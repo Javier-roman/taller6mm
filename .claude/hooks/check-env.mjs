@@ -25,7 +25,9 @@ function isElevated() {
   try {
     if (process.platform === 'win32') {
       // S-1-16-12288 = nivel de integridad alto (proceso elevado). No depende del idioma de Windows.
-      const r = spawnSync('whoami', ['/groups', '/fo', 'csv', '/nh'], {
+      // Ruta absoluta: en Windows se buscaría primero un whoami.exe en el directorio actual (el repo).
+      const whoami = path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'whoami.exe');
+      const r = spawnSync(whoami, ['/groups', '/fo', 'csv', '/nh'], {
         encoding: 'utf8',
         timeout: 5000,
         windowsHide: true,
