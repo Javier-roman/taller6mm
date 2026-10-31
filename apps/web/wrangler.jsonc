@@ -1,0 +1,31 @@
+{
+  // Worker `web`. Configuración local de S2 (D1 en local con identificadores de marcador).
+  // S3 añade los entornos `preview` y `production`, los ids reales, R2, la cola y `previews`.
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "taller6mm-web",
+  "compatibility_date": "2026-08-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "send_metrics": false,
+  "observability": { "enabled": true },
+  "vars": { "ENVIRONMENT": "local" },
+  "d1_databases": [
+    {
+      "binding": "CORE",
+      "database_name": "taller6mm-core-local",
+      "database_id": "00000000-0000-4000-8000-000000000c01",
+      "migrations_dir": "../../packages/db/migrations/core"
+    },
+    {
+      "binding": "MERCADO",
+      "database_name": "taller6mm-mercado-local",
+      "database_id": "00000000-0000-4000-8000-000000000c02",
+      "migrations_dir": "../../packages/db/migrations/mercado"
+    },
+    {
+      "binding": "BUSQUEDA",
+      "database_name": "taller6mm-busqueda-local",
+      "database_id": "00000000-0000-4000-8000-000000000c03",
+      "migrations_dir": "../../packages/db/migrations/busqueda"
+    }
+  ]
+}

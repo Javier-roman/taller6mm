@@ -1,0 +1,63 @@
+---
+// Inicio provisional (S2/S3): estado del entorno y de las tres bases D1, leído en el servidor.
+// La Armería sustituye esta página en la Fase 1.
+
+import { env } from 'cloudflare:workers';
+import { BRAND } from '@taller6mm/ui/brand';
+import { readAllBases } from '../lib/status';
+
+export const prerender = false;
+
+const bases = await readAllBases(env);
+const checkedAt = new Date().toISOString();
+const allOk = bases.every((b) => b.state === 'ok');
+const label = { ok: 'Correcta', cruzada: 'Binding cruzado', sin_migrar: 'Sin migrar', error: 'Error' } as const;
+Astro.response.headers.set('cache-control', 'no-store');
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={`${BRAND.name}: ${BRAND.tagline}`} />
+    <title>{`${BRAND.name} · estado`}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <h1>{BRAND.name}</h1>
+      <p>{BRAND.tagline}</p>
+      <section aria-labelledby="estado">
+        <h2 id="estado">Estado del entorno</h2>
+        <p>Entorno: <strong>{env.ENVIRONMENT}</strong></p>
+        <table>
+          <caption>Bases de datos D1 (cada una se identifica en su tabla <code>meta</code>)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Base</th>
+              <th scope="col">Binding</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Última migración</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              bases.map((b) => (
+                <tr data-base={b.base} data-state={b.state}>
+                  <th scope="row">{b.base}</th>
+                  <td>
+                    <code>{b.binding}</code>
+                  </td>
+                  <td>{label[b.state]}</td>
+                  <td>{b.migration ?? 'Desconocida'}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p role="status">{allOk ? 'Las tres bases responden y son las correctas.' : 'Hay bases con problemas: revisa la tabla.'}</p>
+        <p>Comprobado: <time datetime={checkedAt}>{checkedAt}</time></p>
+      </section>
+    </main>
+  </body>
+</html>

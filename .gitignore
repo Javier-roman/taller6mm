@@ -57,3 +57,7 @@ worker-configuration.d.ts
 
 # Python (apps/pipeline): versión fijada para uv
 !apps/pipeline/.python-version
+
+# Salidas de Playwright y Lighthouse por app
+**/test-results/
+**/playwright-report/
