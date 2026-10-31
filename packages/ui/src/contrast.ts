@@ -38,8 +38,7 @@ const onSurfaces = (fg: ColorToken, use: string, kind: PairKind = 'texto'): Colo
 
 /**
  * Pares declarados. Todo color que se use como texto sobre las tres superficies aparece aquí.
- * `naranja-senal` no es color de texto sobre grafito (4,49:1): se usa como indicador (3:1) y como
- * texto solo sobre negro pavonado y carbón.
+ * `naranja-senal` (#E75A31 desde el 31-10-2026) ya cumple AA como texto en las tres: 4,65:1 en grafito.
  */
 export const COLOR_PAIRS: readonly ColorPair[] = [
   ...onSurfaces('hueso', 'Texto principal'),
@@ -51,8 +50,7 @@ export const COLOR_PAIRS: readonly ColorPair[] = [
   ...onSurfaces('estado-aviso', 'Estado: pocas unidades / con adaptador'),
   ...onSurfaces('estado-error', 'Estado: agotado / incompatible'),
   ...onSurfaces('estado-desconocido', 'Estado: sin datos'),
-  { fg: 'naranja-senal', bg: 'negro-pavonado', kind: 'texto', use: 'Señal como texto' },
-  { fg: 'naranja-senal', bg: 'carbon', kind: 'texto', use: 'Señal como texto' },
+  ...onSurfaces('naranja-senal', 'Señal como texto'),
   ...onSurfaces('naranja-senal', 'Anillo de foco y ranura seleccionada', 'componente'),
   ...onSurfaces('laton', 'Borde de componente activo', 'componente'),
   { fg: 'hueso', bg: 'acero', kind: 'texto', use: 'Botón acero' },

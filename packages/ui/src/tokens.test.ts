@@ -14,8 +14,22 @@ import {
   REDUCED_DURATIONS,
   SPACING,
 } from './index.ts';
+import { NOISE_OPACITY, NOISE_TEXTURE, SHADOWS, SHEENS } from './tokens.ts';
 
 const styles = (name: string) => readFileSync(new URL(`./styles/${name}`, import.meta.url), 'utf8');
+
+describe('placas (docs/02 §4.3)', () => {
+  test('el ruido no pasa del 3 % de opacidad y se pinta con esa opacidad', () => {
+    expect(NOISE_OPACITY).toBeLessThanOrEqual(0.03);
+    expect(NOISE_TEXTURE).toContain(`opacity='${NOISE_OPACITY}'`);
+  });
+
+  test('llevan brillo interior: filo superior de 1 px y luz cenital que se apaga antes de la mitad', () => {
+    expect(SHADOWS.placa).toMatch(/^inset 0 1px 0 0 /);
+    expect(SHEENS.placa).toMatch(/^linear-gradient\(180deg, /);
+    expect(SHEENS.placa).toMatch(/\/ 0\) (?:[1-4]\d|50)%\)$/);
+  });
+});
 
 describe('tokens', () => {
   test('todos los colores son hexadecimales de 6 dígitos', () => {

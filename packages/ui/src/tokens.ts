@@ -26,10 +26,13 @@ export const COLOR_TOKENS = {
   'laton-claro': { hex: '#D9B77E', group: 'acento', use: 'Hover y realce del acento' },
   fde: { hex: '#A08A6A', group: 'acento', use: 'Acento secundario (Flat Dark Earth)' },
   'verde-ranger': { hex: '#4B5A3F', group: 'acento', use: 'Acento terciario (fondos y chapas)' },
+  // #E4572E daba 4,49:1 sobre grafito (por debajo de AA para texto). Misma tinta, algo más de luz:
+  // 4,65:1 en la peor superficie, así que ya puede ser texto en las tres (decisión de Javi, 31-10-2026).
   'naranja-senal': {
-    hex: '#E4572E',
+    hex: '#E75A31',
     group: 'acento',
     use: 'Interacción activa, ranura seleccionada y anillo de foco',
+    previous: '#E4572E',
   },
   'estado-ok': { hex: '#3FA66B', group: 'estado', use: 'En stock / compatible' },
   'estado-aviso': { hex: '#E0A526', group: 'estado', use: 'Pocas unidades / con adaptador' },
@@ -106,10 +109,13 @@ export const RADII = { s: '2px', m: '3px', l: '4px', avatar: '9999px' } as const
 /** Grosor de trazos: bordes de 1 px y anillo de foco de 2 px. */
 export const STROKES = { fino: '1px', foco: '2px' } as const;
 
-/** Sombras largas y suaves, con el brillo interior superior de 1 px de las placas. */
+/**
+ * Sombras largas y suaves, con el brillo interior superior de 1 px de las placas (el filo del panel
+ * que recibe la luz de los tubos del techo). Al 6 % no se percibía: 11 % en placa y 14 % en elevada.
+ */
 export const SHADOWS = {
-  placa: 'inset 0 1px 0 0 rgb(232 228 220 / 0.06), 0 1px 2px 0 rgb(0 0 0 / 0.45), 0 16px 40px -16px rgb(0 0 0 / 0.7)',
-  elevada: 'inset 0 1px 0 0 rgb(232 228 220 / 0.08), 0 2px 4px 0 rgb(0 0 0 / 0.45), 0 28px 64px -20px rgb(0 0 0 / 0.8)',
+  placa: 'inset 0 1px 0 0 rgb(232 228 220 / 0.11), 0 1px 2px 0 rgb(0 0 0 / 0.45), 0 16px 40px -16px rgb(0 0 0 / 0.7)',
+  elevada: 'inset 0 1px 0 0 rgb(232 228 220 / 0.14), 0 2px 4px 0 rgb(0 0 0 / 0.45), 0 28px 64px -20px rgb(0 0 0 / 0.8)',
   boton: 'inset 0 1px 0 0 rgb(255 255 255 / 0.16), 0 1px 2px 0 rgb(0 0 0 / 0.5)',
   hundida: 'inset 0 1px 2px 0 rgb(0 0 0 / 0.55)',
 } as const;
@@ -130,9 +136,23 @@ export const EASINGS = {
 /** Puntos de corte (docs/02 §6). El móvil (390 px) es la base. */
 export const BREAKPOINTS = { tablet: '52.125rem', escritorio: '80rem', ancho: '90rem', amplio: '120rem' } as const;
 
-/** Ruido sutil de las placas (≤ 3 % de opacidad), como SVG en data URI (lo permite img-src de la CSP). */
-export const NOISE_TEXTURE =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='0.05'/%3E%3C/svg%3E\")";
+/**
+ * Brillo interior de las placas: luz cenital muy suave que cae sobre el tercio superior del panel,
+ * como la de los tubos LED sobre una chapa. Va con el filo de 1 px de `SHADOWS.placa`.
+ */
+export const SHEENS = {
+  placa: 'linear-gradient(180deg, rgb(232 228 220 / 0.055) 0%, rgb(232 228 220 / 0.018) 22%, rgb(232 228 220 / 0) 48%)',
+} as const;
 
-/** Opacidad del ruido sobre el panel: 0,6 (matriz) × 0,05 (rect) = 3 %. */
-export const NOISE_OPACITY = 0.6 * 0.05;
+/** Opacidad máxima del ruido sobre el panel (docs/02 §4.3: ≤ 3 %). */
+export const NOISE_OPACITY = 0.03;
+
+/**
+ * Ruido sutil de las placas como SVG en data URI (lo permite img-src de la CSP). Antes era grano solo
+ * blanco con una opacidad media del 1,5 % y no se percibía. Ahora es grano gris de contraste completo
+ * (claro y oscuro: feComponentTransfer estira el ruido a 0–1 y fija el alfa) en una capa al 3 %.
+ */
+export const NOISE_TEXTURE =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncG type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncB type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncA type='table' tableValues='1 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='" +
+  NOISE_OPACITY +
+  '\'/%3E%3C/svg%3E")';
