@@ -1,0 +1,48 @@
+# Dependencias y artefactos de build
+node_modules/
+dist/
+build/
+.astro/
+.wrangler/
+.turbo/
+.cache/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# Python (apps/pipeline)
+.venv/
+__pycache__/
+*.pyc
+
+# Secretos: nunca al repositorio
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+*.pem
+*.key
+
+# Assets fuente pesados: viven en R2 privado; en git solo el manifiesto con hashes
+assets-src/**/*.blend
+assets-src/**/*.blend1
+assets-src/raw/
+
+# Capturas de referencia de terceros: uso interno, no publicar
+docs/referencias/*.png
+docs/referencias/*.jpg
+docs/referencias/*.webp
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code: configuración personal y local
+.claude/settings.local.json
+CLAUDE.local.md
