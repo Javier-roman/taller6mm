@@ -27,7 +27,7 @@ Este kit es el "mega prompt" en el formato que Claude Code mejor aprovecha. Cont
 Si algo del entorno está mal (sesión de administrador, carpeta dentro de OneDrive o Node antiguo), el aviso de inicio te lo dirá en cuanto arranques.
 
 ## Consejos
-- `/context` muestra qué memoria y reglas tiene cargadas. `/agents` y `/skills` listan los de este kit.
+- `/context` muestra qué memoria y reglas tiene cargadas. `/skills` lista las skills de este kit. El asistente `/agents` ya no existe en Claude Code: los subagentes se ven en `.claude/agents/` y se gestionan pidiéndoselo a Claude o editando esos archivos.
 - **pnpm**: si `pnpm -v` no responde, instálalo con `npm install -g pnpm` desde la terminal normal. `corepack enable` suele pedir permisos de administrador en Windows.
 - **GitHub**: antes de que Claude Code suba el CI, ejecuta tú `gh auth refresh -h github.com -s workflow`.
 - `.mcp.json` viene preparado para Windows (`cmd /c npx`). En macOS o Linux, cambia `"command"` a `"npx"` y quita `"/c"` y `"npx"` de `args`.
