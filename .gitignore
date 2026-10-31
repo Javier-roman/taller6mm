@@ -10,6 +10,8 @@ coverage/
 playwright-report/
 test-results/
 .lighthouseci/
+# Salida del MCP de Playwright (instantáneas, capturas sin nombre, consola)
+.playwright-mcp/
 
 # Python (apps/pipeline)
 .venv/
