@@ -35,6 +35,24 @@ describe('normalizeAvailability', () => {
     }
   });
 
+  test('las claves heredadas de Object.prototype no se cuelan como disponibilidad', () => {
+    const inherited = Object.getOwnPropertyNames(Object.prototype);
+    fc.assert(
+      fc.property(
+        fc.constantFrom(
+          ...inherited,
+          'https://schema.org/constructor',
+          'schema:Constructor',
+          'CONSTRUCTOR',
+          '__proto__',
+        ),
+        (raw) => {
+          expect(normalizeAvailability(raw)).toBe('desconocido');
+        },
+      ),
+    );
+  });
+
   test('propiedad: nunca lanza y siempre devuelve un valor del enum', () => {
     fc.assert(
       fc.property(fc.anything(), (raw) => {

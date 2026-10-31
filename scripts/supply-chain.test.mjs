@@ -26,16 +26,48 @@ function days(value) {
 }
 
 describe('pnpm (pnpm-workspace.yaml)', () => {
+  const lines = read('pnpm-workspace.yaml').split(/\r?\n/);
   // Claves de primer nivel del YAML («clave: valor», sin sangría).
   const settings = new Map(
-    read('pnpm-workspace.yaml')
-      .split(/\r?\n/)
-      .flatMap((line) => {
-        const m = /^([A-Za-z]\w*):\s*(.*?)\s*$/.exec(line);
-        return m ? [[m[1], m[2]]] : [];
-      }),
+    lines.flatMap((line) => {
+      const m = /^([A-Za-z]\w*):\s*(.*?)\s*$/.exec(line);
+      return m ? [[m[1], m[2]]] : [];
+    }),
   );
   const setting = (key) => settings.get(key);
+  // Entradas «  clave: valor» de un bloque de primer nivel (sin comentarios).
+  const block = (key) => {
+    const start = lines.findIndex((line) => line === `${key}:`);
+    const entries = new Map();
+    for (const line of start === -1 ? [] : lines.slice(start + 1)) {
+      if (/^\S/.test(line)) break;
+      const m = /^\s{2}"?([^":#\s]+)"?:\s*(\S+)\s*$/.exec(line);
+      if (m) entries.set(m[1], m[2]);
+    }
+    return entries;
+  };
+
+  test('ningún ajuste que reabra lo que la política cierra', () => {
+    for (const key of [
+      'dangerouslyAllowAllBuilds',
+      'trustPolicyExclude',
+      'trustPolicyIgnoreAfter',
+      'permissions',
+      'onlyBuiltDependencies',
+      'neverBuiltDependencies',
+      'ignoredBuiltDependencies',
+    ]) {
+      assert.equal(setting(key), undefined, key);
+    }
+  });
+
+  test('scripts de instalación: solo la lista blanca revisada', () => {
+    assert.deepEqual(
+      Object.fromEntries(block('allowBuilds')),
+      { esbuild: 'true', workerd: 'true', lefthook: 'false', sharp: 'false' },
+      'Cambiar allowBuilds exige revisar el script de instalación del paquete y actualizar este test',
+    );
+  });
 
   test(`minimumReleaseAge de al menos ${MIN_DAYS} días y en modo estricto`, () => {
     assert.ok(Number(setting('minimumReleaseAge')) >= MIN_MINUTES);

@@ -48,6 +48,13 @@ describe('overallVerdict', () => {
     expect(overallVerdict(['desconocido', 'incompatible'])).toBe('incompatible');
   });
 
+  test('un valor fuera del enum cuenta como desconocido, nunca como compatible', () => {
+    const raw = (v: string) => v as Verdict;
+    expect(overallVerdict([raw('Incompatible')])).toBe('desconocido');
+    expect(overallVerdict(['compatible', raw('constructor')])).toBe('desconocido');
+    expect(overallVerdict([raw('x'), 'incompatible'])).toBe('incompatible');
+  });
+
   test('propiedad: no depende del orden (docs/03 §5.3)', () => {
     fc.assert(
       fc.property(fc.array(verdict), (vs) => {

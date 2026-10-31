@@ -57,10 +57,16 @@ const SEVERITY: Record<Verdict, number> = {
   incompatible: 4,
 };
 
-/** Estado global de un conjunto de veredictos. Un build vacío es `compatible`. */
+/**
+ * Estado global de un conjunto de veredictos. Un build vacío es `compatible`. Un valor fuera del enum
+ * (datos sin validar en tiempo de ejecución) cuenta como `desconocido`: nunca suma como compatible.
+ */
 export function overallVerdict(verdicts: Iterable<Verdict>): Verdict {
   let worst: Verdict = 'compatible';
-  for (const v of verdicts) if (SEVERITY[v] > SEVERITY[worst]) worst = v;
+  for (const raw of verdicts) {
+    const v: Verdict = VerdictSchema.safeParse(raw).success ? raw : 'desconocido';
+    if (SEVERITY[v] > SEVERITY[worst]) worst = v;
+  }
   return worst;
 }
 

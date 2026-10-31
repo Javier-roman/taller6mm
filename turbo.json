@@ -2,10 +2,11 @@
   "$schema": "./node_modules/turbo/schema.json",
   "ui": "stream",
   "globalDependencies": [".node-version", "packages/config/**"],
+  "remoteCache": { "enabled": false },
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "!dist/**/.dev.vars", "!dist/**/.dev.vars.*", "!dist/**/.env", "!dist/**/.env.*"]
     },
     "typecheck": {
       "outputs": []
