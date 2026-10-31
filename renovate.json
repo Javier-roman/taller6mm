@@ -15,6 +15,10 @@
     "minimumReleaseAge": null,
     "schedule": ["at any time"]
   },
+  "pip-compile": {
+    "description": "Semgrep del CI: Renovate regenera requirements.txt (hashes y espera) desde requirements.in.",
+    "managerFilePatterns": ["/^\\.github/semgrep/requirements\\.txt$/"]
+  },
   "customManagers": [
     {
       "customType": "regex",
@@ -46,13 +50,10 @@
     },
     {
       "customType": "regex",
-      "description": "uv y Semgrep del CI (PyPI).",
+      "description": "uv del CI (PyPI).",
       "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
-      "matchStrings": [
-        "UV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)",
-        "semgrep==(?<currentValue>\\d+\\.\\d+\\.\\d+)"
-      ],
-      "depNameTemplate": "{{#if (containsString matchString 'semgrep')}}semgrep{{else}}uv{{/if}}",
+      "matchStrings": ["UV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "uv",
       "datasourceTemplate": "pypi"
     }
   ],
