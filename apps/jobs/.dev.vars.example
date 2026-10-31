@@ -1,0 +1,13 @@
+# Variables secretas del worker `jobs` en local. Copia este archivo a `.dev.vars` (está en .gitignore).
+# Nunca subas `.dev.vars` ni pegues sus valores en un PR, un issue o un chat.
+# En preview y producción: `pnpm exec wrangler secret put <NOMBRE>` (lo hace Javi). Rotación trimestral.
+#
+# Todavía no hay ninguna obligatoria: se irán añadiendo con su fase.
+
+# Fase 4 (ingesta): secreto HMAC-SHA256 compartido con el rastreador para firmar los lotes de
+# POST /internal/ingest (docs/04 §5 y docs/08 §6.2). 32 bytes aleatorios en base64.
+# INGEST_HMAC_SECRET=
+
+# Fase 6 (alertas): clave de la API de Resend y claves VAPID de Web Push.
+# RESEND_API_KEY=
+# VAPID_PRIVATE_KEY=

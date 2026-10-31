@@ -6,6 +6,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "env": ["CLOUDFLARE_ENV"],
       "outputs": ["dist/**", "!dist/**/.dev.vars", "!dist/**/.dev.vars.*", "!dist/**/.env", "!dist/**/.env.*"]
     },
     "typecheck": {

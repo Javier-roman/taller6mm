@@ -1,0 +1,57 @@
+# OWASP ZAP baseline semanal contra la preview (docs/08 §2 y §3; plan de la Fase 0, S4).
+# Escaneo pasivo: no ataca ni rellena formularios. Queda preparado para S3: cuando exista la preview,
+# Javi crea la variable de repositorio ZAP_TARGET_URL con su URL. Mientras no exista, el job se salta.
+# Imagen oficial de ZAP fijada por digest (Renovate la actualiza). Sin acciones de terceros ni secretos.
+# El objetivo solo sale de la variable (sin entrada manual) y tiene que ser una preview de nuestro
+# Worker en workers.dev. El informe es público (repo público): nunca se escanea con sesión.
+name: ZAP baseline
+
+on:
+  schedule:
+    - cron: "17 4 * * 1" # lunes, 04:17 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  zap:
+    name: ZAP baseline (preview)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    env:
+      TARGET: ${{ vars.ZAP_TARGET_URL }}
+      ZAP_IMAGE: ghcr.io/zaproxy/zaproxy:stable@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238
+    steps:
+      - name: ¿Hay preview?
+        id: target
+        shell: bash
+        run: |
+          # [[ =~ ]] ancla la cadena entera (un salto de línea no cuela una segunda URL). Solo previews
+          # del Worker taller6mm-web (p. ej. <versión>-taller6mm-web.<cuenta>.workers.dev).
+          if [[ -z "$TARGET" ]]; then
+            echo "::notice::Sin ZAP_TARGET_URL todavía: la preview llega en S3. No se escanea nada."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          elif [[ ! "$TARGET" =~ ^https://[a-z0-9]+(-[a-z0-9]+)*-taller6mm-web\.[a-z0-9-]+\.workers\.dev/?$ ]]; then
+            echo "::error::ZAP_TARGET_URL debe ser una preview https://<versión>-taller6mm-web.<cuenta>.workers.dev."
+            exit 1
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.target.outputs.skip != 'true'
+        with:
+          persist-credentials: false
+      - name: ZAP baseline (falla con las reglas FAIL de .github/zap/reglas.tsv; el resto queda en el informe)
+        if: steps.target.outputs.skip != 'true'
+        run: |
+          mkdir -p zap && chmod 777 zap
+          cp .github/zap/reglas.tsv zap/reglas.tsv
+          docker run --rm -v "$PWD/zap:/zap/wrk:rw" "$ZAP_IMAGE" \
+            zap-baseline.py -t "$TARGET" -c reglas.tsv -r informe.html -J informe.json -I -m 3
+      - name: Informe de ZAP
+        if: always() && steps.target.outputs.skip != 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: zap-baseline
+          path: zap
+          retention-days: 30

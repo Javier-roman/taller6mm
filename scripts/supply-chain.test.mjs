@@ -131,5 +131,16 @@ describe('workflows de GitHub Actions', () => {
         assert.match(ref ?? '', /^actions\/[\w.-]+@[0-9a-f]{40}$/, ref);
       }
     });
+
+    test(`${file}: imágenes de contenedor fijadas por digest`, () => {
+      // Variables *_IMAGE y claves `image:` (container y services).
+      for (const [, image] of text.matchAll(/^\s*(?:-\s*)?(?:\w*IMAGE|image):\s*(\S+)/gm)) {
+        assert.match(image ?? '', /@sha256:[0-9a-f]{64}"?$/, image);
+      }
+      // `docker run` solo con una variable ya comprobada arriba o con un digest literal.
+      for (const [line] of text.matchAll(/docker run[^\n]*/g)) {
+        assert.match(line, /"\$\w*IMAGE"|@sha256:[0-9a-f]{64}/, line);
+      }
+    });
   }
 });

@@ -1,0 +1,6 @@
+# Política de divulgación responsable de Taller6mm (RFC 9116). Ver SECURITY.md en el repositorio.
+# Los informes llegan por los avisos privados de seguridad de GitHub: no exponen el email de nadie.
+Contact: https://github.com/Javier-roman/taller6mm/security/advisories/new
+Expires: 2027-04-30T22:00:00.000Z
+Preferred-Languages: es, en
+Policy: https://github.com/Javier-roman/taller6mm/security/policy

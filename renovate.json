@@ -55,6 +55,15 @@
       "matchStrings": ["UV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
       "depNameTemplate": "uv",
       "datasourceTemplate": "pypi"
+    },
+    {
+      "customType": "regex",
+      "description": "Imagen de OWASP ZAP del workflow semanal: etiqueta estable fijada por digest.",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "ZAP_IMAGE: (?<depName>[a-z0-9./-]+):(?<currentValue>[\\w.-]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "packageRules": [
