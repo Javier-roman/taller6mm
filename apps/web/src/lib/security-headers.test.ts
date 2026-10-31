@@ -60,6 +60,13 @@ describe('cabeceras de seguridad (docs/08 §6.2)', () => {
     expect(mergeCsp(`default-src 'self'; ${HEADER_ONLY_CSP}`)).toBe(`default-src 'self'; ${HEADER_ONLY_CSP}`);
     expect(mergeCsp("default-src 'self';")).toBe(`default-src 'self'; ${HEADER_ONLY_CSP}`);
     expect(mergeCsp(null)).toBe(NON_HTML_CSP);
+    expect(mergeCsp(null, 'application/json')).toBe(NON_HTML_CSP);
+    expect(mergeCsp(null, 'text/plain;charset=UTF-8')).toBe(NON_HTML_CSP);
+  });
+
+  test('HTML sin CSP en cabecera (trae su <meta>): solo frame-ancestors, para no intersecar', () => {
+    expect(mergeCsp(null, 'text/html; charset=utf-8')).toBe(HEADER_ONLY_CSP);
+    expect(mergeCsp(null, 'TEXT/HTML')).toBe(HEADER_ONLY_CSP);
   });
 
   test('applySecurityHeaders deja la respuesta completa', () => {
@@ -70,8 +77,10 @@ describe('cabeceras de seguridad (docs/08 §6.2)', () => {
     expect(headers.get('x-frame-options')).toBe('DENY');
   });
 
-  test('public/_headers coincide con staticHeaders("production")', () => {
+  test('public/_headers coincide con staticHeaders("production") y tiene un único bloque /*', () => {
     const file = readFileSync(new URL('../../public/_headers', import.meta.url), 'utf8');
+    // Wrangler indexa las reglas por ruta: un segundo bloque /* anularía el primero.
+    expect(file.split(/\r?\n/).filter((l) => l.trim() === '/*')).toHaveLength(1);
     expect(parseHeadersFile(file, '/*')).toEqual(staticHeaders('production'));
   });
 });
@@ -90,16 +99,38 @@ describe('/.well-known/security.txt (RFC 9116)', () => {
     expect(field('Policy')).toMatch(/^https:\/\//);
   });
 
-  test('Expires no caduca en menos de 30 días ni pasa de un año (renovarlo antes)', () => {
-    const expires = Date.parse(field('Expires') ?? '');
-    const days = (expires - Date.now()) / 86_400_000;
-    expect(Number.isNaN(expires)).toBe(false);
-    expect(days, 'security.txt caduca en menos de 30 días: actualiza Expires').toBeGreaterThan(30);
+  test('Expires aparece una vez, en RFC 3339 (UTC), sin caducar y a menos de un año', () => {
+    const lines = text.split(/\r?\n/).filter((l) => /^expires:/i.test(l));
+    expect(lines).toHaveLength(1);
+    const value = field('Expires') ?? '';
+    expect(value).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/);
+    const days = (Date.parse(value) - Date.now()) / 86_400_000;
+    // Caducado, el archivo deja de ser válido (RFC 9116 §2.5.5): ese fallo es legítimo.
+    expect(days, 'security.txt ha caducado: actualiza Expires').toBeGreaterThan(0);
     expect(days, 'RFC 9116 recomienda que Expires no pase de un año').toBeLessThanOrEqual(366);
+    // Aviso (no fallo) para no bloquear PR urgentes el último mes.
+    if (days < 30) console.warn(`security.txt caduca en ${Math.floor(days)} días: renueva Expires.`);
   });
 });
 
 describe('integración security-headers', () => {
+  test('el entorno sale del wrangler.json de la build; si falta o no se entiende, «desconocido»', async () => {
+    const { buildEnvironment } = await import('../../integrations/security-headers.ts');
+    const { mkdtempSync, mkdirSync, writeFileSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const { pathToFileURL } = await import('node:url');
+    const root = mkdtempSync(join(tmpdir(), 't6m-build-'));
+    mkdirSync(join(root, 'client'));
+    mkdirSync(join(root, 'server'));
+    const client = pathToFileURL(`${join(root, 'client')}/`);
+    expect(await buildEnvironment(client)).toBe('desconocido');
+    writeFileSync(join(root, 'server', 'wrangler.json'), JSON.stringify({ vars: { ENVIRONMENT: 'production' } }));
+    expect(await buildEnvironment(client)).toBe('production');
+    writeFileSync(join(root, 'server', 'wrangler.json'), '{ no es json');
+    expect(await buildEnvironment(client)).toBe('desconocido');
+  });
+
   test('X-Robots-Tag va dentro del único bloque /* (con dos bloques, Cloudflare aplica solo uno)', async () => {
     const { withNoIndex, ROBOTS_LINE } = await import('../../integrations/security-headers.ts');
     const file = '/_astro/*\n  Cache-Control: public\n\n/*\n  X-Frame-Options: DENY\n';

@@ -3,6 +3,8 @@
   // S3 añade los entornos `preview` y `production`, los ids reales, R2, la cola y `previews`.
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "taller6mm-web",
+  // Entrada propia: el handler de Astro más las cabeceras de seguridad en todas las respuestas.
+  "main": "./src/worker.ts",
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
   "send_metrics": false,

@@ -3,7 +3,7 @@
 // - Imágenes en modo `compile`: sin binding de Cloudflare Images.
 // - El estado local de D1 se comparte con `wrangler dev` y `pnpm db:*` en <raíz>/.wrangler/state.
 // - Seguridad (docs/08 §6.2): CSP de Astro con hashes, comprobación de origen en las mutaciones y
-//   cabeceras en src/middleware.ts y public/_headers (fuente única: src/lib/security-headers.ts).
+//   cabeceras en src/worker.ts y public/_headers (fuente única: src/lib/security-headers.ts).
 import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
 import { defineConfig } from 'astro/config';
