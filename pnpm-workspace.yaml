@@ -21,6 +21,12 @@ allowBuilds:
   # Astro lo ofrece para optimizar imágenes en Node; en Workers usamos el modo `compile`.
   sharp: false
 
+# Parches de seguridad en dependencias transitivas (pnpm audit). Quitar cuando el paquete que las
+# arrastra ya incluya la versión corregida.
+overrides:
+  # GHSA-qrxm-fqhp-jwvm y otras tres altas de undici < 7.30.1, vía miniflare (desarrollo y build).
+  "undici@>=7.0.0 <7.30.1": 7.30.1
+
 # ── Catálogo: una sola versión de cada dependencia en todo el monorepo ──────
 # Versiones exactas; Renovate las actualiza respetando la edad mínima (renovate.json).
 catalog:
