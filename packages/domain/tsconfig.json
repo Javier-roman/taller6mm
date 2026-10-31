@@ -1,0 +1,7 @@
+{
+  "extends": "@taller6mm/config/tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "ESNext.Intl"]
+  },
+  "include": ["src"]
+}
