@@ -1,0 +1,3 @@
+# Generados por el spike (se regeneran con pnpm build, pnpm types y los scripts de medida)
+.measure/
+worker-configuration.d.ts

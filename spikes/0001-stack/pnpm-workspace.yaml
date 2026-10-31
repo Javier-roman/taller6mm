@@ -1,0 +1,14 @@
+# El spike es un proyecto independiente (no forma parte del monorepo de S2), pero aplica la
+# misma política de cadena de suministro del plan de la Fase 0 (decisión 4).
+# Nada con menos de 3 días publicado; sin perder la procedencia firmada; sin scripts de
+# instalación salvo la lista blanca; sin dependencias «exóticas» (git, tarballs) en subdependencias.
+minimumReleaseAge: 4320
+minimumReleaseAgeStrict: true
+trustPolicy: no-downgrade
+strictDepBuilds: true
+blockExoticSubdeps: true
+engineStrict: true
+allowBuilds:
+  esbuild: true
+  workerd: true
+  sharp: false

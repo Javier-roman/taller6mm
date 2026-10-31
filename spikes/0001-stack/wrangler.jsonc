@@ -1,0 +1,44 @@
+{
+  // Spike S1: solo local. No se despliega desde la nube; Javi lo despliega en su PC para medir la CPU.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "taller6mm-spike",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "taller6mm-spike",
+      // Marcador local: al desplegar, Javi pone aquí el id de `wrangler d1 create taller6mm-spike`.
+      "database_id": "00000000-0000-4000-8000-000000000001",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    // Valores de prueba SOLO para el spike local (no son secretos: el spike nunca guarda datos reales).
+    // En la app real, BETTER_AUTH_SECRET irá con `wrangler secret put` y en .dev.vars.
+    "BETTER_AUTH_SECRET": "solo-local-spike-solo-local-spike-solo-local-spike",
+    "BETTER_AUTH_URL": "http://127.0.0.1:4321",
+    "SPIKE_TEST_OUTBOX": "1",
+    "SPIKE_AUTH_TX": "0"
+  },
+  "env": {
+    // Variante para medir Better Auth con `transaction: true` (CLOUDFLARE_ENV=tx pnpm build).
+    "tx": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "taller6mm-spike",
+          "database_id": "00000000-0000-4000-8000-000000000001",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "vars": {
+        "BETTER_AUTH_SECRET": "solo-local-spike-solo-local-spike-solo-local-spike",
+        "BETTER_AUTH_URL": "http://127.0.0.1:4321",
+        "SPIKE_TEST_OUTBOX": "1",
+        "SPIKE_AUTH_TX": "1"
+      }
+    }
+  }
+}
