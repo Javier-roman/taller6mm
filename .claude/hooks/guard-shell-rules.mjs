@@ -11,9 +11,7 @@ const ask = (reason) => ['ask', reason];
 // Separa respetando comillas y las quita: "C:\Program Files" es un solo token.
 export function tokenize(s) {
   const out = [];
-  const re = /"([^"]*)"|'([^']*)'|(\S+)/g;
-  let m;
-  while ((m = re.exec(s))) out.push(m[1] ?? m[2] ?? m[3]);
+  for (const m of s.matchAll(/"([^"]*)"|'([^']*)'|(\S+)/g)) out.push(m[1] ?? m[2] ?? m[3]);
   return out;
 }
 
@@ -59,7 +57,10 @@ function globToRegExp(glob) {
       const end = glob.indexOf(']', i + 1);
       if (end === -1) re += '\\[';
       else {
-        const body = glob.slice(i + 1, end).replace(/^[!^]/, '^').replace(/\\/g, '\\\\');
+        const body = glob
+          .slice(i + 1, end)
+          .replace(/^[!^]/, '^')
+          .replace(/\\/g, '\\\\');
         re += `[${body}]`;
         i = end;
       }
@@ -154,7 +155,10 @@ const DENY = [
     'Ejecutar directamente código descargado (curl | sh, irm | iex) está bloqueado.',
   ],
   [/\b(?:sh|bash|zsh)\s+<\(\s*(?:curl|wget)\b/i, 'Ejecutar directamente código descargado está bloqueado.'],
-  [/\bgit\b[^;|&]*\s--(?:no-index|output)\b/i, 'git con --no-index o --output puede leer archivos ignorados o escribir fuera de git: bloqueado.'],
+  [
+    /\bgit\b[^;|&]*\s--(?:no-index|output)\b/i,
+    'git con --no-index o --output puede leer archivos ignorados o escribir fuera de git: bloqueado.',
+  ],
   [
     /\bgh\s+auth\s+(?:token\b|status\b[^;|&]*--show-token)|\bwrangler\s+auth\s+token\b/i,
     'Mostrar tokens de gh o wrangler está bloqueado: Claude Code nunca maneja tus credenciales.',
@@ -174,7 +178,10 @@ const DENY = [
     'Borrar recursos de Cloudflare está bloqueado: pídeselo a Javi.',
   ],
   // Cubre `wrangler secret put`, `wrangler versions secret put` y `wrangler preview [base-config] secret put`.
-  [/\bwrangler\b[^;|&]*\bsecret\s+(?:put|bulk)\b/i, 'Los secretos los introduce Javi: dile el comando exacto y lo ejecuta él.'],
+  [
+    /\bwrangler\b[^;|&]*\bsecret\s+(?:put|bulk)\b/i,
+    'Los secretos los introduce Javi: dile el comando exacto y lo ejecuta él.',
+  ],
   [/\bgh\s+secret\s+set\b/i, 'Los secretos de GitHub los introduce Javi: dile el comando exacto y lo ejecuta él.'],
   [
     /\b(?:mkfs|diskpart|Format-Volume|Clear-Disk|Initialize-Disk)\b|\bdd\s+[^;|&]*\bof=\/dev\/|\bformat(?:\.com)?\s+[a-z]:/i,
@@ -186,7 +193,10 @@ const DENY = [
 const ASK = [
   [/\bgit\s+push\b.*\b(?:main|master)\b/i, 'Push a main/master: confirma que quieres publicar en la rama principal.'],
   [/\bgit\s+(?:reset\s+--hard|clean\s+-[a-zA-Z]*f)/i, 'Operación git destructiva: confirma.'],
-  [/\bwrangler\s+d1\s+(?:execute|migrations\s+apply)\b(?=.*--remote)/i, 'Operación sobre una base de datos remota: confirma.'],
+  [
+    /\bwrangler\s+d1\s+(?:execute|migrations\s+apply)\b(?=.*--remote)/i,
+    'Operación sobre una base de datos remota: confirma.',
+  ],
   // El entorno de Cloudflare se elige al compilar (CLOUDFLARE_ENV), así que el hook no puede saber
   // si un deploy va a preview o a producción: todo deploy real se confirma.
   [/\bwrangler\s+deploy\b(?!.*--dry-run)/i, 'Despliegue a Cloudflare: confirma el entorno (preview o producción).'],
@@ -231,7 +241,12 @@ export function check(rawCmd, depth = 0) {
   if (depth < 3) {
     for (const seg of segments) {
       const t = tokenize(seg);
-      const i = t.findIndex((x, k) => k > 0 && /^(?:-c|-Command|\/c)$/i.test(x) && /(?:^|[\\/])(?:ba|z)?sh(?:\.exe)?$|(?:^|[\\/])(?:pwsh|powershell|cmd)(?:\.exe)?$/i.test(t[k - 1]));
+      const i = t.findIndex(
+        (x, k) =>
+          k > 0 &&
+          /^(?:-c|-Command|\/c)$/i.test(x) &&
+          /(?:^|[\\/])(?:ba|z)?sh(?:\.exe)?$|(?:^|[\\/])(?:pwsh|powershell|cmd)(?:\.exe)?$/i.test(t[k - 1]),
+      );
       if (i !== -1) {
         const inner = check(t.slice(i + 1).join(' '), depth + 1);
         if (inner) return inner;

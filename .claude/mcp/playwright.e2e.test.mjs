@@ -44,7 +44,10 @@ function mcpClient(child) {
 
 const text = (result) => (result?.result?.content ?? []).map((c) => c.text ?? '').join('\n');
 
-test('el MCP arranca, navega a localhost y bloquea otros orígenes', { skip: !enabled && 'define TALLER6MM_MCP_E2E=1', timeout: 240_000 }, async () => {
+test('el MCP arranca, navega a localhost y bloquea otros orígenes', {
+  skip: !enabled && 'define TALLER6MM_MCP_E2E=1',
+  timeout: 240_000,
+}, async () => {
   const server = createServer((_req, res) => {
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
     res.end('<!doctype html><html lang="es"><title>Taller6mm MCP</title><h1>Banco de pruebas</h1></html>');
@@ -67,11 +70,17 @@ test('el MCP arranca, navega a localhost y bloquea otros orígenes', { skip: !en
     const names = tools.result.tools.map((t) => t.name);
     assert.ok(names.includes('browser_navigate'), names.join(', '));
 
-    const ok = await mcp.request('tools/call', { name: 'browser_navigate', arguments: { url: `http://127.0.0.1:${port}/` } });
+    const ok = await mcp.request('tools/call', {
+      name: 'browser_navigate',
+      arguments: { url: `http://127.0.0.1:${port}/` },
+    });
     assert.ok(!ok.result?.isError, text(ok));
     assert.match(text(ok), /Taller6mm MCP/);
 
-    const blocked = await mcp.request('tools/call', { name: 'browser_navigate', arguments: { url: 'http://example.invalid/' } });
+    const blocked = await mcp.request('tools/call', {
+      name: 'browser_navigate',
+      arguments: { url: 'http://example.invalid/' },
+    });
     assert.match(text(blocked), /ERR_BLOCKED_BY_CLIENT/);
   } finally {
     child.stdin.end();

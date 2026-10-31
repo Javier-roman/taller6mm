@@ -154,7 +154,15 @@ export function buildLaunch({ platform, execPath, env, root, exists, realpath })
       'No encuentro npx (npm) junto a Node ni en el PATH. Reinstala Node.js con npm incluido y vuelve a abrir Claude Code.',
     );
   }
-  const args = [npxCli, '--yes', MCP_PACKAGE, '--config', p.join(root, ...CONFIG_RELATIVE), '--browser', browserFor(platform)];
+  const args = [
+    npxCli,
+    '--yes',
+    MCP_PACKAGE,
+    '--config',
+    p.join(root, ...CONFIG_RELATIVE),
+    '--browser',
+    browserFor(platform),
+  ];
   const executable = cloudExecutable({ platform, env, exists });
   if (executable) args.push('--executable-path', executable);
   return {

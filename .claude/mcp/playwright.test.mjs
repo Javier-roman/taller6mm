@@ -23,7 +23,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..', '..');
 const launcher = path.join(here, 'playwright.mjs');
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
-const only = (...files) => (p) => files.includes(p);
+const only =
+  (...files) =>
+  (p) =>
+    files.includes(p);
 
 const WIN_NODE = 'C:\\Program Files\\nodejs\\node.exe';
 const WIN_NPX = 'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js';
@@ -71,9 +74,19 @@ describe('findNpxCli', () => {
   });
 
   test('sin npm: null y buildLaunch falla con un mensaje claro', () => {
-    assert.equal(findNpxCli({ platform: 'linux', execPath: '/usr/bin/node', pathEnv: '/usr/bin', exists: () => false }), null);
+    assert.equal(
+      findNpxCli({ platform: 'linux', execPath: '/usr/bin/node', pathEnv: '/usr/bin', exists: () => false }),
+      null,
+    );
     assert.throws(
-      () => buildLaunch({ platform: 'linux', execPath: '/usr/bin/node', env: { PATH: '/usr/bin' }, root: '/r', exists: () => false }),
+      () =>
+        buildLaunch({
+          platform: 'linux',
+          execPath: '/usr/bin/node',
+          env: { PATH: '/usr/bin' },
+          root: '/r',
+          exists: () => false,
+        }),
       (error) => error instanceof LaunchError && /npx/.test(error.message),
     );
   });
@@ -81,7 +94,13 @@ describe('findNpxCli', () => {
 
 describe('buildLaunch', () => {
   test('Windows: node + npx-cli.js, versión fijada, Edge y sin shell', () => {
-    const r = buildLaunch({ platform: 'win32', execPath: WIN_NODE, env: { Path: 'C:\\Windows' }, root: 'C:\\dev\\bancada', exists: only(WIN_NPX) });
+    const r = buildLaunch({
+      platform: 'win32',
+      execPath: WIN_NODE,
+      env: { Path: 'C:\\Windows' },
+      root: 'C:\\dev\\bancada',
+      exists: only(WIN_NPX),
+    });
     assert.equal(r.command, WIN_NODE);
     assert.deepEqual(r.args, [
       WIN_NPX,
@@ -99,7 +118,13 @@ describe('buildLaunch', () => {
   });
 
   test('Linux en local: Chromium de Playwright sin ruta de ejecutable', () => {
-    const r = buildLaunch({ platform: 'linux', execPath: NVM_NODE, env: { PATH: '/usr/bin' }, root: '/home/javi/taller6mm', exists: only(NVM_NPX) });
+    const r = buildLaunch({
+      platform: 'linux',
+      execPath: NVM_NODE,
+      env: { PATH: '/usr/bin' },
+      root: '/home/javi/taller6mm',
+      exists: only(NVM_NPX),
+    });
     assert.deepEqual(r.args.slice(-2), ['--browser', 'chromium']);
     assert.ok(!r.args.includes('--executable-path'));
     assert.equal(r.args[r.args.indexOf('--config') + 1], '/home/javi/taller6mm/.claude/playwright-mcp.json');
@@ -107,21 +132,39 @@ describe('buildLaunch', () => {
 
   test('nube de Claude Code: usa el Chromium preinstalado', () => {
     const env = { PATH: '/usr/bin', CLAUDE_CODE_REMOTE: 'true' };
-    const r = buildLaunch({ platform: 'linux', execPath: NVM_NODE, env, root: '/r', exists: only(NVM_NPX, CLOUD_CHROMIUM) });
+    const r = buildLaunch({
+      platform: 'linux',
+      execPath: NVM_NODE,
+      env,
+      root: '/r',
+      exists: only(NVM_NPX, CLOUD_CHROMIUM),
+    });
     assert.deepEqual(r.args.slice(-2), ['--executable-path', CLOUD_CHROMIUM]);
   });
 
   test('la ruta del usuario (PLAYWRIGHT_MCP_EXECUTABLE_PATH) manda sobre la de la nube', () => {
     const env = { CLAUDE_CODE_REMOTE: 'true', PLAYWRIGHT_MCP_EXECUTABLE_PATH: '/opt/chrome/chrome' };
     assert.equal(cloudExecutable({ platform: 'linux', env, exists: () => true }), null);
-    const r = buildLaunch({ platform: 'linux', execPath: NVM_NODE, env, root: '/r', exists: only(NVM_NPX, CLOUD_CHROMIUM) });
+    const r = buildLaunch({
+      platform: 'linux',
+      execPath: NVM_NODE,
+      env,
+      root: '/r',
+      exists: only(NVM_NPX, CLOUD_CHROMIUM),
+    });
     assert.ok(!r.args.includes('--executable-path'));
     assert.equal(r.options.env.PLAYWRIGHT_MCP_EXECUTABLE_PATH, '/opt/chrome/chrome');
   });
 
   test('la detección de la nube solo aplica en Linux y si el binario existe', () => {
-    assert.equal(cloudExecutable({ platform: 'darwin', env: { CLAUDE_CODE_REMOTE: 'true' }, exists: () => true }), null);
-    assert.equal(cloudExecutable({ platform: 'linux', env: { CLAUDE_CODE_REMOTE: 'true' }, exists: () => false }), null);
+    assert.equal(
+      cloudExecutable({ platform: 'darwin', env: { CLAUDE_CODE_REMOTE: 'true' }, exists: () => true }),
+      null,
+    );
+    assert.equal(
+      cloudExecutable({ platform: 'linux', env: { CLAUDE_CODE_REMOTE: 'true' }, exists: () => false }),
+      null,
+    );
     assert.equal(cloudExecutable({ platform: 'linux', env: {}, exists: () => true }), null);
   });
 
@@ -149,10 +192,12 @@ describe('sanitizeEnv', () => {
 
   test('quita las variables que relajarían la configuración y conserva la lista blanca', () => {
     const out = sanitizeEnv(env);
-    assert.deepEqual(Object.keys(out).filter((k) => /^playwright_mcp_/i.test(k)).sort(), [
-      'PLAYWRIGHT_MCP_EXECUTABLE_PATH',
-      'PLAYWRIGHT_MCP_HEADLESS',
-    ]);
+    assert.deepEqual(
+      Object.keys(out)
+        .filter((k) => /^playwright_mcp_/i.test(k))
+        .sort(),
+      ['PLAYWRIGHT_MCP_EXECUTABLE_PATH', 'PLAYWRIGHT_MCP_HEADLESS'],
+    );
     assert.equal(out.PATH, '/usr/bin');
     assert.equal(out.HOME, '/home/javi');
   });
@@ -190,7 +235,9 @@ describe('assertSafeConfig', () => {
 
   test('admite un origen https concreto (la preview, en S3)', () => {
     assert.doesNotThrow(() =>
-      assertSafeConfig(variant((c) => c.network.allowedOrigins.push('https://pr-12-taller6mm-web-preview.javi.workers.dev'))),
+      assertSafeConfig(
+        variant((c) => c.network.allowedOrigins.push('https://pr-12-taller6mm-web-preview.javi.workers.dev')),
+      ),
     );
   });
 
@@ -244,9 +291,15 @@ describe('lanzador (proceso real)', () => {
     const tmp = mkdtempSync(path.join(tmpdir(), 'taller6mm-mcp-'));
     try {
       mkdirSync(path.join(tmp, '.claude', 'mcp'), { recursive: true });
-      for (const f of ['playwright.mjs', 'playwright-launch.mjs']) copyFileSync(path.join(here, f), path.join(tmp, '.claude', 'mcp', f));
-      writeFileSync(path.join(tmp, '.claude', 'playwright-mcp.json'), JSON.stringify({ browser: { isolated: false }, network: {} }));
-      const r = spawnSync(process.execPath, [path.join(tmp, '.claude', 'mcp', 'playwright.mjs'), '--print'], { encoding: 'utf8' });
+      for (const f of ['playwright.mjs', 'playwright-launch.mjs'])
+        copyFileSync(path.join(here, f), path.join(tmp, '.claude', 'mcp', f));
+      writeFileSync(
+        path.join(tmp, '.claude', 'playwright-mcp.json'),
+        JSON.stringify({ browser: { isolated: false }, network: {} }),
+      );
+      const r = spawnSync(process.execPath, [path.join(tmp, '.claude', 'mcp', 'playwright.mjs'), '--print'], {
+        encoding: 'utf8',
+      });
       assert.equal(r.status, 1);
       assert.equal(r.stdout, '');
       assert.match(r.stderr, /no es seguro/);

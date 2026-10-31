@@ -36,13 +36,17 @@ try {
 }
 
 if (process.argv.includes('--print')) {
-  process.stdout.write(`${JSON.stringify({ command: launch.command, args: launch.args, cwd: launch.options.cwd }, null, 2)}\n`);
+  process.stdout.write(
+    `${JSON.stringify({ command: launch.command, args: launch.args, cwd: launch.options.cwd }, null, 2)}\n`,
+  );
   process.exit(0);
 }
 
 const dropped = droppedEnvNames(process.env);
 if (dropped.length) {
-  process.stderr.write(`[taller6mm/playwright-mcp] Ignoro ${dropped.join(', ')}: la configuración está en ${CONFIG_RELATIVE.join('/')}.\n`);
+  process.stderr.write(
+    `[taller6mm/playwright-mcp] Ignoro ${dropped.join(', ')}: la configuración está en ${CONFIG_RELATIVE.join('/')}.\n`,
+  );
 }
 
 const child = spawn(launch.command, launch.args, launch.options);
