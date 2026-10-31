@@ -8,7 +8,9 @@
 import path from 'node:path';
 
 /** Carpetas (relativas a la raíz del repo) donde el MCP puede leer y escribir. */
-export const MCP_DIRS = ['.playwright-mcp', path.join('docs', 'informes', 'capturas')];
+// Como segmentos: se unen con el separador de la plataforma que se evalúa, no con el del sistema que
+// ejecuta (en Windows, `path.join` del sistema metería barras invertidas en rutas POSIX).
+export const MCP_DIRS = [['.playwright-mcp'], ['docs', 'informes', 'capturas']];
 
 /** Herramientas que nunca se usan: ejecutan código arbitrario en Node o suben archivos. */
 const DENIED_TOOLS = new Set(['browser_run_code_unsafe', 'browser_file_upload']);
@@ -40,7 +42,7 @@ export function checkMcp(toolName, toolInput, root, platform = process.platform)
   if (typeof toolInput !== 'object' || toolInput === null) return null;
 
   const p = platform === 'win32' ? path.win32 : path.posix;
-  const allowed = MCP_DIRS.map((d) => p.join(root, d));
+  const allowed = MCP_DIRS.map((segments) => p.join(root, ...segments));
   for (const [key, value] of Object.entries(toolInput)) {
     if (!PATH_KEYS.has(key)) continue;
     const values = Array.isArray(value) ? value : [value];
@@ -49,7 +51,7 @@ export function checkMcp(toolName, toolInput, root, platform = process.platform)
       const resolved = p.resolve(root, v);
       if (!allowed.some((dir) => isInside(resolved, dir, platform) && resolved !== p.resolve(dir))) {
         return deny(
-          `El MCP de Playwright solo puede leer o escribir archivos dentro de ${MCP_DIRS.join(' o ')} (pedido: ${v}).`,
+          `El MCP de Playwright solo puede leer o escribir archivos dentro de ${MCP_DIRS.map((d) => d.join('/')).join(' o ')} (pedido: ${v}).`,
         );
       }
     }
