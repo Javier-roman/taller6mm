@@ -5,7 +5,7 @@
 //      en gzip y brotli (presupuesto: ≤ 350 KB gz).
 // Escribe el resultado en measure-results.json. Multiplataforma: solo Node, sin shell.
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { brotliCompressSync, constants, gzipSync } from 'node:zlib';
@@ -16,6 +16,7 @@ const kb = (n) => Math.round(n / 100) / 10;
 const sizes = (buf) => ({
   raw: buf.length,
   gzip: gzipSync(buf, { level: 9 }).length,
+  gzip6: gzipSync(buf, { level: 6 }).length,
   brotli: brotliCompressSync(buf, { params: { [constants.BROTLI_PARAM_QUALITY]: 11 } }).length,
 });
 
@@ -42,6 +43,19 @@ const worker = {
   withinFreeLimit: gzipKiB <= 3 * 1024,
   withinTarget: gzipKiB <= 1.5 * 1024,
 };
+// El adaptador activa `upload_source_maps`: wrangler sube los mapas aparte y no los suma en «Total Upload».
+// Se informa de su peso para confirmarlo en el primer despliegue real (auditoría de rendimiento).
+const walk = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)],
+  );
+const maps = walk(path.join(root, 'dist', 'server')).filter((f) => f.endsWith('.map'));
+const mapBytes = maps.map((f) => readFileSync(f));
+worker.sourceMaps = {
+  files: maps.length,
+  rawKiB: Math.round(mapBytes.reduce((a, b) => a + b.length, 0) / 102.4) / 10,
+  gzipKiB: Math.round(mapBytes.reduce((a, b) => a + gzipSync(b, { level: 6 }).length, 0) / 102.4) / 10,
+};
 
 // ── 2. Isla 3D ───────────────────────────────────────────────────────────────
 const html = readFileSync(path.join(root, 'dist', 'client', '3d', 'index.html'), 'utf8');
@@ -66,19 +80,33 @@ const chunks = [...seen.entries()].map(([file, s]) => ({
   ...s,
 }));
 const total = chunks.reduce(
-  (acc, c) => ({ raw: acc.raw + c.raw, gzip: acc.gzip + c.gzip, brotli: acc.brotli + c.brotli }),
-  { raw: 0, gzip: 0, brotli: 0 },
+  (acc, c) => ({
+    raw: acc.raw + c.raw,
+    gzip: acc.gzip + c.gzip,
+    gzip6: acc.gzip6 + c.gzip6,
+    brotli: acc.brotli + c.brotli,
+  }),
+  { raw: 0, gzip: 0, gzip6: 0, brotli: 0 },
 );
 const scene = chunks.find((c) => c.file === island[1].replace(/^\//, ''));
 const island3d = {
-  chunks: chunks.map((c) => ({ file: c.file, rawKB: kb(c.raw), gzipKB: kb(c.gzip), brotliKB: kb(c.brotli) })),
+  chunks: chunks.map((c) => ({
+    file: c.file,
+    rawKB: kb(c.raw),
+    gzipKB: kb(c.gzip),
+    gzip6KB: kb(c.gzip6),
+    brotliKB: kb(c.brotli),
+  })),
   sceneChunkGzipKB: kb(scene.gzip),
   totalRawKB: kb(total.raw),
   totalGzipKB: kb(total.gzip),
+  totalGzip6KB: kb(total.gzip6),
   totalBrotliKB: kb(total.brotli),
 };
-// El presupuesto es para el chunk 3D; se exige también con el runtime de React incluido.
+// El presupuesto es para el chunk 3D; se exige también con el runtime de React incluido, y se avisa
+// al 90 % porque la Fase 1 sumará cargadores glTF/KTX2 (auditoría de rendimiento).
 island3d.withinBudget = total.gzip <= 350 * 1000;
+island3d.over90PercentOfBudget = total.gzip > 0.9 * 350 * 1000;
 
 const result = { measuredAt: new Date().toISOString(), node: process.version, worker, island3d };
 writeFileSync(path.join(root, 'measure-results.json'), `${JSON.stringify(result, null, 2)}\n`);

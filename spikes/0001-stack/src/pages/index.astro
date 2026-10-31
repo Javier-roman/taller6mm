@@ -3,13 +3,17 @@
 import { env } from 'cloudflare:workers';
 import { drizzle } from 'drizzle-orm/d1';
 import * as schema from '../db/schema';
-import { getAuth } from '../lib/auth';
 
 export const prerender = false;
 
 const db = drizzle(env.DB, { schema });
 const rows = await db.select().from(schema.meta).orderBy(schema.meta.key);
-const session = await getAuth().api.getSession({ headers: Astro.request.headers });
+// Better Auth (≈ 1 MB sin minificar) solo se carga si hay cookie de sesión: la primera visita anónima
+// de cada isolate no paga su evaluación (auditoría de rendimiento del spike).
+const hasSessionCookie = /(?:^|;\s*)(?:__Secure-)?better-auth\.session_token=/.test(Astro.request.headers.get('cookie') ?? '');
+const session = hasSessionCookie
+  ? await (await import('../lib/auth')).getAuth().api.getSession({ headers: Astro.request.headers })
+  : null;
 const checkedAt = new Date().toISOString();
 ---
 

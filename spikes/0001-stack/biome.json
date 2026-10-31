@@ -7,7 +7,17 @@
     "root": "../.."
   },
   "files": {
-    "includes": ["**", "!dist", "!.measure", "!worker-configuration.d.ts", "!migrations/meta", "!measure-results.json"]
+    "includes": [
+      "**",
+      "!dist",
+      "!.measure",
+      "!worker-configuration.d.ts",
+      "!migrations/meta",
+      "!measure-results.json",
+      "!**/*.md",
+      "!pnpm-lock.yaml",
+      "!capturas"
+    ]
   },
   "formatter": {
     "indentStyle": "space",

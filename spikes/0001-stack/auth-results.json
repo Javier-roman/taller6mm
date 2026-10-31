@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-10-31T16:29:08.908Z",
+  "measuredAt": "2026-10-31T17:09:46.778Z",
   "variant": "transaction: false (por defecto)",
   "allOk": true,
   "steps": [
@@ -7,7 +7,7 @@
       "name": "GET / (SSR + D1 con Drizzle)",
       "ok": true,
       "status": 200,
-      "ms": 79
+      "ms": 53
     },
     {
       "name": "Variante servida: transaction false",
@@ -18,7 +18,7 @@
       "name": "POST /api/auth/sign-in/magic-link",
       "ok": true,
       "status": 200,
-      "ms": 41,
+      "ms": 53,
       "body": "{\"status\":true}"
     },
     {
@@ -29,24 +29,24 @@
       "name": "GET enlace mágico → redirección con cookie de sesión",
       "ok": true,
       "status": 302,
-      "ms": 59,
+      "ms": 48,
       "location": "http://127.0.0.1:4321/"
     },
     {
       "name": "GET /api/auth/get-session con la cookie",
       "ok": true,
       "status": 200,
-      "ms": 13
+      "ms": 17
     },
     {
       "name": "GET /api/auth/get-session solo con el token (lee D1)",
       "ok": true,
-      "ms": 18
+      "ms": 19
     },
     {
       "name": "GET / con sesión (SSR lee la sesión)",
       "ok": true,
-      "ms": 13
+      "ms": 14
     },
     {
       "name": "Reutilizar el enlace mágico se rechaza",
@@ -57,10 +57,10 @@
     {
       "name": "D1: alta de usuario verificada, sesión creada y token consumido",
       "ok": true,
-      "usersBefore": 4,
-      "usersAfter": 5,
+      "usersBefore": 5,
+      "usersAfter": 6,
       "sessions": 1,
-      "pendingVerifications": 1,
+      "pendingVerifications": 0,
       "emailVerified": 1
     }
   ],
