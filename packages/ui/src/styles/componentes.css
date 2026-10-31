@@ -1,0 +1,680 @@
+/*
+ * Componentes base de Taller6mm (docs/02 §4.5). CSS sin JS: los estados salen de pseudoclases y
+ * atributos ARIA. `data-demo` solo existe para que /sistema muestre hover, activo y foco en
+ * estático. Solo tokens: un test rechaza colores, duraciones o medidas sueltas en este archivo.
+ */
+@layer components {
+  /* ── Utilidades de accesibilidad ─────────────────────────────────────────── */
+  .t6-sr {
+    position: absolute;
+    width: var(--trazo-fino);
+    height: var(--trazo-fino);
+    margin: calc(-1 * var(--trazo-fino));
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .t6-saltar {
+    position: absolute;
+    z-index: 10;
+    inset-inline-start: var(--espacio-4);
+    inset-block-start: var(--espacio-4);
+    padding: var(--espacio-2) var(--espacio-4);
+    border-radius: var(--radio-m);
+    background-color: var(--laton);
+    color: var(--negro-pavonado);
+    font-weight: var(--peso-semi);
+    text-decoration: none;
+    translate: 0 calc(-1 * var(--espacio-24));
+  }
+
+  .t6-saltar:focus-visible {
+    translate: 0 0;
+  }
+
+  .t6-icono {
+    flex: none;
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  /* ── Botón: latón, acero, fantasma y peligro ─────────────────────────────── */
+  .t6-boton {
+    --_fondo: var(--acero);
+    --_fondo-hover: color-mix(in oklab, var(--acero), var(--hueso) 10%);
+    --_texto: var(--hueso);
+    --_texto-hover: var(--hueso);
+    --_borde: color-mix(in oklab, var(--acero), var(--hueso) 14%);
+    --_borde-hover: var(--laton);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacio-2);
+    min-width: var(--objetivo-tactil);
+    min-height: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-4);
+    border: var(--trazo-fino) solid var(--_borde);
+    border-radius: var(--radio-m);
+    background-color: var(--_fondo);
+    box-shadow: var(--sombra-boton);
+    color: var(--_texto);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-s);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    line-height: var(--interlineado-compacto);
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color var(--duracion-micro) var(--curva-mecanica),
+      border-color var(--duracion-micro) var(--curva-mecanica),
+      color var(--duracion-micro) var(--curva-mecanica),
+      translate var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-boton--laton {
+    --_fondo: var(--laton);
+    --_fondo-hover: var(--laton-claro);
+    --_texto: var(--negro-pavonado);
+    --_texto-hover: var(--negro-pavonado);
+    --_borde: var(--laton);
+    --_borde-hover: var(--laton-claro);
+  }
+
+  .t6-boton--fantasma {
+    --_fondo: transparent;
+    --_fondo-hover: color-mix(in oklab, var(--laton) 14%, transparent);
+    --_texto: var(--laton);
+    --_texto-hover: var(--laton-claro);
+    --_borde: transparent;
+    --_borde-hover: color-mix(in oklab, var(--laton) 40%, transparent);
+    box-shadow: none;
+  }
+
+  .t6-boton--peligro {
+    --_fondo: transparent;
+    --_fondo-hover: var(--estado-error);
+    --_texto: var(--estado-error);
+    --_texto-hover: var(--negro-pavonado);
+    --_borde: var(--estado-error);
+    --_borde-hover: var(--estado-error);
+    box-shadow: none;
+  }
+
+  .t6-boton:is(:hover, [data-demo="hover"]):not(:disabled, [aria-disabled="true"]) {
+    border-color: var(--_borde-hover);
+    background-color: var(--_fondo-hover);
+    color: var(--_texto-hover);
+  }
+
+  .t6-boton:is(:active, [data-demo="activo"]):not(:disabled, [aria-disabled="true"]) {
+    box-shadow: var(--sombra-hundida);
+    translate: 0 var(--trazo-fino);
+  }
+
+  .t6-boton[data-demo="foco"] {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  .t6-boton:disabled,
+  .t6-boton[aria-disabled="true"]:not([aria-busy="true"]) {
+    border-color: var(--acero);
+    background-color: var(--carbon);
+    box-shadow: none;
+    color: var(--niebla);
+    cursor: not-allowed;
+  }
+
+  .t6-boton[aria-busy="true"] {
+    cursor: progress;
+  }
+
+  .t6-boton[data-estado="error"] {
+    border-color: var(--estado-error);
+  }
+
+  /* ── Acción con mensaje (botón + error o aviso debajo) ────────────────────── */
+  .t6-accion {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espacio-2);
+  }
+
+  .t6-mensaje {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--espacio-2);
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    line-height: var(--interlineado-compacto);
+  }
+
+  .t6-mensaje--error {
+    color: var(--estado-error);
+  }
+
+  .t6-mensaje--aviso {
+    color: var(--estado-aviso);
+  }
+
+  .t6-mensaje--desconocido {
+    color: var(--estado-desconocido);
+  }
+
+  /* ── Cargador: un cargador que se llena con bolas de 6 mm ───────────────── */
+  .t6-cargador {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--espacio-1) * 0.75);
+  }
+
+  .t6-cargador__bola {
+    width: calc(var(--espacio-1) * 1.5);
+    height: calc(var(--espacio-1) * 1.5);
+    border-radius: var(--radio-avatar);
+    background-color: currentColor;
+    opacity: 0.25;
+    animation: t6-bola calc(var(--duracion-componente) * 6) var(--curva-mecanica) infinite;
+  }
+
+  .t6-cargador__bola:nth-child(2) {
+    animation-delay: var(--duracion-componente);
+  }
+
+  .t6-cargador__bola:nth-child(3) {
+    animation-delay: calc(var(--duracion-componente) * 2);
+  }
+
+  @keyframes t6-bola {
+    0%,
+    15% {
+      opacity: 0.25;
+      translate: calc(-1 * var(--espacio-1)) 0;
+    }
+    35%,
+    80% {
+      opacity: 1;
+      translate: 0 0;
+    }
+    100% {
+      opacity: 0.25;
+    }
+  }
+
+  /* ── Esqueleto de carga ──────────────────────────────────────────────────── */
+  .t6-esqueleto {
+    display: block;
+    height: var(--espacio-3);
+    border-radius: var(--radio-s);
+    background: linear-gradient(90deg, var(--carbon), var(--acero), var(--carbon)) 0 0 / 200% 100%;
+    animation: t6-brillo calc(var(--duracion-panel) * 5) linear infinite;
+  }
+
+  .t6-esqueleto + .t6-esqueleto {
+    margin-top: var(--espacio-2);
+  }
+
+  .t6-esqueleto--corto {
+    width: 60%;
+  }
+
+  @keyframes t6-brillo {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+
+  /* ── Placa: panel atornillado de grafito con ruido sutil ─────────────────── */
+  .t6-placa {
+    --_tornillo: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--acero), var(--hueso) 18%) 0 30%,
+      var(--acero) 34% 46%,
+      transparent 52%
+    );
+    --_borde: var(--acero);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+    padding: var(--espacio-6);
+    border: var(--trazo-fino) solid var(--_borde);
+    border-radius: var(--radio-l);
+    background-color: var(--grafito);
+    background-image: var(--_tornillo), var(--_tornillo), var(--_tornillo), var(--_tornillo), var(--textura-ruido);
+    background-position:
+      left var(--espacio-2) top var(--espacio-2),
+      right var(--espacio-2) top var(--espacio-2),
+      left var(--espacio-2) bottom var(--espacio-2),
+      right var(--espacio-2) bottom var(--espacio-2),
+      0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    background-size:
+      var(--espacio-2) var(--espacio-2),
+      var(--espacio-2) var(--espacio-2),
+      var(--espacio-2) var(--espacio-2),
+      var(--espacio-2) var(--espacio-2),
+      auto;
+    box-shadow: var(--sombra-placa);
+    color: var(--hueso);
+    transition:
+      border-color var(--duracion-componente) var(--curva-mecanica),
+      box-shadow var(--duracion-componente) var(--curva-mecanica),
+      translate var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-placa--lisa {
+    background-image: var(--textura-ruido);
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto;
+  }
+
+  .t6-placa__cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-2) var(--espacio-4);
+    padding-bottom: var(--espacio-3);
+    border-bottom: var(--trazo-fino) solid var(--acero);
+  }
+
+  .t6-placa__titulo {
+    margin: 0;
+    color: var(--hueso);
+    font-size: var(--texto-l);
+    font-weight: var(--peso-semi);
+  }
+
+  .t6-placa__codigo {
+    color: var(--niebla);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-xs);
+    letter-spacing: var(--interletra-versalitas);
+  }
+
+  .t6-placa__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+    color: var(--niebla);
+  }
+
+  .t6-placa__cuerpo > :where(p) {
+    margin: 0;
+  }
+
+  /* Placa enlace: toda la placa es clicable (el enlace del título se estira) y un único foco. */
+  .t6-placa__enlace {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .t6-placa__enlace::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    content: "";
+  }
+
+  .t6-placa__enlace:focus-visible {
+    outline: none;
+  }
+
+  .t6-placa--enlace:is(:hover, [data-demo="hover"]) {
+    --_borde: var(--laton);
+    box-shadow: var(--sombra-elevada);
+  }
+
+  .t6-placa--enlace:is(:hover, [data-demo="hover"]) .t6-placa__titulo {
+    color: var(--laton-claro);
+  }
+
+  .t6-placa--enlace:is(:active, [data-demo="activo"]) {
+    box-shadow: var(--sombra-placa);
+    translate: 0 var(--trazo-fino);
+  }
+
+  .t6-placa--enlace:is(:has(.t6-placa__enlace:focus-visible), [data-demo="foco"]) {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  .t6-placa[data-estado="error"] {
+    --_borde: var(--estado-error);
+  }
+
+  .t6-placa[data-estado="deshabilitada"] {
+    --_borde: var(--acero);
+    border-style: dashed;
+    background-color: var(--carbon);
+    box-shadow: none;
+  }
+
+  .t6-placa[data-estado="deshabilitada"] .t6-placa__titulo {
+    color: var(--niebla);
+  }
+
+  /* ── Rótulo a plantilla ──────────────────────────────────────────────────── */
+  .t6-rotulo {
+    --_tinta: var(--hueso);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0;
+    color: var(--_tinta);
+    font-family: var(--fuente-rotulo);
+    font-size: var(--texto-m);
+    font-weight: var(--peso-negrita);
+    letter-spacing: var(--interletra-rotulo);
+    line-height: var(--interlineado-titular);
+    text-transform: uppercase;
+    transition:
+      color var(--duracion-componente) var(--curva-mecanica),
+      text-shadow var(--duracion-componente) var(--curva-mecanica);
+  }
+
+  .t6-rotulo--s {
+    font-size: var(--texto-s);
+  }
+
+  .t6-rotulo--l {
+    font-size: var(--texto-2xl);
+  }
+
+  .t6-rotulo--laton {
+    --_tinta: var(--laton);
+  }
+
+  .t6-rotulo--fde {
+    --_tinta: var(--fde);
+  }
+
+  /* Chapa: pintado en hueso sobre chapa verde ranger (5,84:1). */
+  .t6-rotulo--chapa {
+    padding: var(--espacio-1) var(--espacio-3);
+    border: var(--trazo-fino) solid color-mix(in oklab, var(--verde-ranger), var(--hueso) 18%);
+    border-radius: var(--radio-s);
+    background-color: var(--verde-ranger);
+    box-shadow: var(--sombra-boton);
+  }
+
+  /* Iluminado: el tubo se enciende con un parpadeo de arranque (2 caídas en 700 ms: menos de
+     3 destellos por segundo, WCAG 2.3.1). */
+  .t6-rotulo[data-iluminado],
+  .t6-rotulo-enlace:is(:hover, :focus-visible, [data-demo="hover"]) .t6-rotulo {
+    --_tinta: var(--laton-claro);
+    text-shadow: var(--resplandor-rotulo);
+    animation: t6-arranque var(--duracion-escena) var(--curva-mecanica) both;
+  }
+
+  .t6-rotulo--apagado {
+    --_tinta: var(--niebla);
+  }
+
+  .t6-rotulo-enlace {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--objetivo-tactil);
+    text-decoration: none;
+  }
+
+  @keyframes t6-arranque {
+    0% {
+      opacity: 0.35;
+    }
+    10% {
+      opacity: 1;
+    }
+    18% {
+      opacity: 0.55;
+    }
+    30%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* ── Insignia de fidelidad T0–T3 (docs/05 §2) ────────────────────────────── */
+  .t6-insignia {
+    --_tinta: var(--niebla);
+    --_fondo: transparent;
+    --_borde: currentColor;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    padding: var(--espacio-1) var(--espacio-2);
+    border: var(--trazo-fino) solid var(--_borde);
+    border-radius: var(--radio-s);
+    background-color: var(--_fondo);
+    color: var(--_tinta);
+    font-size: var(--texto-xs);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-semi);
+    line-height: var(--interlineado-compacto);
+    white-space: nowrap;
+  }
+
+  .t6-insignia__codigo {
+    font-family: var(--fuente-datos);
+    letter-spacing: var(--interletra-versalitas);
+  }
+
+  .t6-insignia__nombre {
+    text-transform: uppercase;
+    letter-spacing: var(--interletra-versalitas);
+  }
+
+  .t6-insignia--t0 {
+    border-style: dashed;
+  }
+
+  .t6-insignia--t1 {
+    --_tinta: var(--fde);
+  }
+
+  .t6-insignia--t2 {
+    --_tinta: var(--laton);
+  }
+
+  .t6-insignia--t3 {
+    --_tinta: var(--negro-pavonado);
+    --_fondo: var(--laton-claro);
+    --_borde: var(--laton-claro);
+  }
+
+  .t6-insignia--sin-nivel {
+    --_tinta: var(--estado-desconocido);
+    border-style: dashed;
+  }
+
+  /* ── Barra de dato: datos reales con su escala, nunca «estadísticas» de juego ─ */
+  .t6-dato {
+    --_tinta: var(--laton);
+
+    display: grid;
+    gap: var(--espacio-2);
+    min-width: 0;
+    margin: 0;
+  }
+
+  .t6-dato__cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+  }
+
+  .t6-dato__etiqueta {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-medio);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+  }
+
+  .t6-dato__valor {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--espacio-1);
+    color: var(--hueso);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-l);
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-weight: var(--peso-semi);
+    white-space: nowrap;
+  }
+
+  .t6-dato__unidad {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-regular);
+    text-decoration: none;
+  }
+
+  .t6-dato__pista {
+    position: relative;
+    height: var(--espacio-2);
+    overflow: hidden;
+    border-radius: var(--radio-s);
+    background-color: var(--carbon);
+    box-shadow: var(--sombra-hundida);
+  }
+
+  /* Segmentos cada 10 %: lectura técnica, como una regla. */
+  .t6-dato__pista::after {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(10% - var(--trazo-fino)),
+      var(--negro-pavonado) calc(10% - var(--trazo-fino)) 10%
+    );
+    content: "";
+    pointer-events: none;
+  }
+
+  .t6-dato__grafico {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .t6-dato__relleno {
+    fill: var(--_tinta);
+  }
+
+  .t6-dato__referencia {
+    stroke: var(--hueso);
+    stroke-width: var(--trazo-foco);
+    vector-effect: non-scaling-stroke;
+  }
+
+  .t6-dato__escala {
+    display: flex;
+    justify-content: space-between;
+    color: var(--niebla);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .t6-dato__nota {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-1) var(--espacio-3);
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-s);
+  }
+
+  .t6-dato__referencia-leyenda {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+  }
+
+  .t6-dato__referencia-leyenda::before {
+    width: var(--trazo-foco);
+    height: var(--espacio-3);
+    background-color: var(--hueso);
+    content: "";
+  }
+
+  /* Incompleto: el valor es un mínimo; lo que falta, rayado. */
+  .t6-dato[data-estado="incompleto"] .t6-dato__pista {
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--carbon) 0 var(--espacio-1),
+      color-mix(in oklab, var(--carbon), var(--estado-aviso) 22%) var(--espacio-1) var(--espacio-2)
+    );
+  }
+
+  .t6-dato[data-estado="sin-dato"] .t6-dato__valor {
+    color: var(--estado-desconocido);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-m);
+  }
+
+  .t6-dato[data-estado="sin-dato"] .t6-dato__pista {
+    outline: var(--trazo-fino) dashed var(--estado-desconocido);
+    outline-offset: calc(-1 * var(--trazo-fino));
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .t6-dato[data-estado="carga"] .t6-dato__pista {
+    background: linear-gradient(90deg, var(--carbon), var(--acero), var(--carbon)) 0 0 / 200% 100%;
+    animation: t6-brillo calc(var(--duracion-panel) * 5) linear infinite;
+  }
+
+  .t6-dato[data-estado="carga"] .t6-dato__valor,
+  .t6-dato[data-estado="error"] .t6-dato__valor {
+    color: var(--niebla);
+  }
+
+  .t6-dato[data-estado="error"] .t6-dato__pista {
+    outline: var(--trazo-fino) solid var(--estado-error);
+    outline-offset: calc(-1 * var(--trazo-fino));
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  /* ── Movimiento reducido: sin desplazamientos ni bucles; fundidos cortos ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .t6-cargador__bola,
+    .t6-esqueleto,
+    .t6-dato[data-estado="carga"] .t6-dato__pista,
+    .t6-rotulo[data-iluminado],
+    .t6-rotulo-enlace:is(:hover, :focus-visible, [data-demo="hover"]) .t6-rotulo {
+      animation: none;
+    }
+
+    .t6-cargador__bola {
+      opacity: 1;
+    }
+
+    .t6-boton:is(:active, [data-demo="activo"]):not(:disabled, [aria-disabled="true"]),
+    .t6-placa--enlace:is(:active, [data-demo="activo"]) {
+      translate: none;
+    }
+  }
+}

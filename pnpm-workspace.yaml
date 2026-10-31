@@ -71,6 +71,8 @@ catalog:
   # 0.23.0 se publicó sin procedencia firmada (0.22.0 sí la tiene): trustPolicy la bloquea.
   "@cloudflare/vitest-pool-workers": 0.22.0
   fast-check: 4.10.2
+  # DOM para los tests de componentes de @taller6mm/ui (solo desarrollo).
+  happy-dom: 21.0.4
   "@playwright/test": 1.64.1
   # MCP de Playwright para Claude Code (.claude/mcp/playwright.mjs). Debe coincidir con MCP_PACKAGE
   # del lanzador; un test y Renovate (customManagers) los mantienen alineados.

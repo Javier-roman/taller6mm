@@ -6,6 +6,7 @@
 //   cabeceras en src/worker.ts y public/_headers (fuente única: src/lib/security-headers.ts).
 import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import securityHeaders from './integrations/security-headers.ts';
 import { CSP_DIRECTIVES } from './src/lib/security-headers.ts';
@@ -23,4 +24,6 @@ export default defineConfig({
     csp: { algorithm: 'SHA-256', directives: [...CSP_DIRECTIVES] },
   },
   server: { host: '127.0.0.1', port: 4321 },
+  // Tailwind v4 sobre los tokens de @taller6mm/ui (src/styles/global.css).
+  vite: { plugins: [tailwindcss()] },
 });

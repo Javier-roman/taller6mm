@@ -37,7 +37,7 @@ describe('pnpm (pnpm-workspace.yaml)', () => {
   const setting = (key) => settings.get(key);
   // Entradas «  clave: valor» de un bloque de primer nivel (sin comentarios).
   const block = (key) => {
-    const start = lines.findIndex((line) => line === `${key}:`);
+    const start = lines.indexOf(`${key}:`);
     const entries = new Map();
     for (const line of start === -1 ? [] : lines.slice(start + 1)) {
       if (/^\S/.test(line)) break;

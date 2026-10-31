@@ -1,0 +1,11 @@
+/*
+ * Fuentes OFL autoalojadas con Fontsource (docs/02 §4.2): nada se carga desde servidores de Google
+ * (RGPD). Cada @font-face lleva su unicode-range, así que con texto en español el navegador solo
+ * descarga el subconjunto latino (y el latino extendido si aparece algún carácter de ese rango).
+ * Solo los pesos que usa el sistema. La precarga (Archivo y Cinzel) está en src/fonts.ts.
+ */
+@import "@fontsource-variable/archivo/wdth.css"; /* Interfaz: ejes de peso (100-900) y anchura (62-125 %) */
+@import "@fontsource/cinzel/600.css"; /* Grabado: marca y titulares */
+@import "@fontsource/big-shoulders-stencil/700.css"; /* Rótulo a plantilla */
+@import "@fontsource/jetbrains-mono/400.css"; /* Datos */
+@import "@fontsource/jetbrains-mono/600.css"; /* Datos destacados */

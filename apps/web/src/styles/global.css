@@ -1,0 +1,12 @@
+/*
+ * Hoja global de la web: Tailwind v4 sin su tema por defecto (solo existen los tokens de
+ * @taller6mm/ui), la base y los componentes. Las fuentes se importan aparte en el layout.
+ */
+@layer theme, base, components, utilities;
+
+@import "@taller6mm/ui/estilos/tokens.css" layer(theme);
+@import "@taller6mm/ui/estilos/theme.css";
+@import "tailwindcss/preflight.css" layer(base);
+@import "@taller6mm/ui/estilos/base.css";
+@import "@taller6mm/ui/estilos/componentes.css";
+@import "tailwindcss/utilities.css" layer(utilities);
