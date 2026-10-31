@@ -74,12 +74,12 @@ Puesto de Javi: Claude Code ──▶ hooks ──▶ shell, MCP Playwright (nav
 | I | Indexación de previews | `X-Robots-Tag: noindex` fuera de producción, tanto en el Worker como en `_headers` | ✅ S4 | V13 |
 | I | IDOR en builds privadas | `assertCan(usuario, acción, recurso)` en servidor y tests de autorización por endpoint | 🔜 F5 | V8 |
 | D | Agotar CPU o cuotas (10 ms de CPU y 100.000 peticiones al día) | Caché en el borde, límites de ritmo (Durable Objects), Turnstile, Better Auth solo donde haga falta (medido en S1) | 🔜 F2–F5 · ⚠️ CPU en frío (ADR-0001) | V2 |
-| E | Escalada a staff | Roles en servidor, Trastienda opcionalmente tras Cloudflare Access | 🔜 F2 | V8 |
+| E | Escalada a staff | Roles en servidor y Trastienda **siempre** tras Cloudflare Access (no opcional). En producción, `workers_dev: false` y `preview_urls: false` en `web`: si no, `/trastienda` sería accesible por el hostname de workers.dev sin Access ni WAF y con los bindings de producción. Valorar un subdominio propio para la Trastienda, para que un XSS en contenido de la comunidad no opere con la sesión del staff | 🔜 S3 (hostnames) · F2 | V8, V13 |
 
 ### 4.2 Worker `jobs` (API interna, colas, cron y alertas)
 | STRIDE | Amenaza | Mitigación | Estado | ASVS |
 |---|---|---|---|---|
-| S | Lotes de ingesta falsos | HMAC-SHA256 sobre el cuerpo, marca de tiempo (±5 min), nonce (10 min) e idempotencia; secreto rotado cada trimestre | 🔜 F4 | V4, V11 |
+| S | Lotes de ingesta falsos o repetidos | HMAC-SHA256 sobre `v1\n{ts}\n{nonce}\n{método}\n{ruta}\n{sha256(cuerpo)}`, no solo sobre el cuerpo (si `ts` y `nonce` quedaran fuera del MAC, un lote capturado se reenviaría con valores nuevos y precios viejos parecerían recientes). Verificación en tiempo constante (`crypto.subtle.verify`), marca de tiempo ±5 min, nonce consumido de forma atómica (Durable Object), límite de tamaño antes de verificar, idempotencia y `kid` para rotar la clave cada trimestre con solapamiento | 🔜 F4 | V4, V11 |
 | T | Repetición de lotes antiguos | Nonce y clave de idempotencia; el consumidor solo escribe cambios | 🔜 F4 | V4 |
 | R | No saber qué lote cambió un precio | `crawl_runs` y `price_events` con origen y fecha | 🔜 F4 | V16 |
 | I | `/health` o los errores revelan detalles | `/health` sin versiones ni configuración; 404 y 500 genéricos (probado) | ✅ S2 | V13, V16 |
@@ -145,10 +145,32 @@ Claude Code trabaja con los permisos de Javi y **lee contenido no confiable**: p
 2. **`allowedOrigins` del MCP no es una frontera de seguridad**: no frena redirecciones. Mitiga el perfil aislado.
 3. **CPU en frío del plan gratuito**: la primera petición de cada isolate que carga Better Auth puede pasar de 10 ms. Se mide en el despliegue del spike (ADR-0001, «Pendiente en local»).
 4. **Mientras no haya protección de checks**, un PR puede fusionarse con el CI en rojo. Lo cierra Javi al hacer obligatorios los checks.
-5. **El CI instala pnpm, uv y Semgrep por versión exacta, sin hash de cada dependencia transitiva** de Semgrep. El riesgo está acotado: job sin secretos y con `contents: read`.
+5. **pnpm y uv se instalan en el CI por versión exacta, sin hash** (Semgrep y sus dependencias ya van con hash desde `.github/semgrep/requirements.txt`). El riesgo está acotado: PyPI y npm no permiten resubir una versión publicada, y los jobs no tienen secretos y solo leen el contenido.
 6. **Uso interno de fotos de terceros para medir** (docs/05 §5): pendiente de validación jurídica antes de producción.
 
-## 6. Cómo se revisa
+## 6. Huecos detectados en la revisión de S4 (31-10-2026), por fase
+Pendientes de incorporar a las tablas cuando se diseñe cada pieza. Ninguno afecta a lo que ya existe.
+
+| Componente | Amenaza | Mitigación prevista | Fase | ASVS |
+|---|---|---|---|---|
+| Subidas de usuarios | Archivos disfrazados, bombas de descompresión, EXIF con GPS (RGPD), contenido ilícito (DSA) | Bytes mágicos, límites de tamaño y de píxeles, metadatos eliminados al transformar, cuarentena hasta la moderación automática | F5 | V5, V14 |
+| Enlace mágico | Agotar la cuota de Resend (100 al día en el plan gratuito) y dejar a todos sin acceso; login CSRF; enumeración de cuentas | Límite por IP (hash) y por email, Turnstile, enlace de un solo uso ligado al dispositivo que lo pidió, misma respuesta exista o no la cuenta | F2 | V6 |
+| OAuth (Google, Discord) | Vincular cuentas por un email no verificado; `callbackURL` manipulado | Vincular solo con email verificado por el proveedor; `callbackURL` validado contra `trustedOrigins` | F2 | V9, V10 |
+| «Ir a la tienda» | Redirección abierta | Redirigir solo por id de oferta, nunca por una URL recibida | F4 | V3 |
+| Caché en el borde | *Web cache deception*; respuestas con sesión cacheadas | `Cache-Control: private, no-store` en todo lo que lleve sesión; caché solo de rutas públicas explícitas | S3 · F2 | V14 |
+| Webhooks de Resend | Eventos falsos | Verificar la firma (Svix) y la marca de tiempo | F2 | V4 |
+| Rastreador | Redirecciones hacia dominios no registrados; respuestas enormes o lentas; XSS en datos rastreados que ve el staff | Lista blanca aplicada en cada salto; límites de tamaño y de tiempo; escape siempre al mostrar en la Trastienda | F4 | V1, V3 |
+| Pipeline de assets | Modelos de IA en *pickle* que ejecutan código al cargarse | Solo `safetensors` o `weights_only=True` | F3 | V15 |
+| Artefactos públicos del CI | Trazas de Playwright con cookies; informes de ZAP | Sin sesión en las trazas públicas (o artefactos solo en fallo y con caducidad corta); ZAP nunca con sesión | F5 | V14 |
+| R2 | *Denial of wallet* con query strings que saltan la caché | Servir assets con claves canónicas e ignorar la query en la caché | F3 | V13 |
+| Claude Code | Una inyección persiste modificando `.claude/**`, `CLAUDE.md`, `lefthook.yml`, `scripts/hooks.mjs` o `.github/**`; ramas de PR externos con su propio `.claude/`; MCP con permisos de escritura | Revisar en cada PR los cambios en esas rutas (CODEOWNERS); no abrir ramas de terceros con Claude Code; inventario de MCP y de sus permisos | S6 | V15 |
+| Cuentas de Javi (Cloudflare, GitHub) | Robo de sesión o de credenciales | 2FA con passkey o llave física; tokens con mínimo privilegio y caducidad | Ya | V6 |
+| CSP de la Fase 1 | El 3D (Meshopt, KTX2) necesita `'wasm-unsafe-eval'` y workers `blob:`; las texturas, `blob:` en `img-src` y `connect-src`; los atributos `style` de React se bloquean | Ampliar la CSP solo en las rutas que lo necesiten, con un ADR | F1 | V3 |
+| Endpoints JSON | `checkOrigin` no cubre `application/json` | Exigir `application/json`, nunca CORS con credenciales | F2 | V3 |
+| Métodos HTTP | `TRACE`, `OPTIONS` o `PUT /` renderizan páginas y consultan D1 | Lista blanca de métodos por ruta | S3 | V13 |
+| Página de estado `/` | Expone entorno, bindings y migraciones | Solo en local y preview; nunca en producción | S3 | V13 |
+
+## 7. Cómo se revisa
 - Al cerrar cada fase: repasar cada tabla, marcar lo implementado con su PR y añadir los componentes nuevos.
 - Ante un incidente o un hallazgo crítico: actualizar el modelo en el mismo PR que lo corrige.
 - `revisor-seguridad` revisa este documento junto con el código de cada fase.

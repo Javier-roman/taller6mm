@@ -1,5 +1,6 @@
 // Cabeceras de seguridad de Taller6mm (docs/08 §6.2), en un solo sitio:
-//   - el middleware las pone en las respuestas que genera el Worker (SSR, API);
+//   - src/worker.ts las pone en TODAS las respuestas del Worker (SSR, API, el 403 de checkOrigin,
+//     los 404 y los 500), porque envuelve el handler del adaptador: un único punto de salida;
 //   - `public/_headers` las repite para los estáticos, que no pasan por el Worker (un test comprueba
 //     que coinciden con `staticHeaders('production')`);
 //   - la integración `security-headers` añade X-Robots-Tag a `_headers` fuera de producción.
@@ -51,9 +52,17 @@ export function staticHeaders(environment: Environment): Record<string, string> 
   return { ...baseHeaders(environment), 'content-security-policy': HEADER_ONLY_CSP };
 }
 
-/** Añade `frame-ancestors` a la CSP de Astro o, si no hay (no es HTML), pone una CSP cerrada. */
-export function mergeCsp(existing: string | null): string {
-  if (!existing) return NON_HTML_CSP;
+const isHtml = (contentType: string | null) => /^\s*text\/html\b/i.test(contentType ?? '');
+
+/**
+ * CSP final de una respuesta del Worker:
+ * - con la CSP de Astro (SSR): se le añade `frame-ancestors`;
+ * - HTML sin CSP en cabecera (p. ej. una página de error prerenderizada que trae su <meta>): solo
+ *   `frame-ancestors`, como los estáticos de `_headers`, para no intersecar con su <meta>;
+ * - lo que no es HTML (JSON, texto, el 403 de checkOrigin): una CSP cerrada.
+ */
+export function mergeCsp(existing: string | null, contentType: string | null = null): string {
+  if (!existing) return isHtml(contentType) ? HEADER_ONLY_CSP : NON_HTML_CSP;
   if (/(?:^|;)\s*frame-ancestors\b/.test(existing)) return existing;
   return `${existing.replace(/;\s*$/, '')}; ${HEADER_ONLY_CSP}`;
 }
@@ -61,17 +70,5 @@ export function mergeCsp(existing: string | null): string {
 /** Aplica todas las cabeceras a una respuesta del Worker (las cabeceras deben ser mutables). */
 export function applySecurityHeaders(headers: Headers, environment: Environment): void {
   for (const [name, value] of Object.entries(baseHeaders(environment))) headers.set(name, value);
-  headers.set('content-security-policy', mergeCsp(headers.get('content-security-policy')));
+  headers.set('content-security-policy', mergeCsp(headers.get('content-security-policy'), headers.get('content-type')));
 }
-
-/** Bloque de `_headers` (formato de Cloudflare) para la ruta indicada. */
-export function toHeadersFile(path: string, headers: Record<string, string>): string {
-  const lines = Object.entries(headers).map(([name, value]) => `  ${canonical(name)}: ${value}`);
-  return `${path}\n${lines.join('\n')}\n`;
-}
-
-const canonical = (name: string) =>
-  name
-    .split('-')
-    .map((part) => (part === 'x' ? 'X' : part.charAt(0).toUpperCase() + part.slice(1)))
-    .join('-');

@@ -43,12 +43,34 @@ test.describe('cabeceras de seguridad', () => {
   });
 });
 
-test.describe('CSRF (checkOrigin de Astro)', () => {
-  test('rechaza un formulario enviado desde otro origen', async ({ request }) => {
-    const res = await request.post('/', {
-      headers: { origin: 'https://atacante.example', 'content-type': 'application/x-www-form-urlencoded' },
-      data: 'a=1',
-    });
-    expect(res.status()).toBe(403);
+test.describe('todas las respuestas del Worker llevan las cabeceras (src/worker.ts)', () => {
+  test('una sola CSP por respuesta (headersArray no fusiona duplicados)', async ({ request }) => {
+    for (const path of ['/', '/no-existe']) {
+      const res = await request.get(path);
+      const csp = res.headersArray().filter((h) => h.name.toLowerCase() === 'content-security-policy');
+      expect(csp, path).toHaveLength(1);
+    }
   });
+
+  test('un 404 del Worker también va protegido', async ({ request }) => {
+    const res = await request.get('/no-existe');
+    expect(res.status()).toBe(404);
+    const headers = res.headers();
+    for (const [name, pattern] of Object.entries(COMMON)) expect(headers[name], name).toMatch(pattern);
+  });
+});
+
+test.describe('CSRF (checkOrigin de Astro)', () => {
+  for (const contentType of ['application/x-www-form-urlencoded', 'text/plain', 'multipart/form-data; boundary=x']) {
+    test(`rechaza un envío desde otro origen (${contentType.split(';')[0]}), con cabeceras`, async ({ request }) => {
+      const res = await request.post('/', {
+        headers: { origin: 'https://atacante.example', 'content-type': contentType },
+        data: contentType.startsWith('multipart') ? '--x--\r\n' : 'a=1',
+      });
+      expect(res.status()).toBe(403);
+      const headers = res.headers();
+      for (const [name, pattern] of Object.entries(COMMON)) expect(headers[name], name).toMatch(pattern);
+      expect(headers['content-security-policy']).toBe("default-src 'none'; frame-ancestors 'none'");
+    });
+  }
 });
