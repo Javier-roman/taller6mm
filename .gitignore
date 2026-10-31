@@ -54,3 +54,6 @@ Thumbs.db
 CLAUDE.local.md
 # Tipos generados por `wrangler types` (se regeneran en typecheck)
 worker-configuration.d.ts
+
+# Python (apps/pipeline): versión fijada para uv
+!apps/pipeline/.python-version
