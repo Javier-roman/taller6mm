@@ -9,7 +9,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const require = createRequire(path.join(root, 'package.json'));
 
 export const quietEnv = {
   ...process.env,
@@ -19,8 +18,12 @@ export const quietEnv = {
   DO_NOT_TRACK: '1',
 };
 
-/** Ruta del lanzador JS de un binario de node_modules (evita los .cmd de Windows). */
-export function bin(pkg, file) {
+/**
+ * Ruta del lanzador JS de un binario de node_modules (evita los .cmd de Windows), resuelto desde el
+ * paquete que declara la dependencia (`from`, la raíz por defecto).
+ */
+export function bin(pkg, file, from = root) {
+  const require = createRequire(path.join(from, 'package.json'));
   return path.join(path.dirname(require.resolve(`${pkg}/package.json`)), file);
 }
 
