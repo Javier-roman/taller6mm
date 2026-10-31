@@ -4,5 +4,18 @@
     "path": "dist/client/_astro/*.js",
     "limit": "120 kB",
     "gzip": true
+  },
+  {
+    "name": "CSS global (tokens, base, componentes y utilidades)",
+    "path": "dist/client/_astro/*.css",
+    "limit": "15 kB",
+    "gzip": true
+  },
+  {
+    "name": "Fuentes woff2 (todas las familias y subconjuntos; cada página carga solo los que usa)",
+    "path": "dist/client/_astro/*.woff2",
+    "limit": "400 kB",
+    "gzip": false,
+    "brotli": false
   }
 ]
