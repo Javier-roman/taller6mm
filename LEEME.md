@@ -31,10 +31,12 @@ Si algo del entorno está mal (sesión de administrador, carpeta dentro de OneDr
 - **pnpm**: si `pnpm -v` no responde, instálalo con `npm install -g pnpm` desde la terminal normal. `corepack enable` suele pedir permisos de administrador en Windows.
 - **GitHub**: antes de que Claude Code suba el CI, ejecuta tú `gh auth refresh -h github.com -s workflow`.
 - **MCP de Playwright** (el navegador de Claude Code): `.mcp.json` arranca `node .claude/mcp/playwright.mjs`, que funciona igual en Windows, macOS y Linux sin tocar nada. El lanzador:
-  - abre **Edge** en Windows (ya viene con el sistema) y el **Chromium de Playwright** en macOS y Linux;
-  - ejecuta `@playwright/mcp` con la versión fijada (`0.0.83`), con el npx del mismo Node y sin shell (nada de `cmd /c`), y sin scripts de instalación;
-  - toma el perfil aislado (`isolated`) y los orígenes permitidos (`allowedOrigins`) de `.claude/playwright-mcp.json`, ignora las variables `PLAYWRIGHT_MCP_*` que podrían relajarlos (salvo `PLAYWRIGHT_MCP_EXECUTABLE_PATH` y `PLAYWRIGHT_MCP_HEADLESS`) y no arranca si ese archivo deja de ser seguro.
+  - abre **Edge** en Windows (ya viene con el sistema) y el **Chromium de Playwright** en macOS y Linux, en Linux con el sandbox de Chromium forzado (salvo como root);
+  - ejecuta `@playwright/mcp` con la versión fijada (`0.0.83`), con el npx del mismo Node (nada de `cmd /c`), sin scripts de instalación y desde una carpeta de trabajo fuera del repo, para que no encuentre nada plantado en el proyecto;
+  - valida `.claude/playwright-mcp.json` con una **lista blanca estricta** (perfil aislado, orígenes permitidos y acceso a archivos restringido; cualquier otra clave impide arrancar) e ignora las variables `PLAYWRIGHT_MCP_*` que podrían relajarla (salvo `PLAYWRIGHT_MCP_EXECUTABLE_PATH` y `PLAYWRIGHT_MCP_HEADLESS`).
 
-  En macOS o Linux, la primera vez descarga el navegador con `npx -y @playwright/mcp@0.0.83 install-browser chromium`. Para ver qué ejecutaría, sin arrancar nada: `node .claude/mcp/playwright.mjs --print`. Sus tests: `node --test ".claude/**/*.test.mjs"` (con `TALLER6MM_MCP_E2E=1` añade una prueba real con el navegador).
+  Además, el hook `guard-mcp` limita las rutas de archivo de las herramientas del MCP (capturas, PDF, trazas, subidas…) a `.playwright-mcp/` y `docs/informes/capturas/`, y `browser_run_code_unsafe` está denegada: ejecuta código en Node y saltaría todas las demás barreras. **No apruebes nunca el servidor `playwright` completo** con «no volver a preguntar».
+
+  En macOS o Linux, la primera vez descarga el navegador con `npx -y @playwright/mcp@0.0.83 install-browser chromium`. Si tu distribución no admite el sandbox de Chromium (sin espacios de nombres de usuario), arranca Claude Code con `TALLER6MM_MCP_NO_SANDBOX=1`. Para ver qué ejecutaría, sin arrancar nada: `node .claude/mcp/playwright.mjs --print`. Sus tests: `node --test ".claude/**/*.test.mjs"` (con `TALLER6MM_MCP_E2E=1` añade una prueba real con el navegador y un entorno hostil).
 - Avanza una fase cada vez y lee el informe de fase antes de dar el OK a la siguiente.
 - Las capturas de `docs/referencias/` son de terceros (videojuegos y una fotografía). Úsalas solo como referencia interna. Ya están en `.gitignore`.
