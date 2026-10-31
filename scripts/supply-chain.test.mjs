@@ -79,6 +79,28 @@ describe('Renovate (renovate.json)', () => {
   });
 });
 
+describe('excepciones de OSV-Scanner (osv-scanner.toml)', () => {
+  const blocks = read('osv-scanner.toml')
+    .split(/^\[\[(?:PackageOverrides|IgnoredVulns)\]\]\s*$/m)
+    .slice(1);
+
+  test('cada excepción tiene motivo y caduca en menos de 6 meses', () => {
+    const limit = Date.now() + 183 * 24 * 60 * 60 * 1000;
+    for (const block of blocks) {
+      assert.match(block, /^reason\s*=\s*"[^"]{20,}"/m, 'falta un motivo (reason)');
+      const until = /^(?:effectiveUntil|ignoreUntil)\s*=\s*(\d{4}-\d{2}-\d{2})/m.exec(block)?.[1];
+      assert.ok(until, 'falta la fecha de caducidad (effectiveUntil o ignoreUntil)');
+      assert.ok(Date.parse(until) <= limit, `caduca demasiado tarde: ${until}`);
+    }
+  });
+
+  test('las excepciones de paquete van acotadas a una versión', () => {
+    for (const block of blocks.filter((b) => /^name\s*=/m.test(b))) {
+      assert.match(block, /^version\s*=\s*"\d[^"]*"/m);
+    }
+  });
+});
+
 describe('workflows de GitHub Actions', () => {
   const dir = path.join(root, '.github', 'workflows');
   const files = readdirSync(dir).filter((f) => /\.ya?ml$/.test(f));

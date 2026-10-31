@@ -2,19 +2,34 @@
   "name": "@taller6mm/ui",
   "version": "0.0.0",
   "private": true,
-  "description": "Marca, tokens de diseño y componentes React de Taller6mm.",
+  "description": "Marca, tokens de diseño, fuentes y componentes React de Taller6mm.",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./brand": "./src/brand.ts",
-    "./tokens": "./src/tokens.ts"
+    "./tokens": "./src/tokens.ts",
+    "./contraste": "./src/contrast.ts",
+    "./fuentes": "./src/fonts.ts",
+    "./componentes": "./src/components/index.ts",
+    "./estilos/*": "./src/styles/*"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "css": "node scripts/write-css.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "catalog:",
+    "@fontsource/big-shoulders-stencil": "catalog:",
+    "@fontsource/cinzel": "catalog:",
+    "@fontsource/jetbrains-mono": "catalog:",
+    "react": "catalog:"
   },
   "devDependencies": {
     "@taller6mm/config": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "react-dom": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }
