@@ -25,5 +25,10 @@ export default defineConfig({
   },
   server: { host: '127.0.0.1', port: 4321 },
   // Tailwind v4 sobre los tokens de @taller6mm/ui (src/styles/global.css).
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    // Vite incrusta en base64 los archivos de < 4 KB, incluidos subconjuntos pequeños de Fontsource.
+    // La CSP solo admite `font-src 'self'`, así que las fuentes nunca se incrustan (sin `data:` en la CSP).
+    build: { assetsInlineLimit: (file) => (/\.(?:woff2?|ttf|otf)$/i.test(file) ? false : undefined) },
+  },
 });
