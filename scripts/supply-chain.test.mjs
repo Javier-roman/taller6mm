@@ -26,8 +26,16 @@ function days(value) {
 }
 
 describe('pnpm (pnpm-workspace.yaml)', () => {
-  const ws = read('pnpm-workspace.yaml');
-  const setting = (key) => new RegExp(`^${key}:\\s*(.+?)\\s*$`, 'm').exec(ws)?.[1];
+  // Claves de primer nivel del YAML («clave: valor», sin sangría).
+  const settings = new Map(
+    read('pnpm-workspace.yaml')
+      .split(/\r?\n/)
+      .flatMap((line) => {
+        const m = /^([A-Za-z]\w*):\s*(.*?)\s*$/.exec(line);
+        return m ? [[m[1], m[2]]] : [];
+      }),
+  );
+  const setting = (key) => settings.get(key);
 
   test(`minimumReleaseAge de al menos ${MIN_DAYS} días y en modo estricto`, () => {
     assert.ok(Number(setting('minimumReleaseAge')) >= MIN_MINUTES);
