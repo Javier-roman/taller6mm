@@ -88,7 +88,7 @@ Cada rebanada termina con `/verify`, commits pequeños (Conventional Commits) y 
 1. **Comprobaciones tras reiniciar**:
    - `check-env` sin aviso;
    - `cat .dev.vars` (Bash) y `Get-Content .dev.vars` (PowerShell) denegados por el hook;
-   - tú ejecutas `/skills` y `/agents` y me dices qué ves.
+   - tú ejecutas `/skills` y `/agents` y me dices qué ves. (Hecho: `/skills` muestra las 6 del proyecto; el asistente `/agents` ya no existe en Claude Code, así que los 5 subagentes se verifican porque aparecen como disponibles y se han usado.)
 2. **Renombrado** a Taller6mm.
 3. **Arreglos de Claude Code** (§2):
    - `guard-shell.mjs` con tests (`node --test`, tabla de unos 40 comandos permitir/preguntar/denegar, incluidos los intentos de saltárselo);
