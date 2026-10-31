@@ -19,7 +19,8 @@
     },
     "e2e": {
       "dependsOn": ["build"],
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["CI", "CLAUDE_CODE_REMOTE", "PLAYWRIGHT_BROWSERS_PATH", "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"]
     },
     "size": {
       "dependsOn": ["build"],
