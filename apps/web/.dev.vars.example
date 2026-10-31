@@ -1,0 +1,15 @@
+# Variables secretas de apps/web en local. Copia este archivo a `.dev.vars` (está en .gitignore) y
+# rellénalo. Nunca subas `.dev.vars` ni pegues sus valores en un PR, un issue o un chat.
+# En preview y producción, cada secreto se crea con `pnpm exec wrangler secret put <NOMBRE>` (lo hace Javi).
+# Las variables no secretas (ENVIRONMENT…) viven en wrangler.jsonc.
+#
+# Todavía no hay ninguna obligatoria: se irán añadiendo con su fase.
+
+# Fase 5 (cuentas): clave de Better Auth, 32 bytes aleatorios en base64 (`openssl rand -base64 32`).
+# BETTER_AUTH_SECRET=
+
+# Fase 5 (altas y publicaciones): clave secreta de Turnstile. En local vale la de pruebas de Cloudflare.
+# TURNSTILE_SECRET_KEY=
+
+# Fase 6 (alertas por email): clave de la API de Resend.
+# RESEND_API_KEY=
