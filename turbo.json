@@ -11,6 +11,10 @@
     "typecheck": {
       "outputs": []
     },
+    "@taller6mm/web#typecheck": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
     "test": {
       "outputs": []
     },
