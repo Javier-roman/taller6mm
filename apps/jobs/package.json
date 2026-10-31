@@ -1,0 +1,23 @@
+{
+  "name": "@taller6mm/jobs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Worker de trabajos (Hono): cron, colas, API interna de ingesta y alertas.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --persist-to ../../.wrangler/state",
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "typecheck": "wrangler types && tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "hono": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "catalog:",
+    "@taller6mm/config": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

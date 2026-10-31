@@ -33,6 +33,13 @@ try {
     uid: typeof process.getuid === 'function' ? process.getuid() : -1,
     exists: existsSync,
     realpath: realpathSync,
+    readVersion: (file) => {
+      try {
+        return JSON.parse(readFileSync(file, 'utf8')).version ?? null;
+      } catch {
+        return null;
+      }
+    },
   });
 } catch (error) {
   fail(error instanceof LaunchError || error instanceof SyntaxError ? error.message : String(error));

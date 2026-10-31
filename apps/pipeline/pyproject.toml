@@ -1,0 +1,33 @@
+[project]
+name = "taller6mm-pipeline"
+version = "0.0.0"
+description = "Pipeline de assets 2D/3D y validación de fidelidad de Taller6mm (docs/05)."
+readme = "LEEME.md"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest==9.2.0", "ruff==0.17.3"]
+
+[build-system]
+requires = ["uv_build>=0.11,<0.12"]
+build-backend = "uv_build"
+
+[tool.uv]
+# Misma política que pnpm: nada publicado hace menos de 3 días (paquetes comprometidos recién subidos).
+exclude-newer = "3 days"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# En los tests, `assert` es la forma de comprobar.
+"tests/**" = ["S101"]

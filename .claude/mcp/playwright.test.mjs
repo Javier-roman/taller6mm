@@ -16,7 +16,10 @@ import {
   findNpxCli,
   isInside,
   LaunchError,
+  LOCAL_CLI,
+  localCli,
   MCP_PACKAGE,
+  MCP_VERSION,
   NO_SANDBOX_ENV,
   sandboxArgs,
   sanitizeEnv,
@@ -166,7 +169,7 @@ describe('buildLaunch', () => {
     assert.ok(!r.args.includes('--executable-path'));
     assert.equal(r.args[r.args.indexOf('--config') + 1], `${NIX_ROOT}/.claude/playwright-mcp.json`);
     assert.equal(r.options.cwd, '/home/javi/.cache/taller6mm/playwright-mcp');
-    assert.deepEqual(r.warnings, []);
+    assert.match(r.warnings[0], /pnpm install/, 'sin copia local avisa de que usa npx');
   });
 
   test('nube de Claude Code (root): Chromium preinstalado y aviso de que va sin sandbox', () => {
@@ -181,7 +184,10 @@ describe('buildLaunch', () => {
     });
     assert.deepEqual(r.args.slice(-2), ['--executable-path', CLOUD_CHROMIUM]);
     assert.ok(!r.args.includes('--sandbox'));
-    assert.match(r.warnings[0], /root/);
+    assert.ok(
+      r.warnings.some((w) => /root/.test(w)),
+      r.warnings.join(' | '),
+    );
   });
 
   test('la ruta del usuario (PLAYWRIGHT_MCP_EXECUTABLE_PATH) manda sobre la de la nube', () => {
@@ -214,6 +220,37 @@ describe('buildLaunch', () => {
 
   test('la versión está fijada: nunca latest ni rangos', () => {
     assert.match(MCP_PACKAGE, /^@playwright\/mcp@\d+\.\d+\.\d+$/);
+  });
+});
+
+describe('copia local de @playwright/mcp (devDependency)', () => {
+  const cli = `${NIX_ROOT}/node_modules/@playwright/mcp/cli.js`;
+  const base = {
+    platform: 'linux',
+    execPath: NVM_NODE,
+    env: { PATH: '/usr/bin' },
+    root: NIX_ROOT,
+    home: '/home/javi',
+    uid: 1000,
+  };
+
+  test('con la versión fijada se usa directamente: sin npx, sin --yes y sin avisos', () => {
+    const r = buildLaunch({ ...base, exists: only(cli, NVM_NPX), readVersion: () => MCP_VERSION });
+    assert.equal(r.args[0], cli);
+    assert.ok(!r.args.includes('--yes') && !r.args.includes(MCP_PACKAGE));
+    assert.deepEqual(r.warnings, []);
+  });
+
+  test('con otra versión instalada se ignora y se usa npx con la fijada', () => {
+    assert.equal(localCli({ platform: 'linux', root: NIX_ROOT, exists: only(cli), readVersion: () => '0.0.1' }), null);
+    const r = buildLaunch({ ...base, exists: only(cli, NVM_NPX), readVersion: () => '0.0.1' });
+    assert.deepEqual(r.args.slice(0, 3), [NVM_NPX, '--yes', MCP_PACKAGE]);
+  });
+
+  test('la versión del lanzador coincide con la del catálogo de pnpm', () => {
+    const catalog = readFileSync(path.join(root, 'pnpm-workspace.yaml'), 'utf8');
+    const pinned = catalog.match(/["']@playwright\/mcp["']:\s*([0-9.]+)/)?.[1];
+    assert.equal(pinned, MCP_VERSION);
   });
 });
 
@@ -396,7 +433,8 @@ describe('lanzador (proceso real)', () => {
     const out = JSON.parse(r.stdout);
     assert.equal(out.command, process.execPath);
     assert.ok(!isInside(out.cwd, root, process.platform), 'el directorio de trabajo está fuera del repo');
-    assert.ok(out.args.includes(MCP_PACKAGE));
+    const viaLocal = out.args[0] === path.join(root, ...LOCAL_CLI);
+    assert.ok(viaLocal || out.args.includes(MCP_PACKAGE), 'copia local o npx con la versión fijada');
     assert.equal(out.args[out.args.indexOf('--browser') + 1], browserFor(process.platform));
     assert.ok(!r.stdout.includes('secreto-que-no-debe-salir'));
   });

@@ -14,8 +14,15 @@
 
 import path from 'node:path';
 
-/** Versión fijada: nunca `latest` ni rangos. Cambiarla es una decisión revisada en un PR. */
-export const MCP_PACKAGE = '@playwright/mcp@0.0.83';
+/**
+ * Versión fijada: nunca `latest` ni rangos. Es la misma que el catálogo de pnpm-workspace.yaml (un
+ * test lo comprueba y Renovate actualiza las dos a la vez).
+ */
+export const MCP_VERSION = '0.0.83';
+export const MCP_PACKAGE = `@playwright/mcp@${MCP_VERSION}`;
+
+/** Copia instalada por pnpm (devDependency con integridad en el lockfile), relativa a la raíz. */
+export const LOCAL_CLI = ['node_modules', '@playwright', 'mcp', 'cli.js'];
 
 /** Configuración común a todas las plataformas, relativa a la raíz del proyecto. */
 export const CONFIG_RELATIVE = ['.claude', 'playwright-mcp.json'];
@@ -215,24 +222,47 @@ export function assertSafeConfig(config) {
 }
 
 /**
+ * La copia de @playwright/mcp que instaló pnpm, si tiene la versión fijada. Es la vía preferida:
+ * integridad comprobada por el lockfile, sin npx, sin shell y sin red al arrancar.
+ * @param {{ platform: string, root: string, exists: (p: string) => boolean,
+ *           readVersion?: (packageJson: string) => string | null }} opts
+ */
+export function localCli({ platform, root, exists, readVersion = () => null }) {
+  const p = pathFor(platform);
+  const cli = p.join(root, ...LOCAL_CLI);
+  if (!exists(cli)) return null;
+  return readVersion(p.join(p.dirname(cli), 'package.json')) === MCP_VERSION ? cli : null;
+}
+
+/**
  * Calcula el comando completo. Pura: todo lo que depende del sistema llega por parámetro.
  * @param {{ platform: string, execPath: string, env: Record<string, string | undefined>, root: string,
- *           home: string, uid?: number, exists: (p: string) => boolean, realpath?: (p: string) => string }} opts
+ *           home: string, uid?: number, exists: (p: string) => boolean, realpath?: (p: string) => string,
+ *           readVersion?: (packageJson: string) => string | null }} opts
  */
-export function buildLaunch({ platform, execPath, env, root, home, uid = -1, exists, realpath }) {
+export function buildLaunch({ platform, execPath, env, root, home, uid = -1, exists, realpath, readVersion }) {
   const p = pathFor(platform);
-  const pathEnv = env.PATH ?? env.Path ?? env.path ?? '';
-  const npxCli = findNpxCli({ platform, execPath, pathEnv, root, exists, realpath });
-  if (!npxCli) {
-    throw new LaunchError(
-      'No encuentro npx (npm) junto a Node ni en el PATH. Reinstala Node.js con npm incluido y vuelve a abrir Claude Code.',
+  const warnings = [];
+  let head;
+  const local = localCli({ platform, root, exists, readVersion });
+  if (local) head = [local];
+  else {
+    const pathEnv = env.PATH ?? env.Path ?? env.path ?? '';
+    const npxCli = findNpxCli({ platform, execPath, pathEnv, root, exists, realpath });
+    if (!npxCli) {
+      throw new LaunchError(
+        'No encuentro @playwright/mcp (ejecuta `pnpm install`) ni npx junto a Node o en el PATH para descargarlo.',
+      );
+    }
+    head = [npxCli, '--yes', MCP_PACKAGE];
+    warnings.push(
+      `@playwright/mcp ${MCP_VERSION} no está instalado en node_modules: uso npx. Ejecuta \`pnpm install\`.`,
     );
   }
   const sandbox = sandboxArgs({ platform, uid, env });
+  if (sandbox.warning) warnings.push(sandbox.warning);
   const args = [
-    npxCli,
-    '--yes',
-    MCP_PACKAGE,
+    ...head,
     '--config',
     p.join(root, ...CONFIG_RELATIVE),
     '--browser',
@@ -244,7 +274,7 @@ export function buildLaunch({ platform, execPath, env, root, home, uid = -1, exi
   return {
     command: execPath,
     args,
-    warnings: sandbox.warning ? [sandbox.warning] : [],
+    warnings,
     options: {
       cwd: workDirFor({ platform, env, home, root }),
       env: sanitizeEnv(env, platform),

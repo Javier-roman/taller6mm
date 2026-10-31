@@ -52,3 +52,12 @@ Thumbs.db
 # Claude Code: configuración personal y local
 .claude/settings.local.json
 CLAUDE.local.md
+# Tipos generados por `wrangler types` (se regeneran en typecheck)
+worker-configuration.d.ts
+
+# Python (apps/pipeline): versión fijada para uv
+!apps/pipeline/.python-version
+
+# Salidas de Playwright y Lighthouse por app
+**/test-results/
+**/playwright-report/

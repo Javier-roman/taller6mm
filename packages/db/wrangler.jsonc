@@ -1,0 +1,28 @@
+{
+  // Configuración SOLO para los tests de este paquete (Vitest en workerd con D1 en memoria).
+  // Las apps declaran los mismos bindings en su propio wrangler.jsonc.
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "taller6mm-db-test",
+  "compatibility_date": "2026-08-15",
+  "send_metrics": false,
+  "d1_databases": [
+    {
+      "binding": "CORE",
+      "database_name": "taller6mm-core-test",
+      "database_id": "local-core",
+      "migrations_dir": "migrations/core"
+    },
+    {
+      "binding": "MERCADO",
+      "database_name": "taller6mm-mercado-test",
+      "database_id": "local-mercado",
+      "migrations_dir": "migrations/mercado"
+    },
+    {
+      "binding": "BUSQUEDA",
+      "database_name": "taller6mm-busqueda-test",
+      "database_id": "local-busqueda",
+      "migrations_dir": "migrations/busqueda"
+    }
+  ]
+}

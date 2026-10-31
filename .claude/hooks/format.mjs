@@ -9,7 +9,20 @@ import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
-const BIOME_EXT = new Set(['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs', '.json', '.jsonc', '.css', '.astro']);
+const BIOME_EXT = new Set([
+  '.ts',
+  '.tsx',
+  '.mts',
+  '.cts',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cjs',
+  '.json',
+  '.jsonc',
+  '.css',
+  '.astro',
+]);
 
 // Lectura asíncrona de stdin: readFileSync(0) puede fallar con tuberías en Windows.
 async function readStdin(ms = 5000) {
