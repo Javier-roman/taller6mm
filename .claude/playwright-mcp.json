@@ -1,8 +1,7 @@
 {
   "browser": {
     "browserName": "chromium",
-    "isolated": true,
-    "launchOptions": { "channel": "msedge" }
+    "isolated": true
   },
   "network": {
     "allowedOrigins": ["http://localhost:*", "http://127.0.0.1:*"]

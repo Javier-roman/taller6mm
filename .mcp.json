@@ -2,8 +2,8 @@
   "mcpServers": {
     "playwright": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp@0.0.83", "--config", ".claude/playwright-mcp.json"]
+      "command": "node",
+      "args": ["${CLAUDE_PROJECT_DIR:-.}/.claude/mcp/playwright.mjs"]
     },
     "claude-code-docs": {
       "type": "http",
