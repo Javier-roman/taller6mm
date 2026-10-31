@@ -51,6 +51,18 @@ describe('rutas de archivo', () => {
     test(`deniega ${tool} ${JSON.stringify(input)}`, () => assert.equal(decide(tool, input), 'deny'));
   }
 
+  test('los directorios permitidos no dependen del separador del sistema que ejecuta', () => {
+    // En Windows, una versión anterior unía MCP_DIRS con el path.join del sistema y fallaba en rutas POSIX.
+    assert.equal(
+      decide('browser_take_screenshot', { filename: 'docs/informes/capturas/a.png' }, ROOT, 'linux'),
+      'allow',
+    );
+    assert.equal(
+      decide('browser_take_screenshot', { filename: 'docs\\informes\\capturas\\a.png' }, 'C:\\r', 'win32'),
+      'allow',
+    );
+  });
+
   test('Windows: sin distinguir mayúsculas y con barras invertidas', () => {
     const root = 'C:\\dev\\bancada';
     assert.equal(decide('browser_take_screenshot', { filename: '.PLAYWRIGHT-MCP\\a.png' }, root, 'win32'), 'allow');

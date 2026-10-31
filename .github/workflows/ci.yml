@@ -155,5 +155,12 @@ jobs:
           python-version: "3.12"
       - name: Semgrep (versión exacta)
         run: python -m pip install --disable-pip-version-check semgrep==1.182.1
+      # Las tres reglas excluidas piden 7 días de espera en pnpm, uv y Renovate. La política aprobada
+      # es de 3 días (plan de la Fase 0, decisión 4) y la hace cumplir scripts/supply-chain.test.mjs.
       - name: Semgrep (reglas por defecto, sin métricas)
-        run: semgrep scan --config p/default --error --metrics off --exclude node_modules --exclude dist
+        run: >-
+          semgrep scan --config p/default --error --metrics off
+          --exclude node_modules --exclude dist
+          --exclude-rule package_managers.pnpm.pnpm-missing-minimum-release-age.pnpm-minimum-release-age
+          --exclude-rule package_managers.uv.uv-missing-dependency-cooldown.uv-missing-dependency-cooldown
+          --exclude-rule package_managers.renovate.renovate-missing-minimum-release-age.renovate-missing-minimum-release-age
