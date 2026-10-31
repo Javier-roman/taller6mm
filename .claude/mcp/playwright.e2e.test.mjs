@@ -55,7 +55,18 @@ test('el MCP arranca, navega a localhost y bloquea otros orígenes', {
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const { port } = server.address();
 
-  const child = spawn(process.execPath, [launcher], { stdio: ['pipe', 'pipe', 'inherit'] });
+  // Entorno hostil: si el lanzador no filtrara estas variables, relajarían el aislamiento.
+  const hostile = {
+    PLAYWRIGHT_MCP_ALLOWED_ORIGINS: 'http://example.invalid',
+    PLAYWRIGHT_MCP_ISOLATED: 'false',
+    PLAYWRIGHT_MCP_ALLOW_UNRESTRICTED_FILE_ACCESS: 'true',
+    PLAYWRIGHT_MCP_PORT: '18931',
+    PLAYWRIGHT_MCP_CAPS: 'network,devtools',
+  };
+  const child = spawn(process.execPath, [launcher], {
+    stdio: ['pipe', 'pipe', 'inherit'],
+    env: { ...process.env, ...hostile },
+  });
   try {
     const mcp = mcpClient(child);
     const init = await mcp.request('initialize', {
@@ -82,6 +93,27 @@ test('el MCP arranca, navega a localhost y bloquea otros orígenes', {
       arguments: { url: 'http://example.invalid/' },
     });
     assert.match(text(blocked), /ERR_BLOCKED_BY_CLIENT/);
+
+    const file = await mcp.request('tools/call', {
+      name: 'browser_navigate',
+      arguments: { url: 'file:///etc/hostname' },
+    });
+    assert.ok(file.result?.isError || /blocked|not allowed|ERR_/i.test(text(file)), text(file));
+
+    // Las capacidades extra del entorno hostil no aparecen (p. ej. browser_route deshace allowedOrigins).
+    assert.ok(!names.includes('browser_route'), 'browser_route no debe estar disponible');
+
+    if (names.includes('browser_get_config')) {
+      const config = JSON.parse(
+        text(await mcp.request('tools/call', { name: 'browser_get_config', arguments: {} })).match(
+          /\{[\s\S]*\}/,
+        )?.[0] ?? '{}',
+      );
+      assert.equal(config.browser?.isolated, true);
+      assert.notEqual(config.allowUnrestrictedFileAccess, true);
+      assert.deepEqual(config.network?.allowedOrigins, ['http://localhost:*', 'http://127.0.0.1:*']);
+      assert.equal(config.server?.port, undefined);
+    }
   } finally {
     child.stdin.end();
     await new Promise((resolve) => {
