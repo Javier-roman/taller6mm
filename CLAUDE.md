@@ -88,6 +88,7 @@ docs              Especificación, ADRs, informes de fase, runbooks, referencias
 - Skills: `/verify` (antes de cada commit), `/revisar-ui <ruta>`, `/nueva-tienda`, `/nueva-replica`, `/adr`, `/informe-fase <n>`.
 - Subagentes: `critico-diseno`, `revisor-seguridad`, `ingeniero-ingesta`, `revisor-fidelidad`, `auditor-rendimiento`. Pásalos al cerrar cada rebanada de su área.
 - **Mira lo que construyes**: usa el MCP de Playwright (capturas a 390 px y 1440 px) antes de dar algo por bueno.
+- **El diseño es lo más importante para Javi.** En cada hito visual, para y enséñale capturas en escritorio y móvil, pasadas antes por `critico-diseno`. No continúes ni fusiones sin su OK explícito. Antes de construir La Armería (Fase 1), presenta varias propuestas con capturas basadas en `docs/referencias/` y espera a que elija.
 - Explica a Javi cada decisión importante en 2-3 líneas: qué, por qué y qué alternativa descartaste. Sin jerga innecesaria.
 - Nunca manejes credenciales de Javi: si hace falta iniciar sesión (wrangler, gh), dale el comando y lo ejecuta él.
 - **Nunca con privilegios de administrador**: si el aviso de inicio (`check-env`) detecta una sesión elevada, no instales dependencias ni ejecutes scripts. Pide a Javi que reinicie Claude Code desde una terminal normal.

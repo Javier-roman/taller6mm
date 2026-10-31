@@ -42,7 +42,7 @@ El contenido de cada módulo **es real**: miniaturas de builds reales, siluetas 
 - **Primera visita**: pantalla negra, zumbido y parpadeo de los tubos que se encienden fila a fila, aparece la sala y el logo se "estampa" en el rótulo. Dura 3 s como máximo, se puede saltar (Esc, clic o "Saltar") y se recuerda en `localStorage`. En visitas siguientes las luces ya están encendidas.
 - **Linterna-cursor**: un haz suave sigue al ratón y revela detalle. La sala está en penumbra, nunca a oscuras: el texto siempre es legible.
 - **Hover sobre un módulo**: su tubo se enciende con parpadeo de arranque, el rótulo a plantilla se ilumina y aparece el dato vivo. El resto de la sala baja un poco.
-- **Clic**: los módulos del compactus **se desplazan sobre sus raíles** para abrir el pasillo del elegido. La cámara avanza (unos 700 ms, GSAP) y un fundido con View Transitions lleva a la sección. Al volver, la cámara se restaura en ese pasillo.
+- **Clic**: los módulos del compactus **se desplazan sobre sus raíles** para abrir el pasillo del elegido. La cámara avanza (unos 700 ms, GSAP) y un fundido con View Transitions lleva a la sección. Serán las transiciones nativas del navegador entre documentos (CSS `@view-transition`), no el `<ClientRouter />` de Astro, que no admite la CSP con hashes. Al volver, la cámara se restaura en ese pasillo.
 - **Teclado**: ← y → recorren módulos, Enter entra y Esc vuelve. El foco visible es el propio rótulo iluminado. Hay enlace "Saltar al contenido".
 - **Sonido** (opcional, apagado por defecto, interruptor persistente): zumbido de tubos, clic metálico, rodar de raíles. Sonidos CC0 o propios.
 
@@ -85,16 +85,21 @@ Assets de la escena: geometría propia o procedimental (estanterías, maletines 
 | `--laton-claro` | #D9B77E | Hover y realce del acento |
 | `--fde` | #A08A6A | Acento secundario (Flat Dark Earth) |
 | `--verde-ranger` | #4B5A3F | Acento terciario |
-| `--naranja-senal` | #E4572E | Interacción activa, ranura seleccionada |
+| `--naranja-senal` | #E75A31 | Interacción activa, ranura seleccionada y anillo de foco (antes #E4572E) |
 | `--estado-ok` | #3FA66B | En stock / compatible |
 | `--estado-aviso` | #E0A526 | Pocas unidades / con adaptador |
-| `--estado-error` | #D2453F | Agotado / incompatible |
-| `--estado-desconocido` | #6B7480 | Sin datos |
+| `--estado-error` | #E65850 | Agotado / incompatible (antes #D2453F) |
+| `--estado-desconocido` | #7F8894 | Sin datos (antes #6B7480) |
 
 Reglas:
 - Contraste mínimo AA (4,5:1 en texto normal).
 - El color nunca es el único portador de significado: cada estado lleva icono y texto.
 - Son valores iniciales: `critico-diseno` los valida con capturas y se ajustan en la Fase 1.
+- Tres valores se corrigieron en la Fase 0 porque no llegaban a AA como texto. Se mantuvo la misma tinta en OKLCH y se subió solo la luz:
+  - `--estado-error`: de 4,35:1 a 4,63:1 en la peor superficie;
+  - `--estado-desconocido`: de 4,13:1 a 4,61:1;
+  - `--naranja-senal`: de 4,49:1 a 4,65:1 sobre grafito.
+- La fuente única es `packages/ui/src/tokens.ts`. Un test comprueba AA en cada par texto/fondo declarado (`contrast.ts`).
 
 ### 4.2 Tipografía
 Todas con licencia OFL y **autoalojadas** con Fontsource; nada de cargarlas desde servidores de Google, por RGPD.
@@ -108,7 +113,10 @@ Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo 
 ### 4.3 Espacio, forma y profundidad
 - Rejilla de 4 px; espaciados 4/8/12/16/24/32/48/64/96.
 - Radios pequeños (2–4 px): industrial y preciso. Sin "pastillas" redondas salvo avatares.
-- Paneles: fondo `--grafito` con ruido sutil (≤ 3 % de opacidad), borde de 1 px `--acero`, brillo interior superior de 1 px y sombras largas y suaves.
+- Paneles: fondo `--grafito` con ruido sutil (≤ 3 % de opacidad), borde de 1 px `--acero`, brillo interior superior de 1 px y sombras largas y suaves. En `packages/ui`:
+  - el ruido (`--textura-ruido`) es grano gris de contraste completo en una capa al 3 %;
+  - el brillo es el filo de 1 px (`--sombra-placa`) más una luz cenital muy suave en el tercio superior (`--brillo-placa`), como la de los tubos del techo sobre una chapa;
+  - el primer ajuste, grano solo blanco al 1,5 % de media y filo al 6 %, no se percibía en pantalla.
 - Texturas permitidas, siempre muy sutiles: aluminio cepillado, Cordura y papel kraft (etiquetas).
 
 ### 4.4 Movimiento
@@ -118,7 +126,7 @@ Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo 
 - Con `prefers-reduced-motion`: fundidos de ≤ 120 ms, sin cámara ni parallax.
 
 ### 4.5 Componentes base (en `packages/ui`)
-- **Estructura**: Placa (panel), Cajón (panel lateral, hoja inferior en móvil), Maletín (modal), Pestañas, Tostada, Tooltip, Avatar.
+- **Estructura**: Placa (panel), Cajón (panel lateral, hoja inferior en móvil), Maletín (modal), Pestañas, Tostada, Tooltip, Avatar y Fila desplazable (`.t6-fila-desplazable`). La Fila desplazable va en una sola fila con scroll horizontal en móvil y en varias filas desde tablet. Sirve para menús de secciones y, en la Fase 1, para el pasillo de La Armería en móvil.
 - **Acciones**: Botón (latón, acero, fantasma, peligro); deslizador tipo raíl (rango de precio con una "montura" como tirador).
 - **Rotulación**: Rótulo plantilla, Chip e insignia, **Insignia de fidelidad T0–T3**, Valoración.
 - **Datos**:
