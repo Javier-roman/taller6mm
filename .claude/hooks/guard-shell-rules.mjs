@@ -47,7 +47,11 @@ const SECRET_OK = /^(?:ls|dir|Get-ChildItem|gci|Test-Path|git\s+(?:check-ignore|
 const EXAMPLE_FILE = /(?:^|[\\/])\.(?:dev\.vars|env)\.(?:example|sample|template)$/i;
 const COPY_CMD = /^(?:cp|copy|Copy-Item|cpi)$/i;
 
-function globToRegExp(glob) {
+// Traduce un comodín de shell a RegExp para compararlo con SECRET_CANDIDATES. El patrón sale del
+// comando que el propio hook evalúa, se escapan todos los metacaracteres, las rachas de `*` se
+// reducen a uno y solo se compara con nueve nombres cortos y fijos: el retroceso está acotado.
+function globToRegExp(pattern) {
+  const glob = pattern.replace(/\*+/g, '*');
   let re = '';
   for (let i = 0; i < glob.length; i++) {
     const c = glob[i];
@@ -66,6 +70,7 @@ function globToRegExp(glob) {
       }
     } else re += c.replace(/[.+^${}()|\\\]]/g, '\\$&');
   }
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   return new RegExp(`^${re}$`, 'i');
 }
 
