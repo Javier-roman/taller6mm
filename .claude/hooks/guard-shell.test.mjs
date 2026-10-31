@@ -1,4 +1,4 @@
-// Tests del hook guardián. Ejecuta: node --test .claude/hooks
+// Tests del hook guardián. Ejecuta: node --test ".claude/**/*.test.mjs"
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
