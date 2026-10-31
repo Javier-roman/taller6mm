@@ -1,0 +1,52 @@
+{
+  "measuredAt": "2026-10-31T16:28:37.850Z",
+  "variant": "transaction: true",
+  "allOk": false,
+  "steps": [
+    {
+      "name": "GET / (SSR + D1 con Drizzle)",
+      "ok": true,
+      "status": 200,
+      "ms": 79
+    },
+    {
+      "name": "Variante servida: transaction true",
+      "ok": true,
+      "txMode": "1"
+    },
+    {
+      "name": "POST /api/auth/sign-in/magic-link",
+      "ok": true,
+      "status": 200,
+      "ms": 34,
+      "body": "{\"status\":true}"
+    },
+    {
+      "name": "Emisor de prueba: enlace guardado en D1 (test_outbox)",
+      "ok": true
+    },
+    {
+      "name": "GET enlace mágico → redirección con cookie de sesión",
+      "ok": false,
+      "status": 500,
+      "ms": 36,
+      "location": null,
+      "body": ""
+    },
+    {
+      "name": "D1: alta de usuario verificada, sesión creada y token consumido",
+      "ok": false,
+      "usersBefore": 4,
+      "usersAfter": 4,
+      "sessions": 0,
+      "pendingVerifications": 1,
+      "emailVerified": null
+    }
+  ],
+  "serverErrors": [
+    "Error: Request was cancelled.",
+    "    at makeAppropriateNetworkError (/home/user/taller6mm/spikes/0001-stack/node_modules/.pnpm/undici@7.30.1/node_modules/undici/lib/web/fetch/response.js:488:38)",
+    "Error: Request was cancelled.",
+    "    at makeAppropriateNetworkError (/home/user/taller6mm/spikes/0001-stack/node_modules/.pnpm/undici@7.30.1/node_modules/undici/lib/web/fetch/response.js:488:38)"
+  ]
+}
