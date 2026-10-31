@@ -1,0 +1,11 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "isolated": true,
+    "launchOptions": { "channel": "msedge" }
+  },
+  "network": {
+    "allowedOrigins": ["http://localhost:*", "http://127.0.0.1:*"]
+  },
+  "allowUnrestrictedFileAccess": false
+}

@@ -25,6 +25,10 @@ __pycache__/
 !.dev.vars.example
 *.pem
 *.key
+*.p12
+*.pfx
+.npmrc
+.netrc
 
 # Assets fuente pesados: viven en R2 privado; en git solo el manifiesto con hashes
 assets-src/**/*.blend
