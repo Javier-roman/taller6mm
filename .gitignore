@@ -52,3 +52,5 @@ Thumbs.db
 # Claude Code: configuración personal y local
 .claude/settings.local.json
 CLAUDE.local.md
+# Tipos generados por `wrangler types` (se regeneran en typecheck)
+worker-configuration.d.ts

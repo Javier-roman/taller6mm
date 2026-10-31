@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/turbo/schema.json",
+  "ui": "stream",
+  "globalDependencies": [".node-version", "packages/config/**"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "typecheck": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "e2e": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "size": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "lh": {
+      "dependsOn": ["build"],
+      "cache": false
+    }
+  }
+}

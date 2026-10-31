@@ -1,0 +1,15 @@
+# Hooks de git de Taller6mm (los instala `pnpm install` con scripts/hooks.mjs).
+# Funcionan igual en Windows (Git Bash, que trae Git for Windows), macOS y Linux.
+# El CI repite estas comprobaciones para quien no tenga los hooks.
+pre-commit:
+  parallel: true
+  jobs:
+    # Para el secreto antes de que entre en el historial. Si falta gitleaks, el commit falla:
+    #   Windows: winget install --id Gitleaks.Gitleaks --exact · macOS: brew install gitleaks
+    - name: gitleaks
+      run: gitleaks git --pre-commit --staged --redact --no-banner
+
+    # Formato y lint de lo que se va a confirmar (no toca archivos: si falla, `pnpm format`).
+    - name: biome
+      glob: '*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,astro}'
+      run: pnpm exec biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}

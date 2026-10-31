@@ -1,0 +1,33 @@
+{
+  "name": "taller6mm",
+  "private": true,
+  "description": "Taller6mm: taller virtual de airsoft. Monorepo (pnpm + Turborepo).",
+  "type": "module",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=26.13.0 <27"
+  },
+  "scripts": {
+    "dev": "node scripts/run.mjs dev",
+    "build": "node scripts/run.mjs build",
+    "verify": "node scripts/verify.mjs",
+    "lint": "node scripts/run.mjs lint",
+    "format": "node scripts/run.mjs format",
+    "typecheck": "node scripts/run.mjs typecheck",
+    "test": "node scripts/run.mjs test",
+    "e2e": "node scripts/run.mjs e2e",
+    "lh": "node scripts/run.mjs lh",
+    "size": "node scripts/run.mjs size",
+    "db:migrate:local": "node scripts/db.mjs migrate",
+    "db:seed:local": "node scripts/db.mjs seed",
+    "db:reset:local": "node scripts/db.mjs reset",
+    "prepare": "node scripts/hooks.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/node": "catalog:",
+    "lefthook": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  }
+}
