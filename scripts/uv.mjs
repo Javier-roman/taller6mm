@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Tests del pipeline de Python (apps/pipeline) desde Turborepo: uv sync + ruff + pytest.
-// Si `uv` no está instalado, se salta con un aviso (el job `pipeline` del CI lo cubre), salvo en CI,
-// donde falla. Multiplataforma: sin shell.
+// Si `uv` no está instalado, se salta con un aviso, salvo en CI, donde falla: el job `verify`
+// (Ubuntu y Windows) instala uv y lo ejecuta siempre. Multiplataforma: sin shell.
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { quietEnv, root } from './run.mjs';
