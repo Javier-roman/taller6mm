@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/turbo/schema.json",
+  "ui": "stream",
+  "globalDependencies": [".node-version", "packages/config/**"],
+  "remoteCache": { "enabled": false },
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "env": ["CLOUDFLARE_ENV"],
+      "outputs": ["dist/**", "!dist/**/.dev.vars", "!dist/**/.dev.vars.*", "!dist/**/.env", "!dist/**/.env.*"]
+    },
+    "typecheck": {
+      "outputs": []
+    },
+    "@taller6mm/web#typecheck": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "e2e": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "passThroughEnv": ["CI", "CLAUDE_CODE_REMOTE", "PLAYWRIGHT_BROWSERS_PATH", "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH"]
+    },
+    "size": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "lh": {
+      "dependsOn": ["build"],
+      "cache": false
+    }
+  }
+}

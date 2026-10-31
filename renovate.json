@@ -1,0 +1,111 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Renovate de Taller6mm (plan de la Fase 0, decisión 10). Lo activa Javi instalando la app solo en este repo.",
+  "extends": ["config:best-practices", ":semanticCommitTypeAll(chore)", ":dependencyDashboard"],
+  "timezone": "Europe/Madrid",
+  "schedule": ["before 8am on monday"],
+  "labels": ["dependencias"],
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "rangeStrategy": "pin",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": ["seguridad"],
+    "minimumReleaseAge": null,
+    "schedule": ["at any time"]
+  },
+  "pip-compile": {
+    "description": "Semgrep del CI: Renovate regenera requirements.txt (hashes y espera) desde requirements.in.",
+    "managerFilePatterns": ["/^\\.github/semgrep/requirements\\.txt$/"]
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Versión de @playwright/mcp fijada en el lanzador (debe coincidir con el catálogo de pnpm).",
+      "managerFilePatterns": ["/^\\.claude/mcp/playwright-launch\\.mjs$/"],
+      "matchStrings": ["export const MCP_VERSION = '(?<currentValue>[^']+)'"],
+      "depNameTemplate": "@playwright/mcp",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "Binarios del CI: el PR de Renovate fallará en el checksum hasta que alguien revise la release y actualice el SHA-256 a mano (fallo seguro).",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "GITLEAKS_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)",
+        "OSV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "{{#if (containsString matchString 'GITLEAKS')}}gitleaks/gitleaks{{else}}google/osv-scanner{{/if}}",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "pnpm del CI (debe coincidir con packageManager de package.json).",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": ["PNPM_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "pnpm",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "uv del CI (PyPI).",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": ["UV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "uv",
+      "datasourceTemplate": "pypi"
+    },
+    {
+      "customType": "regex",
+      "description": "Imagen de OWASP ZAP del workflow semanal: etiqueta estable fijada por digest.",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "ZAP_IMAGE: (?<depName>[a-z0-9./-]+):(?<currentValue>[\\w.-]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "El pool de Workers (@cloudflare/vitest-pool-workers) solo admite Vitest ^4.1.",
+      "matchPackageNames": ["vitest", "@vitest/**"],
+      "allowedVersions": "<5"
+    },
+    {
+      "description": "@astrojs/check exige TypeScript <= 6 y TS 7 aún no tiene API programática; se revisa con TS 7.1.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7"
+    },
+    {
+      "description": "@playwright/mcp va en el catálogo y en el lanzador: un único PR para los dos.",
+      "matchPackageNames": ["@playwright/mcp"],
+      "groupName": "playwright mcp"
+    },
+    { "groupName": "astro", "matchPackageNames": ["astro", "@astrojs/**"] },
+    {
+      "groupName": "cloudflare",
+      "matchPackageNames": ["wrangler", "@cloudflare/**", "workerd", "miniflare"]
+    },
+    { "groupName": "react", "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"] },
+    { "groupName": "drizzle", "matchPackageNames": ["drizzle-orm", "drizzle-kit"] },
+    {
+      "groupName": "pruebas",
+      "matchPackageNames": [
+        "vitest",
+        "fast-check",
+        "@playwright/test",
+        "@axe-core/playwright",
+        "size-limit",
+        "@size-limit/**"
+      ]
+    },
+    { "groupName": "acciones de GitHub", "matchManagers": ["github-actions"] },
+    { "groupName": "python", "matchManagers": ["pep621"] },
+    {
+      "description": "Las versiones mayores esperan a que Javi las apruebe desde el panel de dependencias.",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}

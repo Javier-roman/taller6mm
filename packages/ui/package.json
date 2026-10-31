@@ -1,0 +1,21 @@
+{
+  "name": "@taller6mm/ui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Marca, tokens de diseño y componentes React de Taller6mm.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./brand": "./src/brand.ts",
+    "./tokens": "./src/tokens.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@taller6mm/config": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

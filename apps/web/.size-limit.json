@@ -1,0 +1,8 @@
+[
+  {
+    "name": "JS de cliente (todas las islas)",
+    "path": "dist/client/_astro/*.js",
+    "limit": "120 kB",
+    "gzip": true
+  }
+]

@@ -1,4 +1,4 @@
-// Tests del hook guardián. Ejecuta: node --test .claude/hooks
+// Tests del hook guardián. Ejecuta: node --test ".claude/**/*.test.mjs"
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -16,7 +16,7 @@ const CASES = {
     'gc apps/web/.dev.vars',
     'type .env',
     'Get-Content -Path .\\apps\\web\\.dev.vars.preview',
-    'node -e "console.log(require(\'fs\').readFileSync(\'.dev.vars\',\'utf8\'))"',
+    "node -e \"console.log(require('fs').readFileSync('.dev.vars','utf8'))\"",
     'git add .dev.vars',
     'Remove-Item .env.local',
     // Agujero 1: copiar el secreto real a un archivo que se sube a git

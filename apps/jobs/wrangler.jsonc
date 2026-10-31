@@ -1,0 +1,12 @@
+{
+  // Worker `jobs`. Configuración local de S2; S3 añade los entornos `preview` y `production`,
+  // las bases D1, la cola de ingesta y el cron (docs/07).
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "taller6mm-jobs",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "send_metrics": false,
+  "observability": { "enabled": true },
+  "workers_dev": false
+}

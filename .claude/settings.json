@@ -54,6 +54,7 @@
       "Read(~/AppData/Roaming/xdg.config/.wrangler/**)",
       "Read(~/.config/.wrangler/**)",
       "mcp__playwright__browser_file_upload",
+      "mcp__playwright__browser_run_code_unsafe",
       "Read(./**/.dev.vars)",
       "Read(./**/.dev.vars.local)",
       "Read(./**/.dev.vars.preview)",
@@ -89,6 +90,17 @@
             "type": "command",
             "command": "node",
             "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-shell.mjs"],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__playwright__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-mcp.mjs"],
             "timeout": 10
           }
         ]

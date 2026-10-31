@@ -1,0 +1,4 @@
+{
+  "extends": "@taller6mm/config/tsconfig.base.json",
+  "include": ["src"]
+}

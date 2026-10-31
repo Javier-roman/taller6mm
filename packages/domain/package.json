@@ -1,0 +1,23 @@
+{
+  "name": "@taller6mm/domain",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tipos y esquemas Zod compartidos: unidades (mm), dinero (céntimos) y monedas ISO 4217.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@taller6mm/config": "workspace:*",
+    "fast-check": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

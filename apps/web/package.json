@@ -1,0 +1,38 @@
+{
+  "name": "@taller6mm/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Web pública de Taller6mm: Astro 7 en Cloudflare Workers con islas React 19.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "typecheck": "wrangler types && astro check",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "size": "size-limit"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "catalog:",
+    "@astrojs/react": "catalog:",
+    "@taller6mm/db": "workspace:*",
+    "@taller6mm/ui": "workspace:*",
+    "astro": "catalog:",
+    "drizzle-orm": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@astrojs/check": "catalog:",
+    "@axe-core/playwright": "catalog:",
+    "@playwright/test": "catalog:",
+    "@size-limit/file": "catalog:",
+    "@taller6mm/config": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "size-limit": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

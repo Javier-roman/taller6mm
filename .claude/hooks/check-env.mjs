@@ -46,7 +46,11 @@ function onPath(name) {
   return (process.env.PATH ?? '')
     .split(path.delimiter)
     .filter(Boolean)
-    .some((dir) => exts.some((ext) => existsSync(path.join(dir, name + ext.toLowerCase())) || existsSync(path.join(dir, name + ext))));
+    .some((dir) =>
+      exts.some(
+        (ext) => existsSync(path.join(dir, name + ext.toLowerCase())) || existsSync(path.join(dir, name + ext)),
+      ),
+    );
 }
 
 const warnings = [];
@@ -66,7 +70,9 @@ try {
     );
   }
 
-  const oneDriveRoots = [process.env.OneDrive, process.env.OneDriveCommercial, process.env.OneDriveConsumer].filter(Boolean);
+  const oneDriveRoots = [process.env.OneDrive, process.env.OneDriveCommercial, process.env.OneDriveConsumer].filter(
+    Boolean,
+  );
   if (oneDriveRoots.some((r) => norm(dir).startsWith(norm(r))) || /\/onedrive\b/.test(norm(dir))) {
     warnings.push(
       'El proyecto está dentro de OneDrive, que bloquea archivos de node_modules al sincronizar (errores EPERM o EBUSY): muévelo a una ruta como C:\\dev\\.',
@@ -83,7 +89,9 @@ try {
 
   if (!onPath('pnpm')) warnings.push('No encuentro pnpm en el PATH: instálalo con `npm install --global pnpm`.');
   if (!onPath('gitleaks')) {
-    warnings.push('No encuentro gitleaks (lo usa el pre-commit): instálalo con `winget install --id Gitleaks.Gitleaks --exact`.');
+    warnings.push(
+      'No encuentro gitleaks (lo usa el pre-commit): instálalo con `winget install --id Gitleaks.Gitleaks --exact`.',
+    );
   }
 } catch {
   // Nunca bloquear.

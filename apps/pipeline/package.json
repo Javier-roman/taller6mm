@@ -1,0 +1,9 @@
+{
+  "name": "@taller6mm/pipeline",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pipeline de assets en Python 3.12 (uv + pytest). Este package.json solo lo integra en Turborepo.",
+  "scripts": {
+    "test": "node ../../scripts/uv.mjs"
+  }
+}
