@@ -1,0 +1,32 @@
+---
+// `/3d`: página estática con la isla R3F cargada solo en el cliente.
+import BrassScene from '../components/BrassScene';
+
+export const prerender = true;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isla 3D · Spike S1</title>
+    <style>
+      body { margin: 0; background: #0b0c0e; color: #e8e4dc; font-family: system-ui, sans-serif; }
+      /* minmax(0, 1fr) + border-box: sin ellos el canvas crece en bucle (ResizeObserver) y anula frameloop="demand". */
+      main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1rem; }
+      .escena { box-sizing: border-box; min-width: 0; width: 100%; height: min(70vh, 640px); border: 1px solid #2a2f35; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Bocacha de latón (isla R3F)</h1>
+      <p>Bloom, viñeta y tone mapping AgX con <code>postprocessing</code>.</p>
+      <div class="escena">
+        <BrassScene client:only="react">
+          <p slot="fallback">Cargando la escena 3D…</p>
+        </BrassScene>
+      </div>
+      <p><a href="/">Volver</a></p>
+    </main>
+  </body>
+</html>

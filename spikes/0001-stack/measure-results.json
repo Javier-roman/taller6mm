@@ -1,0 +1,48 @@
+{
+  "measuredAt": "2026-10-31T17:08:58.144Z",
+  "node": "v26.13.0",
+  "worker": {
+    "uploadKiB": 2199.8,
+    "gzipKiB": 505.6,
+    "gzipMiB": 0.49,
+    "withinFreeLimit": true,
+    "withinTarget": true,
+    "sourceMaps": {
+      "files": 15,
+      "rawKiB": 4391.3,
+      "gzipKiB": 958.6
+    }
+  },
+  "island3d": {
+    "chunks": [
+      {
+        "file": "_astro/BrassScene.BrgEtrVS.js",
+        "rawKB": 1023.4,
+        "gzipKB": 268.9,
+        "gzip6KB": 269.8,
+        "brotliKB": 221
+      },
+      {
+        "file": "_astro/scheduler.k2eSUhFW.js",
+        "rawKB": 12,
+        "gzipKB": 4.6,
+        "gzip6KB": 4.6,
+        "brotliKB": 4.1
+      },
+      {
+        "file": "_astro/client.ClywqXCn.js",
+        "rawKB": 209.3,
+        "gzipKB": 64.5,
+        "gzip6KB": 64.6,
+        "brotliKB": 55.7
+      }
+    ],
+    "sceneChunkGzipKB": 268.9,
+    "totalRawKB": 1244.7,
+    "totalGzipKB": 338,
+    "totalGzip6KB": 339,
+    "totalBrotliKB": 280.8,
+    "withinBudget": true,
+    "over90PercentOfBudget": true
+  }
+}

@@ -1,0 +1,47 @@
+---
+// `/` en SSR: consulta la tabla `meta` de D1 con Drizzle y el estado de sesión de Better Auth.
+import { env } from 'cloudflare:workers';
+import { drizzle } from 'drizzle-orm/d1';
+import * as schema from '../db/schema';
+
+export const prerender = false;
+
+const db = drizzle(env.DB, { schema });
+const rows = await db.select().from(schema.meta).orderBy(schema.meta.key);
+// Better Auth (≈ 1 MB sin minificar) solo se carga si hay cookie de sesión: la primera visita anónima
+// de cada isolate no paga su evaluación (auditoría de rendimiento del spike).
+const hasSessionCookie = /(?:^|;\s*)(?:__Secure-)?better-auth\.session_token=/.test(Astro.request.headers.get('cookie') ?? '');
+const session = hasSessionCookie
+  ? await (await import('../lib/auth')).getAuth().api.getSession({ headers: Astro.request.headers })
+  : null;
+const checkedAt = new Date().toISOString();
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spike S1 · Taller6mm</title>
+  </head>
+  <body>
+    <main>
+      <h1>Spike S1: Astro 7 en Cloudflare</h1>
+      <p>Renderizado en el servidor con una consulta a D1 (Drizzle).</p>
+      <table>
+        <caption>Tabla <code>meta</code> de la base D1 <code>DB</code></caption>
+        <thead>
+          <tr><th scope="col">Clave</th><th scope="col">Valor</th></tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr><td>{row.key}</td><td>{row.value}</td></tr>
+          ))}
+        </tbody>
+      </table>
+      <p>Comprobado: <time datetime={checkedAt}>{checkedAt}</time></p>
+      <p>Sesión: {session ? `iniciada como ${session.user.email}` : 'sin iniciar'}</p>
+      <p>Transacciones del adaptador de Better Auth: <span data-auth-tx={env.SPIKE_AUTH_TX}>{env.SPIKE_AUTH_TX === '1' ? 'activadas' : 'desactivadas'}</span></p>
+      <p><a href="/3d">Ver la isla 3D</a></p>
+    </main>
+  </body>
+</html>

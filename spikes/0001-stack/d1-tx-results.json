@@ -1,0 +1,17 @@
+{
+  "measuredAt": "2026-10-31T16:26:38.257Z",
+  "rawBegin": {
+    "ok": false,
+    "error": "D1_ERROR: To execute a transaction, please use the state.storage.transaction() or state.storage.transactionSync() APIs instead of the SQL BEGIN TRANSACTION or SAVEPOINT statements. The JavaScript API is safer because it will automatically roll back on exceptions, and because it interacts correctly with Durable Objects' automatic atomic write coalescing."
+  },
+  "drizzleTransaction": {
+    "threw": "Failed query: begin\nparams: ",
+    "rowLeftBehind": false,
+    "atomic": true
+  },
+  "drizzleBatch": {
+    "threw": "D1_ERROR: UNIQUE constraint failed: meta.key: SQLITE_CONSTRAINT (extended: SQLITE_CONSTRAINT_PRIMARYKEY)",
+    "rowLeftBehind": false,
+    "atomic": true
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "measuredAt": "2026-10-31T17:09:46.778Z",
+  "variant": "transaction: false (por defecto)",
+  "allOk": true,
+  "steps": [
+    {
+      "name": "GET / (SSR + D1 con Drizzle)",
+      "ok": true,
+      "status": 200,
+      "ms": 53
+    },
+    {
+      "name": "Variante servida: transaction false",
+      "ok": true,
+      "txMode": "0"
+    },
+    {
+      "name": "POST /api/auth/sign-in/magic-link",
+      "ok": true,
+      "status": 200,
+      "ms": 53,
+      "body": "{\"status\":true}"
+    },
+    {
+      "name": "Emisor de prueba: enlace guardado en D1 (test_outbox)",
+      "ok": true
+    },
+    {
+      "name": "GET enlace mágico → redirección con cookie de sesión",
+      "ok": true,
+      "status": 302,
+      "ms": 48,
+      "location": "http://127.0.0.1:4321/"
+    },
+    {
+      "name": "GET /api/auth/get-session con la cookie",
+      "ok": true,
+      "status": 200,
+      "ms": 17
+    },
+    {
+      "name": "GET /api/auth/get-session solo con el token (lee D1)",
+      "ok": true,
+      "ms": 19
+    },
+    {
+      "name": "GET / con sesión (SSR lee la sesión)",
+      "ok": true,
+      "ms": 14
+    },
+    {
+      "name": "Reutilizar el enlace mágico se rechaza",
+      "ok": true,
+      "status": 302,
+      "location": "http://127.0.0.1:4321/?error=INVALID_TOKEN"
+    },
+    {
+      "name": "D1: alta de usuario verificada, sesión creada y token consumido",
+      "ok": true,
+      "usersBefore": 5,
+      "usersAfter": 6,
+      "sessions": 1,
+      "pendingVerifications": 0,
+      "emailVerified": 1
+    }
+  ],
+  "serverErrors": [
+    "Error: Request was cancelled.",
+    "    at makeAppropriateNetworkError (/home/user/taller6mm/spikes/0001-stack/node_modules/.pnpm/undici@7.30.1/node_modules/undici/lib/web/fetch/response.js:488:38)",
+    "Error: Request was cancelled.",
+    "    at makeAppropriateNetworkError (/home/user/taller6mm/spikes/0001-stack/node_modules/.pnpm/undici@7.30.1/node_modules/undici/lib/web/fetch/response.js:488:38)"
+  ]
+}
