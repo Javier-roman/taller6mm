@@ -91,5 +91,11 @@ describe('workflows de GitHub Actions', () => {
         assert.match(ref ?? '', /^actions\/[\w.-]+@[0-9a-f]{40}$/, ref);
       }
     });
+
+    test(`${file}: imágenes de contenedor fijadas por digest`, () => {
+      for (const [, image] of text.matchAll(/^\s*\w*IMAGE:\s*(\S+)/gm)) {
+        assert.match(image ?? '', /@sha256:[0-9a-f]{64}$/, image);
+      }
+    });
   }
 });
