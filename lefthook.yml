@@ -11,5 +11,5 @@ pre-commit:
 
     # Formato y lint de lo que se va a confirmar (no toca archivos: si falla, `pnpm format`).
     - name: biome
-      glob: '*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,astro}'
+      glob: "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,astro}"
       run: pnpm exec biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
