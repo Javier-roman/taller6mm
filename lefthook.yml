@@ -1,6 +1,11 @@
 # Hooks de git de Taller6mm (los instala `pnpm install` con scripts/hooks.mjs).
 # Funcionan igual en Windows (Git Bash, que trae Git for Windows), macOS y Linux.
 # El CI repite estas comprobaciones para quien no tenga los hooks.
+
+# Si el hook instalado no encuentra lefthook (p. ej., tras borrar node_modules), el commit falla en
+# vez de pasar sin gitleaks. Arreglo: `pnpm install`.
+assert_lefthook_installed: true
+
 pre-commit:
   parallel: true
   jobs:
