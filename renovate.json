@@ -26,12 +26,34 @@
     },
     {
       "customType": "regex",
-      "description": "gitleaks del CI (versión y checksum se cambian juntos a mano tras revisar la release).",
+      "description": "Binarios del CI: el PR de Renovate fallará en el checksum hasta que alguien revise la release y actualice el SHA-256 a mano (fallo seguro).",
       "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
-      "matchStrings": ["GITLEAKS_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
-      "depNameTemplate": "gitleaks/gitleaks",
+      "matchStrings": [
+        "GITLEAKS_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)",
+        "OSV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "{{#if (containsString matchString 'GITLEAKS')}}gitleaks/gitleaks{{else}}google/osv-scanner{{/if}}",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "pnpm del CI (debe coincidir con packageManager de package.json).",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": ["PNPM_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "pnpm",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "uv y Semgrep del CI (PyPI).",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "UV_VERSION: (?<currentValue>\\d+\\.\\d+\\.\\d+)",
+        "semgrep==(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "{{#if (containsString matchString 'semgrep')}}semgrep{{else}}uv{{/if}}",
+      "datasourceTemplate": "pypi"
     }
   ],
   "packageRules": [

@@ -1,6 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
     "includes": [
       "**",
@@ -20,25 +24,54 @@
     "lineEnding": "lf"
   },
   "javascript": {
-    "formatter": { "quoteStyle": "single", "jsxQuoteStyle": "double", "trailingCommas": "all", "semicolons": "always" }
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "trailingCommas": "all",
+      "semicolons": "always"
+    }
   },
-  "json": { "formatter": { "trailingCommas": "none" } },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
   "html": {
     "experimentalFullSupportEnabled": true
   },
   "linter": {
     "rules": {
       "preset": "recommended",
-      "suspicious": { "noExplicitAny": "error", "noConsole": "off" },
-      "style": { "useNodejsImportProtocol": "error", "noNonNullAssertion": "error" },
-      "correctness": { "noUnusedImports": "error", "noUnusedVariables": "error" }
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noConsole": "off"
+      },
+      "style": {
+        "useNodejsImportProtocol": "error",
+        "noNonNullAssertion": "error"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      },
+      "complexity": {
+        "useLiteralKeys": "off"
+      }
     }
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "overrides": [
     {
       "includes": ["packages/domain/src/currency.ts"],
-      "formatter": { "lineWidth": 140 }
+      "formatter": {
+        "lineWidth": 140
+      }
     }
   ]
 }
