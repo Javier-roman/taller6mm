@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@playwright/mcp": "catalog:",
     "@types/node": "catalog:",
     "lefthook": "catalog:",
     "turbo": "catalog:",

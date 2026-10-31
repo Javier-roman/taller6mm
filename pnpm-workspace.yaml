@@ -53,6 +53,9 @@ catalog:
   "@cloudflare/vitest-pool-workers": 0.22.0
   fast-check: 4.10.2
   "@playwright/test": 1.64.1
+  # MCP de Playwright para Claude Code (.claude/mcp/playwright.mjs). Debe coincidir con MCP_PACKAGE
+  # del lanzador; un test y Renovate (customManagers) los mantienen alineados.
+  "@playwright/mcp": 0.0.83
   "@axe-core/playwright": 4.14.0
   size-limit: 14.3.0
   "@size-limit/file": 14.3.0
