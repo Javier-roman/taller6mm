@@ -12,7 +12,7 @@ Este kit es el "mega prompt" en el formato que Claude Code mejor aprovecha. Cont
 | `CLAUDE.local.md` | El perfil de tu equipo (Windows 11, herramientas, GPU). Se carga junto a `CLAUDE.md` y no se sube al repositorio |
 | `docs/` | Especificación completa (visión, diseño, configurador, mercado, assets, comunidad, arquitectura, calidad, legal y roadmap), ADRs, tus tiendas y marcas, y referencias visuales |
 | `.claude/` | Skills (`/verify`, `/revisar-ui`…), subagentes revisores, reglas que se cargan según la carpeta y tres hooks: guardián de comandos (Bash y PowerShell), formateador y aviso de entorno al iniciar |
-| `.mcp.json` | Navegador Playwright (con Edge) para que Claude Code vea lo que construye, y la documentación de Claude Code |
+| `.mcp.json` | Navegador Playwright para que Claude Code vea lo que construye (Edge en Windows, Chromium en macOS y Linux, mediante `.claude/mcp/playwright.mjs`), y la documentación de Claude Code |
 | `.gitignore` | Deja fuera del repositorio los secretos, los builds, `CLAUDE.local.md` y las capturas de referencia |
 
 ## Arrancar en Windows
@@ -30,6 +30,13 @@ Si algo del entorno está mal (sesión de administrador, carpeta dentro de OneDr
 - `/context` muestra qué memoria y reglas tiene cargadas. `/skills` lista las skills de este kit. El asistente `/agents` ya no existe en Claude Code: los subagentes se ven en `.claude/agents/` y se gestionan pidiéndoselo a Claude o editando esos archivos.
 - **pnpm**: si `pnpm -v` no responde, instálalo con `npm install -g pnpm` desde la terminal normal. `corepack enable` suele pedir permisos de administrador en Windows.
 - **GitHub**: antes de que Claude Code suba el CI, ejecuta tú `gh auth refresh -h github.com -s workflow`.
-- `.mcp.json` viene preparado para Windows (`cmd /c npx`). En macOS o Linux, cambia `"command"` a `"npx"` y quita `"/c"` y `"npx"` de `args`.
+- **MCP de Playwright** (el navegador de Claude Code): `.mcp.json` arranca `node .claude/mcp/playwright.mjs`, que funciona igual en Windows, macOS y Linux sin tocar nada. El lanzador:
+  - abre **Edge** en Windows (ya viene con el sistema) y el **Chromium de Playwright** en macOS y Linux, en Linux con el sandbox de Chromium forzado (salvo como root);
+  - ejecuta `@playwright/mcp` con la versión fijada (`0.0.83`), con el npx del mismo Node (nada de `cmd /c`), sin scripts de instalación y desde una carpeta de trabajo fuera del repo, para que no encuentre nada plantado en el proyecto;
+  - valida `.claude/playwright-mcp.json` con una **lista blanca estricta** (perfil aislado, orígenes permitidos y acceso a archivos restringido; cualquier otra clave impide arrancar) e ignora las variables `PLAYWRIGHT_MCP_*` que podrían relajarla (salvo `PLAYWRIGHT_MCP_EXECUTABLE_PATH` y `PLAYWRIGHT_MCP_HEADLESS`).
+
+  Además, el hook `guard-mcp` limita las rutas de archivo de las herramientas del MCP (capturas, PDF, trazas, subidas…) a `.playwright-mcp/` y `docs/informes/capturas/`, y `browser_run_code_unsafe` está denegada: ejecuta código en Node y saltaría todas las demás barreras. **No apruebes nunca el servidor `playwright` completo** con «no volver a preguntar».
+
+  En macOS o Linux, la primera vez descarga el navegador con `npx -y @playwright/mcp@0.0.83 install-browser chromium`. Si tu distribución no admite el sandbox de Chromium (sin espacios de nombres de usuario), arranca Claude Code con `TALLER6MM_MCP_NO_SANDBOX=1`. Para ver qué ejecutaría, sin arrancar nada: `node .claude/mcp/playwright.mjs --print`. Sus tests: `node --test ".claude/**/*.test.mjs"` (con `TALLER6MM_MCP_E2E=1` añade una prueba real con el navegador y un entorno hostil).
 - Avanza una fase cada vez y lee el informe de fase antes de dar el OK a la siguiente.
 - Las capturas de `docs/referencias/` son de terceros (videojuegos y una fotografía). Úsalas solo como referencia interna. Ya están en `.gitignore`.
