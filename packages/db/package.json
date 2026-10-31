@@ -1,0 +1,28 @@
+{
+  "name": "@taller6mm/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Drizzle: esquemas y migraciones de las tres bases D1 (core, mercado y busqueda).",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./core": "./src/core.ts",
+    "./mercado": "./src/mercado.ts",
+    "./busqueda": "./src/busqueda.ts"
+  },
+  "scripts": {
+    "typecheck": "wrangler types && tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "drizzle-orm": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "catalog:",
+    "@taller6mm/config": "workspace:*",
+    "drizzle-kit": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "wrangler": "catalog:"
+  }
+}
