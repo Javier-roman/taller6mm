@@ -1,0 +1,68 @@
+/* GENERADO por scripts/prototipos/zonas-poster.mjs: no editar a mano (lo comprueba un test). */
+.armeria-poster__zona[data-zona="replicas"] {
+  left: 6.873%;
+  top: 26.142%;
+  width: 27.562%;
+  height: 27.036%;
+}
+
+.armeria-poster__zona[data-zona="accesorios"] {
+  left: 7.091%;
+  top: 53.177%;
+  width: 27.407%;
+  height: 21.581%;
+}
+
+.armeria-poster__zona[data-zona="comunidad"] {
+  left: 36.259%;
+  top: 26.142%;
+  width: 27.483%;
+  height: 27.036%;
+}
+
+.armeria-poster__zona[data-zona="banco"] {
+  left: 34.419%;
+  top: 53.222%;
+  width: 31.162%;
+  height: 33.247%;
+}
+
+.armeria-poster__zona[data-zona="mercado"] {
+  left: 65.302%;
+  top: 26.142%;
+  width: 13.819%;
+  height: 27.036%;
+}
+
+.armeria-poster__zona[data-zona="guias"] {
+  left: 65.240%;
+  top: 53.177%;
+  width: 13.734%;
+  height: 21.581%;
+}
+
+.armeria-poster__zona[data-zona="tiendas"] {
+  left: 79.500%;
+  top: 26.142%;
+  width: 13.891%;
+  height: 27.036%;
+}
+
+.armeria-poster__zona[data-zona="taquilla"] {
+  left: 79.380%;
+  top: 53.177%;
+  width: 13.791%;
+  height: 21.581%;
+}
+
+.armeria-poster__ancla[data-estanteria="izquierda"] {
+  left: 20.751%;
+}
+
+.armeria-poster__ancla[data-estanteria="centro"] {
+  left: 50.000%;
+}
+
+.armeria-poster__ancla[data-estanteria="derecha"] {
+  left: 79.249%;
+}

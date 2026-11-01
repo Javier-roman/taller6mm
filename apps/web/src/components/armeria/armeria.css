@@ -1,0 +1,582 @@
+/*
+ * La Armería (prototipos A y B de la Fase 1). Solo tokens de @taller6mm/ui. La capa de interfaz deja
+ * pasar el puntero a la escena (pointer-events: none) salvo en sus controles.
+ */
+@import "./zonas-poster.css";
+
+.armeria {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--negro-pavonado);
+  color: var(--hueso);
+  font-family: var(--fuente-interfaz);
+}
+
+.armeria__escena {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  background: var(--negro-pavonado);
+}
+
+.armeria__lienzo {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duracion-escena) var(--curva-mecanica);
+}
+
+.armeria__lienzo[data-listo="true"] {
+  opacity: 1;
+}
+
+.armeria__lienzo canvas {
+  display: block;
+  touch-action: pan-y;
+}
+
+/* ── Póster (alternativa ligera y primer pintado) ─────────────────────────────── */
+.armeria-poster {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: opacity var(--duracion-escena) var(--curva-mecanica);
+}
+
+.armeria-poster[data-oculto="true"] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duracion-escena) var(--curva-mecanica),
+    visibility 0s linear var(--duracion-escena);
+}
+
+/* Como object-fit: cover, pero con las zonas encima en la misma proporción (16:9). */
+.armeria-poster__lienzo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100cqw, calc(100cqh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  translate: -50% -50%;
+}
+
+.armeria-poster__imagen {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--carbon);
+}
+
+.armeria-poster__zonas {
+  position: absolute;
+  inset: 0;
+}
+
+.armeria-poster__zona {
+  position: absolute;
+  border: var(--trazo-fino) solid transparent;
+  border-radius: var(--radio-m);
+  transition:
+    border-color var(--duracion-componente) var(--curva-mecanica),
+    box-shadow var(--duracion-componente) var(--curva-mecanica);
+}
+
+.armeria-poster__zona:hover,
+.armeria-poster__zona[data-activa="true"] {
+  border-color: color-mix(in srgb, var(--laton-claro) 70%, transparent);
+  box-shadow: var(--resplandor-rotulo);
+}
+
+.armeria-poster__zona-nombre {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.armeria-poster__ancla {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: center;
+}
+
+/* ── Capa de interfaz ──────────────────────────────────────────────────────────── */
+.armeria__capa {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100svh;
+  pointer-events: none;
+}
+
+.armeria__capa :where(a, button, nav, fieldset, [role="dialog"]) {
+  pointer-events: auto;
+}
+
+.armeria__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3) var(--espacio-6);
+  padding: var(--espacio-4) var(--espacio-6);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--negro-pavonado) 88%, transparent),
+    color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
+  );
+}
+
+.armeria__marca {
+  font-family: var(--fuente-rotulo);
+  font-weight: var(--peso-negrita);
+  font-size: var(--texto-2xl);
+  letter-spacing: var(--interletra-rotulo);
+  line-height: var(--interlineado-titular);
+  text-transform: uppercase;
+  color: var(--laton-claro);
+  text-decoration: none;
+  text-shadow: var(--resplandor-rotulo);
+}
+
+.armeria__prototipo {
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  letter-spacing: var(--interletra-versalitas);
+  color: var(--niebla);
+  text-transform: uppercase;
+}
+
+.armeria__prototipo strong {
+  color: var(--hueso);
+  font-weight: var(--peso-medio);
+}
+
+.armeria__ajustes {
+  display: flex;
+  gap: var(--espacio-2);
+  margin-inline-start: auto;
+}
+
+.armeria__ajuste {
+  min-height: var(--objetivo-tactil);
+  padding: 0 var(--espacio-3);
+  border: var(--trazo-fino) solid var(--acero);
+  border-radius: var(--radio-m);
+  background: color-mix(in srgb, var(--carbon) 80%, transparent);
+  color: var(--niebla);
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  letter-spacing: var(--interletra-versalitas);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color var(--duracion-micro) var(--curva-mecanica),
+    border-color var(--duracion-micro) var(--curva-mecanica);
+}
+
+.armeria__ajuste:hover {
+  color: var(--hueso);
+  border-color: var(--niebla);
+}
+
+.armeria__ajuste[aria-pressed="true"] {
+  color: var(--negro-pavonado);
+  background: var(--laton);
+  border-color: var(--laton-claro);
+}
+
+:where(.armeria) :focus-visible {
+  outline: var(--trazo-foco) solid var(--naranja-senal);
+  outline-offset: 2px;
+}
+
+.armeria__aviso {
+  justify-self: center;
+  align-self: start;
+  margin: 0;
+  padding: var(--espacio-2) var(--espacio-4);
+  border: var(--trazo-fino) solid var(--estado-aviso);
+  border-radius: var(--radio-m);
+  background: var(--carbon);
+  font-size: var(--texto-s);
+}
+
+/* ── Navegación de zonas: barra en escritorio ─────────────────────────────────── */
+.armeria__nav {
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: var(--espacio-4);
+  padding: var(--espacio-8) var(--espacio-6) var(--espacio-4);
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--negro-pavonado) 92%, transparent) 30%,
+    color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
+  );
+}
+
+.armeria__grupo-titulo {
+  margin: 0 0 var(--espacio-2);
+  font-family: var(--fuente-rotulo);
+  font-weight: var(--peso-negrita);
+  font-size: var(--texto-s);
+  letter-spacing: var(--interletra-rotulo);
+  text-transform: uppercase;
+  color: var(--niebla);
+}
+
+.armeria__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.armeria__zona {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  gap: var(--espacio-1);
+  min-width: 0;
+  min-height: var(--objetivo-tactil);
+  height: 100%;
+  padding: var(--espacio-2) var(--espacio-3);
+  border: var(--trazo-fino) solid var(--acero);
+  border-radius: var(--radio-m);
+  background: color-mix(in srgb, var(--carbon) 78%, transparent);
+  box-shadow: var(--sombra-boton);
+  color: var(--hueso);
+  text-decoration: none;
+  transition:
+    border-color var(--duracion-componente) var(--curva-mecanica),
+    background-color var(--duracion-componente) var(--curva-mecanica),
+    box-shadow var(--duracion-componente) var(--curva-mecanica);
+}
+
+.armeria__zona:hover,
+.armeria__zona[data-activa="true"] {
+  border-color: var(--laton);
+  background: color-mix(in srgb, var(--grafito) 92%, transparent);
+}
+
+.armeria__zona[data-activa="true"] .armeria__zona-nombre {
+  color: var(--laton-claro);
+  text-shadow: var(--resplandor-rotulo);
+}
+
+.armeria__zona-estanteria {
+  display: none;
+}
+
+.armeria__zona-nombre {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* La marca DEMO va en la esquina: el dato no se corta. */
+/* En escritorio, la marca DEMO va en la cabecera de cada grupo; en cada tarjeta solo la oye el lector. */
+.armeria__zona-dato .armeria__demo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.armeria__demo--grupo {
+  vertical-align: 0.1em;
+}
+
+.armeria__zona-nombre {
+  font-family: var(--fuente-rotulo);
+  font-weight: var(--peso-negrita);
+  font-size: var(--texto-m);
+  letter-spacing: var(--interletra-rotulo);
+  text-transform: uppercase;
+  line-height: var(--interlineado-compacto);
+}
+
+.armeria__zona-dato {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  color: var(--niebla);
+}
+
+.armeria__demo {
+  display: inline-block;
+  margin-inline-start: var(--espacio-1);
+  padding: 0 var(--espacio-1);
+  border: var(--trazo-fino) solid var(--estado-aviso);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  line-height: var(--interlineado-cuerpo);
+  letter-spacing: var(--interletra-versalitas);
+  text-transform: uppercase;
+  color: var(--estado-aviso);
+}
+
+/* ── Etiqueta flotante sobre la zona activa (la coloca la escena) ─────────────── */
+.armeria__etiqueta {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  display: grid;
+  gap: var(--espacio-1);
+  padding: var(--espacio-2) var(--espacio-3);
+  border: var(--trazo-fino) solid var(--laton);
+  border-radius: var(--radio-m);
+  background: color-mix(in srgb, var(--negro-pavonado) 90%, transparent);
+  box-shadow: var(--sombra-placa);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--duracion-micro) var(--curva-mecanica);
+}
+
+.armeria__etiqueta[data-visible="true"] {
+  opacity: 1;
+}
+
+.armeria__etiqueta-nombre {
+  font-family: var(--fuente-rotulo);
+  font-weight: var(--peso-negrita);
+  font-size: var(--texto-l);
+  letter-spacing: var(--interletra-rotulo);
+  text-transform: uppercase;
+  color: var(--laton-claro);
+}
+
+.armeria__etiqueta-dato {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  color: var(--hueso);
+}
+
+/* ── Panel de la zona abierta ──────────────────────────────────────────────────── */
+.armeria__panel {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: var(--espacio-6);
+  width: min(26rem, calc(100% - 2 * var(--espacio-6)));
+  translate: 0 -50%;
+  animation: armeria-entra var(--duracion-panel) var(--curva-mecanica);
+}
+
+.armeria__panel:focus {
+  outline: none;
+}
+
+.armeria__panel-texto {
+  margin: 0 0 var(--espacio-3);
+  max-width: var(--ancho-lectura);
+  line-height: var(--interlineado-cuerpo);
+}
+
+.armeria__panel-dato {
+  margin: 0 0 var(--espacio-3);
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-s);
+}
+
+.armeria__panel-nota {
+  margin: 0 0 var(--espacio-4);
+  font-size: var(--texto-s);
+  color: var(--niebla);
+}
+
+.armeria__panel-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+}
+
+@keyframes armeria-entra {
+  from {
+    opacity: 0;
+    translate: var(--espacio-4) -50%;
+  }
+}
+
+.armeria__saltar {
+  position: absolute;
+  z-index: 4;
+  top: 5.5rem;
+  right: var(--espacio-6);
+  min-height: var(--objetivo-tactil);
+  padding: 0 var(--espacio-4);
+  border: var(--trazo-fino) solid var(--acero);
+  border-radius: var(--radio-m);
+  background: var(--carbon);
+  color: var(--hueso);
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  letter-spacing: var(--interletra-versalitas);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.armeria__saltar kbd {
+  margin-inline-start: var(--espacio-2);
+  padding: 0 var(--espacio-1);
+  border: var(--trazo-fino) solid var(--acero);
+  border-radius: var(--radio-s);
+  color: var(--niebla);
+}
+
+/* Durante la intro la navegación espera (sigue en el DOM y con foco). */
+.armeria[data-intro="true"] .armeria__nav {
+  opacity: 0.35;
+}
+
+/* ── Móvil: pasillo horizontal con scroll-snap (docs/02 §3.3) ─────────────────── */
+@media (max-width: 52.125rem) {
+  .armeria__cabecera {
+    padding: var(--espacio-3) var(--espacio-4);
+    gap: var(--espacio-2) var(--espacio-3);
+  }
+
+  .armeria__marca {
+    font-size: var(--texto-xl);
+  }
+
+  .armeria__prototipo {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .armeria__nav {
+    display: flex;
+    gap: var(--espacio-3);
+    padding: var(--espacio-12) 11vw var(--espacio-6);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .armeria__grupo,
+  .armeria__lista,
+  .armeria__item {
+    display: contents;
+  }
+
+  .armeria__grupo-titulo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .armeria__zona {
+    flex: 0 0 78vw;
+    min-height: 6.5rem;
+    scroll-snap-align: center;
+    padding: var(--espacio-3) var(--espacio-4);
+  }
+
+  .armeria__zona-estanteria {
+    display: block;
+    font-family: var(--fuente-rotulo);
+    font-weight: var(--peso-negrita);
+    font-size: var(--texto-xs);
+    letter-spacing: var(--interletra-rotulo);
+    text-transform: uppercase;
+    color: var(--niebla);
+  }
+
+  .armeria__zona-nombre {
+    font-size: var(--texto-l);
+  }
+
+  .armeria__panel {
+    top: auto;
+    right: var(--espacio-4);
+    bottom: var(--espacio-4);
+    left: var(--espacio-4);
+    width: auto;
+    translate: none;
+    animation-name: armeria-sube;
+  }
+
+  .armeria[data-abierta="true"] .armeria__nav {
+    visibility: hidden;
+  }
+
+  .armeria__saltar {
+    top: 7rem;
+    right: var(--espacio-4);
+  }
+
+  .armeria__tecnica {
+    display: none;
+  }
+
+  .armeria__cabecera {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--negro-pavonado) 94%, transparent) 70%,
+      color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
+    );
+    padding-bottom: var(--espacio-6);
+  }
+
+  .armeria__demo--grupo {
+    display: none;
+  }
+
+  .armeria__zona-dato .armeria__demo {
+    position: absolute;
+    right: var(--espacio-3);
+    bottom: var(--espacio-3);
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+
+  /* El póster se recorre en horizontal, estantería a estantería. */
+  .armeria-poster {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .armeria-poster__lienzo {
+    left: 0;
+    top: 0;
+    width: auto;
+    height: 100%;
+    translate: none;
+  }
+}
+
+@keyframes armeria-sube {
+  from {
+    opacity: 0;
+    translate: 0 var(--espacio-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .armeria__panel {
+    animation: none;
+  }
+}

@@ -1,0 +1,19 @@
+---
+// Prototipo A de La Armería (Fase 1, rama spike: no se fusiona). docs/02 §3.5 y
+// docs/informes/fase-1-propuestas.md. Prerenderizada: la isla pinta el póster y la navegación en HTML
+// y pide el 3D después.
+import ArmeriaA from '../../components/armeria/ArmeriaA.tsx';
+import Base from '../../layouts/Base.astro';
+
+export const prerender = true;
+---
+
+<Base
+  title="La Armería · prototipo A (3D)"
+  description="Prototipo A del inicio de Taller6mm: la armería en 3D en tiempo real. Datos de ejemplo."
+>
+  <main id="contenido">
+    <h1 class="t6-sr">La Armería · prototipo A: 3D en tiempo real</h1>
+    <ArmeriaA client:idle />
+  </main>
+</Base>

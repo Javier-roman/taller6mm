@@ -1,8 +1,14 @@
 [
   {
-    "name": "JS de cliente (todas las islas)",
-    "path": "dist/client/_astro/*.js",
+    "name": "JS inicial de cliente (todas las islas, sin el chunk 3D)",
+    "path": ["dist/client/_astro/*.js", "!dist/client/_astro/Escena*.js"],
     "limit": "120 kB",
+    "gzip": true
+  },
+  {
+    "name": "Chunk 3D de La Armería (docs/02 §3.6: ≤ 350 KB gz, después del primer pintado)",
+    "path": "dist/client/_astro/Escena*.js",
+    "limit": "350 kB",
     "gzip": true
   },
   {

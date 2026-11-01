@@ -1,0 +1,47 @@
+{
+  "ruta": "/prototipos/armeria-a",
+  "fecha": "2026-11-01T07:38:20.847Z",
+  "segundos": 8,
+  "resultados": [
+    {
+      "nombre": "escritorio-1440",
+      "escena": true,
+      "listoEnMs": 2842,
+      "fotogramas": 476,
+      "fpsMedio": 60,
+      "msP50": 16.7,
+      "msP95": 17.1,
+      "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "dpr": 1,
+      "info": {
+        "llamadas": 1,
+        "triangulos": 1,
+        "programas": 12,
+        "geometrias": 292,
+        "texturas": 51
+      },
+      "cayoAlPoster": false,
+      "errores": []
+    },
+    {
+      "nombre": "movil-390-cpu4x",
+      "escena": true,
+      "listoEnMs": 5395,
+      "fotogramas": 468,
+      "fpsMedio": 59.3,
+      "msP50": 16.7,
+      "msP95": 16.8,
+      "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "dpr": 1.25,
+      "info": {
+        "llamadas": 1,
+        "triangulos": 1,
+        "programas": 11,
+        "geometrias": 288,
+        "texturas": 43
+      },
+      "cayoAlPoster": false,
+      "errores": []
+    }
+  ]
+}

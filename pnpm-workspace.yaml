@@ -52,6 +52,12 @@ catalog:
   react-dom: 19.3.1
   "@types/react": 19.3.0
   "@types/react-dom": 19.3.0
+  # 3D: prototipos de La Armería (Fase 1). El ADR-0002 decidirá si se quedan.
+  three: 0.186.1
+  "@types/three": 0.186.0
+  "@react-three/fiber": 9.8.2
+  "@react-three/postprocessing": 3.2.2
+  postprocessing: 6.39.5
   # Cloudflare y servidor
   wrangler: 4.154.0
   hono: 4.13.14

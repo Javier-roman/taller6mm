@@ -16,12 +16,16 @@
   "dependencies": {
     "@astrojs/cloudflare": "catalog:",
     "@astrojs/react": "catalog:",
+    "@react-three/fiber": "catalog:",
+    "@react-three/postprocessing": "catalog:",
     "@taller6mm/db": "workspace:*",
     "@taller6mm/ui": "workspace:*",
     "astro": "catalog:",
     "drizzle-orm": "catalog:",
+    "postprocessing": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "three": "catalog:"
   },
   "devDependencies": {
     "@astrojs/check": "catalog:",
@@ -32,6 +36,7 @@
     "@taller6mm/config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@types/three": "catalog:",
     "chrome-launcher": "catalog:",
     "lighthouse": "catalog:",
     "size-limit": "catalog:",
