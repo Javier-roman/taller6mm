@@ -580,3 +580,11 @@
     animation: none;
   }
 }
+
+/* Prototipo B: el lienzo del compositor ocupa toda la escena. */
+.armeria__canvas-b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}

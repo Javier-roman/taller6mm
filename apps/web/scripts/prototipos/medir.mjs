@@ -8,6 +8,7 @@
 //      [--segundos 8] [--salida archivo.json] [--headed]
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { argumentos, ESCRITORIO, esperarEscena, MOVIL, navegador, pausa, root, servidor } from './comun.mjs';
 
 const args = argumentos({ ruta: '/prototipos/armeria-a', segundos: '8' });
@@ -23,6 +24,23 @@ async function medirEscenario(nombre, contexto, accion) {
     const cdp = await context.newCDPSession(page);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpu });
   }
+  // Peso de lo que descarga la página, por tipo (JS y CSS también comprimidos con gzip -9).
+  const recursos = {};
+  const pendientes = [];
+  page.on('response', (r) => {
+    pendientes.push(
+      (async () => {
+        const tipo = r.request().resourceType();
+        const cuerpo = await r.body().catch(() => null);
+        if (!cuerpo) return;
+        recursos[tipo] ??= { kb: 0, gzKb: 0, n: 0 };
+        recursos[tipo].kb += cuerpo.length / 1024;
+        recursos[tipo].n += 1;
+        if (tipo === 'script' || tipo === 'stylesheet')
+          recursos[tipo].gzKb += gzipSync(cuerpo, { level: 9 }).length / 1024;
+      })(),
+    );
+  });
   const errores = [];
   page.on('console', (m) => {
     if (m.type() === 'error') errores.push(m.text());
@@ -71,8 +89,13 @@ async function medirEscenario(nombre, contexto, accion) {
       cayoAlPoster: Boolean(document.querySelector('.armeria__aviso')),
     };
   });
+  await Promise.all(pendientes);
+  for (const r of Object.values(recursos)) {
+    r.kb = Math.round(r.kb * 10) / 10;
+    r.gzKb = Math.round(r.gzKb * 10) / 10;
+  }
   await context.close();
-  return { nombre, escena: true, listoEnMs, ...datos, errores };
+  return { nombre, escena: true, listoEnMs, ...datos, recursos, errores };
 }
 
 const resultados = [];

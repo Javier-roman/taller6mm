@@ -1,0 +1,74 @@
+[
+  {
+    "ruta": "/prototipos/armeria-a",
+    "pantalla": "escritorio",
+    "caso": "escena",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-a",
+    "pantalla": "escritorio",
+    "caso": "zona-abierta",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-a",
+    "pantalla": "escritorio",
+    "caso": "poster",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-a",
+    "pantalla": "movil",
+    "caso": "escena",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-a",
+    "pantalla": "movil",
+    "caso": "zona-abierta",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-a",
+    "pantalla": "movil",
+    "caso": "poster",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-b",
+    "pantalla": "escritorio",
+    "caso": "escena",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-b",
+    "pantalla": "escritorio",
+    "caso": "zona-abierta",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-b",
+    "pantalla": "escritorio",
+    "caso": "poster",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-b",
+    "pantalla": "movil",
+    "caso": "escena",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-b",
+    "pantalla": "movil",
+    "caso": "zona-abierta",
+    "fallos": []
+  },
+  {
+    "ruta": "/prototipos/armeria-b",
+    "pantalla": "movil",
+    "caso": "poster",
+    "fallos": []
+  }
+]

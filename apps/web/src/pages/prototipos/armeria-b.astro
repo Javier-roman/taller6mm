@@ -1,0 +1,19 @@
+---
+// Prototipo B de La Armería (Fase 1, rama spike: no se fusiona). docs/02 §3.5 y
+// docs/informes/fase-1-propuestas.md. Prerenderizada: la isla pinta el póster y la navegación en HTML
+// y pide el compositor 2,5D después.
+import ArmeriaB from '../../components/armeria/ArmeriaB.tsx';
+import Base from '../../layouts/Base.astro';
+
+export const prerender = true;
+---
+
+<Base
+  title="La Armería · prototipo B (2,5D)"
+  description="Prototipo B del inicio de Taller6mm: la armería en 2,5D re-iluminable. Datos de ejemplo."
+>
+  <main id="contenido">
+    <h1 class="t6-sr">La Armería · prototipo B: 2,5D re-iluminable</h1>
+    <ArmeriaB client:idle />
+  </main>
+</Base>

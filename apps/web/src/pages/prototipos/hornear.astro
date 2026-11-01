@@ -1,0 +1,15 @@
+---
+// Horno del prototipo B (Fase 1, rama spike): saca los pases de luz de la sala para
+// scripts/prototipos/hornear-b.mjs. No es una página para usuarios.
+import Horno from '../../components/armeria/Horno.tsx';
+import Base from '../../layouts/Base.astro';
+
+export const prerender = true;
+---
+
+<Base title="Horno del prototipo B" description="Herramienta interna: pases de luz de La Armería para el prototipo B.">
+  <main id="contenido">
+    <h1 class="t6-sr">Horno de pases del prototipo B</h1>
+    <Horno client:only="react" />
+  </main>
+</Base>

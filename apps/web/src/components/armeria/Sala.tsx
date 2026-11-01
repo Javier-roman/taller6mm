@@ -584,15 +584,14 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       tubosMat[e].emissive.copy(control.colorTubo);
       const g = grupos[e].current;
       if (g) g.position.z = control.desplazamiento[e];
-      cabeceras[e].emissiveIntensity =
-        e === 'centro' ? LUZ.marca * luz.marca : LUZ.rotuloBase * luz.rotulos * (0.4 + nivel);
+      // Emisión independiente de los tubos: así cada grupo de luz se suma (pases del prototipo B).
+      cabeceras[e].emissiveIntensity = e === 'centro' ? LUZ.marca * luz.marca : LUZ.rotuloBase * 1.4 * luz.rotulos;
     }
     for (const z of ZONAS) {
       const material = rotulos[z.id];
       if (!material) continue;
       const activo = z.id === control.zonaActiva;
-      material.emissiveIntensity =
-        luz.rotulos * (activo ? LUZ.rotuloActivo : LUZ.rotuloBase * (0.4 + luz.tubos[z.estanteria]));
+      material.emissiveIntensity = luz.rotulos * (activo ? LUZ.rotuloActivo : LUZ.rotuloBase * 1.2);
     }
     if (flexo.current) flexo.current.intensity = LUZ.flexo * luz.calidas;
     mat.bombilla.emissiveIntensity = LUZ.bombilla * luz.calidas;

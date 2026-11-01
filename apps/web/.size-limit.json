@@ -1,15 +1,28 @@
 [
   {
-    "name": "JS inicial de cliente (todas las islas, sin el chunk 3D)",
-    "path": ["dist/client/_astro/*.js", "!dist/client/_astro/Escena*.js"],
+    "name": "JS inicial de cliente (todas las islas, sin el chunk 3D ni el compositor)",
+    "path": ["dist/client/_astro/*.js", "!dist/client/_astro/{Sala,EscenaA,EscenaB,Horno}*.js"],
     "limit": "120 kB",
     "gzip": true
   },
   {
-    "name": "Chunk 3D de La Armería (docs/02 §3.6: ≤ 350 KB gz, después del primer pintado)",
-    "path": "dist/client/_astro/Escena*.js",
+    "name": "Chunk 3D del prototipo A (docs/02 §3.6: ≤ 350 KB gz, después del primer pintado)",
+    "path": ["dist/client/_astro/Sala*.js", "dist/client/_astro/EscenaA*.js"],
     "limit": "350 kB",
     "gzip": true
+  },
+  {
+    "name": "Compositor 2,5D del prototipo B (WebGL2, sin three.js)",
+    "path": "dist/client/_astro/EscenaB*.js",
+    "limit": "30 kB",
+    "gzip": true
+  },
+  {
+    "name": "Pases horneados del prototipo B (docs/02 §3.6: ≤ 2 MB en móvil)",
+    "path": "dist/client/prototipos/armeria-b/*.webp",
+    "limit": "2 MB",
+    "gzip": false,
+    "brotli": false
   },
   {
     "name": "CSS global (tokens, base, componentes y utilidades)",
