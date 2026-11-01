@@ -117,6 +117,11 @@ Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo 
   - el ruido (`--textura-ruido`) es grano gris de contraste completo en una capa al 3 %;
   - el brillo es el filo de 1 px (`--sombra-placa`) más una luz cenital muy suave en el tercio superior (`--brillo-placa`), como la de los tubos del techo sobre una chapa;
   - el primer ajuste, grano solo blanco al 1,5 % de media y filo al 6 %, no se percibía en pantalla.
+- Luces de la sala como tokens:
+  - `--luz-cenital`: fría, la de los tubos;
+  - `--luz-flexo`: cálida, la del banco.
+
+  Las usan las cabeceras y las heredará La Armería.
 - Texturas permitidas, siempre muy sutiles: aluminio cepillado, Cordura y papel kraft (etiquetas).
 
 ### 4.4 Movimiento
@@ -126,7 +131,7 @@ Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo 
 - Con `prefers-reduced-motion`: fundidos de ≤ 120 ms, sin cámara ni parallax.
 
 ### 4.5 Componentes base (en `packages/ui`)
-- **Estructura**: Placa (panel), Cajón (panel lateral, hoja inferior en móvil), Maletín (modal), Pestañas, Tostada, Tooltip, Avatar y Fila desplazable (`.t6-fila-desplazable`). La Fila desplazable va en una sola fila con scroll horizontal en móvil y en varias filas desde tablet. Sirve para menús de secciones y, en la Fase 1, para el pasillo de La Armería en móvil.
+- **Estructura**: Placa (panel), Cajón (panel lateral, hoja inferior en móvil), Maletín (modal), Pestañas, Tostada, Tooltip, Avatar y Fila desplazable (`.t6-fila-desplazable`). La Fila desplazable va en una sola fila con scroll horizontal hasta escritorio y en varias filas desde 1280 px; como menú fijo, varias filas en tablet taparían media pantalla. Sirve para menús de secciones y, en la Fase 1, para el pasillo de La Armería en móvil.
 - **Acciones**: Botón (latón, acero, fantasma, peligro); deslizador tipo raíl (rango de precio con una "montura" como tirador).
 - **Rotulación**: Rótulo plantilla, Chip e insignia, **Insignia de fidelidad T0–T3**, Valoración.
 - **Datos**:
@@ -136,7 +141,8 @@ Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo 
 - **Configurador**:
   - **Nodo de ranura**: "+" con línea guía.
   - **Ficha de pieza**: miniatura, nombre, "desde X €", nº de tiendas y compatibilidad.
-- **Indicador de carga**: un cargador que se llena con bolas de 6 mm.
+- **Indicador de carga** (Cargador): un cargador visto de lado, con su labio, que se llena con 5 bolas de 6 mm una a una, con la curva «pesada». Con movimiento reducido, lleno y quieto.
+- **Fecha de comprobación**: toda Barra de dato de precio o stock lleva «Comprobado hace X» (`<time datetime>` en UTC) o «Sin fecha de comprobación». El tipo del componente no compila sin ella.
 
 Una página viva, `/sistema`, muestra todos los tokens y componentes con sus estados: hover, foco, activo, deshabilitado, carga y error.
 
