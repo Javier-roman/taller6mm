@@ -14,7 +14,9 @@
       "!**/.astro",
       "!**/dist",
       "!apps/pipeline/.venv",
-      "!pnpm-lock.yaml"
+      "!pnpm-lock.yaml",
+      "!packages/ui/src/styles/tokens.css",
+      "!packages/ui/src/styles/theme.css"
     ]
   },
   "formatter": {
@@ -34,6 +36,11 @@
   "json": {
     "formatter": {
       "trailingCommas": "none"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   },
   "html": {

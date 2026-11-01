@@ -1,0 +1,16 @@
+# Excepciones de OSV-Scanner (job «dependencias» del CI). Cada una va acotada a un paquete y una
+# versión concretos, con motivo y fecha de caducidad: al caducar, el CI vuelve a fallar y se revisa.
+
+[[PackageOverrides]]
+# GHSA-mrhx-c7xc-m3w5 (zod < 4.6.6, agotamiento de memoria al validar colecciones enormes).
+# Lo arrastra chromium-bidi 17.0.2 (lighthouse → puppeteer-core 25.12.0), herramienta de desarrollo
+# que solo se ejecuta en local contra nuestra propia web. puppeteer-core solo carga chromium-bidi en
+# modo WebDriver BiDi y Lighthouse usa CDP. No hay versión 3.x corregida, y las chromium-bidi que ya
+# usan zod 4 llegan sin procedencia firmada (ver overrides en pnpm-workspace.yaml).
+# Nuestro código usa zod 4.6.7 desde el catálogo, sin excepción.
+name = "zod"
+version = "3.25.76"
+ecosystem = "npm"
+vulnerability.ignore = true
+effectiveUntil = 2027-01-31
+reason = "Solo en lighthouse (desarrollo, modo CDP); sin 3.x corregida. Revisar al subir puppeteer-core."

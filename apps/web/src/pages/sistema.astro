@@ -1,0 +1,724 @@
+---
+// /sistema: página viva del sistema de diseño (docs/02 §4.5). Prerenderizada y sin JS de cliente:
+// los componentes React se renderizan en la build. Todo sale de @taller6mm/ui.
+import { BRAND } from '@taller6mm/ui/brand';
+import {
+  BarraDato,
+  Boton,
+  BotonEnlace,
+  Cargador,
+  IconoFlecha,
+  InsigniaFidelidad,
+  NIVELES_FIDELIDAD,
+  type NivelFidelidad,
+  Placa,
+  Rotulo,
+  VARIANTES_BOTON,
+} from '@taller6mm/ui/componentes';
+import { COLOR_PAIRS, checkPair } from '@taller6mm/ui/contraste';
+import { COLOR_TOKENS, type ColorToken, DURATIONS, EASINGS, REDUCED_DURATIONS } from '@taller6mm/ui/tokens';
+import { createElement } from 'react';
+import Base from '../layouts/Base.astro';
+import {
+  ESCALA_ESPACIO,
+  ESCALA_TEXTO,
+  FONDO,
+  GRUPOS_COLOR,
+  RADIOS,
+  SECCIONES,
+  SOMBRAS,
+  TEXTO,
+} from '../lib/sistema';
+
+export const prerender = true;
+
+const colores = Object.entries(COLOR_TOKENS) as [ColorToken, (typeof COLOR_TOKENS)[ColorToken]][];
+const pares = COLOR_PAIRS.map(checkPair);
+const ratio = (n: number) => n.toLocaleString('es-ES', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+const niveles = Object.entries(NIVELES_FIDELIDAD) as [NivelFidelidad, (typeof NIVELES_FIDELIDAD)[NivelFidelidad]][];
+const nombreVariante = { laton: 'Latón', acero: 'Acero', fantasma: 'Fantasma', peligro: 'Peligro' } as const;
+const usoVariante = {
+  laton: 'Acción principal',
+  acero: 'Acción secundaria',
+  fantasma: 'Acción terciaria',
+  peligro: 'Acción destructiva',
+} as const;
+const accion = {
+  laton: 'Guardar build',
+  acero: 'Guardar build',
+  fantasma: 'Guardar build',
+  peligro: 'Borrar build',
+} as const;
+const accionEnCurso = {
+  laton: 'Guardando…',
+  acero: 'Guardando…',
+  fantasma: 'Guardando…',
+  peligro: 'Borrando…',
+} as const;
+const nombreDuracion = { micro: 'Micro', componente: 'Componentes', panel: 'Paneles', escena: 'Cámara y escena' } as const;
+const nombreCurva = { mecanica: 'Mecánica', pesada: 'Pesada (raíles y cajones)' } as const;
+// Los textos salen de los datos para que nunca contradigan la tabla de la propia página.
+const corregidos = colores.filter(([, spec]) => 'previous' in spec).length;
+const paresSinAA = pares.filter((p) => !p.passes).length;
+// Datos de ejemplo de la Barra de dato. Fechas fijas: la página está prerenderizada y un «hace 3 h»
+// calculado al compilar mentiría al día siguiente. En la web real, `ahora` es la hora de la petición.
+const DEMO_AHORA = '2026-10-31T18:00:00Z';
+const DEMO_COMPROBADO = '2026-10-31T15:12:00Z';
+// Las props de un componente React necesitan elementos de React, no plantillas de Astro.
+const flecha = createElement(IconoFlecha);
+---
+
+<Base
+  title="Sistema de diseño"
+  description="Tokens y componentes base de Taller6mm: color, tipografía, espacio, movimiento, botones, placas, rótulos, insignias de fidelidad y barras de dato."
+>
+  <!-- Cabecera con la luz de la sala: cenital fría de los tubos y cálida del flexo, sobre grano. -->
+  <header
+    class="border-b border-acero bg-carbon bg-[image:var(--luz-cenital),var(--luz-flexo),var(--textura-ruido)]"
+  >
+    <div
+      class="mx-auto grid max-w-pagina items-center gap-12 px-4 py-12 tablet:px-8 escritorio:grid-cols-[minmax(0,1fr)_minmax(0,var(--ancho-lectura))] escritorio:py-16"
+    >
+      <div class="flex flex-col gap-4">
+        <Rotulo tinta="laton" tamano="s">Sistema de diseño · Fase 0</Rotulo>
+        <h1 class="font-grabado text-4xl tracking-grabado text-hueso tablet:text-5xl">{BRAND.name}</h1>
+        <p class="max-w-entradilla text-l text-niebla">
+          Herencia de armero, precisión táctica. Esta página es la referencia viva de los tokens y componentes
+          de <code class="text-hueso">@taller6mm/ui</code>: lo que ves aquí es exactamente lo que usa la web.
+        </p>
+      </div>
+      <!-- Los componentes juntos, como se verán en la web (datos de ejemplo). -->
+      <div class="hidden escritorio:block">
+        <Placa as="div" titulo="Banco de trabajo" codigo="MOD-01">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <Rotulo tinta="laton" iluminado>Continúa tu build</Rotulo>
+            <InsigniaFidelidad nivel="T2" />
+          </div>
+          <BarraDato
+            etiqueta="Peso total"
+            valor={3120}
+            unidad="g"
+            escala={{ min: 2400, max: 4200 }}
+            referencia={{ valor: 3400, etiqueta: 'Mediana de 128 builds M4' }}
+          />
+          <BarraDato
+            etiqueta="Precio de la build"
+            valor={41235}
+            unidad="eur"
+            escala={{ min: 15000, max: 90000 }}
+            comprobado={DEMO_COMPROBADO}
+            ahora={DEMO_AHORA}
+          />
+          <div>
+            <BotonEnlace href="#boton" variante="laton" icono={flecha}>Montar réplica</BotonEnlace>
+          </div>
+        </Placa>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menú fijo: la página es larga y hay que poder saltar de sección sin volver arriba. -->
+  <nav aria-label="Secciones del sistema" class="sticky top-0 z-10 border-b border-acero bg-carbon">
+    <div class="mx-auto max-w-pagina px-4 py-2 tablet:px-8">
+      <ul class="t6-fila-desplazable">
+        {
+          SECCIONES.map((s) => (
+            <li>
+              <BotonEnlace href={`#${s.id}`} variante="fantasma">
+                {s.titulo}
+              </BotonEnlace>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+
+  <main
+    id="contenido"
+    class="mx-auto flex max-w-pagina scroll-mt-24 flex-col gap-24 px-4 py-16 tablet:px-8 *:scroll-mt-24"
+  >
+    <!-- 01 · Color -->
+    <section id="color" aria-labelledby="t-color" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">01</Rotulo>
+        <h2 id="t-color" class="font-grabado text-3xl text-hueso">Color</h2>
+        <p class="max-w-lectura text-niebla">
+          Nombres de acabado. El color nunca va solo: cada estado lleva también icono y texto. {corregidos} de los
+          valores iniciales no llegaban a AA y se han corregido con la misma tinta y algo más de luz.
+        </p>
+      </div>
+
+      {
+        GRUPOS_COLOR.map(({ grupo, titulo }) => (
+          <div class="flex flex-col gap-4">
+            <h3 class="text-l font-semi text-hueso">{titulo}</h3>
+            <ul class="grid grid-cols-2 gap-4 tablet:grid-cols-3 escritorio:grid-cols-5">
+              {colores
+                .filter(([, spec]) => spec.group === grupo)
+                .map(([nombre, spec]) => (
+                  <li class="flex flex-col overflow-hidden rounded-l border border-acero bg-grafito">
+                    {/* Muestra enmarcada: se ve aunque su color sea el de la tarjeta (grafito sobre grafito). */}
+                    <span class={`m-2 block h-12 rounded-m border border-acero ${FONDO[nombre]}`} aria-hidden="true" />
+                    <span class="flex flex-col gap-1 p-3">
+                      <code class="text-s text-hueso">--{nombre}</code>
+                      <span class="font-datos text-xs text-niebla">{spec.hex}</span>
+                      <span class="text-xs text-niebla">{spec.use}</span>
+                      {'previous' in spec ? (
+                        <span class="text-xs text-estado-aviso">Antes {spec.previous}: no llegaba a AA</span>
+                      ) : null}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <div class="flex flex-col gap-4">
+        <h3 class="text-l font-semi text-hueso">Rampa de profundidad</h3>
+        <p class="max-w-lectura text-s text-niebla">
+          Cada superficie se apoya en la anterior: el fondo pavonado, las superficies de carbón y los paneles de grafito
+          con borde de acero y su sombra.
+        </p>
+        <div class="rounded-l border border-acero bg-negro-pavonado p-6" aria-hidden="true">
+          <code class="text-xs text-niebla">--negro-pavonado · fondo base</code>
+          <div class="mt-4 rounded-l border border-acero bg-carbon p-6">
+            <code class="text-xs text-niebla">--carbon · superficies</code>
+            <div class="mt-4 rounded-l border border-acero bg-grafito p-6 shadow-placa">
+              <code class="text-xs text-hueso">--grafito · paneles elevados</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <h3 class="text-l font-semi text-hueso">Pares de contraste comprobados</h3>
+        <p class="max-w-lectura text-s text-niebla">
+          Un test recorre los {pares.length} pares en cada cambio: texto normal 4,5:1; texto grande, indicadores y bordes
+          de componente 3:1. {paresSinAA === 0 ? 'Todos cumplen.' : `${paresSinAA} no cumplen: revísalos.`}
+        </p>
+        <div class="rounded-l border border-acero">
+          <table class="w-full border-collapse text-left text-s">
+            <caption class="t6-sr">Pares de color texto/fondo y su relación de contraste</caption>
+            <thead class="bg-carbon text-niebla">
+              <tr>
+                <th scope="col" class="px-3 py-3 font-medio tablet:px-4">Muestra</th>
+                <th scope="col" class="px-3 py-3 font-medio tablet:px-4">Texto sobre fondo</th>
+                <th scope="col" class="hidden px-4 py-3 font-medio tablet:table-cell">Uso</th>
+                <th scope="col" class="px-3 py-3 font-medio tablet:px-4">Contraste</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                pares.map((p) => (
+                  <tr class="border-t border-acero">
+                    <td class="px-3 py-2 tablet:px-4">
+                      <span class={`inline-block rounded-s px-2 py-1 font-semi ${FONDO[p.bg]} ${TEXTO[p.fg]}`}>
+                        Aa
+                      </span>
+                    </td>
+                    <td class="px-3 py-2 wrap-anywhere tablet:px-4">
+                      <code class="text-hueso">{p.fg}</code> <span class="text-niebla">sobre</span>{' '}
+                      <code class="text-hueso">{p.bg}</code>
+                    </td>
+                    <td class="hidden px-4 py-2 text-niebla tablet:table-cell">{p.use}</td>
+                    <td class="px-3 py-2 font-datos tablet:px-4">
+                      <span class={`whitespace-nowrap ${p.passes ? 'text-estado-ok' : 'text-estado-error'}`}>
+                        {p.passes ? '✓' : '✗'} {ratio(p.ratio)}:1
+                      </span>{' '}
+                      <span class="whitespace-nowrap text-niebla">mín. {ratio(p.min)}</span>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · Tipografía -->
+    <section id="tipografia" aria-labelledby="t-tipografia" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">02</Rotulo>
+        <h2 id="t-tipografia" class="font-grabado text-3xl text-hueso">Tipografía</h2>
+        <p class="max-w-lectura text-niebla">
+          Cuatro familias con licencia OFL, autoalojadas: ninguna se carga desde servidores de terceros. Solo se precargan
+          Archivo y Cinzel.
+        </p>
+      </div>
+      <div class="grid gap-6 escritorio:grid-cols-2">
+        <Placa titulo="Grabado · Cinzel" codigo="--fuente-grabado" lisa>
+          <p class="font-grabado text-3xl tracking-grabado text-hueso">Armería</p>
+          <p>Marca y nombres de zona en grande: capitales de inscripción, como el grabado de un armero.</p>
+        </Placa>
+        <Placa titulo="Rótulo · Big Shoulders Stencil" codigo="--fuente-rotulo" lisa>
+          <Rotulo tamano="l">Almacén de accesorios</Rotulo>
+          <p>Etiquetas de zona, chips y rótulos de estantería, pintados a plantilla.</p>
+        </Placa>
+        <Placa titulo="Interfaz · Archivo" codigo="--fuente-interfaz" lisa>
+          <p class="text-l text-hueso">Guardamanos M-LOK de 10″ con raíl superior continuo</p>
+          <ul class="flex flex-col gap-1">
+            <li class="font-stretch-condensed text-hueso">Condensada (75 %): tablas y datos densos</li>
+            <li class="font-stretch-semi-condensed text-hueso">Semicondensada (87,5 %): botones y etiquetas</li>
+            <li class="font-stretch-normal text-hueso">Normal (100 %): lectura</li>
+          </ul>
+        </Placa>
+        <Placa titulo="Datos · JetBrains Mono" codigo="--fuente-datos" lisa>
+          <p class="font-datos text-xl text-hueso">412,35 € · 845 mm · 3120 g</p>
+          <p>Medidas, precios y códigos con cifras tabulares: <code class="text-hueso">T6M-7KQ2-9XWD</code>.</p>
+        </Placa>
+      </div>
+      <div class="flex flex-col gap-4">
+        <h3 class="text-l font-semi text-hueso">Escala modular 1,25</h3>
+        <ol class="flex flex-col gap-3">
+          {
+            ESCALA_TEXTO.map((t) => (
+              <li class="flex items-baseline gap-4 border-b border-acero pb-3">
+                <span class="w-16 shrink-0 font-datos text-xs text-niebla">
+                  {t.token} · {t.px}
+                </span>
+                <span class={`${t.clase} leading-titular text-hueso`}>Réplica a escala</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- 03 · Espacio y forma -->
+    <section id="espacio" aria-labelledby="t-espacio" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">03</Rotulo>
+        <h2 id="t-espacio" class="font-grabado text-3xl text-hueso">Espacio y forma</h2>
+        <p class="max-w-lectura text-niebla">
+          Rejilla de 4&nbsp;px. Radios pequeños, industriales y precisos. Paneles de grafito con ruido de un 3&nbsp;%,
+          borde de acero, brillo interior superior y sombras largas y suaves. Objetivos táctiles de 44&nbsp;px como mínimo.
+        </p>
+      </div>
+      <div class="grid gap-6 escritorio:grid-cols-3">
+        <Placa titulo="Espaciado" codigo="--espacio-*" lisa>
+          <ul class="flex flex-col gap-2">
+            {
+              ESCALA_ESPACIO.map((e) => (
+                <li class="flex items-center gap-3">
+                  <span class="w-12 shrink-0 font-datos text-xs text-niebla">{e.px}&nbsp;px</span>
+                  <span class={`block h-3 rounded-s bg-laton ${e.clase}`} aria-hidden="true" />
+                </li>
+              ))
+            }
+          </ul>
+        </Placa>
+        <Placa titulo="Radios y trazos" codigo="--radio-* · --trazo-*" lisa>
+          <ul class="flex flex-wrap gap-4">
+            {
+              RADIOS.map((r) => (
+                <li class="flex flex-col items-center gap-2">
+                  <span class={`block h-16 w-16 border border-acero bg-carbon ${r.clase}`} aria-hidden="true" />
+                  <span class="font-datos text-xs text-niebla">
+                    {r.token} · {r.valor}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+          <p>Bordes de 1&nbsp;px y anillo de foco de 2&nbsp;px en señal naranja, separado 2&nbsp;px del componente.</p>
+        </Placa>
+        <Placa titulo="Sombras" codigo="--sombra-*" lisa>
+          {/* Sobre el fondo pavonado, que es donde se ven: grafito sobre grafito no se distinguían. */}
+          <ul class="grid grid-cols-2 gap-4 rounded-m bg-negro-pavonado p-4">
+            {
+              SOMBRAS.map((s) => (
+                <li class="flex flex-col gap-2">
+                  <span class={`block h-12 rounded-l border border-acero bg-grafito ${s.clase}`} aria-hidden="true" />
+                  <span class="text-xs text-niebla">
+                    <code class="text-hueso">{s.token}</code> · {s.uso}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </Placa>
+      </div>
+    </section>
+
+    <!-- 04 · Movimiento -->
+    <section id="movimiento" aria-labelledby="t-movimiento" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">04</Rotulo>
+        <h2 id="t-movimiento" class="font-grabado text-3xl text-hueso">Movimiento</h2>
+        <p class="max-w-lectura text-niebla">
+          Con propósito: el cajón se desliza como un cajón y la pieza encaja con un rebote de 2&nbsp;px. Con movimiento
+          reducido, todo se queda en fundidos de 120&nbsp;ms como máximo, sin desplazamientos ni bucles.
+        </p>
+      </div>
+      <div class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-3">
+        <Placa titulo="Duraciones" codigo="--duracion-*" lisa>
+          <dl class="grid grid-cols-[auto_1fr_auto] gap-x-4 gap-y-2">
+            {
+              Object.entries(DURATIONS).map(([k, v]) => (
+                <>
+                  <dt class="text-hueso">{nombreDuracion[k as keyof typeof nombreDuracion]}</dt>
+                  <dd class="font-datos text-s text-hueso">{v}</dd>
+                  <dd class="font-datos text-xs text-niebla">
+                    reducido: {REDUCED_DURATIONS[k as keyof typeof REDUCED_DURATIONS]}
+                  </dd>
+                </>
+              ))
+            }
+          </dl>
+        </Placa>
+        <Placa titulo="Curvas" codigo="--curva-*" lisa>
+          <p>Pasa el puntero o enfoca cada raíl: la montura lo recorre en {DURATIONS.escena} con su curva.</p>
+          {
+            Object.entries(EASINGS).map(([k, v]) => (
+              <button type="button" class={`t6-demo-movimiento t6-curva t6-curva--${k}`}>
+                <span class="t6-demo-movimiento__nombre">
+                  <span>{nombreCurva[k as keyof typeof nombreCurva]}</span>
+                  <span class="t6-demo-movimiento__valor">{v}</span>
+                </span>
+                <span class="t6-curva__rail" aria-hidden="true">
+                  <span class="t6-curva__montura" />
+                </span>
+              </button>
+            ))
+          }
+        </Placa>
+        <Placa titulo="La pieza encaja" codigo="--duracion-componente" lisa>
+          <p>
+            Al montar una pieza, baja, se pasa 2&nbsp;px y se asienta en {DURATIONS.componente}. Con movimiento reducido,
+            aparece en su sitio sin rebote.
+          </p>
+          <button type="button" class="t6-demo-movimiento t6-encaje">
+            <span class="t6-demo-movimiento__nombre">
+              <span>Montar una pieza</span>
+              <span class="t6-demo-movimiento__valor">rebote de 2&nbsp;px</span>
+            </span>
+            <span class="t6-encaje__banco" aria-hidden="true">
+              <span class="t6-encaje__pieza" />
+              <span class="t6-encaje__ranura" />
+            </span>
+          </button>
+        </Placa>
+      </div>
+    </section>
+
+    <!-- 05 · Botón -->
+    <section id="boton" aria-labelledby="t-boton" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">05</Rotulo>
+        <h2 id="t-boton" class="font-grabado text-3xl text-hueso">Botón</h2>
+        <p class="max-w-lectura text-niebla">
+          Latón para la acción principal, acero para la secundaria, fantasma para la terciaria y peligro para lo que no se
+          deshace. Las columnas «hover», «foco» y «activo» están forzadas para documentarlas; los botones reales responden
+          al puntero y al teclado. Mientras carga, el botón conserva el foco pero no se puede volver a pulsar.
+        </p>
+      </div>
+      <div class="flex flex-col gap-6">
+        {
+          VARIANTES_BOTON.map((v) => (
+            <div class="flex flex-col gap-3 border-b border-acero pb-6">
+              <h3 class="text-m font-semi text-hueso">
+                {nombreVariante[v]} <span class="font-regular text-niebla">· {usoVariante[v]}</span>
+              </h3>
+              <ul class="flex flex-wrap items-start gap-4" aria-label={`Estados del botón ${nombreVariante[v]}`}>
+                <li class="flex flex-col gap-2">
+                  <span class="text-xs text-niebla">Normal</span>
+                  <Boton variante={v}>{accion[v]}</Boton>
+                </li>
+                <li class="flex flex-col gap-2">
+                  <span class="text-xs text-niebla">Hover</span>
+                  <Boton variante={v} demo="hover">
+                    {accion[v]}
+                  </Boton>
+                </li>
+                <li class="flex flex-col gap-2">
+                  <span class="text-xs text-niebla">Foco</span>
+                  <Boton variante={v} demo="foco">
+                    {accion[v]}
+                  </Boton>
+                </li>
+                <li class="flex flex-col gap-2">
+                  <span class="text-xs text-niebla">Activo</span>
+                  <Boton variante={v} demo="activo">
+                    {accion[v]}
+                  </Boton>
+                </li>
+                <li class="flex flex-col gap-2">
+                  <span class="text-xs text-niebla">Deshabilitado</span>
+                  <Boton variante={v} disabled>
+                    {accion[v]}
+                  </Boton>
+                </li>
+                <li class="flex flex-col gap-2">
+                  <span class="text-xs text-niebla">Cargando</span>
+                  <Boton variante={v} cargando textoCarga={accionEnCurso[v]}>
+                    {accion[v]}
+                  </Boton>
+                </li>
+              </ul>
+            </div>
+          ))
+        }
+        <div class="flex flex-col gap-3">
+          <h3 class="text-m font-semi text-hueso">Error tras la acción</h3>
+          <Boton variante="laton" error="No se ha guardado: se ha perdido la conexión. Tu build sigue en este dispositivo.">
+            Guardar build
+          </Boton>
+        </div>
+        <div class="flex flex-col gap-3">
+          <h3 class="text-m font-semi text-hueso">Enlace con aspecto de botón</h3>
+          <div>
+            <BotonEnlace href="#dato" variante="laton" icono={flecha}>Ver las barras de dato</BotonEnlace>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · Placa -->
+    <section id="placa" aria-labelledby="t-placa" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">06</Rotulo>
+        <h2 id="t-placa" class="font-grabado text-3xl text-hueso">Placa</h2>
+        <p class="max-w-lectura text-niebla">
+          El panel base: grafito con ruido sutil, borde de acero, brillo interior superior y tornillos en las esquinas.
+          Si lleva enlace, toda la placa se puede pulsar, pero el foco es uno solo: el del título.
+        </p>
+      </div>
+      <ul class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-3">
+        <li>
+          <Placa titulo="Banco de trabajo" codigo="MOD-01" nivelTitulo={3}>
+            <p>Monta tu réplica pieza a pieza con medidas reales y compatibilidad explicada.</p>
+          </Placa>
+        </li>
+        <li>
+          <Placa titulo="Armero de réplicas" codigo="MOD-02" href="#placa">
+            <p>Placa enlace en reposo.</p>
+          </Placa>
+        </li>
+        <li>
+          <Placa titulo="Almacén de accesorios" codigo="MOD-03" href="#placa" demo="hover">
+            <p>Placa enlace con hover forzado.</p>
+          </Placa>
+        </li>
+        <li>
+          <Placa titulo="Tablón de mercado" codigo="MOD-05" href="#placa" demo="foco">
+            <p>Placa enlace con foco forzado.</p>
+          </Placa>
+        </li>
+        <li>
+          <Placa titulo="Biblioteca de manuales" codigo="MOD-07" href="#placa" demo="activo">
+            <p>Placa enlace pulsada (activo forzado).</p>
+          </Placa>
+        </li>
+        <li>
+          <Placa titulo="Mostrador de tiendas" codigo="MOD-06" estado="carga" />
+        </li>
+        <li>
+          <Placa
+            titulo="Vitrina de la comunidad"
+            codigo="MOD-04"
+            estado="error"
+            mensaje="No se han podido cargar las builds de la semana. Inténtalo de nuevo en unos minutos."
+          />
+        </li>
+        <li>
+          <Placa
+            titulo="Taquilla personal"
+            codigo="MOD-08"
+            href="#placa"
+            estado="deshabilitada"
+            mensaje="Disponible cuando haya cuentas de usuario (Fase 2)."
+          />
+        </li>
+      </ul>
+    </section>
+
+    <!-- 07 · Rótulo -->
+    <section id="rotulo" aria-labelledby="t-rotulo" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">07</Rotulo>
+        <h2 id="t-rotulo" class="font-grabado text-3xl text-hueso">Rótulo plantilla</h2>
+        <p class="max-w-lectura text-niebla">
+          Pintado a plantilla, como los rótulos de las estanterías. Iluminado es el tubo LED encendido de La Armería: se
+          enciende con un parpadeo corto al pasar por encima o al enfocar su enlace (con movimiento reducido, sin
+          parpadeo).
+        </p>
+      </div>
+      <div class="grid gap-6 tablet:grid-cols-2">
+        <Placa titulo="Tamaños y tintas" lisa>
+          <div class="flex flex-wrap items-center gap-4">
+            <Rotulo tamano="s">Pequeño</Rotulo>
+            <Rotulo>Mediano</Rotulo>
+            <Rotulo tamano="l">Grande</Rotulo>
+          </div>
+          <div class="flex flex-wrap items-center gap-4">
+            <Rotulo>Hueso</Rotulo>
+            <Rotulo tinta="laton">Latón</Rotulo>
+            <Rotulo tinta="fde">FDE</Rotulo>
+            <Rotulo tinta="chapa">Chapa verde</Rotulo>
+          </div>
+        </Placa>
+        <Placa titulo="Estados" lisa>
+          <div class="flex flex-wrap items-center gap-6">
+            <Rotulo tamano="l">Normal</Rotulo>
+            <Rotulo tamano="l" iluminado>Iluminado</Rotulo>
+            <Rotulo tamano="l" apagado>Apagado</Rotulo>
+          </div>
+          <p>
+            En un enlace:{' '}
+            <a class="t6-rotulo-enlace" href="#rotulo"><Rotulo tinta="laton">Mercado</Rotulo></a>
+          </p>
+        </Placa>
+      </div>
+    </section>
+
+    <!-- 08 · Fidelidad -->
+    <section id="fidelidad" aria-labelledby="t-fidelidad" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">08</Rotulo>
+        <h2 id="t-fidelidad" class="font-grabado text-3xl text-hueso">Insignia de fidelidad</h2>
+        <p class="max-w-lectura text-niebla">
+          Acompaña siempre al render para que se sepa qué se está viendo. El nivel va en texto, icono y forma; si no hay
+          nivel, se dice.
+        </p>
+      </div>
+      <dl class="grid gap-4 tablet:grid-cols-2">
+        {
+          niveles.map(([nivel, { descripcion }]) => (
+            <div class="flex flex-col gap-2 rounded-l border border-acero bg-grafito p-4">
+              <dt>
+                <InsigniaFidelidad nivel={nivel} />
+              </dt>
+              <dd class="text-s text-niebla">{descripcion}</dd>
+            </div>
+          ))
+        }
+        <div class="flex flex-col gap-2 rounded-l border border-acero bg-grafito p-4">
+          <dt>
+            <InsigniaFidelidad nivel={null} />
+          </dt>
+          <dd class="text-s text-niebla">El asset aún no tiene nivel comprobado: nunca se presenta como si lo tuviera.</dd>
+        </div>
+      </dl>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-s text-niebla">Compactas, para miniaturas:</span>
+        <InsigniaFidelidad nivel="T0" compacta />
+        <InsigniaFidelidad nivel="T1" compacta />
+        <InsigniaFidelidad nivel="T2" compacta />
+        <InsigniaFidelidad nivel="T3" compacta />
+      </div>
+    </section>
+
+    <!-- 09 · Barra de dato -->
+    <section id="dato" aria-labelledby="t-dato" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">09</Rotulo>
+        <h2 id="t-dato" class="font-grabado text-3xl text-hueso">Barra de dato</h2>
+        <p class="max-w-lectura text-niebla">
+          Datos reales con su escala: la distribución de builds de la misma plataforma. Nada de «daño» ni «precisión». Si
+          falta el dato de alguna pieza, la barra lo dice.
+        </p>
+        <p class="max-w-lectura text-s text-estado-aviso">
+          Valores de ejemplo para mostrar los estados: no son datos del catálogo.
+        </p>
+      </div>
+      <div class="grid gap-6 escritorio:grid-cols-2">
+        <Placa titulo="Con valor y referencia" lisa>
+          <BarraDato
+            etiqueta="Peso total"
+            valor={3120}
+            unidad="g"
+            escala={{ min: 2400, max: 4200 }}
+            referencia={{ valor: 3400, etiqueta: 'Mediana de 128 builds M4' }}
+            nota={'Más ligera que el 70 % de las builds M4'}
+          />
+          <BarraDato etiqueta="Longitud con culata extendida" valor={845} unidad="mm" escala={{ min: 600, max: 1100 }} />
+        </Placa>
+        <Placa titulo="Precio y stock: siempre con su fecha" lisa>
+          <BarraDato
+            etiqueta="Precio de la build"
+            valor={41235}
+            unidad="eur"
+            escala={{ min: 15000, max: 90000 }}
+            comprobado={DEMO_COMPROBADO}
+            ahora={DEMO_AHORA}
+          />
+          <BarraDato
+            etiqueta="Tiendas con stock en España"
+            valor={7}
+            unidad="tiendas"
+            escala={{ min: 0, max: 10 }}
+            comprobado={null}
+          />
+        </Placa>
+        <Placa titulo="Datos incompletos o ausentes" lisa>
+          <BarraDato
+            etiqueta="Precio de la build"
+            valor={41235}
+            unidad="eur"
+            escala={{ min: 15000, max: 90000 }}
+            piezasSinDato={2}
+            comprobado={DEMO_COMPROBADO}
+          />
+          <BarraDato etiqueta="Peso de los accesorios" valor={null} unidad="g" escala={{ min: 0, max: 1500 }} />
+        </Placa>
+        <Placa titulo="Carga y error" lisa>
+          <BarraDato
+            etiqueta="Tiendas con stock"
+            valor={null}
+            unidad="tiendas"
+            escala={{ min: 0, max: 40 }}
+            estado="carga"
+            comprobado={null}
+          />
+          <BarraDato
+            etiqueta="Precio de la build"
+            valor={null}
+            unidad="eur"
+            escala={{ min: 15000, max: 90000 }}
+            estado="error"
+            mensajeError="No se han podido consultar los precios. Inténtalo de nuevo en unos minutos."
+            comprobado={null}
+          />
+        </Placa>
+      </div>
+    </section>
+
+    <!-- 10 · Cargador -->
+    <section id="cargador" aria-labelledby="t-cargador" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">10</Rotulo>
+        <h2 id="t-cargador" class="font-grabado text-3xl text-hueso">Cargador</h2>
+        <p class="max-w-lectura text-niebla">
+          El indicador de carga: un cargador visto de lado que se llena con bolas de 6&nbsp;mm, una a una, con la curva
+          pesada. Con etiqueta, anuncia el estado a los lectores de pantalla; dentro de un botón es decorativo, porque el
+          texto ya dice qué pasa. Con movimiento reducido, lleno y quieto.
+        </p>
+      </div>
+      <div class="grid gap-6 tablet:grid-cols-2">
+        <Placa titulo="Con etiqueta" lisa>
+          <div class="text-laton">
+            <Cargador etiqueta="Buscando ofertas…" />
+          </div>
+        </Placa>
+        <Placa titulo="Dentro de un botón" lisa>
+          <div class="flex flex-wrap gap-4">
+            <Boton variante="laton" cargando textoCarga="Guardando…">Guardar build</Boton>
+            <Boton variante="acero" cargando textoCarga="Comprobando stock…">Comprobar stock</Boton>
+          </div>
+        </Placa>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-acero bg-carbon">
+    <div class="mx-auto flex max-w-pagina flex-col gap-2 px-4 py-8 text-s text-niebla tablet:px-8">
+      <p>
+        Fuentes OFL autoalojadas: Cinzel, Big Shoulders Stencil, Archivo y JetBrains Mono. Iconos propios a plantilla.
+      </p>
+      <p>{BRAND.name} · {BRAND.tagline}</p>
+    </div>
+  </footer>
+</Base>

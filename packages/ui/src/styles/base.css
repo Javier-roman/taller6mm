@@ -1,0 +1,77 @@
+/*
+ * Base de Taller6mm: fondo, texto, enlaces, foco visible y movimiento reducido (docs/02 §4 y §5).
+ * Va después del preflight de Tailwind, en la misma capa. Solo tokens.
+ */
+@layer base {
+  :root {
+    color-scheme: dark;
+    accent-color: var(--laton);
+  }
+
+  html {
+    background-color: var(--negro-pavonado);
+    color: var(--hueso);
+    font-family: var(--fuente-interfaz);
+    line-height: var(--interlineado-cuerpo);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-size: var(--texto-m);
+    font-kerning: normal;
+    font-optical-sizing: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: var(--interlineado-titular);
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: var(--laton);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--trazo-fino);
+    text-underline-offset: 0.2em;
+    transition: color var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  a:hover {
+    color: var(--laton-claro);
+  }
+
+  /* Foco siempre visible y con 3:1 sobre las tres superficies (contrast.ts). */
+  :focus-visible {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  ::selection {
+    background-color: var(--laton);
+    color: var(--negro-pavonado);
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--fuente-datos);
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}

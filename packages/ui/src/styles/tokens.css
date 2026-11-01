@@ -1,0 +1,95 @@
+/* Generado desde packages/ui/src/tokens.ts con `pnpm --filter @taller6mm/ui css`. No lo edites a mano. */
+:root {
+  /* Color (docs/02 §4.1) */
+  --negro-pavonado: #0B0C0E;
+  --carbon: #121417;
+  --grafito: #1C1F23;
+  --acero: #2A2F35;
+  --hueso: #E8E4DC;
+  --niebla: #9AA3AD;
+  --laton: #B8925A;
+  --laton-claro: #D9B77E;
+  --fde: #A08A6A;
+  --verde-ranger: #4B5A3F;
+  --naranja-senal: #E75A31;
+  --estado-ok: #3FA66B;
+  --estado-aviso: #E0A526;
+  --estado-error: #E65850;
+  --estado-desconocido: #7F8894;
+
+  /* Tipografía (§4.2) */
+  --fuente-grabado: 'Cinzel', 'Trajan Pro', Georgia, 'Times New Roman', serif;
+  --fuente-rotulo: 'Big Shoulders Stencil', 'Arial Narrow', 'Roboto Condensed', sans-serif-condensed, sans-serif;
+  --fuente-interfaz: 'Archivo Variable', 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fuente-datos: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --texto-xs: 0.75rem;
+  --texto-s: 0.875rem;
+  --texto-m: 1rem;
+  --texto-l: 1.25rem;
+  --texto-xl: 1.5625rem;
+  --texto-2xl: 1.9375rem;
+  --texto-3xl: 2.4375rem;
+  --texto-4xl: 3.0625rem;
+  --texto-5xl: 3.8125rem;
+  --peso-regular: 400;
+  --peso-medio: 500;
+  --peso-semi: 600;
+  --peso-negrita: 700;
+  --anchura-condensada: 75%;
+  --anchura-semicondensada: 87.5%;
+  --anchura-normal: 100%;
+  --interlineado-cuerpo: 1.5;
+  --interlineado-titular: 1.1;
+  --interlineado-compacto: 1.25;
+  --interletra-grabado: 0.08em;
+  --interletra-rotulo: 0.06em;
+  --interletra-versalitas: 0.04em;
+
+  /* Espacio, forma y profundidad (§4.3) */
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 0.75rem;
+  --espacio-4: 1rem;
+  --espacio-6: 1.5rem;
+  --espacio-8: 2rem;
+  --espacio-12: 3rem;
+  --espacio-16: 4rem;
+  --espacio-24: 6rem;
+  --objetivo-tactil: 2.75rem;
+  --ancho-lectura: 34rem;
+  --ancho-entradilla: 42rem;
+  --ancho-pagina: 80rem;
+  --radio-s: 2px;
+  --radio-m: 3px;
+  --radio-l: 4px;
+  --radio-avatar: 9999px;
+  --trazo-fino: 1px;
+  --trazo-foco: 2px;
+  --sombra-placa: inset 0 1px 0 0 rgb(232 228 220 / 0.11), 0 1px 2px 0 rgb(0 0 0 / 0.45), 0 16px 40px -16px rgb(0 0 0 / 0.7);
+  --sombra-elevada: inset 0 1px 0 0 rgb(232 228 220 / 0.14), 0 2px 4px 0 rgb(0 0 0 / 0.45), 0 28px 64px -20px rgb(0 0 0 / 0.8);
+  --sombra-boton: inset 0 1px 0 0 rgb(255 255 255 / 0.16), 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --sombra-hundida: inset 0 1px 2px 0 rgb(0 0 0 / 0.55);
+  --resplandor-rotulo: 0 0 0.75rem rgb(217 183 126 / 0.45), 0 0 0.125rem rgb(217 183 126 / 0.6);
+  --brillo-placa: linear-gradient(180deg, rgb(232 228 220 / 0.055) 0%, rgb(232 228 220 / 0.018) 22%, rgb(232 228 220 / 0) 48%);
+  --luz-cenital: radial-gradient(90% 70% at 50% -10%, rgb(232 228 220 / 0.08), rgb(232 228 220 / 0) 70%);
+  --luz-flexo: radial-gradient(55% 80% at 100% 0%, rgb(217 183 126 / 0.1), rgb(217 183 126 / 0) 65%);
+  --textura-ruido: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncG type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncB type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncA type='table' tableValues='1 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='0.03'/%3E%3C/svg%3E");
+
+  /* Movimiento (§4.4) */
+  --duracion-micro: 120ms;
+  --duracion-componente: 200ms;
+  --duracion-panel: 320ms;
+  --duracion-escena: 700ms;
+  --curva-mecanica: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --curva-pesada: cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* Movimiento reducido: fundidos de 120 ms como máximo y sin escena. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duracion-micro: 120ms;
+    --duracion-componente: 120ms;
+    --duracion-panel: 120ms;
+    --duracion-escena: 0ms;
+  }
+}

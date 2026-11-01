@@ -35,6 +35,10 @@ overrides:
   # GHSA-67mh-4wv8-2f99 (moderada, servidor de desarrollo de esbuild ≤ 0.24.2). Lo arrastra
   # @esbuild-kit/core-utils, que drizzle-kit 0.31 declara pero ya no carga.
   "@esbuild-kit/core-utils>esbuild": 0.25.12
+  # Desde puppeteer-core 25.13, chromium-bidi salta de 17.x (publicada desde GitHub Actions con
+  # procedencia SLSA) a 157.x (decenas de versiones al día, subidas a mano y sin procedencia):
+  # trustPolicy lo bloquea como posible secuestro. 25.12.0 usa chromium-bidi 17.0.2 firmada.
+  "lighthouse>puppeteer-core": 25.12.0
 
 # ── Catálogo: una sola versión de cada dependencia en todo el monorepo ──────
 # Versiones exactas; Renovate las actualiza respetando la edad mínima (renovate.json).
@@ -67,6 +71,8 @@ catalog:
   # 0.23.0 se publicó sin procedencia firmada (0.22.0 sí la tiene): trustPolicy la bloquea.
   "@cloudflare/vitest-pool-workers": 0.22.0
   fast-check: 4.10.2
+  # DOM para los tests de componentes de @taller6mm/ui (solo desarrollo).
+  happy-dom: 21.0.4
   "@playwright/test": 1.64.1
   # MCP de Playwright para Claude Code (.claude/mcp/playwright.mjs). Debe coincidir con MCP_PACKAGE
   # del lanzador; un test y Renovate (customManagers) los mantienen alineados.
@@ -74,3 +80,15 @@ catalog:
   "@axe-core/playwright": 4.14.0
   size-limit: 14.3.0
   "@size-limit/file": 14.3.0
+  # Lighthouse en local y, desde S3, contra la preview (apps/web/scripts/lighthouse.mjs). Se descartó
+  # @lhci/cli 0.15.1: arrastra 10 avisos (7 altos, uno sin parche) en dependencias abandonadas.
+  # 13.6.0 exige puppeteer-core ^25.16 (ver overrides).
+  lighthouse: 13.5.0
+  chrome-launcher: 1.2.2
+  # Estilos y fuentes (S5): Tailwind v4 sobre los tokens de @taller6mm/ui y fuentes OFL autoalojadas
+  tailwindcss: 4.3.3
+  "@tailwindcss/vite": 4.3.3
+  "@fontsource/cinzel": 5.3.0
+  "@fontsource/big-shoulders-stencil": 5.3.0
+  "@fontsource-variable/archivo": 5.3.0
+  "@fontsource/jetbrains-mono": 5.3.0

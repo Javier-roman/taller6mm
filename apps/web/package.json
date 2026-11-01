@@ -10,7 +10,8 @@
     "typecheck": "wrangler types && astro check",
     "test": "vitest run",
     "e2e": "playwright test",
-    "size": "size-limit"
+    "size": "size-limit",
+    "lh": "node scripts/lighthouse.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "catalog:",
@@ -27,10 +28,14 @@
     "@axe-core/playwright": "catalog:",
     "@playwright/test": "catalog:",
     "@size-limit/file": "catalog:",
+    "@tailwindcss/vite": "catalog:",
     "@taller6mm/config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "chrome-launcher": "catalog:",
+    "lighthouse": "catalog:",
     "size-limit": "catalog:",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "wrangler": "catalog:"

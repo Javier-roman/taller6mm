@@ -1,0 +1,944 @@
+/*
+ * Componentes base de Taller6mm (docs/02 §4.5). CSS sin JS: los estados salen de pseudoclases y
+ * atributos ARIA. `data-demo` solo existe para que /sistema muestre hover, activo y foco en
+ * estático. Solo tokens: un test rechaza colores, duraciones o medidas sueltas en este archivo.
+ */
+@layer components {
+  /* ── Utilidades de accesibilidad ─────────────────────────────────────────── */
+  .t6-sr {
+    position: absolute;
+    width: var(--trazo-fino);
+    height: var(--trazo-fino);
+    margin: calc(-1 * var(--trazo-fino));
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .t6-saltar {
+    position: absolute;
+    z-index: 10;
+    inset-inline-start: var(--espacio-4);
+    inset-block-start: var(--espacio-4);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-4);
+    border-radius: var(--radio-m);
+    background-color: var(--laton);
+    color: var(--negro-pavonado);
+    font-weight: var(--peso-semi);
+    text-decoration: none;
+    translate: 0 calc(-1 * var(--espacio-24));
+  }
+
+  .t6-saltar:focus-visible {
+    translate: 0 0;
+  }
+
+  .t6-icono {
+    flex: none;
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  /* ── Botón: latón, acero, fantasma y peligro ─────────────────────────────── */
+  .t6-boton {
+    --_fondo: var(--acero);
+    --_fondo-hover: color-mix(in oklab, var(--acero), var(--hueso) 10%);
+    --_fondo-activo: color-mix(in oklab, var(--acero), var(--negro-pavonado) 22%);
+    --_fondo-deshabilitado: color-mix(in oklab, var(--acero) 45%, var(--carbon));
+    --_texto: var(--hueso);
+    --_texto-hover: var(--hueso);
+    --_texto-activo: var(--hueso);
+    --_borde: color-mix(in oklab, var(--acero), var(--hueso) 14%);
+    --_borde-hover: var(--laton);
+    --_borde-deshabilitado: var(--estado-desconocido);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacio-2);
+    min-width: var(--objetivo-tactil);
+    min-height: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-4);
+    border: var(--trazo-fino) solid var(--_borde);
+    border-radius: var(--radio-m);
+    background-color: var(--_fondo);
+    box-shadow: var(--sombra-boton);
+    color: var(--_texto);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-s);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    line-height: var(--interlineado-compacto);
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color var(--duracion-micro) var(--curva-mecanica),
+      border-color var(--duracion-micro) var(--curva-mecanica),
+      color var(--duracion-micro) var(--curva-mecanica),
+      translate var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-boton--laton {
+    --_fondo: var(--laton);
+    --_fondo-hover: var(--laton-claro);
+    --_fondo-activo: color-mix(in oklab, var(--laton), var(--negro-pavonado) 14%);
+    --_fondo-deshabilitado: color-mix(in oklab, var(--laton) 20%, var(--carbon));
+    --_texto: var(--negro-pavonado);
+    --_texto-hover: var(--negro-pavonado);
+    --_texto-activo: var(--negro-pavonado);
+    --_borde: var(--laton);
+    --_borde-hover: var(--laton-claro);
+  }
+
+  .t6-boton--fantasma {
+    --_fondo: transparent;
+    --_fondo-hover: color-mix(in oklab, var(--laton) 14%, transparent);
+    --_fondo-activo: color-mix(in oklab, var(--laton) 24%, transparent);
+    --_fondo-deshabilitado: transparent;
+    --_texto: var(--laton);
+    --_texto-hover: var(--laton-claro);
+    --_texto-activo: var(--laton-claro);
+    --_borde: transparent;
+    --_borde-hover: color-mix(in oklab, var(--laton) 40%, transparent);
+    /* Sin caja propia: deshabilitado no puede pesar más que el habilitado. */
+    --_borde-deshabilitado: color-mix(in oklab, var(--estado-desconocido) 45%, transparent);
+    box-shadow: none;
+  }
+
+  .t6-boton--peligro {
+    --_fondo: transparent;
+    --_fondo-hover: var(--estado-error);
+    /* Oscurecer el rojo bajaba el texto a 4,16:1 (axe): pulsado = rojo del hover + sombra hundida. */
+    --_fondo-activo: var(--estado-error);
+    --_fondo-deshabilitado: transparent;
+    --_texto: var(--estado-error);
+    --_texto-hover: var(--negro-pavonado);
+    --_texto-activo: var(--negro-pavonado);
+    --_borde: var(--estado-error);
+    --_borde-hover: var(--estado-error);
+    box-shadow: none;
+  }
+
+  .t6-boton:is(:hover, [data-demo="hover"]):not(:disabled, [aria-disabled="true"]) {
+    border-color: var(--_borde-hover);
+    background-color: var(--_fondo-hover);
+    color: var(--_texto-hover);
+  }
+
+  /* Pulsado: más hundido que el hover, con fondo propio (antes en fantasma y peligro no se notaba). */
+  .t6-boton:is(:active, [data-demo="activo"]):not(:disabled, [aria-disabled="true"]) {
+    border-color: var(--_borde-hover);
+    background-color: var(--_fondo-activo);
+    box-shadow: var(--sombra-hundida);
+    color: var(--_texto-activo);
+    translate: 0 var(--trazo-fino);
+  }
+
+  .t6-boton[data-demo="foco"] {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  /* No disponible: conserva su variante y lleva el borde discontinuo de todo lo «no disponible»
+     del sistema (placa deshabilitada, «Sin dato»). */
+  .t6-boton:disabled,
+  .t6-boton[aria-disabled="true"]:not([aria-busy="true"]) {
+    border-style: dashed;
+    border-color: var(--_borde-deshabilitado);
+    background-color: var(--_fondo-deshabilitado);
+    box-shadow: none;
+    color: var(--estado-desconocido);
+    cursor: not-allowed;
+  }
+
+  .t6-boton[aria-busy="true"] {
+    cursor: progress;
+  }
+
+  .t6-boton[data-estado="error"] {
+    border-color: var(--estado-error);
+  }
+
+  /* ── Acción con mensaje (botón + error o aviso debajo) ────────────────────── */
+  .t6-accion {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espacio-2);
+  }
+
+  .t6-mensaje {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--espacio-2);
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    line-height: var(--interlineado-compacto);
+  }
+
+  .t6-mensaje--error {
+    color: var(--estado-error);
+  }
+
+  .t6-mensaje--aviso {
+    color: var(--estado-aviso);
+  }
+
+  .t6-mensaje--desconocido {
+    color: var(--estado-desconocido);
+  }
+
+  /* ── Cargador: un cargador que se llena con bolas de 6 mm ───────────────── */
+  .t6-cargador {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+  }
+
+  /* La silueta: el cuerpo del cargador visto de lado, con el labio de alimentación a la izquierda. */
+  .t6-cargador__cuerpo {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--espacio-1) * 0.5);
+    padding: calc(var(--espacio-1) * 0.5);
+    border: var(--trazo-fino) solid currentColor;
+    border-inline-start-width: var(--trazo-foco);
+    border-radius: var(--radio-s);
+  }
+
+  /* Bolas de 6 mm (6 px) que entran una a una por el labio, con la curva «pesada». */
+  .t6-cargador__bola {
+    width: calc(var(--espacio-1) * 1.5);
+    height: calc(var(--espacio-1) * 1.5);
+    border-radius: var(--radio-avatar);
+    background-color: currentColor;
+    opacity: 0.18;
+    animation: t6-carga calc(var(--duracion-componente) * 8) var(--curva-pesada) infinite;
+  }
+
+  .t6-cargador__bola:nth-child(2) {
+    animation-delay: var(--duracion-componente);
+  }
+
+  .t6-cargador__bola:nth-child(3) {
+    animation-delay: calc(var(--duracion-componente) * 2);
+  }
+
+  .t6-cargador__bola:nth-child(4) {
+    animation-delay: calc(var(--duracion-componente) * 3);
+  }
+
+  .t6-cargador__bola:nth-child(5) {
+    animation-delay: calc(var(--duracion-componente) * 4);
+  }
+
+  @keyframes t6-carga {
+    0% {
+      opacity: 0.18;
+      translate: calc(-1 * var(--espacio-1)) 0;
+    }
+    12%,
+    70% {
+      opacity: 1;
+      translate: 0 0;
+    }
+    85%,
+    100% {
+      opacity: 0.18;
+      translate: 0 0;
+    }
+  }
+
+  .t6-cargador__etiqueta {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+  }
+
+  /* ── Esqueleto de carga ──────────────────────────────────────────────────── */
+  .t6-esqueleto {
+    display: block;
+    height: var(--espacio-3);
+    border-radius: var(--radio-s);
+    background: linear-gradient(90deg, var(--carbon), var(--acero), var(--carbon)) 0 0 / 200% 100%;
+    animation: t6-brillo calc(var(--duracion-panel) * 5) linear infinite;
+  }
+
+  .t6-esqueleto + .t6-esqueleto {
+    margin-top: var(--espacio-2);
+  }
+
+  .t6-esqueleto--corto {
+    width: 60%;
+  }
+
+  @keyframes t6-brillo {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+
+  /* ── Fila desplazable: en móvil, una sola fila con scroll horizontal ─────────
+     Para menús de secciones y, en la Fase 1, el pasillo de La Armería en móvil (docs/02 §3.3).
+     Sale hasta el borde de la pantalla, se ajusta a cada elemento y un desvanecido en el borde
+     indica que hay más. Desde escritorio vuelve a repartirse en filas. Los elementos son enlaces o
+     botones, así que se recorre entera con Tab (y axe no exige que la región sea enfocable). */
+  .t6-fila-desplazable {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--espacio-2);
+    margin-inline: calc(var(--espacio-4) * -1);
+    /* Al final del scroll, el último elemento y su anillo de foco quedan fuera del desvanecido. */
+    padding-block: var(--espacio-1);
+    padding-inline: var(--espacio-4) calc(var(--espacio-12) + var(--espacio-1));
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--espacio-4);
+    scrollbar-width: none;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      var(--negro-pavonado) var(--espacio-4),
+      var(--negro-pavonado) calc(100% - var(--espacio-12)),
+      transparent 100%
+    );
+
+    & > * {
+      flex: none;
+      scroll-snap-align: start;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hasta escritorio, una fila: como menú fijo, varias filas en tablet taparían media pantalla. */
+    @variant escritorio {
+      flex-wrap: wrap;
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow-x: visible;
+      mask-image: none;
+    }
+  }
+
+  /* ── Placa: panel atornillado de grafito con ruido sutil ─────────────────── */
+  .t6-placa {
+    --_tornillo: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--acero), var(--hueso) 18%) 0 30%,
+      var(--acero) 34% 46%,
+      transparent 52%
+    );
+    --_borde: var(--acero);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+    /* En una rejilla, las placas de una misma fila miden lo mismo. */
+    block-size: 100%;
+    padding: var(--espacio-6);
+    border: var(--trazo-fino) solid var(--_borde);
+    border-radius: var(--radio-l);
+    background-color: var(--grafito);
+    /* Capas, de arriba abajo: cuatro tornillos, luz cenital (brillo interior) y ruido del metal. */
+    background-image:
+      var(--_tornillo), var(--_tornillo), var(--_tornillo), var(--_tornillo), var(--brillo-placa), var(--textura-ruido);
+    background-position:
+      left var(--espacio-2) top var(--espacio-2),
+      right var(--espacio-2) top var(--espacio-2),
+      left var(--espacio-2) bottom var(--espacio-2),
+      right var(--espacio-2) bottom var(--espacio-2),
+      0 0,
+      0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    background-size:
+      var(--espacio-2) var(--espacio-2),
+      var(--espacio-2) var(--espacio-2),
+      var(--espacio-2) var(--espacio-2),
+      var(--espacio-2) var(--espacio-2),
+      100% 100%,
+      auto;
+    box-shadow: var(--sombra-placa);
+    color: var(--hueso);
+    transition:
+      border-color var(--duracion-componente) var(--curva-mecanica),
+      box-shadow var(--duracion-componente) var(--curva-mecanica),
+      translate var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-placa--lisa {
+    background-image: var(--brillo-placa), var(--textura-ruido);
+    background-position:
+      0 0,
+      0 0;
+    background-repeat: no-repeat, repeat;
+    background-size:
+      100% 100%,
+      auto;
+  }
+
+  .t6-placa__cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-2) var(--espacio-4);
+    padding-bottom: var(--espacio-3);
+    border-bottom: var(--trazo-fino) solid var(--acero);
+  }
+
+  .t6-placa__titulo {
+    margin: 0;
+    color: var(--hueso);
+    font-size: var(--texto-l);
+    font-weight: var(--peso-semi);
+  }
+
+  .t6-placa__marcas {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin-inline-start: auto;
+  }
+
+  .t6-placa__codigo {
+    color: var(--niebla);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-xs);
+    letter-spacing: var(--interletra-versalitas);
+  }
+
+  /* Placa enlace: en táctil no hay hover que lo descubra, así que una flecha dice que se puede pulsar. */
+  .t6-placa__flecha {
+    display: inline-flex;
+    align-self: center;
+    color: var(--niebla);
+    transition:
+      color var(--duracion-micro) var(--curva-mecanica),
+      translate var(--duracion-componente) var(--curva-mecanica);
+  }
+
+  .t6-placa--enlace:is(
+      :hover,
+      :has(.t6-placa__enlace:focus-visible),
+      [data-demo="hover"],
+      [data-demo="foco"],
+      [data-demo="activo"]
+    )
+    .t6-placa__flecha {
+    color: var(--laton);
+    translate: var(--espacio-1) 0;
+  }
+
+  .t6-placa__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+    color: var(--niebla);
+  }
+
+  .t6-placa__cuerpo > :where(p) {
+    margin: 0;
+  }
+
+  /* Placa enlace: toda la placa es clicable (el enlace del título se estira) y un único foco. */
+  .t6-placa__enlace {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .t6-placa__enlace::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    content: "";
+  }
+
+  .t6-placa__enlace:focus-visible {
+    outline: none;
+  }
+
+  .t6-placa--enlace:is(:hover, [data-demo="hover"]) {
+    --_borde: var(--laton);
+    box-shadow: var(--sombra-elevada);
+  }
+
+  .t6-placa--enlace:is(:hover, [data-demo="hover"]) .t6-placa__titulo {
+    color: var(--laton-claro);
+  }
+
+  .t6-placa--enlace:is(:active, [data-demo="activo"]) {
+    box-shadow: var(--sombra-placa);
+    translate: 0 var(--trazo-fino);
+  }
+
+  .t6-placa--enlace:is(:has(.t6-placa__enlace:focus-visible), [data-demo="foco"]) {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  .t6-placa[data-estado="error"] {
+    --_borde: var(--estado-error);
+  }
+
+  .t6-placa[data-estado="deshabilitada"] {
+    --_borde: var(--acero);
+    border-style: dashed;
+    background-color: var(--carbon);
+    box-shadow: none;
+  }
+
+  .t6-placa[data-estado="deshabilitada"] .t6-placa__titulo {
+    color: var(--niebla);
+  }
+
+  /* ── Rótulo a plantilla ──────────────────────────────────────────────────── */
+  .t6-rotulo {
+    --_tinta: var(--hueso);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0;
+    color: var(--_tinta);
+    font-family: var(--fuente-rotulo);
+    font-size: var(--texto-m);
+    font-weight: var(--peso-negrita);
+    letter-spacing: var(--interletra-rotulo);
+    line-height: var(--interlineado-titular);
+    text-transform: uppercase;
+    transition:
+      color var(--duracion-componente) var(--curva-mecanica),
+      text-shadow var(--duracion-componente) var(--curva-mecanica);
+  }
+
+  .t6-rotulo--s {
+    font-size: var(--texto-s);
+  }
+
+  .t6-rotulo--l {
+    font-size: var(--texto-2xl);
+  }
+
+  .t6-rotulo--laton {
+    --_tinta: var(--laton);
+  }
+
+  .t6-rotulo--fde {
+    --_tinta: var(--fde);
+  }
+
+  /* Chapa: pintado en hueso sobre chapa verde ranger (5,84:1). */
+  .t6-rotulo--chapa {
+    padding: var(--espacio-1) var(--espacio-3);
+    border: var(--trazo-fino) solid color-mix(in oklab, var(--verde-ranger), var(--hueso) 18%);
+    border-radius: var(--radio-s);
+    background-color: var(--verde-ranger);
+    box-shadow: var(--sombra-boton);
+  }
+
+  /* Iluminado: el tubo se enciende con un parpadeo de arranque (2 caídas en 700 ms: menos de
+     3 destellos por segundo, WCAG 2.3.1). */
+  .t6-rotulo[data-iluminado],
+  .t6-rotulo-enlace:is(:hover, :focus-visible, [data-demo="hover"]) .t6-rotulo {
+    --_tinta: var(--laton-claro);
+    text-shadow: var(--resplandor-rotulo);
+    animation: t6-arranque var(--duracion-escena) var(--curva-mecanica) both;
+  }
+
+  .t6-rotulo--apagado {
+    --_tinta: var(--niebla);
+  }
+
+  .t6-rotulo-enlace {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--objetivo-tactil);
+    text-decoration: none;
+  }
+
+  @keyframes t6-arranque {
+    0% {
+      opacity: 0.35;
+    }
+    10% {
+      opacity: 1;
+    }
+    18% {
+      opacity: 0.55;
+    }
+    30%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* ── Insignia de fidelidad T0–T3 (docs/05 §2) ────────────────────────────── */
+  .t6-insignia {
+    --_tinta: var(--niebla);
+    --_fondo: transparent;
+    --_borde: currentColor;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    padding: var(--espacio-1) var(--espacio-2);
+    border: var(--trazo-fino) solid var(--_borde);
+    border-radius: var(--radio-s);
+    background-color: var(--_fondo);
+    color: var(--_tinta);
+    font-size: var(--texto-xs);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-semi);
+    line-height: var(--interlineado-compacto);
+    white-space: nowrap;
+  }
+
+  .t6-insignia__codigo {
+    font-family: var(--fuente-datos);
+    letter-spacing: var(--interletra-versalitas);
+  }
+
+  .t6-insignia__nombre {
+    text-transform: uppercase;
+    letter-spacing: var(--interletra-versalitas);
+  }
+
+  /* T0 es un nivel real (plano técnico): borde continuo. El discontinuo es solo para lo desconocido. */
+  .t6-insignia--t0 {
+    border-style: solid;
+  }
+
+  .t6-insignia--t1 {
+    --_tinta: var(--fde);
+  }
+
+  .t6-insignia--t2 {
+    --_tinta: var(--laton);
+  }
+
+  .t6-insignia--t3 {
+    --_tinta: var(--negro-pavonado);
+    --_fondo: var(--laton-claro);
+    --_borde: var(--laton-claro);
+  }
+
+  .t6-insignia--sin-nivel {
+    --_tinta: var(--estado-desconocido);
+    border-style: dashed;
+  }
+
+  /* ── Barra de dato: datos reales con su escala, nunca «estadísticas» de juego ─ */
+  .t6-dato {
+    --_tinta: var(--laton);
+
+    display: grid;
+    gap: var(--espacio-2);
+    min-width: 0;
+    margin: 0;
+  }
+
+  .t6-dato__cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+  }
+
+  .t6-dato__etiqueta {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-medio);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+  }
+
+  .t6-dato__valor {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--espacio-1);
+    color: var(--hueso);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-l);
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-weight: var(--peso-semi);
+    white-space: nowrap;
+  }
+
+  .t6-dato__unidad {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-regular);
+    text-decoration: none;
+  }
+
+  .t6-dato__pista {
+    position: relative;
+    height: var(--espacio-2);
+    overflow: hidden;
+    border-radius: var(--radio-s);
+    background-color: var(--carbon);
+    box-shadow: var(--sombra-hundida);
+  }
+
+  /* Segmentos cada 10 %: lectura técnica, como una regla. */
+  .t6-dato__pista::after {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(10% - var(--trazo-fino)),
+      var(--negro-pavonado) calc(10% - var(--trazo-fino)) 10%
+    );
+    content: "";
+    pointer-events: none;
+  }
+
+  .t6-dato__grafico {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .t6-dato__relleno {
+    fill: var(--_tinta);
+  }
+
+  .t6-dato__referencia {
+    stroke: var(--hueso);
+    stroke-width: var(--trazo-foco);
+    vector-effect: non-scaling-stroke;
+  }
+
+  .t6-dato__escala {
+    display: flex;
+    justify-content: space-between;
+    color: var(--niebla);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .t6-dato__nota {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-1) var(--espacio-3);
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-s);
+  }
+
+  .t6-dato__referencia-leyenda {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+  }
+
+  /* Precio y stock: cuándo se comprobó (principio 2). Sin fecha, se dice con el icono de desconocido. */
+  .t6-dato__comprobado {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+  }
+
+  .t6-dato__comprobado time {
+    color: var(--hueso);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .t6-dato__referencia-leyenda::before {
+    width: var(--trazo-foco);
+    height: var(--espacio-3);
+    background-color: var(--hueso);
+    content: "";
+  }
+
+  /* Incompleto: el valor es un mínimo; lo que falta, rayado. */
+  .t6-dato[data-estado="incompleto"] .t6-dato__pista {
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--carbon) 0 var(--espacio-1),
+      color-mix(in oklab, var(--carbon), var(--estado-aviso) 22%) var(--espacio-1) var(--espacio-2)
+    );
+  }
+
+  .t6-dato[data-estado="sin-dato"] .t6-dato__valor {
+    color: var(--estado-desconocido);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-m);
+  }
+
+  .t6-dato[data-estado="sin-dato"] .t6-dato__pista {
+    outline: var(--trazo-fino) dashed var(--estado-desconocido);
+    outline-offset: calc(-1 * var(--trazo-fino));
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .t6-dato[data-estado="carga"] .t6-dato__pista {
+    background: linear-gradient(90deg, var(--carbon), var(--acero), var(--carbon)) 0 0 / 200% 100%;
+    animation: t6-brillo calc(var(--duracion-panel) * 5) linear infinite;
+  }
+
+  .t6-dato[data-estado="carga"] .t6-dato__valor,
+  .t6-dato[data-estado="error"] .t6-dato__valor {
+    color: var(--niebla);
+  }
+
+  .t6-dato[data-estado="error"] .t6-dato__pista {
+    outline: var(--trazo-fino) solid var(--estado-error);
+    outline-offset: calc(-1 * var(--trazo-fino));
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  /* ── Demostración de movimiento (/sistema): la curva se ve, no solo se lee ─────
+     Botones sin acción: al pasar el puntero o enfocarlos, una montura recorre un raíl con su curva,
+     o una pieza baja a su ranura y encaja con un rebote de 2 px. Solo CSS. */
+  .t6-demo-movimiento {
+    display: grid;
+    gap: var(--espacio-2);
+    inline-size: 100%;
+    min-height: var(--objetivo-tactil);
+    padding: var(--espacio-3) var(--espacio-4);
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-m);
+    background-color: var(--carbon);
+    color: var(--hueso);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    transition: border-color var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-demo-movimiento:hover {
+    border-color: var(--laton);
+  }
+
+  .t6-demo-movimiento:focus-visible {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  .t6-demo-movimiento__nombre {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--espacio-3);
+    font-size: var(--texto-s);
+  }
+
+  .t6-demo-movimiento__valor {
+    color: var(--niebla);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-xs);
+  }
+
+  .t6-curva {
+    --_curva: var(--curva-mecanica);
+  }
+
+  .t6-curva--pesada {
+    --_curva: var(--curva-pesada);
+  }
+
+  .t6-curva__rail {
+    position: relative;
+    block-size: var(--espacio-4);
+    border-block-end: var(--trazo-fino) solid var(--acero);
+  }
+
+  .t6-curva__montura {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: var(--espacio-8);
+    block-size: var(--espacio-3);
+    border-radius: var(--radio-s) var(--radio-s) 0 0;
+    background-color: var(--laton);
+    box-shadow: var(--sombra-boton);
+    transition: inset-inline-start var(--duracion-escena) var(--_curva);
+  }
+
+  .t6-curva:is(:hover, :focus-visible) .t6-curva__montura {
+    inset-inline-start: calc(100% - var(--espacio-8));
+  }
+
+  .t6-encaje__banco {
+    display: grid;
+    justify-items: center;
+    padding-block-start: var(--espacio-2);
+  }
+
+  .t6-encaje__pieza {
+    inline-size: var(--espacio-12);
+    block-size: var(--espacio-3);
+    border-radius: var(--radio-s);
+    background-color: var(--fde);
+    box-shadow: var(--sombra-boton);
+    translate: 0 calc(-1 * var(--espacio-2));
+  }
+
+  .t6-encaje__ranura {
+    inline-size: calc(var(--espacio-12) + var(--espacio-2));
+    border-block-end: var(--trazo-foco) solid var(--acero);
+  }
+
+  .t6-encaje:is(:hover, :focus-visible) .t6-encaje__pieza {
+    animation: t6-encaje var(--duracion-componente) var(--curva-mecanica) forwards;
+  }
+
+  /* La pieza baja, se pasa 2 px y se asienta: el «clic» de docs/02 §4.4. */
+  @keyframes t6-encaje {
+    0% {
+      translate: 0 calc(-1 * var(--espacio-2));
+    }
+    70% {
+      translate: 0 var(--trazo-foco);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  /* ── Movimiento reducido: sin desplazamientos ni bucles; fundidos cortos ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .t6-encaje:is(:hover, :focus-visible) .t6-encaje__pieza {
+      animation: none;
+      translate: 0 0;
+    }
+
+    .t6-cargador__bola,
+    .t6-esqueleto,
+    .t6-dato[data-estado="carga"] .t6-dato__pista,
+    .t6-rotulo[data-iluminado],
+    .t6-rotulo-enlace:is(:hover, :focus-visible, [data-demo="hover"]) .t6-rotulo {
+      animation: none;
+    }
+
+    .t6-cargador__bola {
+      opacity: 1;
+    }
+
+    .t6-boton:is(:active, [data-demo="activo"]):not(:disabled, [aria-disabled="true"]),
+    .t6-placa--enlace:is(:active, [data-demo="activo"]) {
+      translate: none;
+    }
+  }
+}

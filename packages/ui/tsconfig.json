@@ -1,4 +1,10 @@
 {
   "extends": "@taller6mm/config/tsconfig.base.json",
-  "include": ["src"]
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["node"]
+  },
+  "include": ["src", "scripts"]
 }

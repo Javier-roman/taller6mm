@@ -1,0 +1,32 @@
+---
+// Layout base: idioma, metadatos, fuentes (precarga solo Archivo y Cinzel), hoja global y enlace
+// para saltar al contenido. Sin JS de cliente.
+import '@taller6mm/ui/estilos/fuentes.css';
+import '../styles/global.css';
+import { BRAND } from '@taller6mm/ui/brand';
+import { FONT_PRELOADS } from '@taller6mm/ui/fuentes';
+import { colors } from '@taller6mm/ui/tokens';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{`${title} · ${BRAND.name}`}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={colors['negro-pavonado']} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {FONT_PRELOADS.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
+  </head>
+  <body>
+    <a class="t6-saltar" href="#contenido">Saltar al contenido</a>
+    <slot />
+  </body>
+</html>
