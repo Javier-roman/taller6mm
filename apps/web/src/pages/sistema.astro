@@ -6,6 +6,7 @@ import {
   BarraDato,
   Boton,
   BotonEnlace,
+  Cargador,
   IconoFlecha,
   InsigniaFidelidad,
   NIVELES_FIDELIDAD,
@@ -42,8 +43,27 @@ const usoVariante = {
   fantasma: 'Acción terciaria',
   peligro: 'Acción destructiva',
 } as const;
+const accion = {
+  laton: 'Guardar build',
+  acero: 'Guardar build',
+  fantasma: 'Guardar build',
+  peligro: 'Borrar build',
+} as const;
+const accionEnCurso = {
+  laton: 'Guardando…',
+  acero: 'Guardando…',
+  fantasma: 'Guardando…',
+  peligro: 'Borrando…',
+} as const;
 const nombreDuracion = { micro: 'Micro', componente: 'Componentes', panel: 'Paneles', escena: 'Cámara y escena' } as const;
 const nombreCurva = { mecanica: 'Mecánica', pesada: 'Pesada (raíles y cajones)' } as const;
+// Los textos salen de los datos para que nunca contradigan la tabla de la propia página.
+const corregidos = colores.filter(([, spec]) => 'previous' in spec).length;
+const paresSinAA = pares.filter((p) => !p.passes).length;
+// Datos de ejemplo de la Barra de dato. Fechas fijas: la página está prerenderizada y un «hace 3 h»
+// calculado al compilar mentiría al día siguiente. En la web real, `ahora` es la hora de la petición.
+const DEMO_AHORA = '2026-10-31T18:00:00Z';
+const DEMO_COMPROBADO = '2026-10-31T15:12:00Z';
 // Las props de un componente React necesitan elementos de React, no plantillas de Astro.
 const flecha = createElement(IconoFlecha);
 ---
@@ -52,39 +72,80 @@ const flecha = createElement(IconoFlecha);
   title="Sistema de diseño"
   description="Tokens y componentes base de Taller6mm: color, tipografía, espacio, movimiento, botones, placas, rótulos, insignias de fidelidad y barras de dato."
 >
-  <header class="border-b border-acero bg-carbon">
-    <div class="mx-auto flex max-w-pagina flex-col gap-4 px-4 py-12 tablet:px-8 escritorio:py-16">
-      <Rotulo tinta="laton" tamano="s">Sistema de diseño · Fase 0</Rotulo>
-      <h1 class="font-grabado text-4xl tracking-grabado text-hueso tablet:text-5xl">{BRAND.name}</h1>
-      <p class="max-w-lectura text-l text-niebla">
-        Herencia de armero, precisión táctica. Esta página es la referencia viva de los tokens y componentes
-        de <code class="text-hueso">@taller6mm/ui</code>: lo que ves aquí es exactamente lo que usa la web.
-      </p>
-      <nav aria-label="Secciones del sistema" class="pt-2">
-        <ul class="t6-fila-desplazable">
-          {
-            SECCIONES.map((s) => (
-              <li>
-                <BotonEnlace href={`#${s.id}`} variante="fantasma">
-                  {s.titulo}
-                </BotonEnlace>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+  <!-- Cabecera con la luz de la sala: cenital fría de los tubos y cálida del flexo, sobre grano. -->
+  <header
+    class="border-b border-acero bg-carbon bg-[image:var(--luz-cenital),var(--luz-flexo),var(--textura-ruido)]"
+  >
+    <div
+      class="mx-auto grid max-w-pagina items-center gap-12 px-4 py-12 tablet:px-8 escritorio:grid-cols-[minmax(0,1fr)_minmax(0,var(--ancho-lectura))] escritorio:py-16"
+    >
+      <div class="flex flex-col gap-4">
+        <Rotulo tinta="laton" tamano="s">Sistema de diseño · Fase 0</Rotulo>
+        <h1 class="font-grabado text-4xl tracking-grabado text-hueso tablet:text-5xl">{BRAND.name}</h1>
+        <p class="max-w-entradilla text-l text-niebla">
+          Herencia de armero, precisión táctica. Esta página es la referencia viva de los tokens y componentes
+          de <code class="text-hueso">@taller6mm/ui</code>: lo que ves aquí es exactamente lo que usa la web.
+        </p>
+      </div>
+      <!-- Los componentes juntos, como se verán en la web (datos de ejemplo). -->
+      <div class="hidden escritorio:block">
+        <Placa as="div" titulo="Banco de trabajo" codigo="MOD-01">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <Rotulo tinta="laton" iluminado>Continúa tu build</Rotulo>
+            <InsigniaFidelidad nivel="T2" />
+          </div>
+          <BarraDato
+            etiqueta="Peso total"
+            valor={3120}
+            unidad="g"
+            escala={{ min: 2400, max: 4200 }}
+            referencia={{ valor: 3400, etiqueta: 'Mediana de 128 builds M4' }}
+          />
+          <BarraDato
+            etiqueta="Precio de la build"
+            valor={41235}
+            unidad="eur"
+            escala={{ min: 15000, max: 90000 }}
+            comprobado={DEMO_COMPROBADO}
+            ahora={DEMO_AHORA}
+          />
+          <div>
+            <BotonEnlace href="#boton" variante="laton" icono={flecha}>Montar réplica</BotonEnlace>
+          </div>
+        </Placa>
+      </div>
     </div>
   </header>
 
-  <main id="contenido" class="mx-auto flex max-w-pagina flex-col gap-24 px-4 py-16 tablet:px-8">
+  <!-- Menú fijo: la página es larga y hay que poder saltar de sección sin volver arriba. -->
+  <nav aria-label="Secciones del sistema" class="sticky top-0 z-10 border-b border-acero bg-carbon">
+    <div class="mx-auto max-w-pagina px-4 py-2 tablet:px-8">
+      <ul class="t6-fila-desplazable">
+        {
+          SECCIONES.map((s) => (
+            <li>
+              <BotonEnlace href={`#${s.id}`} variante="fantasma">
+                {s.titulo}
+              </BotonEnlace>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+
+  <main
+    id="contenido"
+    class="mx-auto flex max-w-pagina scroll-mt-24 flex-col gap-24 px-4 py-16 tablet:px-8 *:scroll-mt-24"
+  >
     <!-- 01 · Color -->
     <section id="color" aria-labelledby="t-color" class="flex flex-col gap-8">
       <div class="flex flex-col gap-2">
         <Rotulo tinta="fde" tamano="s">01</Rotulo>
         <h2 id="t-color" class="font-grabado text-3xl text-hueso">Color</h2>
         <p class="max-w-lectura text-niebla">
-          Nombres de acabado. El color nunca va solo: cada estado lleva también icono y texto. Dos valores iniciales no
-          llegaban a AA y se han corregido con la misma tinta y algo más de luz.
+          Nombres de acabado. El color nunca va solo: cada estado lleva también icono y texto. {corregidos} de los
+          valores iniciales no llegaban a AA y se han corregido con la misma tinta y algo más de luz.
         </p>
       </div>
 
@@ -97,7 +158,8 @@ const flecha = createElement(IconoFlecha);
                 .filter(([, spec]) => spec.group === grupo)
                 .map(([nombre, spec]) => (
                   <li class="flex flex-col overflow-hidden rounded-l border border-acero bg-grafito">
-                    <span class={`block h-16 border-b border-acero ${FONDO[nombre]}`} aria-hidden="true" />
+                    {/* Muestra enmarcada: se ve aunque su color sea el de la tarjeta (grafito sobre grafito). */}
+                    <span class={`m-2 block h-12 rounded-m border border-acero ${FONDO[nombre]}`} aria-hidden="true" />
                     <span class="flex flex-col gap-1 p-3">
                       <code class="text-s text-hueso">--{nombre}</code>
                       <span class="font-datos text-xs text-niebla">{spec.hex}</span>
@@ -114,10 +176,27 @@ const flecha = createElement(IconoFlecha);
       }
 
       <div class="flex flex-col gap-4">
+        <h3 class="text-l font-semi text-hueso">Rampa de profundidad</h3>
+        <p class="max-w-lectura text-s text-niebla">
+          Cada superficie se apoya en la anterior: el fondo pavonado, las superficies de carbón y los paneles de grafito
+          con borde de acero y su sombra.
+        </p>
+        <div class="rounded-l border border-acero bg-negro-pavonado p-6" aria-hidden="true">
+          <code class="text-xs text-niebla">--negro-pavonado · fondo base</code>
+          <div class="mt-4 rounded-l border border-acero bg-carbon p-6">
+            <code class="text-xs text-niebla">--carbon · superficies</code>
+            <div class="mt-4 rounded-l border border-acero bg-grafito p-6 shadow-placa">
+              <code class="text-xs text-hueso">--grafito · paneles elevados</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
         <h3 class="text-l font-semi text-hueso">Pares de contraste comprobados</h3>
         <p class="max-w-lectura text-s text-niebla">
-          Un test recorre cada par en cada cambio. Texto normal 4,5:1; texto grande, indicadores y bordes de componente
-          3:1. La señal naranja no se usa como texto sobre grafito (4,49:1).
+          Un test recorre los {pares.length} pares en cada cambio: texto normal 4,5:1; texto grande, indicadores y bordes
+          de componente 3:1. {paresSinAA === 0 ? 'Todos cumplen.' : `${paresSinAA} no cumplen: revísalos.`}
         </p>
         <div class="rounded-l border border-acero">
           <table class="w-full border-collapse text-left text-s">
@@ -214,8 +293,8 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">03</Rotulo>
         <h2 id="t-espacio" class="font-grabado text-3xl text-hueso">Espacio y forma</h2>
         <p class="max-w-lectura text-niebla">
-          Rejilla de 4 px. Radios pequeños, industriales y precisos. Paneles de grafito con ruido de un 3 %, borde de
-          acero, brillo interior superior y sombras largas y suaves. Objetivos táctiles de 44 px como mínimo.
+          Rejilla de 4&nbsp;px. Radios pequeños, industriales y precisos. Paneles de grafito con ruido de un 3&nbsp;%,
+          borde de acero, brillo interior superior y sombras largas y suaves. Objetivos táctiles de 44&nbsp;px como mínimo.
         </p>
       </div>
       <div class="grid gap-6 escritorio:grid-cols-3">
@@ -224,7 +303,7 @@ const flecha = createElement(IconoFlecha);
             {
               ESCALA_ESPACIO.map((e) => (
                 <li class="flex items-center gap-3">
-                  <span class="w-12 shrink-0 font-datos text-xs text-niebla">{e.px} px</span>
+                  <span class="w-12 shrink-0 font-datos text-xs text-niebla">{e.px}&nbsp;px</span>
                   <span class={`block h-3 rounded-s bg-laton ${e.clase}`} aria-hidden="true" />
                 </li>
               ))
@@ -244,14 +323,15 @@ const flecha = createElement(IconoFlecha);
               ))
             }
           </ul>
-          <p>Bordes de 1 px y anillo de foco de 2 px en señal naranja, separado 2 px del componente.</p>
+          <p>Bordes de 1&nbsp;px y anillo de foco de 2&nbsp;px en señal naranja, separado 2&nbsp;px del componente.</p>
         </Placa>
         <Placa titulo="Sombras" codigo="--sombra-*" lisa>
-          <ul class="grid grid-cols-2 gap-4">
+          {/* Sobre el fondo pavonado, que es donde se ven: grafito sobre grafito no se distinguían. */}
+          <ul class="grid grid-cols-2 gap-4 rounded-m bg-negro-pavonado p-4">
             {
               SOMBRAS.map((s) => (
                 <li class="flex flex-col gap-2">
-                  <span class={`block h-12 rounded-l bg-grafito ${s.clase}`} aria-hidden="true" />
+                  <span class={`block h-12 rounded-l border border-acero bg-grafito ${s.clase}`} aria-hidden="true" />
                   <span class="text-xs text-niebla">
                     <code class="text-hueso">{s.token}</code> · {s.uso}
                   </span>
@@ -269,11 +349,11 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">04</Rotulo>
         <h2 id="t-movimiento" class="font-grabado text-3xl text-hueso">Movimiento</h2>
         <p class="max-w-lectura text-niebla">
-          Con propósito: el cajón se desliza como un cajón y la pieza encaja con un rebote de 2 px. Con movimiento
-          reducido, todo se queda en fundidos de 120 ms como máximo, sin desplazamientos ni bucles.
+          Con propósito: el cajón se desliza como un cajón y la pieza encaja con un rebote de 2&nbsp;px. Con movimiento
+          reducido, todo se queda en fundidos de 120&nbsp;ms como máximo, sin desplazamientos ni bucles.
         </p>
       </div>
-      <div class="grid gap-6 tablet:grid-cols-2">
+      <div class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-3">
         <Placa titulo="Duraciones" codigo="--duracion-*" lisa>
           <dl class="grid grid-cols-[auto_1fr_auto] gap-x-4 gap-y-2">
             {
@@ -290,16 +370,36 @@ const flecha = createElement(IconoFlecha);
           </dl>
         </Placa>
         <Placa titulo="Curvas" codigo="--curva-*" lisa>
-          <dl class="flex flex-col gap-3">
-            {
-              Object.entries(EASINGS).map(([k, v]) => (
-                <div>
-                  <dt class="text-hueso">{nombreCurva[k as keyof typeof nombreCurva]}</dt>
-                  <dd class="font-datos text-xs text-niebla">{v}</dd>
-                </div>
-              ))
-            }
-          </dl>
+          <p>Pasa el puntero o enfoca cada raíl: la montura lo recorre en {DURATIONS.escena} con su curva.</p>
+          {
+            Object.entries(EASINGS).map(([k, v]) => (
+              <button type="button" class={`t6-demo-movimiento t6-curva t6-curva--${k}`}>
+                <span class="t6-demo-movimiento__nombre">
+                  <span>{nombreCurva[k as keyof typeof nombreCurva]}</span>
+                  <span class="t6-demo-movimiento__valor">{v}</span>
+                </span>
+                <span class="t6-curva__rail" aria-hidden="true">
+                  <span class="t6-curva__montura" />
+                </span>
+              </button>
+            ))
+          }
+        </Placa>
+        <Placa titulo="La pieza encaja" codigo="--duracion-componente" lisa>
+          <p>
+            Al montar una pieza, baja, se pasa 2&nbsp;px y se asienta en {DURATIONS.componente}. Con movimiento reducido,
+            aparece en su sitio sin rebote.
+          </p>
+          <button type="button" class="t6-demo-movimiento t6-encaje">
+            <span class="t6-demo-movimiento__nombre">
+              <span>Montar una pieza</span>
+              <span class="t6-demo-movimiento__valor">rebote de 2&nbsp;px</span>
+            </span>
+            <span class="t6-encaje__banco" aria-hidden="true">
+              <span class="t6-encaje__pieza" />
+              <span class="t6-encaje__ranura" />
+            </span>
+          </button>
         </Placa>
       </div>
     </section>
@@ -325,36 +425,36 @@ const flecha = createElement(IconoFlecha);
               <ul class="flex flex-wrap items-start gap-4" aria-label={`Estados del botón ${nombreVariante[v]}`}>
                 <li class="flex flex-col gap-2">
                   <span class="text-xs text-niebla">Normal</span>
-                  <Boton variante={v}>Guardar build</Boton>
+                  <Boton variante={v}>{accion[v]}</Boton>
                 </li>
                 <li class="flex flex-col gap-2">
                   <span class="text-xs text-niebla">Hover</span>
                   <Boton variante={v} demo="hover">
-                    Guardar build
+                    {accion[v]}
                   </Boton>
                 </li>
                 <li class="flex flex-col gap-2">
                   <span class="text-xs text-niebla">Foco</span>
                   <Boton variante={v} demo="foco">
-                    Guardar build
+                    {accion[v]}
                   </Boton>
                 </li>
                 <li class="flex flex-col gap-2">
                   <span class="text-xs text-niebla">Activo</span>
                   <Boton variante={v} demo="activo">
-                    Guardar build
+                    {accion[v]}
                   </Boton>
                 </li>
                 <li class="flex flex-col gap-2">
                   <span class="text-xs text-niebla">Deshabilitado</span>
                   <Boton variante={v} disabled>
-                    Guardar build
+                    {accion[v]}
                   </Boton>
                 </li>
                 <li class="flex flex-col gap-2">
                   <span class="text-xs text-niebla">Cargando</span>
-                  <Boton variante={v} cargando textoCarga="Guardando…">
-                    Guardar build
+                  <Boton variante={v} cargando textoCarga={accionEnCurso[v]}>
+                    {accion[v]}
                   </Boton>
                 </li>
               </ul>
@@ -405,6 +505,11 @@ const flecha = createElement(IconoFlecha);
         <li>
           <Placa titulo="Tablón de mercado" codigo="MOD-05" href="#placa" demo="foco">
             <p>Placa enlace con foco forzado.</p>
+          </Placa>
+        </li>
+        <li>
+          <Placa titulo="Biblioteca de manuales" codigo="MOD-07" href="#placa" demo="activo">
+            <p>Placa enlace pulsada (activo forzado).</p>
           </Placa>
         </li>
         <li>
@@ -462,7 +567,7 @@ const flecha = createElement(IconoFlecha);
             <Rotulo tamano="l" apagado>Apagado</Rotulo>
           </div>
           <p>
-            En un enlace:
+            En un enlace:{' '}
             <a class="t6-rotulo-enlace" href="#rotulo"><Rotulo tinta="laton">Mercado</Rotulo></a>
           </p>
         </Placa>
@@ -526,10 +631,27 @@ const flecha = createElement(IconoFlecha);
             valor={3120}
             unidad="g"
             escala={{ min: 2400, max: 4200 }}
-            referencia={{ valor: 3400, etiqueta: 'Mediana M4' }}
-            nota="Más ligera que el 70 % de las builds M4"
+            referencia={{ valor: 3400, etiqueta: 'Mediana de 128 builds M4' }}
+            nota={'Más ligera que el 70 % de las builds M4'}
           />
           <BarraDato etiqueta="Longitud con culata extendida" valor={845} unidad="mm" escala={{ min: 600, max: 1100 }} />
+        </Placa>
+        <Placa titulo="Precio y stock: siempre con su fecha" lisa>
+          <BarraDato
+            etiqueta="Precio de la build"
+            valor={41235}
+            unidad="eur"
+            escala={{ min: 15000, max: 90000 }}
+            comprobado={DEMO_COMPROBADO}
+            ahora={DEMO_AHORA}
+          />
+          <BarraDato
+            etiqueta="Tiendas con stock en España"
+            valor={7}
+            unidad="tiendas"
+            escala={{ min: 0, max: 10 }}
+            comprobado={null}
+          />
         </Placa>
         <Placa titulo="Datos incompletos o ausentes" lisa>
           <BarraDato
@@ -538,11 +660,19 @@ const flecha = createElement(IconoFlecha);
             unidad="eur"
             escala={{ min: 15000, max: 90000 }}
             piezasSinDato={2}
+            comprobado={DEMO_COMPROBADO}
           />
           <BarraDato etiqueta="Peso de los accesorios" valor={null} unidad="g" escala={{ min: 0, max: 1500 }} />
         </Placa>
         <Placa titulo="Carga y error" lisa>
-          <BarraDato etiqueta="Tiendas con stock" valor={null} unidad="tiendas" escala={{ min: 0, max: 40 }} estado="carga" />
+          <BarraDato
+            etiqueta="Tiendas con stock"
+            valor={null}
+            unidad="tiendas"
+            escala={{ min: 0, max: 40 }}
+            estado="carga"
+            comprobado={null}
+          />
           <BarraDato
             etiqueta="Precio de la build"
             valor={null}
@@ -550,7 +680,34 @@ const flecha = createElement(IconoFlecha);
             escala={{ min: 15000, max: 90000 }}
             estado="error"
             mensajeError="No se han podido consultar los precios. Inténtalo de nuevo en unos minutos."
+            comprobado={null}
           />
+        </Placa>
+      </div>
+    </section>
+
+    <!-- 10 · Cargador -->
+    <section id="cargador" aria-labelledby="t-cargador" class="flex flex-col gap-8">
+      <div class="flex flex-col gap-2">
+        <Rotulo tinta="fde" tamano="s">10</Rotulo>
+        <h2 id="t-cargador" class="font-grabado text-3xl text-hueso">Cargador</h2>
+        <p class="max-w-lectura text-niebla">
+          El indicador de carga: un cargador visto de lado que se llena con bolas de 6&nbsp;mm, una a una, con la curva
+          pesada. Con etiqueta, anuncia el estado a los lectores de pantalla; dentro de un botón es decorativo, porque el
+          texto ya dice qué pasa. Con movimiento reducido, lleno y quieto.
+        </p>
+      </div>
+      <div class="grid gap-6 tablet:grid-cols-2">
+        <Placa titulo="Con etiqueta" lisa>
+          <div class="text-laton">
+            <Cargador etiqueta="Buscando ofertas…" />
+          </div>
+        </Placa>
+        <Placa titulo="Dentro de un botón" lisa>
+          <div class="flex flex-wrap gap-4">
+            <Boton variante="laton" cargando textoCarga="Guardando…">Guardar build</Boton>
+            <Boton variante="acero" cargando textoCarga="Comprobando stock…">Comprobar stock</Boton>
+          </div>
         </Placa>
       </div>
     </section>

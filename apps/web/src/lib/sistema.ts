@@ -69,12 +69,12 @@ export const ESCALA_ESPACIO = [
   { token: '24', clase: 'w-24', px: 96 },
 ] as const;
 
+// Cifra y unidad con espacio duro (U+00A0): nunca se separan en dos líneas.
 export const RADIOS = [
-  { token: 's', clase: 'rounded-s', valor: '2 px' },
-  { token: 'm', clase: 'rounded-m', valor: '3 px' },
-  { token: 'l', clase: 'rounded-l', valor: '4 px' },
+  { token: 's', clase: 'rounded-s', valor: '2 px' },
+  { token: 'm', clase: 'rounded-m', valor: '3 px' },
+  { token: 'l', clase: 'rounded-l', valor: '4 px' },
 ] as const;
-
 export const SOMBRAS = [
   { token: 'placa', clase: 'shadow-placa', uso: 'Placas y tarjetas' },
   { token: 'elevada', clase: 'shadow-elevada', uso: 'Maletín (modal) y hover de placas' },
@@ -92,4 +92,5 @@ export const SECCIONES = [
   { id: 'rotulo', titulo: 'Rótulo' },
   { id: 'fidelidad', titulo: 'Fidelidad' },
   { id: 'dato', titulo: 'Barra de dato' },
+  { id: 'cargador', titulo: 'Cargador' },
 ] as const;

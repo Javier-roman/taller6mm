@@ -19,6 +19,10 @@ export default defineConfig({
   }),
   integrations: [react(), securityHeaders()],
   session: false,
+  // Páginas prerenderizadas como `sistema.html`, sin barra final: Cloudflare sirve /sistema con 200 en
+  // vez de redirigir a /sistema/ (una ida y vuelta menos; auditor-rendimiento, S5).
+  build: { format: 'file' },
+  trailingSlash: 'never',
   security: {
     checkOrigin: true,
     csp: { algorithm: 'SHA-256', directives: [...CSP_DIRECTIVES] },
