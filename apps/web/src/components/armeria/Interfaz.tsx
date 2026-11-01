@@ -411,8 +411,6 @@ export function InterfazArmeria({
                       className="armeria__zona"
                       data-activa={z.id === estado.zonaActiva}
                       tabIndex={z.id === foco ? 0 : -1}
-                      aria-label={z.nombre}
-                      aria-describedby={`armeria-dato-${z.id}`}
                       onFocus={() => {
                         setFoco(z.id);
                         acciones.enfocar(z.id);
@@ -430,7 +428,7 @@ export function InterfazArmeria({
                         {ESTANTERIAS[e].titulo}
                       </span>
                       <span className="armeria__zona-nombre">{z.rotulo}</span>
-                      <span className="armeria__zona-dato" id={`armeria-dato-${z.id}`}>
+                      <span className="armeria__zona-dato">
                         <span className="armeria__zona-dato-texto">{z.dato}</span>
                         <Demo />
                       </span>
