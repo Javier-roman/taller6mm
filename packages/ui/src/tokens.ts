@@ -100,8 +100,11 @@ export const SPACING = {
 /** Objetivo táctil mínimo (docs/02 §5 y WCAG 2.5.8): 44 px. */
 export const TOUCH_TARGET = '2.75rem';
 
-/** Anchos máximos: medida de lectura (~70 caracteres) y página. */
-export const WIDTHS = { lectura: '42rem', pagina: '80rem' } as const;
+/**
+ * Anchos máximos. Lectura: ~70 caracteres a 16 px (con 42rem salían 80–99). Entradilla: la misma
+ * medida para el texto de 20 px. Página: el ancho del contenido.
+ */
+export const WIDTHS = { lectura: '34rem', entradilla: '42rem', pagina: '80rem' } as const;
 
 /** Radios pequeños: industrial y preciso. Sin pastillas salvo avatares. */
 export const RADII = { s: '2px', m: '3px', l: '4px', avatar: '9999px' } as const;
@@ -142,6 +145,15 @@ export const BREAKPOINTS = { tablet: '52.125rem', escritorio: '80rem', ancho: '9
  */
 export const SHEENS = {
   placa: 'linear-gradient(180deg, rgb(232 228 220 / 0.055) 0%, rgb(232 228 220 / 0.018) 22%, rgb(232 228 220 / 0) 48%)',
+} as const;
+
+/**
+ * Luces de la sala (docs/02 §1 y §3.1): la cenital fría de los tubos LED y la cálida del flexo del
+ * banco. Las usan las cabeceras y, en la Fase 1, La Armería. Son luz sobre una superficie, no color.
+ */
+export const LIGHTS = {
+  cenital: 'radial-gradient(90% 70% at 50% -10%, rgb(232 228 220 / 0.08), rgb(232 228 220 / 0) 70%)',
+  flexo: 'radial-gradient(55% 80% at 100% 0%, rgb(217 183 126 / 0.1), rgb(217 183 126 / 0) 65%)',
 } as const;
 
 /** Opacidad máxima del ruido sobre el panel (docs/02 §4.3: ≤ 3 %). */

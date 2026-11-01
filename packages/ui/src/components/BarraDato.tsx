@@ -4,14 +4,21 @@
 // estilos en línea (la CSP los bloquea). Estados: listo, incompleto (el valor es un mínimo), sin
 // dato, carga y error.
 import { useId } from 'react';
-import { formatearDato, formatearNumero, textoFaltan, UNIDADES, type Unidad } from './formato.ts';
+import {
+  formatearComprobado,
+  formatearDato,
+  formatearNumero,
+  requiereFecha,
+  textoFaltan,
+  UNIDADES,
+  type UnidadConFecha,
+} from './formato.ts';
 import { IconoAlerta, IconoDesconocido } from './iconos.tsx';
 
-export interface BarraDatoProps {
+interface BarraDatoComun {
   etiqueta: string;
   /** En la unidad guardada (g, mm, céntimos…). `null`: ninguna pieza tiene el dato. */
   valor: number | null;
-  unidad: Unidad;
   escala: { readonly min: number; readonly max: number };
   /** Marca de comparación, p. ej. la mediana de las builds de la plataforma. */
   referencia?: { readonly valor: number; readonly etiqueta: string };
@@ -22,6 +29,27 @@ export interface BarraDatoProps {
   estado?: 'listo' | 'carga' | 'error';
   mensajeError?: string;
 }
+
+/**
+ * Precio y stock caducan: llevan SIEMPRE la fecha de su última comprobación (principio 2 de
+ * CLAUDE.md), así que `comprobado` es obligatoria con `eur` y `tiendas` (en una build, la del
+ * precio más antiguo). `null` se muestra como «Sin fecha de comprobación», nunca se inventa.
+ */
+interface BarraDatoConFecha extends BarraDatoComun {
+  unidad: UnidadConFecha;
+  /** ISO 8601 en UTC o `null` si no se sabe. */
+  comprobado: string | null;
+  /** Momento de referencia (ISO) para «hace 3 h». Sin él, la fecha absoluta. */
+  ahora?: string;
+}
+
+interface BarraDatoSinFecha extends BarraDatoComun {
+  unidad: 'g' | 'mm';
+  comprobado?: undefined;
+  ahora?: undefined;
+}
+
+export type BarraDatoProps = BarraDatoConFecha | BarraDatoSinFecha;
 
 const porcentaje = (valor: number, min: number, max: number) =>
   max > min ? Math.round(Math.min(1, Math.max(0, (valor - min) / (max - min))) * 1000) / 10 : 0;
@@ -36,11 +64,16 @@ export function BarraDato({
   piezasSinDato = 0,
   estado = 'listo',
   mensajeError,
+  comprobado,
+  ahora,
 }: BarraDatoProps) {
   const etiquetaId = `${useId()}-etiqueta`;
   const { simbolo, nombre } = UNIDADES[unidad];
   const conValor = estado === 'listo' && valor !== null;
   const visual = estado !== 'listo' ? estado : valor === null ? 'sin-dato' : piezasSinDato > 0 ? 'incompleto' : 'listo';
+  const conFecha = requiereFecha(unidad);
+  const comprobacion = conFecha && comprobado ? formatearComprobado(comprobado, ahora) : null;
+  const textoComprobacion = comprobacion ? `comprobado ${comprobacion.texto}` : 'sin fecha de comprobación';
 
   const lectura = conValor
     ? [
@@ -48,6 +81,7 @@ export function BarraDato({
         piezasSinDato > 0 ? textoFaltan(piezasSinDato, unidad) : null,
         nota ?? null,
         referencia ? `${referencia.etiqueta}: ${formatearDato(referencia.valor, unidad)}` : null,
+        conFecha ? textoComprobacion : null,
       ]
         .filter(Boolean)
         .join('; ')
@@ -138,7 +172,7 @@ export function BarraDato({
           <IconoDesconocido />
           {nota ?? 'Ninguna pieza de la build tiene este dato todavía.'}
         </p>
-      ) : conValor && (nota || referencia || piezasSinDato > 0) ? (
+      ) : conValor && (nota || referencia || piezasSinDato > 0 || conFecha) ? (
         <p className="t6-dato__nota" aria-hidden="true">
           {piezasSinDato > 0 ? <span className="t6-mensaje--aviso">{textoFaltan(piezasSinDato, unidad)}</span> : null}
           {nota ? <span>{nota}</span> : null}
@@ -146,6 +180,21 @@ export function BarraDato({
             <span className="t6-dato__referencia-leyenda">
               {referencia.etiqueta}: {formatearDato(referencia.valor, unidad)}
             </span>
+          ) : null}
+          {conFecha ? (
+            comprobacion ? (
+              <span className="t6-dato__comprobado">
+                Comprobado{' '}
+                <time dateTime={comprobacion.iso} title={comprobacion.completo}>
+                  {comprobacion.texto}
+                </time>
+              </span>
+            ) : (
+              <span className="t6-dato__comprobado t6-mensaje--desconocido">
+                <IconoDesconocido />
+                Sin fecha de comprobación
+              </span>
+            )
           ) : null}
         </p>
       ) : null}

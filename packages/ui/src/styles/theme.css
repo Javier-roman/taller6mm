@@ -49,6 +49,7 @@
   --spacing-24: var(--espacio-24);
   --spacing-tactil: var(--objetivo-tactil);
   --container-lectura: var(--ancho-lectura);
+  --container-entradilla: var(--ancho-entradilla);
   --container-pagina: var(--ancho-pagina);
   --radius-s: var(--radio-s);
   --radius-m: var(--radio-m);

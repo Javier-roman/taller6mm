@@ -7,8 +7,23 @@ export {
   VARIANTES_BOTON,
   type VarianteBoton,
 } from './Boton.tsx';
-export { Cargador } from './Cargador.tsx';
-export { formatearDato, formatearNumero, textoFaltan, UNIDADES, type Unidad } from './formato.ts';
+export {
+  BOLAS_CARGADOR,
+  Cargador,
+} from './Cargador.tsx';
+export {
+  type Comprobacion,
+  formatearComprobado,
+  formatearDato,
+  formatearNumero,
+  NBSP,
+  requiereFecha,
+  textoFaltan,
+  UNIDADES,
+  UNIDADES_CON_FECHA,
+  type Unidad,
+  type UnidadConFecha,
+} from './formato.ts';
 export {
   InsigniaFidelidad,
   type InsigniaFidelidadProps,

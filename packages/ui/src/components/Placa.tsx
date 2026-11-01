@@ -2,7 +2,7 @@
 // tornillos en las esquinas. Con `href` toda la placa es un enlace (un solo foco: el del título).
 // Estados: hover, foco, activo (si es enlace), carga, error y deshabilitada.
 import { type ReactNode, useId } from 'react';
-import { IconoAlerta } from './iconos.tsx';
+import { IconoAlerta, IconoFlecha } from './iconos.tsx';
 import { cx, type EstadoDemo } from './util.ts';
 
 export type EstadoPlaca = 'listo' | 'carga' | 'error' | 'deshabilitada';
@@ -60,7 +60,18 @@ export function Placa({
             titulo
           )}
         </Titulo>
-        {codigo ? <span className="t6-placa__codigo">{codigo}</span> : null}
+        {/* Código y flecha van juntos: si el título es largo, bajan a la vez y alineados a la derecha. */}
+        {codigo || enlace ? (
+          <span className="t6-placa__marcas">
+            {codigo ? <span className="t6-placa__codigo">{codigo}</span> : null}
+            {/* En táctil no hay hover que lo descubra: la flecha dice que la placa entera se puede pulsar. */}
+            {enlace ? (
+              <span className="t6-placa__flecha" aria-hidden="true">
+                <IconoFlecha />
+              </span>
+            ) : null}
+          </span>
+        ) : null}
       </header>
       <div className="t6-placa__cuerpo">
         {estado === 'carga' ? (

@@ -4,9 +4,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, test } from 'vitest';
 import {
   BarraDato,
+  BOLAS_CARGADOR,
   Boton,
   BotonEnlace,
   Cargador,
+  formatearComprobado,
   formatearDato,
   InsigniaFidelidad,
   NIVELES_FIDELIDAD,
@@ -161,7 +163,7 @@ describe('Barra de dato', () => {
     expect(meter?.getAttribute('min')).toBe('2400');
     expect(meter?.getAttribute('max')).toBe('4200');
     expect(meter?.getAttribute('aria-valuetext')).toBe(
-      '3120 g; Más ligera que el 70 % de las builds M4; Mediana M4: 3400 g',
+      '3120 g; Más ligera que el 70 % de las builds M4; Mediana M4: 3400 g',
     );
     const label = root.querySelector(`[id="${meter?.getAttribute('aria-labelledby')}"]`);
     expect(label?.textContent).toBe('Peso total');
@@ -178,7 +180,7 @@ describe('Barra de dato', () => {
   test('incompleto: el valor es un mínimo y se dice cuántas piezas faltan', () => {
     const root = doc(<BarraDato {...base} valor={3120} piezasSinDato={2} />);
     expect(root.querySelector('[data-estado="incompleto"]')).not.toBeNull();
-    expect(root.querySelector('meter')?.getAttribute('aria-valuetext')).toBe('al menos 3120 g; 2 piezas sin peso');
+    expect(root.querySelector('meter')?.getAttribute('aria-valuetext')).toBe('al menos 3120 g; 2 piezas sin peso');
     expect(root.textContent).toContain('≥');
   });
 
@@ -198,10 +200,57 @@ describe('Barra de dato', () => {
     expect(error.textContent).toContain('No se ha podido calcular');
   });
 
-  test('formato es-ES: miles a partir de 5 cifras, céntimos a euros', () => {
-    expect(formatearDato(3120, 'g')).toBe('3120 g');
-    expect(formatearDato(12500, 'mm')).toBe('12.500 mm');
-    expect(formatearDato(41235, 'eur')).toBe('412,35 €');
+  test('formato es-ES: miles a partir de 5 cifras, céntimos a euros y espacio duro antes de la unidad', () => {
+    expect(formatearDato(3120, 'g')).toBe('3120 g');
+    expect(formatearDato(12500, 'mm')).toBe('12.500 mm');
+    expect(formatearDato(41235, 'eur')).toBe('412,35 €');
+  });
+
+  // Principio 2 de CLAUDE.md: precio y stock siempre con la fecha de su última comprobación.
+  const precio = { etiqueta: 'Precio de la build', unidad: 'eur', escala: { min: 15000, max: 90000 } } as const;
+
+  test('precio: dice cuándo se comprobó, con <time datetime> en UTC', () => {
+    const root = doc(
+      <BarraDato {...precio} valor={41235} comprobado="2026-10-31T15:12:00Z" ahora="2026-10-31T18:00:00Z" />,
+    );
+    const time = root.querySelector('time');
+    expect(time?.getAttribute('datetime')).toBe('2026-10-31T15:12:00.000Z');
+    expect(time?.textContent).toBe('hace 2 h');
+    expect(time?.getAttribute('title')).toMatch(/2026/);
+    expect(root.querySelector('meter')?.getAttribute('aria-valuetext')).toBe('412,35 €; comprobado hace 2 h');
+  });
+
+  test('precio sin fecha conocida: se dice, nunca se inventa', () => {
+    const root = doc(<BarraDato {...precio} valor={41235} comprobado={null} />);
+    expect(root.querySelector('time')).toBeNull();
+    expect(root.textContent).toContain('Sin fecha de comprobación');
+    expect(root.querySelector('meter')?.getAttribute('aria-valuetext')).toBe('412,35 €; sin fecha de comprobación');
+  });
+
+  test('peso y longitud no llevan fecha: no caducan', () => {
+    const root = doc(<BarraDato {...base} valor={3120} />);
+    expect(root.textContent).not.toContain('omprobado');
+  });
+});
+
+describe('formatearComprobado', () => {
+  const ahora = '2026-10-31T18:00:00Z';
+  test.each([
+    ['2026-10-31T17:59:40Z', 'hace un momento'],
+    ['2026-10-31T17:35:00Z', 'hace 25 min'],
+    ['2026-10-31T15:00:00Z', 'hace 3 h'],
+    ['2026-10-30T17:00:00Z', 'hace 1 día'],
+    ['2026-10-25T18:00:00Z', 'hace 6 días'],
+  ])('%s → %s', (iso, texto) => {
+    expect(formatearComprobado(iso, ahora)?.texto).toBe(texto);
+  });
+
+  test('sin `ahora` (páginas prerenderizadas) da la fecha absoluta, que no caduca', () => {
+    expect(formatearComprobado('2026-10-31T15:12:00Z')?.texto).toMatch(/^el 31 oct 2026/);
+  });
+
+  test('una fecha no válida no se muestra como si lo fuera', () => {
+    expect(formatearComprobado('ayer por la tarde')).toBeNull();
   });
 });
 
@@ -210,5 +259,10 @@ describe('Cargador', () => {
     expect(html(<Cargador />)).toContain('aria-hidden="true"');
     const root = doc(<Cargador etiqueta="Buscando ofertas" />);
     expect(root.querySelector('[role="status"]')?.textContent).toBe('Buscando ofertas');
+  });
+
+  test('se llena con 5 bolas de 6 mm', () => {
+    expect(doc(<Cargador />).querySelectorAll('.t6-cargador__bola')).toHaveLength(BOLAS_CARGADOR);
+    expect(BOLAS_CARGADOR).toBe(5);
   });
 });
