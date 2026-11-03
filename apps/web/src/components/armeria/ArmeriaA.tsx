@@ -19,6 +19,8 @@ export default function ArmeriaA() {
     if (!escena) return;
     let vivo = true;
     const pedir = () => {
+      // El chunk 3D se descarga en paralelo a las fuentes; solo los rótulos necesitan esperarlas.
+      void import('./EscenaA.tsx');
       fuentesListas().then(() => {
         if (vivo) setCargar(true);
       });

@@ -7,7 +7,7 @@ import { ToneMappingMode } from 'postprocessing';
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 import { Color, type PerspectiveCamera, Plane, Raycaster, Vector2, Vector3 } from 'three';
 import { anchoVisibleMovil, encuadreSala, encuadreZona, FOV } from './camara.ts';
-import type { CanalEscena } from './canal.ts';
+import { type CanalEscena, crearVigia } from './canal.ts';
 import { Director, VARIANTES, type Variante } from './director.ts';
 import { crearControl, Sala } from './Sala.tsx';
 import { ORDEN_ESTANTERIAS, ZONAS, zonaPorId } from './zonas.ts';
@@ -40,7 +40,9 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
   const cam = camera as PerspectiveCamera;
   const listo = useRef(false);
   const introAvisada = useRef(false);
-  const lento = useRef({ desde: 0, avisado: false });
+  const vigia = useMemo(() => crearVigia(30), []);
+  const ultimoPuntero = useRef(0);
+  const sombrasPendientes = useRef(3);
   const tmp = useMemo(
     () => ({
       pos: new Vector3(),
@@ -68,7 +70,10 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       dentro.current = false;
       invalidate();
     };
-    const mover = () => invalidate();
+    const mover = () => {
+      ultimoPuntero.current = performance.now();
+      invalidate();
+    };
     el.addEventListener('pointerenter', entrar);
     el.addEventListener('pointerleave', salir);
     el.addEventListener('pointermove', mover);
@@ -110,6 +115,13 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
     };
   }, [props.medir, gl, canal]);
 
+  // Sombras bajo demanda: las luces que las proyectan no se mueven; solo hace falta recalcularlas al
+  // empezar y mientras rueda un cuerpo del compactus (auditor-rendimiento: −65 % de draw calls).
+  useEffect(() => {
+    gl.shadowMap.autoUpdate = false;
+    gl.shadowMap.needsUpdate = true;
+  }, [gl]);
+
   useEffect(() => {
     canal.current.pintar = () => invalidate();
     invalidate();
@@ -144,7 +156,9 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
           : 0;
       const antes = control.desplazamiento[e];
       control.desplazamiento[e] = antes + (objetivo - antes) * kMov;
-      movimiento += Math.abs(objetivo - control.desplazamiento[e]);
+      const resto = Math.abs(objetivo - control.desplazamiento[e]);
+      movimiento += resto;
+      if (resto > 1e-4 || Math.abs(antes - control.desplazamiento[e]) > 1e-5) sombrasPendientes.current = 2;
     }
 
     // Cámara: plano general, zona abierta o, en móvil, la zona del carrusel.
@@ -241,23 +255,16 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       }
     }
 
-    // Mediciones y caída al póster si la GPU no llega (docs/02 §3.6: ≥ 30 FPS o póster).
+    if (sombrasPendientes.current > 0) {
+      gl.shadowMap.needsUpdate = true;
+      sombrasPendientes.current--;
+    }
+
+    // Mediciones y caída al póster si no llega a 30 FPS (docs/02 §3.6). Con ?medir no cae: se mide tal cual.
     const f = canal.current.fotogramas;
     f.push(delta);
     if (f.length > 240) f.shift();
-    if (!director.enIntro && !lento.current.avisado && f.length >= 90) {
-      const media = f.slice(-90).reduce((s, d) => s + d, 0) / 90;
-      const seguidos = f.slice(-90).every((d) => d < 0.25);
-      if (seguidos && 1 / media < 24) {
-        lento.current.desde ||= performance.now();
-        if (performance.now() - lento.current.desde > 2500) {
-          lento.current.avisado = true;
-          props.onLento();
-        }
-      } else {
-        lento.current.desde = 0;
-      }
-    }
+    if (vigia(f, !director.enIntro && !props.medir, performance.now())) props.onLento();
 
     if (!listo.current) {
       listo.current = true;
@@ -268,8 +275,9 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       props.onIntroFin();
     }
     // Sigue pintando mientras algo se mueve.
-    const quieto =
-      director.enReposo && movimiento < 0.002 && !(dentro.current && director.luz.linterna > 0.01 && linternaPosible);
+    // Con el puntero quieto, la linterna llega a su sitio en unos 300 ms: después, la escena deja de pintar.
+    const punteroReciente = dentro.current && linternaPosible && performance.now() - ultimoPuntero.current < 400;
+    const quieto = director.enReposo && movimiento < 0.002 && !punteroReciente && sombrasPendientes.current === 0;
     if (props.medir || !quieto) invalidate();
   });
   return null;
@@ -298,7 +306,7 @@ export default function EscenaA(props: EscenaAProps) {
   return (
     <Canvas
       frameloop={medir ? 'always' : 'demand'}
-      dpr={[1, 1.5]}
+      dpr={[1, alta ? 1.5 : 1.25]}
       shadows={alta ? 'percentage' : false}
       flat
       gl={{ antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: medir, stencil: false }}
@@ -309,7 +317,7 @@ export default function EscenaA(props: EscenaAProps) {
       <fog attach="fog" args={['#040506', 9, 20]} />
       <Sala control={control} onApuntar={props.onApuntar} onElegir={props.onElegir} />
       <Motor {...props} control={control} />
-      <EffectComposer multisampling={alta ? 4 : 0} enableNormalPass={false}>
+      <EffectComposer multisampling={alta ? 2 : 0} enableNormalPass={false}>
         <Bloom
           mipmapBlur
           luminanceThreshold={0.92}

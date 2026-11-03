@@ -254,21 +254,23 @@ export interface OpcionesRotulo {
  * JetBrains Mono. Sirve de mapa de color y de emisión: al encender el tubo, el rótulo se ilumina.
  */
 export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
-  const ancho = opciones.ancho ?? 1024;
-  const alto = opciones.alto ?? 256;
+  // 512 × 128 basta: en pantalla la placa no pasa de unos 400 px ni con la cámara dentro (auditor-rendimiento).
+  const ancho = opciones.ancho ?? 512;
+  const alto = opciones.alto ?? 128;
+  const borde = Math.round(alto * 0.07);
   const { canvas, ctx } = lienzo(ancho, alto);
   ctx.fillStyle = opciones.fondo ?? '#15171a';
   ctx.fillRect(0, 0, ancho, alto);
   // Remaches de la chapa.
   ctx.fillStyle = 'rgb(232 228 220 / 0.22)';
   for (const [x, y] of [
-    [18, 18],
-    [ancho - 18, 18],
-    [18, alto - 18],
-    [ancho - 18, alto - 18],
+    [borde, borde],
+    [ancho - borde, borde],
+    [borde, alto - borde],
+    [ancho - borde, alto - borde],
   ] as const) {
     ctx.beginPath();
-    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.arc(x, y, Math.max(2, alto * 0.024), 0, Math.PI * 2);
     ctx.fill();
   }
   const tinta = opciones.tinta ?? colors['laton-claro'];
@@ -281,18 +283,18 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
     ? `600 ${Math.round(tamTitulo * 0.82)}px ${FONT_FAMILIES.grabado}`
     : `700 ${tamTitulo}px ${FONT_FAMILIES.rotulo}`;
   ctx.letterSpacing = `${Math.round(tamTitulo * (grabado ? 0.08 : 0.06))}px`;
-  ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.dato ? alto * 0.38 : alto / 2, ancho - 60);
+  ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.dato ? alto * 0.38 : alto / 2, ancho - borde * 3);
   if (opciones.dato) {
     ctx.letterSpacing = '0px';
     ctx.fillStyle = colors.hueso;
     ctx.font = `400 ${Math.round(alto * 0.17)}px ${FONT_FAMILIES.datos}`;
-    ctx.fillText(opciones.dato, ancho / 2, alto * 0.78, ancho - 60);
+    ctx.fillText(opciones.dato, ancho / 2, alto * 0.78, ancho - borde * 3);
   }
   if (opciones.demo) {
     ctx.textAlign = 'right';
     ctx.fillStyle = colors['estado-aviso'];
     ctx.font = `700 ${Math.round(alto * 0.11)}px ${FONT_FAMILIES.datos}`;
-    ctx.fillText('DEMO', ancho - 34, alto * 0.16);
+    ctx.fillText('DEMO', ancho - borde * 2, alto * 0.16);
   }
   grano(ctx, ancho, alto, 10, azar(texto.length * 97));
   return textura(canvas);

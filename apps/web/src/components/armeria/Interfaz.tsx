@@ -340,16 +340,34 @@ export function InterfazArmeria({
       el?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: estado.reducido ? 'auto' : 'smooth' });
   };
 
-  // Carrusel móvil: la tarjeta centrada es la zona activa y su posición mueve la cámara.
+  // Carrusel móvil: la tarjeta centrada es la zona activa y su posición mueve la cámara. La geometría de
+  // las tarjetas se mide una vez y se vuelve a medir al cambiar el tamaño: leer el layout en cada evento
+  // de scroll lo forzaba en cada fotograma (auditor-rendimiento).
+  const geometria = useRef<{ centro: number; paso: number; ancho: number } | null>(null);
+  useEffect(() => {
+    const el = nav.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const observador = new ResizeObserver(() => {
+      geometria.current = null;
+    });
+    observador.observe(el);
+    return () => observador.disconnect();
+  }, []);
   const desplazar = (e: UIEvent<HTMLElement>) => {
     if (!estado.movil) return;
     const el = e.currentTarget;
-    const tarjetas = ZONAS.map((z) => zonas.current[z.id]).filter((t): t is HTMLAnchorElement => Boolean(t));
-    const primera = tarjetas[0];
-    const segunda = tarjetas[1];
-    if (!primera || !segunda) return;
-    const paso = segunda.offsetLeft - primera.offsetLeft || 1;
-    const progreso = (el.scrollLeft + el.clientWidth / 2 - (primera.offsetLeft + primera.offsetWidth / 2)) / paso;
+    if (!geometria.current) {
+      const primera = zonas.current[ZONAS[0]?.id ?? ''];
+      const segunda = zonas.current[ZONAS[1]?.id ?? ''];
+      if (!primera || !segunda) return;
+      geometria.current = {
+        centro: primera.offsetLeft + primera.offsetWidth / 2,
+        paso: segunda.offsetLeft - primera.offsetLeft || 1,
+        ancho: el.clientWidth,
+      };
+    }
+    const { centro, paso, ancho } = geometria.current;
+    const progreso = (el.scrollLeft + ancho / 2 - centro) / paso;
     onProgreso?.(progreso);
     const i = Math.round(Math.min(ZONAS.length - 1, Math.max(0, progreso)));
     const z = ZONAS[i];
