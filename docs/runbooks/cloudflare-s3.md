@@ -15,7 +15,8 @@
 En el panel de Cloudflare, mira qué hay ya en tu cuenta (Workers, D1, R2, KV y Pages). Dentro de una misma
 cuenta, un Worker con permiso de despliegue puede enlazar las bases y buckets de otros proyectos.
 - **Si tiene otros proyectos o datos**: crea una cuenta nueva (gratis) solo para Taller6mm y sigue con ella.
-- **Producción** irá en otra cuenta distinta de la de preview (decisión propuesta en el ADR-0008).
+- **Producción** irá siempre en otra cuenta, y en esta nunca habrá datos reales, solo de demo. Es un
+  requisito del ADR-0008: los tokens del CI alcanzan toda la cuenta (paso 4).
 
 ## Paso 1 · Iniciar sesión (2 min)
 ```powershell
@@ -38,7 +39,7 @@ cd C:\dev\bancada\apps\web
 pnpm exec wrangler d1 create taller6mm-core-preview
 pnpm exec wrangler d1 create taller6mm-mercado-preview
 pnpm exec wrangler d1 create taller6mm-busqueda-preview
-pnpm exec wrangler d1 create taller6mm-canario       # nunca entra en ningún token: sirve para las pruebas negativas
+pnpm exec wrangler d1 create taller6mm-canario       # ningún Worker la usa: sirve para la prueba negativa del token de PR
 ```
 
 1. Copia los tres `database_id` de las bases `*-preview` (no son secretos) en lugar de
@@ -65,11 +66,14 @@ Panel de Cloudflare → **Manage Account → Account API Tokens → Create Token
 
 | Token | Para qué | Permisos | Entorno de GitHub |
 |---|---|---|---|
-| `taller6mm-ci-preview` | Despliegue desde `main` y migraciones | **Editor** de los Workers `taller6mm-web-preview` y `taller6mm-jobs-preview`. **D1: Editor** solo de las tres bases `*-preview` si el panel deja elegir bases; si no, a nivel de producto (por eso el paso 0). | `preview` |
-| `taller6mm-ci-preview-pr` | Previews de PR | **Editor** solo del Worker `taller6mm-web-preview`. **Sin D1** ni nada más. | `preview-pr` |
+| `taller6mm-ci-preview` | Despliegue desde `main` y migraciones | **Workers Scripts: Edit** y **D1: Edit**. Si el panel deja elegir Workers y bases, solo `taller6mm-web-preview`, `taller6mm-jobs-preview` y las tres bases `*-preview`. | `preview` |
+| `taller6mm-ci-preview-pr` | Previews de PR | **Workers Scripts: Edit**. Si el panel deja elegirlo, solo `taller6mm-web-preview`. **Sin D1** ni nada más. | `preview-pr` |
 
-Sin permisos de cuenta, DNS ni rutas. El token de producción se crea en el lanzamiento, en la cuenta de
-producción y cuando existan sus Workers (solo se puede acotar a Workers que ya existen).
+Ningún otro permiso: ni DNS, ni rutas, ni zonas, ni R2. **Lo que pasó el 03-11-2026**: el formulario solo dejó
+dar los permisos a **toda la cuenta**. Con el token de PR se podría crear, cambiar o borrar cualquier Worker de la
+cuenta y enlazar cualquiera de sus bases. Por eso la cuenta es solo para la preview de Taller6mm y nunca tendrá
+datos reales (paso 0). Es un riesgo aceptado en el ADR-0008; volver a acotarlos está en la issue #11. El token de
+producción se crea en el lanzamiento, en la cuenta de producción y cuando existan sus Workers.
 
 ## Paso 5 · GitHub: entornos, secretos y variables (4 min)
 1. **Settings → Environments**: crea `preview-pr`. En `preview` y en `preview-pr`, **Deployment branches and
@@ -98,7 +102,9 @@ pnpm exec wrangler d1 execute taller6mm-canario --remote --command "select 1"   
 pnpm exec wrangler d1 execute taller6mm-core-preview --remote --command "select 1"        # debe fallar (sin D1)
 Remove-Item Env:CLOUDFLARE_API_TOKEN, Env:CLOUDFLARE_ACCOUNT_ID
 ```
-Si alguna **no** falla, para y cuéntamelo antes de seguir. Si todo falla como debe:
+Si alguna **no** falla, para y cuéntamelo antes de seguir. Las dos prueban que el token de PR no tiene la API
+de D1, no que esté acotado a unas bases: el de `main`, con D1 de toda la cuenta, sí alcanza la canario. Si todo
+falla como debe:
 ```powershell
 gh variable set CLOUDFLARE_PREVIEWS --body activas
 ```
@@ -108,7 +114,9 @@ tres bases responden y que lleva `noindex`. Al cerrar el PR, la Preview se borra
 las que se escapen).
 
 ## Si algo va mal (incidente)
-Apagar la variable **no** contiene un incidente: un PR puede ignorarla. En este orden:
+Apagar la variable `CLOUDFLARE_PREVIEWS` corta el uso de los tokens en el CI: los jobs que los tienen salen de
+`main` y la respetan (un PR solo puede saltársela en su build, que no tiene secretos). Pero **no** revoca un token
+que se haya filtrado. Por eso lo primero es rotarlo. En este orden:
 1. Panel de Cloudflare → Account API Tokens → **Roll** (o Delete) del token afectado.
 2. `gh secret delete CLOUDFLARE_API_TOKEN --env preview-pr` (o `--env preview`).
 3. Borra las Previews: `wrangler preview delete --env preview --name pr-<n>` (o el recolector a mano).

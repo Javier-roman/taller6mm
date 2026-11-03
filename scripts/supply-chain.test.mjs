@@ -181,6 +181,23 @@ describe('workflows de GitHub Actions', () => {
       });
     }
 
+    if (trasOtroWorkflow) {
+      // La build de un PR llega como artefacto: se sube solo su código y con la configuración de main
+      // (scripts/preparar-preview.mjs; segunda revisión de seguridad de S3, A1).
+      test(`${file}: el código de un PR se despliega solo con la configuración de main`, () => {
+        for (const [linea] of text.matchAll(/exec wrangler (?:preview|deploy|versions upload)\b(?!\s+delete)[^\n]*/g)) {
+          assert.match(linea, /-c "\$RUNNER_TEMP\/limpio\/server\/wrangler\.json"/, linea);
+        }
+        if (/download-artifact/.test(text)) {
+          const prepara = text.indexOf(
+            'node scripts/preparar-preview.mjs "$RUNNER_TEMP/preview" "$RUNNER_TEMP/limpio"',
+          );
+          const sube = text.search(/exec wrangler preview\b(?!\s+delete)/);
+          assert.ok(prepara !== -1 && prepara < sube, 'preparar-preview.mjs tiene que ir antes de wrangler preview');
+        }
+      });
+    }
+
     test(`${file}: migraciones remotas solo desde main (nunca desde un PR)`, () => {
       if (/--remote\b/.test(text))
         assert.ok(!corrigePr && !trasOtroWorkflow, 'las migraciones van en desplegar-preview.yml');

@@ -112,12 +112,14 @@ Puesto de Javi: Claude Code ──▶ hooks ──▶ shell, MCP Playwright (nav
 | T | Escrituras múltiples a medias | `db.batch()` atómico (D1 no admite `BEGIN`; medido en S1) | ✅ S1 | V2 |
 | I | Copias de seguridad expuestas | R2 privado; exportación semanal de `core` y `mercado` | 🔜 F9 | V14 |
 | D | Superar las 100.000 escrituras diarias | Solo cambios y en lotes; contadores en Durable Objects con volcado periódico | 🔜 F4–F5 | V2 |
-| E | Token de CI con permisos de toda la cuenta | Tokens por uso (ADR-0008): `preview` (Workers y D1 de preview, solo desde `main`) y `preview-pr` (solo el Worker de preview, sin D1); el de producción, en otra cuenta y solo desde el entorno `production` con aprobación. El aislamiento real lo da la cuenta: dentro de una, un Editor de Worker puede enlazar cualquier base | 🔜 S3 (lo crea Javi) | V13 |
+| E | Token de CI con permisos de toda la cuenta | Tokens por uso (ADR-0008) en entornos de GitHub restringidos a `main` y solo en jobs que no ejecutan código del PR: `preview` (Workers y D1) y `preview-pr` (Workers, sin la API de D1). **Alcanzan toda la cuenta**, porque el panel no dejó acotarlos (03-11-2026). Requisito duro: la cuenta solo tiene la preview de Taller6mm, nunca datos reales, y producción va en otra cuenta, con su token solo en el entorno `production` y con aprobación. Volver a acotarlos: issue #11 | ✅ S3 · ⚠️ alcance aceptado por Javi | V13 |
 
 ### 4.6 CI/CD y cadena de suministro
 | STRIDE | Amenaza | Mitigación | Estado | ASVS |
 |---|---|---|---|---|
-| S | Un PR (de un fork o del propio repo: Renovate, un agente) roba secretos | Sin `pull_request_target`; ningún job de `pull_request` tiene secretos ni entorno (test de política); la Preview se despliega con `workflow_run` desde `main`, que valida la build como dato; entornos de GitHub restringidos a `main` | ✅ S2 · 🔜 S3 | V13 |
+| S | Un PR (de un fork o del propio repo: Renovate, un agente) roba secretos | Sin `pull_request_target`; ningún job de `pull_request` tiene secretos ni entorno (test de política); la Preview se despliega con `workflow_run` desde `main`, que trata la build como dato; entornos de GitHub restringidos a `main` | ✅ S2–S3 | V13 |
+| T | La configuración de la build de un PR decide qué sube el paso con token (`base_dir`, `rules`, `alias`, `build`, `secrets`, mapas de código) | La del artefacto no se usa: `scripts/preparar-preview.mjs` escribe la de `main` y copia solo módulos, mapas y estáticos, sin archivos ocultos ni enlaces y con cada `sourceMappingURL` dentro de su carpeta. Tests con casos negativos. Comprobado con la Preview `pr-8` | ✅ S3 (A1 de la segunda revisión) | V2, V15 |
+| E | Las dependencias que se instalan y compilan en el job de despliegue de `main` alteran `node_modules`, `GITHUB_ENV` o `GITHUB_PATH` antes del paso con token | Lockfile congelado, edad mínima de 3 días y `allowBuilds`. Pendiente: separar la build y el despliegue en jobs distintos (issue #11, M3) | ⚠️ S3 · 🔜 issue #11 | V15 |
 | T | Paquete npm o PyPI comprometido (tipo Shai-Hulud) | pnpm con edad mínima de 3 días (estricta), `trustPolicy: no-downgrade` (ya bloqueó dos paquetes sin procedencia), `allowBuilds`, `strictDepBuilds` y `blockExoticSubdeps`; uv con `exclude-newer`; lockfiles congelados; OSV, `pnpm audit` y Renovate con edad mínima | ✅ S2 | V15 |
 | T | Acción de GitHub modificada | Solo acciones `actions/*` fijadas por SHA (la política del repo exige SHA y creadores verificados); binarios descargados con SHA-256 comprobado | ✅ S2 | V15 |
 | T | Envenenamiento de caché entre PR y `main` | Sin cachés compartidas en el CI v1 | ✅ S2 | V15 |
@@ -147,7 +149,9 @@ Claude Code trabaja con los permisos de Javi y **lee contenido no confiable**: p
 4. **Mientras no haya protección de checks**, un PR puede fusionarse con el CI en rojo. Lo cierra Javi al hacer obligatorios los checks.
 5. **pnpm y uv se instalan en el CI por versión exacta, sin hash** (Semgrep y sus dependencias ya van con hash desde `.github/semgrep/requirements.txt`). El riesgo está acotado: PyPI y npm no permiten resubir una versión publicada, y los jobs de PR no tienen secretos. Los de despliegue (`main` y `workflow_run`) sí los tienen: ahí el riesgo es mayor y se acepta mientras pnpm no publique un hash verificable; se revisa en la Fase 3.
 6. **Previews públicas** (ADR-0008): sirven código sin revisar en `<cuenta>.workers.dev` con las cuotas de la cuenta; `noindex` no es privacidad. Access antes de la Fase 2.
-7. **Uso interno de fotos de terceros para medir** (docs/05 §5): pendiente de validación jurídica antes de producción.
+7. **Tokens de CI de toda la cuenta** (ADR-0008, decisión 5): si se filtrase el de PR, permitiría alojar cualquier Worker en el `workers.dev` de la cuenta o enlazar cualquiera de sus bases. Lo acotan la cuenta dedicada sin datos reales y que el token solo exista en jobs sin código del PR. Javi lo acepta (03-11-2026); issue #11.
+8. **Subdominio de `workers.dev`**: identifica a Javi y sale en las URLs públicas de las Previews, en los comentarios del bot y en los informes de ZAP. Javi lo acepta (03-11-2026).
+9. **Uso interno de fotos de terceros para medir** (docs/05 §5): pendiente de validación jurídica antes de producción.
 
 ## 6. Huecos detectados en la revisión de S4 (31-10-2026), por fase
 Pendientes de incorporar a las tablas cuando se diseñe cada pieza. Ninguno afecta a lo que ya existe.

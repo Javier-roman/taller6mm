@@ -98,7 +98,7 @@ Tablas FTS5 con `tokenize = "unicode61 remove_diacritics 2"` para productos, bui
 ## 7. Entornos
 Motivos en el ADR-0008; puesta en marcha en `docs/runbooks/cloudflare-s3.md`. El entorno se elige al compilar (`CLOUDFLARE_ENV`).
 - **Local**: `astro dev` en workerd con D1, R2, KV y Durable Objects locales, y seeds de demo.
-- **Preview**: Workers `taller6mm-web-preview` y `taller6mm-jobs-preview` con bases `*-preview` y datos de demo, en una cuenta de Cloudflare solo para Taller6mm. `main` despliega este entorno y es el único que migra. Cada PR del repo tiene su Preview `pr-<n>` (Worker Previews): se construye sin secretos, se despliega desde `main` con `workflow_run`, su URL se comenta en el PR y se borra al cerrarlo. Siempre con `noindex`; Access antes de la Fase 2.
+- **Preview**: Workers `taller6mm-web-preview` y `taller6mm-jobs-preview` con bases `*-preview` y datos de demo, en una cuenta de Cloudflare solo para Taller6mm. `main` despliega este entorno y es el único que migra. Cada PR del repo tiene su Preview `pr-<n>` (Worker Previews): se construye sin secretos, se despliega desde `main` con `workflow_run` (solo su código y con la configuración de `main`), su URL se comenta en el PR y se borra al cerrarlo. Los tokens del CI alcanzan toda la cuenta (riesgo aceptado en el ADR-0008), así que en ella nunca hay datos reales. Siempre con `noindex`; Access antes de la Fase 2.
 - **Producción**: `taller6mm-web` y `taller6mm-jobs`, en otra cuenta de Cloudflare y cerrados (sin `workers.dev` ni URLs de versión) hasta el lanzamiento. Se despliega a mano desde `main`, tras CI verde y con la aprobación de Javi. Las migraciones remotas son manuales y con confirmación.
 
 ## 8. Costes

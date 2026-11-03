@@ -39,7 +39,7 @@ Flujos E2E críticos:
 
 **En `main`**: lo mismo, más el despliegue del entorno preview (con sus migraciones). Producción se despliega con un workflow manual (`workflow_dispatch`) desde `main`, en el entorno protegido `production` y con la aprobación de Javi (ADR-0008). Rollback documentado (`wrangler rollback`).
 
-**Previews de PR** (ADR-0008): el job que ejecuta código del PR no tiene secretos; el despliegue lo hace un `workflow_run` con la definición de `main`, que valida la build antes de subirla.
+**Previews de PR** (ADR-0008): el job que ejecuta código del PR no tiene secretos; el despliegue lo hace un `workflow_run` con la definición de `main`, que sube solo el código de la build y con la configuración de `main` (`scripts/preparar-preview.mjs`).
 
 ## 4. Presupuestos de rendimiento
 | Página | LCP p75 móvil | INP | CLS | JS inicial (gz) |
@@ -91,7 +91,7 @@ Activos a proteger:
   - variantes servidas solo mediante transformación sin metadatos.
 - **SSRF**: nunca se descarga una URL aportada por un usuario. Las únicas descargas salen del crawler hacia dominios registrados.
 - **API interna**: HMAC-SHA256 sobre el cuerpo, marca de tiempo (±5 min), nonce guardado 10 min y clave de idempotencia. El secreto se rota cada trimestre.
-- **Secretos**: `wrangler secret` y secretos de GitHub con tokens de mínimo privilegio. Nunca en el repo ni en los logs. gitleaks en CI y en pre-commit.
+- **Secretos**: `wrangler secret` y secretos de GitHub con tokens de mínimo privilegio. Nunca en el repo ni en los logs. gitleaks en CI y en pre-commit. Los tokens de preview alcanzan hoy toda su cuenta, porque el panel no dejó acotarlos: riesgo aceptado en el ADR-0008, contenido con una cuenta solo para la preview (issue #11).
 - **Cadena de suministro**:
   - lockfile y pnpm sin scripts de instalación, salvo lista blanca;
   - Renovate con edad mínima de versión y OSV;

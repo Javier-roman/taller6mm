@@ -3,7 +3,8 @@
   // - local (nivel superior): `astro dev`, e2e y Lighthouse en workerd, con D1 locales de marcador.
   // - preview: Worker persistente `taller6mm-web-preview`. `main` lo despliega (desplegar-preview.yml)
   //   y cada PR tiene su Preview `pr-<n>` (previews.yml construye sin secretos; previews-desplegar.yml
-  //   valida la build y la sube) con los bindings del bloque `previews`.
+  //   sube solo su código, con la configuración que scripts/validar-preview.mjs deriva de este entorno)
+  //   con los bindings del bloque `previews`.
   // - production: configurado pero cerrado (sin workers.dev ni URLs de versión) hasta el lanzamiento.
   // El entorno se elige AL COMPILAR: `CLOUDFLARE_ENV=preview pnpm --filter @taller6mm/web build`
   // genera dist/server/wrangler.json ya resuelto y `wrangler deploy`/`wrangler preview` lo usan.

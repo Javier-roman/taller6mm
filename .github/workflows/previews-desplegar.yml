@@ -1,9 +1,12 @@
 # Previews de PR en Cloudflare, fase 2 de 2: DESPLEGAR o BORRAR (S3; ADR-0008; revisor-seguridad).
 # - `workflow_run` usa siempre esta definición de `main`: un PR no puede cambiarla. No hace checkout del
-#   código del PR: wrangler sale del lockfile de `main` y la build del PR es un artefacto que se valida
-#   (scripts/validar-preview.mjs) antes de subirlo. Sin migraciones: las Previews usan el esquema de `main`.
-# - El token vive en el entorno `preview-pr` de GitHub (restringido a `main`): Editor solo del Worker
-#   `taller6mm-web-preview` y sin permisos de D1. Solo está en el `env` de los pasos de wrangler.
+#   código del PR: wrangler sale del lockfile de `main` y la build del PR es un artefacto sin confianza.
+#   scripts/preparar-preview.mjs copia de él solo módulos, mapas y estáticos a una carpeta limpia y escribe
+#   la configuración de `main`: la del artefacto no se usa nunca (revisor-seguridad, 03-11-2026, A1).
+#   Sin migraciones: las Previews usan el esquema de `main`.
+# - El token vive en el entorno `preview-pr` de GitHub (restringido a `main`): «Workers Scripts: Edit» de
+#   toda la cuenta y sin la API de D1 (alcance real y riesgo aceptado en el ADR-0008). Solo está en el `env`
+#   de los pasos de wrangler. El `pnpm install` de antes corre en el mismo job (issue #11, M3).
 # - PR abierto → Preview `pr-<n>` + humo + comentario (job aparte, sin checkout). PR cerrado → se borra.
 # - Apagado hasta que exista la variable CLOUDFLARE_PREVIEWS=activas.
 name: Previews · desplegar
@@ -84,17 +87,19 @@ jobs:
           path: ${{ runner.temp }}/preview
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
-      - name: La build del PR apunta al Worker de preview y a nada más
-        run: node scripts/validar-preview.mjs "$RUNNER_TEMP/preview/server/wrangler.json"
+      - name: Código del PR a una carpeta limpia, con la configuración de main
+        run: node scripts/preparar-preview.mjs "$RUNNER_TEMP/preview" "$RUNNER_TEMP/limpio"
       - name: wrangler preview pr-${{ needs.estado.outputs.pr }}
         id: preview
+        # Directorio de main: wrangler carga los archivos de variables de entorno del directorio actual y
+        # aquí no hay ninguno (están ignorados en git); la carpeta limpia no admite archivos ocultos.
         working-directory: apps/web
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          pnpm exec wrangler preview -c "$RUNNER_TEMP/preview/server/wrangler.json" --name "pr-$PR" \
+          pnpm exec wrangler preview -c "$RUNNER_TEMP/limpio/server/wrangler.json" --name "pr-$PR" \
             --message "PR #$PR (${SHA::7})" --json > "$RUNNER_TEMP/preview.json"
           # Solo se acepta la URL de esta Preview, en workers.dev (nada de enlaces al panel ni saltos de línea).
           # Con grep y no con jq: wrangler escribe avisos de texto delante del JSON (comprobado el 03-11).

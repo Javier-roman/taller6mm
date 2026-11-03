@@ -1,8 +1,9 @@
 # Despliegue del entorno preview desde `main` (S3; ADR-0008; revisor-seguridad).
 # - Solo `main` (push) o a mano: es el único sitio con migraciones remotas, y van en serie (grupo global
 #   sin cancelación) para que dos despliegues no migren a la vez ni se corte una migración a medias.
-# - Token del entorno `preview` de GitHub (restringido a `main`): Editor de los Workers de preview y de D1.
-#   Solo está en el `env` de los pasos de wrangler.
+# - Token del entorno `preview` de GitHub (restringido a `main`): «Workers Scripts: Edit» y «D1: Edit» de
+#   toda la cuenta (alcance real y riesgo aceptado en el ADR-0008). Solo está en el `env` de los pasos de
+#   wrangler, pero la instalación y la build corren antes en el mismo job (separarlos: issue #11, M3).
 # - Antes de desplegar se comprueba que la build es del Worker de preview (nunca el de producción).
 # - Apagado hasta que exista la variable CLOUDFLARE_PREVIEWS=activas. Producción no se despliega aquí.
 name: Desplegar preview
