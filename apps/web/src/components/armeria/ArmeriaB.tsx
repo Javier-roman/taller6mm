@@ -12,15 +12,19 @@ export default function ArmeriaB() {
   const etiqueta = useRef<HTMLDivElement>(null);
   const escena = conEscena(estado);
 
-  useEffect(() => {
-    if (estado.listo && estado.intro && !estado.introActiva) acciones.introEmpieza();
-  }, [estado.listo, estado.intro, estado.introActiva, acciones]);
-
   const saltarIntro = useCallback(() => {
     canal.current.director?.saltarIntro();
     canal.current.pintar();
     acciones.introTermina();
   }, [acciones]);
+
+  // La intro empieza cuando la escena ya pinta. Si llega tarde (más de 1,5 s), el usuario ya ha visto
+  // la sala en el póster: no se apaga para volver a encenderla (critico-diseno).
+  useEffect(() => {
+    if (!estado.listo || !estado.intro || estado.introActiva) return;
+    if (!estado.forzarIntro && performance.now() > 1500) saltarIntro();
+    else acciones.introEmpieza();
+  }, [estado.listo, estado.intro, estado.introActiva, estado.forzarIntro, acciones, saltarIntro]);
 
   return (
     <InterfazArmeria

@@ -60,6 +60,8 @@ export interface EstadoArmeria {
   centrada: string;
   calidad: 'alta' | 'baja';
   medir: boolean;
+  /** ?intro=1: la intro se ve aunque la escena llegue tarde (capturas y pruebas). */
+  forzarIntro: boolean;
 }
 
 export function useArmeria() {
@@ -75,10 +77,12 @@ export function useArmeria() {
   const [introActiva, setIntroActiva] = useState(false);
   const [apuntada, setApuntada] = useState<string | null>(null);
   const [enfocada, setEnfocada] = useState<string | null>(null);
-  const [centrada, setCentrada] = useState<string>(ZONAS[0]?.id ?? 'replicas');
+  // En móvil se empieza por el banco, el protagonista.
+  const [centrada, setCentrada] = useState<string>('banco');
   const [abierta, setAbierta] = useState<string | null>(null);
   const [calidad, setCalidad] = useState<'alta' | 'baja'>('alta');
   const [medir, setMedir] = useState(false);
+  const [forzarIntro, setForzarIntro] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -93,7 +97,7 @@ export function useArmeria() {
     mqReducido.addEventListener('change', actualizar);
 
     const luz = params.get('luz') ?? leer(CLAVE.luz);
-    if (luz === 'taller' || luz === 'penumbra') setVariante(luz);
+    if (luz === 'mas-luz' || luz === 'penumbra') setVariante(luz);
     const pedida = params.get('vista') ?? leer(CLAVE.vista);
     if (pedida === 'ligera') setVista('ligera');
     // Póster si no hay WebGL2 o si el usuario pide ahorrar datos (docs/02 §3.4).
@@ -111,6 +115,7 @@ export function useArmeria() {
     setMedir(params.has('medir'));
     const introPedida = params.get('intro');
     const quiereIntro = introPedida === '1' || (introPedida !== '0' && leer(CLAVE.intro) === null);
+    setForzarIntro(introPedida === '1');
     setIntro(quiereIntro && !mqReducido.matches);
     setHidratado(true);
     return () => {
@@ -165,6 +170,7 @@ export function useArmeria() {
     centrada,
     calidad,
     medir,
+    forzarIntro,
   };
   return { estado, acciones };
 }
@@ -304,6 +310,12 @@ export function InterfazArmeria({
     return () => removeEventListener('keydown', tecla);
   }, [estado.introActiva, estado.zonaAbierta, onSaltarIntro, cerrar]);
 
+  // En móvil el pasillo empieza en el banco, el protagonista (y el póster también).
+  useEffect(() => {
+    if (estado.movil)
+      zonas.current['banco']?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
+  }, [estado.movil]);
+
   // Al abrir una zona, el foco va al panel; el lector oye su nombre.
   useEffect(() => {
     if (estado.zonaAbierta) panel.current?.focus();
@@ -353,26 +365,37 @@ export function InterfazArmeria({
       data-abierta={Boolean(abierta)}
       data-luz={estado.variante}
     >
-      <div className="armeria__escena">{children}</div>
+      <div className="armeria__escena">
+        {children}
+        {/* Con la escena activa el póster (y su texto alternativo) se oculta: el lector oye lo mismo. */}
+        {conEscena(estado) && estado.listo ? <p className="t6-sr">{TEXTO_ALTERNATIVO}</p> : null}
+      </div>
 
       <div className="armeria__capa">
         <header className="armeria__cabecera">
-          <a className="armeria__marca" href="/">
-            {BRAND.name}
-          </a>
+          <div className="armeria__identidad">
+            <a className="armeria__marca" href="/">
+              {BRAND.name}
+            </a>
+            <p className="armeria__lema">{BRAND.tagline}</p>
+          </div>
           <p className="armeria__prototipo">
             <strong>Prototipo {prototipo}</strong> · {descripcion} <span className="armeria__tecnica">({tecnica})</span>
           </p>
+          {/* Acción principal: el banco (configurador) es el protagonista de la web. */}
+          <Boton variante="laton" className="armeria__accion" onClick={() => abrir('banco')}>
+            Monta tu réplica
+          </Boton>
           <fieldset className="armeria__ajustes">
             <legend className="t6-sr">Ajustes de la sala</legend>
             <button
               type="button"
               className="armeria__ajuste"
-              aria-pressed={estado.variante === 'taller'}
-              onClick={() => acciones.cambiarLuz(estado.variante === 'taller' ? 'penumbra' : 'taller')}
+              aria-pressed={estado.variante === 'mas-luz'}
+              onClick={() => acciones.cambiarLuz(estado.variante === 'mas-luz' ? 'penumbra' : 'mas-luz')}
               title={`Luz: ${VARIANTES[estado.variante].nombre}`}
             >
-              Luz cálida
+              Más luz
             </button>
             <button
               type="button"

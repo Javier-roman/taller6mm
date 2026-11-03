@@ -44,7 +44,8 @@ export const ESTANTERIAS: Readonly<
 export const ORDEN_ESTANTERIAS: readonly Estanteria[] = ['izquierda', 'centro', 'derecha'];
 
 /** Banco de trabajo, delante de la estantería central. */
-export const BANCO = { x: 0, z: -0.55, ancho: 2.25, fondo: 0.9, alto: 0.93 } as const;
+// Adelantado para que sea el protagonista (critico-diseno, 01-11-2026).
+export const BANCO = { x: 0, z: 0.45, ancho: 2.25, fondo: 0.9, alto: 0.93 } as const;
 
 const zFondo = MUEBLE.frente - MUEBLE.fondo / 2;
 const zRotulo = MUEBLE.frente + 0.012;
@@ -63,7 +64,7 @@ export const ZONAS: readonly Zona[] = [
     id: 'replicas',
     nombre: 'Armero de réplicas',
     rotulo: 'Armero',
-    dato: '24 réplicas',
+    dato: '24 réplicas',
     descripcion: 'Ranuras numeradas con cada réplica del catálogo, en vertical y a escala.',
     ruta: '/replicas',
     estanteria: 'izquierda',
@@ -75,7 +76,7 @@ export const ZONAS: readonly Zona[] = [
     id: 'accesorios',
     nombre: 'Almacén de accesorios',
     rotulo: 'Accesorios',
-    dato: '186 accesorios · 8 tiendas',
+    dato: '186 accesorios · 8 tiendas',
     descripcion: 'Maletines y cajas etiquetadas con todos los accesorios del mercado.',
     ruta: '/accesorios',
     estanteria: 'izquierda',
@@ -111,7 +112,7 @@ export const ZONAS: readonly Zona[] = [
     id: 'mercado',
     nombre: 'Tablón de mercado',
     rotulo: 'Tablón',
-    dato: '3 bajadas hoy',
+    dato: '3 bajadas hoy',
     descripcion: 'Bajadas de precio y vueltas a stock, con la hora de cada comprobación.',
     ruta: '/mercado',
     estanteria: 'derecha',
@@ -120,28 +121,28 @@ export const ZONAS: readonly Zona[] = [
     fase: 4,
   },
   {
-    id: 'guias',
-    nombre: 'Biblioteca de manuales',
-    rotulo: 'Manuales',
-    dato: '12 guías',
-    descripcion: 'Guías de montaje, despieces y normativa de airsoft en España.',
-    ruta: '/guias',
-    estanteria: 'derecha',
-    caja: { centro: [der - mitad, abajo.y, zFondo], tamano: [1.3, abajo.alto, MUEBLE.fondo] },
-    anclaRotulo: [der - mitad, yRotuloAbajo, zRotulo],
-    fase: 2,
-  },
-  {
     id: 'tiendas',
     nombre: 'Mostrador de tiendas',
     rotulo: 'Tiendas',
-    dato: '8 tiendas · hace 2 h',
+    dato: '8 tiendas · hace 2 h',
     descripcion: 'Las tiendas de España y del extranjero que seguimos, y la frescura de sus datos.',
     ruta: '/tiendas',
     estanteria: 'derecha',
     caja: { centro: [der + mitad, arriba.y, zFondo], tamano: [1.3, arriba.alto, MUEBLE.fondo] },
     anclaRotulo: [der + mitad, yRotuloArriba, zRotulo],
     fase: 4,
+  },
+  {
+    id: 'guias',
+    nombre: 'Biblioteca de manuales',
+    rotulo: 'Manuales',
+    dato: '12 guías',
+    descripcion: 'Guías de montaje, despieces y normativa de airsoft en España.',
+    ruta: '/guias',
+    estanteria: 'derecha',
+    caja: { centro: [der - mitad, abajo.y, zFondo], tamano: [1.3, abajo.alto, MUEBLE.fondo] },
+    anclaRotulo: [der - mitad, yRotuloAbajo, zRotulo],
+    fase: 2,
   },
   {
     id: 'taquilla',

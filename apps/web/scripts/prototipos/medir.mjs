@@ -32,11 +32,22 @@ async function medirEscenario(nombre, contexto, accion) {
       (async () => {
         const tipo = r.request().resourceType();
         const cuerpo = await r.body().catch(() => null);
-        if (!cuerpo) return;
+        // Las respuestas de fetch() (los pases del B) pueden llegar sin cuerpo a Playwright: entonces
+        // se usa el tamaño que da el propio navegador.
+        const tamano =
+          cuerpo?.length ||
+          (
+            await r
+              .request()
+              .sizes()
+              .catch(() => null)
+          )?.responseBodySize ||
+          0;
+        if (!tamano) return;
         recursos[tipo] ??= { kb: 0, gzKb: 0, n: 0 };
-        recursos[tipo].kb += cuerpo.length / 1024;
+        recursos[tipo].kb += tamano / 1024;
         recursos[tipo].n += 1;
-        if (tipo === 'script' || tipo === 'stylesheet')
+        if (cuerpo && (tipo === 'script' || tipo === 'stylesheet'))
           recursos[tipo].gzKb += gzipSync(cuerpo, { level: 9 }).length / 1024;
       })(),
     );

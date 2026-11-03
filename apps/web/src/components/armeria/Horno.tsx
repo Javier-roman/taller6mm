@@ -5,7 +5,7 @@
 // equipo de Javi (instalarlo pide permisos de administrador), así que los pases salen del rasterizador
 // de three.js, con sombras de mapa en vez de trazado de rayos.
 import { Canvas, useThree } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Color,
   LinearSRGBColorSpace,
@@ -21,6 +21,7 @@ import {
 } from 'three';
 import { ENCUADRE_POSTER } from './camara.ts';
 import { crearIluminacion, type Iluminacion } from './director.ts';
+import { fuentesListas } from './fuentes.ts';
 import { EXPOSICION_HORNO, type Pase, PROFUNDIDAD } from './pases.ts';
 import { crearControl, Sala } from './Sala.tsx';
 import { ORDEN_ESTANTERIAS } from './zonas.ts';
@@ -144,6 +145,12 @@ export default function Horno() {
     c.calidad = 'alta';
     return c;
   }, []);
+  // Los rótulos se dibujan en canvas: sin las fuentes cargadas saldrían en una sans genérica.
+  const [fuentes, setFuentes] = useState(false);
+  useEffect(() => {
+    fuentesListas().then(() => setFuentes(true));
+  }, []);
+  if (!fuentes) return null;
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
       <Canvas

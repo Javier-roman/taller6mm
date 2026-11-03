@@ -6,7 +6,7 @@ import { Bloom, EffectComposer, Noise, ToneMapping, Vignette } from '@react-thre
 import { ToneMappingMode } from 'postprocessing';
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 import { Color, type PerspectiveCamera, Plane, Raycaster, Vector2, Vector3 } from 'three';
-import { encuadreSala, encuadreZona, FOV } from './camara.ts';
+import { anchoVisibleMovil, encuadreSala, encuadreZona, FOV } from './camara.ts';
 import type { CanalEscena } from './canal.ts';
 import { Director, VARIANTES, type Variante } from './director.ts';
 import { crearControl, Sala } from './Sala.tsx';
@@ -32,7 +32,6 @@ export interface EscenaAProps {
   onLento: () => void;
 }
 
-const ANCHO_VISIBLE_MOVIL = 2.2;
 const ROTACION = { centro: 0.28, lateral: 0.4 };
 
 function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> }) {
@@ -103,8 +102,6 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       },
       dpr: () => gl.getPixelRatio(),
       info: () => ({
-        llamadas: gl.info.render.calls,
-        triangulos: gl.info.render.triangles,
         programas: gl.info.programs?.length ?? 0,
         geometrias: gl.info.memory.geometries,
         texturas: gl.info.memory.textures,
@@ -151,11 +148,13 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
     }
 
     // Cámara: plano general, zona abierta o, en móvil, la zona del carrusel.
-    let encuadre = encuadreSala(aspecto, FOV);
+    let encuadre = encuadreSala(aspecto);
     let offsetX = 0;
     let offsetY = 0;
     if (movil) {
-      const p = Math.min(ZONAS.length - 1, Math.max(0, canal.current.progreso));
+      // Con movimiento reducido la cámara no viaja con el dedo: corta de zona a zona.
+      const bruto = Math.min(ZONAS.length - 1, Math.max(0, canal.current.progreso));
+      const p = reducido ? Math.round(bruto) : bruto;
       const i = Math.floor(p);
       const f = p - i;
       const a = ZONAS[i];
@@ -164,16 +163,17 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
         const ea = encuadreZona(
           abierta ?? a,
           aspecto,
-          abierta ? control.desplazamiento[abierta.estanteria] : 0,
-          ANCHO_VISIBLE_MOVIL,
+          abierta && abierta.id !== 'banco' ? control.desplazamiento[abierta.estanteria] : 0,
+          anchoVisibleMovil(abierta ?? a),
         );
-        const eb = abierta ? ea : encuadreZona(b, aspecto, 0, ANCHO_VISIBLE_MOVIL);
+        const eb = abierta ? ea : encuadreZona(b, aspecto, 0, anchoVisibleMovil(b));
         const mezcla = (u: readonly number[], v: readonly number[]) =>
           [0, 1, 2].map((k) => (u[k] ?? 0) + ((v[k] ?? 0) - (u[k] ?? 0)) * f) as [number, number, number];
         encuadre = { posicion: mezcla(ea.posicion, eb.posicion), objetivo: mezcla(ea.objetivo, eb.objetivo), fov: FOV };
       }
-      // La zona queda en el hueco entre la cabecera y el carrusel.
-      offsetY = 0.04;
+      // La zona queda en el hueco entre la cabecera y el carrusel; abierta, en el tercio superior
+      // (la hoja de abajo ocupa como mucho el 45 % de la pantalla).
+      offsetY = abierta ? 0.2 : 0.04;
     } else if (abierta) {
       encuadre = encuadreZona(
         abierta,
@@ -187,8 +187,8 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
     tmp.obj.set(...encuadre.objetivo);
     if (!movil && !abierta && !reducido) {
       // Deriva suave con el ratón (parallax); nunca con movimiento reducido.
-      tmp.pos.x += pointer.x * 0.22;
-      tmp.pos.y += pointer.y * 0.09;
+      tmp.pos.x += pointer.x * 0.12;
+      tmp.pos.y += pointer.y * 0.05;
     }
     const kCam = reducido ? 1 : 1 - Math.exp(-(movil ? 7 : 4.2) * dt);
     movimiento += cam.position.distanceTo(tmp.pos) + tmp.objActual.distanceTo(tmp.obj);
@@ -210,6 +210,7 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
     } else if (cam.view?.enabled) {
       cam.clearViewOffset();
     }
+    cam.fov += (encuadre.fov - cam.fov) * kCam;
     cam.updateProjectionMatrix();
 
     // Linterna: el haz apunta adonde está el ratón, sobre el plano de las baldas.
@@ -219,7 +220,7 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       tmp.ray.ray.intersectPlane(tmp.plano, control.linterna);
     }
 
-    // Etiqueta HTML de la zona activa, pegada a su rótulo.
+    // Etiqueta HTML de la zona activa, bajo su rótulo: no tapa la cabecera de la estantería.
     const el = etiqueta.current;
     if (el) {
       if (activa && !abierta && !movil) {
@@ -227,13 +228,13 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
         tmp.proy
           .set(
             activa.anclaRotulo[0],
-            activa.anclaRotulo[1] + (activa.id === 'banco' ? 0.12 : 0.2),
+            activa.anclaRotulo[1] - (activa.id === 'banco' ? 0.1 : 0.14),
             activa.anclaRotulo[2] + dz,
           )
           .project(cam);
         const x = (tmp.proy.x * 0.5 + 0.5) * size.width;
         const y = (-tmp.proy.y * 0.5 + 0.5) * size.height;
-        el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -100%)`;
+        el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, 0)`;
         el.dataset['visible'] = 'true';
       } else {
         el.dataset['visible'] = 'false';
@@ -297,7 +298,7 @@ export default function EscenaA(props: EscenaAProps) {
   return (
     <Canvas
       frameloop={medir ? 'always' : 'demand'}
-      dpr={[1, alta ? 1.5 : 1.25]}
+      dpr={[1, 1.5]}
       shadows={alta ? 'percentage' : false}
       flat
       gl={{ antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: medir, stencil: false }}

@@ -37,6 +37,15 @@ try {
   await page.goto(`${base}${args.ruta}`, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(() => window.__horno?.listo === true, null, { timeout: 60_000 });
+  // Sin las fuentes de los rótulos, el horneado sale con una sans genérica: mejor fallar.
+  const fuentes = await page.evaluate(() =>
+    ['700 64px "Big Shoulders Stencil"', '600 64px "Cinzel"', '400 32px "JetBrains Mono"'].map((f) => [
+      f,
+      document.fonts.check(f),
+    ]),
+  );
+  const faltan = fuentes.filter(([, ok]) => !ok).map(([f]) => f);
+  if (faltan.length) throw new Error(`Fuentes sin cargar: ${faltan.join(', ')}`);
   await pausa(1500);
   for (const [pase, calidad] of PASES) {
     const url = await page.evaluate(([p, q]) => window.__horno.pase(p, q), [pase, calidad]);

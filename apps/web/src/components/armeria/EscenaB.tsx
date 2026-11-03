@@ -106,9 +106,9 @@ void main() {
     float d = mix(CERCA, LEJOS, texture(uProf, uv).r);
     vec3 p = posVista(uv, d);
     vec3 n = normalize(texture(uNormal, uv).xyz * 2.0 - 1.0);
-    float cono = smoothstep(cos(0.17), cos(0.06), dot(normalize(p), normalize(posVista(uLinterna, 1.0))));
+    float cono = smoothstep(cos(0.22), cos(0.08), dot(normalize(p), normalize(posVista(uLinterna, 1.0))));
     float lambert = max(dot(n, normalize(-p)), 0.0);
-    c += texture(uAlbedo, uv).rgb * lambert * cono * uLinternaN * 34.0 / (3.14159 * d * d) * vec3(1.0, 0.97, 0.92);
+    c += texture(uAlbedo, uv).rgb * lambert * cono * uLinternaN * 120.0 / (3.14159 * d * d) * vec3(1.0, 0.97, 0.92);
   }
   // Resplandor de los tubos (sustituye al bloom de A).
   vec2 q = uv * vec2(uAspecto, 1.0);
@@ -291,17 +291,22 @@ export default function EscenaB(props: EscenaBProps) {
         return r ? [r.x + r.ancho / 2, r.y + r.alto / 2] : [0.5, 0.5];
       };
       if (p.movil) {
-        const progreso = Math.min(ZONAS.length - 1, Math.max(0, canal.current.progreso));
+        // Con movimiento reducido el encuadre no viaja con el dedo: corta de zona a zona.
+        const bruto = Math.min(ZONAS.length - 1, Math.max(0, canal.current.progreso));
+        const progreso = p.reducido ? Math.round(bruto) : bruto;
         const i = Math.floor(progreso);
         const f = progreso - i;
         const a = centroDe(abierta?.id ?? ZONAS[i]?.id ?? 'banco');
         const b = abierta ? a : centroDe(ZONAS[Math.min(ZONAS.length - 1, i + 1)]?.id ?? 'banco');
+        // Sin ampliar: los pases son de 1920 px y en vertical ya se ven a más del doble (critico-diseno).
+        // Con una zona abierta, la zona sube al tercio superior: la hoja de abajo ocupa hasta el 45 %.
+        const [, vh] = visible(1);
         return {
           centro: [
             (a[0] ?? 0.5) + ((b[0] ?? 0.5) - (a[0] ?? 0.5)) * f,
-            (a[1] ?? 0.5) + ((b[1] ?? 0.5) - (a[1] ?? 0.5)) * f,
+            (a[1] ?? 0.5) + ((b[1] ?? 0.5) - (a[1] ?? 0.5)) * f + (abierta ? 0.2 * vh : 0),
           ],
-          zoom: 1.35,
+          zoom: 1,
         };
       }
       if (abierta) {
@@ -350,8 +355,8 @@ export default function EscenaB(props: EscenaBProps) {
       // Parallax con el ratón (nunca con movimiento reducido ni con una zona abierta).
       const par = !p.reducido && !p.movil && !abierta ? estado.puntero : [0, 0];
       estado.parallax = [
-        (estado.parallax[0] ?? 0) + (-(par[0] ?? 0) * 0.006 - (estado.parallax[0] ?? 0)) * k,
-        (estado.parallax[1] ?? 0) + ((par[1] ?? 0) * 0.004 - (estado.parallax[1] ?? 0)) * k,
+        (estado.parallax[0] ?? 0) + (-(par[0] ?? 0) * 0.004 - (estado.parallax[0] ?? 0)) * k,
+        (estado.parallax[1] ?? 0) + ((par[1] ?? 0) * 0.0025 - (estado.parallax[1] ?? 0)) * k,
       ];
 
       gl.uniform2f(u('uCentro'), estado.centro[0] ?? 0.5, estado.centro[1] ?? 0.5);
@@ -373,21 +378,21 @@ export default function EscenaB(props: EscenaBProps) {
       gl.uniform1f(u('uTiempo'), (ahora / 1000) % 100);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
 
-      // Etiqueta HTML de la zona activa, sobre su rótulo.
+      // Etiqueta HTML de la zona activa, bajo su rótulo: no tapa la cabecera de la estantería.
       const el = p.etiqueta.current;
       if (el) {
         if (activa && !abierta && !p.movil) {
           const [ax, ay] = proyectar(
             [
               activa.anclaRotulo[0],
-              activa.anclaRotulo[1] + (activa.id === 'banco' ? 0.12 : 0.2),
+              activa.anclaRotulo[1] - (activa.id === 'banco' ? 0.1 : 0.14),
               activa.anclaRotulo[2],
             ],
             ENCUADRE_POSTER,
             ASPECTO_POSTER,
           );
           const [x, y] = aPantalla(ax, ay);
-          el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -100%)`;
+          el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, 0)`;
           el.dataset['visible'] = 'true';
         } else {
           el.dataset['visible'] = 'false';

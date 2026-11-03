@@ -8,7 +8,10 @@
 // Con movimiento reducido no hay intro ni parpadeos.
 import { type Estanteria, ORDEN_ESTANTERIAS } from './zonas.ts';
 
-export type Variante = 'penumbra' | 'taller';
+// La variante cálida («Taller abierto») se probó y se descartó: calentar toda la sala borraba el
+// contraste entre los tubos fríos y el flexo cálido, que es el concepto (critico-diseno, 01-11-2026).
+// Queda «Más luz», una ayuda de legibilidad con la misma temperatura.
+export type Variante = 'penumbra' | 'mas-luz';
 
 export interface Iluminacion {
   /** Nivel de cada fila de tubos (0–1, puede pasar un poco de 1 en el arranque). */
@@ -35,28 +38,28 @@ export const VARIANTES: Readonly<
       readonly resto: number;
       readonly calidas: number;
       readonly ambiente: number;
-      /** Color de los tubos (hex): frío tipo ref-08 o cálido de taller. */
+      /** Color de los tubos (hex): frío, como en ref-08. */
       readonly colorTubo: string;
     }
   >
 > = {
   penumbra: {
-    nombre: 'Penumbra fría (ref-08)',
-    reposo: 0.46,
+    nombre: 'Cierre de taller (penumbra)',
+    reposo: 0.38,
     foco: 1,
-    resto: 0.32,
+    resto: 0.24,
     calidas: 1,
-    ambiente: 1,
+    ambiente: 0.7,
     colorTubo: '#dfe9ff',
   },
-  taller: {
-    nombre: 'Taller abierto (cálida)',
-    reposo: 0.95,
-    foco: 1.1,
-    resto: 0.78,
-    calidas: 1.4,
-    ambiente: 2.4,
-    colorTubo: '#ffd6a0',
+  'mas-luz': {
+    nombre: 'Más luz',
+    reposo: 0.7,
+    foco: 1.05,
+    resto: 0.55,
+    calidas: 1,
+    ambiente: 1.3,
+    colorTubo: '#dfe9ff',
   },
 };
 

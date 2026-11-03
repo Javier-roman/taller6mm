@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ASPECTO_POSTER, ENCUADRE_POSTER, encuadreSala, proyectar, rectZona } from './camara.ts';
-import { Director, INTRO } from './director.ts';
+import { Director, INTRO, VARIANTES } from './director.ts';
 import { type Estanteria, ORDEN_ESTANTERIAS, ZONAS } from './zonas.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -79,7 +79,7 @@ describe('director de luces', () => {
     const d = new Director({ intro: true, reducido: true, variante: 'penumbra' });
     expect(d.enIntro).toBe(false);
     d.actualizar(DT, { estanteriaActiva: 'centro', zonaActiva: true, linterna: false });
-    expect(d.luz.tubos.centro).toBeGreaterThan(0.4);
+    expect(d.luz.tubos.centro).toBeGreaterThan(VARIANTES.penumbra.reposo);
     const antes = d.luz.tubos.centro;
     d.actualizar(0.05, { estanteriaActiva: 'centro', zonaActiva: true, linterna: false });
     expect(d.luz.tubos.centro).toBeGreaterThanOrEqual(antes);

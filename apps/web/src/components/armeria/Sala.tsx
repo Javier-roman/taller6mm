@@ -10,6 +10,7 @@ import { type ReactNode, type RefObject, useLayoutEffect, useMemo, useRef } from
 import {
   type AmbientLight,
   Color,
+  ExtrudeGeometry,
   type Group,
   type HemisphereLight,
   type Mesh,
@@ -17,6 +18,7 @@ import {
   Object3D,
   PMREMGenerator,
   type PointLight,
+  Shape,
   type SpotLight,
   type Texture,
   Vector3,
@@ -61,16 +63,17 @@ export const crearControl = (luz: Iluminacion = crearIluminacion(1)): ControlSal
 export const LUZ = {
   tubo: 85,
   tuboEmisivo: 3.4,
-  flexo: 20,
+  // El flexo es la mancha más brillante de la sala: el banco es el protagonista (critico-diseno).
+  flexo: 40,
   bombilla: 8,
-  vitrina: 9,
-  led: 2.6,
+  vitrina: 5,
+  led: 1.6,
   ambiente: 0.06,
   hemisferio: 0.1,
   acento: 34,
-  linterna: 34,
-  rotuloBase: 0.22,
-  rotuloActivo: 0.55,
+  linterna: 120,
+  rotuloBase: 0.16,
+  rotuloActivo: 0.32,
   marca: 0.9,
   pantalla: 0.9,
   /** Reflejos del entorno (IBL): sin ellos el metal se ve negro. */
@@ -147,19 +150,75 @@ function Caja({ p, t, m, r = [0, 0, 0] }: { p: V3; t: V3; m: MeshStandardMateria
   );
 }
 
-/** Silueta genérica de réplica (culata abajo): no reproduce ningún modelo real ni sus marcajes. */
+// Perfil lateral genérico de una réplica larga, en metros (culata en x = 0, bocacha en +x): culata,
+// cajón de mecanismos, guardamanos, punto de mira, cañón, cargador curvo, guardamonte y empuñadura.
+// Es propio y no copia ningún modelo real ni sus marcajes (CLAUDE.md, principio 5).
+const PERFIL_REPLICA: readonly (readonly [number, number])[] = [
+  [0, 0.03],
+  [0, 0.135],
+  [0.06, 0.14],
+  [0.25, 0.158],
+  [0.27, 0.172],
+  [0.6, 0.172],
+  [0.6, 0.168],
+  [0.8, 0.168],
+  [0.805, 0.185],
+  [0.83, 0.185],
+  [0.835, 0.16],
+  [0.93, 0.16],
+  [0.93, 0.166],
+  [0.975, 0.166],
+  [0.975, 0.136],
+  [0.93, 0.136],
+  [0.93, 0.142],
+  [0.8, 0.142],
+  [0.8, 0.115],
+  [0.6, 0.115],
+  [0.6, 0.1],
+  [0.615, -0.09],
+  [0.55, -0.1],
+  [0.525, 0.1],
+  [0.47, 0.1],
+  [0.465, 0.07],
+  [0.4, 0.07],
+  [0.395, 0.1],
+  [0.385, 0.1],
+  [0.34, -0.015],
+  [0.3, -0.01],
+  [0.33, 0.1],
+  [0.27, 0.1],
+  [0.06, 0.06],
+];
+
+let geometriaReplica: ExtrudeGeometry | null = null;
+/** Una sola geometría (unos 600 triángulos con bisel) compartida por todas las réplicas. */
+function perfilReplica() {
+  if (geometriaReplica) return geometriaReplica;
+  const forma = new Shape();
+  const [x0, y0] = PERFIL_REPLICA[0] ?? [0, 0];
+  forma.moveTo(x0, y0);
+  for (const [x, y] of PERFIL_REPLICA.slice(1)) forma.lineTo(x, y);
+  forma.closePath();
+  geometriaReplica = new ExtrudeGeometry(forma, {
+    depth: 0.036,
+    bevelEnabled: true,
+    bevelThickness: 0.004,
+    bevelSize: 0.003,
+    bevelSegments: 1,
+    curveSegments: 1,
+  });
+  geometriaReplica.center();
+  return geometriaReplica;
+}
+
+/** Réplica tumbada de perfil (bocacha hacia +x), centrada en su caja. */
 function Replica({ material, optica, mat }: { material: MeshStandardMaterial; optica?: boolean; mat: Materiales }) {
   return (
     <group>
-      <Caja p={[0, 0.84, 0]} t={[0.022, 0.24, 0.022]} m={mat.acero} />
-      <Caja p={[0, 0.58, 0]} t={[0.052, 0.3, 0.05]} m={material} />
-      <Caja p={[0.004, 0.32, 0]} t={[0.07, 0.24, 0.056]} m={material} />
-      <Caja p={[0.07, 0.32, 0]} t={[0.08, 0.05, 0.03]} r={[0, 0, -0.2]} m={mat.polimeroNegro} />
-      <Caja p={[-0.05, 0.22, 0]} t={[0.07, 0.035, 0.034]} r={[0, 0, 0.5]} m={material} />
-      <Caja p={[0, 0.1, 0]} t={[0.08, 0.2, 0.046]} m={material} />
+      <mesh geometry={perfilReplica()} material={material} />
       {optica ? (
-        <mesh position={[-0.058, 0.36, 0]} material={mat.polimeroNegro}>
-          <cylinderGeometry args={[0.018, 0.022, 0.16, 12]} />
+        <mesh position={[-0.04, 0.16, 0]} rotation={[0, 0, Math.PI / 2]} material={mat.polimeroNegro}>
+          <cylinderGeometry args={[0.02, 0.024, 0.2, 14]} />
         </mesh>
       ) : null}
     </group>
@@ -198,7 +257,7 @@ function Mueble({ mat, children }: { mat: Materiales; children?: ReactNode }) {
 
 function Armero({ mat }: { mat: Materiales }) {
   const materiales = [mat.polimeroNegro, mat.polimeroFde, mat.polimeroNegro, mat.polimeroOd];
-  const huecos = 9;
+  const huecos = 12;
   const util = MUEBLE.ancho - 0.2;
   const paso = util / huecos;
   const tira = useMemo(() => texturaTiraNumerada(1, huecos), []);
@@ -215,11 +274,11 @@ function Armero({ mat }: { mat: Materiales }) {
       {Array.from({ length: huecos }, (_, i) => (
         <group
           key={`rep-${i}`}
-          position={[-util / 2 + (i + 0.5) * paso, MUEBLE.baldaMedia + 0.02, zFondo + 0.03]}
-          rotation={[0, 0.25 * ((i % 3) - 1), 0]}
-          scale={1.05}
+          // De pie (culata en la balda) y girada unos 55°: caben 12 por cuerpo, como las ranuras de ref-08.
+          position={[-util / 2 + (i + 0.5) * paso, MUEBLE.baldaMedia + 0.52, zFondo + 0.04]}
+          rotation={[0, (i % 2 === 0 ? -1 : 1) * 0.95, Math.PI / 2]}
         >
-          <Replica material={materiales[i % materiales.length] ?? mat.polimeroNegro} optica={i % 2 === 0} mat={mat} />
+          <Replica material={materiales[i % materiales.length] ?? mat.polimeroNegro} optica={i % 3 === 0} mat={mat} />
         </group>
       ))}
       <mesh position={[0, MUEBLE.baldaMedia - 0.03, MUEBLE.frente + 0.001]}>
@@ -266,7 +325,7 @@ function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | nu
       {[-0.78, 0, 0.78].map((x, i) => (
         <group key={`pedestal-${x}`} position={[x, y0 + 0.1, zFondo + 0.04]}>
           <Caja p={[0, 0.07 + i * 0.03, 0]} t={[0.5, 0.14 + i * 0.06, 0.3]} m={mat.polimeroNegro} />
-          <group position={[-0.36, 0.2 + i * 0.06, 0]} rotation={[0, 0, -Math.PI / 2]} scale={0.74}>
+          <group position={[0, 0.22 + i * 0.06, 0]} scale={0.8}>
             <Replica material={colores[i] ?? mat.polimeroNegro} optica mat={mat} />
           </group>
           <Caja p={[0, 0.06 + i * 0.03, 0.155]} t={[0.18, 0.05, 0.01]} m={mat.laton} />
@@ -414,7 +473,7 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
         <planeGeometry args={[1.5, 0.66]} />
       </mesh>
       {/* Réplica a medio montar, tumbada sobre el tapete */}
-      <group position={[-0.62, alto + 0.03, 0.02]} rotation={[-Math.PI / 2, 0, -Math.PI / 2 + 0.1]}>
+      <group position={[-0.2, alto + 0.024, 0.04]} rotation={[-Math.PI / 2, 0, 0.12]}>
         <Replica material={mat.polimeroFde} mat={mat} />
       </group>
       {/* Herramientas */}
@@ -442,8 +501,8 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
           target={objetivo}
           color={CALIDO}
           intensity={LUZ.flexo}
-          angle={0.62}
-          penumbra={0.75}
+          angle={0.45}
+          penumbra={0.5}
           distance={4}
           decay={2}
           castShadow
@@ -527,7 +586,13 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
   const rotulos = useMemo(
     () =>
       Object.fromEntries(
-        ZONAS.map((z) => [z.id, materialRotulo(texturaRotulo(z.rotulo, { dato: z.dato, demo: true }))]),
+        ZONAS.map((z) => [
+          z.id,
+          // El rótulo del banco es más apaisado (0,84 × 0,13 m): su textura también, para no estirarlo.
+          materialRotulo(
+            texturaRotulo(z.rotulo, { dato: z.dato, demo: true, ...(z.id === 'banco' ? { alto: 160 } : {}) }),
+          ),
+        ]),
       ) as Record<string, MeshStandardMaterial>,
     [],
   );
@@ -540,6 +605,8 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
             texturaRotulo(e === 'centro' ? BRAND.name : ESTANTERIAS[e].titulo, {
               ancho: 1024,
               alto: 160,
+              // La marca, grabada en Cinzel como en el resto del sistema (docs/02 §4.2).
+              familia: e === 'centro' ? 'grabado' : 'rotulo',
               tinta: e === 'centro' ? colors['laton-claro'] : colors.hueso,
             }),
           ),
@@ -755,8 +822,8 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         target={objetivos.linterna}
         color={colors.hueso}
         intensity={0}
-        angle={0.16}
-        penumbra={0.9}
+        angle={0.22}
+        penumbra={0.6}
         distance={14}
         decay={2}
       />

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Capturas de un prototipo de La Armería (Fase 1) para el informe y para critico-diseno: escritorio
-// (1440 × 900) y móvil (390 × 844, DPR 3, táctil), en reposo, con la linterna y una zona activa, con
-// una zona abierta, durante la intro, con la variante de luz cálida, con movimiento reducido y con el
-// póster (vista ligera). Las capturas salen a escala CSS.
+// (1440 × 900), tableta (1024 × 768) y móvil (390 × 844, DPR 3, táctil): en reposo, con la linterna y una
+// zona activa, con el banco y una estantería abiertos, durante la intro, con «Más luz», con movimiento
+// reducido y con el póster (vista ligera). Las capturas salen a escala CSS.
 // Uso: node scripts/prototipos/capturas.mjs --ruta /prototipos/armeria-a --prefijo a
 //      [--base http://127.0.0.1:4321] [--salida docs/informes/capturas/fase-1-propuestas]
 import { mkdirSync } from 'node:fs';
@@ -82,11 +82,20 @@ try {
       // En mitad de la intro: el primer tubo encendido y el segundo arrancando.
     },
   });
-  await capturar('escritorio-luz-calida', { contexto: ESCRITORIO, query: '?intro=0&luz=taller' });
+  await capturar('escritorio-armero-abierto', {
+    contexto: ESCRITORIO,
+    preparar: async (page) => {
+      // Abre una estantería: en A el cuerpo rueda sobre sus raíles y la cámara entra; en B, zoom.
+      await page.click('.armeria__zona[href="/replicas"]');
+      await pausa(1800);
+    },
+  });
+  await capturar('escritorio-mas-luz', { contexto: ESCRITORIO, query: '?intro=0&luz=mas-luz' });
+  await capturar('tableta-1024', { contexto: { viewport: { width: 1024, height: 768 }, deviceScaleFactor: 1 } });
   await capturar('escritorio-reducido', { contexto: ESCRITORIO, reducido: true });
   await capturar('escritorio-poster', { contexto: ESCRITORIO, query: '?vista=ligera', escena: false });
   await capturar('movil-reposo', { contexto: MOVIL });
-  await capturar('movil-banco', { contexto: MOVIL, preparar: irAZona('banco') });
+  await capturar('movil-armero', { contexto: MOVIL, preparar: irAZona('replicas') });
   await capturar('movil-tablon-abierto', {
     contexto: MOVIL,
     preparar: async (page) => {
