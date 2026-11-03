@@ -12,41 +12,67 @@ export interface Encuadre {
 }
 
 export const FOV = 42;
-/** Mitad del ancho que debe verse siempre en escritorio: los tres cuerpos (±4,13 m) y un margen. */
-const MEDIO_ANCHO_SALA = 4.75;
-const OBJETIVO_SALA: V3 = [0, 1.45, MUEBLE.frente];
+/** Aspecto del póster y de los pases del B (16:9). */
+export const ASPECTO_POSTER = 16 / 9;
+/** Mitad del ancho que se ve en el póster: los tres cuerpos (±4,13 m) y aire alrededor. */
+const MEDIO_ANCHO_POSTER = 4.75;
+/** Mitad del ancho que debe verse siempre en escritorio: los tres cuerpos y un margen mínimo. */
+const MEDIO_ANCHO_MINIMO = 4.3;
+/** Cámara a la altura de los ojos de alguien de pie, con un picado de unos 7° (critico-diseno). */
+const ALTURA_CAMARA = 2.05;
+const OBJETIVO_SALA: V3 = [0, 1.2, MUEBLE.frente];
 
 const tanMedio = (fov: number) => Math.tan((fov * Math.PI) / 360);
+const DISTANCIA_POSTER = MEDIO_ANCHO_POSTER / (tanMedio(FOV) * ASPECTO_POSTER);
 
-/** Plano general de la sala para un aspecto dado (escritorio, póster y horneado del B). */
-export function encuadreSala(aspecto: number, fov = FOV): Encuadre {
-  const d = Math.max(6.75, MEDIO_ANCHO_SALA / (tanMedio(fov) * aspecto));
-  return { posicion: [0, 1.62, OBJETIVO_SALA[2] + d], objetivo: OBJETIVO_SALA, fov };
+/**
+ * Plano general de la sala para un aspecto dado. Recorta igual que el póster (como object-fit:
+ * cover), para que el fundido del póster a la escena no mueva nada: más ancho que 16:9, cierra el
+ * campo vertical; más estrecho, mantiene la cámara del póster mientras quepan los tres cuerpos y,
+ * si no caben, retrocede.
+ */
+export function encuadreSala(aspecto: number): Encuadre {
+  if (aspecto >= ASPECTO_POSTER) {
+    const fov = (2 * Math.atan((tanMedio(FOV) * ASPECTO_POSTER) / aspecto) * 180) / Math.PI;
+    return { posicion: [0, ALTURA_CAMARA, OBJETIVO_SALA[2] + DISTANCIA_POSTER], objetivo: OBJETIVO_SALA, fov };
+  }
+  const d = Math.max(DISTANCIA_POSTER, MEDIO_ANCHO_MINIMO / (tanMedio(FOV) * aspecto));
+  return { posicion: [0, ALTURA_CAMARA, OBJETIVO_SALA[2] + d], objetivo: OBJETIVO_SALA, fov: FOV };
 }
 
 /** El póster y los pases del B se renderizan con este encuadre fijo (16:9). */
-export const ASPECTO_POSTER = 16 / 9;
 export const ENCUADRE_POSTER = encuadreSala(ASPECTO_POSTER);
+
+/** Picado de la cámara sobre el tablero del banco al abrirlo: se ve el tapete, no las patas. */
+const PICADO_BANCO = (25 * Math.PI) / 180;
 
 /**
  * Encuadre de una zona: de frente, con margen, desplazada `dz` si su cuerpo ha rodado. En móvil
- * (`anchoVisible`) no cabe la zona entera: se ve su parte central y asoman las vecinas (pasillo).
+ * (`anchoVisible`) se ve la zona entera con un poco de aire y asoman las vecinas (pasillo). El banco se
+ * mira desde arriba, apuntando al tablero.
  */
 export function encuadreZona(zona: Zona, aspecto: number, dz = 0, anchoVisible?: number, fov = FOV): Encuadre {
   const [x, y, z] = zona.caja.centro;
   const [ancho, alto, fondo] = zona.caja.tamano;
   const t = tanMedio(fov);
+  if (zona.id === 'banco') {
+    const tablero = 0.95;
+    const d = anchoVisible ? Math.min(anchoVisible, 1.8) / 2 / (t * aspecto) : 2.3;
+    return {
+      posicion: [x, tablero + d * Math.sin(PICADO_BANCO), z + d * Math.cos(PICADO_BANCO)],
+      objetivo: [x, tablero, z],
+      fov,
+    };
+  }
   const d = anchoVisible
     ? anchoVisible / 2 / (t * aspecto)
     : Math.max((ancho / 2 + 0.45) / (t * aspecto), (alto / 2 + 0.35) / t);
   const frente = z + fondo / 2 + dz;
-  const elevacion = zona.id === 'banco' ? 0.95 : 0.06;
-  return {
-    posicion: [x, y + elevacion, frente + d],
-    objetivo: [x, y - (zona.id === 'banco' ? 0.12 : 0.04), z + dz],
-    fov,
-  };
+  return { posicion: [x, y + 0.06, frente + d], objetivo: [x, y - 0.04, z + dz], fov };
 }
+
+/** Ancho visible en móvil para una zona: entera y con aire, sin bajar de 1,6 m (pasillo). */
+export const anchoVisibleMovil = (zona: Zona) => Math.max(1.6, zona.caja.tamano[0] + 0.15);
 
 type M3 = [number, number, number];
 const resta = (a: V3, b: V3): M3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];

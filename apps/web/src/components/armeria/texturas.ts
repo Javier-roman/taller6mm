@@ -85,7 +85,8 @@ export function texturaLadrillo(repetir: readonly [number, number]): TexturaConR
   const [W, H] = [1024, 512];
   const color = lienzo(W, H);
   const alt = lienzo(W, H);
-  color.ctx.fillStyle = '#2a2622'; // llaga (mortero oscuro)
+  // Ladrillo arena y desaturado, como el de ref-08: el rojo chocaba con el verde oliva (critico-diseno).
+  color.ctx.fillStyle = '#3f3b35'; // llaga (mortero)
   color.ctx.fillRect(0, 0, W, H);
   alt.ctx.fillStyle = 'rgb(70 70 70)';
   alt.ctx.fillRect(0, 0, W, H);
@@ -94,9 +95,9 @@ export function texturaLadrillo(repetir: readonly [number, number]): TexturaConR
   for (let y = 0; y < H; y += fila) {
     const desfase = (y / fila) % 2 === 0 ? 0 : ancho / 2;
     for (let x = -ancho; x < W + ancho; x += ancho) {
-      const r = 92 + rnd() * 34;
-      const g = 54 + rnd() * 18;
-      const b = 40 + rnd() * 14;
+      const r = 118 + rnd() * 16;
+      const g = 106 + rnd() * 12;
+      const b = 92 + rnd() * 10;
       color.ctx.fillStyle = `rgb(${r} ${g} ${b})`;
       color.ctx.fillRect(x + desfase + 5, y + 5, ancho - 10, fila - 10);
       const a = 190 + rnd() * 40;
@@ -244,6 +245,8 @@ export interface OpcionesRotulo {
   readonly demo?: boolean;
   readonly tinta?: string;
   readonly fondo?: string;
+  /** `rotulo` (Big Shoulders Stencil, por defecto) o `grabado` (Cinzel, solo la marca). */
+  readonly familia?: 'rotulo' | 'grabado';
 }
 
 /**
@@ -273,8 +276,11 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
   const tamTitulo = Math.round(alto * (opciones.dato ? 0.46 : 0.62));
-  ctx.font = `700 ${tamTitulo}px ${FONT_FAMILIES.rotulo}`;
-  ctx.letterSpacing = `${Math.round(tamTitulo * 0.06)}px`;
+  const grabado = opciones.familia === 'grabado';
+  ctx.font = grabado
+    ? `600 ${Math.round(tamTitulo * 0.82)}px ${FONT_FAMILIES.grabado}`
+    : `700 ${tamTitulo}px ${FONT_FAMILIES.rotulo}`;
+  ctx.letterSpacing = `${Math.round(tamTitulo * (grabado ? 0.08 : 0.06))}px`;
   ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.dato ? alto * 0.38 : alto / 2, ancho - 60);
   if (opciones.dato) {
     ctx.letterSpacing = '0px';
@@ -292,29 +298,35 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
   return textura(canvas);
 }
 
-/** Pantalla del tablón: bajadas de precio de ejemplo en señal naranja. */
+/**
+ * Pantalla del tablón: bajadas de precio de ejemplo, cada una con su hora de comprobación (principio 2:
+ * nunca un precio sin fecha). Bajada en verde de estado con ▼; el naranja-señal es solo de interacción.
+ */
 export function texturaPantalla() {
   const { canvas, ctx } = lienzo(512, 320);
   ctx.fillStyle = '#07090b';
   ctx.fillRect(0, 0, 512, 320);
   ctx.fillStyle = colors.niebla;
-  ctx.font = `400 26px ${FONT_FAMILIES.datos}`;
-  ctx.fillText('BAJADAS · DEMO', 24, 44);
+  ctx.font = `400 24px ${FONT_FAMILIES.datos}`;
+  ctx.fillText('BAJADAS · DEMO', 24, 40);
   const filas = [
-    ['Bocacha 14 mm CCW', '−12 %'],
-    ['Óptica 1-4×24', '−8 %'],
-    ['Cargador mid-cap', '−15 %'],
+    ['Bocacha 14 mm CCW', '▼ 12 %', 'comprobado hace 2 h'],
+    ['Óptica 1-4×24', '▼ 8 %', 'comprobado hace 3 h'],
+    ['Cargador mid-cap', '▼ 15 %', 'comprobado hace 5 h'],
   ];
-  filas.forEach(([pieza, bajada], i) => {
-    const y = 110 + i * 70;
+  filas.forEach(([pieza, bajada, comprobado], i) => {
+    const y = 96 + i * 76;
+    ctx.textAlign = 'left';
     ctx.fillStyle = colors.hueso;
-    ctx.font = `400 28px ${FONT_FAMILIES.datos}`;
+    ctx.font = `400 26px ${FONT_FAMILIES.datos}`;
     ctx.fillText(pieza ?? '', 24, y);
-    ctx.fillStyle = colors['naranja-senal'];
-    ctx.font = `700 34px ${FONT_FAMILIES.datos}`;
+    ctx.fillStyle = colors.niebla;
+    ctx.font = `400 18px ${FONT_FAMILIES.datos}`;
+    ctx.fillText(comprobado ?? '', 24, y + 28);
+    ctx.fillStyle = colors['estado-ok'];
+    ctx.font = `700 30px ${FONT_FAMILIES.datos}`;
     ctx.textAlign = 'right';
     ctx.fillText(bajada ?? '', 488, y);
-    ctx.textAlign = 'left';
   });
   return textura(canvas);
 }

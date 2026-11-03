@@ -1,46 +1,106 @@
 {
   "ruta": "/prototipos/armeria-a",
-  "fecha": "2026-11-01T07:38:20.847Z",
+  "fecha": "2026-11-03T10:21:01.208Z",
   "segundos": 8,
   "resultados": [
     {
       "nombre": "escritorio-1440",
       "escena": true,
-      "listoEnMs": 2842,
-      "fotogramas": 476,
+      "listoEnMs": 2719,
+      "fotogramas": 475,
       "fpsMedio": 60,
       "msP50": 16.7,
-      "msP95": 17.1,
+      "msP95": 17,
       "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
       "dpr": 1,
       "info": {
-        "llamadas": 1,
-        "triangulos": 1,
         "programas": 12,
-        "geometrias": 292,
+        "geometrias": 217,
         "texturas": 51
       },
       "cayoAlPoster": false,
+      "recursos": {
+        "document": {
+          "kb": 14.7,
+          "gzKb": 0,
+          "n": 1
+        },
+        "stylesheet": {
+          "kb": 55.3,
+          "gzKb": 11.5,
+          "n": 2
+        },
+        "font": {
+          "kb": 159.4,
+          "gzKb": 0,
+          "n": 5
+        },
+        "image": {
+          "kb": 76.4,
+          "gzKb": 0,
+          "n": 1
+        },
+        "script": {
+          "kb": 1254.9,
+          "gzKb": 346.7,
+          "n": 10
+        },
+        "other": {
+          "kb": 0.2,
+          "gzKb": 0,
+          "n": 1
+        }
+      },
       "errores": []
     },
     {
       "nombre": "movil-390-cpu4x",
       "escena": true,
-      "listoEnMs": 5395,
-      "fotogramas": 468,
-      "fpsMedio": 59.3,
-      "msP50": 16.7,
-      "msP95": 16.8,
+      "listoEnMs": 18416,
+      "fotogramas": 82,
+      "fpsMedio": 10,
+      "msP50": 33.3,
+      "msP95": 300,
       "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
-      "dpr": 1.25,
+      "dpr": 1.5,
       "info": {
-        "llamadas": 1,
-        "triangulos": 1,
         "programas": 11,
-        "geometrias": 288,
-        "texturas": 43
+        "geometrias": 148,
+        "texturas": 38
       },
       "cayoAlPoster": false,
+      "recursos": {
+        "document": {
+          "kb": 14.7,
+          "gzKb": 0,
+          "n": 1
+        },
+        "stylesheet": {
+          "kb": 55.3,
+          "gzKb": 11.5,
+          "n": 2
+        },
+        "font": {
+          "kb": 159.4,
+          "gzKb": 0,
+          "n": 5
+        },
+        "image": {
+          "kb": 76.4,
+          "gzKb": 0,
+          "n": 1
+        },
+        "other": {
+          "kb": 0.2,
+          "gzKb": 0,
+          "n": 1
+        },
+        "script": {
+          "kb": 1254.9,
+          "gzKb": 346.7,
+          "n": 10
+        }
+      },
       "errores": []
     }
   ]

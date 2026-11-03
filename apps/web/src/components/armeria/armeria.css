@@ -126,24 +126,41 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espacio-3) var(--espacio-6);
-  padding: var(--espacio-4) var(--espacio-6);
+  padding: var(--espacio-4) var(--espacio-6) var(--espacio-8);
+  /* Velo denso: los tubos del techo quedan detrás de la cabecera y el texto debe leerse. */
   background: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--negro-pavonado) 88%, transparent),
+    color-mix(in srgb, var(--negro-pavonado) 94%, transparent) 55%,
     color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
   );
 }
 
+.armeria__identidad {
+  display: grid;
+  gap: var(--espacio-1);
+}
+
+/* La marca va grabada en Cinzel, como en el resto del sistema (docs/02 §4.2). */
 .armeria__marca {
-  font-family: var(--fuente-rotulo);
-  font-weight: var(--peso-negrita);
-  font-size: var(--texto-2xl);
-  letter-spacing: var(--interletra-rotulo);
+  font-family: var(--fuente-grabado);
+  font-weight: var(--peso-semi);
+  font-size: var(--texto-xl);
+  letter-spacing: var(--interletra-grabado);
   line-height: var(--interlineado-titular);
   text-transform: uppercase;
   color: var(--laton-claro);
   text-decoration: none;
   text-shadow: var(--resplandor-rotulo);
+}
+
+.armeria__lema {
+  margin: 0;
+  font-size: var(--texto-s);
+  color: var(--hueso);
+}
+
+.armeria__accion {
+  margin-inline-start: auto;
 }
 
 .armeria__prototipo {
@@ -163,7 +180,15 @@
 .armeria__ajustes {
   display: flex;
   gap: var(--espacio-2);
-  margin-inline-start: auto;
+}
+
+/* Con una zona abierta, la escena se acerca: la cabecera necesita un velo más denso. */
+.armeria[data-abierta="true"] .armeria__cabecera {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--negro-pavonado) 96%, transparent) calc(100% - var(--espacio-8)),
+    color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
+  );
 }
 
 .armeria__ajuste {
@@ -219,7 +244,7 @@
   padding: var(--espacio-8) var(--espacio-6) var(--espacio-4);
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--negro-pavonado) 92%, transparent) 30%,
+    color-mix(in srgb, var(--negro-pavonado) 94%, transparent) 70%,
     color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
   );
 }
@@ -228,7 +253,7 @@
   margin: 0 0 var(--espacio-2);
   font-family: var(--fuente-rotulo);
   font-weight: var(--peso-negrita);
-  font-size: var(--texto-s);
+  font-size: var(--texto-m);
   letter-spacing: var(--interletra-rotulo);
   text-transform: uppercase;
   color: var(--niebla);
@@ -246,11 +271,11 @@
 .armeria__zona {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   gap: var(--espacio-1);
   min-width: 0;
-  min-height: var(--objetivo-tactil);
+  min-height: calc(var(--espacio-16) + var(--espacio-4));
   height: 100%;
   padding: var(--espacio-2) var(--espacio-3);
   border: var(--trazo-fino) solid var(--acero);
@@ -314,6 +339,7 @@
   font-family: var(--fuente-datos);
   font-size: var(--texto-xs);
   color: var(--niebla);
+  text-wrap: balance;
 }
 
 .armeria__demo {
@@ -440,9 +466,22 @@
   color: var(--niebla);
 }
 
-/* Durante la intro la navegación espera (sigue en el DOM y con foco). */
-.armeria[data-intro="true"] .armeria__nav {
-  opacity: 0.35;
+/* ── Tableta horizontal y portátil pequeño: ocho tarjetas en una fila, solo con el rótulo ── */
+@media (min-width: 52.1875rem) and (max-width: 72rem) {
+  .armeria__lista {
+    grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  }
+
+  .armeria__zona {
+    min-height: var(--objetivo-tactil);
+    justify-content: center;
+  }
+
+  .armeria__zona-dato,
+  .armeria__lema,
+  .armeria__tecnica {
+    display: none;
+  }
 }
 
 /* ── Móvil: pasillo horizontal con scroll-snap (docs/02 §3.3) ─────────────────── */
@@ -506,14 +545,25 @@
     font-size: var(--texto-l);
   }
 
+  /* La hoja de la zona abierta ocupa como mucho el 45 % de la pantalla: la zona se ve encima. */
   .armeria__panel {
     top: auto;
     right: var(--espacio-4);
     bottom: var(--espacio-4);
     left: var(--espacio-4);
     width: auto;
+    max-height: 45svh;
+    overflow-y: auto;
     translate: none;
     animation-name: armeria-sube;
+  }
+
+  .armeria__accion {
+    display: none;
+  }
+
+  .armeria__lema {
+    font-size: var(--texto-xs);
   }
 
   .armeria[data-abierta="true"] .armeria__nav {
@@ -579,4 +629,12 @@
   .armeria__panel {
     animation: none;
   }
+}
+
+/* Prototipo B: el lienzo del compositor ocupa toda la escena. */
+.armeria__canvas-b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
 }
