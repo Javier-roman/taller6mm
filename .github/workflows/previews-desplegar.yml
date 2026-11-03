@@ -97,7 +97,8 @@ jobs:
           pnpm exec wrangler preview -c "$RUNNER_TEMP/preview/server/wrangler.json" --name "pr-$PR" \
             --message "PR #$PR (${SHA::7})" --json > "$RUNNER_TEMP/preview.json"
           # Solo se acepta la URL de esta Preview, en workers.dev (nada de enlaces al panel ni saltos de línea).
-          url=$(jq -r --arg pr "$PR" '[.. | strings | select(test("^https://pr-" + $pr + "-taller6mm-web-preview\\.[a-z0-9-]+\\.workers\\.dev/?$"))][0] // empty' "$RUNNER_TEMP/preview.json")
+          # Con grep y no con jq: wrangler escribe avisos de texto delante del JSON (comprobado el 03-11).
+          url=$(grep -oE "https://pr-${PR}-taller6mm-web-preview\.[a-z0-9-]+\.workers\.dev" "$RUNNER_TEMP/preview.json" | head -n 1 || true)
           if [ -z "$url" ]; then
             echo "wrangler preview no devolvió la URL esperada"
             exit 1

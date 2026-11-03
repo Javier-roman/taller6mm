@@ -29,8 +29,8 @@
    `preview_urls` en `false`), `preview` (`taller6mm-web-preview`, `taller6mm-jobs-preview` y bases `*-preview`
    con datos de demo) y `production` (`taller6mm-web`, `taller6mm-jobs`), configurado y **cerrado** hasta el
    lanzamiento: sin `workers.dev`, sin URLs de versión y sin rutas.
-2. **Aislamiento por cuenta**: la cuenta de preview solo tiene Taller6mm (si la actual tiene otros proyectos, se
-   usa una nueva) y **producción vivirá en otra cuenta de Cloudflare**. Dentro de una cuenta, un Editor de un
+2. **Aislamiento por cuenta**: la cuenta de preview solo tiene Taller6mm (comprobado el 03-11: la cuenta de Javi
+   estaba vacía) y **producción vivirá en otra cuenta de Cloudflare**. Dentro de una cuenta, un Editor de un
    Worker puede enlazar cualquier base o bucket de esa cuenta: el token no basta para aislar.
 3. **Previews de PR en dos fases**:
    - `previews.yml` (`pull_request`) solo construye, **sin secretos ni entorno**, y sube la build como artefacto.
@@ -76,9 +76,9 @@
   - `preview_urls: true` en el Worker de preview publica también las URLs de versión de cada despliegue de `main`.
   - Si el panel no permite D1 por base, el token de `main` tendrá D1 de todo el producto: lo acota la cuenta
     dedicada (decisión 2).
-  - Comprobado el 03-11 con una build local `CLOUDFLARE_ENV=preview`: `dist/server/wrangler.json` conserva el bloque
-    `previews` y el validador la acepta. Falta ver en la primera ejecución real que `wrangler preview` lo aplica; si
-    no, el humo lo detecta (las tres bases deben responder).
+  - Comprobado el 03-11: la build con `CLOUDFLARE_ENV=preview` conserva el bloque `previews` (el validador la acepta)
+    y `wrangler preview` lo aplica. Con el Worker del spike, una Preview sin ese bloque nacía sin bindings y daba 500;
+    con él, respondía 200 leyendo D1. El humo lo vigila igualmente (las tres bases deben responder).
   - Worker Previews está en beta abierta.
 - **Trabajo que genera**: la receta de Javi (unos 20 min), los ids `PENDIENTE_*`, el workflow de producción, los e2e
   y Lighthouse contra la preview y Access para las Previews.
