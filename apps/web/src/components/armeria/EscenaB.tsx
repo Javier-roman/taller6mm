@@ -5,7 +5,7 @@
 // La cámara no se mueve: «abrir» una zona es un zoom 2D sobre la imagen (apertura simulada).
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
 import { ASPECTO_POSTER, ENCUADRE_POSTER, proyectar, type Rect, rectZona } from './camara.ts';
-import type { CanalEscena } from './canal.ts';
+import { type CanalEscena, crearVigia } from './canal.ts';
 import { Director, VARIANTES, type Variante } from './director.ts';
 import { EXPOSICION_HORNO, PASES_DATOS, PASES_LUZ, type Pase, PROFUNDIDAD, RUTA_PASES } from './pases.ts';
 import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONAS, zonaPorId } from './zonas.ts';
@@ -220,6 +220,10 @@ export default function EscenaB(props: EscenaBProps) {
     let cuadro = 0;
     let anterior = performance.now();
     let listo = false;
+    // «Lista» solo con los pases subidos: hasta entonces se ve el póster (auditor-rendimiento).
+    let texturas = false;
+    let ultimoPuntero = 0;
+    const vigia = crearVigia(30);
     let introAvisada = false;
     const estado = {
       centro: [0.5, 0.5],
@@ -234,7 +238,11 @@ export default function EscenaB(props: EscenaBProps) {
     const linternaPosible = matchMedia('(hover: hover) and (pointer: fine)').matches;
     const programa = compilar(gl);
     gl.useProgram(programa);
-    const u = (nombre: string) => gl.getUniformLocation(programa, nombre);
+    const ubicaciones = new Map<string, WebGLUniformLocation | null>();
+    const u = (nombre: string) => {
+      if (!ubicaciones.has(nombre)) ubicaciones.set(nombre, gl.getUniformLocation(programa, nombre));
+      return ubicaciones.get(nombre) ?? null;
+    };
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
@@ -246,7 +254,8 @@ export default function EscenaB(props: EscenaBProps) {
     gl.uniform1f(u('uAspecto'), ASPECTO_POSTER);
 
     const tamano = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // En móvil, 1,5: cada píxel de pase ya ocupa más de uno de pantalla y DPR 2 no gana detalle.
+      const dpr = Math.min(window.devicePixelRatio || 1, ultimas.current.movil ? 1.5 : 2);
       const w = Math.round(canvas.clientWidth * dpr);
       const h = Math.round(canvas.clientHeight * dpr);
       if (canvas.width !== w || canvas.height !== h) {
@@ -324,7 +333,9 @@ export default function EscenaB(props: EscenaBProps) {
     const pintar = (ahora: number) => {
       if (!vivo) return;
       cuadro = 0;
-      const dt = Math.min((ahora - anterior) / 1000, 1 / 20);
+      if (!texturas) return;
+      const bruto = (ahora - anterior) / 1000;
+      const dt = Math.min(bruto, 1 / 20);
       anterior = ahora;
       const p = ultimas.current;
       const d = canal.current.director;
@@ -400,7 +411,7 @@ export default function EscenaB(props: EscenaBProps) {
       }
 
       const f = canal.current.fotogramas;
-      f.push(dt);
+      f.push(bruto);
       if (f.length > 240) f.shift();
       if (!listo) {
         listo = true;
@@ -410,8 +421,11 @@ export default function EscenaB(props: EscenaBProps) {
         introAvisada = true;
         p.onIntroFin();
       }
-      const quieto =
-        d.enReposo && estado.movimiento < 0.0005 && !(estado.dentro && luz.linterna > 0.01 && linternaPosible);
+      // Caída al póster si no llega a 30 FPS (docs/02 §3.6). Con ?medir no cae: se mide tal cual.
+      if (vigia(f, !d.enIntro && !p.medir, ahora)) p.onLento();
+      // Con el puntero quieto, la linterna llega a su sitio en unos 300 ms: después, deja de pintar.
+      const punteroReciente = estado.dentro && linternaPosible && ahora - ultimoPuntero < 400;
+      const quieto = d.enReposo && estado.movimiento < 0.0005 && !punteroReciente;
       if (p.medir || !quieto) pedir();
     };
     const pedir = () => {
@@ -428,6 +442,7 @@ export default function EscenaB(props: EscenaBProps) {
       const [ux, uy] = aImagen(x, y);
       estado.linterna = [ux, uy];
       estado.dentro = true;
+      ultimoPuntero = performance.now();
       if (!ultimas.current.movil) {
         const id = zonaEn(x, y);
         if (id !== estado.apuntada) {
@@ -471,7 +486,16 @@ export default function EscenaB(props: EscenaBProps) {
       };
     }
 
-    Promise.all(UNIDADES.map(cargarPase))
+    // Sin puntero fino no hay linterna ni parallax: los pases de datos sobran (auditor-rendimiento:
+    // −382 kB y −32 MiB de GPU). En su lugar, texturas de 1 × 1 neutras (sin albedo, normal al frente y
+    // profundidad al fondo, que anula el parallax).
+    const NEUTROS: Partial<Record<Pase, readonly number[]>> = {
+      albedo: [0, 0, 0, 255],
+      normal: [128, 128, 255, 255],
+      profundidad: [255, 255, 255, 255],
+    };
+    const descargar = (pase: Pase) => (linternaPosible || !NEUTROS[pase] ? cargarPase(pase) : Promise.resolve(null));
+    Promise.all(UNIDADES.map(descargar))
       .then((imagenes) => {
         if (!vivo) return;
         imagenes.forEach((imagen, i) => {
@@ -481,15 +505,30 @@ export default function EscenaB(props: EscenaBProps) {
           gl.activeTexture(gl.TEXTURE0 + i);
           gl.bindTexture(gl.TEXTURE_2D, textura);
           // Luz y albedo se guardaron en sRGB: la GPU los pasa a lineal al leerlos. Los datos, en bruto.
-          gl.texImage2D(gl.TEXTURE_2D, 0, datos ? gl.RGBA8 : gl.SRGB8_ALPHA8, gl.RGBA, gl.UNSIGNED_BYTE, imagen);
+          const formato = datos ? gl.RGBA8 : gl.SRGB8_ALPHA8;
+          if (imagen) gl.texImage2D(gl.TEXTURE_2D, 0, formato, gl.RGBA, gl.UNSIGNED_BYTE, imagen);
+          else
+            gl.texImage2D(
+              gl.TEXTURE_2D,
+              0,
+              formato,
+              1,
+              1,
+              0,
+              gl.RGBA,
+              gl.UNSIGNED_BYTE,
+              new Uint8Array(NEUTROS[pase] ?? [0, 0, 0, 255]),
+            );
           gl.generateMipmap(gl.TEXTURE_2D);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
           gl.uniform1i(u(UNIFORME_DE[pase]), i);
-          imagen.close();
+          imagen?.close();
         });
+        texturas = true;
+        anterior = performance.now();
         pedir();
       })
       .catch(() => ultimas.current.onLento());

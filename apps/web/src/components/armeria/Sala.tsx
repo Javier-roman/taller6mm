@@ -590,7 +590,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
           z.id,
           // El rótulo del banco es más apaisado (0,84 × 0,13 m): su textura también, para no estirarlo.
           materialRotulo(
-            texturaRotulo(z.rotulo, { dato: z.dato, demo: true, ...(z.id === 'banco' ? { alto: 160 } : {}) }),
+            texturaRotulo(z.rotulo, { dato: z.dato, demo: true, ...(z.id === 'banco' ? { alto: 80 } : {}) }),
           ),
         ]),
       ) as Record<string, MeshStandardMaterial>,
@@ -603,8 +603,8 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
           e,
           materialRotulo(
             texturaRotulo(e === 'centro' ? BRAND.name : ESTANTERIAS[e].titulo, {
-              ancho: 1024,
-              alto: 160,
+              ancho: 512,
+              alto: 80,
               // La marca, grabada en Cinzel como en el resto del sistema (docs/02 §4.2).
               familia: e === 'centro' ? 'grabado' : 'rotulo',
               tinta: e === 'centro' ? colors['laton-claro'] : colors.hueso,
@@ -619,12 +619,12 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       Object.fromEntries(
         ORDEN_ESTANTERIAS.map((e) => [
           e,
-          texturaRotulo(ESTANTERIAS[e].numero, { ancho: 256, alto: 160, tinta: colors.hueso }),
+          texturaRotulo(ESTANTERIAS[e].numero, { ancho: 128, alto: 80, tinta: colors.hueso }),
         ]),
       ) as unknown as Record<Estanteria, Texture>,
     [],
   );
-  const apodo = useMemo(() => texturaRotulo('Invitado', { alto: 200, fondo: '#3b434b', tinta: colors.hueso }), []);
+  const apodo = useMemo(() => texturaRotulo('Invitado', { alto: 128, fondo: '#3b434b', tinta: colors.hueso }), []);
 
   // Objetivos de los focos (deben estar en la escena para que se actualice su matriz).
   const objetivos = useMemo(
