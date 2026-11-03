@@ -10,7 +10,7 @@
       "binding": "DB",
       "database_name": "taller6mm-spike",
       // Marcador local: al desplegar, Javi pone aquí el id de `wrangler d1 create taller6mm-spike`.
-      "database_id": "00000000-0000-4000-8000-000000000001",
+      "database_id": "59e0f64a-48b4-4742-a657-8bd225b4ad72",
       "migrations_dir": "migrations"
     }
   ],
@@ -22,6 +22,23 @@
     "SPIKE_TEST_OUTBOX": "1",
     "SPIKE_AUTH_TX": "0"
   },
+  // Las Previews no heredan nada del Worker (comprobado: sin este bloque, pr-1 daba 500).
+  "previews": {
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "taller6mm-spike",
+        "database_id": "59e0f64a-48b4-4742-a657-8bd225b4ad72",
+        "migrations_dir": "migrations"
+      }
+    ],
+    "vars": {
+      "BETTER_AUTH_SECRET": "solo-local-spike-solo-local-spike-solo-local-spike",
+      "BETTER_AUTH_URL": "http://127.0.0.1:4321",
+      "SPIKE_TEST_OUTBOX": "1",
+      "SPIKE_AUTH_TX": "0"
+    }
+  },
   "env": {
     // Variante para medir Better Auth con `transaction: true` (CLOUDFLARE_ENV=tx pnpm build).
     "tx": {
@@ -29,7 +46,7 @@
         {
           "binding": "DB",
           "database_name": "taller6mm-spike",
-          "database_id": "00000000-0000-4000-8000-000000000001",
+          "database_id": "59e0f64a-48b4-4742-a657-8bd225b4ad72",
           "migrations_dir": "migrations"
         }
       ],

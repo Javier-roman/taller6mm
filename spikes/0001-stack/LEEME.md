@@ -80,3 +80,19 @@ pnpm measure
 pnpm auth:flow
 ```
 `pnpm d1:tx` repite la sonda de transacciones. Para la variante con transacciones: `CLOUDFLARE_ENV=tx pnpm build` (en PowerShell, `$env:CLOUDFLARE_ENV="tx"; pnpm build`) y después `pnpm auth:flow:tx`. Antes de medir, cierra cualquier servidor en el puerto 4321: el script se niega a medir otro.
+
+## Resultados en Cloudflare (03-11-2026, cuenta de Javi, plan gratuito)
+Desplegado con `wrangler deploy` y borrado el mismo día por Javi. Cifras completas en el ADR-0001 (Aceptada).
+
+| Medida | Resultado |
+|---|---|
+| Worker comprimido | 505,22 KiB gzip (2.190 KiB sin comprimir); sin source maps subidos |
+| Arranque («Worker Startup Time») | 20 ms |
+| CPU en caliente, `/` (n = 80) | p50 1 ms · p95 3 ms · p99 4 ms |
+| CPU en caliente, `/api/auth/get-session` (n = 74) | p50 1 ms · p95 2 ms · p99 3 ms |
+| CPU en frío (1.ª petición de cada isolate, 4 muestras) | 16–26 ms, todas con resultado `ok` (ninguna `exceededCpu`) |
+| `wrangler preview --name pr-1` | Funciona. Sin bloque `previews` la Preview nace sin bindings (500); con él, 200 |
+
+Método: `wrangler tail --format json` con una carga pausada (unas 3 peticiones por segundo). Con la carga de
+`scripts/load.mjs` a ritmo libre, el tail muestreaba y solo recogió 13 de unos 435 eventos. El alta por enlace mágico
+da 403 desde `scripts/load.mjs` (Better Auth comprueba el origen): los escenarios con sesión quedan para la Fase 5.
