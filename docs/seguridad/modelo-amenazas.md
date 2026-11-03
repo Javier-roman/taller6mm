@@ -112,12 +112,12 @@ Puesto de Javi: Claude Code ──▶ hooks ──▶ shell, MCP Playwright (nav
 | T | Escrituras múltiples a medias | `db.batch()` atómico (D1 no admite `BEGIN`; medido en S1) | ✅ S1 | V2 |
 | I | Copias de seguridad expuestas | R2 privado; exportación semanal de `core` y `mercado` | 🔜 F9 | V14 |
 | D | Superar las 100.000 escrituras diarias | Solo cambios y en lotes; contadores en Durable Objects con volcado periódico | 🔜 F4–F5 | V2 |
-| E | Token de CI con permisos de toda la cuenta | Tokens granulares: el de preview, solo para recursos de preview; el de producción, solo desde el entorno `production` con aprobación | 🔜 S3 (lo crea Javi) | V13 |
+| E | Token de CI con permisos de toda la cuenta | Tokens por uso (ADR-0008): `preview` (Workers y D1 de preview, solo desde `main`) y `preview-pr` (solo el Worker de preview, sin D1); el de producción, en otra cuenta y solo desde el entorno `production` con aprobación. El aislamiento real lo da la cuenta: dentro de una, un Editor de Worker puede enlazar cualquier base | 🔜 S3 (lo crea Javi) | V13 |
 
 ### 4.6 CI/CD y cadena de suministro
 | STRIDE | Amenaza | Mitigación | Estado | ASVS |
 |---|---|---|---|---|
-| S | Un PR de un fork roba secretos | Sin `pull_request_target`; los jobs de PR no tienen secretos; la preview solo para PR del propio repo | ✅ S2 · 🔜 S3 | V13 |
+| S | Un PR (de un fork o del propio repo: Renovate, un agente) roba secretos | Sin `pull_request_target`; ningún job de `pull_request` tiene secretos ni entorno (test de política); la Preview se despliega con `workflow_run` desde `main`, que valida la build como dato; entornos de GitHub restringidos a `main` | ✅ S2 · 🔜 S3 | V13 |
 | T | Paquete npm o PyPI comprometido (tipo Shai-Hulud) | pnpm con edad mínima de 3 días (estricta), `trustPolicy: no-downgrade` (ya bloqueó dos paquetes sin procedencia), `allowBuilds`, `strictDepBuilds` y `blockExoticSubdeps`; uv con `exclude-newer`; lockfiles congelados; OSV, `pnpm audit` y Renovate con edad mínima | ✅ S2 | V15 |
 | T | Acción de GitHub modificada | Solo acciones `actions/*` fijadas por SHA (la política del repo exige SHA y creadores verificados); binarios descargados con SHA-256 comprobado | ✅ S2 | V15 |
 | T | Envenenamiento de caché entre PR y `main` | Sin cachés compartidas en el CI v1 | ✅ S2 | V15 |
@@ -145,8 +145,9 @@ Claude Code trabaja con los permisos de Javi y **lee contenido no confiable**: p
 2. **`allowedOrigins` del MCP no es una frontera de seguridad**: no frena redirecciones. Mitiga el perfil aislado.
 3. **CPU en frío del plan gratuito**: la primera petición de cada isolate que carga Better Auth puede pasar de 10 ms. Se mide en el despliegue del spike (ADR-0001, «Pendiente en local»).
 4. **Mientras no haya protección de checks**, un PR puede fusionarse con el CI en rojo. Lo cierra Javi al hacer obligatorios los checks.
-5. **pnpm y uv se instalan en el CI por versión exacta, sin hash** (Semgrep y sus dependencias ya van con hash desde `.github/semgrep/requirements.txt`). El riesgo está acotado: PyPI y npm no permiten resubir una versión publicada, y los jobs no tienen secretos y solo leen el contenido.
-6. **Uso interno de fotos de terceros para medir** (docs/05 §5): pendiente de validación jurídica antes de producción.
+5. **pnpm y uv se instalan en el CI por versión exacta, sin hash** (Semgrep y sus dependencias ya van con hash desde `.github/semgrep/requirements.txt`). El riesgo está acotado: PyPI y npm no permiten resubir una versión publicada, y los jobs de PR no tienen secretos. Los de despliegue (`main` y `workflow_run`) sí los tienen: ahí el riesgo es mayor y se acepta mientras pnpm no publique un hash verificable; se revisa en la Fase 3.
+6. **Previews públicas** (ADR-0008): sirven código sin revisar en `<cuenta>.workers.dev` con las cuotas de la cuenta; `noindex` no es privacidad. Access antes de la Fase 2.
+7. **Uso interno de fotos de terceros para medir** (docs/05 §5): pendiente de validación jurídica antes de producción.
 
 ## 6. Huecos detectados en la revisión de S4 (31-10-2026), por fase
 Pendientes de incorporar a las tablas cuando se diseñe cada pieza. Ninguno afecta a lo que ya existe.

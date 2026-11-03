@@ -164,5 +164,55 @@ describe('workflows de GitHub Actions', () => {
         assert.match(line, /"\$\w*IMAGE"|@sha256:[0-9a-f]{64}/, line);
       }
     });
+
+    // Despliegues (ADR-0008; revisor-seguridad, 03-11-2026).
+    const disparadores = (/^on:\s*\n((?:[ \t]+.*\n?)*)/m.exec(text)?.[1] ?? '').replace(/#.*$/gm, '');
+    const corrigePr = /^\s+pull_request(?:_target)?:/m.test(disparadores);
+    const trasOtroWorkflow = /^\s+workflow_run:/m.test(disparadores);
+
+    test(`${file}: nada de pull_request_target`, () => {
+      assert.doesNotMatch(disparadores, /pull_request_target/);
+    });
+
+    if (corrigePr) {
+      test(`${file}: los jobs que corren código de un PR no tienen secretos ni entorno`, () => {
+        assert.doesNotMatch(text, /secrets\./, 'usa un workflow_run que lea el artefacto como dato');
+        assert.doesNotMatch(text, /^\s+environment:/m);
+      });
+    }
+
+    test(`${file}: migraciones remotas solo desde main (nunca desde un PR)`, () => {
+      if (/--remote\b/.test(text))
+        assert.ok(!corrigePr && !trasOtroWorkflow, 'las migraciones van en desplegar-preview.yml');
+    });
+
+    test(`${file}: cada job con entorno tiene concurrency`, () => {
+      const jobs = text.split(/^ {2}(?=[\w-]+:\s*$)/m).slice(1);
+      for (const job of jobs) {
+        if (/^\s{4}environment:/m.test(job)) assert.match(job, /^\s{4}concurrency:/m, job.split('\n')[0]);
+      }
+    });
+  }
+});
+
+describe('migraciones (packages/db/migrations)', () => {
+  const base = path.join(root, 'packages', 'db', 'migrations');
+  const sql = readdirSync(base, { recursive: true })
+    .map(String)
+    .filter((f) => f.endsWith('.sql'));
+
+  test('hay migraciones que comprobar', () => {
+    assert.ok(sql.length > 0);
+  });
+
+  // Las bases de preview se comparten (ADR-0008): una migración destructiva vaciaría el entorno de todos.
+  // Excepción explícita y revisada: una línea `-- destructiva-permitida: <motivo>` en el archivo.
+  for (const archivo of sql) {
+    test(`${archivo}: solo cambios aditivos`, () => {
+      const texto = readFileSync(path.join(base, archivo), 'utf8');
+      if (/^--\s*destructiva-permitida:\s*\S/m.test(texto)) return;
+      const sinComentarios = texto.replace(/--.*$/gm, '');
+      assert.doesNotMatch(sinComentarios, /\b(?:DROP|DELETE|UPDATE|RENAME|TRUNCATE)\b/i);
+    });
   }
 });

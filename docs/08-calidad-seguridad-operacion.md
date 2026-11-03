@@ -37,7 +37,9 @@ Flujos E2E críticos:
 6. E2E, axe y Lighthouse CI contra la preview.
 7. ZAP baseline (semanal).
 
-**En `main`**: lo mismo, más el despliegue a producción con aprobación manual (environment protegido). Rollback documentado (`wrangler rollback`).
+**En `main`**: lo mismo, más el despliegue del entorno preview (con sus migraciones). Producción se despliega con un workflow manual (`workflow_dispatch`) desde `main`, en el entorno protegido `production` y con la aprobación de Javi (ADR-0008). Rollback documentado (`wrangler rollback`).
+
+**Previews de PR** (ADR-0008): el job que ejecuta código del PR no tiene secretos; el despliegue lo hace un `workflow_run` con la definición de `main`, que valida la build antes de subirla.
 
 ## 4. Presupuestos de rendimiento
 | Página | LCP p75 móvil | INP | CLS | JS inicial (gz) |
