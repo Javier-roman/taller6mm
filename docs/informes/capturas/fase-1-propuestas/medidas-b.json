@@ -1,0 +1,115 @@
+{
+  "ruta": "/prototipos/armeria-b",
+  "fecha": "2026-11-03T10:21:31.702Z",
+  "segundos": 8,
+  "resultados": [
+    {
+      "nombre": "escritorio-1440",
+      "escena": true,
+      "listoEnMs": 1009,
+      "fotogramas": 477,
+      "fpsMedio": 60,
+      "msP50": 16.7,
+      "msP95": 17,
+      "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "dpr": 1,
+      "info": {
+        "llamadas": 1,
+        "texturas": 9
+      },
+      "cayoAlPoster": false,
+      "recursos": {
+        "document": {
+          "kb": 14.7,
+          "gzKb": 0,
+          "n": 1
+        },
+        "font": {
+          "kb": 159.4,
+          "gzKb": 0,
+          "n": 5
+        },
+        "stylesheet": {
+          "kb": 55.3,
+          "gzKb": 11.5,
+          "n": 2
+        },
+        "image": {
+          "kb": 76.4,
+          "gzKb": 0,
+          "n": 1
+        },
+        "script": {
+          "kb": 252.4,
+          "gzKb": 82.8,
+          "n": 9
+        },
+        "other": {
+          "kb": 0.2,
+          "gzKb": 0,
+          "n": 1
+        },
+        "fetch": {
+          "kb": 534,
+          "gzKb": 0,
+          "n": 9
+        }
+      },
+      "errores": []
+    },
+    {
+      "nombre": "movil-390-cpu4x",
+      "escena": true,
+      "listoEnMs": 2436,
+      "fotogramas": 145,
+      "fpsMedio": 18.6,
+      "msP50": 33.3,
+      "msP95": 166.5,
+      "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "dpr": 2,
+      "info": {
+        "llamadas": 1,
+        "texturas": 9
+      },
+      "cayoAlPoster": false,
+      "recursos": {
+        "document": {
+          "kb": 14.7,
+          "gzKb": 0,
+          "n": 1
+        },
+        "stylesheet": {
+          "kb": 55.3,
+          "gzKb": 11.5,
+          "n": 2
+        },
+        "font": {
+          "kb": 138.1,
+          "gzKb": 0,
+          "n": 4
+        },
+        "image": {
+          "kb": 76.4,
+          "gzKb": 0,
+          "n": 1
+        },
+        "other": {
+          "kb": 0.2,
+          "gzKb": 0,
+          "n": 1
+        },
+        "script": {
+          "kb": 252.4,
+          "gzKb": 82.8,
+          "n": 9
+        },
+        "fetch": {
+          "kb": 534,
+          "gzKb": 0,
+          "n": 9
+        }
+      },
+      "errores": []
+    }
+  ]
+}
