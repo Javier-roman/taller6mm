@@ -24,7 +24,7 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
   STRIDE.
 - **S2 · Monorepo y calidad** (#5): pnpm + Turborepo, paquetes base con tests, Biome, TypeScript estricto,
   Vitest, lefthook con gitleaks, CI v1 (también en Windows), OSV-Scanner, Semgrep y Renovate.
-- **ADR-0001** (#3): cifras del spike del stack en la nube; queda en «Propuesta» hasta medir la CPU en local.
+- **ADR-0001** (#3 y #9): cifras del spike del stack en la nube y, el 03-11, en Cloudflare (505 KiB gz, arranque de 20 ms, CPU p99 de 4 ms en caliente; riesgo en frío vigilado). **Aceptada.**
 - **S0 · Arranque seguro** (#1, #4): renombrado a Taller6mm, guardián de comandos con tests, MCP de Playwright
   multiplataforma, ajustes de seguridad del repositorio y plan de la Fase 0.
 

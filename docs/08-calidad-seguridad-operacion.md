@@ -79,7 +79,7 @@ Activos a proteger:
   - límites de ritmo por hash de IP o por usuario con Durable Objects;
   - Turnstile en registro, publicación y denuncias.
 - **Cabeceras**:
-  - CSP estricta (soporte de Astro 6) y HSTS (con preload cuando proceda);
+  - CSP estricta (con hashes, de Astro 7) y HSTS (con preload cuando proceda);
   - `X-Content-Type-Options` y `Referrer-Policy: strict-origin-when-cross-origin`;
   - `Permissions-Policy` mínima;
   - `frame-ancestors 'none'`, salvo para los embeds.

@@ -1,6 +1,6 @@
 # 07 · Arquitectura
 
-La decisión base está en `docs/adr/0001-stack.md` (Astro 6 + islas React en Cloudflare Workers). Este documento describe el sistema.
+La decisión base está en `docs/adr/0001-stack.md` (Astro 7 + islas React en Cloudflare Workers). Este documento describe el sistema.
 
 ## 1. Vista general
 ```
@@ -11,7 +11,7 @@ La decisión base está en `docs/adr/0001-stack.md` (Astro 6 + islas React en Cl
                │ Turnstile, Web Analytics │
                └────────────┬─────────────┘
           ┌─────────────────▼─────────────────┐      ┌────────────────────────┐
-          │ Worker web (Astro 6, SSR)         │─────▶│ R2 · assets públicos   │
+          │ Worker web (Astro 7, SSR)         │─────▶│ R2 · assets públicos   │
           │ páginas · API v1 · Actions ·      │      │ modelos, sprites, OG   │
           │ Trastienda                        │      └────────────────────────┘
           └──┬──────────────┬──────────────┬──┘
@@ -34,9 +34,9 @@ La decisión base está en `docs/adr/0001-stack.md` (Astro 6 + islas React en Cl
 ## 2. Componentes
 | Componente | Responsabilidad | Tecnología |
 |---|---|---|
-| `apps/web` | Páginas públicas (SSR + caché), islas interactivas, API pública v1, Actions, Trastienda | Astro 6, React 19, R3F, Tailwind v4 |
+| `apps/web` | Páginas públicas (SSR + caché), islas interactivas, API pública v1, Actions, Trastienda | Astro 7, React 19, R3F, Tailwind v4 |
 | `apps/jobs` | Ingesta firmada, consumidores de cola, cron (rankings, alertas, archivo, salud), Durable Objects (contadores, límites de ritmo) | Worker con Hono |
-| `apps/crawler` | Descubrir, descargar, extraer, normalizar, clasificar, emparejar y enviar lotes | Node 22, Crawlee, transformers.js |
+| `apps/crawler` | Descubrir, descargar, extraer, normalizar, clasificar, emparejar y enviar lotes | Node 26, Crawlee, transformers.js |
 | `apps/pipeline` | Assets T0–T3 y validación de fidelidad | Python 3.12 (uv), Blender, gltf-transform |
 | `packages/compat` | Motor de compatibilidad | TS puro |
 | `packages/market` | Normalización, emparejado, precio puesto en casa, optimizador | TS puro + HiGHS (WASM) |

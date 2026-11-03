@@ -1,6 +1,6 @@
 # ADR-0001 — Stack base: Astro 6 + islas React en Cloudflare Workers
 
-- **Estado**: Propuesta (se valida con un prototipo en la Fase 0)
+- **Estado**: Aceptada (2026-11-03, con el prototipo de la Fase 0 desplegado en Cloudflare)
 - **Fecha**: 2026-10-31
 - **Decisores**: Javi (+ Claude Code)
 
@@ -27,7 +27,7 @@ Hechos verificados en octubre de 2026 (revalidar en el prototipo):
 - **D1** soporta FTS5, pero no exporta bases que contengan tablas virtuales.
 
 ## Decisión
-- **Web**: Astro 6 con salida `server` y adaptador de Cloudflare. Islas React 19 donde haya interactividad, y el 3D con React Three Fiber cargado como isla `client:only`.
+- **Web**: Astro 7 con salida `server` y adaptador de Cloudflare, sobre Node 26 LTS, pnpm 12, TypeScript 6 y Vitest 4.1. Islas React 19 donde haya interactividad, y el 3D con React Three Fiber cargado como isla `client:only`.
 - **Plataforma**: Cloudflare (Workers, D1 ×3, R2, Queues, Cron, Durable Objects, Turnstile, Web Analytics).
 - **Datos**: Drizzle ORM con tres bases D1: `core`, `mercado` y `busqueda` (FTS5, reconstruible).
 - **Auth**: Better Auth sobre D1.
@@ -57,11 +57,12 @@ Hechos verificados en octubre de 2026 (revalidar en el prototipo):
 - Cada consulta entre bases se compone en el servicio, porque no hay JOIN entre ellas.
 
 ## Validación (prototipo de la Fase 0)
-- [ ] Isla R3F con postprocesado desplegada en el plan gratuito; chunk 3D ≤ 350 KB gz.
-- [ ] Worker web comprimido muy por debajo de 3 MiB (objetivo: ≤ 1,5 MiB, para tener margen).
-- [ ] Ruta SSR con consulta a D1 dentro del límite de CPU, medido con observabilidad de Workers.
-- [ ] Better Auth funcionando con D1 y Drizzle.
-- [ ] Biome con `.astro` aceptable. Si no, alternativa documentada (Prettier con su plugin de Astro + ESLint).
+- [x] Isla R3F con postprocesado desplegada en el plan gratuito; chunk 3D ≤ 350 KB gz (268,9 KB; `/3d` sirve en Cloudflare).
+- [x] Worker web comprimido muy por debajo de 3 MiB (505,22 KiB desplegado, 16 % del límite).
+- [x] Ruta SSR con consulta a D1 dentro del límite de CPU en caliente (p99 4 ms), medido con `wrangler tail` sobre el
+  despliegue. **En frío lo supera** (16–26 ms) sin errores: riesgo aceptado y vigilado (ver «Resultados en Cloudflare»).
+- [x] Better Auth funcionando con D1 y Drizzle (flujo completo en local, 10/10; `/api/auth/get-session` en Cloudflare).
+- [x] Biome con `.astro` aceptable con `html.experimentalFullSupportEnabled` (0 avisos). Plan B documentado.
 
 ## Resultados en la nube
 Medido el 31-10-2026 por Claude Code en un contenedor Linux en la nube, **sin cuenta de Cloudflare**: todo en local con workerd, D1 local y `wrangler deploy --dry-run`. Código, scripts y evidencias en la rama `spike/0001-stack` (carpeta `spikes/0001-stack/`, PR en borrador que no se fusiona).
@@ -95,14 +96,33 @@ Consecuencias para la Fase 0 (se aplican en S2 y siguientes):
 
 Revisión de `auditor-rendimiento`: reproduce las cifras de tamaño, corrige el método (frío frente a caliente, source maps, gzip-6) y las conclusiones de arriba ya lo reflejan. Detalle en el PR del spike.
 
-## Pendiente en local
-Lo que necesita la cuenta de Cloudflare de Javi. Pasos exactos en `spikes/0001-stack/LEEME.md` de la rama del spike.
-1. **Despliegue en el plan gratuito**: `wrangler login`, crear la D1 `taller6mm-spike`, migraciones remotas, `wrangler deploy` y comprobar `/`, `/3d` y el flujo de autenticación.
-2. **CPU p50/p95/p99** frente al límite de 10 ms, separando **frío** (1.ª petición de cada isolate, tras cada despliegue) y **caliente** (unas 200 peticiones por escenario con calentamiento). Escenarios: `/` y `/api/auth/get-session` anónimos, con cookie completa y solo con el token, más la petición de enlace mágico. Con `wrangler tail --format json`, `scripts/load.mjs` y `scripts/cpu-from-tail.mjs` (el middleware del spike etiqueta isolate, número de petición y escenario).
-3. **Source maps**: confirmar en el panel o en la respuesta del despliegue que no cuentan para el límite de 3 MiB.
-4. **Previews**: `wrangler preview --name pr-1` con la build de Astro.
+## Resultados en Cloudflare
+Medido el 03-11-2026 en la cuenta de Javi (plan gratuito) con el Worker `taller6mm-spike` y su D1, desplegados
+desde la rama `spike/0001-stack`. CPU con `wrangler tail --format json`, `scripts/cpu-from-tail.mjs` y una carga
+pausada (unas 3 peticiones por segundo; a más ritmo `wrangler tail` muestrea y se pierden eventos): 410
+peticiones, 165 eventos capturados y 4 primeras peticiones de isolate (frío).
 
-La ADR sigue en **Propuesta** hasta tener la CPU. Al aceptarla: Decisión con Astro 7, Node 26, TypeScript 6 y Vitest 4.1, la tabla de CPU añadida a esta sección y las casillas de Validación marcadas.
+| Medida | Resultado | Límite u objetivo | Veredicto |
+|---|---|---|---|
+| Worker comprimido (`wrangler deploy` real) | **505,22 KiB gzip** (2.190 KiB sin comprimir) | 3 MiB | ✅ 16 % |
+| Source maps | No se suben (`upload_source_maps` no está activo): no cuentan para el límite | — | ✅ |
+| Arranque del Worker («Worker Startup Time» del despliegue) | **20 ms** | 1 s | ✅ |
+| CPU en caliente, `/` anónimo (n = 80) | p50 1 ms · p95 3 ms · p99 4 ms | 10 ms | ✅ |
+| CPU en caliente, `/api/auth/get-session` anónimo (n = 74) | p50 1 ms · p95 2 ms · p99 3 ms | 10 ms | ✅ |
+| CPU de la 1.ª petición de cada isolate (frío, 4 muestras) | 16, 18, 20 y 26 ms | 10 ms | ⚠️ por encima, pero las 178 invocaciones capturadas terminaron en `ok` (ninguna `exceededCpu`) |
+| `wrangler preview --name pr-1` con la build de Astro | Funciona. Sin bloque `previews`, la Preview nace sin bindings (500); con él responde 200 leyendo D1 | — | ✅ (ADR-0008) |
+| Entorno preview real (`taller6mm-web-preview`, S3) | 279,77 KiB gzip, arranque 21 ms, las tres D1 correctas; Lighthouse móvil de `/sistema` 98 · 100 · 100 · 100 | — | ✅ |
+
+**Riesgo en frío** (decisión de Javi, 03-11-2026): se acepta y se vigila.
+- Alerta en Workers Logs si aparece el resultado `exceededCpu`.
+- Caché en el borde del HTML anónimo, para que la mayoría de las primeras visitas no despierten un isolate.
+- Better Auth solo donde haga falta (ya en el spike) y SSR minificado.
+- Plan B solo si aparecen errores reales: autenticación en otro Worker o Workers Paid (5 $/mes, con el OK de Javi).
+- La escena 3D de la Fase 1 no cambia este riesgo: va en el cliente.
+
+Escenarios con sesión (cookie completa y solo el token) y la petición de enlace mágico quedan sin medir en Cloudflare:
+`scripts/load.mjs` recibe 403 en el alta porque Better Auth comprueba el origen. Se medirán con la autenticación real
+(Fase 5).
 
 ## Disparadores de revisión
 - El prototipo incumple algún punto de validación.

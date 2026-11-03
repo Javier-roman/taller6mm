@@ -39,14 +39,16 @@ La especificación está en `docs/` y **no se importa aquí** para no gastar con
 10. **El "wow" nunca rompe la función**: toda experiencia visual tiene alternativa ligera y accesible.
 
 ## Stack (detalle, cifras y alternativas en `docs/adr/0001-stack.md`)
-- **Web**: Astro 6 (salida `server`, adaptador Cloudflare) + islas **React 19**; Tailwind CSS v4 con tokens en CSS variables; nanostores entre islas.
+- **Base**: Node 26 LTS (`.node-version`), pnpm 12 (fijado en `packageManager`, con catálogo y política de cadena de suministro en `pnpm-workspace.yaml`), Turborepo, TypeScript 6 (7 cuando lo admita `@astrojs/check`).
+- **Web**: Astro 7 (salida `server`, adaptador Cloudflare) + islas **React 19**; Tailwind CSS v4 con tokens en CSS variables; nanostores entre islas.
 - **3D**: three.js + React Three Fiber + drei + postprocessing; GSAP para cinemáticas; glTF con Meshopt y texturas KTX2.
 - **Plataforma**: Cloudflare Workers, D1 (tres bases: `core`, `mercado`, `busqueda`), R2, Queues, Cron, Durable Objects, Turnstile.
 - **Datos**: Drizzle ORM + drizzle-kit; Zod 4 en todos los contratos.
 - **Auth**: Better Auth (enlace mágico, Google, Discord, passkeys).
 - **Ingesta**: Node + Crawlee en GitHub Actions → API interna firmada (HMAC) del worker `jobs`.
 - **Assets**: Python 3.12 + uv, Blender sin interfaz, gltf-transform.
-- **Calidad**: Biome, TypeScript estricto, Vitest (+ pool de Workers), Playwright + axe, fast-check, Lighthouse CI.
+- **Calidad**: Biome, TypeScript estricto, Vitest 4.1 (+ pool de Workers; Vitest 5 cuando lo admita el pool), Playwright + axe, fast-check, Lighthouse, size-limit, lefthook (Biome + gitleaks).
+- **Entornos** (ADR-0008): local, `preview` (Worker `taller6mm-web-preview` y Previews `pr-<n>` por PR) y `production` (cerrado hasta el lanzamiento, en otra cuenta).
 
 Usa siempre las últimas versiones estables y **verifica la documentación actual** antes de usar una API que aún no se haya usado en este repo.
 
