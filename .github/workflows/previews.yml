@@ -11,6 +11,8 @@ name: Previews
 
 on:
   pull_request:
+    # Solo los PR contra main tienen Preview (previews-desplegar.yml también lo comprueba).
+    branches: [main]
     types: [opened, synchronize, reopened, closed]
 
 permissions: {}

@@ -51,7 +51,20 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           NUMEROS: ${{ steps.cerrados.outputs.numeros }}
+        # «Preview not found» (código 10025) es normal: ese PR no tuvo Preview o ya se borró. Cualquier otro
+        # error (un permiso que falta, la API caída…) deja el job en rojo: el 04-11 un `|| true` escondió que el
+        # token no podía borrar ninguna (issue #11, B2).
         run: |
+          fallos=0
           for n in $NUMEROS; do
-            pnpm exec wrangler preview delete --env preview --name "pr-$n" --skip-confirmation || true
+            if salida=$(pnpm exec wrangler preview delete --env preview --name "pr-$n" --skip-confirmation 2>&1); then
+              echo "pr-$n: borrada"
+            elif grep -q "code: 10025" <<< "$salida"; then
+              echo "pr-$n: no existe"
+            else
+              echo "::error::pr-$n: no se pudo borrar"
+              tail -n 5 <<< "$salida"
+              fallos=$((fallos + 1))
+            fi
           done
+          test "$fallos" -eq 0
