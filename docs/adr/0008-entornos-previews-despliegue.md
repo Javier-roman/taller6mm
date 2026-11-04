@@ -47,7 +47,10 @@
      (`scripts/validar-preview.mjs`) para avisar de que la Preview no sería fiel. Después lo sube como Preview
      `pr-<n>` con `--ignore-base-config`, para que tampoco reciba la «Preview base config» del panel (variables,
      bindings y secretos de la cuenta). Luego pasa el humo (tres bases en orden y `noindex` en `/` y `/sistema`) y comenta la URL desde un job
-     aparte. Al cerrar el PR la borra, y un recolector diario borra las que se escapen.
+     aparte. Al cerrar el PR la borra, y un recolector diario borra las que se escapen. El número del PR se ata al
+     commit del run: tiene que ser un PR de este repo, contra `main` y con la cabeza en ese commit (si no, el run es
+     viejo y no hace nada). Con el PR ya cerrado, GitHub no da el número en el evento: se busca por el commit
+     (comprobado al fusionar el #8, cuyo borrado se saltó por eso).
 4. **Migraciones solo desde `main`** (`desplegar-preview.yml`), en serie y sin cancelación. Las Previews de PR
    usan el esquema de `main`. Un test rechaza SQL destructivo en `packages/db/migrations` salvo excepción anotada.
 5. **Tokens por uso, en entornos de GitHub restringidos a `main`**: `preview` («Workers Scripts: Edit» y
