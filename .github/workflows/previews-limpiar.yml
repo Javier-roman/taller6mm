@@ -1,0 +1,57 @@
+# Recolector de Previews huérfanas (S3; ADR-0008; revisor-seguridad). Si un PR se cerró mientras su
+# Preview se desplegaba, o el borrado falló, la Preview seguiría pública con código sin revisar. Cada día,
+# desde `main`, borra las `pr-<n>` de los PR cerrados en la última semana (borrar dos veces no hace daño).
+name: Previews · recolector
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+env:
+  PNPM_VERSION: 12.16.1
+  WRANGLER_SEND_METRICS: "false"
+  DO_NOT_TRACK: "1"
+
+jobs:
+  recoger:
+    name: Borrar Previews de PR cerrados
+    if: vars.CLOUDFLARE_PREVIEWS == 'activas' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: preview-pr
+    permissions:
+      contents: read
+      pull-requests: read
+    concurrency:
+      group: previews-recolector
+      cancel-in-progress: false
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - run: npm install --global "pnpm@$PNPM_VERSION"
+      - run: pnpm install --frozen-lockfile
+      - name: PR cerrados en los últimos 7 días
+        id: cerrados
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          desde=$(date -u -d '7 days ago' +%F)
+          numeros=$(gh pr list --repo "$GITHUB_REPOSITORY" --state closed --search "closed:>=$desde" --limit 100 --json number --jq '.[].number' | grep -E '^[1-9][0-9]{0,6}$' | tr '\n' ' ')
+          echo "numeros=$numeros" >> "$GITHUB_OUTPUT"
+      - name: Borrar sus Previews
+        working-directory: apps/web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          NUMEROS: ${{ steps.cerrados.outputs.numeros }}
+        run: |
+          for n in $NUMEROS; do
+            pnpm exec wrangler preview delete --env preview --name "pr-$n" --skip-confirmation || true
+          done

@@ -1,0 +1,169 @@
+# Previews de PR en Cloudflare, fase 2 de 2: DESPLEGAR o BORRAR (S3; ADR-0008; revisor-seguridad).
+# - `workflow_run` usa siempre esta definición de `main`: un PR no puede cambiarla. No hace checkout del
+#   código del PR: wrangler sale del lockfile de `main` y la build del PR es un artefacto sin confianza.
+#   scripts/preparar-preview.mjs copia de él solo módulos, mapas y estáticos a una carpeta limpia y escribe
+#   la configuración de `main`: la del artefacto no se usa nunca (revisor-seguridad, 03-11-2026, A1).
+#   Sin migraciones: las Previews usan el esquema de `main`.
+# - El token vive en el entorno `preview-pr` de GitHub (restringido a `main`): «Workers Scripts: Edit» de
+#   toda la cuenta y sin la API de D1 (alcance real y riesgo aceptado en el ADR-0008). Solo está en el `env`
+#   de los pasos de wrangler. El `pnpm install` de antes corre en el mismo job (issue #11, M3).
+# - PR abierto → Preview `pr-<n>` + humo + comentario (job aparte, sin checkout). PR cerrado → se borra.
+# - Apagado hasta que exista la variable CLOUDFLARE_PREVIEWS=activas.
+name: Previews · desplegar
+
+on:
+  workflow_run:
+    workflows: [Previews]
+    types: [completed]
+
+permissions: {}
+
+env:
+  PNPM_VERSION: 12.16.1
+  TURBO_TELEMETRY_DISABLED: "1"
+  WRANGLER_SEND_METRICS: "false"
+  DO_NOT_TRACK: "1"
+
+jobs:
+  estado:
+    name: ¿Abierto o cerrado?
+    if: >-
+      vars.CLOUDFLARE_PREVIEWS == 'activas' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    timeout-minutes: 5
+    outputs:
+      pr: ${{ steps.pr.outputs.pr }}
+      abierto: ${{ steps.pr.outputs.abierto }}
+    steps:
+      - id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          # El número sale del evento y solo se acepta si es un entero.
+          if ! [[ "$PR" =~ ^[1-9][0-9]{0,6}$ ]]; then
+            echo "::notice::El run no corresponde a un PR de este repo. No se hace nada."
+            exit 0
+          fi
+          estado=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state)
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+          echo "abierto=$([ "$estado" = OPEN ] && echo si || echo no)" >> "$GITHUB_OUTPUT"
+
+  desplegar:
+    name: Preview pr-${{ needs.estado.outputs.pr }}
+    needs: estado
+    if: >-
+      needs.estado.outputs.abierto == 'si' &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment: preview-pr
+    permissions:
+      contents: read
+      actions: read
+    concurrency:
+      group: preview-pr-${{ needs.estado.outputs.pr }}
+      cancel-in-progress: true
+    timeout-minutes: 15
+    outputs:
+      url: ${{ steps.preview.outputs.url }}
+    env:
+      PR: ${{ needs.estado.outputs.pr }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - run: npm install --global "pnpm@$PNPM_VERSION"
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: preview-web
+          path: ${{ runner.temp }}/preview
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Código del PR a una carpeta limpia, con la configuración de main
+        run: node scripts/preparar-preview.mjs "$RUNNER_TEMP/preview" "$RUNNER_TEMP/limpio"
+      - name: wrangler preview pr-${{ needs.estado.outputs.pr }}
+        id: preview
+        # Directorio de main: wrangler carga los archivos de variables de entorno del directorio actual y
+        # aquí no hay ninguno (están ignorados en git); la carpeta limpia no admite archivos ocultos.
+        working-directory: apps/web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        # --ignore-base-config: la Preview no recibe la «Preview base config» del panel (variables, bindings
+        # y secretos de la cuenta), solo la configuración de main (tercera revisión de seguridad, B1).
+        run: |
+          pnpm exec wrangler preview -c "$RUNNER_TEMP/limpio/server/wrangler.json" --name "pr-$PR" \
+            --ignore-base-config --message "PR #$PR (${SHA::7})" --json > "$RUNNER_TEMP/preview.json"
+          # Solo se acepta la URL de esta Preview, en workers.dev (nada de enlaces al panel ni saltos de línea).
+          # Con grep y no con jq: wrangler escribe avisos de texto delante del JSON (comprobado el 03-11).
+          url=$(grep -oE "https://pr-${PR}-taller6mm-web-preview\.[a-z0-9-]+\.workers\.dev" "$RUNNER_TEMP/preview.json" | head -n 1 || true)
+          if [ -z "$url" ]; then
+            echo "wrangler preview no devolvió la URL esperada"
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Humo (tres bases en orden, /sistema y noindex en las dos rutas)
+        env:
+          URL: ${{ steps.preview.outputs.url }}
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 --retry-all-errors -D cabeceras.txt -o inicio.html "$URL/"
+          test "$(grep -o 'data-state="ok"' inicio.html | wc -l)" -ge 3
+          grep -qi '^x-robots-tag: noindex' cabeceras.txt
+          curl --fail --silent --show-error -D cabeceras-sistema.txt -o /dev/null "$URL/sistema"
+          grep -qi '^x-robots-tag: noindex' cabeceras-sistema.txt
+
+  comentar:
+    name: URL en el PR
+    needs: [estado, desplegar]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    timeout-minutes: 5
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ needs.estado.outputs.pr }}
+          URL: ${{ needs.desplegar.outputs.url }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --create-if-none \
+            --body "Preview de este PR: $URL (commit ${SHA::7}). Se borra al cerrar el PR."
+
+  borrar:
+    name: Borrar la Preview pr-${{ needs.estado.outputs.pr }}
+    needs: estado
+    if: needs.estado.outputs.abierto == 'no'
+    runs-on: ubuntu-latest
+    environment: preview-pr
+    permissions:
+      contents: read
+    concurrency:
+      group: preview-pr-${{ needs.estado.outputs.pr }}
+      cancel-in-progress: true
+    timeout-minutes: 10
+    env:
+      PR: ${{ needs.estado.outputs.pr }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - run: npm install --global "pnpm@$PNPM_VERSION"
+      - run: pnpm install --frozen-lockfile
+      - name: wrangler preview delete
+        working-directory: apps/web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm exec wrangler preview delete --env preview --name "pr-$PR" --skip-confirmation

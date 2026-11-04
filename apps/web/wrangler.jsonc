@@ -1,6 +1,15 @@
 {
-  // Worker `web`. Configuración local de S2 (D1 en local con identificadores de marcador).
-  // S3 añade los entornos `preview` y `production`, los ids reales, R2, la cola y `previews`.
+  // Worker `web` (S3, ADR-0008). Tres entornos:
+  // - local (nivel superior): `astro dev`, e2e y Lighthouse en workerd, con D1 locales de marcador.
+  // - preview: Worker persistente `taller6mm-web-preview`. `main` lo despliega (desplegar-preview.yml)
+  //   y cada PR tiene su Preview `pr-<n>` (previews.yml construye sin secretos; previews-desplegar.yml
+  //   sube solo su código, con la configuración que scripts/validar-preview.mjs deriva de este entorno)
+  //   con los bindings del bloque `previews`.
+  // - production: configurado pero cerrado (sin workers.dev ni URLs de versión) hasta el lanzamiento.
+  // El entorno se elige AL COMPILAR: `CLOUDFLARE_ENV=preview pnpm --filter @taller6mm/web build`
+  // genera dist/server/wrangler.json ya resuelto y `wrangler deploy`/`wrangler preview` lo usan.
+  // Bindings mínimos: solo las bases D1. R2 y la cola se añaden con el código que los use (F3–F5).
+  // Ids de preview: los de `wrangler d1 create` (03-11-2026). Los PENDIENTE_* de producción, en el lanzamiento.
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "taller6mm-web",
   // Entrada propia: el handler de Astro más las cabeceras de seguridad en todas las respuestas.
@@ -8,6 +17,9 @@
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
   "send_metrics": false,
+  // El nivel superior es el entorno local: si alguien lo desplegase por error, no quedaría expuesto.
+  "workers_dev": false,
+  "preview_urls": false,
   "observability": { "enabled": true },
   "vars": { "ENVIRONMENT": "local" },
   "d1_databases": [
@@ -29,5 +41,90 @@
       "database_id": "00000000-0000-4000-8000-000000000c03",
       "migrations_dir": "../../packages/db/migrations/busqueda"
     }
-  ]
+  ],
+  "env": {
+    "preview": {
+      "name": "taller6mm-web-preview",
+      // Público con noindex (lo pone workers.dev y nuestra cabecera): lo usan las previews y ZAP.
+      "workers_dev": true,
+      "preview_urls": true,
+      "observability": { "enabled": true },
+      "vars": { "ENVIRONMENT": "preview" },
+      "d1_databases": [
+        {
+          "binding": "CORE",
+          "database_name": "taller6mm-core-preview",
+          "database_id": "48fcb078-0320-410d-b892-b59a10c6a3b1",
+          "migrations_dir": "../../packages/db/migrations/core"
+        },
+        {
+          "binding": "MERCADO",
+          "database_name": "taller6mm-mercado-preview",
+          "database_id": "caa911ae-7817-4cc8-8142-256401719a00",
+          "migrations_dir": "../../packages/db/migrations/mercado"
+        },
+        {
+          "binding": "BUSQUEDA",
+          "database_name": "taller6mm-busqueda-preview",
+          "database_id": "34608602-ded8-47a6-bcb5-0fee56b21518",
+          "migrations_dir": "../../packages/db/migrations/busqueda"
+        }
+      ],
+      // Cada Preview de PR comparte estos recursos de preview (con datos de demo, nunca de producción).
+      // Las Previews no heredan nada del Worker: sin este bloque se crearían sin bases ni buckets.
+      "previews": {
+        "vars": { "ENVIRONMENT": "preview" },
+        "observability": { "enabled": true },
+        "d1_databases": [
+          {
+            "binding": "CORE",
+            "database_name": "taller6mm-core-preview",
+            "database_id": "48fcb078-0320-410d-b892-b59a10c6a3b1",
+            "migrations_dir": "../../packages/db/migrations/core"
+          },
+          {
+            "binding": "MERCADO",
+            "database_name": "taller6mm-mercado-preview",
+            "database_id": "caa911ae-7817-4cc8-8142-256401719a00",
+            "migrations_dir": "../../packages/db/migrations/mercado"
+          },
+          {
+            "binding": "BUSQUEDA",
+            "database_name": "taller6mm-busqueda-preview",
+            "database_id": "34608602-ded8-47a6-bcb5-0fee56b21518",
+            "migrations_dir": "../../packages/db/migrations/busqueda"
+          }
+        ]
+      }
+    },
+    "production": {
+      "name": "taller6mm-web",
+      // Cerrado hasta el lanzamiento: sin workers.dev ni URLs de versión (modelo de amenazas §6).
+      // El dominio propio (routes) llega con la fase de lanzamiento.
+      "workers_dev": false,
+      "preview_urls": false,
+      "observability": { "enabled": true },
+      "vars": { "ENVIRONMENT": "production" },
+      "d1_databases": [
+        {
+          "binding": "CORE",
+          "database_name": "taller6mm-core",
+          "database_id": "PENDIENTE_ID_D1_CORE",
+          "migrations_dir": "../../packages/db/migrations/core"
+        },
+        {
+          "binding": "MERCADO",
+          "database_name": "taller6mm-mercado",
+          "database_id": "PENDIENTE_ID_D1_MERCADO",
+          "migrations_dir": "../../packages/db/migrations/mercado"
+        },
+        {
+          "binding": "BUSQUEDA",
+          "database_name": "taller6mm-busqueda",
+          "database_id": "PENDIENTE_ID_D1_BUSQUEDA",
+          "migrations_dir": "../../packages/db/migrations/busqueda"
+        }
+      ]
+    }
+  }
 }
