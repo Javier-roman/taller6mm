@@ -7,7 +7,8 @@
 // - server/: módulos .mjs/.js y sus mapas .map, sin archivos ocultos y con cada `sourceMappingURL`
 //   apuntando a un archivo de su misma carpeta (wrangler lee ese mapa y lo sube);
 // - client/: los estáticos, sin archivos ocultos salvo `.assetsignore` y `.well-known/` en la raíz.
-// Cualquier otra cosa (enlaces simbólicos, .env, .dev.vars, otras carpetas) hace fallar el despliegue.
+// Cualquier otra cosa (enlaces simbólicos, .env, .dev.vars, nombres con `\` o caracteres de control,
+// otras carpetas) hace fallar el despliegue.
 // Uso: node scripts/preparar-preview.mjs <artefacto (contenido de dist)> <carpeta limpia> [wrangler.jsonc]
 import { copyFileSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -22,14 +23,31 @@ const SECRETOS = /^\.(?:env|dev\.vars)(?:\..*)?$/i;
 const MAPA = /\/\/[#@]\s*sourceMappingURL=([^\n]*)/g;
 const MAPA_PERMITIDO = /^[\w-][\w.-]*\.map$/;
 
-function recorrer(dir, base = '') {
+// En Linux `\` es un carácter más de un nombre, pero wrangler lo convierte en separador al nombrar los
+// módulos y los lee con esa ruta: un `x\..\..\y.mjs` saldría de la carpeta (tercera revisión, M1). Hoy
+// download-artifact lo neutraliza al extraer, pero esta barrera no debe depender de eso.
+const nombreRaro = (nombre) =>
+  nombre.includes('\\') || [...nombre].some((c) => c.charCodeAt(0) < 0x20 || c.charCodeAt(0) === 0x7f);
+
+/** Archivos regulares bajo `dir` (rutas con `/`). Lo que no lo sea se anota en `errores` y no se copia. */
+function recorrer(dir, errores, base = '') {
   return readdirSync(dir).flatMap((nombre) => {
     const ruta = path.join(dir, nombre);
     const relativa = base ? `${base}/${nombre}` : nombre;
+    if (nombreRaro(nombre)) {
+      errores.push(`nombre de archivo no permitido: ${JSON.stringify(relativa)}`);
+      return [];
+    }
     const info = lstatSync(ruta);
-    if (info.isSymbolicLink()) throw new Error(`enlace simbólico no permitido: ${relativa}`);
-    if (info.isDirectory()) return recorrer(ruta, relativa);
-    if (!info.isFile()) throw new Error(`tipo de archivo no permitido: ${relativa}`);
+    if (info.isSymbolicLink()) {
+      errores.push(`enlace simbólico no permitido: ${relativa}`);
+      return [];
+    }
+    if (info.isDirectory()) return recorrer(ruta, errores, relativa);
+    if (!info.isFile()) {
+      errores.push(`tipo de archivo no permitido: ${relativa}`);
+      return [];
+    }
     return [relativa];
   });
 }
@@ -40,11 +58,11 @@ export function revisar(origen, referencia) {
   const server = path.join(origen, 'server');
   const client = path.join(origen, 'client');
   const sobrantes = readdirSync(origen).filter((n) => n !== 'server' && n !== 'client');
-  if (sobrantes.length) errores.push(`sobra en el artefacto: ${sobrantes.join(', ')}`);
+  if (sobrantes.length) errores.push(`sobra en el artefacto: ${sobrantes.map((n) => JSON.stringify(n)).join(', ')}`);
   if (!existsSync(path.join(server, 'entry.mjs'))) errores.push('falta server/entry.mjs');
   if (!existsSync(client)) errores.push('falta client/');
-  const archivosServer = existsSync(server) ? recorrer(server) : [];
-  const archivosClient = existsSync(client) ? recorrer(client) : [];
+  const archivosServer = existsSync(server) ? recorrer(server, errores) : [];
+  const archivosClient = existsSync(client) ? recorrer(client, errores) : [];
 
   for (const f of [...archivosServer.map((f) => `server/${f}`), ...archivosClient.map((f) => `client/${f}`)]) {
     if (f.split('/').some((parte) => SECRETOS.test(parte))) errores.push(`archivo de secretos: ${f}`);

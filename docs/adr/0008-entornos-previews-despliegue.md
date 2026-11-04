@@ -39,12 +39,14 @@
    - `previews.yml` (`pull_request`) solo construye, **sin secretos ni entorno**, y sube la build como artefacto.
    - `previews-desplegar.yml` (`workflow_run`, definición siempre de `main`) no ejecuta código del PR y trata el
      artefacto como un dato. `scripts/preparar-preview.mjs` copia de él solo los módulos (`.mjs`, `.js`), sus mapas
-     y los estáticos a una carpeta limpia, sin archivos ocultos ni enlaces y con cada `sourceMappingURL` dentro de su
-     carpeta, y escribe la configuración **de `main`** (`configuracionPreview`). La configuración del artefacto
+     y los estáticos a una carpeta limpia (sin archivos ocultos, enlaces ni nombres con `\` o caracteres de control,
+     y con cada `sourceMappingURL` dentro de su carpeta) y escribe la configuración **de `main`**
+     (`configuracionPreview`). La configuración del artefacto
      **no se usa nunca**: claves como `base_dir`, `rules`, `alias` o `build` decidirían qué archivos del runner se
      suben o qué se ejecuta junto al token (revisor-seguridad, 03-11-2026, A1). Solo se compara con la de `main`
      (`scripts/validar-preview.mjs`) para avisar de que la Preview no sería fiel. Después lo sube como Preview
-     `pr-<n>`, pasa el humo (tres bases en orden y `noindex` en `/` y `/sistema`) y comenta la URL desde un job
+     `pr-<n>` con `--ignore-base-config`, para que tampoco reciba la «Preview base config» del panel (variables,
+     bindings y secretos de la cuenta). Luego pasa el humo (tres bases en orden y `noindex` en `/` y `/sistema`) y comenta la URL desde un job
      aparte. Al cerrar el PR la borra, y un recolector diario borra las que se escapen.
 4. **Migraciones solo desde `main`** (`desplegar-preview.yml`), en serie y sin cancelación. Las Previews de PR
    usan el esquema de `main`. Un test rechaza SQL destructivo en `packages/db/migrations` salvo excepción anotada.
@@ -111,8 +113,11 @@
   preview falla con 403. Prueban que ese token no tiene la API de D1, no que esté acotado a unas bases: con tokens
   de toda la cuenta, el de `main` sí alcanza la canario.
 - `scripts/preparar-preview.test.mjs` y `scripts/validar-preview.test.mjs`: la configuración desplegada sale de
-  `main` y se rechazan `.env`, `.dev.vars`, archivos ocultos, otros tipos de archivo, enlaces simbólicos, mapas fuera
-  de su carpeta, `base_dir`, `build`, `alias`, `define`, `rules`, `no_bundle: false`, `secrets` y `account_id`.
+  `main` y se rechazan `.env`, `.dev.vars`, archivos ocultos, otros tipos de archivo, enlaces simbólicos, nombres con
+  `\` o caracteres de control, mapas fuera de su carpeta, `base_dir`, `build`, `alias`, `define`, `rules`,
+  `no_bundle: false`, `secrets` y `account_id`. Una regla de `scripts/supply-chain.test.mjs` exige la carpeta limpia y
+  `--ignore-base-config` en todo despliegue desde `workflow_run`. La tercera revisión de seguridad (04-11-2026) no
+  encontró nada crítico ni alto.
 - Primer PR tras activar: la build no recibe secretos, la Preview se despliega desde `workflow_run`, el humo pasa y
   la Preview se borra al cerrar.
 - Un PR que cambie `previews-desplegar.yml` o `wrangler.jsonc` no altera lo que se despliega (lo ejecuta `main`).

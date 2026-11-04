@@ -185,8 +185,12 @@ describe('workflows de GitHub Actions', () => {
       // La build de un PR llega como artefacto: se sube solo su código y con la configuración de main
       // (scripts/preparar-preview.mjs; segunda revisión de seguridad de S3, A1).
       test(`${file}: el código de un PR se despliega solo con la configuración de main`, () => {
-        for (const [linea] of text.matchAll(/exec wrangler (?:preview|deploy|versions upload)\b(?!\s+delete)[^\n]*/g)) {
-          assert.match(linea, /-c "\$RUNNER_TEMP\/limpio\/server\/wrangler\.json"/, linea);
+        // Cada orden completa, con sus líneas de continuación (`\` al final).
+        const ordenes = /exec wrangler (preview|deploy|versions upload)\b(?!\s+delete)(?:[^\n]*\\\n)*[^\n]*/g;
+        for (const [orden, tipo] of text.matchAll(ordenes)) {
+          assert.match(orden, /-c "\$RUNNER_TEMP\/limpio\/server\/wrangler\.json"/, orden);
+          // Ni la «Preview base config» del panel (tercera revisión de seguridad de S3, B1).
+          if (tipo === 'preview') assert.match(orden, /--ignore-base-config\b/, orden);
         }
         if (/download-artifact/.test(text)) {
           const prepara = text.indexOf(

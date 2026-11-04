@@ -173,6 +173,13 @@ describe('preparar-preview', () => {
     'un sourceMappingURL file:': (a) => {
       a['server/chunks/react_BSHLiuuV.mjs'] = 'x;\n//# sourceMappingURL=file:///etc/passwd.map';
     },
+    'un sourceMappingURL con //@': (a) => {
+      a['server/entry.mjs'] = 'x;\n//@ sourceMappingURL=../../../x.map\n';
+    },
+    // wrangler solo usa la última línea; aquí se exige que todas sean correctas.
+    'un sourceMappingURL malo antes de uno bueno': (a) => {
+      a['server/entry.mjs'] = 'x;\n//# sourceMappingURL=../../../x.map\ny;\n//# sourceMappingURL=entry.mjs.map\n';
+    },
     // Configuración del PR distinta de la de main (no se usa, pero delata un cambio que la Preview no tendría).
     'base_dir en la configuración del PR': conConfig((c) => {
       c.base_dir = '/';
@@ -209,6 +216,28 @@ describe('preparar-preview', () => {
     test(`rechaza ${nombre}`, () => {
       const destino = carpeta();
       assert.throws(() => preparar(artefacto(cambiar), destino, referencia), /no se puede desplegar/);
+      assert.ok(!existsSync(destino), 'no copia nada si la build no es válida');
+    });
+  }
+
+  // En Windows `\` es separador y los caracteres de control no valen en un nombre: estos casos solo se
+  // pueden crear en Linux y macOS (los ejecuta el CI en ubuntu-latest).
+  const nombresRaros = {
+    'un nombre con barra invertida y ..': 'server/x\\..\\..\\..\\preview\\client\\cebo.mjs',
+    'un nombre con barra invertida': 'server/chunks\\a.mjs',
+    'un nombre con salto de línea': 'client/a\nb.js',
+  };
+  for (const [nombre, ruta] of Object.entries(nombresRaros)) {
+    test(`rechaza ${nombre}`, (t) => {
+      if (process.platform === 'win32') {
+        t.skip('en Windows no se puede crear ese nombre');
+        return;
+      }
+      const destino = carpeta();
+      const origen = artefacto((a) => {
+        a[ruta] = 'export {};\n';
+      });
+      assert.throws(() => preparar(origen, destino, referencia), /nombre de archivo no permitido/);
       assert.ok(!existsSync(destino), 'no copia nada si la build no es válida');
     });
   }
