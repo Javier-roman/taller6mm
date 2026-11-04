@@ -185,4 +185,14 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-        run: pnpm exec wrangler preview delete --env preview --name "pr-$PR" --skip-confirmation
+        # Si el PR nunca tuvo Preview, «Preview not found» (código 10025) no es un fallo; cualquier otro error, sí.
+        run: |
+          if salida=$(pnpm exec wrangler preview delete --env preview --name "pr-$PR" --skip-confirmation 2>&1); then
+            echo "pr-$PR: borrada"
+          elif grep -q "code: 10025" <<< "$salida"; then
+            echo "pr-$PR: no existía"
+          else
+            echo "::error::pr-$PR: no se pudo borrar"
+            tail -n 5 <<< "$salida"
+            exit 1
+          fi
