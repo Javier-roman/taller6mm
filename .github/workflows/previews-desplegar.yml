@@ -4,9 +4,10 @@
 #   scripts/preparar-preview.mjs copia de él solo módulos, mapas y estáticos a una carpeta limpia y escribe
 #   la configuración de `main`: la del artefacto no se usa nunca (revisor-seguridad, 03-11-2026, A1).
 #   Sin migraciones: las Previews usan el esquema de `main`.
-# - El token vive en el entorno `preview-pr` de GitHub (restringido a `main`): «Workers Scripts: Edit» de
-#   toda la cuenta y sin la API de D1 (alcance real y riesgo aceptado en el ADR-0008). Solo está en el `env`
-#   de los pasos de wrangler. El `pnpm install` de antes corre en el mismo job (issue #11, M3).
+# - El token vive en el entorno `preview-pr` de GitHub (restringido a `main`): «Workers: Admin» (modelo nuevo;
+#   la API de Previews no acepta «Workers Scripts») de toda la cuenta y sin la API de D1 (alcance real y riesgo
+#   aceptado en el ADR-0008). Solo está en el `env` de los pasos de wrangler. El `pnpm install` de antes corre
+#   en el mismo job (issue #11, M3).
 # - PR abierto → Preview `pr-<n>` + humo + comentario (job aparte, sin checkout). PR cerrado → se borra.
 # - Apagado hasta que exista la variable CLOUDFLARE_PREVIEWS=activas.
 name: Previews · desplegar

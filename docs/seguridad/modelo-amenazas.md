@@ -112,7 +112,7 @@ Puesto de Javi: Claude Code ──▶ hooks ──▶ shell, MCP Playwright (nav
 | T | Escrituras múltiples a medias | `db.batch()` atómico (D1 no admite `BEGIN`; medido en S1) | ✅ S1 | V2 |
 | I | Copias de seguridad expuestas | R2 privado; exportación semanal de `core` y `mercado` | 🔜 F9 | V14 |
 | D | Superar las 100.000 escrituras diarias | Solo cambios y en lotes; contadores en Durable Objects con volcado periódico | 🔜 F4–F5 | V2 |
-| E | Token de CI con permisos de toda la cuenta | Tokens por uso (ADR-0008) en entornos de GitHub restringidos a `main` y solo en jobs que no ejecutan código del PR: `preview` (Workers y D1) y `preview-pr` (Workers, sin la API de D1). **Alcanzan toda la cuenta**, porque el panel no dejó acotarlos (03-11-2026). Requisito duro: la cuenta solo tiene la preview de Taller6mm, nunca datos reales, y producción va en otra cuenta, con su token solo en el entorno `production` y con aprobación. Volver a acotarlos: issue #11 | ✅ S3 · ⚠️ alcance aceptado por Javi | V13 |
+| E | Token de CI con permisos de toda la cuenta | Tokens por uso (ADR-0008) en entornos de GitHub restringidos a `main` y solo en jobs que no ejecutan código del PR: `preview` («Workers Scripts» y D1) y `preview-pr` («Workers: Admin» del modelo nuevo, que es lo que acepta la API de Previews; sin la API de D1). **Alcanzan toda la cuenta**, porque el panel no dejó acotarlos (03 y 04-11-2026). Requisito duro: la cuenta solo tiene la preview de Taller6mm, nunca datos reales, y producción va en otra cuenta, con su token solo en el entorno `production` y con aprobación. Volver a acotarlos: issue #11 | ✅ S3 · ⚠️ alcance aceptado por Javi | V13 |
 
 ### 4.6 CI/CD y cadena de suministro
 | STRIDE | Amenaza | Mitigación | Estado | ASVS |
