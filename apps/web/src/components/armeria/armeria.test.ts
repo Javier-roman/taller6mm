@@ -4,7 +4,16 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { ASPECTO_POSTER, ENCUADRE_POSTER, encuadreSala, proyectar, rectZona } from './camara.ts';
+import {
+  ASPECTO_POSTER,
+  anchoVisibleMovil,
+  ENCUADRE_POSTER,
+  encuadreSala,
+  encuadreZona,
+  proyectar,
+  rectZona,
+  TABLERO_EN_MOVIL,
+} from './camara.ts';
 import { Director, INTRO, VARIANTES } from './director.ts';
 import { type Estanteria, ORDEN_ESTANTERIAS, ZONAS } from './zonas.ts';
 
@@ -114,6 +123,16 @@ describe('encuadres', () => {
       ASPECTO_POSTER,
     );
     expect(x).toBeCloseTo(0.5, 5);
+  });
+
+  it('en móvil el tablero del banco cae en el tercio inferior, sin franja vacía debajo', () => {
+    const banco = ZONAS.find((z) => z.id === 'banco');
+    if (!banco) throw new Error('falta la zona banco');
+    for (const aspecto of [390 / 844, 375 / 667, 430 / 932]) {
+      const e = encuadreZona(banco, aspecto, 0, anchoVisibleMovil(banco));
+      const [, y] = proyectar([banco.caja.centro[0], 0.95, banco.caja.centro[2]], e, aspecto);
+      expect(y).toBeCloseTo(TABLERO_EN_MOVIL, 2);
+    }
   });
 
   it('zonas-poster.css está al día con la proyección (scripts/prototipos/zonas-poster.mjs)', () => {

@@ -14,6 +14,7 @@ import {
   type Group,
   type HemisphereLight,
   type Mesh,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
   Object3D,
   PMREMGenerator,
@@ -26,6 +27,7 @@ import {
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { crearIluminacion, type Iluminacion } from './director.ts';
+import { ajustarHaz, crearHaz, crearReflejoFalso } from './efectos.ts';
 import {
   texturaCorcho,
   texturaHormigon,
@@ -78,6 +80,10 @@ export const LUZ = {
   pantalla: 0.9,
   /** Reflejos del entorno (IBL): sin ellos el metal se ve negro. */
   entorno: 0.08,
+  /** Haces de luz bajo los tubos (efectos.ts), proporcionales al nivel de su fila. */
+  haz: 1.1,
+  /** Reflejos falsos del suelo bajo los tubos y el flexo (efectos.ts). */
+  reflejo: 3.5,
 } as const;
 
 const CALIDO = new Color('#ffb46a');
@@ -94,22 +100,28 @@ function useMateriales() {
     const pantalla = texturaPantalla();
     return {
       ladrillo: m({ map: ladrillo.mapa, normalMap: ladrillo.normal, roughness: 0.92 }),
-      hormigon: m({ map: hormigon.mapa, normalMap: hormigon.normal, roughness: 0.82, metalness: 0.05 }),
-      chapa: m({ color: verde, roughness: 0.48, metalness: 0.5 }),
+      hormigon: m({ map: hormigon.mapa, normalMap: hormigon.normal, roughness: 0.42, metalness: 0.08 }),
+      chapa: m({ color: verde, roughness: 0.32, metalness: 0.55 }),
       chapaOscura: m({ color: verde.clone().multiplyScalar(0.45), roughness: 0.7, metalness: 0.3 }),
       techo: m({ color: '#121315', roughness: 1 }),
-      acero: m({ color: '#2b2f34', roughness: 0.32, metalness: 0.85 }),
-      rail: m({ color: '#8a9097', roughness: 0.22, metalness: 0.95 }),
-      polimeroNegro: m({ color: '#17191c', roughness: 0.62 }),
+      acero: m({ color: '#2b2f34', roughness: 0.2, metalness: 0.9 }),
+      rail: m({ color: '#8a9097', roughness: 0.14, metalness: 0.95 }),
+      polimeroNegro: m({ color: '#17191c', roughness: 0.46 }),
       polimeroFde: m({ color: colors.fde, roughness: 0.7 }),
       polimeroOd: m({ color: colors['verde-ranger'], roughness: 0.7 }),
-      maletin: m({ color: '#1b1d20', roughness: 0.46, metalness: 0.1 }),
+      maletin: m({ color: '#1b1d20', roughness: 0.28, metalness: 0.15 }),
       kraft: m({ color: '#a8854f', roughness: 0.9 }),
-      nogal: m({ map: texturaNogal(), roughness: 0.55 }),
+      // Nogal barnizado: capa de barniz con brillo propio sobre la madera.
+      nogal: new MeshPhysicalMaterial({
+        map: texturaNogal(),
+        roughness: 0.42,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.12,
+      }),
       tapete: m({ map: texturaTapete(), roughness: 0.92 }),
       corcho: m({ map: texturaCorcho(), roughness: 0.95 }),
       papel: m({ color: colors.hueso, roughness: 0.85 }),
-      laton: m({ color: colors.laton, roughness: 0.3, metalness: 0.95 }),
+      laton: m({ color: colors.laton, roughness: 0.2, metalness: 0.95 }),
       vidrio: m({
         color: '#d8e4ea',
         roughness: 0.08,
@@ -118,7 +130,7 @@ function useMateriales() {
         opacity: 0.05,
         depthWrite: false,
       }),
-      taquilla: m({ color: '#3b434b', roughness: 0.42, metalness: 0.65 }),
+      taquilla: m({ color: '#3b434b', roughness: 0.3, metalness: 0.7 }),
       pantalla: m({ map: pantalla, emissiveMap: pantalla, emissive: '#ffffff', emissiveIntensity: LUZ.pantalla }),
       led: m({ color: '#fff3e2', emissive: CALIDO, emissiveIntensity: LUZ.led, roughness: 0.3 }),
       bombilla: m({ color: '#fff3e2', emissive: CALIDO, emissiveIntensity: LUZ.bombilla, roughness: 0.3 }),
@@ -636,6 +648,28 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
     [],
   );
 
+  // Haces de luz (uno por fila de tubos) y reflejo del suelo pulido, solo en tiempo real (efectos.ts).
+  const haces = useMemo(
+    () =>
+      Object.fromEntries(
+        ORDEN_ESTANTERIAS.map((e) => [
+          e,
+          crearHaz(new Vector3(xDe(e), 3.37, -1.0), new Vector3(xDe(e), 0.0, -1.4), new Color('#dfe9ff'), 3.4),
+        ]),
+      ) as Record<Estanteria, ReturnType<typeof crearHaz>>,
+    [],
+  );
+  // Reflejos falsos en el suelo pulido: uno bajo cada fila de tubos y otro, cálido, bajo el flexo.
+  const reflejos = useMemo(
+    () => ({
+      tubos: Object.fromEntries(
+        ORDEN_ESTANTERIAS.map((e) => [e, crearReflejoFalso(1.9, 3.6, new Color('#dfe9ff'))]),
+      ) as Record<Estanteria, ReturnType<typeof crearReflejoFalso>>,
+      flexo: crearReflejoFalso(1.4, 2.2, new Color('#ffb46a')),
+    }),
+    [],
+  );
+
   const destino = useMemo(() => new Vector3(), []);
   const origenAcento = useMemo(() => new Vector3(), []);
   useFrame(({ camera }) => {
@@ -648,6 +682,8 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         foco.color.copy(control.colorTubo);
       }
       tubosMat[e].emissiveIntensity = LUZ.tuboEmisivo * Math.min(1.2, nivel * 1.6);
+      ajustarHaz(haces[e], LUZ.haz * Math.min(1.2, nivel), control.colorTubo);
+      ajustarHaz(reflejos.tubos[e], LUZ.reflejo * Math.min(1.2, nivel), control.colorTubo);
       tubosMat[e].emissive.copy(control.colorTubo);
       const g = grupos[e].current;
       if (g) g.position.z = control.desplazamiento[e];
@@ -661,6 +697,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       material.emissiveIntensity = luz.rotulos * (activo ? LUZ.rotuloActivo : LUZ.rotuloBase * 1.2);
     }
     if (flexo.current) flexo.current.intensity = LUZ.flexo * luz.calidas;
+    ajustarHaz(reflejos.flexo, LUZ.reflejo * 0.8 * luz.calidas, CALIDO);
     mat.bombilla.emissiveIntensity = LUZ.bombilla * luz.calidas;
     mat.led.emissiveIntensity = LUZ.led * luz.calidas;
     if (vitrina.current) vitrina.current.intensity = LUZ.vitrina * luz.calidas;
@@ -709,6 +746,13 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       <mesh position={[0, 2.6, MUEBLE.frente - MUEBLE.fondo - 0.04]} material={mat.ladrillo} receiveShadow>
         <planeGeometry args={[24, 5.2]} />
       </mesh>
+      {ORDEN_ESTANTERIAS.map((e) => (
+        <primitive key={`reflejo-${e}`} object={reflejos.tubos[e]} position={[xDe(e), 0.004, MUEBLE.frente + 1.8]} />
+      ))}
+      <primitive object={reflejos.flexo} position={[BANCO.x, 0.004, BANCO.z + 1.3]} />
+      {ORDEN_ESTANTERIAS.map((e) => (
+        <primitive key={`haz-${e}`} object={haces[e]} />
+      ))}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 4.2, 2]} material={mat.techo}>
         <planeGeometry args={[24, 16]} />
       </mesh>

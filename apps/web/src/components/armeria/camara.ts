@@ -45,6 +45,8 @@ export const ENCUADRE_POSTER = encuadreSala(ASPECTO_POSTER);
 
 /** Picado de la cámara sobre el tablero del banco al abrirlo: se ve el tapete, no las patas. */
 const PICADO_BANCO = (25 * Math.PI) / 180;
+/** Altura en pantalla (0 arriba, 1 abajo) del centro del tablero en móvil: justo encima del carrusel. */
+export const TABLERO_EN_MOVIL = 0.74;
 
 /**
  * Encuadre de una zona: de frente, con margen, desplazada `dz` si su cuerpo ha rodado. En móvil
@@ -58,11 +60,20 @@ export function encuadreZona(zona: Zona, aspecto: number, dz = 0, anchoVisible?:
   if (zona.id === 'banco') {
     const tablero = 0.95;
     const d = anchoVisible ? Math.min(anchoVisible, 1.8) / 2 / (t * aspecto) : 2.3;
-    return {
-      posicion: [x, tablero + d * Math.sin(PICADO_BANCO), z + d * Math.cos(PICADO_BANCO)],
-      objetivo: [x, tablero, z],
-      fov,
-    };
+    const posicion: V3 = [x, tablero + d * Math.sin(PICADO_BANCO), z + d * Math.cos(PICADO_BANCO)];
+    if (!anchoVisible) return { posicion, objetivo: [x, tablero, z], fov };
+    // Móvil (retrato): mirando al centro del tablero, la mitad inferior se quedaba en las patas y el
+    // suelo. Se sube el objetivo hasta que el tablero cae en el tercio inferior y la vitrina de detrás
+    // llena el de arriba (petición de Javi, 04-11-2026).
+    let bajo = 0;
+    let alto = 3;
+    for (let i = 0; i < 30; i++) {
+      const medio = (bajo + alto) / 2;
+      const y = proyectar([x, tablero, z], { posicion, objetivo: [x, tablero + medio, z], fov }, aspecto)[1];
+      if (y < TABLERO_EN_MOVIL) bajo = medio;
+      else alto = medio;
+    }
+    return { posicion, objetivo: [x, tablero + bajo, z], fov };
   }
   const d = anchoVisible
     ? anchoVisible / 2 / (t * aspecto)

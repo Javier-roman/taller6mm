@@ -399,6 +399,8 @@ export function InterfazArmeria({
           </div>
           <p className="armeria__prototipo">
             <strong>Prototipo {prototipo}</strong> · {descripcion} <span className="armeria__tecnica">({tecnica})</span>
+            {/* Hasta tener réplicas modeladas a escala real (frente de fidelidad), las siluetas son de atrezo. */} ·{' '}
+            <span className="armeria__provisional">siluetas provisionales</span>
           </p>
           {/* Acción principal: el banco (configurador) es el protagonista de la web. */}
           <Boton variante="laton" className="armeria__accion" onClick={() => abrir('banco')}>

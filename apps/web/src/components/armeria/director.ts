@@ -43,13 +43,15 @@ export const VARIANTES: Readonly<
     }
   >
 > = {
+  // Penumbra más marcada (Javi, 04-11-2026): menos luz de relleno para que se lean los haces de los
+  // tubos, el brillo del metal y el reflejo del suelo. «Más luz» sigue a la vista para leer.
   penumbra: {
     nombre: 'Cierre de taller (penumbra)',
-    reposo: 0.38,
+    reposo: 0.34,
     foco: 1,
-    resto: 0.24,
+    resto: 0.18,
     calidas: 1,
-    ambiente: 0.7,
+    ambiente: 0.4,
     colorTubo: '#dfe9ff',
   },
   'mas-luz': {
