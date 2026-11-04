@@ -1,0 +1,70 @@
+# Previews de PR en Cloudflare, fase 1 de 2: CONSTRUIR (S3; ADR-0008; revisor-seguridad, 03-11-2026).
+# - Corre el código del PR (y sus dependencias), así que no tiene secretos ni entorno de GitHub: build con
+#   CLOUDFLARE_ENV=preview y la sube como artefacto. Nada más.
+# - El despliegue lo hace previews-desplegar.yml con `workflow_run`: su definición sale siempre de `main`,
+#   no usa el código del PR y trata el artefacto como datos (sube solo su código, con la configuración
+#   de `main`). Aquí se pasa la misma comprobación para que el PR vea pronto si su build no valdría.
+# - Apagado hasta que exista la variable CLOUDFLARE_PREVIEWS=activas (docs/runbooks/cloudflare-s3.md). No
+#   es un control de seguridad: solo evita builds inútiles mientras Cloudflare no está listo.
+# - Sin `pull_request_target`; los PR de forks no construyen preview.
+name: Previews
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions: {}
+
+concurrency:
+  group: previews-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  PNPM_VERSION: 12.16.1
+  TURBO_TELEMETRY_DISABLED: "1"
+  ASTRO_TELEMETRY_DISABLED: "1"
+  WRANGLER_SEND_METRICS: "false"
+  DO_NOT_TRACK: "1"
+
+jobs:
+  construir:
+    name: Build de la Preview (sin secretos)
+    if: >-
+      vars.CLOUDFLARE_PREVIEWS == 'activas' &&
+      github.event.action != 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - run: npm install --global "pnpm@$PNPM_VERSION"
+      - run: pnpm install --frozen-lockfile
+      - name: Build del entorno preview
+        env:
+          CLOUDFLARE_ENV: preview
+        run: pnpm --filter @taller6mm/web build
+      - name: La build se podrá desplegar (misma comprobación que previews-desplegar.yml)
+        run: node scripts/preparar-preview.mjs apps/web/dist "$RUNNER_TEMP/limpio"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: preview-web
+          path: apps/web/dist
+          retention-days: 3
+          if-no-files-found: error
+
+  # Al cerrar el PR, el run termina en verde para que previews-desplegar.yml borre la Preview.
+  cerrado:
+    name: PR cerrado
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 2
+    steps:
+      - run: echo "PR cerrado; previews-desplegar.yml borra su Preview."

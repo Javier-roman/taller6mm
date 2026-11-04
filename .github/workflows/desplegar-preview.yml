@@ -1,0 +1,84 @@
+# Despliegue del entorno preview desde `main` (S3; ADR-0008; revisor-seguridad).
+# - Solo `main` (push) o a mano: es el único sitio con migraciones remotas, y van en serie (grupo global
+#   sin cancelación) para que dos despliegues no migren a la vez ni se corte una migración a medias.
+# - Token del entorno `preview` de GitHub (restringido a `main`): «Workers Scripts: Edit» y «D1: Edit» de
+#   toda la cuenta (alcance real y riesgo aceptado en el ADR-0008). Solo está en el `env` de los pasos de
+#   wrangler, pero la instalación y la build corren antes en el mismo job (separarlos: issue #11, M3).
+# - Antes de desplegar se comprueba que la build es del Worker de preview (nunca el de producción).
+# - Apagado hasta que exista la variable CLOUDFLARE_PREVIEWS=activas. Producción no se despliega aquí.
+name: Desplegar preview
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+env:
+  PNPM_VERSION: 12.16.1
+  TURBO_TELEMETRY_DISABLED: "1"
+  ASTRO_TELEMETRY_DISABLED: "1"
+  WRANGLER_SEND_METRICS: "false"
+  DO_NOT_TRACK: "1"
+
+jobs:
+  desplegar:
+    name: Entorno preview (web y jobs)
+    if: vars.CLOUDFLARE_PREVIEWS == 'activas' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: preview
+    permissions:
+      contents: read
+    concurrency:
+      group: d1-preview
+      cancel-in-progress: false
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+      - run: npm install --global "pnpm@$PNPM_VERSION"
+      - run: pnpm install --frozen-lockfile
+      - name: Migraciones (aditivas, lo comprueba un test) en las bases de preview
+        working-directory: apps/web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          for db in CORE MERCADO BUSQUEDA; do
+            pnpm exec wrangler d1 migrations apply "$db" --env preview --remote
+          done
+      - name: Build del entorno preview
+        env:
+          CLOUDFLARE_ENV: preview
+        run: pnpm --filter @taller6mm/web build
+      - name: La build es del Worker de preview
+        run: node scripts/validar-preview.mjs apps/web/dist/server/wrangler.json
+      - name: Desplegar web (taller6mm-web-preview)
+        working-directory: apps/web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm exec wrangler deploy --message "main (${GITHUB_SHA::7})"
+      - name: Desplegar jobs (taller6mm-jobs-preview)
+        working-directory: apps/jobs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm exec wrangler deploy --env preview --message "main (${GITHUB_SHA::7})"
+      - name: Humo del entorno preview
+        env:
+          URL: ${{ vars.ZAP_TARGET_URL }}
+        run: |
+          if [[ ! "$URL" =~ ^https://taller6mm-web-preview\.[a-z0-9-]+\.workers\.dev/?$ ]]; then
+            echo "::warning::ZAP_TARGET_URL no es la URL del Worker de preview: sin humo."
+            exit 0
+          fi
+          URL="${URL%/}"
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 --retry-all-errors -o inicio.html "$URL/"
+          test "$(grep -o 'data-state="ok"' inicio.html | wc -l)" -ge 3
+          curl --fail --silent --show-error -o /dev/null "$URL/sistema"
