@@ -9,7 +9,7 @@
 // Lee como mucho: robots, portada, 4 sitemaps, 3 legales y `max` páginas de muestra, y solo URLs https del
 // propio sitio. Revisiones de seguridad e ingesta del 04-11-2026.
 import { lookup } from 'node:dns/promises';
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { isIP } from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -57,7 +57,7 @@ interface Resumen {
   slug: string;
   url: string;
   fecha: string;
-  robots?: { estado: number | null; fecha: string; sha256: string; lineasReserva: string[] };
+  robots?: { sintetico: boolean; estado: number | null; fecha: string; sha256: string; lineasReserva: string[] };
   reservaIa?: boolean;
   motivosReserva?: string[];
   portadaPermitida?: boolean;
@@ -124,8 +124,10 @@ export async function diligencia(cliente: ClienteRespetuoso, ua: string, sitio: 
     return resumen;
   }
   // robots.txt es un archivo para bots: se guarda siempre como evidencia (no es contenido de la web).
-  writeFileSync(path.join(dir, 'robots.txt'), info.texto);
+  // Si no hubo uno real (5xx, red, redirección fuera), no se inventa: se anota como sintético.
+  if (!info.sintetico) writeFileSync(path.join(dir, 'robots.txt'), info.texto);
   resumen.robots = {
+    sintetico: info.sintetico,
     estado: info.estado,
     fecha: info.fecha,
     sha256: info.sha256,
@@ -139,7 +141,7 @@ export async function diligencia(cliente: ClienteRespetuoso, ua: string, sitio: 
 
   const guardar = (tipo: string, r: Respuesta) => {
     const html = texto(r);
-    motivos.push(...reservaEnPagina(html).map((m) => `${m} (${tipo})`));
+    motivos.push(...reservaEnPagina(html, r.cabeceras).map((m) => `${m} (${tipo})`));
     const sinIa = motivos.length > 0;
     const carpeta = path.join(dir, sinIa ? 'sin-ia' : 'paginas');
     mkdirSync(carpeta, { recursive: true });
@@ -171,6 +173,17 @@ export async function diligencia(cliente: ClienteRespetuoso, ua: string, sitio: 
     }
     return '';
   };
+
+  // TDMRep (W3C): /.well-known/tdmrep.json con alguna reserva (tdm-reservation: 1).
+  if (evaluacion.permitido) {
+    try {
+      const r = await cliente.obtener(new URL('/.well-known/tdmrep.json', base).href);
+      if (r.estado === 200 && /"tdm-reservation"s*:s*1/.test(texto(r, 512 * 1024)))
+        motivos.push('TDMRep: tdm-reservation=1');
+    } catch (e) {
+      errores.push(`tdmrep: ${motivo(e)}`);
+    }
+  }
 
   if (!evaluacion.permitido) {
     errores.push('robots.txt prohíbe la portada: no se pide nada más');
@@ -213,6 +226,16 @@ export async function diligencia(cliente: ClienteRespetuoso, ua: string, sitio: 
     for (const u of eleccion.productos) await intentar('producto', u);
   }
 
+  // Si la reserva apareció tarde (en una página posterior), lo ya guardado se aparta y se limpia el resumen.
+  if (motivos.length && existsSync(path.join(dir, 'paginas'))) {
+    mkdirSync(path.join(dir, 'sin-ia'), { recursive: true });
+    for (const f of readdirSync(path.join(dir, 'paginas')))
+      renameSync(path.join(dir, 'paginas', f), path.join(dir, 'sin-ia', f));
+    for (const p of paginas) {
+      for (const k of ['pasajes', 'jsonLdTipos', 'tieneProducto', 'tieneOferta', 'ogProducto', 'imagenes']) delete p[k];
+      if (typeof p['archivo'] === 'string') p['archivo'] = p['archivo'].replace(/^paginas\//, 'sin-ia/');
+    }
+  }
   resumen.reservaIa = motivos.length > 0;
   resumen.motivosReserva = motivos;
   writeFileSync(path.join(dir, 'resumen.json'), `${JSON.stringify(resumen, null, 2)}\n`);

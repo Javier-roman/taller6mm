@@ -44,6 +44,8 @@ export interface InfoRobots {
   estado: number | null;
   fecha: string;
   sha256: string;
+  /** No hubo robots.txt real (5xx, red o redirección fuera): se aplica «todo prohibido» y no hay texto. */
+  sintetico: boolean;
 }
 
 export interface Respuesta {
@@ -52,6 +54,8 @@ export interface Respuesta {
   tipo: string | null;
   cuerpo: Uint8Array;
   evaluacion: Evaluacion;
+  /** Cabeceras de reserva de IA/TDM (X-Robots-Tag, TDM-Reservation), en minúsculas. */
+  cabeceras: Record<string, string>;
 }
 
 export class BloqueadoPorRobots extends Error {}
@@ -67,9 +71,9 @@ const MAX_CRAWL_DELAY_S = 60;
 const MAX_ESPERA = 2 ** 31 - 1;
 const MAX_REDIRECCIONES = 5;
 const RUTA_PRIVADA =
-  /(^|[/_-])(carrito|cart|basket|checkout|pedido|pedidos|order|orders|cuenta|account|my-account|mi-cuenta|login|iniciar-sesion|registro|register|contrase|password|wishlist|deseos|compar|buscar|busqueda|search|logout|desconect|historial)([/_.?-]|$)/i;
+  /(^|[/_-])(carrito|cart|basket|checkout|pedido|pedidos|order|orders|cuenta|account|my-account|mi-cuenta|login|iniciar-sesion|registro|register|contrase|password|wishlist|deseos|compar|buscar|busqueda|search|logout|desconect|historial|finalizar-compra|autenticacion|identificacion|direcciones|pago|payment)([/_.?-]|$)/i;
 const QUERY_PRIVADA = /(^|[?&])(add-to-cart|action|token|back|sessionid|sid|redirect)=/i;
-const DESAFIO = /cf-chl|challenge-platform|captcha|just a moment|attention required|access denied/i;
+const DESAFIO_FUERTE = /cf-chl|cf_chl_opt|challenge-platform|<title>\s*(just a moment|attention required)/i;
 
 /** Clave de sitio: el host sin `www.` (comparten cola, pausa, circuito y bloqueo). */
 export const claveSitio = (u: URL) => u.hostname.toLowerCase().replace(/^www\./, '');
@@ -81,7 +85,13 @@ export function mismoSitio(a: URL, b: URL): boolean {
 
 /** ¿Es una ruta que el bot no debe pedir nunca? */
 export function esZonaPrivada(u: URL): boolean {
-  return RUTA_PRIVADA.test(decodeURIComponent(u.pathname)) || QUERY_PRIVADA.test(u.search);
+  let ruta: string;
+  try {
+    ruta = decodeURIComponent(u.pathname);
+  } catch {
+    return true; // un % mal formado: se descarta
+  }
+  return RUTA_PRIVADA.test(ruta) || QUERY_PRIVADA.test(u.search);
 }
 
 interface Cruda {
@@ -90,6 +100,7 @@ interface Cruda {
   cuerpo: Uint8Array;
   location: string | null;
   retryAfter: string | null;
+  cabeceras: Record<string, string>;
 }
 
 const numero = (v: unknown, defecto: number) => (typeof v === 'number' && Number.isFinite(v) ? v : defecto);
@@ -198,6 +209,12 @@ export class ClienteRespetuoso {
         cuerpo,
         location: r.headers.get('location'),
         retryAfter: r.headers.get('retry-after'),
+        cabeceras: Object.fromEntries(
+          ['x-robots-tag', 'tdm-reservation', 'tdm-policy'].flatMap((h) => {
+            const v = r.headers.get(h);
+            return v ? [[h, v]] : [];
+          }),
+        ),
       };
     } catch (e) {
       this.#fallos.set(clave, (this.#fallos.get(clave) ?? 0) + 1);
@@ -255,6 +272,12 @@ export class ClienteRespetuoso {
       estado,
       fecha,
       sha256: createHash('sha256').update(texto).digest('hex'),
+      sintetico: false,
+    });
+    const prohibido = (estado: number | null): InfoRobots => ({
+      ...nada(estado, ''),
+      robots: analizarRobots('User-agent: *\nDisallow: /'),
+      sintetico: true,
     });
     let url = new URL('/robots.txt', origen);
     for (let salto = 0; salto <= MAX_REDIRECCIONES; salto++) {
@@ -263,27 +286,32 @@ export class ClienteRespetuoso {
         r = await this.#peticion(url, null);
       } catch (e) {
         if (e instanceof CircuitoAbierto) throw e;
-        return nada(null, 'User-agent: *\nDisallow: /');
+        return prohibido(null);
       }
       if (r.estado >= 300 && r.estado < 400 && r.location) {
         const destino = new URL(r.location, url);
-        if (!mismoSitio(origen, destino)) return nada(r.estado, 'User-agent: *\nDisallow: /');
+        try {
+          this.#comprobar(destino);
+        } catch {
+          return prohibido(r.estado);
+        }
+        if (!mismoSitio(origen, destino)) return prohibido(r.estado);
         url = destino;
         continue;
       }
       const texto = new TextDecoder().decode(r.cuerpo);
       if (r.estado >= 200 && r.estado < 300) {
         // Un 200 con HTML («Just a moment…») no es un robots.txt: es un desafío o un error disfrazado.
-        if (/text\/html/i.test(r.tipo ?? '') || /^\s*</.test(texto) || DESAFIO.test(texto.slice(0, 2000))) {
+        if (/text\/html/i.test(r.tipo ?? '') || /^\s*</.test(texto) || DESAFIO_FUERTE.test(texto.slice(0, 2000))) {
           this.#bloquear(origen, 'robots.txt devuelve HTML o un desafío');
         }
         return nada(r.estado, texto);
       }
       if (r.estado === 404 || r.estado === 410) return nada(r.estado, '');
       if (r.estado >= 400 && r.estado < 500) this.#bloquear(origen, `robots.txt responde ${r.estado}`);
-      return nada(r.estado, 'User-agent: *\nDisallow: /');
+      return prohibido(r.estado);
     }
-    return nada(null, 'User-agent: *\nDisallow: /');
+    return prohibido(null);
   }
 
   /** Evaluación de robots para una URL (sin pedirla). */
@@ -310,7 +338,7 @@ export class ClienteRespetuoso {
         url = new URL(r.location, actual);
         continue;
       }
-      return { url: actual.href, estado: r.estado, tipo: r.tipo, cuerpo: r.cuerpo, evaluacion };
+      return { url: actual.href, estado: r.estado, tipo: r.tipo, cuerpo: r.cuerpo, evaluacion, cabeceras: r.cabeceras };
     }
     throw new Error(`Demasiadas redirecciones desde ${direccion}`);
   }
@@ -320,7 +348,8 @@ export class ClienteRespetuoso {
     for (let intento = 0; ; intento++) {
       const r = await this.#peticion(url, crawlDelay);
       if (r.estado === 401 || r.estado === 403) this.#bloquear(url, `responde ${r.estado}`);
-      if (/text\/html/i.test(r.tipo ?? '') && DESAFIO.test(new TextDecoder().decode(r.cuerpo.slice(0, 4096)))) {
+      // Un reCAPTCHA en el <head> de una portada normal no es un bloqueo: solo las marcas fuertes de desafío.
+      if (/text\/html/i.test(r.tipo ?? '') && DESAFIO_FUERTE.test(new TextDecoder().decode(r.cuerpo.slice(0, 8192)))) {
         this.#bloquear(url, 'página de desafío o CAPTCHA');
       }
       if (r.estado !== 429 && r.estado !== 503) {

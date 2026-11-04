@@ -213,10 +213,18 @@ describe('ClienteRespetuoso: ritmo y bloqueos', () => {
       'https://k.example/robots.txt': { estado: 404 },
       'https://k.example/p': {
         estado: 200,
-        cuerpo: '<div class="g-recaptcha captcha"></div>',
+        cuerpo: '<html><head><title>Just a moment...</title><script src="/cdn-cgi/challenge-platform/x.js"></script>',
+        cabeceras: { 'content-type': 'text/html' },
+      },
+      // Una portada normal que carga reCAPTCHA para su formulario de contacto no es un bloqueo.
+      'https://k.example/portada': {
+        estado: 200,
+        cuerpo:
+          '<head><script src="https://www.google.com/recaptcha/api.js"></script></head><div class="g-recaptcha"></div>',
         cabeceras: { 'content-type': 'text/html' },
       },
     });
+    expect((await captcha.cliente.obtener('https://k.example/portada')).estado).toBe(200);
     await expect(captcha.cliente.obtener('https://k.example/p')).rejects.toBeInstanceOf(BloqueoDetectado);
   });
 

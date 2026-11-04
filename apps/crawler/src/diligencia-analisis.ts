@@ -42,7 +42,13 @@ export function candidataValida(u: string, base: string): boolean {
 /** Elige páginas legales, de producto y de categoría entre candidatas válidas (deterministas, sin duplicados). */
 export function elegirPaginas(urls: string[], base: string, max = 5): Seleccion {
   const unicas = [...new Set(urls)].filter((u) => candidataValida(u, base));
-  const ruta = (u: string) => decodeURIComponent(new URL(u).pathname);
+  const ruta = (u: string) => {
+    try {
+      return decodeURIComponent(new URL(u).pathname);
+    } catch {
+      return new URL(u).pathname;
+    }
+  };
   const legales = unicas.filter((u) => LEGAL.test(ruta(u))).slice(0, 3);
   const resto = unicas.filter((u) => !legales.includes(u));
   const categorias = resto.filter((u) => CATEGORIA.test(ruta(u))).slice(0, 2);

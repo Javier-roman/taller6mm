@@ -84,8 +84,11 @@ export function analizarRobots(entrada: string): Robots {
         if (/(^|[\s,;])[a-z-]*ai\s*=\s*n\b/i.test(valor)) robots.usoIaNo = true;
         continue;
       }
-      if (!actual) actual = nuevoGrupo();
-      if (!actual.agentes.length) actual.agentes.push('*');
+      // Fuera de todo grupo, la señal es del sitio entero (grupo `*`). Un grupo sin agentes válidos no la recibe.
+      if (!actual) {
+        actual = nuevoGrupo();
+        actual.agentes.push('*');
+      }
       const pares = valor.split(',');
       for (const par of pares) {
         const m = /^\s*([a-z0-9-]+)\s*=\s*(yes|no)\s*$/i.exec(par);

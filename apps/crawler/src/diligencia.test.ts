@@ -132,3 +132,41 @@ describe('diligencia', () => {
     for (const ip of ['8.8.8.8', '172.32.0.1', '2a00:1450::1']) expect(ipPrivada(ip), ip).toBe(false);
   });
 });
+
+describe('diligencia: casos raros', () => {
+  test('un enlace con % mal formado no aborta el sitio', async () => {
+    const { cliente } = web({
+      'https://tienda.example/robots.txt': { estado: 404 },
+      'https://tienda.example/': {
+        estado: 200,
+        cuerpo: '<a href="/funda-100%-algodon">x</a><a href="/aviso-legal">L</a>',
+      },
+      'https://tienda.example/aviso-legal': { estado: 200, cuerpo: '<p>Texto legal.</p>' },
+    });
+    const r = await diligencia(cliente, UA, { slug: 'porcentaje', url: 'https://tienda.example/' }, 5, tmp);
+    expect(r.paginas.some((p) => p['tipo'] === 'legal')).toBe(true);
+  });
+
+  test('una reserva que aparece tarde aparta lo ya guardado y limpia el resumen', async () => {
+    const { cliente } = web({
+      'https://tienda.example/robots.txt': { estado: 404 },
+      'https://tienda.example/': {
+        estado: 200,
+        cuerpo: '<a href="/aviso-legal">L</a><a href="/producto/replica-m4-0001">P</a>',
+      },
+      'https://tienda.example/aviso-legal': {
+        estado: 200,
+        cuerpo: '<p>Prohibida la extracción automatizada de contenidos con robots.</p>',
+      },
+      'https://tienda.example/producto/replica-m4-0001': {
+        estado: 200,
+        cuerpo: '<meta name="robots" content="noai">',
+      },
+    });
+    const r = await diligencia(cliente, UA, { slug: 'tardia', url: 'https://tienda.example/' }, 5, tmp);
+    expect(r.reservaIa).toBe(true);
+    expect(r.paginas.every((p) => p['pasajes'] === undefined)).toBe(true);
+    expect(readdirSync(path.join(tmp, 'tardia', 'paginas'))).toEqual([]);
+    expect(readdirSync(path.join(tmp, 'tardia', 'sin-ia')).length).toBeGreaterThan(0);
+  });
+});
