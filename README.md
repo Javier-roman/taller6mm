@@ -4,10 +4,11 @@ Taller virtual de airsoft: eliges **tu réplica exacta**, la montas en un banco 
 accesorios del mercado representados **a escala 1:1**, ves **qué encaja y por qué**, **dónde comprar** cada
 pieza (stock y precio con su fecha de comprobación) y **compartes** tus builds.
 
-> **Estado (03-11-2026)**: Fase 0 «Cimientos» casi cerrada. Fusionado: arranque seguro (S0), monorepo y CI
-> (S2), seguridad base (S4) y semilla del sistema de diseño (S5). En PR borrador: Cloudflare y previews (S3,
-> [PR #8](https://github.com/Javier-roman/taller6mm/pull/8), con el ADR-0008). Propuestas del inicio (La Armería,
-> Fase 1) en las ramas `spike/armeria-a-3d` y `spike/armeria-b-25d`, pendientes de decisión.
+> **Estado (04-11-2026)**: Fase 0 «Cimientos» en cierre. Fusionado: arranque seguro (S0), monorepo y CI (S2),
+> Cloudflare de preview y previews por PR (S3, ADR-0008), seguridad base (S4), semilla del sistema de diseño
+> (S5) y esta documentación (S6). Propuestas del inicio (La Armería, Fase 1) en el
+> [PR #10](https://github.com/Javier-roman/taller6mm/pull/10) y en las ramas `spike/armeria-a-3d` y
+> `spike/armeria-b-25d`, pendientes de decisión.
 
 ## Puesta en marcha en 5 pasos
 Funciona igual en Windows 11 (PowerShell o Git Bash), macOS y Linux. En Windows, usa una terminal **normal**

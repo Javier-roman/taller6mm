@@ -11,12 +11,25 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 - Informe comparativo con capturas, pesos, FPS y revisiones (`docs/informes/fase-1-propuestas.md`).
 
 ### Fase 0 · Cimientos
-#### En revisión
-- S3: entornos `preview` y `production` en `wrangler.jsonc`, previews por PR con Worker Previews, receta de
-  activación de Cloudflare y ADR-0008 (PR en borrador; sin recursos creados).
-- S6: README, CONTRIBUTING y este registro de cambios.
-
 #### Añadido
+- **S6 · Documentación** (#9, 2026-11-04): README con la puesta en marcha en 5 pasos, CONTRIBUTING (ramas,
+  commits y definición de terminado), este registro de cambios, CLAUDE.md al stack real (Astro 7, Node 26,
+  pnpm 12, TypeScript 6 y Vitest 4.1) y docs/07 y docs/08 al día.
+- **S3 · Cloudflare de preview y previews por PR** (#8, 2026-11-04):
+  - Entornos `preview` y `production` (configurado y cerrado) en `wrangler.jsonc`.
+  - Recursos de preview: tres bases D1, la cola de ingesta con su cola de mensajes fallidos y los Workers
+    `taller6mm-web-preview` y `taller6mm-jobs-preview`.
+  - Página de estado `/` con cada binding.
+  - Una Preview por PR (Worker Previews): se construye sin secretos y se despliega desde `main` con
+    `workflow_run`, solo con el código del PR y la configuración de `main`.
+  - Recolector diario y ZAP semanal contra la preview.
+  - Receta de activación en `docs/runbooks/cloudflare-s3.md` y **ADR-0008 aceptado**.
+  - Pendiente: los buckets R2, porque falta activar R2 en la cuenta.
+
+#### Seguridad
+- Tres revisiones de `revisor-seguridad` sobre S3. La Preview de un PR ya no usa la configuración que trae el
+  propio PR (A1, alto). El alcance real de los tokens del CI, que es toda la cuenta, queda como riesgo
+  aceptado en el ADR-0008 (M1). Pendientes en #11 y #12.
 - **S5 · Sistema de diseño** (#7, 2026-11-01): tokens de color, tipografía, espacio, sombras, luces y
   movimiento en `packages/ui`; fuentes autoalojadas; componentes Botón, Placa, Rótulo, Insignia de fidelidad,
   Barra de dato y Cargador; página `/sistema`; e2e con axe y presupuestos de tamaño.
