@@ -116,19 +116,24 @@ describe('/.well-known/security.txt (RFC 9116)', () => {
 describe('integración security-headers', () => {
   test('el entorno sale del wrangler.json de la build; si falta o no se entiende, «desconocido»', async () => {
     const { buildEnvironment } = await import('../../integrations/security-headers.ts');
-    const { mkdtempSync, mkdirSync, writeFileSync } = await import('node:fs');
+    const { mkdtempSync, mkdirSync, rmSync, writeFileSync } = await import('node:fs');
     const { tmpdir } = await import('node:os');
     const { join } = await import('node:path');
     const { pathToFileURL } = await import('node:url');
     const root = mkdtempSync(join(tmpdir(), 't6m-build-'));
-    mkdirSync(join(root, 'client'));
-    mkdirSync(join(root, 'server'));
-    const client = pathToFileURL(`${join(root, 'client')}/`);
-    expect(await buildEnvironment(client)).toBe('desconocido');
-    writeFileSync(join(root, 'server', 'wrangler.json'), JSON.stringify({ vars: { ENVIRONMENT: 'production' } }));
-    expect(await buildEnvironment(client)).toBe('production');
-    writeFileSync(join(root, 'server', 'wrangler.json'), '{ no es json');
-    expect(await buildEnvironment(client)).toBe('desconocido');
+    try {
+      mkdirSync(join(root, 'client'));
+      mkdirSync(join(root, 'server'));
+      const client = pathToFileURL(`${join(root, 'client')}/`);
+      expect(await buildEnvironment(client)).toBe('desconocido');
+      writeFileSync(join(root, 'server', 'wrangler.json'), JSON.stringify({ vars: { ENVIRONMENT: 'production' } }));
+      expect(await buildEnvironment(client)).toBe('production');
+      writeFileSync(join(root, 'server', 'wrangler.json'), '{ no es json');
+      expect(await buildEnvironment(client)).toBe('desconocido');
+    } finally {
+      // Sin esto, cada ejecución dejaba una carpeta t6m-build-* en el directorio temporal.
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   test('X-Robots-Tag va dentro del único bloque /* (con dos bloques, Cloudflare aplica solo uno)', async () => {
