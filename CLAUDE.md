@@ -1,6 +1,6 @@
 # Taller6mm — taller virtual de airsoft
 
-> Nombre del proyecto desde el 31-10-2026 (antes, nombre en clave BANCADA). La marca visible vive en un solo sitio, `packages/ui/src/brand.ts`; los identificadores técnicos usan `taller6mm` (repo, paquetes `@taller6mm/*`, Workers, bases de datos). La carpeta local sigue siendo `C:\dev\bancada` hasta cerrar la Fase 0.
+> Nombre del proyecto desde el 31-10-2026 (antes, nombre en clave BANCADA). La marca visible vive en un solo sitio, `packages/ui/src/brand.ts`; los identificadores técnicos usan `taller6mm` (repo, paquetes `@taller6mm/*`, Workers, bases de datos). La carpeta local es `C:\dev\taller6mm` desde el 04-11-2026 (antes, `C:\dev\bancada`).
 
 Web donde cualquier jugador elige **su réplica exacta**, la monta en un banco de trabajo virtual con **todos los accesorios del mercado** representados con **fidelidad 1:1**, sabe **qué encaja y por qué**, ve **dónde comprar** cada pieza (stock y precio en tiendas de España y del extranjero) y **comparte** sus builds con la comunidad.
 

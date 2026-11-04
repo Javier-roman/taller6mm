@@ -1,6 +1,6 @@
 # Kit de arranque de Taller6mm para Claude Code
 
-> El proyecto se llamaba BANCADA hasta el 31-10-2026. La carpeta local `C:\dev\bancada` conserva el nombre antiguo.
+> El proyecto se llamaba BANCADA hasta el 31-10-2026. La carpeta local se renombró de `C:\dev\bancada` a `C:\dev\taller6mm` el 04-11-2026.
 
 Este kit es el "mega prompt" en el formato que Claude Code mejor aprovecha. Contiene un mensaje inicial y una memoria permanente. A eso se suman una especificación por áreas y la configuración de Claude Code. Así nada se pierde aunque el proyecto dure meses y muchas sesiones.
 
@@ -16,11 +16,11 @@ Este kit es el "mega prompt" en el formato que Claude Code mejor aprovecha. Cont
 | `.gitignore` | Deja fuera del repositorio los secretos, los builds, `CLAUDE.local.md` y las capturas de referencia |
 
 ## Arrancar en Windows
-1. Crea la carpeta `C:\dev\bancada`. Tiene que estar fuera de OneDrive, que bloquea archivos de `node_modules` mientras sincroniza.
+1. Crea la carpeta `C:\dev\taller6mm`. Tiene que estar fuera de OneDrive, que bloquea archivos de `node_modules` mientras sincroniza.
 2. Pon dentro **todo** el contenido del kit, incluidas la carpeta `.claude` y los archivos `.mcp.json`, `.gitignore` y `CLAUDE.local.md`. Con el zip, en PowerShell:
-   `Expand-Archive -Path "$HOME\Downloads\bancada.zip" -DestinationPath C:\dev\bancada`
+   `Expand-Archive -Path "$HOME\Downloads\bancada.zip" -DestinationPath C:\dev\taller6mm`
 3. Abre una terminal **normal**: Windows Terminal o PowerShell, **sin** «Ejecutar como administrador».
-4. Ejecuta `cd C:\dev\bancada` y después `claude`.
+4. Ejecuta `cd C:\dev\taller6mm` y después `claude`.
 5. Acepta el diálogo de confianza de la carpeta y aprueba los servidores MCP de `.mcp.json` cuando te lo pida. Sin eso no funcionan los hooks ni el navegador.
 6. Abre `PROMPT_INICIAL.md`, copia el bloque entre las líneas `=====` y pégalo.
 
