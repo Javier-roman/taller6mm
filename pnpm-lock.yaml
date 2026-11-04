@@ -305,6 +305,9 @@ importers:
       '@taller6mm/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@taller6mm/config':
         specifier: workspace:*

@@ -1,0 +1,3 @@
+# Webs que han pedido no ser rastreadas por Taller6mmBot (opt-out, docs/04 §3).
+# Un dominio por línea, sin https:// ni www. El rastreador no las toca nunca y sus datos se borran.
+# Formato: dominio  # fecha de la petición y canal
