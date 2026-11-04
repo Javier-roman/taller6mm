@@ -67,13 +67,20 @@ Panel de Cloudflare → **Manage Account → Account API Tokens → Create Token
 | Token | Para qué | Permisos | Entorno de GitHub |
 |---|---|---|---|
 | `taller6mm-ci-preview` | Despliegue desde `main` y migraciones | **Workers Scripts: Edit** y **D1: Edit**. Si el panel deja elegir Workers y bases, solo `taller6mm-web-preview`, `taller6mm-jobs-preview` y las tres bases `*-preview`. | `preview` |
-| `taller6mm-ci-preview-pr` | Previews de PR | **Workers Scripts: Edit**. Si el panel deja elegirlo, solo `taller6mm-web-preview`. **Sin D1** ni nada más. | `preview-pr` |
+| `taller6mm-ci-preview-pr` | Previews de PR (crear, borrar y recolector) | **Workers: Admin**, el permiso que se llama solo «Workers» (modelo de autorización nuevo). Nada más: ni «Workers Scripts» ni D1. | `preview-pr` |
 
-Ningún otro permiso: ni DNS, ni rutas, ni zonas, ni R2. **Lo que pasó el 03-11-2026**: el formulario solo dejó
-dar los permisos a **toda la cuenta**. Con el token de PR se podría crear, cambiar o borrar cualquier Worker de la
-cuenta y enlazar cualquiera de sus bases. Por eso la cuenta es solo para la preview de Taller6mm y nunca tendrá
-datos reales (paso 0). Es un riesgo aceptado en el ADR-0008; volver a acotarlos está en la issue #11. El token de
-producción se crea en el lanzamiento, en la cuenta de producción y cuando existan sus Workers.
+Ningún otro permiso: ni DNS, ni rutas, ni zonas, ni R2. **Lo que pasó**:
+- **03-11-2026**: el formulario solo dejó dar los permisos a **toda la cuenta**.
+- **04-11-2026**: la API de Previews **no acepta** el permiso clásico «Workers Scripts». Responde «No access to the
+  specified resource» al crear o borrar una Preview, aunque el token tenga además D1 (Read o Edit). Funciona con el
+  permiso **«Workers»** del modelo nuevo, en Admin: con él solo, el CI creó `pr-9` y borró `pr-8`. No se probó
+  «Editor».
+
+Con el token de PR se podría crear, cambiar o borrar cualquier Worker de la cuenta y enlazar cualquiera de sus
+bases. Por eso la cuenta es solo para la preview de Taller6mm y nunca tendrá datos reales (paso 0). Es un riesgo
+aceptado en el ADR-0008. Volver a acotarlos (probar «Editor» y elegir solo `taller6mm-web-preview`) está en la
+issue #11. El token de producción se crea en el lanzamiento, en la cuenta de producción y cuando existan sus
+Workers.
 
 ## Paso 5 · GitHub: entornos, secretos y variables (4 min)
 1. **Settings → Environments**: crea `preview-pr`. En `preview` y en `preview-pr`, **Deployment branches and

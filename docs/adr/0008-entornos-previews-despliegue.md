@@ -18,7 +18,9 @@
   aplicar migraciones, sí. La documentación no garantiza permisos por base de D1
   (developers.cloudflare.com/workers/authorization/, 01-11-2026). **En la práctica**, al crear los tokens el
   03-11-2026 el formulario de tokens personalizados solo ofreció permisos de **toda la cuenta**
-  («Workers Scripts: Edit» y «D1: Edit»), sin elegir Workers ni bases.
+  («Workers Scripts: Edit» y «D1: Edit»), sin elegir Workers ni bases. Y el 04-11-2026, con el CI encendido, la
+  **API de Previews no aceptó «Workers Scripts»**: respondía «No access to the specified resource» al crear o
+  borrar, incluso con D1 (Read o Edit) añadido. Funciona con el permiso «Workers» del modelo nuevo (Admin).
 - El adaptador de Cloudflare de Astro elige el entorno **al compilar** (`CLOUDFLARE_ENV`) y genera
   `dist/server/wrangler.json` ya resuelto, que usan `wrangler deploy` y `wrangler preview`.
 - En `pull_request`, GitHub ejecuta el workflow **del PR**: cualquiera que pueda empujar una rama (Javi, Renovate
@@ -56,8 +58,9 @@
 4. **Migraciones solo desde `main`** (`desplegar-preview.yml`), en serie y sin cancelación. Las Previews de PR
    usan el esquema de `main`. Un test rechaza SQL destructivo en `packages/db/migrations` salvo excepción anotada.
 5. **Tokens por uso, en entornos de GitHub restringidos a `main`**: `preview` («Workers Scripts: Edit» y
-   «D1: Edit», para `main`) y `preview-pr` («Workers Scripts: Edit», **sin D1**, para las Previews). **Los dos
-   alcanzan toda la cuenta**, porque el panel no dejó acotarlos. Con el de PR se podría crear, cambiar o borrar
+   «D1: Edit», para `main`) y `preview-pr` («Workers: Admin» del modelo nuevo y nada más, para crear y borrar
+   Previews; ver el contexto). **Los dos alcanzan toda la cuenta**, porque el panel no dejó acotarlos. Con el de PR
+   se podría crear, cambiar o borrar
    cualquier Worker de la cuenta y enlazar cualquiera de sus bases; «sin D1» solo cierra la API de D1
    (migraciones, exportar o borrar bases). Javi lo **acepta como riesgo** (03-11-2026) mientras la cuenta solo
    tenga la preview de Taller6mm (decisión 2). El token solo está en el `env` de los pasos de wrangler, en jobs que
