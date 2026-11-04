@@ -109,10 +109,11 @@ export function datosEstructurados(html: string): DatosEstructurados {
 /** Reservas de IA/TDM en la propia página: meta robots noai/noimageai y tdm-reservation (TDMRep). */
 export function reservaEnPagina(html: string, cabeceras: Record<string, string> = {}): string[] {
   const motivos: string[] = [];
-  const meta = (nombre: string) =>
-    [...html.matchAll(new RegExp(`<meta[^>]{0,300}name=["']${nombre}["'][^>]{0,300}>`, 'gi'))].map((m) => m[0]);
-  if (meta('robots').some((m) => /noai|noimageai/i.test(m))) motivos.push('meta robots noai');
-  if (meta('tdm-reservation').some((m) => /content=["']1["']/.test(m))) motivos.push('meta tdm-reservation=1');
+  // Expresiones literales (nada construido con variables: Semgrep detect-non-literal-regexp).
+  const metas = [...html.matchAll(/<meta[^>]{0,300}name=["'](robots|tdm-reservation)["'][^>]{0,300}>/gi)];
+  const de = (nombre: string) => metas.filter((m) => m[1]?.toLowerCase() === nombre).map((m) => m[0]);
+  if (de('robots').some((m) => /noai|noimageai/i.test(m))) motivos.push('meta robots noai');
+  if (de('tdm-reservation').some((m) => /content=["']1["']/.test(m))) motivos.push('meta tdm-reservation=1');
   if (/noai|noimageai/i.test(cabeceras['x-robots-tag'] ?? '')) motivos.push('X-Robots-Tag noai');
   if ((cabeceras['tdm-reservation'] ?? '').trim() === '1') motivos.push('cabecera tdm-reservation=1');
   return motivos;
