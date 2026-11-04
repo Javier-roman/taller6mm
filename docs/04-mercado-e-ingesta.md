@@ -20,13 +20,13 @@ Están implementadas en el cliente HTTP común y no se pueden saltar.
 
 | Regla | Implementación |
 |---|---|
-| robots.txt | Se descarga y cachea 24 h; se respetan `Disallow`, `Allow` y `Crawl-delay` |
-| Content Signals | Se leen las líneas `Content-Signal` del robots.txt. Con `ai-train=no` o `ai-input=no` queda prohibido usar sus imágenes o textos en cualquier proceso de IA, también interno |
+| robots.txt | Se descarga y cachea 24 h (siguiendo sus redirecciones dentro del sitio); se respetan `Disallow`, `Allow` y `Crawl-delay` con el token de agente exacto (RFC 9309). 404/410 = sin restricciones; 401, 403, 429, otros 4xx o una página de desafío = la web nos bloquea y no se rastrea (más estricto que el RFC, por cortesía); 5xx o error de red = todo prohibido. Un `Crawl-delay` de más de 60 s deja el sitio fuera |
+| Content Signals | Se leen las líneas `Content-Signal` del robots.txt. Con `ai-train=no` o `ai-input=no` queda prohibido usar sus imágenes o textos en cualquier proceso de IA, también interno. Cuentan igual una línea que no se entiende entera, `Content-Usage` con IA denegada, un veto total a los bots de IA (GPTBot, CCBot, Google-Extended, ClaudeBot…) y `noai` o `tdm-reservation` en la página. Lo descargado de esas webs va a `sin-ia/` y lo revisa una persona |
 | Identificación | `User-Agent: Taller6mmBot/<versión> (+https://<dominio>/bot)`. La página `/bot` explica qué hacemos y cómo excluirse |
 | Ritmo | 1 petición concurrente por dominio, espera de 3–10 s con variación aleatoria y ventanas nocturnas para recorridos grandes |
 | Eficiencia | Peticiones condicionales (`ETag` / `If-Modified-Since`); solo URLs cambiadas según el sitemap |
-| Errores | Backoff exponencial ante 429/503 y circuito abierto tras N fallos. Nunca reintentos agresivos |
-| Límites | Sin login, sin zonas privadas, sin resolver CAPTCHAs, sin proxies rotatorios ni evasión de bloqueos |
+| Errores | Backoff exponencial ante 429/503 (respetando `Retry-After`; si pide más de 5 min, se abandona el sitio) y circuito abierto tras N fallos. 401/403 o un CAPTCHA paran el sitio. Nunca reintentos agresivos |
+| Límites | Solo https y solo hosts aprobados (nunca IP ni la red local). Sin login, sin zonas privadas (carrito, cuenta, búsqueda, añadir al carrito), sin resolver CAPTCHAs, sin proxies rotatorios ni evasión de bloqueos |
 | Exclusión | Opt-out atendido en menos de 24 h: la tienda pasa a `opted_out`, se detiene y sus datos se borran según la política |
 | Registro | Cada ejecución guarda métricas y errores (`crawl_runs`) |
 

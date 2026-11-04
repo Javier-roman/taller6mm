@@ -30,7 +30,7 @@ Elige el método más oficial disponible: feed > API pública de la plataforma >
 
 ## 3. Implementación (solo si el veredicto lo permite)
 - Configuración de la fuente en `apps/crawler/sources/<slug>.ts`, con ritmo, ventana horaria y nivel de frecuencia.
-- Descarga **una sola vez** 3-5 páginas de muestra (categoría, producto en stock, agotado, con variantes) como fixtures en `apps/crawler/fixtures/<slug>/`, con su fecha y su URL.
+- Descarga **una sola vez** 3-5 páginas de muestra (categoría, producto en stock, agotado, con variantes) con `pnpm --filter @taller6mm/crawler diligencia` (cliente respetuoso). El HTML completo se queda en `assets-src/raw/diligencia/<slug>/`, fuera de git. En `apps/crawler/fixtures/<slug>/` (repo público) solo van **fixtures reducidas**: el JSON-LD o el fragmento que use el parser, sin scripts, reseñas ni datos personales, con su fecha y su URL. Si la web tiene reserva de IA (`sin-ia/`), las fixtures y el parser los prepara Javi o esperan a tener feed o permiso.
 - Parser y tests contra los fixtures: precio en céntimos, disponibilidad normalizada, GTIN/MPN y variantes.
 - Estado inicial `pendiente_revision`. No actives la programación.
 
