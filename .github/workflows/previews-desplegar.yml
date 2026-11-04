@@ -33,6 +33,7 @@ jobs:
       github.event.workflow_run.head_repository.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: read
     timeout-minutes: 5
     outputs:
@@ -43,13 +44,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.workflow_run.pull_requests[0].number }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          # El número sale del evento y solo se acepta si es un entero.
-          if ! [[ "$PR" =~ ^[1-9][0-9]{0,6}$ ]]; then
-            echo "::notice::El run no corresponde a un PR de este repo. No se hace nada."
+          if ! [[ "$SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::notice::El run no trae un commit válido. No se hace nada."
             exit 0
           fi
-          estado=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state)
+          # Con el PR ya cerrado, GitHub deja vacía `pull_requests` (comprobado al fusionar el #8): se busca el
+          # único PR de este repo cuya cabeza es el commit del run.
+          if [ -z "$PR" ]; then
+            PR=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/pulls" --jq "[.[] | select(.head.sha == \"$SHA\"
+              and .head.repo.full_name == \"$GITHUB_REPOSITORY\") | .number] | if length == 1 then .[0] else empty end")
+          fi
+          if ! [[ "$PR" =~ ^[1-9][0-9]{0,6}$ ]]; then
+            echo "::notice::El run no corresponde a un único PR de este repo. No se hace nada."
+            exit 0
+          fi
+          # El número queda atado al commit: PR de este repo, contra main y con la cabeza en el commit del run.
+          # Si el PR recibió otro push después, este run es viejo y lo despliega o lo borra el siguiente.
+          datos=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state,headRefOid,baseRefName,isCrossRepository \
+            --jq '"\(.state) \(.headRefOid) \(.baseRefName) \(.isCrossRepository)"')
+          read -r estado cabeza base cruzado <<< "$datos"
+          if [ "$cabeza" != "$SHA" ] || [ "$base" != main ] || [ "$cruzado" != false ]; then
+            echo "::notice::PR #$PR: su cabeza, su base o su origen no cuadran con este run. No se hace nada."
+            exit 0
+          fi
           echo "pr=$PR" >> "$GITHUB_OUTPUT"
           echo "abierto=$([ "$estado" = OPEN ] && echo si || echo no)" >> "$GITHUB_OUTPUT"
 
