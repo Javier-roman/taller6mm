@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "opusplan",
+  "effortLevel": "medium",
+  "advisorModel": "opus",
   "permissions": {
     "allow": [
       "Bash(pnpm verify)",
@@ -66,7 +69,9 @@
       "Edit(./**/.env.local)",
       "Edit(./**/.dev.vars)",
       "Edit(./**/.dev.vars.preview)",
-      "Edit(./**/.dev.vars.production)"
+      "Edit(./**/.dev.vars.production)",
+      "Edit(~/.gemini/**)",
+      "Write(~/.gemini/**)"
     ]
   },
   "hooks": {

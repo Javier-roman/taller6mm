@@ -195,6 +195,38 @@ const DENY = [
   [/\b(?:Set-MpPreference|Add-MpPreference)\b/i, 'Cambiar la configuración de Microsoft Defender está bloqueado.'],
 ];
 
+// ── Antigravity CLI (agy) ────────────────────────────────────────────────────
+// A mano solo `agy models`, `agy --version` y `agy --help`. Todo lo demás pasa por scripts/gemini.mjs, que
+// lo lanza en solo lectura desde una carpeta temporal con solo los archivos permitidos (docs/ia/modelos.md).
+// Lanzado desde el repo, agy podría leer cualquier archivo de él, secretos incluidos.
+const AGY = /^agy(?:\.exe)?$/i;
+const AGY_PERMITIDO = new Set(['models', '--version', '-v', '--help', '-h', 'help']);
+// Tokens tras los que viene un comando: `& agy`, `Start-Process agy`, `cmd /c agy`, `env agy`…
+const ANTES_DE_COMANDO =
+  /^(?:&|\.|Start-Process|saps|start|call|exec|nohup|env|command|xargs|time|timeout|-FilePath|\/c|-c|-Command|Invoke-Expression|iex)$/i;
+const AGY_MSG =
+  'agy solo se lanza con scripts/gemini.mjs (skill /gemini o subagente delegado-gemini). A mano, solo `agy models`, `agy --version` o `agy --help`.';
+const CONF_AGY = /[\\/]\.gemini(?:[\\/]|$)/i;
+const SOLO_LECTURA = /^(?:cat|type|Get-Content|gc|ls|dir|Get-ChildItem|gci|Test-Path)$/i;
+const CONF_AGY_MSG =
+  'La configuración de agy (~/.gemini) no se cambia desde aquí: es la barandilla de solo lectura. Si hay que cambiarla, díselo a Javi.';
+
+function checkAgy(segments) {
+  for (const seg of segments) {
+    const t = tokenize(seg);
+    for (let i = 0; i < t.length; i++) {
+      const esComando = i === 0 || ANTES_DE_COMANDO.test(t[i - 1]);
+      const base = t[i].replace(/\\/g, '/').split('/').pop() ?? '';
+      if (esComando && (AGY.test(base) || /\bAGY_BIN\b/i.test(t[i]))) {
+        const resto = t.slice(i + 1);
+        if (!(resto.length === 1 && AGY_PERMITIDO.has(resto[0].toLowerCase()))) return deny(AGY_MSG);
+      }
+    }
+    if (CONF_AGY.test(seg) && !(SOLO_LECTURA.test(t[0] ?? '') && !/>/.test(seg))) return deny(CONF_AGY_MSG);
+  }
+  return null;
+}
+
 const ASK = [
   [/\bgit\s+push\b.*\b(?:main|master)\b/i, 'Push a main/master: confirma que quieres publicar en la rama principal.'],
   [/\bgit\s+(?:reset\s+--hard|clean\s+-[a-zA-Z]*f)/i, 'Operación git destructiva: confirma.'],
@@ -264,6 +296,8 @@ export function check(rawCmd, depth = 0) {
   if (deniedDelete) return deniedDelete;
 
   for (const [re, reason] of DENY) if (re.test(cmd)) return deny(reason);
+  const agy = checkAgy(segments);
+  if (agy) return agy;
   if (deletes.length) return deletes[0];
   for (const [re, reason] of ASK) if (re.test(cmd)) return ask(reason);
   return null;

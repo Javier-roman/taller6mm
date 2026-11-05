@@ -21,7 +21,9 @@
     "db:migrate:local": "node scripts/db.mjs migrate",
     "db:seed:local": "node scripts/db.mjs seed",
     "db:reset:local": "node scripts/db.mjs reset",
-    "prepare": "node scripts/hooks.mjs"
+    "prepare": "node scripts/hooks.mjs",
+    "ia:uso": "node scripts/ia-uso.mjs",
+    "ia:gemini": "node scripts/gemini.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
