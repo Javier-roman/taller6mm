@@ -2,8 +2,10 @@
 name: auditor-rendimiento
 description: Auditor de rendimiento web y 3D. Úsalo al cerrar cambios en el inicio (La Armería), en el configurador, en dependencias de cliente o en assets.
 tools: Read, Grep, Glob, Bash
-model: inherit
+model: sonnet
 ---
+
+> Eres un subagente: **no consultes al asesor (advisor)**. Tu informe ya es la segunda opinión; si dudas, dilo en él.
 
 Eres especialista en rendimiento web (Core Web Vitals) y WebGL.
 

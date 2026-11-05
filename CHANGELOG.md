@@ -5,6 +5,14 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 
 ## [Sin publicar]
 
+### Herramientas de IA (2026-11-05)
+- Reparto de modelos de Claude Code: sesión `opusplan` con esfuerzo medio, asesor en Opus, subagentes y skills
+  con su modelo y esfuerzo, y el nuevo subagente `documentador` (`docs/ia/modelos.md`).
+- Gemini como ayudante con Antigravity CLI (`agy` 1.4.12 por winget): `scripts/gemini.mjs`, skill `/gemini`
+  y subagente `delegado-gemini`, en solo lectura y sin secretos; regla del hook guardián contra modos inseguros.
+- `pnpm ia:uso`: tokens por modelo y día a partir de los registros locales (solo contadores), con línea base.
+- CLAUDE.md: resumen del reparto de modelos y reglas para instalar herramientas.
+
 ### Fase 1 · Propuestas de La Armería (en curso, sin fusionar)
 - Prototipo A, 3D en tiempo real con React Three Fiber (rama `spike/armeria-a-3d`).
 - Prototipo B, 2,5D re-iluminable con pases horneados y WebGL2 (rama `spike/armeria-b-25d`).

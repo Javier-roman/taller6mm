@@ -2,6 +2,8 @@
 name: adr
 description: Crea un registro de decisión de arquitectura (ADR) numerado a partir de la plantilla del proyecto.
 argument-hint: "[título de la decisión]"
+model: opus
+effort: high
 ---
 
 1. Busca el siguiente número libre en `docs/adr/` (formato `NNNN-titulo-en-kebab.md`).
