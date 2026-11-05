@@ -169,4 +169,29 @@ describe('diligencia: casos raros', () => {
     expect(readdirSync(path.join(tmp, 'tardia', 'paginas'))).toEqual([]);
     expect(readdirSync(path.join(tmp, 'tardia', 'sin-ia')).length).toBeGreaterThan(0);
   });
+  test('una «página» que resulta ser una imagen no se archiva como HTML', async () => {
+    const { cliente } = web({
+      'https://tienda.example/robots.txt': { estado: 404 },
+      'https://tienda.example/': { estado: 200, cuerpo: '<a href="/producto/replica-m4-0001">P</a>' },
+      'https://tienda.example/producto/replica-m4-0001': { estado: 200, cuerpo: 'PNG', tipo: 'image/png' },
+    });
+    const r = await diligencia(cliente, UA, { slug: 'imagen', url: 'https://tienda.example/' }, 5, tmp);
+    const p = r.paginas.find((x) => x['url'] === 'https://tienda.example/producto/replica-m4-0001');
+    expect(p?.['archivo']).toBeUndefined();
+    expect(String(p?.['descartada'])).toContain('image/png');
+  });
+
+  test('TDMRep con espacios alrededor de los dos puntos cuenta como reserva', async () => {
+    const { cliente } = web({
+      'https://tienda.example/robots.txt': { estado: 404 },
+      'https://tienda.example/.well-known/tdmrep.json': {
+        estado: 200,
+        cuerpo: '[{"location": "/", "tdm-reservation" : 1}]',
+        tipo: 'application/json',
+      },
+      'https://tienda.example/': { estado: 200, cuerpo: '<p>Hola</p>' },
+    });
+    const r = await diligencia(cliente, UA, { slug: 'tdmrep', url: 'https://tienda.example/' }, 5, tmp);
+    expect(r.reservaIa).toBe(true);
+  });
 });
