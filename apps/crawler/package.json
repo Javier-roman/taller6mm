@@ -6,10 +6,12 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "diligencia": "node src/diligencia.ts"
   },
   "dependencies": {
-    "@taller6mm/ui": "workspace:*"
+    "@taller6mm/ui": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@taller6mm/config": "workspace:*",

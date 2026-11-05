@@ -1,0 +1,62 @@
+---
+// /bot: qué hace Taller6mmBot y cómo excluirse (docs/04 §3). El User-Agent del rastreador apunta aquí.
+// Prerenderizada y sin JS. Mientras no haya dominio, vive en la URL de la preview.
+import { BRAND } from '@taller6mm/ui/brand';
+import Base from '../layouts/Base.astro';
+
+export const prerender = true;
+
+const REPO = 'https://github.com/Javier-roman/taller6mm';
+const exclusion = `${REPO}/issues/new?title=${encodeURIComponent(`Exclusión de ${BRAND.botName}: <tu dominio>`)}`;
+---
+
+<Base title={BRAND.botName} description={`Qué hace ${BRAND.botName}, el rastreador de ${BRAND.name}, y cómo excluir tu web.`}>
+  <main id="contenido" class="mx-auto flex max-w-lectura flex-col gap-6 px-4 py-12 text-hueso tablet:px-8">
+    <h1 class="font-grabado text-3xl tracking-grabado break-words tablet:text-4xl">{BRAND.botName}</h1>
+    <p class="text-l text-niebla">
+      Es el rastreador de {BRAND.name}, un taller virtual de airsoft. Si lo ves en tus registros, esto es lo que hace
+      y cómo pedirnos que no vuelva.
+    </p>
+
+    <section class="flex flex-col gap-3" aria-labelledby="que">
+      <h2 id="que" class="font-rotulo text-2xl uppercase tracking-rotulo text-laton-claro">Qué recoge</h2>
+      <ul class="flex list-disc flex-col gap-2 pl-6">
+        <li>Hechos de producto: nombre, precio, disponibilidad, identificadores y medidas publicadas.</li>
+        <li>
+          Fotos de producto, solo como referencia interna para medir y modelar réplicas a escala real. Nunca se publican
+          ni se usan como textura, y se borran a los 90 días.
+        </li>
+        <li>Nada que esté detrás de un inicio de sesión, un carrito o un CAPTCHA.</li>
+      </ul>
+    </section>
+
+    <section class="flex flex-col gap-3" aria-labelledby="como">
+      <h2 id="como" class="font-rotulo text-2xl uppercase tracking-rotulo text-laton-claro">Cómo se comporta</h2>
+      <ul class="flex list-disc flex-col gap-2 pl-6">
+        <li>
+          Respeta <code>robots.txt</code>, incluidos <code>Crawl-delay</code> y las líneas <code>Content-Signal</code>:
+          con <code>ai-train=no</code> o <code>ai-input=no</code>, nada de tu web pasa por ningún modelo de IA.
+        </li>
+        <li>Una sola petición a la vez por web, con entre 3 y 10 segundos de pausa, y se detiene ante errores 429 o 503.</li>
+        <li>Se identifica siempre como <code>{BRAND.botName}/&lt;versión&gt; (+&lt;esta página&gt;)</code>.</li>
+        <li>No usa proxies ni rota direcciones, y no intenta saltarse ningún bloqueo.</li>
+      </ul>
+    </section>
+
+    <section class="flex flex-col gap-3" aria-labelledby="excluir">
+      <h2 id="excluir" class="font-rotulo text-2xl uppercase tracking-rotulo text-laton-claro">Excluir tu web</h2>
+      <p>Hay dos formas, y cualquiera de las dos basta:</p>
+      <ol class="flex list-decimal flex-col gap-2 pl-6">
+        <li>
+          Añade a tu <code>robots.txt</code>:
+          <pre class="mt-2 overflow-x-auto rounded-s border border-acero bg-carbon p-3 font-datos text-s"><code>User-agent: {BRAND.botName}
+Disallow: /</code></pre>
+        </li>
+        <li>
+          <a class="text-laton-claro underline underline-offset-4" href={exclusion}>Pídenoslo en el repositorio del proyecto</a>.
+          Paramos en menos de 24 horas y borramos lo que tengamos de tu web.
+        </li>
+      </ol>
+    </section>
+  </main>
+</Base>

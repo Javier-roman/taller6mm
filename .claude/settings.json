@@ -36,6 +36,7 @@
     "ask": ["Edit(./.mcp.json)", "Edit(./.git/**)"],
     "disableBypassPermissionsMode": "disable",
     "deny": [
+      "Read(./assets-src/raw/diligencia/**/sin-ia/**)",
       "Read(./.env)",
       "Read(./**/.env)",
       "Read(./**/.env.local)",
