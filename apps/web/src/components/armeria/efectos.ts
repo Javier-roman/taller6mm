@@ -43,7 +43,8 @@ export function crearHaz(
         float eje = pow(clamp(abs(dot(normalize(vNormal), normalize(vVista))), 0.0, 1.0), 2.2);
         // clamp: la interpolación puede dar -1e-17 y pow() de un negativo es NaN (el bloom lo extiende a toda la pantalla).
         float h = clamp(vAltura, 0.0, 1.0);
-        float caida = mix(0.3, 1.0, pow(h, 1.4)) * smoothstep(0.0, 0.12, h);
+        // Brilla junto al tubo y queda en un velo tenue a la altura de rótulos y réplicas: no las lava.
+        float caida = mix(0.22, 1.0, smoothstep(0.84, 1.0, h)) * smoothstep(0.0, 0.18, h);
         float a = uIntensidad * eje * caida;
         gl_FragColor = vec4(uColor * a, a);
       }`,
@@ -68,7 +69,9 @@ export function ajustarHaz(
   intensidad: number,
   color: Color,
 ) {
-  const u = haz.material.uniforms;
+  // En los pases de datos del horno (albedo, normales) los materiales se sustituyen y no hay uniforms.
+  const u = (haz.material as Partial<ShaderMaterial>).uniforms;
+  if (!u) return;
   if (u['uIntensidad']) u['uIntensidad'].value = intensidad;
   if (u['uColor']) (u['uColor'].value as Color).copy(color);
 }

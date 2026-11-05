@@ -20,7 +20,9 @@ const MEDIO_ANCHO_POSTER = 4.75;
 const MEDIO_ANCHO_MINIMO = 4.3;
 /** Cámara a la altura de los ojos de alguien de pie, con un picado de unos 7° (critico-diseno). */
 const ALTURA_CAMARA = 2.05;
-const OBJETIVO_SALA: V3 = [0, 1.2, MUEBLE.frente];
+// Objetivo alto: los tubos quedan bajo la cabecera (y ≥ 104 px a 1440 × 900) y se ve de dónde nacen los haces
+// (critico-diseno, 05-11-2026). Con 1,2 quedaban tapados por el degradado de la cabecera.
+const OBJETIVO_SALA: V3 = [0, 1.52, MUEBLE.frente];
 
 const tanMedio = (fov: number) => Math.tan((fov * Math.PI) / 360);
 const DISTANCIA_POSTER = MEDIO_ANCHO_POSTER / (tanMedio(FOV) * ASPECTO_POSTER);

@@ -80,8 +80,12 @@ export const LUZ = {
   pantalla: 0.9,
   /** Reflejos del entorno (IBL): sin ellos el metal se ve negro. */
   entorno: 0.08,
-  /** Haces de luz bajo los tubos (efectos.ts), proporcionales al nivel de su fila. */
-  haz: 1.1,
+  /**
+   * Haces de luz bajo los tubos (efectos.ts). Siguen al nivel de su fila solo hasta el de reposo: al pasar
+   * por un módulo se encienden el tubo y el rótulo, no el cono, que si no tapa el rótulo (critico-diseno).
+   */
+  haz: 0.9,
+  hazTope: 0.34,
   /** Reflejos falsos del suelo bajo los tubos y el flexo (efectos.ts). */
   reflejo: 3.5,
 } as const;
@@ -131,9 +135,27 @@ function useMateriales() {
         depthWrite: false,
       }),
       taquilla: m({ color: '#3b434b', roughness: 0.3, metalness: 0.7 }),
-      pantalla: m({ map: pantalla, emissiveMap: pantalla, emissive: '#ffffff', emissiveIntensity: LUZ.pantalla }),
-      led: m({ color: '#fff3e2', emissive: CALIDO, emissiveIntensity: LUZ.led, roughness: 0.3 }),
-      bombilla: m({ color: '#fff3e2', emissive: CALIDO, emissiveIntensity: LUZ.bombilla, roughness: 0.3 }),
+      pantalla: m({
+        name: 'emisivo:base',
+        map: pantalla,
+        emissiveMap: pantalla,
+        emissive: '#ffffff',
+        emissiveIntensity: LUZ.pantalla,
+      }),
+      led: m({
+        name: 'emisivo:calidas',
+        color: '#fff3e2',
+        emissive: CALIDO,
+        emissiveIntensity: LUZ.led,
+        roughness: 0.3,
+      }),
+      bombilla: m({
+        name: 'emisivo:calidas',
+        color: '#fff3e2',
+        emissive: CALIDO,
+        emissiveIntensity: LUZ.bombilla,
+        roughness: 0.3,
+      }),
     };
   }, []);
 }
@@ -346,6 +368,7 @@ function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | nu
       {/* Tira LED cálida bajo el techo de la vitrina */}
       <Caja p={[0, MUEBLE.alto - 0.05, MUEBLE.frente - 0.06]} t={[2.4, 0.018, 0.03]} m={mat.led} />
       <pointLight
+        name="luz:calidas"
         ref={luz}
         position={[0, y0 + 1.15, zFondo + 0.12]}
         color={CALIDO}
@@ -508,6 +531,7 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
           <sphereGeometry args={[0.03, 12, 12]} />
         </mesh>
         <spotLight
+          name="luz:calidas"
           ref={flexo}
           position={[-0.42, 0.5, 0.34]}
           target={objetivo}
@@ -543,7 +567,14 @@ function PlacaRotulo({
 }
 
 const materialRotulo = (map: Texture) =>
-  new MeshStandardMaterial({ map, emissiveMap: map, emissive: '#ffffff', emissiveIntensity: 0, roughness: 0.55 });
+  new MeshStandardMaterial({
+    name: 'emisivo:rotulos',
+    map,
+    emissiveMap: map,
+    emissive: '#ffffff',
+    emissiveIntensity: 0,
+    roughness: 0.55,
+  });
 
 export interface SalaProps {
   control: ControlSala;
@@ -590,7 +621,13 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       Object.fromEntries(
         ORDEN_ESTANTERIAS.map((e) => [
           e,
-          new MeshStandardMaterial({ color: '#e9eef7', emissive: '#ffffff', emissiveIntensity: 0, roughness: 0.3 }),
+          new MeshStandardMaterial({
+            name: `emisivo:tubo-${e}`,
+            color: '#e9eef7',
+            emissive: '#ffffff',
+            emissiveIntensity: 0,
+            roughness: 0.3,
+          }),
         ]),
       ) as Record<Estanteria, MeshStandardMaterial>,
     [],
@@ -682,7 +719,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         foco.color.copy(control.colorTubo);
       }
       tubosMat[e].emissiveIntensity = LUZ.tuboEmisivo * Math.min(1.2, nivel * 1.6);
-      ajustarHaz(haces[e], LUZ.haz * Math.min(1.2, nivel), control.colorTubo);
+      ajustarHaz(haces[e], LUZ.haz * Math.min(LUZ.hazTope, nivel), control.colorTubo);
       ajustarHaz(reflejos.tubos[e], LUZ.reflejo * Math.min(1.2, nivel), control.colorTubo);
       tubosMat[e].emissive.copy(control.colorTubo);
       const g = grupos[e].current;
@@ -773,6 +810,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
           </mesh>
           <primitive object={objetivos.tubos[e]} position={[0, -2.3, -0.9]} />
           <spotLight
+            name={`luz:tubo-${e}`}
             ref={tubos[e]}
             position={[0, -0.05, 0.05]}
             target={objetivos.tubos[e]}
@@ -852,6 +890,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
 
       {/* Foco de acento (la zona activa) y linterna-cursor */}
       <spotLight
+        name="luz:acento"
         ref={acento}
         position={[0, 3, 0]}
         target={objetivos.acento}
@@ -862,6 +901,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         decay={2}
       />
       <spotLight
+        name="luz:linterna"
         ref={linterna}
         target={objetivos.linterna}
         color={colors.hueso}

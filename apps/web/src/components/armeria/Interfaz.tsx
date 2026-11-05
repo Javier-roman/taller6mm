@@ -399,8 +399,8 @@ export function InterfazArmeria({
           </div>
           <p className="armeria__prototipo">
             <strong>Prototipo {prototipo}</strong> · {descripcion} <span className="armeria__tecnica">({tecnica})</span>
-            {/* Hasta tener réplicas modeladas a escala real (frente de fidelidad), las siluetas son de atrezo. */} ·{' '}
-            <span className="armeria__provisional">siluetas provisionales</span>
+            {/* Hasta tener réplicas modeladas a escala real (frente de fidelidad), las siluetas son de atrezo. */}
+            <span className="armeria__provisional">Siluetas provisionales</span>
           </p>
           {/* Acción principal: el banco (configurador) es el protagonista de la web. */}
           <Boton variante="laton" className="armeria__accion" onClick={() => abrir('banco')}>
@@ -415,15 +415,18 @@ export function InterfazArmeria({
               onClick={() => acciones.cambiarLuz(estado.variante === 'mas-luz' ? 'penumbra' : 'mas-luz')}
               title={`Luz: ${VARIANTES[estado.variante].nombre}`}
             >
-              Más luz
+              <IconoLuz />
+              <span className="armeria__ajuste-texto">Más luz</span>
             </button>
             <button
               type="button"
               className="armeria__ajuste"
               aria-pressed={estado.vista === 'ligera'}
               onClick={() => acciones.cambiarVista(estado.vista === 'ligera' ? 'escena' : 'ligera')}
+              title="Vista ligera"
             >
-              Vista ligera
+              <IconoLigera />
+              <span className="armeria__ajuste-texto">Vista ligera</span>
             </button>
           </fieldset>
         </header>
@@ -531,5 +534,24 @@ export function InterfazArmeria({
         </button>
       ) : null}
     </div>
+  );
+}
+
+/** Bombilla: «Más luz». En móvil el botón es solo icono (44 × 44) y el texto queda para el lector. */
+function IconoLuz() {
+  return (
+    <svg className="armeria__icono" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z" />
+    </svg>
+  );
+}
+
+/** Imagen fija: «Vista ligera» (póster en vez de escena). */
+function IconoLigera() {
+  return (
+    <svg className="armeria__icono" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="3" y="5" width="18" height="14" rx="1.5" />
+      <path d="m3 16 5-5 4 4 3-3 6 6" />
+    </svg>
   );
 }

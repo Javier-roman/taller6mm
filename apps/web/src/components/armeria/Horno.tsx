@@ -17,8 +17,11 @@ import {
   type MeshStandardMaterial,
   type PerspectiveCamera,
   ShaderMaterial,
+  type SpotLight,
   SRGBColorSpace,
+  Vector3,
 } from 'three';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { ENCUADRE_POSTER } from './camara.ts';
 import { crearIluminacion, type Iluminacion } from './director.ts';
 import { fuentesListas } from './fuentes.ts';
@@ -87,6 +90,23 @@ function Controlador({ control }: { control: ReturnType<typeof crearControl> }) 
       originales.clear();
     };
 
+    // Los efectos de tiempo real (haces y reflejos falsos) no entran en ningún pase horneado: en Cycles
+    // salen del volumen y del trazado, y en los pases de datos ensuciarían normales y profundidad.
+    const conEfectosOcultos = <T,>(trabajo: () => T): T => {
+      const ocultos: { visible: boolean }[] = [];
+      scene.traverse((o) => {
+        if (o.userData['soloTiempoReal'] && o.visible) {
+          o.visible = false;
+          ocultos.push(o);
+        }
+      });
+      try {
+        return trabajo();
+      } finally {
+        for (const o of ocultos) o.visible = true;
+      }
+    };
+
     const w = window as Window & { __horno?: unknown };
     w.__horno = {
       pase: (pase: Pase, calidad = 0.9) => {
@@ -127,11 +147,55 @@ function Controlador({ control }: { control: ReturnType<typeof crearControl> }) 
         // Dos fotogramas: el primero actualiza luces y sombras con los niveles nuevos.
         advance(performance.now());
         advance(performance.now() + 16);
-        const url = gl.domElement.toDataURL('image/webp', calidad);
+        const url = conEfectosOcultos(() => {
+          advance(performance.now() + 32);
+          return gl.domElement.toDataURL('image/webp', calidad);
+        });
         restaurar();
         scene.background = background;
         scene.fog = fog;
         return url;
+      },
+      /**
+       * Sala y cámara del póster en glTF binario (base64) para hornear con Cycles: todos los grupos a su
+       * nivel de referencia, con las luces y los emisivos nombrados por grupo (luz:*, emisivo:*).
+       */
+      exportar: async () => {
+        restaurar();
+        const luz = crearIluminacion(1);
+        luz.acento = 0;
+        luz.linterna = 0;
+        Object.assign(control.luz, luz);
+        control.luz.tubos = { ...luz.tubos };
+        advance(performance.now());
+        advance(performance.now() + 16);
+        const ocultos: { visible: boolean }[] = [];
+        scene.traverse((o) => {
+          if (o.userData['soloTiempoReal'] && o.visible) {
+            o.visible = false;
+            ocultos.push(o);
+          }
+          // glTF (y Blender) orientan un foco por el −Z de su nodo; three, por su `target`. Se gira cada
+          // foco hacia su objetivo para que la dirección viaje en el glTF (three no usa esa rotación).
+          const foco = o as SpotLight;
+          if (foco.isSpotLight) {
+            foco.target.updateMatrixWorld();
+            foco.lookAt(foco.target.getWorldPosition(new Vector3()));
+            foco.updateMatrixWorld();
+          }
+        });
+        try {
+          const glb = (await new GLTFExporter().parseAsync([scene, camera], {
+            binary: true,
+            onlyVisible: true,
+          })) as ArrayBuffer;
+          const bytes = new Uint8Array(glb);
+          let bin = '';
+          for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+          return btoa(bin);
+        } finally {
+          for (const o of ocultos) o.visible = true;
+        }
       },
       listo: true,
     };

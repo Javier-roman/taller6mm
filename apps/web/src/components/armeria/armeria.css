@@ -192,6 +192,9 @@
 }
 
 .armeria__ajuste {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
   min-height: var(--objetivo-tactil);
   padding: 0 var(--espacio-3);
   border: var(--trazo-fino) solid var(--acero);
@@ -213,10 +216,22 @@
   border-color: var(--niebla);
 }
 
+/* Activo sin relleno latón: el único botón latón es la acción principal, «Monta tu réplica» (critico-diseno). */
 .armeria__ajuste[aria-pressed="true"] {
-  color: var(--negro-pavonado);
-  background: var(--laton);
-  border-color: var(--laton-claro);
+  color: var(--laton-claro);
+  background: var(--grafito);
+  border-color: var(--laton);
+}
+
+.armeria__icono {
+  flex: none;
+  width: calc(var(--espacio-4) + var(--espacio-1));
+  height: calc(var(--espacio-4) + var(--espacio-1));
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 :where(.armeria) :focus-visible {
@@ -558,8 +573,39 @@
     animation-name: armeria-sube;
   }
 
+  /* Móvil: la acción principal a todo el ancho; los ajustes, botones de icono de 44 × 44 junto a la marca. */
   .armeria__accion {
-    display: none;
+    order: 2;
+    flex-basis: 100%;
+    justify-content: center;
+    min-height: var(--espacio-12);
+    margin-inline-start: 0;
+  }
+
+  /* La marca cede ancho (el lema pasa a dos líneas) para que los ajustes vayan en su misma fila. */
+  .armeria__identidad {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .armeria__ajustes {
+    order: 1;
+    margin-inline-start: auto;
+  }
+
+  .armeria__ajuste {
+    justify-content: center;
+    min-width: var(--objetivo-tactil);
+    padding: 0;
+  }
+
+  .armeria__ajuste-texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .armeria__lema {
@@ -579,10 +625,11 @@
     display: none;
   }
 
+  /* Cabecera opaca con un fundido de 24 px: detrás no debe leerse ningún rótulo de la sala. */
   .armeria__cabecera {
     background: linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--negro-pavonado) 94%, transparent) 70%,
+      var(--negro-pavonado) calc(100% - var(--espacio-6)),
       color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
     );
     padding-bottom: var(--espacio-6);
@@ -609,11 +656,12 @@
     scrollbar-width: none;
   }
 
+  /* Mismo recorte vertical que el B en móvil (ZOOM_MOVIL 1,22, del 10 % al 92 %): sin franja de suelo. */
   .armeria-poster__lienzo {
     left: 0;
-    top: 0;
+    top: -12.2%;
     width: auto;
-    height: 100%;
+    height: 122%;
     translate: none;
   }
 }
@@ -641,6 +689,7 @@
 
 /* Las siluetas de réplicas son de atrezo hasta que el frente de fidelidad entregue modelos a escala. */
 .armeria__provisional {
+  display: block;
   color: var(--estado-aviso);
   white-space: nowrap;
 }

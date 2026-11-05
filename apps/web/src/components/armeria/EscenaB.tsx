@@ -177,6 +177,9 @@ async function cargarPase(pase: Pase) {
   return createImageBitmap(await respuesta.blob(), { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
 }
 
+/** Zoom del encuadre móvil del B: quita la franja de suelo sin pasar de ~1 píxel de pase por píxel físico. */
+const ZOOM_MOVIL = 1.22;
+
 const UNIDADES: Pase[] = [...PASES_LUZ, ...PASES_DATOS];
 const UNIFORME_DE: Record<Pase, string> = {
   base: 'uBase',
@@ -307,16 +310,13 @@ export default function EscenaB(props: EscenaBProps) {
         const f = progreso - i;
         const a = centroDe(abierta?.id ?? ZONAS[i]?.id ?? 'banco');
         const b = abierta ? a : centroDe(ZONAS[Math.min(ZONAS.length - 1, i + 1)]?.id ?? 'banco');
-        // Sin ampliar: los pases son de 1920 px y en vertical ya se ven a más del doble (critico-diseno).
+        // En reposo se recorta el suelo vacío de abajo (franja bajo el banco, critico-diseno 05-11-2026): ventana
+        // vertical fija entre el 10 % y el 92 % del pase. Los pases de 2560 px aguantan ese zoom en vertical.
         // Con una zona abierta, la zona sube al tercio superior: la hoja de abajo ocupa hasta el 45 %.
-        const [, vh] = visible(1);
-        return {
-          centro: [
-            (a[0] ?? 0.5) + ((b[0] ?? 0.5) - (a[0] ?? 0.5)) * f,
-            (a[1] ?? 0.5) + ((b[1] ?? 0.5) - (a[1] ?? 0.5)) * f + (abierta ? 0.2 * vh : 0),
-          ],
-          zoom: 1,
-        };
+        const [, vh] = visible(ZOOM_MOVIL);
+        const x = (a[0] ?? 0.5) + ((b[0] ?? 0.5) - (a[0] ?? 0.5)) * f;
+        const y = abierta ? (a[1] ?? 0.5) + 0.2 * vh : 0.1 + vh / 2;
+        return { centro: [x, y], zoom: ZOOM_MOVIL };
       }
       if (abierta) {
         const r = RECTS.find((z) => z.id === abierta.id)?.rect;
