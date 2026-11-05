@@ -4,6 +4,7 @@ import {
   datosEstructurados,
   elegirPaginas,
   enlacesMismoHost,
+  esHtml,
   htmlInerte,
   locsDeSitemap,
   pasajesRelevantes,
@@ -64,6 +65,14 @@ describe('análisis de la diligencia debida', () => {
     expect(candidataValida('https://127.0.0.1/a', BASE)).toBe(false);
     expect(candidataValida('https://t.example/a?x=1', BASE)).toBe(false);
     expect(candidataValida('no es url', BASE)).toBe(false);
+    // Los sitemaps de imágenes mezclan ficheros con productos: no son páginas.
+    expect(candidataValida('https://t.example/_i/upload/product/abc.PNG', BASE)).toBe(false);
+    expect(candidataValida('https://t.example/manual.pdf', BASE)).toBe(false);
+    expect(candidataValida('https://t.example/m4-cqb.html', BASE)).toBe(true);
+    expect(esHtml('text/html; charset=utf-8')).toBe(true);
+    expect(esHtml('application/xhtml+xml')).toBe(true);
+    expect(esHtml('image/png')).toBe(false);
+    expect(esHtml(null)).toBe(false);
   });
 
   test('enlaces del mismo sitio (con o sin www), absolutos, https y con &amp; decodificado', () => {

@@ -21,6 +21,7 @@ import {
   datosEstructurados,
   elegirPaginas,
   enlacesMismoHost,
+  esHtml,
   htmlInerte,
   locsDeSitemap,
   pasajesRelevantes,
@@ -166,7 +167,17 @@ export async function diligencia(cliente: ClienteRespetuoso, ua: string, sitio: 
   const intentar = async (tipo: string, u: string) => {
     try {
       const r = await cliente.obtener(u);
-      if (r.estado === 200) return guardar(tipo, r);
+      // Solo se guardan páginas HTML: una imagen o un PDF con extensión engañosa no se archiva como página.
+      if (r.estado === 200 && esHtml(r.tipo)) return guardar(tipo, r);
+      if (r.estado === 200) {
+        paginas.push({
+          tipo,
+          url: u,
+          estado: r.estado,
+          descartada: `no es HTML (${(r.tipo ?? 'sin tipo').slice(0, 60)})`,
+        });
+        return '';
+      }
       paginas.push({ tipo, url: u, estado: r.estado });
     } catch (e) {
       errores.push(`${tipo} ${u}: ${motivo(e)}`);
@@ -178,7 +189,7 @@ export async function diligencia(cliente: ClienteRespetuoso, ua: string, sitio: 
   if (evaluacion.permitido) {
     try {
       const r = await cliente.obtener(new URL('/.well-known/tdmrep.json', base).href);
-      if (r.estado === 200 && /"tdm-reservation"s*:s*1/.test(texto(r, 512 * 1024)))
+      if (r.estado === 200 && /"tdm-reservation"\s*:\s*1/.test(texto(r, 512 * 1024)))
         motivos.push('TDMRep: tdm-reservation=1');
     } catch (e) {
       errores.push(`tdmrep: ${motivo(e)}`);

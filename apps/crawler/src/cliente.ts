@@ -105,6 +105,18 @@ interface Cruda {
 
 const numero = (v: unknown, defecto: number) => (typeof v === 'number' && Number.isFinite(v) ? v : defecto);
 
+/** «fetch failed» no dice nada: la causa real (TLS, DNS, conexión) va en `cause`. */
+export function describirError(e: unknown): string {
+  const partes = [String(e)];
+  let causa = e instanceof Error ? e.cause : undefined;
+  for (let i = 0; i < 3 && causa; i++) {
+    const c = causa as { code?: unknown; message?: unknown; cause?: unknown };
+    partes.push([c.code, c.message].filter((x) => typeof x === 'string').join(' '));
+    causa = c.cause;
+  }
+  return partes.filter(Boolean).join(' <- ').slice(0, 500);
+}
+
 export class ClienteRespetuoso {
   readonly #fetch: typeof fetch;
   readonly #esperar: (ms: number) => Promise<void>;
@@ -202,12 +214,19 @@ export class ClienteRespetuoso {
         headers: { 'user-agent': this.#ua, accept: '*/*', 'accept-language': 'es-ES,es;q=0.9,en;q=0.5' },
       });
       const cuerpo = await this.#leer(r);
-      this.#log({ url: url.href, estado: r.status, bytes: cuerpo.byteLength, ms: this.#ahora() - inicio });
+      const location = r.headers.get('location');
+      this.#log({
+        url: url.href,
+        estado: r.status,
+        bytes: cuerpo.byteLength,
+        ms: this.#ahora() - inicio,
+        ...(location ? { nota: `location: ${location.slice(0, 300)}` } : {}),
+      });
       return {
         estado: r.status,
         tipo: r.headers.get('content-type'),
         cuerpo,
-        location: r.headers.get('location'),
+        location,
         retryAfter: r.headers.get('retry-after'),
         cabeceras: Object.fromEntries(
           ['x-robots-tag', 'tdm-reservation', 'tdm-policy'].flatMap((h) => {
@@ -218,7 +237,7 @@ export class ClienteRespetuoso {
       };
     } catch (e) {
       this.#fallos.set(clave, (this.#fallos.get(clave) ?? 0) + 1);
-      this.#log({ url: url.href, estado: null, bytes: 0, ms: this.#ahora() - inicio, nota: String(e) });
+      this.#log({ url: url.href, estado: null, bytes: 0, ms: this.#ahora() - inicio, nota: describirError(e) });
       throw e;
     } finally {
       clearTimeout(reloj);
