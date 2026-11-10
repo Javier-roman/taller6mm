@@ -2,6 +2,7 @@
 name: informe-fase
 description: Informe de cierre de fase contra los criterios de aceptación de docs/10-roadmap.md, con evidencias.
 argument-hint: "[número de fase]"
+model: sonnet
 ---
 
 Genera `docs/informes/fase-$ARGUMENTS.md` con:
