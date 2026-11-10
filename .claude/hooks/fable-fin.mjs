@@ -26,17 +26,24 @@ export function quitarAsesorFable(archivo, ahora = Date.now(), fin = FIN_FABLE) 
         mensaje: 'settings.local.json no es JSON válido: no he podido quitar el asesor Fable.',
       };
     }
-    if (!datos || typeof datos !== 'object' || Array.isArray(datos) || !esFable(datos.advisorModel)) {
-      return { cambio: 'ninguno' };
+    if (!datos || typeof datos !== 'object' || Array.isArray(datos)) return { cambio: 'ninguno' };
+    // Esta semana Fable es el modelo principal (`model`) y el asesor (`advisorModel`): se quitan los dos.
+    const resto = { ...datos };
+    let quitado = false;
+    for (const clave of ['advisorModel', 'model']) {
+      if (esFable(resto[clave])) {
+        delete resto[clave];
+        quitado = true;
+      }
     }
-    const { advisorModel: _quitado, ...resto } = datos;
+    if (!quitado) return { cambio: 'ninguno' };
     const tmp = `${archivo}.tmp`;
     writeFileSync(tmp, `${JSON.stringify(resto, null, 2)}\n`);
     renameSync(tmp, archivo);
     return {
       cambio: 'quitado',
       mensaje:
-        'Ha terminado la semana de Fable (16-11-2026, 23:59 de Madrid): he quitado el asesor Fable de .claude/settings.local.json. ' +
+        'Ha terminado la semana de Fable (16-11-2026, 23:59 de Madrid): he quitado Fable (modelo principal y asesor) de .claude/settings.local.json. ' +
         'Reinicia Claude Code para que se aplique y no uses `model: fable` en ningún subagente.',
     };
   } catch {

@@ -50,6 +50,16 @@ El `model` de una skill cambia el modelo de la sesión hasta el final de ese tur
 ### Semana de Fable (hasta el 16-11-2026 a las 23:59, hora de Madrid)
 **Pasada esa fecha, todo este apartado queda sin efecto y Fable no se usa nunca.** El plan Pro de Javi incluye Fable 5.2 hasta entonces, con un tope: como mucho la mitad de su uso semanal. Solo para lo más difícil.
 - `fable` apunta a Fable 5.2 desde Claude Code 2.1.321 (comprobado: 2.1.322 instalado, doc `model-config#work-with-fable`).
+- **Orquestador (decisión de Javi, 10-11-2026)**: esta semana Fable es el modelo principal (`model: fable` en `.claude/settings.local.json`, que `check-env` limpia al acabar el plazo) y lleva lo difícil: planificar, decidir y revisar. Delega según la exigencia:
+  | Tarea | Quién |
+  |---|---|
+  | Decisiones de diseño, arquitectura, planes grandes, escena y luz difíciles | Fable (principal) |
+  | Revisión visual, de seguridad y de fidelidad; 3D difícil | `critico-diseno`, `revisor-seguridad`, `revisor-fidelidad`, `ingeniero-3d` con `model: fable` |
+  | Implementación, mediciones y rendimiento rutinarios | Sonnet (`auditor-rendimiento`, `ingeniero-ingesta`, o subagente general) |
+  | Docs, CHANGELOG, README, cambios mecánicos | `documentador` (Haiku) |
+  | Búsquedas amplias en el código | `Explore` |
+  | Segunda opinión sobre planes, ADRs y diffs públicos; resúmenes de documentación pública larga; traducciones | `/gemini` (`gemini-3.8-flash-high` para opinión, `-low` para volumen). Nunca secretos ni `assets-src/raw/` |
+  El tope de la semana es la mitad del uso semanal de Javi: lo rutinario se delega para no gastar Fable en ello.
 - **Asesor**: `advisorModel: fable` en `.claude/settings.local.json` (no se sube). Esta semana también se puede consultar en modo plan, una vez, antes de presentar un plan grande. Si la cuenta exige aceptar el cobro con créditos, el asesor Fable se ignora hasta que Javi lo acepte con `/model fable`; ese comando deja Fable como modelo por defecto, así que Javi responde «No» a cualquier aviso de créditos.
 - **Subagentes**: al invocar `critico-diseno`, `revisor-fidelidad`, `revisor-seguridad` e `ingeniero-3d` se les pasa `model: fable` hasta la fecha de fin. Sus archivos no cambian (siguen en opus). El nuevo `ingeniero-3d` (opus, esfuerzo alto, sin asesor) es para escena, luz y materiales de La Armería, scripts de Blender y medición de fidelidad.
 - **Límite**: si Fable da un error de límite, se repite con el modelo normal, se avisa a Javi una vez (puede usar el reinicio gratis) y se sigue. Sin créditos de pago.

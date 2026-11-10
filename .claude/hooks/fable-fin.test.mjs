@@ -48,6 +48,19 @@ test('conserva las demás claves y es idempotente', () => {
   rmSync(d, { recursive: true });
 });
 
+test('quita también el modelo principal si es Fable, y solo si lo es', () => {
+  const d = tmp();
+  const f = escribir(d, { model: 'fable', advisorModel: 'fable', keep: true });
+  assert.equal(quitarAsesorFable(f, FIN_FABLE + 1).cambio, 'quitado');
+  assert.deepEqual(leer(f), { keep: true });
+  const g = escribir(d, { model: 'sonnet', advisorModel: 'fable' });
+  assert.equal(quitarAsesorFable(g, FIN_FABLE + 1).cambio, 'quitado');
+  assert.deepEqual(leer(g), { model: 'sonnet' });
+  const h = escribir(d, { model: 'opusplan', advisorModel: 'opus' });
+  assert.equal(quitarAsesorFable(h, FIN_FABLE + 1).cambio, 'ninguno');
+  rmSync(d, { recursive: true });
+});
+
 test('solo quita el asesor si es Fable', () => {
   const d = tmp();
   const f = escribir(d, { advisorModel: 'opus' });
