@@ -33,6 +33,7 @@ Sonnet lo consulta **solo** en estos casos:
 | `revisor-fidelidad` | opus | high | Fidelidad 1:1 y licencias |
 | `auditor-rendimiento` | sonnet | (sesión) | Medir y comparar con presupuestos |
 | `ingeniero-ingesta` | sonnet | (sesión) | Fuentes, parsers, emparejado |
+| `ingeniero-3d` | opus | high | Escena, luz y materiales de La Armería, Blender, medición de fidelidad |
 | `documentador` | haiku | low | `docs/`, CHANGELOG y README de un cambio ya hecho |
 | `delegado-gemini` | haiku | low | Preparar la llamada a Gemini y devolver su respuesta |
 | `Explore` (integrado) | el de la sesión | — | Búsquedas amplias en el código |
@@ -45,6 +46,16 @@ Sonnet lo consulta **solo** en estos casos:
 | `/gemini` | se ejecuta en `delegado-gemini` (haiku, low) | low |
 
 El `model` de una skill cambia el modelo de la sesión hasta el final de ese turno; `/gemini` usa `context: fork` para no cambiarlo.
+
+### Semana de Fable (hasta el 16-11-2026 a las 23:59, hora de Madrid)
+**Pasada esa fecha, todo este apartado queda sin efecto y Fable no se usa nunca.** El plan Pro de Javi incluye Fable 5.2 hasta entonces, con un tope: como mucho la mitad de su uso semanal. Solo para lo más difícil.
+- `fable` apunta a Fable 5.2 desde Claude Code 2.1.321 (comprobado: 2.1.322 instalado, doc `model-config#work-with-fable`).
+- **Asesor**: `advisorModel: fable` en `.claude/settings.local.json` (no se sube). Esta semana también se puede consultar en modo plan, una vez, antes de presentar un plan grande. Si la cuenta exige aceptar el cobro con créditos, el asesor Fable se ignora hasta que Javi lo acepte con `/model fable`; ese comando deja Fable como modelo por defecto, así que Javi responde «No» a cualquier aviso de créditos.
+- **Subagentes**: al invocar `critico-diseno`, `revisor-fidelidad`, `revisor-seguridad` e `ingeniero-3d` se les pasa `model: fable` hasta la fecha de fin. Sus archivos no cambian (siguen en opus). El nuevo `ingeniero-3d` (opus, esfuerzo alto, sin asesor) es para escena, luz y materiales de La Armería, scripts de Blender y medición de fidelidad.
+- **Límite**: si Fable da un error de límite, se repite con el modelo normal, se avisa a Javi una vez (puede usar el reinicio gratis) y se sigue. Sin créditos de pago.
+- **Seguridad**: si los clasificadores de Fable saltan (ciberseguridad), Claude Code cae a Opus; se anota qué modelo corrió de verdad.
+- **Fin**: `check-env` (`.claude/hooks/fable-fin.mjs`, con tests) quita el asesor Fable de `settings.local.json` en la primera sesión después de 2026-11-16T22:59:59Z y avisa. Una sesión que cruce la medianoche conserva el asesor hasta reiniciar: antes de invocar Fable se mira la hora de Madrid.
+- **Medición**: al terminar la semana, `pnpm ia:uso --desde 2026-11-10` y filas `claude-fable-5-2` y `asesor:*`. Como el tope es la mitad del uso semanal, Javi mira `/usage` a mitad de semana y se para antes de llegar a la mitad.
 
 ## 2. Gemini como ayudante (Antigravity CLI, `agy`)
 Google retiró Gemini CLI para cuentas personales el 18-06-2026. Con Google AI Plus toca Antigravity CLI, con una cuota semanal modesta. **Si falla o se agota, se sigue sin él.**
