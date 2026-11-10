@@ -31,10 +31,19 @@ export interface Seleccion {
 }
 
 /** ¿Candidata a página de muestra? https, del mismo sitio, sin query y fuera de zonas privadas. */
+// Imágenes, documentos y ficheros no son páginas: los sitemaps de imágenes los mezclan con las URL de producto.
+const NO_PAGINA =
+  /\.(?:png|jpe?g|gif|webp|avif|svg|ico|bmp|tiff?|pdf|zip|rar|7z|gz|mp4|webm|mov|mp3|css|js|json|xml|txt|woff2?|ttf|otf|eot)$/i;
+
+/** Solo se archivan páginas HTML (no imágenes ni PDF servidos con otra extensión). */
+export function esHtml(tipo: string | null): boolean {
+  return /^\s*(?:text\/html|application\/xhtml\+xml)\b/i.test(tipo ?? '');
+}
+
 export function candidataValida(u: string, base: string): boolean {
   const a = url(u);
   const b = url(base);
-  if (!a || !b || a.protocol !== 'https:' || a.search) return false;
+  if (!a || !b || a.protocol !== 'https:' || a.search || NO_PAGINA.test(a.pathname)) return false;
   const sitio = (x: URL) => x.hostname.toLowerCase().replace(/^www\./, '');
   return sitio(a) === sitio(b) && !esZonaPrivada(a);
 }
