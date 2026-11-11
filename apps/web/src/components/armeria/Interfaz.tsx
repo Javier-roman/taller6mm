@@ -395,6 +395,7 @@ export function InterfazArmeria({
             <button
               type="button"
               className="armeria__ajuste"
+              aria-label="Más luz"
               aria-pressed={estado.variante === 'mas-luz'}
               onClick={() => acciones.cambiarLuz(estado.variante === 'mas-luz' ? 'penumbra' : 'mas-luz')}
               title={`Luz: ${VARIANTES[estado.variante].nombre}`}
@@ -405,6 +406,7 @@ export function InterfazArmeria({
             <button
               type="button"
               className="armeria__ajuste"
+              aria-label="Vista ligera"
               aria-pressed={estado.vista === 'ligera'}
               onClick={() => acciones.cambiarVista(estado.vista === 'ligera' ? 'escena' : 'ligera')}
               title="Vista ligera"
@@ -459,7 +461,7 @@ export function InterfazArmeria({
                       </span>
                       <span className="armeria__zona-nombre">{z.rotulo}</span>
                       <span className="armeria__zona-dato">
-                        <span className="armeria__zona-dato-texto">{z.dato}</span>
+                        <span className="armeria__zona-dato-texto">{sinSeparadorHuerfano(z.dato)}</span>
                         <Demo />
                       </span>
                     </a>
@@ -510,6 +512,9 @@ export function InterfazArmeria({
     </div>
   );
 }
+
+/** «186 accesorios · 8 tiendas»: si el dato parte en dos líneas, el «·» se queda al final de la primera. */
+const sinSeparadorHuerfano = (dato: string) => dato.replaceAll(' · ', '\u00A0· ');
 
 /** Bombilla: «Más luz». En móvil el botón es solo icono (44 × 44) y el texto queda para el lector. */
 function IconoLuz() {

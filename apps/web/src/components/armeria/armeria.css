@@ -270,6 +270,18 @@
   );
 }
 
+/*
+ * Con una zona abierta la escena se acerca y sus rótulos caen detrás de la navegación: velo opaco desde la
+ * línea de las etiquetas de grupo, con un fundido corto por encima (critico-diseno, 2.ª revisión).
+ */
+.armeria[data-abierta="true"] .armeria__nav {
+  background: linear-gradient(
+    to top,
+    var(--negro-pavonado) calc(100% - var(--espacio-6)),
+    color-mix(in srgb, var(--negro-pavonado) 0%, transparent)
+  );
+}
+
 .armeria__grupo-titulo {
   margin: 0 0 var(--espacio-2);
   font-family: var(--fuente-rotulo);
@@ -451,18 +463,34 @@
   color: var(--niebla);
 }
 
-/* ── Tableta horizontal y portátil pequeño: ocho tarjetas en una fila, solo con el rótulo ── */
+/*
+ * ── Tableta horizontal y portátil pequeño: fila desplazable (docs/02 §4.5, como .t6-fila-desplazable) ──
+ * Ocho tarjetas de 160 px no caben en 1024: en vez de encogerlas (rótulo cortado y sin dato vivo), la fila
+ * se desplaza en horizontal y la tarjeta que asoma cortada por la derecha avisa de que hay más.
+ */
 @media (min-width: 52.1875rem) and (max-width: 72rem) {
+  .armeria__nav {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--espacio-6);
+    scrollbar-width: none;
+  }
+
+  .armeria__grupo {
+    flex: none;
+  }
+
   .armeria__lista {
-    grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+    display: flex;
   }
 
-  .armeria__zona {
-    min-height: var(--objetivo-tactil);
-    justify-content: center;
+  .armeria__item {
+    flex: 0 0 calc(var(--espacio-16) + var(--espacio-24));
+    scroll-snap-align: start;
   }
 
-  .armeria__zona-dato,
   .armeria__lema,
   .armeria__tecnica {
     display: none;
