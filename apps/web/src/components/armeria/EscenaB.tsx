@@ -4,7 +4,7 @@
 // profundidad, mueve la imagen con un parallax leve y termina con AgX, viñeta y grano.
 // La cámara no se mueve: «abrir» una zona es un zoom 2D sobre la imagen (apertura simulada).
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
-import { ASPECTO_POSTER, ENCUADRE_POSTER, proyectar, type Rect, rectZona } from './camara.ts';
+import { ANCHO_MINIMO_VISIBLE, ASPECTO_POSTER, ENCUADRE_POSTER, proyectar, type Rect, rectZona } from './camara.ts';
 import { type CanalEscena, crearVigia } from './canal.ts';
 import { Director, VARIANTES, type Variante } from './director.ts';
 import { EXPOSICION_HORNO, PASES_DATOS, PASES_LUZ, type Pase, PROFUNDIDAD, RUTA_PASES } from './pases.ts';
@@ -40,8 +40,8 @@ in vec2 vUv;
 out vec4 salida;
 uniform sampler2D uBase, uTuboI, uTuboC, uTuboD, uCalidas, uRotulos, uAlbedo, uNormal, uProf;
 uniform vec2 uCentro, uVisible, uParallax, uLinterna, uResolucion;
-uniform vec3 uTubos, uTinte;
-uniform float uAmbiente, uCalidasN, uRotulosN, uAcento, uLinternaN, uTiempo, uTanFov, uAspecto;
+uniform vec3 uTubos, uTubosLuz, uTinte, uFondo;
+uniform float uAmbiente, uCalidasN, uRotulosN, uAcento, uExtra, uLinternaN, uTiempo, uTanFov, uAspecto;
 uniform vec4 uRectActivo;
 uniform int uFilaActiva;
 uniform vec4 uSegmentos[3];
@@ -85,6 +85,8 @@ float segmento(vec2 p, vec2 a, vec2 b) {
 }
 void main() {
   vec2 uv = uCentro + (vUv - 0.5) * uVisible;
+  // Fuera de la imagen (tableta 4:3: sobra arriba y abajo) se pinta el fondo de la página.
+  float dentro = smoothstep(0.0, 0.004, uv.y) * smoothstep(0.0, 0.004, 1.0 - uv.y);
   uv += uParallax * (1.0 - texture(uProf, uv).r);
   vec3 tI = texture(uTuboI, uv).rgb;
   vec3 tC = texture(uTuboC, uv).rgb;
@@ -95,10 +97,11 @@ void main() {
     + texture(uCalidas, uv).rgb * uCalidasN
     + rot * uRotulosN;
   if (uRectActivo.z > 0.0) {
-    // Acento: la zona activa recibe otra vez la luz de su fila de tubos y su rótulo se enciende.
-    float m = rect(uv, uRectActivo, 0.012) * uAcento;
+    // Zona activa: lo que su fila de tubos sube sobre el reposo se aplica solo dentro de la zona (el cono
+    // de luz de encima no se toca, que lavaba los rótulos) y su rótulo se enciende (critico-diseno).
+    float m = rect(uv, uRectActivo, 0.012);
     vec3 fila = uFilaActiva == 0 ? tI : (uFilaActiva == 1 ? tC : tD);
-    c += fila * uTinte * m * 0.75 + rot * m * 1.1;
+    c += fila * uTinte * m * uExtra + rot * m * uAcento * 1.76;
   }
   c /= EXPO;
   if (uLinternaN > 0.001) {
@@ -112,7 +115,7 @@ void main() {
   // Resplandor de los tubos (sustituye al bloom de A).
   vec2 q = uv * vec2(uAspecto, 1.0);
   for (int i = 0; i < 3; i++) {
-    float nivel = i == 0 ? uTubos.x : (i == 1 ? uTubos.y : uTubos.z);
+    float nivel = i == 0 ? uTubosLuz.x : (i == 1 ? uTubosLuz.y : uTubosLuz.z);
     float dd = segmento(q, uSegmentos[i].xy * vec2(uAspecto, 1.0), uSegmentos[i].zw * vec2(uAspecto, 1.0));
     c += uTinte * nivel * (exp(-dd * dd / 0.000012) * 1.6 + exp(-dd * dd / 0.0011) * 0.22);
   }
@@ -121,7 +124,7 @@ void main() {
   c *= 1.0 - 0.62 * smoothstep(0.45, 1.25, length(v));
   float g = fract(sin(dot(gl_FragCoord.xy + uTiempo * 61.0, vec2(12.9898, 78.233))) * 43758.5453);
   c += (g - 0.5) * 0.05 * c;
-  salida = vec4(aSrgb(clamp(c, 0.0, 1.0)), 1.0);
+  salida = vec4(mix(uFondo, aSrgb(clamp(c, 0.0, 1.0)), dentro), 1.0);
 }`;
 
 /** Rectángulos de las zonas sobre la imagen (uv 0–1, y hacia abajo). El banco va primero: está delante. */
@@ -136,6 +139,10 @@ const SEGMENTOS = ORDEN_ESTANTERIAS.map((e) => {
   const b = proyectar([x + 1.1, 3.42, -1.05], ENCUADRE_POSTER, ASPECTO_POSTER);
   return [a[0], a[1], b[0], b[1]] as const;
 });
+
+/** «#0b0c0e» → [r, g, b] en 0–1 (sRGB, tal cual sale a pantalla). Negro si no es un hex válido. */
+const srgb = (hex: string) =>
+  /^#[0-9a-f]{6}$/i.test(hex) ? [1, 3, 5].map((i) => Number.parseInt(hex.slice(i, i + 2), 16) / 255) : [0, 0, 0];
 
 const lineal = (hex: string) =>
   [1, 3, 5].map((i) => {
@@ -235,6 +242,8 @@ export default function EscenaB(props: EscenaBProps) {
       linterna: [0.5, 0.5] as [number, number],
       dentro: false,
       apuntada: null as string | null,
+      /** Última zona activa: su luz se apaga suave al salir, sin saltar. */
+      iluminada: null as string | null,
       movimiento: 1,
     };
     const linternaPosible = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -254,6 +263,8 @@ export default function EscenaB(props: EscenaBProps) {
     gl.uniform4fv(u('uSegmentos'), SEGMENTOS.flat());
     gl.uniform1f(u('uTanFov'), tanFov);
     gl.uniform1f(u('uAspecto'), ASPECTO_POSTER);
+    // El fondo de la página (token --negro-pavonado), para lo que sobra fuera de la imagen.
+    gl.uniform3fv(u('uFondo'), srgb(getComputedStyle(canvas).getPropertyValue('--negro-pavonado').trim()));
 
     const tamano = () => {
       // En móvil, 1,5: cada píxel de pase ya ocupa más de uno de pantalla y DPR 2 no gana detalle.
@@ -267,11 +278,16 @@ export default function EscenaB(props: EscenaBProps) {
       }
     };
 
-    /** Ventana visible de la imagen (uv) para el aspecto de la pantalla y un zoom. */
+    /**
+     * Ventana visible de la imagen (uv) para el aspecto de la pantalla y un zoom. Como el póster: llena la
+     * pantalla (cover), pero fuera del móvil nunca recorta más que el margen de los lados: en 4:3 se ven
+     * los tres cuerpos enteros y la ventana se sale de la imagen por arriba y por abajo.
+     */
     const visible = (zoom: number) => {
       const aspecto = canvas.clientWidth / Math.max(1, canvas.clientHeight);
-      const base = aspecto >= ASPECTO_POSTER ? [1, ASPECTO_POSTER / aspecto] : [aspecto / ASPECTO_POSTER, 1];
-      return [(base[0] ?? 1) / zoom, (base[1] ?? 1) / zoom] as const;
+      const ancho = Math.min(1, aspecto / ASPECTO_POSTER);
+      const w = ultimas.current.movil ? ancho : Math.max(ancho, ANCHO_MINIMO_VISIBLE);
+      return [w / zoom, (w * ASPECTO_POSTER) / aspecto / zoom] as const;
     };
     const aImagen = (x: number, y: number) => {
       const [vw, vh] = visible(estado.zoom);
@@ -350,7 +366,8 @@ export default function EscenaB(props: EscenaBProps) {
         Math.abs((meta.centro[1] ?? 0) - (estado.centro[1] ?? 0));
       estado.zoom += (meta.zoom - estado.zoom) * k;
       const [vw, vh] = visible(estado.zoom);
-      const limitar = (c: number, v: number) => Math.min(1 - v / 2, Math.max(v / 2, c));
+      // Si la ventana es mayor que la imagen, la imagen va centrada.
+      const limitar = (c: number, v: number) => (v >= 1 ? 0.5 : Math.min(1 - v / 2, Math.max(v / 2, c)));
       estado.centro = [
         limitar((estado.centro[0] ?? 0.5) + ((meta.centro[0] ?? 0.5) - (estado.centro[0] ?? 0.5)) * k, vw),
         limitar((estado.centro[1] ?? 0.5) + ((meta.centro[1] ?? 0.5) - (estado.centro[1] ?? 0.5)) * k, vh),
@@ -366,15 +383,26 @@ export default function EscenaB(props: EscenaBProps) {
       gl.uniform2f(u('uVisible'), vw, vh);
       gl.uniform2f(u('uParallax'), estado.parallax[0] ?? 0, estado.parallax[1] ?? 0);
       gl.uniform2f(u('uResolucion'), canvas.width, canvas.height);
-      gl.uniform3f(u('uTubos'), luz.tubos.izquierda, luz.tubos.centro, luz.tubos.derecha);
+      // La fila de la zona activa (o de la última, mientras se apaga) no pasa del reposo en toda la imagen:
+      // lo que sube de ahí solo se ve dentro de la zona.
+      if (activa) estado.iluminada = activa.id;
+      const iluminada = zonaPorId(estado.iluminada);
+      const tope = VARIANTES[d.variante].reposo;
+      const niveles = ORDEN_ESTANTERIAS.map((e) => luz.tubos[e]);
+      const fila = iluminada && !d.enIntro ? ORDEN_ESTANTERIAS.indexOf(iluminada.estanteria) : -1;
+      const extra = fila >= 0 ? Math.max(0, (niveles[fila] ?? 0) - tope) : 0;
+      if (fila >= 0) niveles[fila] = Math.min(niveles[fila] ?? 0, tope);
+      gl.uniform3f(u('uTubos'), niveles[0] ?? 0, niveles[1] ?? 0, niveles[2] ?? 0);
+      gl.uniform3f(u('uTubosLuz'), luz.tubos.izquierda, luz.tubos.centro, luz.tubos.derecha);
+      gl.uniform1f(u('uExtra'), extra);
       gl.uniform3fv(u('uTinte'), tinte(d.variante));
       gl.uniform1f(u('uAmbiente'), luz.ambiente);
       gl.uniform1f(u('uCalidasN'), luz.calidas);
       // Los rótulos de zona y la marca comparten pase: la marca manda durante la intro.
       gl.uniform1f(u('uRotulosN'), d.enIntro ? Math.max(luz.rotulos, luz.marca * 0.8) : luz.rotulos);
-      const r = activa ? RECTS.find((z) => z.id === activa.id)?.rect : undefined;
+      const r = iluminada ? RECTS.find((z) => z.id === iluminada.id)?.rect : undefined;
       gl.uniform4f(u('uRectActivo'), r?.x ?? 0, r?.y ?? 0, r?.ancho ?? 0, r?.alto ?? 0);
-      gl.uniform1i(u('uFilaActiva'), activa ? ORDEN_ESTANTERIAS.indexOf(activa.estanteria) : -1);
+      gl.uniform1i(u('uFilaActiva'), fila);
       gl.uniform1f(u('uAcento'), luz.acento);
       gl.uniform2f(u('uLinterna'), estado.linterna[0], estado.linterna[1]);
       gl.uniform1f(u('uLinternaN'), luz.linterna);

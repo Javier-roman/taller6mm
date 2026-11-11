@@ -53,12 +53,16 @@
     visibility 0s linear var(--duracion-escena);
 }
 
-/* Como object-fit: cover, pero con las zonas encima en la misma proporción (16:9). */
+/*
+ * Como object-fit: cover, pero con las zonas encima en la misma proporción (16:9) y sin recortar nunca más
+ * que el margen de los lados (4,3 de 4,75 m, como MEDIO_ANCHO_MINIMO en camara.ts): en 4:3 (tableta) se ven
+ * los tres cuerpos enteros y sobra arriba y abajo, donde van la cabecera y la navegación.
+ */
 .armeria-poster__lienzo {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: max(100cqw, calc(100cqh * 16 / 9));
+  width: max(100cqw, min(calc(100cqh * 16 / 9), calc(100cqw * 4.75 / 4.3)));
   aspect-ratio: 16 / 9;
   translate: -50% -50%;
 }

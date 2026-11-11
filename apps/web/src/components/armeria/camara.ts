@@ -18,6 +18,12 @@ export const ASPECTO_POSTER = 16 / 9;
 const MEDIO_ANCHO_POSTER = 4.75;
 /** Mitad del ancho que debe verse siempre en escritorio: los tres cuerpos y un margen mínimo. */
 const MEDIO_ANCHO_MINIMO = 4.3;
+/**
+ * Fracción del ancho del póster (y de los pases del B) que se ve siempre fuera del móvil: en pantallas
+ * más estrechas que 16:9 (tableta 4:3) la imagen no se recorta más que esto; sobra arriba y abajo, donde
+ * van la cabecera y la navegación. El mismo valor está en armeria.css (.armeria-poster__lienzo).
+ */
+export const ANCHO_MINIMO_VISIBLE = MEDIO_ANCHO_MINIMO / MEDIO_ANCHO_POSTER;
 /** Cámara a la altura de los ojos de alguien de pie, con un picado de unos 7° (critico-diseno). */
 const ALTURA_CAMARA = 2.05;
 // Objetivo alto: los tubos quedan bajo la cabecera (y ≥ 104 px a 1440 × 900) y se ve de dónde nacen los haces
