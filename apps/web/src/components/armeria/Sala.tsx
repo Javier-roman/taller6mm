@@ -27,7 +27,7 @@ import {
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { crearIluminacion, type Iluminacion } from './director.ts';
-import { ajustarHaz, crearHaz, crearReflejoFalso } from './efectos.ts';
+import { ajustarHaz, crearReflejoFalso } from './efectos.ts';
 import {
   texturaCorcho,
   texturaHormigon,
@@ -89,12 +89,8 @@ export const LUZ = {
   pantalla: 0.9,
   /** Reflejos del entorno (IBL): sin ellos el metal se ve negro. */
   entorno: 0.08,
-  /**
-   * Haces de luz bajo los tubos (efectos.ts). Siguen al nivel de su fila solo hasta el de reposo: al pasar
-   * por un módulo se encienden el tubo y el rótulo, no el cono, que si no tapa el rótulo (critico-diseno).
-   */
-  haz: 0.9,
-  hazTope: 0.34,
+  // Sin haces de luz visibles (Javi, 11-11-2026: parecían de videojuego). La luz es indirecta: los tubos
+  // iluminan paredes, suelo y muebles, y el aire no se ve.
   /** Reflejos falsos del suelo bajo los tubos y el flexo (efectos.ts). */
   reflejo: 3.5,
 } as const;
@@ -694,17 +690,6 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
     [],
   );
 
-  // Haces de luz (uno por fila de tubos) y reflejo del suelo pulido, solo en tiempo real (efectos.ts).
-  const haces = useMemo(
-    () =>
-      Object.fromEntries(
-        ORDEN_ESTANTERIAS.map((e) => [
-          e,
-          crearHaz(new Vector3(xDe(e), 3.37, -1.0), new Vector3(xDe(e), 0.0, -1.4), new Color('#dfe9ff'), 3.4),
-        ]),
-      ) as Record<Estanteria, ReturnType<typeof crearHaz>>,
-    [],
-  );
   // Reflejos falsos en el suelo pulido: uno bajo cada fila de tubos y otro, cálido, bajo el flexo.
   const reflejos = useMemo(
     () => ({
@@ -728,7 +713,6 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         foco.color.copy(control.colorTubo);
       }
       tubosMat[e].emissiveIntensity = LUZ.tuboEmisivo * Math.min(1.2, nivel * 1.6);
-      ajustarHaz(haces[e], LUZ.haz * Math.min(LUZ.hazTope, nivel), control.colorTubo);
       ajustarHaz(reflejos.tubos[e], LUZ.reflejo * Math.min(1.2, nivel), control.colorTubo);
       tubosMat[e].emissive.copy(control.colorTubo);
       const g = grupos[e].current;
@@ -797,9 +781,6 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         <primitive key={`reflejo-${e}`} object={reflejos.tubos[e]} position={[xDe(e), 0.004, MUEBLE.frente + 1.8]} />
       ))}
       <primitive object={reflejos.flexo} position={[BANCO.x, 0.004, BANCO.z + 1.3]} />
-      {ORDEN_ESTANTERIAS.map((e) => (
-        <primitive key={`haz-${e}`} object={haces[e]} />
-      ))}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 4.2, 2]} material={mat.techo}>
         <planeGeometry args={[24, 16]} />
       </mesh>
