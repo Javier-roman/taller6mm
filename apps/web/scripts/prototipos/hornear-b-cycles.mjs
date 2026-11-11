@@ -4,18 +4,20 @@
 // datos (albedo, normal, profundidad) los sigue sacando hornear-b.mjs desde three.js.
 // Uso: node scripts/prototipos/hornear-b-cycles.mjs [--base http://127.0.0.1:4398] [--muestras 128]
 //      [--blender C:\tools\blender\blender.exe] [--exposicion 0] [--ambiente 0.04] [--bruma 0.012] [--solo base]
-//      [--ancho 2560 --alto 1440] [--hilos 12] [--salida <carpeta>] [--modulo <zona>|todos]
+//      [--ancho 2560 --alto 1440] [--hilos 12] [--salida <carpeta>] [--conjunto <id>[,<id>]|todos]
 // Variable BLENDER: ruta de blender.exe (por defecto C:\tools\blender\blender.exe).
 // Los pases en uso se hornearon con --ancho 2560 --alto 1440 y lo demás por defecto (unos 4 min por pase en CPU).
 //
-// ── Recortes por módulo para el móvil (--modulo): DISEÑO, aún sin conectar al compositor ──────────────
+// ── Recortes por conjunto de módulos para el móvil (--conjunto) ──────────────────────────────────────
 // Problema (critico-diseno, 2.ª revisión): en un móvil de 3× el B enseña unos 545 px del pase de 2560 px
 // en 1170 px físicos (ampliado ×2,1) y además pinta a DPR 1,5: borroso.
 // 1. Geometría: recorteMovil(zona) (camara.ts) da, para cada módulo, la ventana del encuadre que ve el
-//    móvil de referencia (430 × 956 px CSS a 3×) con el módulo centrado y 16 px de aire a cada lado.
-// 2. Horneado: este script, con --modulo, hornea esa ventana con la misma cámara (borde de render de
-//    Cycles) a 1290 px de ancho: 1 píxel de pase por píxel físico, nunca ampliado. Salen en
-//    <salida>/movil/<zona>/<pase>.webp. Con --hilos se le dejan núcleos al resto del equipo.
+//    móvil de referencia (430 × 956 px CSS a 3×) con el módulo centrado y 16 px de aire a cada lado. Los
+//    módulos que comparten ventana van en un mismo conjunto (recortes.ts).
+// 2. Horneado: este script, con --conjunto, hornea esa ventana con la misma cámara (borde de render de
+//    Cycles) a 1 píxel de pase por píxel físico (1290 px por módulo), nunca ampliado, y solo los pases de
+//    luz que se notan en ella. Salen en <salida>/movil/<conjunto>/<pase>.webp. Con --hilos se le dejan
+//    núcleos al resto del equipo. Medido: 1,6 min por megapíxel y pase en CPU (el banco, 22 min).
 // 3. Variantes: de cada pase, 1290 px (3×) y 860 px (2× o ahorro de datos), reducido del primero. El
 //    compositor elige por `clientWidth × min(devicePixelRatio, 3)`, como un srcset; el póster móvil pasa
 //    a ser una imagen por módulo con `srcset` de verdad (poster.mjs, compuesto en reposo de estos pases).
@@ -29,8 +31,12 @@ import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { recorteMovil } from '../../src/components/armeria/camara.ts';
-import { ZONAS } from '../../src/components/armeria/zonas.ts';
+import {
+  CONJUNTOS_MOVIL,
+  PASES_RECORTE,
+  paseHorneado,
+  recorteConjunto,
+} from '../../src/components/armeria/recortes.ts';
 import { argumentos, navegador, pausa, servidor, webDir } from './comun.mjs';
 
 const args = argumentos({ ruta: '/prototipos/hornear' });
@@ -39,9 +45,11 @@ const destino = args.salida
   ? path.resolve(String(args.salida))
   : path.join(webDir, 'public', 'prototipos', 'armeria-b');
 mkdirSync(destino, { recursive: true });
-// Sin --modulo, el encuadre entero; con él, el recorte de una zona (o de todas) para el móvil.
-const modulos = args.modulo ? ZONAS.filter((z) => args.modulo === 'todos' || z.id === args.modulo) : [null];
-if (!modulos.length) throw new Error(`No hay ninguna zona «${args.modulo}»`);
+// Sin --conjunto, el encuadre entero; con él, el recorte de un conjunto (o de todos) para el móvil.
+const conjuntos = args.conjunto
+  ? CONJUNTOS_MOVIL.filter((c) => args.conjunto === 'todos' || String(args.conjunto).split(',').includes(c.id))
+  : [null];
+if (!conjuntos.length) throw new Error(`No hay ningún conjunto «${args.conjunto}»`);
 const tmp = mkdtempSync(path.join(tmpdir(), 't6m-horno-'));
 const glb = path.join(tmp, 'sala.glb');
 
@@ -65,20 +73,28 @@ try {
 
 const opciones = (claves) => claves.flatMap((k) => (args[k] !== undefined ? [`--${k}`, String(args[k])] : []));
 let estado = 0;
-for (const zona of modulos) {
-  const recorte = zona ? recorteMovil(zona) : null;
-  const salida = zona ? path.join(destino, 'movil', zona.id) : destino;
+for (const conjunto of conjuntos) {
+  const recorte = conjunto ? recorteConjunto(conjunto) : null;
+  const salida = conjunto ? path.join(destino, 'movil', conjunto.id) : destino;
   mkdirSync(salida, { recursive: true });
   const extra = [
-    ...opciones(['muestras', 'exposicion', 'ambiente', 'bruma', 'solo']),
+    ...opciones(['muestras', 'exposicion', 'ambiente', 'bruma']),
     ...(recorte
       ? [
+          // Solo los pases de luz que se notan en esa ventana (recortes.ts).
+          '--solo',
+          String(
+            args.solo ??
+              PASES_RECORTE.map((p) => paseHorneado(conjunto, p))
+                .filter(Boolean)
+                .join(','),
+          ),
           '--recorte',
           [recorte.x, recorte.y, recorte.ancho, recorte.alto].map((n) => n.toFixed(5)).join(','),
           '--ancho',
           String(recorte.px[0]),
         ]
-      : opciones(['ancho', 'alto'])),
+      : opciones(['solo', 'ancho', 'alto'])),
   ];
   const inicio = Date.now();
   const r = spawnSync(
@@ -100,7 +116,9 @@ for (const zona of modulos) {
     if (/^HORNO|Error|Traceback|Saved:/.test(linea)) console.log(linea);
   }
   const minutos = ((Date.now() - inicio) / 60_000).toFixed(1);
-  console.log(`✔ ${zona ? `módulo ${zona.id} (${recorte.px.join(' × ')} px)` : 'encuadre entero'} · ${minutos} min`);
+  console.log(
+    `✔ ${conjunto ? `conjunto ${conjunto.id} (${recorte.px.join(' × ')} px)` : 'encuadre entero'} · ${minutos} min`,
+  );
   estado ||= r.status ?? 1;
 }
 process.exit(estado);

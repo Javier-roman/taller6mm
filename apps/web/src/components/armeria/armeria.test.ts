@@ -18,6 +18,7 @@ import {
 } from './camara.ts';
 import { crearCanal } from './canal.ts';
 import { Director, INTRO, VARIANTES } from './director.ts';
+import { CONJUNTOS_MOVIL, conjuntoDe, recorteConjunto } from './recortes.ts';
 import { type Estanteria, ORDEN_ESTANTERIAS, ZONA_INICIAL, ZONAS } from './zonas.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -161,6 +162,27 @@ describe('encuadres', () => {
       // Ancho útil: al menos 390 × 3 px (critico-diseno) y nunca ampliado en el móvil de referencia.
       expect(c.px[0]).toBeGreaterThanOrEqual(1170);
       expect(c.px[0]).toBe(ancho * densidad);
+    }
+  });
+
+  it('cada zona tiene su conjunto de recortes, que cubre su ventana y cabe en una textura de móvil', () => {
+    for (const zona of ZONAS) {
+      const conjunto = conjuntoDe(zona.id);
+      if (!conjunto) throw new Error(`la zona ${zona.id} no está en ningún conjunto`);
+      expect(conjunto.fila).toBe(zona.estanteria);
+      const c = recorteConjunto(conjunto);
+      const r = recorteMovil(zona);
+      expect(c.x).toBeLessThanOrEqual(r.x + 1e-9);
+      expect(c.y).toBeLessThanOrEqual(r.y + 1e-9);
+      expect(c.x + c.ancho).toBeGreaterThanOrEqual(r.x + r.ancho - 1e-9);
+      expect(c.y + c.alto).toBeGreaterThanOrEqual(r.y + r.alto - 1e-9);
+      // Nunca ampliado: al menos tantos píxeles de pase por uv como pide la zona.
+      expect(c.px[0] / c.ancho).toBeGreaterThanOrEqual(r.px[0] / r.ancho - 1e-6);
+    }
+    // 4096 px es el tamaño máximo de textura que garantizan los móviles.
+    for (const conjunto of CONJUNTOS_MOVIL) {
+      const [ancho, alto] = recorteConjunto(conjunto).px;
+      expect(Math.max(ancho, alto)).toBeLessThanOrEqual(4096);
     }
   });
 

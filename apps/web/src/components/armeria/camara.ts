@@ -146,23 +146,47 @@ export function rectZona(zona: Zona, encuadre: Encuadre, aspecto: number): Rect 
  */
 export const MOVIL_REFERENCIA = { ancho: 430, alto: 956, densidad: 3, aire: 16, centro: 0.52 } as const;
 
+/** Altura (0–1) de la pantalla del móvil donde empieza el carrusel: la sala llega al menos hasta ahí. */
+const FONDO_MOVIL = 0.8;
+
+const acotar = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+
+/**
+ * Ventana del encuadre del póster (uv 0–1) que ve una pantalla de `ancho` × `alto` px CSS con una zona
+ * centrada: la zona entera con su aire a los lados y su centro a la altura del hueco entre la cabecera y
+ * el carrusel. Si la ventana es más alta que el encuadre (zonas anchas), se sale por arriba (detrás de la
+ * cabecera) antes que dejar un hueco sobre el carrusel.
+ */
+export function ventanaZona(zona: Zona, ancho: number, alto: number, movil = MOVIL_REFERENCIA): Rect {
+  const r = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
+  const w = Math.min(1, (r.ancho * ancho) / (ancho - 2 * movil.aire));
+  const x = acotar(r.x + r.ancho / 2 - w / 2, 0, 1 - w);
+  const h = (w * ASPECTO_POSTER * alto) / ancho;
+  const centrada = r.y + r.alto / 2 - movil.centro * h;
+  const y = h < 1 ? acotar(centrada, 0, 1 - h) : acotar(centrada, 1 - h, Math.min(0, 1 - FONDO_MOVIL * h));
+  return { x, y, ancho: w, alto: h };
+}
+
 export interface RecorteMovil extends Rect {
   /** Tamaño del recorte horneado en píxeles: 1 píxel de pase por píxel físico del móvil de referencia. */
   readonly px: readonly [number, number];
 }
 
 /**
- * Recorte del encuadre del póster (uv 0–1) que ve el móvil con una zona centrada: la zona entera con su
- * aire a los lados y, en vertical, lo que cabe en la pantalla (el encuadre entero si la zona es ancha).
- * Lo usa el horno (hornear-b-cycles.mjs --modulo) y lo usará el compositor del B en móvil.
+ * Lo que hay que hornear para una zona: su ventana en el móvil de referencia, recortada al encuadre.
+ * Lo usan el horno (hornear-b-cycles.mjs --conjunto) y los conjuntos de recortes.ts.
  */
 export function recorteMovil(zona: Zona, movil: typeof MOVIL_REFERENCIA = MOVIL_REFERENCIA): RecorteMovil {
-  const r = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
-  const ancho = Math.min(1, (r.ancho * movil.ancho) / (movil.ancho - 2 * movil.aire));
-  const x = Math.min(1 - ancho, Math.max(0, r.x + r.ancho / 2 - ancho / 2));
+  const v = ventanaZona(zona, movil.ancho, movil.alto, movil);
+  const y = Math.max(0, v.y);
+  const alto = Math.min(1, v.y + v.alto) - y;
   // Alto del encuadre entero, en px CSS, a la escala de este recorte.
-  const altoMarco = movil.ancho / ancho / ASPECTO_POSTER;
-  const alto = Math.min(1, movil.alto / altoMarco);
-  const y = Math.min(1 - alto, Math.max(0, r.y + r.alto / 2 - movil.centro * alto));
-  return { x, y, ancho, alto, px: [movil.ancho * movil.densidad, Math.round(alto * altoMarco * movil.densidad)] };
+  const altoMarco = movil.ancho / v.ancho / ASPECTO_POSTER;
+  return {
+    x: v.x,
+    y,
+    ancho: v.ancho,
+    alto,
+    px: [movil.ancho * movil.densidad, Math.round(alto * altoMarco * movil.densidad)],
+  };
 }
