@@ -531,6 +531,7 @@ export default function EscenaB(props: EscenaBProps) {
           return salidas;
         },
         luz: () => JSON.parse(JSON.stringify(canal.current.director?.luz ?? null)),
+        progreso: () => canal.current.progreso,
       };
     }
 

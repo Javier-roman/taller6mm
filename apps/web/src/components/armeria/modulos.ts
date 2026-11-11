@@ -85,6 +85,9 @@ void main() {
   salida = vec4(mix(uFondo, aSrgb(clamp(c, 0.0, 1.0)), dentro), 1.0);
 }`;
 
+/** Fracción del paso del carrusel, a cada lado de una zona, en la que todavía se ve solo esa zona. */
+const ZONA_MUERTA = 0.03;
+
 /** Como mucho, tres conjuntos en la GPU: el que se ve y sus vecinos (el mayor ocupa unos 65 MB a 3×). */
 const MAXIMO_EN_GPU = 3;
 
@@ -283,8 +286,10 @@ export function crearModulos(
     lista: (zona: Zona | undefined) => Boolean(zona && cargas.get(conjuntoDe(zona.id)?.id ?? '')?.texturas),
 
     pintar(e: EntradaModulos) {
-      // A menos de dos milésimas de una zona, es esa zona: el carrusel en reposo nunca da un entero exacto.
-      const progreso = Math.abs(e.progreso - Math.round(e.progreso)) < 0.002 ? Math.round(e.progreso) : e.progreso;
+      // Zona muerta junto a cada zona: el carrusel en reposo nunca da un entero exacto (queda a unos píxeles)
+      // y ahí no debe asomar, ni hacer falta, el módulo vecino. El resto del recorrido se reparte sin saltos.
+      const entero = Math.floor(e.progreso);
+      const progreso = entero + Math.min(1, Math.max(0, (e.progreso - entero - ZONA_MUERTA) / (1 - 2 * ZONA_MUERTA)));
       const i = Math.min(ZONAS.length - 1, Math.max(0, Math.floor(progreso)));
       const za = e.abierta ?? (ZONAS[i] as Zona);
       const zb = e.abierta ?? ZONAS[i + 1] ?? za;
