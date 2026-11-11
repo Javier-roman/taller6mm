@@ -18,3 +18,4 @@ Producto: $ARGUMENTS. Sigue `docs/03` (ranuras), `docs/05` (fidelidad) y el esqu
 3. Define las ranuras (`slots`) con su interfaz y su geometría en mm desde el origen canónico. Cada valor lleva `source` y `confidence` (`fabricante`, `medido` o `estimado`). Lo desconocido va a `null`, con bandera para que lo complete la comunidad.
 4. Genera el asset T0 (plano técnico) y deja el producto en `borrador`.
 5. Entrega la ficha, los huecos de datos y la lista de fotos y medidas que hay que pedir a la comunidad para subirlo a T1 o T2.
+6. Herramientas (`apps/pipeline`, ver su `LEEME.md`): para T0, construye la `Ficha` con `ficha.py` y genera el plano con `plano_t0.generar_plano_svg`; para T2, compara siluetas y cotas con `validacion.validar` y adjunta el informe de `informe.generar_informe_html`.
