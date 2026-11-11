@@ -31,6 +31,8 @@ export interface EscenaAProps {
 }
 
 const ROTACION = { centro: 0.28, lateral: 0.4 };
+/** El flexo en tiempo real (ver ControlSala.flexo): que la réplica del banco conserve su forma bajo el bloom. */
+const FLEXO_TIEMPO_REAL = 0.4;
 
 function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> }) {
   const { canal, control, zonaActiva, zonaAbierta, movil, reducido } = props;
@@ -197,9 +199,16 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
     tmp.pos.set(...encuadre.posicion);
     tmp.obj.set(...encuadre.objetivo);
     if (!movil && !abierta && !reducido) {
-      // Deriva suave con el ratón (parallax); nunca con movimiento reducido.
-      tmp.pos.x += pointer.x * 0.12;
+      // Deriva suave con el ratón (parallax); nunca con movimiento reducido. La cámara se desplaza en
+      // paralelo, sin girar: el giro inclinaba las horizontales y, sin antialias, los tubos atenuados
+      // (4 px de alto) salían con un escalón de 1 px, como dos imágenes (critico-diseno, 2.ª revisión).
+      // El desplazamiento de la vista compensa para que el plano de las estanterías no se mueva.
+      const dx = pointer.x * 0.12;
+      tmp.pos.x += dx;
+      tmp.obj.x += dx;
       tmp.pos.y += pointer.y * 0.05;
+      const distancia = encuadre.posicion[2] - encuadre.objetivo[2];
+      offsetX -= dx / (2 * distancia * Math.tan((encuadre.fov * Math.PI) / 360) * aspecto);
     }
     const kCam = reducido ? 1 : 1 - Math.exp(-(movil ? 7 : 4.2) * dt);
     movimiento += cam.position.distanceTo(tmp.pos) + tmp.objActual.distanceTo(tmp.obj);
@@ -276,6 +285,7 @@ export default function EscenaA(props: EscenaAProps) {
     };
   }, [canal, control, director, variante]);
   control.calidad = calidad;
+  control.flexo = FLEXO_TIEMPO_REAL;
   control.luz = director.luz;
 
   const inicial = encuadreSala(16 / 9);

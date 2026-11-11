@@ -50,6 +50,11 @@ export interface ControlSala {
   colorTubo: Color;
   /** «baja»: sin sombras (móvil o GPU modesta). */
   calidad: 'alta' | 'baja';
+  /**
+   * Factor del flexo. En tiempo real (A) va a 0,6: sin iluminación global y con bloom, a plena potencia la
+   * réplica del banco se quemaba a blanco (critico-diseno, 2.ª revisión). El horno exporta a 1 para Cycles.
+   */
+  flexo: number;
 }
 
 export const crearControl = (luz: Iluminacion = crearIluminacion(1)): ControlSala => ({
@@ -59,6 +64,7 @@ export const crearControl = (luz: Iluminacion = crearIluminacion(1)): ControlSal
   desplazamiento: { izquierda: 0, centro: 0, derecha: 0 },
   colorTubo: new Color('#dfe9ff'),
   calidad: 'alta',
+  flexo: 1,
 });
 
 /** Intensidades de referencia (candelas: luces físicas de three r155+), ajustadas con capturas. */
@@ -75,7 +81,10 @@ export const LUZ = {
   acento: 34,
   linterna: 120,
   rotuloBase: 0.16,
-  rotuloActivo: 0.32,
+  // Al pasar por un módulo se enciende su rótulo (y no hay tooltip): 1,6 veces la emisión activa anterior.
+  rotuloActivo: 0.32 * 1.6,
+  // El rótulo del banco cuelga del faldón, a la sombra del tablero: sin más emisión no se lee (critico-diseno).
+  rotuloBanco: 2,
   marca: 0.9,
   pantalla: 0.9,
   /** Reflejos del entorno (IBL): sin ellos el metal se ve negro. */
@@ -731,9 +740,10 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       const material = rotulos[z.id];
       if (!material) continue;
       const activo = z.id === control.zonaActiva;
-      material.emissiveIntensity = luz.rotulos * (activo ? LUZ.rotuloActivo : LUZ.rotuloBase * 1.2);
+      material.emissiveIntensity =
+        luz.rotulos * (activo ? LUZ.rotuloActivo : LUZ.rotuloBase * 1.2) * (z.id === 'banco' ? LUZ.rotuloBanco : 1);
     }
-    if (flexo.current) flexo.current.intensity = LUZ.flexo * luz.calidas;
+    if (flexo.current) flexo.current.intensity = LUZ.flexo * control.flexo * luz.calidas;
     ajustarHaz(reflejos.flexo, LUZ.reflejo * 0.8 * luz.calidas, CALIDO);
     mat.bombilla.emissiveIntensity = LUZ.bombilla * luz.calidas;
     mat.led.emissiveIntensity = LUZ.led * luz.calidas;
