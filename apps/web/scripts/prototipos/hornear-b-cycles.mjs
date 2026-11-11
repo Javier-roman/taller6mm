@@ -18,15 +18,15 @@
 //    Cycles) a 1 píxel de pase por píxel físico (1290 px por módulo), nunca ampliado, y solo los pases de
 //    luz que se notan en ella. Salen en <salida>/movil/<conjunto>/<pase>.webp. Con --hilos se le dejan
 //    núcleos al resto del equipo. Medido: 1,6 min por megapíxel y pase en CPU (el banco, 22 min).
-// 3. Variantes: de cada pase, 1290 px (3×) y 860 px (2× o ahorro de datos), reducido del primero. El
-//    compositor elige por `clientWidth × min(devicePixelRatio, 3)`, como un srcset; el póster móvil pasa
-//    a ser una imagen por módulo con `srcset` de verdad (poster.mjs, compuesto en reposo de estos pases).
-// 4. Compositor (EscenaB en móvil): cada módulo es una «diapositiva». Al deslizar, se pintan la actual y
-//    la vecina una junto a otra (12 texturas, dentro de las 16 unidades de WebGL2); solo viven en la GPU el
-//    módulo centrado y sus dos vecinos, y los pases de datos siguen sin cargarse (no hay linterna).
-//    Resolución dinámica: DPR 1,5 mientras algo se mueve y hasta 3 en el fotograma de reposo.
-// 5. Presupuesto (docs/02 §3.6, ≤ 2 MB en móvil): se carga el banco (módulo por defecto) y, en reposo, sus
-//    vecinos; el resto, al acercarse. Las cifras medidas del banco están en el informe de la rebanada.
+// 3. Variantes y pósteres (recortes-movil.mjs): de cada pase, el entero (móvil de 3×) y uno a 2/3 (-2x). El
+//    compositor elige como un srcset (sufijoRecorte en modulos.ts); el póster del móvil es una imagen por
+//    conjunto con `srcset` de verdad, compuesta en reposo por el propio compositor.
+// 4. Compositor (modulos.ts, en móviles de hasta 430 px): cada módulo es una vista. Al deslizar entre
+//    conjuntos, una empuja a la otra (ocho texturas); dentro de un conjunto, el encuadre se desplaza. En la
+//    GPU viven tres conjuntos como mucho; los pases de datos no se cargan (no hay linterna). Resolución
+//    dinámica: DPR 1,5 mientras algo se mueve y hasta 3 en el fotograma de reposo.
+// 5. Presupuesto (docs/02 §3.6, ≤ 2 MB en móvil): se carga el conjunto del banco (el módulo por defecto) y,
+//    ya pintado, sus vecinos; el resto, al acercarse.
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
