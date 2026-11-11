@@ -183,17 +183,7 @@ export const conEscena = (e: EstadoArmeria) => e.hidratado && e.capaz && e.vista
 export const TEXTO_ALTERNATIVO =
   'La Armería en penumbra: tres cuerpos de compactus verde oliva sobre raíles. A la izquierda, Catálogo (armero de réplicas y almacén de accesorios); en el centro, la vitrina de la comunidad y el banco de trabajo con su flexo; a la derecha, Mercado (tablón, mostrador de tiendas, manuales y taquilla).';
 
-export function Poster({
-  acciones,
-  zonaActiva,
-  oculto,
-  movil,
-}: {
-  acciones: Acciones;
-  zonaActiva: string | null;
-  oculto: boolean;
-  movil: boolean;
-}) {
+export function Poster({ acciones, oculto, movil }: { acciones: Acciones; oculto: boolean; movil: boolean }) {
   const desplazable = useRef<HTMLDivElement>(null);
   // En móvil el póster se recorre en horizontal: empieza en el banco (el protagonista).
   useEffect(() => {
@@ -217,7 +207,7 @@ export function Poster({
         {ORDEN_ESTANTERIAS.map((estanteria) => (
           <span key={estanteria} className="armeria-poster__ancla" data-estanteria={estanteria} />
         ))}
-        {/* Zonas clicables para ratón y tacto. Fuera del árbol de accesibilidad y del tabulador: el teclado y los lectores usan los mismos enlaces, con su nombre, en la navegación. */}
+        {/* Zonas clicables para ratón y tacto. Fuera del árbol de accesibilidad y del tabulador: el teclado y los lectores usan los mismos enlaces, con su nombre, en la navegación. Sin borde en reposo: la zona activa se marca en su tarjeta de la navegación (critico-diseno, 2.ª revisión). */}
         <div className="armeria-poster__zonas" aria-hidden="true">
           {ZONAS.map((zona) => (
             <a
@@ -225,7 +215,6 @@ export function Poster({
               href={zona.ruta}
               className="armeria-poster__zona"
               data-zona={zona.id}
-              data-activa={zona.id === zonaActiva}
               tabIndex={-1}
               onPointerEnter={() => acciones.apuntar(zona.id)}
               onPointerLeave={() => acciones.apuntar(null)}

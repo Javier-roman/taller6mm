@@ -75,19 +75,19 @@
   inset: 0;
 }
 
+/*
+ * Sin borde en reposo: en móvil la zona activa es más ancha que la pantalla y su borde era una línea latón
+ * de lado a lado (critico-diseno, 2.ª revisión). La zona activa se marca en su tarjeta de la navegación;
+ * aquí solo hay contorno de foco, por dentro de la caja.
+ */
 .armeria-poster__zona {
   position: absolute;
-  border: var(--trazo-fino) solid transparent;
   border-radius: var(--radio-m);
-  transition:
-    border-color var(--duracion-componente) var(--curva-mecanica),
-    box-shadow var(--duracion-componente) var(--curva-mecanica);
 }
 
-.armeria-poster__zona:hover,
-.armeria-poster__zona[data-activa="true"] {
-  border-color: color-mix(in srgb, var(--laton-claro) 70%, transparent);
-  box-shadow: var(--resplandor-rotulo);
+.armeria-poster__zona:focus-visible {
+  outline: var(--trazo-foco) solid var(--naranja-senal);
+  outline-offset: calc(var(--trazo-foco) * -1);
 }
 
 .armeria-poster__zona-nombre {
