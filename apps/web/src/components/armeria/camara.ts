@@ -136,3 +136,33 @@ export function rectZona(zona: Zona, encuadre: Encuadre, aspecto: number): Rect 
   const y = Math.min(...ys);
   return { x, y, ancho: Math.max(...xs) - x, alto: Math.max(...ys) - y };
 }
+
+/**
+ * Móvil de referencia de los recortes por módulo del B (critico-diseno, 2.ª revisión: el pase único de
+ * 2560 px se veía borroso, ampliado ×2 en un móvil de 3×). Es el más ancho y el más alargado de los
+ * habituales (430 × 956 px CSS a 3× = 1290 px físicos de ancho): los demás muestran el recorte reducido,
+ * nunca ampliado. `aire` es el margen a cada lado del módulo y `centro`, la altura (0–1) de la pantalla
+ * donde cae el centro del módulo: el hueco entre la cabecera y el carrusel.
+ */
+export const MOVIL_REFERENCIA = { ancho: 430, alto: 956, densidad: 3, aire: 16, centro: 0.52 } as const;
+
+export interface RecorteMovil extends Rect {
+  /** Tamaño del recorte horneado en píxeles: 1 píxel de pase por píxel físico del móvil de referencia. */
+  readonly px: readonly [number, number];
+}
+
+/**
+ * Recorte del encuadre del póster (uv 0–1) que ve el móvil con una zona centrada: la zona entera con su
+ * aire a los lados y, en vertical, lo que cabe en la pantalla (el encuadre entero si la zona es ancha).
+ * Lo usa el horno (hornear-b-cycles.mjs --modulo) y lo usará el compositor del B en móvil.
+ */
+export function recorteMovil(zona: Zona, movil: typeof MOVIL_REFERENCIA = MOVIL_REFERENCIA): RecorteMovil {
+  const r = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
+  const ancho = Math.min(1, (r.ancho * movil.ancho) / (movil.ancho - 2 * movil.aire));
+  const x = Math.min(1 - ancho, Math.max(0, r.x + r.ancho / 2 - ancho / 2));
+  // Alto del encuadre entero, en px CSS, a la escala de este recorte.
+  const altoMarco = movil.ancho / ancho / ASPECTO_POSTER;
+  const alto = Math.min(1, movil.alto / altoMarco);
+  const y = Math.min(1 - alto, Math.max(0, r.y + r.alto / 2 - movil.centro * alto));
+  return { x, y, ancho, alto, px: [movil.ancho * movil.densidad, Math.round(alto * altoMarco * movil.densidad)] };
+}

@@ -10,7 +10,9 @@ import {
   ENCUADRE_POSTER,
   encuadreSala,
   encuadreZona,
+  MOVIL_REFERENCIA,
   proyectar,
+  recorteMovil,
   rectZona,
   TABLERO_EN_MOVIL,
 } from './camara.ts';
@@ -140,6 +142,25 @@ describe('encuadres', () => {
       const e = encuadreZona(banco, aspecto, 0, anchoVisibleMovil(banco));
       const [, y] = proyectar([banco.caja.centro[0], 0.95, banco.caja.centro[2]], e, aspecto);
       expect(y).toBeCloseTo(TABLERO_EN_MOVIL, 2);
+    }
+  });
+
+  it('el recorte de cada módulo para el móvil lo contiene con su aire y da 1 px de pase por px físico', () => {
+    const { ancho, densidad, aire } = MOVIL_REFERENCIA;
+    for (const zona of ZONAS) {
+      const r = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
+      const c = recorteMovil(zona);
+      expect(c.x).toBeGreaterThanOrEqual(0);
+      expect(c.y).toBeGreaterThanOrEqual(0);
+      expect(c.x + c.ancho).toBeLessThanOrEqual(1 + 1e-9);
+      expect(c.y + c.alto).toBeLessThanOrEqual(1 + 1e-9);
+      // El módulo cabe entero, con al menos `aire` px CSS a cada lado.
+      const pxPorUv = ancho / c.ancho;
+      expect((r.x - c.x) * pxPorUv).toBeGreaterThanOrEqual(aire - 1e-6);
+      expect((c.x + c.ancho - r.x - r.ancho) * pxPorUv).toBeGreaterThanOrEqual(aire - 1e-6);
+      // Ancho útil: al menos 390 × 3 px (critico-diseno) y nunca ampliado en el móvil de referencia.
+      expect(c.px[0]).toBeGreaterThanOrEqual(1170);
+      expect(c.px[0]).toBe(ancho * densidad);
     }
   });
 

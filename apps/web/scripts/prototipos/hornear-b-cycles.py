@@ -6,6 +6,9 @@
 # (hornear-b.mjs): dependen solo de la geometría, que es la misma.
 # Uso: blender --background --factory-startup --python hornear-b-cycles.py -- <sala.glb> <carpeta> [opciones]
 #   --muestras N (128) --ancho 1920 --alto 1080 --exposicion E (stops) --ambiente S --bruma D --solo pase,pase
+#   --recorte x,y,ancho,alto (uv 0–1 del encuadre, y hacia abajo): hornea solo esa ventana, con la misma cámara,
+#     a --ancho píxeles de ancho (el encuadre entero se calcula a la resolución equivalente). Para los recortes
+#     por módulo del móvil (hornear-b-cycles.mjs --modulo).
 import math
 import sys
 
@@ -25,6 +28,7 @@ def opciones():
         "ambiente": 0.04,
         "bruma": 0.012,
         "solo": "",
+        "recorte": "",
     }
     resto = args[2:]
     for i in range(0, len(resto) - 1, 2):
@@ -80,6 +84,18 @@ def main():
     escena.render.resolution_x = o["ancho"]
     escena.render.resolution_y = o["alto"]
     escena.render.resolution_percentage = 100
+    if o["recorte"]:
+        # Borde de render: misma cámara y misma perspectiva, pero solo se trazan los píxeles de la ventana.
+        x, y, ancho, alto = (float(v) for v in o["recorte"].split(","))
+        total = math.ceil(o["ancho"] / ancho)
+        escena.render.resolution_x = total
+        escena.render.resolution_y = round(total * 9 / 16)  # el encuadre del póster es 16:9
+        escena.render.use_border = True
+        escena.render.use_crop_to_border = True
+        escena.render.border_min_x = x
+        escena.render.border_max_x = x + ancho
+        escena.render.border_min_y = 1 - (y + alto)
+        escena.render.border_max_y = 1 - y
     escena.render.image_settings.file_format = "WEBP"
     escena.render.image_settings.quality = 86
     escena.render.image_settings.color_mode = "RGB"
