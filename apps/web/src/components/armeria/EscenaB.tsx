@@ -125,7 +125,10 @@ async function cargarPase(pase: Pase) {
   return createImageBitmap(await respuesta.blob(), { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
 }
 
-/** Zoom del encuadre móvil del B: quita la franja de suelo sin pasar de ~1 píxel de pase por píxel físico. */
+/**
+ * Zoom del encuadre «móvil» con la sala entera (tableta en vertical: más ancha que los recortes de modulos.ts):
+ * quita la franja de suelo sin pasar de ~1 píxel de pase por píxel físico.
+ */
 const ZOOM_MOVIL = 1.22;
 
 const UNIDADES: Pase[] = [...PASES_LUZ, ...PASES_DATOS];

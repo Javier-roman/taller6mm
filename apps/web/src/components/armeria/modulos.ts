@@ -18,6 +18,7 @@ import {
   CONJUNTOS_MOVIL,
   type ConjuntoMovil,
   conjuntoDe,
+  MARGEN_RECORTE,
   PASES_RECORTE,
   paseHorneado,
   recorteConjunto,
@@ -38,6 +39,7 @@ uniform vec3 uTinte, uFondo;
 uniform vec2 uResolucion;
 uniform float uDesliz, uAmbiente, uCalidasN, uRotulosN, uTiempo, uAspecto, uPlano;
 ${GLSL_COMUN}
+const float MARGEN = ${MARGEN_RECORTE.toFixed(3)};
 void main() {
   float s = vUv.x + uDesliz;
   bool b = s >= 1.0;
@@ -78,9 +80,11 @@ void main() {
     float g = fract(sin(dot(gl_FragCoord.xy + uTiempo * 61.0, vec2(12.9898, 78.233))) * 43758.5453);
     c += (g - 0.5) * 0.05 * c;
   }
-  // Fuera del recorte (o si aún no ha cargado) se pinta el fondo de la página.
+  // Fuera del recorte (o si aún no ha cargado) se pinta el fondo de la página. A lo ancho hay un 1 % de
+  // tolerancia: un móvil más estrecho que el de referencia ve hasta 2 px más por cada lado (su aire pesa
+  // más), y ahí se estira el borde del recorte en vez de dejar una raya.
   float dentro = rec.z > 0.0
-    ? step(0.0, t.x) * step(t.x, 1.0) * smoothstep(0.0, 0.002, t.y) * smoothstep(0.0, 0.002, 1.0 - t.y)
+    ? step(-MARGEN, t.x) * step(t.x, 1.0 + MARGEN) * smoothstep(0.0, 0.002, t.y) * smoothstep(0.0, 0.002, 1.0 - t.y)
     : 0.0;
   salida = vec4(mix(uFondo, aSrgb(clamp(c, 0.0, 1.0)), dentro), 1.0);
 }`;

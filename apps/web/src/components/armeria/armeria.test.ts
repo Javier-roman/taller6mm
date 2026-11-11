@@ -15,10 +15,12 @@ import {
   recorteMovil,
   rectZona,
   TABLERO_EN_MOVIL,
+  ventanaZona,
 } from './camara.ts';
 import { crearCanal } from './canal.ts';
 import { Director, INTRO, VARIANTES } from './director.ts';
-import { CONJUNTOS_MOVIL, conjuntoDe, recorteConjunto } from './recortes.ts';
+import { cabenRecortes, sufijoRecorte } from './modulos.ts';
+import { CONJUNTOS_MOVIL, conjuntoDe, MARGEN_RECORTE, recorteConjunto } from './recortes.ts';
 import { type Estanteria, ORDEN_ESTANTERIAS, ZONA_INICIAL, ZONAS } from './zonas.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -183,6 +185,35 @@ describe('encuadres', () => {
     for (const conjunto of CONJUNTOS_MOVIL) {
       const [ancho, alto] = recorteConjunto(conjunto).px;
       expect(Math.max(ancho, alto)).toBeLessThanOrEqual(4096);
+    }
+  });
+
+  it('ningún móvil estrecho amplía su recorte, y cada uno pide la variante que le toca', () => {
+    // Hasta 430 px CSS (y el lienzo no pasa de 3×) hay recortes; más ancho, la sala entera.
+    expect(cabenRecortes(430)).toBe(true);
+    expect(cabenRecortes(431)).toBe(false);
+    expect(sufijoRecorte(390, 3)).toBe('');
+    expect(sufijoRecorte(430, 3)).toBe('');
+    expect(sufijoRecorte(412, 2.625)).toBe('');
+    expect(sufijoRecorte(360, 2)).toBe('-2x');
+    expect(sufijoRecorte(430, 2)).toBe('-2x');
+    for (const [ancho, alto, densidad] of [
+      [430, 932, 3],
+      [390, 844, 3],
+      [360, 740, 2],
+    ] as const) {
+      const escala = sufijoRecorte(ancho, densidad) === '' ? 1 : 2 / 3;
+      for (const zona of ZONAS) {
+        const conjunto = conjuntoDe(zona.id);
+        if (!conjunto) throw new Error('zona sin conjunto');
+        const c = recorteConjunto(conjunto);
+        const v = ventanaZona(zona, ancho, alto);
+        // Píxeles de pase por píxel físico: nunca menos de 1.
+        expect(((c.px[0] * escala) / c.ancho) * (v.ancho / (ancho * densidad))).toBeGreaterThanOrEqual(1 - 1e-6);
+        // La ventana cabe a lo ancho en su recorte (con el margen que tolera el compositor).
+        expect(v.x).toBeGreaterThanOrEqual(c.x - MARGEN_RECORTE * c.ancho);
+        expect(v.x + v.ancho).toBeLessThanOrEqual(c.x + c.ancho * (1 + MARGEN_RECORTE));
+      }
     }
   });
 

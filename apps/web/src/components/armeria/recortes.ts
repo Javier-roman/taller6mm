@@ -77,3 +77,10 @@ export function srcsetPoster(conjunto: ConjuntoMovil) {
     (v) => `/prototipos/armeria/movil/${conjunto.id}${v.sufijo}.webp ${Math.round(ancho * v.escala)}w`,
   ).join(', ');
 }
+
+/**
+ * Fracción del ancho de un recorte que una pantalla puede ver de más por cada lado sin que se note: los
+ * móviles más estrechos que el de referencia (su aire de 16 px pesa más) se asoman hasta un 0,8 %.
+ * Pendiente: hornear los recortes con ese margen.
+ */
+export const MARGEN_RECORTE = 0.01;
