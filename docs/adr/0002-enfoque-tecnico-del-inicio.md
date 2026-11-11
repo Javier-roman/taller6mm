@@ -1,6 +1,6 @@
 # ADR-0002 — Enfoque técnico del inicio (La Armería): póster, 2,5D y 3D por niveles
 
-- **Estado**: Propuesta (OK visual de Javi el 11-11-2026 con una condición: sin haces de luz visibles; falta mostrarle el resultado y medir)
+- **Estado**: Aceptada (11-11-2026). Javi dio su OK visual tras ver el resultado sin haces de luz. **La prioridad es el escritorio**: el pulido del móvil (encuadre del Banco y tubo del armero en B móvil, medición en móvil real) queda para más adelante.
 - **Fecha**: 2026-11-10
 - **Decisores**: Javi (+ Claude Code)
 
@@ -36,7 +36,7 @@ Decisiones de Javi (05-11-2026): híbrido (póster de base, B en móvil y A en e
 ## Consecuencias
 - **Positivas**: primer pintado rápido, móvil ligero, escritorio con 3D completo, accesible con movimiento reducido.
 - **Negativas**: mantener la misma sala en tres formas (A, B, póster) y volver a hornear B cuando cambie la escena (unos 22 min en CPU).
-- **Trabajo**: lightmaps de A con Blender (pendientes), horneado vertical propio para móvil, medición en un móvil real (iPhone 15 Pro Max de Javi; Android de gama media pendiente).
+- **Trabajo**: lightmaps de A con Blender (pendientes). Aplazado, sin fecha: pulido del móvil de B (encuadre del Banco y tubo del armero, que comparten fórmula con el póster y el CSS) y medición en un móvil real (iPhone 15 Pro Max de Javi; Android de gama media pendiente). Medido el 11-11-2026 en el portátil (Intel Arc, enchufado): A 60 FPS en escritorio y 59 en móvil simulado; B 60 y 51; JS de A 349 KB gz y de B unos 88 KB.
 
 ## Validación
 - Presupuestos de docs/02 §3.6 y docs/08: JS inicial ≤ 120 KB gz, assets ≤ 4 MB escritorio y ≤ 2 MB móvil, ≥ 30 FPS en móvil de gama media, LCP ≤ 2,5 s p75.
