@@ -104,7 +104,10 @@ try {
       await pausa(1500);
     },
   });
-  await capturar('movil-reducido', { contexto: MOVIL, reducido: true, preparar: irAZona('comunidad') });
+  // Con movimiento reducido el módulo por defecto es el mismo: el banco (critico-diseno, 2.ª revisión).
+  await capturar('movil-reducido', { contexto: MOVIL, reducido: true });
+  // Y al deslizar, el encuadre corta de zona a zona (sin viaje de cámara).
+  await capturar('movil-reducido-vitrina', { contexto: MOVIL, reducido: true, preparar: irAZona('comunidad') });
   await capturar('movil-poster', { contexto: MOVIL, query: '?vista=ligera', escena: false });
 } finally {
   await browser.close();

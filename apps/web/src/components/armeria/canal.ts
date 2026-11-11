@@ -1,6 +1,7 @@
 // Canal entre la interfaz (React) y la escena (A o B): estado que cambia en cada fotograma o en cada
 // evento de scroll y que no debe provocar renders de React. Sin three.js: va en el chunk inicial.
 import type { Director } from './director.ts';
+import { INDICE_INICIAL } from './zonas.ts';
 
 export interface CanalEscena {
   director: Director | null;
@@ -12,7 +13,13 @@ export interface CanalEscena {
   fotogramas: number[];
 }
 
-export const crearCanal = (): CanalEscena => ({ director: null, progreso: 0, pintar: () => undefined, fotogramas: [] });
+// El carrusel empieza en el banco: la cámara también, sin esperar al primer evento de scroll.
+export const crearCanal = (): CanalEscena => ({
+  director: null,
+  progreso: INDICE_INICIAL,
+  pintar: () => undefined,
+  fotogramas: [],
+});
 
 /**
  * Vigía de rendimiento (docs/02 §3.6: ≥ 30 FPS o póster). Mira los últimos 2 s de fotogramas seguidos

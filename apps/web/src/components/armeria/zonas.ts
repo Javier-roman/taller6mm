@@ -158,6 +158,16 @@ export const ZONAS: readonly Zona[] = [
   },
 ];
 
+/**
+ * Módulo activo por defecto en móvil: siempre el banco, el protagonista, también con movimiento reducido
+ * (critico-diseno, 2.ª revisión). Lo comparten la tarjeta centrada, el póster y la cámara de la escena.
+ */
+export const ZONA_INICIAL = 'banco';
+export const INDICE_INICIAL = Math.max(
+  0,
+  ZONAS.findIndex((zona) => zona.id === ZONA_INICIAL),
+);
+
 export const zonaPorId = (id: string | null | undefined) => ZONAS.find((zona) => zona.id === id) ?? null;
 
 export const zonasDe = (estanteria: Estanteria) => ZONAS.filter((zona) => zona.estanteria === estanteria);

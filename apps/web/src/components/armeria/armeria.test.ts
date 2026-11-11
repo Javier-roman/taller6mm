@@ -14,8 +14,9 @@ import {
   rectZona,
   TABLERO_EN_MOVIL,
 } from './camara.ts';
+import { crearCanal } from './canal.ts';
 import { Director, INTRO, VARIANTES } from './director.ts';
-import { type Estanteria, ORDEN_ESTANTERIAS, ZONAS } from './zonas.ts';
+import { type Estanteria, ORDEN_ESTANTERIAS, ZONA_INICIAL, ZONAS } from './zonas.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const DT = 1 / 120;
@@ -101,6 +102,13 @@ describe('director de luces', () => {
     d.saltarIntro();
     expect(d.enIntro).toBe(false);
     expect(d.progresoIntro).toBe(1);
+  });
+});
+
+describe('módulo por defecto', () => {
+  it('la escena arranca en el banco sin esperar al carrusel (también con movimiento reducido)', () => {
+    expect(ZONA_INICIAL).toBe('banco');
+    expect(ZONAS[crearCanal().progreso]?.id).toBe('banco');
   });
 });
 

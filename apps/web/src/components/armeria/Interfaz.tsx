@@ -16,7 +16,7 @@ import {
   useState,
 } from 'react';
 import { VARIANTES, type Variante } from './director.ts';
-import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONAS, zonaPorId, zonasDe } from './zonas.ts';
+import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONA_INICIAL, ZONAS, zonaPorId, zonasDe } from './zonas.ts';
 import './armeria.css';
 
 const CLAVE = {
@@ -78,7 +78,7 @@ export function useArmeria() {
   const [apuntada, setApuntada] = useState<string | null>(null);
   const [enfocada, setEnfocada] = useState<string | null>(null);
   // En móvil se empieza por el banco, el protagonista.
-  const [centrada, setCentrada] = useState<string>('banco');
+  const [centrada, setCentrada] = useState<string>(ZONA_INICIAL);
   const [abierta, setAbierta] = useState<string | null>(null);
   const [calidad, setCalidad] = useState<'alta' | 'baja'>('alta');
   const [medir, setMedir] = useState(false);
@@ -313,7 +313,7 @@ export function InterfazArmeria({
   // En móvil el pasillo empieza en el banco, el protagonista (y el póster también).
   useEffect(() => {
     if (estado.movil)
-      zonas.current['banco']?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
+      zonas.current[ZONA_INICIAL]?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'instant' });
   }, [estado.movil]);
 
   // Al abrir una zona, el foco va al panel; el lector oye su nombre.
