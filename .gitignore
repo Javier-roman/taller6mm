@@ -61,3 +61,6 @@ worker-configuration.d.ts
 # Salidas de Playwright y Lighthouse por app
 **/test-results/
 **/playwright-report/
+
+# Muestras generadas por las familias paramétricas (apps/pipeline)
+apps/pipeline/salida/
