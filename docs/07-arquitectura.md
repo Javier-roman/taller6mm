@@ -130,7 +130,7 @@ Por orden, solo cuando haga falta:
 | ADR | Tema | Estado |
 |---|---|---|
 | 0001 | Stack | Propuesta |
-| 0002 | Enfoque técnico del inicio (prototipos A/B) | Pendiente |
+| 0002 | Enfoque técnico del inicio: póster, 2,5D y 3D por niveles | Aceptada |
 | 0003 | Esquema de compatibilidad | Pendiente |
 | 0004 | Estrategia de caché | Pendiente |
 | 0005 | Autenticación | Pendiente |
