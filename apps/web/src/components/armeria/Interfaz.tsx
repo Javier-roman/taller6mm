@@ -1,13 +1,12 @@
 // Interfaz HTML de La Armería, común a los prototipos A y B: cabecera, navegación de zonas (barra en
-// escritorio, carrusel con scroll-snap en móvil), etiqueta flotante, panel de la zona, botón de saltar
-// la intro y póster con zonas clicables. La navegación real es siempre HTML (docs/02 §3.4): el 3D y el
+// escritorio, fila desplazable en tableta y carrusel con scroll-snap en móvil), panel de la zona, botón
+// de saltar la intro y póster con zonas clicables. La navegación real es siempre HTML (docs/02 §3.4): el 3D y el
 // 2,5D son una mejora progresiva por encima.
 import { BRAND } from '@taller6mm/ui/brand';
 import { Boton, Placa } from '@taller6mm/ui/componentes';
 import {
   type KeyboardEvent,
   type ReactNode,
-  type RefObject,
   type UIEvent,
   useCallback,
   useEffect,
@@ -247,8 +246,6 @@ export interface InterfazProps {
   tecnica: string;
   estado: EstadoArmeria;
   acciones: Acciones;
-  /** Etiqueta flotante que la escena coloca sobre la zona activa. */
-  etiqueta: RefObject<HTMLDivElement | null>;
   onSaltarIntro: () => void;
   /** El carrusel móvil informa de su posición (en zonas) para mover la cámara. */
   onProgreso?: (progreso: number) => void;
@@ -262,7 +259,6 @@ export function InterfazArmeria({
   tecnica,
   estado,
   acciones,
-  etiqueta,
   onSaltarIntro,
   onProgreso,
   children,
@@ -271,7 +267,6 @@ export function InterfazArmeria({
   const nav = useRef<HTMLElement>(null);
   const [foco, setFoco] = useState<string>(ZONAS[0]?.id ?? 'replicas');
   const abierta = zonaPorId(estado.zonaAbierta);
-  const activa = zonaPorId(estado.zonaActiva);
   const volverA = useRef<string | null>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -474,16 +469,12 @@ export function InterfazArmeria({
             </section>
           ))}
         </nav>
-      </div>
 
-      <div className="armeria__etiqueta" ref={etiqueta} aria-hidden="true" data-visible="false">
-        {activa ? (
-          <>
-            <span className="armeria__etiqueta-nombre">{activa.nombre}</span>
-            <span className="armeria__etiqueta-dato">
-              {activa.dato} <span className="armeria__demo">Demo</span>
-            </span>
-          </>
+        {/* Abajo a la derecha, justo encima de la navegación: no tapa la sala mientras se enciende. */}
+        {estado.introActiva ? (
+          <button type="button" className="armeria__saltar" onClick={onSaltarIntro}>
+            Saltar intro <kbd>Esc</kbd>
+          </button>
         ) : null}
       </div>
 
@@ -515,12 +506,6 @@ export function InterfazArmeria({
             </div>
           </Placa>
         </div>
-      ) : null}
-
-      {estado.introActiva ? (
-        <button type="button" className="armeria__saltar" onClick={onSaltarIntro}>
-          Saltar intro <kbd>Esc</kbd>
-        </button>
       ) : null}
     </div>
   );

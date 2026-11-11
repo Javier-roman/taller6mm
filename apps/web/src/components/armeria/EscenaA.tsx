@@ -23,8 +23,6 @@ export interface EscenaAProps {
   calidad: 'alta' | 'baja';
   /** Captura del póster y mediciones: conserva el búfer y pinta siempre. */
   medir: boolean;
-  /** Elemento HTML de la etiqueta flotante de la zona activa (la mueve la escena). */
-  etiqueta: RefObject<HTMLElement | null>;
   onApuntar: (id: string | null) => void;
   onElegir: (id: string) => void;
   onListo: () => void;
@@ -35,7 +33,7 @@ export interface EscenaAProps {
 const ROTACION = { centro: 0.28, lateral: 0.4 };
 
 function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> }) {
-  const { canal, control, zonaActiva, zonaAbierta, movil, reducido, etiqueta } = props;
+  const { canal, control, zonaActiva, zonaAbierta, movil, reducido } = props;
   const { camera, size, gl, invalidate, pointer } = useThree();
   const cam = camera as PerspectiveCamera;
   const listo = useRef(false);
@@ -48,7 +46,6 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       pos: new Vector3(),
       obj: new Vector3(),
       objActual: new Vector3(...encuadreSala(1.6).objetivo),
-      proy: new Vector3(),
       ray: new Raycaster(),
       plano: new Plane(new Vector3(0, 0, 1), 1.95),
       p2: new Vector2(),
@@ -232,27 +229,6 @@ function Motor(props: EscenaAProps & { control: ReturnType<typeof crearControl> 
       tmp.p2.set(pointer.x, pointer.y);
       tmp.ray.setFromCamera(tmp.p2, cam);
       tmp.ray.ray.intersectPlane(tmp.plano, control.linterna);
-    }
-
-    // Etiqueta HTML de la zona activa, bajo su rótulo: no tapa la cabecera de la estantería.
-    const el = etiqueta.current;
-    if (el) {
-      if (activa && !abierta && !movil) {
-        const dz = activa.id === 'banco' ? 0 : control.desplazamiento[activa.estanteria];
-        tmp.proy
-          .set(
-            activa.anclaRotulo[0],
-            activa.anclaRotulo[1] - (activa.id === 'banco' ? 0.1 : 0.14),
-            activa.anclaRotulo[2] + dz,
-          )
-          .project(cam);
-        const x = (tmp.proy.x * 0.5 + 0.5) * size.width;
-        const y = (-tmp.proy.y * 0.5 + 0.5) * size.height;
-        el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, 0)`;
-        el.dataset['visible'] = 'true';
-      } else {
-        el.dataset['visible'] = 'false';
-      }
     }
 
     if (sombrasPendientes.current > 0) {

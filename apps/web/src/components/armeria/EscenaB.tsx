@@ -19,7 +19,6 @@ export interface EscenaBProps {
   intro: boolean;
   variante: Variante;
   medir: boolean;
-  etiqueta: RefObject<HTMLElement | null>;
   onApuntar: (id: string | null) => void;
   onElegir: (id: string) => void;
   onListo: () => void;
@@ -281,13 +280,6 @@ export default function EscenaB(props: EscenaBProps) {
         (estado.centro[1] ?? 0.5) + (y / canvas.clientHeight - 0.5) * vh,
       ] as const;
     };
-    const aPantalla = (uvx: number, uvy: number) => {
-      const [vw, vh] = visible(estado.zoom);
-      return [
-        ((uvx - (estado.centro[0] ?? 0.5)) / vw + 0.5) * canvas.clientWidth,
-        ((uvy - (estado.centro[1] ?? 0.5)) / vh + 0.5) * canvas.clientHeight,
-      ] as const;
-    };
     const zonaEn = (x: number, y: number) => {
       const [ux, uy] = aImagen(x, y);
       return (
@@ -388,27 +380,6 @@ export default function EscenaB(props: EscenaBProps) {
       gl.uniform1f(u('uLinternaN'), luz.linterna);
       gl.uniform1f(u('uTiempo'), (ahora / 1000) % 100);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-      // Etiqueta HTML de la zona activa, bajo su rótulo: no tapa la cabecera de la estantería.
-      const el = p.etiqueta.current;
-      if (el) {
-        if (activa && !abierta && !p.movil) {
-          const [ax, ay] = proyectar(
-            [
-              activa.anclaRotulo[0],
-              activa.anclaRotulo[1] - (activa.id === 'banco' ? 0.1 : 0.14),
-              activa.anclaRotulo[2],
-            ],
-            ENCUADRE_POSTER,
-            ASPECTO_POSTER,
-          );
-          const [x, y] = aPantalla(ax, ay);
-          el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, 0)`;
-          el.dataset['visible'] = 'true';
-        } else {
-          el.dataset['visible'] = 'false';
-        }
-      }
 
       const f = canal.current.fotogramas;
       f.push(bruto);

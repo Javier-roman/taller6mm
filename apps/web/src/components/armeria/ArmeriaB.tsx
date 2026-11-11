@@ -9,7 +9,6 @@ const EscenaB = lazy(() => import('./EscenaB.tsx'));
 export default function ArmeriaB() {
   const { estado, acciones } = useArmeria();
   const canal = useRef<CanalEscena>(crearCanal());
-  const etiqueta = useRef<HTMLDivElement>(null);
   const escena = conEscena(estado);
 
   const saltarIntro = useCallback(() => {
@@ -33,7 +32,6 @@ export default function ArmeriaB() {
       tecnica="pases horneados + WebGL2"
       estado={estado}
       acciones={acciones}
-      etiqueta={etiqueta}
       onSaltarIntro={saltarIntro}
       onProgreso={(p) => {
         canal.current.progreso = p;
@@ -53,7 +51,6 @@ export default function ArmeriaB() {
               intro={estado.intro}
               variante={estado.variante}
               medir={estado.medir}
-              etiqueta={etiqueta}
               onApuntar={acciones.apuntar}
               onElegir={acciones.abrir}
               onListo={acciones.listo}

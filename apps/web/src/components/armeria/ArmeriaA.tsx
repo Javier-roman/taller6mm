@@ -11,7 +11,6 @@ const EscenaA = lazy(() => import('./EscenaA.tsx'));
 export default function ArmeriaA() {
   const { estado, acciones } = useArmeria();
   const canal = useRef<CanalEscena>(crearCanal());
-  const etiqueta = useRef<HTMLDivElement>(null);
   const [cargar, setCargar] = useState(false);
   const escena = conEscena(estado);
 
@@ -57,7 +56,6 @@ export default function ArmeriaA() {
       tecnica="React Three Fiber"
       estado={estado}
       acciones={acciones}
-      etiqueta={etiqueta}
       onSaltarIntro={saltarIntro}
       onProgreso={(p) => {
         canal.current.progreso = p;
@@ -78,7 +76,6 @@ export default function ArmeriaA() {
               variante={estado.variante}
               calidad={estado.calidad}
               medir={estado.medir}
-              etiqueta={etiqueta}
               onApuntar={acciones.apuntar}
               onElegir={acciones.abrir}
               onListo={acciones.listo}

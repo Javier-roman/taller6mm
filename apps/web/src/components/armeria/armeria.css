@@ -240,6 +240,8 @@
 }
 
 .armeria__aviso {
+  grid-row: 2;
+  grid-column: 1;
   justify-self: center;
   align-self: start;
   margin: 0;
@@ -371,44 +373,6 @@
   color: var(--estado-aviso);
 }
 
-/* ── Etiqueta flotante sobre la zona activa (la coloca la escena) ─────────────── */
-.armeria__etiqueta {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  display: grid;
-  gap: var(--espacio-1);
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--trazo-fino) solid var(--laton);
-  border-radius: var(--radio-m);
-  background: color-mix(in srgb, var(--negro-pavonado) 90%, transparent);
-  box-shadow: var(--sombra-placa);
-  pointer-events: none;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity var(--duracion-micro) var(--curva-mecanica);
-}
-
-.armeria__etiqueta[data-visible="true"] {
-  opacity: 1;
-}
-
-.armeria__etiqueta-nombre {
-  font-family: var(--fuente-rotulo);
-  font-weight: var(--peso-negrita);
-  font-size: var(--texto-l);
-  letter-spacing: var(--interletra-rotulo);
-  text-transform: uppercase;
-  color: var(--laton-claro);
-}
-
-.armeria__etiqueta-dato {
-  font-family: var(--fuente-datos);
-  font-size: var(--texto-xs);
-  color: var(--hueso);
-}
-
 /* ── Panel de la zona abierta ──────────────────────────────────────────────────── */
 .armeria__panel {
   position: absolute;
@@ -455,11 +419,13 @@
   }
 }
 
+/* Abajo a la derecha, apoyado en la navegación (fila central de la capa): no tapa los tubos al encenderse. */
 .armeria__saltar {
-  position: absolute;
-  z-index: 4;
-  top: 5.5rem;
-  right: var(--espacio-6);
+  grid-row: 2;
+  grid-column: 1;
+  align-self: end;
+  justify-self: end;
+  margin-inline-end: var(--espacio-6);
   min-height: var(--objetivo-tactil);
   padding: 0 var(--espacio-4);
   border: var(--trazo-fino) solid var(--acero);
@@ -617,8 +583,7 @@
   }
 
   .armeria__saltar {
-    top: 7rem;
-    right: var(--espacio-4);
+    margin-inline-end: var(--espacio-4);
   }
 
   .armeria__tecnica {
