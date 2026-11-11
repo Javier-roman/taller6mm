@@ -4,10 +4,12 @@
 //   - Proyecto dentro de OneDrive (bloquea archivos de node_modules al sincronizar)
 //   - Versión mayor de Node distinta de la fijada en .node-version
 //   - Falta pnpm o gitleaks (este último lo usa el pre-commit)
+//   - Pasada la semana de Fable (16-11-2026, 23:59 de Madrid), quita el asesor Fable de settings.local.json
 // Nunca bloquea: si algo falla, no dice nada.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { quitarAsesorFable } from './fable-fin.mjs';
 
 async function readStdin(ms = 3000) {
   const chunks = [];
@@ -86,6 +88,9 @@ try {
   if (Number.isFinite(wantMajor) && haveMajor !== wantMajor) {
     warnings.push(`Node.js ${process.versions.node}: el proyecto fija Node ${pinned} en .node-version.`);
   }
+
+  const fable = quitarAsesorFable(path.join(dir, '.claude', 'settings.local.json'));
+  if (fable.mensaje) warnings.push(fable.mensaje);
 
   if (!onPath('pnpm')) warnings.push('No encuentro pnpm en el PATH: instálalo con `npm install --global pnpm`.');
   if (!onPath('gitleaks')) {
