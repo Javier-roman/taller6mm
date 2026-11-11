@@ -4,10 +4,13 @@
 // profundidad, mueve la imagen con un parallax leve y termina con AgX, viñeta y grano.
 // La cámara no se mueve: «abrir» una zona es un zoom 2D sobre la imagen (apertura simulada).
 import { type RefObject, useEffect, useMemo, useRef } from 'react';
-import { ANCHO_MINIMO_VISIBLE, ASPECTO_POSTER, ENCUADRE_POSTER, proyectar, type Rect, rectZona } from './camara.ts';
+import { ANCHO_MINIMO_VISIBLE, ASPECTO_POSTER, ENCUADRE_POSTER, type Rect, rectZona, segmentoTubo } from './camara.ts';
 import { type CanalEscena, crearVigia } from './canal.ts';
-import { Director, VARIANTES, type Variante } from './director.ts';
-import { EXPOSICION_HORNO, PASES_DATOS, PASES_LUZ, type Pase, PROFUNDIDAD, RUTA_PASES } from './pases.ts';
+import { Director, type Iluminacion, VARIANTES, type Variante } from './director.ts';
+import { compilar, GLSL_COMUN } from './glsl.ts';
+import { cabenRecortes, crearModulos, type Modulos, sufijoRecorte } from './modulos.ts';
+import { PASES_DATOS, PASES_LUZ, type Pase, PROFUNDIDAD, RUTA_PASES } from './pases.ts';
+import { CONJUNTOS_MOVIL, conjuntoDe, recorteConjunto, VARIANTES_RECORTE } from './recortes.ts';
 import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONAS, zonaPorId } from './zonas.ts';
 
 export interface EscenaBProps {
@@ -26,14 +29,6 @@ export interface EscenaBProps {
   onLento: () => void;
 }
 
-const VERTICES = `#version 300 es
-in vec2 aPos;
-out vec2 vUv;
-void main() {
-  vUv = vec2(aPos.x * 0.5 + 0.5, 0.5 - aPos.y * 0.5);
-  gl_Position = vec4(aPos, 0.0, 1.0);
-}`;
-
 const FRAGMENTOS = `#version 300 es
 precision highp float;
 in vec2 vUv;
@@ -46,42 +41,12 @@ uniform vec4 uRectActivo;
 uniform int uFilaActiva;
 uniform vec4 uSegmentos[3];
 
-const float EXPO = ${EXPOSICION_HORNO.toFixed(4)};
 const float CERCA = ${PROFUNDIDAD.cerca.toFixed(4)};
 const float LEJOS = ${PROFUNDIDAD.lejos.toFixed(4)};
-
-// AgX de three.js r186 (tonemapping_pars_fragment), el mismo que usa el prototipo A.
-const mat3 REC2020_A_SRGB = mat3(vec3(1.6605, -0.1246, -0.0182), vec3(-0.5876, 1.1329, -0.1006), vec3(-0.0728, -0.0083, 1.1187));
-const mat3 SRGB_A_REC2020 = mat3(vec3(0.6274, 0.0691, 0.0164), vec3(0.3293, 0.9195, 0.0880), vec3(0.0433, 0.0113, 0.8956));
-vec3 contraste(vec3 x) {
-  vec3 x2 = x * x;
-  vec3 x4 = x2 * x2;
-  return 15.5 * x4 * x2 - 40.14 * x4 * x + 31.96 * x4 - 6.868 * x2 * x + 0.4298 * x2 + 0.1191 * x - 0.00232;
-}
-vec3 agx(vec3 c) {
-  const mat3 dentro = mat3(vec3(0.856627153315983, 0.137318972929847, 0.11189821299995), vec3(0.0951212405381588, 0.761241990602591, 0.0767994186031903), vec3(0.0482516061458583, 0.101439036467562, 0.811302368396859));
-  const mat3 fuera = mat3(vec3(1.1271005818144368, -0.1413297634984383, -0.14132976349843826), vec3(-0.11060664309660323, 1.157823702216272, -0.11060664309660294), vec3(-0.016493938717834573, -0.016493938717834257, 1.2519364065950405));
-  c = dentro * (SRGB_A_REC2020 * c);
-  c = clamp((log2(max(c, 1e-10)) + 12.47393) / 16.499999, 0.0, 1.0);
-  c = fuera * contraste(c);
-  return clamp(REC2020_A_SRGB * pow(max(vec3(0.0), c), vec3(2.2)), 0.0, 1.0);
-}
-vec3 aSrgb(vec3 c) {
-  return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c));
-}
+${GLSL_COMUN}
 vec3 posVista(vec2 uv, float d) {
   vec2 ndc = vec2(uv.x * 2.0 - 1.0, 1.0 - uv.y * 2.0);
   return vec3(ndc.x * uTanFov * uAspecto * d, ndc.y * uTanFov * d, -d);
-}
-float rect(vec2 p, vec4 r, float s) {
-  vec2 a = smoothstep(r.xy - s, r.xy + s, p);
-  vec2 b = 1.0 - smoothstep(r.xy + r.zw - s, r.xy + r.zw + s, p);
-  return a.x * a.y * b.x * b.y;
-}
-float segmento(vec2 p, vec2 a, vec2 b) {
-  vec2 pa = p - a;
-  vec2 ba = b - a;
-  return length(pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0));
 }
 void main() {
   vec2 uv = uCentro + (vUv - 0.5) * uVisible;
@@ -117,7 +82,7 @@ void main() {
   for (int i = 0; i < 3; i++) {
     float nivel = i == 0 ? uTubosLuz.x : (i == 1 ? uTubosLuz.y : uTubosLuz.z);
     float dd = segmento(q, uSegmentos[i].xy * vec2(uAspecto, 1.0), uSegmentos[i].zw * vec2(uAspecto, 1.0));
-    c += uTinte * nivel * (exp(-dd * dd / 0.000012) * 1.6 + exp(-dd * dd / 0.0011) * 0.22);
+    c += uTinte * nivel * resplandor(dd);
   }
   c = agx(c);
   vec2 v = (vUv - 0.5) * vec2(uResolucion.x / uResolucion.y, 1.0);
@@ -133,12 +98,7 @@ const RECTS: { id: string; rect: Rect }[] = [...ZONAS]
   .map((z) => ({ id: z.id, rect: rectZona(z, ENCUADRE_POSTER, ASPECTO_POSTER) }));
 
 /** Tubos de cada estantería proyectados sobre la imagen (para su resplandor). */
-const SEGMENTOS = ORDEN_ESTANTERIAS.map((e) => {
-  const x = ESTANTERIAS[e].x;
-  const a = proyectar([x - 1.1, 3.42, -1.05], ENCUADRE_POSTER, ASPECTO_POSTER);
-  const b = proyectar([x + 1.1, 3.42, -1.05], ENCUADRE_POSTER, ASPECTO_POSTER);
-  return [a[0], a[1], b[0], b[1]] as const;
-});
+const SEGMENTOS = ORDEN_ESTANTERIAS.map((e) => segmentoTubo(ESTANTERIAS[e].x));
 
 /** «#0b0c0e» → [r, g, b] en 0–1 (sRGB, tal cual sale a pantalla). Negro si no es un hex válido. */
 const srgb = (hex: string) =>
@@ -158,24 +118,6 @@ function tinte(variante: Variante) {
 }
 
 const tanFov = Math.tan((ENCUADRE_POSTER.fov * Math.PI) / 360);
-
-function compilar(gl: WebGL2RenderingContext) {
-  const shader = (tipo: number, fuente: string) => {
-    const s = gl.createShader(tipo);
-    if (!s) throw new Error('No se pudo crear el shader');
-    gl.shaderSource(s, fuente);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) ?? 'Shader inválido');
-    return s;
-  };
-  const programa = gl.createProgram();
-  gl.attachShader(programa, shader(gl.VERTEX_SHADER, VERTICES));
-  gl.attachShader(programa, shader(gl.FRAGMENT_SHADER, FRAGMENTOS));
-  gl.linkProgram(programa);
-  if (!gl.getProgramParameter(programa, gl.LINK_STATUS))
-    throw new Error(gl.getProgramInfoLog(programa) ?? 'Programa inválido');
-  return programa;
-}
 
 async function cargarPase(pase: Pase) {
   const respuesta = await fetch(`${RUTA_PASES}/${pase}.webp`);
@@ -245,9 +187,13 @@ export default function EscenaB(props: EscenaBProps) {
       /** Última zona activa: su luz se apaga suave al salir, sin saltar. */
       iluminada: null as string | null,
       movimiento: 1,
+      /** Recortes del móvil: posición suavizada del carrusel, subida de la zona abierta y resolución fina. */
+      p: canal.current.progreso,
+      sube: 0,
+      fino: false,
     };
     const linternaPosible = matchMedia('(hover: hover) and (pointer: fine)').matches;
-    const programa = compilar(gl);
+    const programa = compilar(gl, FRAGMENTOS);
     gl.useProgram(programa);
     const ubicaciones = new Map<string, WebGLUniformLocation | null>();
     const u = (nombre: string) => {
@@ -266,9 +212,51 @@ export default function EscenaB(props: EscenaBProps) {
     // El fondo de la página (token --negro-pavonado), para lo que sobra fuera de la imagen.
     gl.uniform3fv(u('uFondo'), srgb(getComputedStyle(canvas).getPropertyValue('--negro-pavonado').trim()));
 
+    /** Lo que el compositor de recortes necesita saber de las luces en este fotograma. */
+    const entradaModulos = (luz: Iluminacion, variante: Variante, enIntro: boolean, ahora: number) => ({
+      ancho: canvas.clientWidth,
+      alto: canvas.clientHeight,
+      progreso: estado.p,
+      abierta: zonaPorId(ultimas.current.zonaAbierta),
+      sube: estado.sube,
+      iluminada: zonaPorId(estado.iluminada),
+      luz,
+      variante,
+      enIntro,
+      tinte: tinte(variante),
+      // Los rótulos de zona y la marca comparten pase: la marca manda durante la intro.
+      rotulos: enIntro ? Math.max(luz.rotulos, luz.marca * 0.8) : luz.rotulos,
+      tiempo: (ahora / 1000) % 100,
+    });
+
+    // Móvil estrecho: cada módulo se pinta con su recorte horneado a 1 píxel de pase por píxel físico
+    // (modulos.ts). En pantallas más anchas (tableta en vertical) un módulo a todo el ancho ampliaría su
+    // recorte: ahí sigue la sala entera, como en escritorio.
+    const densidad = window.devicePixelRatio || 1;
+    const fondo = srgb(getComputedStyle(canvas).getPropertyValue('--negro-pavonado').trim());
+    const zonaCentrada = () =>
+      ZONAS[Math.round(Math.min(ZONAS.length - 1, Math.max(0, canal.current.progreso)))] as (typeof ZONAS)[number];
+    const modulos: Modulos | null =
+      ultimas.current.movil && cabenRecortes(canvas.clientWidth)
+        ? crearModulos(gl, {
+            fondo,
+            sufijo: sufijoRecorte(canvas.clientWidth, densidad),
+            alCargar: () => {
+              if (!texturas && modulos?.lista(zonaCentrada())) {
+                texturas = true;
+                anterior = performance.now();
+              }
+              pedir();
+            },
+            alFallar: () => ultimas.current.onLento(),
+          })
+        : null;
+
     const tamano = () => {
-      // En móvil, 1,5: cada píxel de pase ya ocupa más de uno de pantalla y DPR 2 no gana detalle.
-      const dpr = Math.min(window.devicePixelRatio || 1, ultimas.current.movil ? 1.5 : 2);
+      // Sala entera en móvil, 1,5: cada píxel de pase ya ocupa más de uno de pantalla. Con recortes, 1,5
+      // mientras algo se mueve y hasta 3 en el fotograma de reposo, que es el que se mira.
+      const tope = modulos ? (estado.fino ? 3 : 1.5) : ultimas.current.movil ? 1.5 : 2;
+      const dpr = Math.min(densidad, tope);
       const w = Math.round(canvas.clientWidth * dpr);
       const h = Math.round(canvas.clientHeight * dpr);
       if (canvas.width !== w || canvas.height !== h) {
@@ -290,6 +278,7 @@ export default function EscenaB(props: EscenaBProps) {
       return [w / zoom, (w * ASPECTO_POSTER) / aspecto / zoom] as const;
     };
     const aImagen = (x: number, y: number) => {
+      if (modulos) return modulos.aImagen(x / canvas.clientWidth, y / canvas.clientHeight);
       const [vw, vh] = visible(estado.zoom);
       return [
         (estado.centro[0] ?? 0.5) + (x / canvas.clientWidth - 0.5) * vw,
@@ -348,6 +337,13 @@ export default function EscenaB(props: EscenaBProps) {
       const p = ultimas.current;
       const d = canal.current.director;
       if (!d) return;
+      // Recortes: el carrusel manda (con movimiento reducido, corta de zona a zona). Mientras algo se
+      // mueve se pinta a menos resolución.
+      const progreso = Math.min(ZONAS.length - 1, Math.max(0, canal.current.progreso));
+      const metaP = p.reducido ? Math.round(progreso) : progreso;
+      const metaSube = p.zonaAbierta ? 1 : 0;
+      if (modulos && (Math.abs(metaP - estado.p) + Math.abs(metaSube - estado.sube) > 1e-3 || !d.enReposo))
+        estado.fino = false;
       tamano();
       const activa = zonaPorId(p.zonaActiva);
       const abierta = zonaPorId(p.zonaAbierta);
@@ -357,9 +353,45 @@ export default function EscenaB(props: EscenaBProps) {
         linterna: linternaPosible && estado.dentro && !abierta,
       });
 
+      if (activa) estado.iluminada = activa.id;
+      const k = p.reducido ? 1 : 1 - Math.exp(-(p.movil ? 7 : 4.2) * dt);
+      if (modulos) {
+        estado.movimiento = Math.abs(metaP - estado.p) + Math.abs(metaSube - estado.sube);
+        estado.p += (metaP - estado.p) * k;
+        estado.sube += (metaSube - estado.sube) * k;
+        modulos.pintar(entradaModulos(luz, d.variante, d.enIntro, ahora));
+      } else {
+        pintarSala(k, luz, d, ahora);
+      }
+
+      const f = canal.current.fotogramas;
+      f.push(bruto);
+      if (f.length > 240) f.shift();
+      if (!listo) {
+        listo = true;
+        p.onListo();
+      }
+      if (!d.enIntro && !introAvisada) {
+        introAvisada = true;
+        p.onIntroFin();
+      }
+      // Caída al póster si no llega a 30 FPS (docs/02 §3.6). Con ?medir no cae: se mide tal cual.
+      if (vigia(f, !d.enIntro && !p.medir, ahora)) p.onLento();
+      // Con el puntero quieto, la linterna llega a su sitio en unos 300 ms: después, deja de pintar.
+      const punteroReciente = estado.dentro && linternaPosible && ahora - ultimoPuntero < 400;
+      const quieto = d.enReposo && estado.movimiento < 0.0005 && !punteroReciente;
+      // Recortes: el último fotograma, ya en reposo, se repite a resolución fina.
+      const afinar = Boolean(modulos) && quieto && !estado.fino;
+      if (afinar) estado.fino = true;
+      if (p.medir || !quieto || afinar) pedir();
+    };
+
+    /** La sala entera (escritorio, tableta y móvil ancho): un solo encuadre con zoom, parallax y linterna. */
+    const pintarSala = (k: number, luz: Iluminacion, d: Director, ahora: number) => {
+      const p = ultimas.current;
+      const abierta = zonaPorId(p.zonaAbierta);
       // Encuadre: zoom y desplazamiento suaves (instantáneos con movimiento reducido).
       const meta = objetivo();
-      const k = p.reducido ? 1 : 1 - Math.exp(-(p.movil ? 7 : 4.2) * dt);
       estado.movimiento =
         Math.abs(meta.zoom - estado.zoom) +
         Math.abs((meta.centro[0] ?? 0) - (estado.centro[0] ?? 0)) +
@@ -385,7 +417,6 @@ export default function EscenaB(props: EscenaBProps) {
       gl.uniform2f(u('uResolucion'), canvas.width, canvas.height);
       // La fila de la zona activa (o de la última, mientras se apaga) no pasa del reposo en toda la imagen:
       // lo que sube de ahí solo se ve dentro de la zona.
-      if (activa) estado.iluminada = activa.id;
       const iluminada = zonaPorId(estado.iluminada);
       const tope = VARIANTES[d.variante].reposo;
       const niveles = ORDEN_ESTANTERIAS.map((e) => luz.tubos[e]);
@@ -408,24 +439,6 @@ export default function EscenaB(props: EscenaBProps) {
       gl.uniform1f(u('uLinternaN'), luz.linterna);
       gl.uniform1f(u('uTiempo'), (ahora / 1000) % 100);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-      const f = canal.current.fotogramas;
-      f.push(bruto);
-      if (f.length > 240) f.shift();
-      if (!listo) {
-        listo = true;
-        p.onListo();
-      }
-      if (!d.enIntro && !introAvisada) {
-        introAvisada = true;
-        p.onIntroFin();
-      }
-      // Caída al póster si no llega a 30 FPS (docs/02 §3.6). Con ?medir no cae: se mide tal cual.
-      if (vigia(f, !d.enIntro && !p.medir, ahora)) p.onLento();
-      // Con el puntero quieto, la linterna llega a su sitio en unos 300 ms: después, deja de pintar.
-      const punteroReciente = estado.dentro && linternaPosible && ahora - ultimoPuntero < 400;
-      const quieto = d.enReposo && estado.movimiento < 0.0005 && !punteroReciente;
-      if (p.medir || !quieto) pedir();
     };
     const pedir = () => {
       if (!cuadro && vivo) cuadro = requestAnimationFrame(pintar);
@@ -480,7 +493,43 @@ export default function EscenaB(props: EscenaBProps) {
           return String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
         },
         dpr: () => canvas.width / Math.max(1, canvas.clientWidth),
-        info: () => ({ llamadas: 1, texturas: UNIDADES.length }),
+        info: () => ({ llamadas: 1, texturas: UNIDADES.length, recortes: Boolean(modulos) }),
+        /**
+         * Póster de un conjunto de recortes: la composición en reposo, sin zona activa, viñeta ni grano, al
+         * tamaño del recorte y en las variantes del srcset (scripts/prototipos/recortes-movil.mjs).
+         */
+        componer: async (id: string, calidad = 0.82) => {
+          const conjunto = CONJUNTOS_MOVIL.find((c) => c.id === id);
+          const zona = ZONAS.find((z) => conjuntoDe(z.id) === conjunto);
+          const d = canal.current.director;
+          if (!modulos || !conjunto || !zona || !d) return null;
+          modulos.pedir(conjunto);
+          for (let i = 0; i < 600 && !modulos.lista(zona); i++) await new Promise((r) => requestAnimationFrame(r));
+          const v = VARIANTES[d.variante];
+          const reposo: Iluminacion = {
+            tubos: { izquierda: v.reposo, centro: v.reposo, derecha: v.reposo },
+            calidas: v.calidas,
+            ambiente: v.ambiente,
+            rotulos: 1,
+            marca: 1,
+            acento: 0,
+            linterna: 0,
+          };
+          const [ancho, alto] = recorteConjunto(conjunto).px;
+          canvas.width = ancho;
+          canvas.height = alto;
+          gl.viewport(0, 0, ancho, alto);
+          if (!modulos.componer(conjunto, entradaModulos(reposo, d.variante, false, 0))) return null;
+          const salidas = VARIANTES_RECORTE.map(({ sufijo, escala }) => {
+            const c = document.createElement('canvas');
+            c.width = Math.round(ancho * escala);
+            c.height = Math.round(alto * escala);
+            c.getContext('2d')?.drawImage(canvas, 0, 0, c.width, c.height);
+            return { sufijo, ancho: c.width, url: c.toDataURL('image/webp', calidad) };
+          });
+          pedir();
+          return salidas;
+        },
         luz: () => JSON.parse(JSON.stringify(canal.current.director?.luz ?? null)),
       };
     }
@@ -494,7 +543,10 @@ export default function EscenaB(props: EscenaBProps) {
       profundidad: [255, 255, 255, 255],
     };
     const descargar = (pase: Pase) => (linternaPosible || !NEUTROS[pase] ? cargarPase(pase) : Promise.resolve(null));
-    Promise.all(UNIDADES.map(descargar))
+    // Con recortes solo se pide el conjunto de la zona centrada; los vecinos, al pintar.
+    const conjuntoInicial = modulos ? conjuntoDe(zonaCentrada().id) : null;
+    if (modulos && conjuntoInicial) modulos.pedir(conjuntoInicial);
+    Promise.all(modulos ? [] : UNIDADES.map(descargar))
       .then((imagenes) => {
         if (!vivo) return;
         imagenes.forEach((imagen, i) => {
@@ -526,6 +578,7 @@ export default function EscenaB(props: EscenaBProps) {
           gl.uniform1i(u(UNIFORME_DE[pase]), i);
           imagen?.close();
         });
+        if (modulos) return;
         texturas = true;
         anterior = performance.now();
         pedir();
@@ -539,9 +592,10 @@ export default function EscenaB(props: EscenaBProps) {
       canvas.removeEventListener('pointerleave', salir);
       canvas.removeEventListener('click', clic);
       removeEventListener('resize', alCambiarTamano);
+      modulos?.liberar();
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [canal]);
+  }, [canal, props.movil]);
 
   // Cada cambio de la interfaz pide un fotograma.
   useEffect(() => {

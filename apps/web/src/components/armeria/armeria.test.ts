@@ -191,6 +191,7 @@ describe('encuadres', () => {
     for (const zona of ZONAS) {
       const r = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
       expect(css).toContain(`[data-zona="${zona.id}"] {\n  left: ${(r.x * 100).toFixed(3)}%;`);
+      expect(css).toContain(`[data-zona="${zona.id}"] {\n  --zona-ancho: ${Number(r.ancho.toFixed(5))};`);
     }
   });
 });

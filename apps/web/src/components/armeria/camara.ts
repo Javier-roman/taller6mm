@@ -147,7 +147,7 @@ export function rectZona(zona: Zona, encuadre: Encuadre, aspecto: number): Rect 
 export const MOVIL_REFERENCIA = { ancho: 430, alto: 956, densidad: 3, aire: 16, centro: 0.52 } as const;
 
 /** Altura (0–1) de la pantalla del móvil donde empieza el carrusel: la sala llega al menos hasta ahí. */
-const FONDO_MOVIL = 0.8;
+export const FONDO_MOVIL = 0.8;
 
 const acotar = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
@@ -163,7 +163,9 @@ export function ventanaZona(zona: Zona, ancho: number, alto: number, movil = MOV
   const x = acotar(r.x + r.ancho / 2 - w / 2, 0, 1 - w);
   const h = (w * ASPECTO_POSTER * alto) / ancho;
   const centrada = r.y + r.alto / 2 - movil.centro * h;
-  const y = h < 1 ? acotar(centrada, 0, 1 - h) : acotar(centrada, 1 - h, Math.min(0, 1 - FONDO_MOVIL * h));
+  // Una sola fórmula para los dos casos (ventana más baja o más alta que el encuadre): es la misma que usa
+  // el póster del móvil en CSS (zonas-poster.css), que no puede bifurcar.
+  const y = acotar(centrada, Math.min(0, 1 - h), Math.max(1 - h, Math.min(0, 1 - FONDO_MOVIL * h)));
   return { x, y, ancho: w, alto: h };
 }
 
@@ -189,4 +191,11 @@ export function recorteMovil(zona: Zona, movil: typeof MOVIL_REFERENCIA = MOVIL_
     alto,
     px: [movil.ancho * movil.densidad, Math.round(alto * altoMarco * movil.densidad)],
   };
+}
+
+/** Tubo de una estantería (centro en `x`) proyectado sobre el póster: [x0, y0, x1, y1] en uv, para su resplandor. */
+export function segmentoTubo(x: number): readonly [number, number, number, number] {
+  const a = proyectar([x - 1.1, 3.42, -1.05], ENCUADRE_POSTER, ASPECTO_POSTER);
+  const b = proyectar([x + 1.1, 3.42, -1.05], ENCUADRE_POSTER, ASPECTO_POSTER);
+  return [a[0], a[1], b[0], b[1]];
 }

@@ -64,3 +64,16 @@ export function recorteConjunto(conjunto: ConjuntoMovil): RecorteMovil {
   const escala = Math.max(...recortes.map((r) => r.px[0] / r.ancho));
   return { x, y, ancho, alto, px: [Math.ceil(ancho * escala), Math.ceil((alto * escala) / ASPECTO_POSTER)] };
 }
+
+/** Media query del móvil estrecho, donde valen los recortes: hasta el ancho del móvil de referencia. */
+export const MEDIA_RECORTES = '(max-width: 26.875rem)';
+/** El recorte se ve algo más ancho que la pantalla (lleva el aire de los lados): para elegir en el srcset. */
+export const TAMANOS_RECORTE = '110vw';
+
+/** Póster de un conjunto (su composición en reposo) en las variantes de su srcset. */
+export function srcsetPoster(conjunto: ConjuntoMovil) {
+  const [ancho] = recorteConjunto(conjunto).px;
+  return VARIANTES_RECORTE.map(
+    (v) => `/prototipos/armeria/movil/${conjunto.id}${v.sufijo}.webp ${Math.round(ancho * v.escala)}w`,
+  ).join(', ');
+}

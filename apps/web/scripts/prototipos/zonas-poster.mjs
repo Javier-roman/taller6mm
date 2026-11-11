@@ -6,7 +6,15 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ASPECTO_POSTER, ENCUADRE_POSTER, proyectar, rectZona } from '../../src/components/armeria/camara.ts';
+import {
+  ASPECTO_POSTER,
+  ENCUADRE_POSTER,
+  FONDO_MOVIL,
+  MOVIL_REFERENCIA,
+  proyectar,
+  rectZona,
+} from '../../src/components/armeria/camara.ts';
+import { conjuntoDe, recorteConjunto } from '../../src/components/armeria/recortes.ts';
 import { ESTANTERIAS, MUEBLE, ORDEN_ESTANTERIAS, ZONAS } from '../../src/components/armeria/zonas.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -22,8 +30,18 @@ const anclas = ORDEN_ESTANTERIAS.map((e) => {
   return `.armeria-poster__ancla[data-estanteria="${e}"] {\n  left: ${pc(x)};\n}`;
 });
 
+// Móvil estrecho: cada vista del pasillo coloca el recorte de su conjunto con estas variables (uv del
+// encuadre) y la misma fórmula que ventanaZona (camara.ts), escrita en armeria.css.
+const n = (v) => String(Number(v.toFixed(5)));
+const vistas = ZONAS.map((zona) => {
+  const r = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
+  const c = recorteConjunto(conjuntoDe(zona.id));
+  return `.armeria-poster__vista[data-zona="${zona.id}"] {\n  --zona-ancho: ${n(r.ancho)};\n  --zona-x: ${n(r.x + r.ancho / 2)};\n  --zona-y: ${n(r.y + r.alto / 2)};\n  --recorte-x: ${n(c.x)};\n  --recorte-y: ${n(c.y)};\n  --recorte-ancho: ${n(c.ancho)};\n  --recorte-alto: ${n(c.alto)};\n}`;
+});
+const pasillo = `.armeria-poster__pasillo {\n  --centro-movil: ${MOVIL_REFERENCIA.centro * 100}cqh;\n  --fondo-movil: ${FONDO_MOVIL * 100}cqh;\n}`;
+
 writeFileSync(
   destino,
-  `/* GENERADO por scripts/prototipos/zonas-poster.mjs: no editar a mano (lo comprueba un test). */\n${[...reglas, ...anclas].join('\n\n')}\n`,
+  `/* GENERADO por scripts/prototipos/zonas-poster.mjs: no editar a mano (lo comprueba un test). */\n${[...reglas, ...anclas, pasillo, ...vistas].join('\n\n')}\n`,
 );
 console.log(`✔ ${path.relative(process.cwd(), destino)}`);

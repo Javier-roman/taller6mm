@@ -15,6 +15,7 @@ import {
   useState,
 } from 'react';
 import { VARIANTES, type Variante } from './director.ts';
+import { conjuntoDe, MEDIA_RECORTES, recorteConjunto, srcsetPoster, TAMANOS_RECORTE } from './recortes.ts';
 import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONA_INICIAL, ZONAS, zonaPorId, zonasDe } from './zonas.ts';
 import './armeria.css';
 
@@ -182,9 +183,22 @@ export const conEscena = (e: EstadoArmeria) => e.hidratado && e.capaz && e.vista
 export const TEXTO_ALTERNATIVO =
   'La Armería en penumbra: tres cuerpos de compactus verde oliva sobre raíles. A la izquierda, Catálogo (armero de réplicas y almacén de accesorios); en el centro, la vitrina de la comunidad y el banco de trabajo con su flexo; a la derecha, Mercado (tablón, mostrador de tiendas, manuales y taquilla).';
 
-export function Poster({ acciones, oculto, movil }: { acciones: Acciones; oculto: boolean; movil: boolean }) {
+const CONJUNTO_INICIAL = conjuntoDe(ZONA_INICIAL);
+
+export function Poster({
+  acciones,
+  oculto,
+  movil,
+  centrada,
+}: {
+  acciones: Acciones;
+  oculto: boolean;
+  movil: boolean;
+  /** Zona que se ve en el móvil estrecho: la abierta o la centrada en el carrusel. */
+  centrada: string;
+}) {
   const desplazable = useRef<HTMLDivElement>(null);
-  // En móvil el póster se recorre en horizontal: empieza en el banco (el protagonista).
+  // En tableta vertical el póster se recorre en horizontal: empieza en el banco (el protagonista).
   useEffect(() => {
     const el = desplazable.current;
     if (el && movil) el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
@@ -192,17 +206,23 @@ export function Poster({ acciones, oculto, movil }: { acciones: Acciones; oculto
   return (
     <div className="armeria-poster" data-oculto={oculto} ref={desplazable}>
       <div className="armeria-poster__lienzo">
-        <img
-          className="armeria-poster__imagen"
-          src="/prototipos/armeria/poster-1920.webp"
-          srcSet="/prototipos/armeria/poster-960.webp 960w, /prototipos/armeria/poster-1920.webp 1920w"
-          sizes="(max-width: 52.125rem) 180vh, 100vw"
-          width={1920}
-          height={1080}
-          alt={TEXTO_ALTERNATIVO}
-          fetchPriority="high"
-          decoding="async"
-        />
+        {/* En móvil estrecho esta imagen no se ve: su <source> pide ya, con prioridad, el recorte del banco, que es el que enseña el pasillo de abajo (misma URL: una sola descarga). */}
+        <picture>
+          {CONJUNTO_INICIAL ? (
+            <source media={MEDIA_RECORTES} srcSet={srcsetPoster(CONJUNTO_INICIAL)} sizes={TAMANOS_RECORTE} />
+          ) : null}
+          <img
+            className="armeria-poster__imagen"
+            src="/prototipos/armeria/poster-1920.webp"
+            srcSet="/prototipos/armeria/poster-960.webp 960w, /prototipos/armeria/poster-1920.webp 1920w"
+            sizes="(max-width: 52.125rem) 180vh, 100vw"
+            width={1920}
+            height={1080}
+            alt={TEXTO_ALTERNATIVO}
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
         {ORDEN_ESTANTERIAS.map((estanteria) => (
           <span key={estanteria} className="armeria-poster__ancla" data-estanteria={estanteria} />
         ))}
@@ -226,6 +246,42 @@ export function Poster({ acciones, oculto, movil }: { acciones: Acciones; oculto
             </a>
           ))}
         </div>
+      </div>
+      {/* Móvil estrecho: un módulo por pantalla, con el recorte de su conjunto a 1 píxel de imagen por píxel físico (srcset) y el mismo encuadre que la escena. Solo se pinta (y se descarga) el de la zona centrada. */}
+      <div className="armeria-poster__pasillo">
+        {ZONAS.map((zona) => {
+          const conjunto = conjuntoDe(zona.id);
+          if (!conjunto) return null;
+          const [ancho, alto] = recorteConjunto(conjunto).px;
+          return (
+            <div key={zona.id} className="armeria-poster__vista" data-zona={zona.id} data-activa={zona.id === centrada}>
+              <img
+                className="armeria-poster__recorte"
+                srcSet={srcsetPoster(conjunto)}
+                sizes={TAMANOS_RECORTE}
+                width={ancho}
+                height={alto}
+                alt={TEXTO_ALTERNATIVO}
+                loading="lazy"
+                decoding="async"
+              />
+              {/* Como las zonas del póster grande: para ratón y tacto, fuera del árbol de accesibilidad. */}
+              <div className="armeria-poster__toque" aria-hidden="true">
+                <a
+                  href={zona.ruta}
+                  className="armeria-poster__zona armeria-poster__zona--vista"
+                  tabIndex={-1}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    acciones.abrir(zona.id);
+                  }}
+                >
+                  <span className="armeria-poster__zona-nombre">{zona.nombre}</span>
+                </a>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

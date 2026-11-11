@@ -66,3 +66,88 @@
 .armeria-poster__ancla[data-estanteria="derecha"] {
   left: 79.141%;
 }
+
+.armeria-poster__pasillo {
+  --centro-movil: 52cqh;
+  --fondo-movil: 80cqh;
+}
+
+.armeria-poster__vista[data-zona="replicas"] {
+  --zona-ancho: 0.27896;
+  --zona-x: 0.20558;
+  --zona-y: 0.40916;
+  --recorte-x: 0.05489;
+  --recorte-y: 0;
+  --recorte-ancho: 0.30312;
+  --recorte-alto: 1;
+}
+
+.armeria-poster__vista[data-zona="accesorios"] {
+  --zona-ancho: 0.27411;
+  --zona-x: 0.20994;
+  --zona-y: 0.65055;
+  --recorte-x: 0.05489;
+  --recorte-y: 0;
+  --recorte-ancho: 0.30312;
+  --recorte-alto: 1;
+}
+
+.armeria-poster__vista[data-zona="comunidad"] {
+  --zona-ancho: 0.2765;
+  --zona-x: 0.5;
+  --zona-y: 0.40916;
+  --recorte-x: 0.35063;
+  --recorte-y: 0;
+  --recorte-ancho: 0.29873;
+  --recorte-alto: 1;
+}
+
+.armeria-poster__vista[data-zona="banco"] {
+  --zona-ancho: 0.38112;
+  --zona-x: 0.5;
+  --zona-y: 0.80735;
+  --recorte-x: 0.29412;
+  --recorte-y: 0;
+  --recorte-ancho: 0.41176;
+  --recorte-alto: 1;
+}
+
+.armeria-poster__vista[data-zona="mercado"] {
+  --zona-ancho: 0.14067;
+  --zona-x: 0.72265;
+  --zona-y: 0.40916;
+  --recorte-x: 0.64488;
+  --recorte-y: 0.0968;
+  --recorte-ancho: 0.15376;
+  --recorte-alto: 0.83658;
+}
+
+.armeria-poster__vista[data-zona="tiendas"] {
+  --zona-ancho: 0.14291;
+  --zona-x: 0.8651;
+  --zona-y: 0.40916;
+  --recorte-x: 0.78438;
+  --recorte-y: 0.09182;
+  --recorte-ancho: 0.15792;
+  --recorte-alto: 0.84516;
+}
+
+.armeria-poster__vista[data-zona="guias"] {
+  --zona-ancho: 0.13798;
+  --zona-x: 0.71942;
+  --zona-y: 0.65055;
+  --recorte-x: 0.64488;
+  --recorte-y: 0.0968;
+  --recorte-ancho: 0.15376;
+  --recorte-alto: 0.83658;
+}
+
+.armeria-poster__vista[data-zona="taquilla"] {
+  --zona-ancho: 0.13974;
+  --zona-x: 0.85987;
+  --zona-y: 0.65055;
+  --recorte-x: 0.78438;
+  --recorte-y: 0.09182;
+  --recorte-ancho: 0.15792;
+  --recorte-alto: 0.84516;
+}

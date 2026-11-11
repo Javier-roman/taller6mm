@@ -62,7 +62,12 @@ export default function ArmeriaA() {
         canal.current.pintar();
       }}
     >
-      <Poster acciones={acciones} oculto={escena && estado.listo} movil={estado.movil} />
+      <Poster
+        acciones={acciones}
+        oculto={escena && estado.listo}
+        movil={estado.movil}
+        centrada={estado.zonaAbierta ?? estado.centrada}
+      />
       {escena && cargar ? (
         <div className="armeria__lienzo" data-listo={estado.listo}>
           <Suspense fallback={null}>

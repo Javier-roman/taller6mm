@@ -103,6 +103,11 @@
   white-space: nowrap;
 }
 
+/* Pasillo del móvil estrecho (más abajo): fuera de él no existe. */
+.armeria-poster__pasillo {
+  display: none;
+}
+
 .armeria-poster__ancla {
   position: absolute;
   top: 0;
@@ -660,6 +665,69 @@
     width: auto;
     height: 122%;
     translate: none;
+  }
+}
+
+/*
+ * ── Móvil estrecho (hasta 430 px, MEDIA_RECORTES en recortes.ts): un módulo por pantalla ──────────
+ * El póster es el recorte del conjunto de la zona centrada (critico-diseno, 2.ª revisión: el póster único,
+ * ampliado, se veía borroso), con el mismo encuadre que el B en móvil (ventanaZona en camara.ts): el módulo
+ * entero con 16 px de aire a cada lado y a 1 píxel de imagen por píxel físico. Las variables --zona-* y
+ * --recorte-* (uv del encuadre) las genera scripts/prototipos/zonas-poster.mjs.
+ */
+@media (max-width: 26.875rem) {
+  .armeria-poster {
+    overflow: hidden;
+  }
+
+  .armeria-poster__lienzo {
+    display: none;
+  }
+
+  .armeria-poster__pasillo {
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+
+  .armeria-poster__vista {
+    /* Píxeles por unidad de uv del encuadre, a lo ancho y a lo alto (16:9). */
+    --k: calc((100cqw - 2 * var(--espacio-4)) / var(--zona-ancho));
+    --kh: calc(var(--k) * 9 / 16);
+
+    display: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .armeria-poster__vista[data-activa="true"] {
+    display: block;
+  }
+
+  .armeria-poster__recorte {
+    position: absolute;
+    left: calc(var(--k) * var(--recorte-x) - clamp(0px, var(--k) * var(--zona-x) - 50cqw, var(--k) - 100cqw));
+    top: calc(
+      var(--kh) *
+      var(--recorte-y) -
+      clamp(
+        min(0px, var(--kh) - 100cqh),
+        var(--kh) *
+        var(--zona-y) -
+        var(--centro-movil),
+        max(var(--kh) - 100cqh, min(0px, var(--kh) - var(--fondo-movil)))
+      )
+    );
+    width: calc(var(--k) * var(--recorte-ancho));
+    max-width: none;
+    height: calc(var(--kh) * var(--recorte-alto));
+  }
+
+  .armeria-poster__toque,
+  .armeria-poster__zona--vista {
+    position: absolute;
+    inset: 0;
   }
 }
 
