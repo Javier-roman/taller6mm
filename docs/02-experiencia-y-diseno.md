@@ -52,7 +52,8 @@ El contenido de cada módulo **es real**: miniaturas de builds reales, siluetas 
 - Calidad automática según la GPU (detect-gpu + PerformanceMonitor): menor resolución de render y sin postprocesado caro.
 
 ### 3.4 Alternativa ligera y SEO
-- Sin WebGL, con `prefers-reduced-motion`, en modo ahorro de datos o con GPU débil se muestra un **póster estático** (render de la escena) con zonas HTML clicables encima. Mismas rutas y mismos datos vivos.
+- Sin WebGL, en modo ahorro de datos o con GPU débil se muestra un **póster estático** (render de la escena) con zonas HTML clicables encima. Mismas rutas y mismos datos vivos.
+- Con `prefers-reduced-motion` la escena **no** se queda en póster: sigue siendo una escena **estática re-iluminable** (linterna y «Más luz» funcionan), sin viaje de cámara ni parallax (ADR-0002, corrige la redacción anterior).
 - La navegación real es HTML semántico (`<nav>` con enlaces) y siempre está presente. La escena 3D es una mejora progresiva.
 
 ### 3.5 Enfoque técnico (prototipos en la Fase 1)
