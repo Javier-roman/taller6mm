@@ -1,6 +1,6 @@
 # ADR-0002 — Enfoque técnico del inicio (La Armería): póster, 2,5D y 3D por niveles
 
-- **Estado**: Propuesta (pendiente del OK visual de Javi a los hitos de La Armería)
+- **Estado**: Propuesta (OK visual de Javi el 11-11-2026 con una condición: sin haces de luz visibles; falta mostrarle el resultado y medir)
 - **Fecha**: 2026-11-10
 - **Decisores**: Javi (+ Claude Code)
 
@@ -19,7 +19,7 @@ Decisiones de Javi (05-11-2026): híbrido (póster de base, B en móvil y A en e
 
 ## Decisión
 1. **Tres niveles**: póster (primer pintado, vista ligera y SEO), luego **B** en móvil y **A** en escritorio con WebGL2. Cada nivel cae al anterior si falla o va lento.
-2. **Penumbra por defecto** y botón **«Más luz»** siempre visible, misma temperatura de luz y más nivel. Los haces de los tubos nunca tapan rótulos ni réplicas.
+2. **Penumbra por defecto** y botón **«Más luz»** siempre visible, misma temperatura de luz y más nivel. **Luz indirecta, sin haces visibles** (Javi, 11-11-2026): los conos de luz y la bruma volumétrica se quitaron porque daban aspecto de videojuego indie; la sala simula la realidad, así que los tubos iluminan paredes, suelo y muebles y el aire no se ve.
 3. **Movimiento reducido** (`prefers-reduced-motion`): escena **estática re-iluminable** (linterna y «Más luz» siguen funcionando), sin viaje de cámara ni parallax. Esto **corrige docs/02 §3.4**, que decía «póster estático».
 4. **Luz horneada con Cycles** (Blender portátil, `scripts/prototipos/hornear-b-cycles.*`) para B y para el póster, que sale de la composición de B para que póster, vista ligera y B sean la misma sala. Los pases de luz van a 2560 × 1440 para que el móvil recortado se vea nítido.
 5. **Mismos datos vivos y mismas rutas** en los tres niveles; todo valor de diseño sale de los tokens de `packages/ui`.
