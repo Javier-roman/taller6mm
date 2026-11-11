@@ -95,9 +95,11 @@ export function texturaLadrillo(repetir: readonly [number, number]): TexturaConR
   for (let y = 0; y < H; y += fila) {
     const desfase = (y / fila) % 2 === 0 ? 0 : ancho / 2;
     for (let x = -ancho; x < W + ancho; x += ancho) {
-      const r = 118 + rnd() * 16;
-      const g = 106 + rnd() * 12;
-      const b = 92 + rnd() * 10;
+      // ~35 % menos saturación (critico-diseno, 3.ª revisión): con la luz cálida de A el ladrillo salía naranja
+      // y el póster, que sale de B, lo enseña gris.
+      const r = 112 + rnd() * 15;
+      const g = 107 + rnd() * 12;
+      const b = 98 + rnd() * 10;
       color.ctx.fillStyle = `rgb(${r} ${g} ${b})`;
       color.ctx.fillRect(x + desfase + 5, y + 5, ancho - 10, fila - 10);
       const a = 190 + rnd() * 40;
