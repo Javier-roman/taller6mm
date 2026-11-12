@@ -10,9 +10,10 @@ from taller6mm_pipeline.familias.base import (
     Pieza,
     Socket,
 )
+from taller6mm_pipeline.familias.boca import Bocacha, Silenciador
 from taller6mm_pipeline.familias.guardamanos_mlok import GuardamanosMlok
 from taller6mm_pipeline.familias.rail_picatinny import RailPicatinny
 
-FAMILIAS: dict[str, Familia] = {f.id: f for f in (RailPicatinny(), GuardamanosMlok())}
+FAMILIAS: dict[str, Familia] = {f.id: f for f in (RailPicatinny(), GuardamanosMlok(), Bocacha(), Silenciador())}
 
 __all__ = ["FAMILIAS", "Familia", "Geometria", "Parametro", "ParametroInvalidoError", "Pieza", "Socket"]

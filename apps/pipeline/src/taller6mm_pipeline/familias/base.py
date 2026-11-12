@@ -271,7 +271,7 @@ class Familia(ABC):
             "es_demo": ficha is None,
             "material": self.material,
             "requiere": self.requiere_de(p),
-            "ofrece": self.ofrece,
+            "ofrece": self.ofrece_de(p),
             "pendientes": tuple(pendientes),
         }
         if criticos_sin_dato:
@@ -289,3 +289,7 @@ class Familia(ABC):
     def requiere_de(self, p: Mapping[str, Valor]) -> tuple[str, ...]:
         """Interfaces que requiere la variante (por defecto, las de la clase)."""
         return self.requiere
+
+    def ofrece_de(self, p: Mapping[str, Valor]) -> tuple[str, ...]:
+        """Interfaces que ofrece la variante (por defecto, las de la clase)."""
+        return self.ofrece
