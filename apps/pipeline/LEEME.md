@@ -30,8 +30,9 @@ Generadores por código de piezas estándar (docs/05 §4 y §6.3): parámetros e
 | `rail.picatinny` | `rail_picatinny.py` | MIL-STD-1913: ranura 5,23 mm, paso 10,01, profundidad 3,00, ancho 21,21, plano 15,67, apoyos a 45° | — (solo nº de ranuras) |
 | `guardamanos.mlok` | `guardamanos_mlok.py` | M-LOK: ranura 32 × 7 mm, separación 8, radio 2,38 (confianza media) + Picatinny | longitud, diámetro, pared |
 | `boca.bocacha`, `boca.silenciador` | `boca.py` | Rosca M14x1 a derechas (CW) o a izquierdas (CCW) | longitud, diámetros, ranuras |
-| `culata.tubo`, `culata.telescopica` | `culata.py` | Tubo mil-spec 29,16 mm y comercial 29,67 mm; rosca 1 3/16"-16 | longitudes, altura, ancho, pared |
-| `cargador.m4` | `cargador_m4.py` | Ninguno verificable: sin cotas del SKU sale T0 | largo, ancho, altura |
+| `culata.tubo` | `culata.py` | Tubo mil-spec 29,16 mm y comercial 29,67 mm; rosca 1 3/16"-16 | longitud, tramo roscado |
+| `culata.telescopica` | `culata.py` | **Solo T0** (`motivo_sin_malla`): la forma del cuerpo no tiene cotas verificables | longitud, altura, ancho, pared |
+| `cargador.m4` | `cargador_m4.py` | **Solo T0** (`motivo_sin_malla`): curvatura, labios y sección sin fuente pública | largo, ancho, altura |
 
 ```bash
 uv run python -m taller6mm_pipeline.familias.muestras   # tanda de 40 variantes + informe.html en salida/ (ignorada por git)
@@ -48,14 +49,18 @@ pieza.metadatos()
 pieza.ficha()
 ```
 
-Reglas: las cotas de estándar viven en `estandares.py` con fuente, fecha y confianza; las de cada SKU llegan por una `Ficha` (la clave de la cota es la del parámetro). Si falta una cota crítica, la pieza sale **T0 sin malla** con el parámetro `null`; si falta una no crítica, esa parte no se modela y queda anotada. El nivel con malla es `T2_candidato`: aún debe pasar `validacion.py` y el `revisor-fidelidad`. Los GLB salen sin optimizar (Meshopt, KTX2 y LODs los pone gltf-transform después).
+Reglas: las cotas de estándar viven en `estandares.py` con fuente, fecha y confianza; las de cada SKU llegan por una `Ficha` (la clave de la cota es la del parámetro). Si falta una cota crítica, la pieza sale **T0 sin malla** con el parámetro `null`; si falta una no crítica, esa parte no se modela y queda anotada. El nivel con malla es `T2_candidato`: aún debe pasar `validacion.py` y el `revisor-fidelidad`. Los GLB salen sin optimizar (Meshopt, KTX2 y LODs los pone gltf-transform después). Una familia sin cotas verificables para una forma creíble declara `motivo_sin_malla` y **solo** produce T0 (parámetros, interfaz y cotas para el plano): mejor ninguna malla que una caja de juguete.
+
+**Convención de ejes de los sockets** (fijada en `Socket` y en `rotation` del nodo glTF, probada en `tests/test_familias_sockets.py`): **+Z local = normal de montaje, hacia fuera de la pieza**; **+X local = eje del raíl o de la ranura** (dirección de deslizamiento); +Y local = Z × X. Ejemplos: `rail.top` tiene Z = +Y de la pieza y X = +X; `mlok.side.l` tiene Z = +Z; `mlok.side.r`, Z = −Z; `mlok.bottom`, Z = −Y.
+
+Salud de la malla: `tests/test_familias_malla.py` exige para todas las familias malla cerrada (`Malla.aristas_abiertas() == 0`), volumen positivo y normales hacia fuera; `tests/test_familias_regresion.py` fija caja envolvente, volumen y triángulos por familia. Al renderizar piezas pequeñas en Blender, baja `clip_start` de la cámara (por defecto 0,1 m: recorta una bocacha de 45 mm y la muestra hueca y negra).
 
 ### Cómo añadir una familia
 
 1. Verifica las cotas de estándar en una fuente pública y añádelas a `estandares.py` como `Cota` (valor en mm, URL, fecha, confianza). Lo que no puedas verificar va a `PENDIENTES` con valor `None`: no lo estimes.
-2. Copia `cargador_m4.py` (el caso mínimo) o `boca.py` (con cotas opcionales) a `familias/<nombre>.py` y crea una subclase de `Familia` con `id` (`grupo.nombre`, estable), `nombre`, `material`, `requiere`/`ofrece` (o `requiere_de`/`ofrece_de` si dependen de los parámetros) y `estandares`.
+2. Copia `boca.py` (con cotas opcionales) o `rail_picatinny.py` (con sockets); si no hay cotas para una forma creíble, copia `cargador_m4.py` (solo T0) a `familias/<nombre>.py` y crea una subclase de `Familia` con `id` (`grupo.nombre`, estable), `nombre`, `material`, `requiere`/`ofrece` (o `requiere_de`/`ofrece_de` si dependen de los parámetros) y `estandares`.
 3. Declara `parametros` con `Parametro(clave, descripción, tipo, unidad, minimo, maximo)`. Marca `de_sku=True` lo que dependa del producto y `critico=False` lo que pueda faltar sin impedir la geometría. Las validaciones cruzadas van en `comprobar`.
-4. Implementa `construir(p)`: sólido en mm con los ejes canónicos (+X boca, +Y arriba, +Z izquierda del tirador), origen en el punto de montaje (documéntalo en el docstring) y devuelve `Geometria(solido, sockets, cotas_derivadas, notas)`. Cada `Socket(slot_key, posicion_mm, interfaz, extras)` usa las claves de ranura de docs/03 §3.1. Anota en `notas` toda simplificación.
+4. Implementa `construir(p)`: sólido en mm con los ejes canónicos (+X boca, +Y arriba, +Z izquierda del tirador), origen en el punto de montaje (documéntalo en el docstring) y devuelve `Geometria(solido, sockets, cotas_derivadas, notas)`. Cada `Socket(slot_key, posicion_mm, interfaz, normal, tangente, extras)` usa las claves de ranura de docs/03 §3.1 y la convención de ejes de arriba. Anota en `notas` toda simplificación.
 5. Regístrala en `FAMILIAS` (`familias/__init__.py`) y añade sus variantes a `tanda()` en `muestras.py`.
-6. Escribe `tests/test_familias_<nombre>.py` con: cotas del estándar contra la fuente, dimensiones de la malla, parámetros fuera de rango, hash estable, nodos del GLB releído y el caso T0.
+6. Escribe `tests/test_familias_<nombre>.py` con: cotas del estándar contra la fuente, dimensiones de la malla, parámetros fuera de rango, hash estable, nodos del GLB releído y el caso T0. Añade un caso a `CASOS` en `tests/test_familias_regresion.py`; la malla cerrada y los sockets se comprueban solos al estar en la tanda.
 7. Si cambias la geometría de una familia ya publicada, sube su `version` (cambia el `id_variante`). Termina con `uv run ruff check`, `uv run ruff format` y `uv run pytest`.
