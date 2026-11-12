@@ -61,3 +61,6 @@ worker-configuration.d.ts
 # Salidas de Playwright y Lighthouse por app
 **/test-results/
 **/playwright-report/
+
+# Copias de trabajo de los subagentes (git worktree)
+.claude/worktrees/

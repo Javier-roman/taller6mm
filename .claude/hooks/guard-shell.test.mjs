@@ -85,6 +85,12 @@ const CASES = {
     'npm unpublish @taller6mm/domain',
     'wrangler pages project delete viejo',
     'wrangler vectorize delete indice',
+    // Kaggle: el token no se imprime ni se toca
+    'kaggle auth print-access-token',
+    'kaggle.exe auth login',
+    'cat ~/.kaggle/access_token',
+    'type %USERPROFILE%\\.kaggle\\kaggle.json',
+    'echo $KAGGLE_API_TOKEN',
     // Antigravity CLI: nunca sin permisos ni en modos que actúan solos
     'agy -p "hola" --dangerously-skip-permissions',
     'agy --mode auto -p x',
@@ -160,6 +166,8 @@ const CASES = {
     'cat .envrc.sample',
     'ls .wrangler/state',
     // agy en solo lectura, como lo lanza scripts/gemini.mjs
+    'kaggle kernels status usuario/cuaderno',
+    'kaggle datasets list',
     'agy models',
     'agy --version',
     'agy.exe --help',
