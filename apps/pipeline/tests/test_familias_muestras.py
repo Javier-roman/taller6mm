@@ -39,6 +39,8 @@ def test_genera_archivos_informe_y_manifiesto_deterministas(tmp_path: Path) -> N
     assert "Barrido paramétrico de demostración" in html
     assert "MIL-STD-1913" in html
     assert "T0 (sin malla)" in html
+    assert "malla candidata, no publicable" in html
+    assert "3D publicable" not in html  # sin vistas de referencia, nada se publica como 3D
     assert all(f'id="{familia}"' in html for familia in FAMILIAS)
     assert "<script" not in html
 

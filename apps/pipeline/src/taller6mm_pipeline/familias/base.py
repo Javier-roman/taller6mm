@@ -15,10 +15,11 @@ import hashlib
 import json
 import math
 from abc import ABC, abstractmethod
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, ClassVar
 
+from taller6mm_pipeline import realismo
 from taller6mm_pipeline.familias.glb import escribir_glb
 from taller6mm_pipeline.familias.malla import Malla, teselar
 from taller6mm_pipeline.ficha import Confianza, Cota, Ficha
@@ -150,11 +151,21 @@ class Geometria:
     sockets: tuple[Socket, ...] = ()
     cotas: tuple[Cota, ...] = ()
     notas: tuple[str, ...] = ()
+    # Largo (X), alto (Y) y ancho (Z) que debe medir la malla según los parámetros y los estándares: son las
+    # cotas clave que la puerta de realismo compara con la malla teselada. Obligatorio.
+    dimensiones_nominales_mm: tuple[float, float, float] | None = None
+    # Huecos de la pieza (taladros, ranuras): la puerta los usa para no confundirla con una caja.
+    vaciados: int = 0
 
 
 @dataclass(frozen=True, slots=True)
 class Pieza:
-    """Resultado de generar una variante. `nivel` es `T0` (sin malla) o `T2_candidato` (pendiente de validación)."""
+    """Resultado de generar una variante.
+
+    `nivel` es el **nivel publicable** que fija la puerta de realismo (`realismo.decidir_nivel`): `T0`…`T3`.
+    Una malla sin vistas de referencia licenciadas es T0 y `publicable_3d = False`, por exactas que sean sus
+    cotas: la malla existe (`malla is not None`) como candidata, pero no se publica como modelo fiel.
+    """
 
     familia_id: str
     id_variante: str
@@ -170,6 +181,9 @@ class Pieza:
     notas: tuple[str, ...]
     sockets: tuple[Socket, ...] = ()
     malla: Malla | None = None
+    publicable_3d: bool = False
+    sospechosa_de_cubo: bool = False
+    motivos_nivel: tuple[str, ...] = ()
 
     def ficha(self) -> Ficha:
         """Ficha de la variante (sirve para el plano T0 y para la validación de cotas)."""
@@ -182,6 +196,10 @@ class Pieza:
             "id_variante": self.id_variante,
             "nombre": self.nombre,
             "nivel": self.nivel,
+            "publicable_3d": self.publicable_3d,
+            "sospechosa_de_cubo": self.sospechosa_de_cubo,
+            "motivos_nivel": list(self.motivos_nivel),
+            "tiene_malla": self.malla is not None,
             "es_demo": self.es_demo,
             "material": self.material,
             "requiere": list(self.requiere),
@@ -278,8 +296,18 @@ class Familia(ABC):
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         """Construye el sólido en mm y ejes canónicos (+X boca, +Y arriba, +Z izquierda del tirador)."""
 
-    def generar(self, params: Mapping[str, Valor], ficha: Ficha | None = None) -> Pieza:
-        """Genera la variante. Con `ficha`, las cotas `de_sku` salen de ella (y mandan sobre `params`)."""
+    def generar(
+        self,
+        params: Mapping[str, Valor],
+        ficha: Ficha | None = None,
+        vistas: Sequence[realismo.VistaIoU] = (),
+        verificado_fisicamente: bool = False,
+    ) -> Pieza:
+        """Genera la variante. Con `ficha`, las cotas `de_sku` salen de ella (y mandan sobre `params`).
+
+        El nivel lo decide la puerta de realismo: `vistas` son los IoU de silueta medidos contra fotos de
+        referencia (sin ellas, la malla no pasa de T0) y `verificado_fisicamente` es lo único que da T3.
+        """
         entrada = dict(params)
         if ficha is not None:
             entrada.update(self.params_desde_ficha(ficha))
@@ -321,18 +349,52 @@ class Familia(ABC):
             "ofrece": self.ofrece_de(p),
             "pendientes": tuple(pendientes),
         }
-        if self.motivo_sin_malla is not None:
-            comun["pendientes"] = (*pendientes, "geometria")
-            return Pieza(nivel="T0", cotas=tuple(cotas), notas=(self.motivo_sin_malla,), **comun)
-        if criticos_sin_dato:
-            return Pieza(nivel="T0", cotas=tuple(cotas), notas=(), **comun)
+        if self.motivo_sin_malla is not None or criticos_sin_dato:
+            notas: tuple[str, ...] = ()
+            if self.motivo_sin_malla is not None:
+                comun["pendientes"] = (*pendientes, "geometria")
+                notas = (self.motivo_sin_malla,)
+            # Sin malla no hay nada que medir: las cotas del SKU pasan a la puerta con la medida desconocida.
+            claves = [
+                realismo.Cota(par.clave, None if p[par.clave] is None else float(p[par.clave]), None)
+                for par in self.parametros
+                if par.de_sku
+            ]
+            decision = realismo.decidir_nivel(cotas=claves, vistas=list(vistas), tiene_malla=False)
+            return Pieza(
+                nivel=decision.nivel.name,
+                cotas=tuple(cotas),
+                notas=notas,
+                motivos_nivel=tuple(decision.motivos),
+                **comun,
+            )
         geo = self.construir(p)
+        if geo.dimensiones_nominales_mm is None:
+            raise ValueError(f"{self.id}: `construir` debe declarar `dimensiones_nominales_mm`")
+        malla = teselar(geo.solido, self.tolerancia_mm, self.tolerancia_angular)
+        medidas = malla.dimensiones_mm
+        claves = [
+            realismo.Cota(nombre, float(nominal), medida, "caja envolvente de la malla frente a los parámetros")
+            for nombre, nominal, medida in zip(
+                ("largo", "alto", "ancho"), geo.dimensiones_nominales_mm, medidas, strict=True
+            )
+        ]
+        decision = realismo.decidir_nivel(
+            cotas=claves,
+            vistas=list(vistas),
+            tiene_malla=True,
+            malla=realismo.Malla(malla.volumen_mm3, medidas[0] * medidas[1] * medidas[2], geo.vaciados),
+            verificado_fisicamente=verificado_fisicamente,
+        )
         return Pieza(
-            nivel="T2_candidato",
+            nivel=decision.nivel.name,
+            publicable_3d=decision.publicable_3d,
+            sospechosa_de_cubo=decision.sospechosa_de_cubo,
+            motivos_nivel=tuple(decision.motivos),
             cotas=(*cotas, *geo.cotas),
             notas=geo.notas,
             sockets=geo.sockets,
-            malla=teselar(geo.solido, self.tolerancia_mm, self.tolerancia_angular),
+            malla=malla,
             **comun,
         )
 

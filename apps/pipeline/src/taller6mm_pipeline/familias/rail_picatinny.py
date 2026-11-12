@@ -90,4 +90,5 @@ class RailPicatinny(Familia):
         derivada = Cota(
             "longitud", largo, "derivada: N x paso + un diente (paso - ancho de ranura)", e.FECHA, Confianza.MEDIA
         )
-        return Geometria(solido_rail(n), (socket,), (derivada,), (NOTA_PERFIL,))
+        nominales = (largo, e.PICATINNY_ALTURA.valor_mm, e.PICATINNY_ANCHO.valor_mm)
+        return Geometria(solido_rail(n), (socket,), (derivada,), (NOTA_PERFIL,), nominales, vaciados=n)

@@ -128,4 +128,6 @@ class GuardamanosMlok(Familia):
                         {"largo_ranura_mm": e.MLOK_LARGO_RANURA.valor_mm},
                     )
                 )
-        return Geometria(cuerpo, tuple(sockets), (), tuple(notas))
+        alto = 2 * radio + (e.PICATINNY_ALTURA.valor_mm if con_rail else 0.0)
+        vaciados = 1 + len(caras) * n_mlok  # el hueco del cañón y las ranuras M-LOK
+        return Geometria(cuerpo, tuple(sockets), (), tuple(notas), (largo, alto, 2 * radio), vaciados)

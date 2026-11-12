@@ -131,8 +131,9 @@ def generar_informe_html(filas: list[dict[str, object]]) -> str:
         "<h1>Familias paramétricas · tanda de muestras</h1>",
         '<p class="aviso"><strong>Barrido paramétrico de demostración.</strong> Las cotas de estándar llevan su '
         "fuente; las cotas de SKU de esta tanda son parámetros de entrada, no datos de productos reales "
-        "(<code>es_demo</code>). Una pieza sin sus cotas críticas sale como T0, sin malla. El nivel "
-        "«T2 candidato» aún debe pasar la validación (cotas y silueta) y la revisión de fidelidad.</p>",
+        "(<code>es_demo</code>). Una pieza sin sus cotas críticas sale como T0, sin malla. El nivel lo "
+        "fija la puerta de realismo (<code>realismo.decidir_nivel</code>): sin vistas de referencia licenciadas, "
+        "una malla es T0 y <strong>no es publicable</strong> como modelo 3D, por exactas que sean sus cotas.</p>",
     ]
     for familia_id, familia in FAMILIAS.items():
         propias = [f for f in filas if f["familia"] == familia_id]
@@ -152,7 +153,11 @@ def generar_informe_html(filas: list[dict[str, object]]) -> str:
                 nivel, malla, tris, peso = '<span class="t0">T0 (sin malla)</span>', "—", "—", "—"
             else:
                 x, y, z = pieza.malla.dimensiones_mm
-                nivel = '<span class="ok">T2 candidato</span>'
+                if pieza.publicable_3d:
+                    nivel = f'<span class="ok">{pieza.nivel} (3D publicable)</span>'
+                else:
+                    nivel = f'<span class="t0">{pieza.nivel} (malla candidata, no publicable)</span>'
+                nivel += "<br>" + "<br>".join(escape(m) for m in pieza.motivos_nivel)
                 malla, tris = f"{x:g} &times; {y:g} &times; {z:g} mm", str(len(pieza.malla.triangulos))
                 kb = int(f["bytes"]) / 1024  # type: ignore[call-overload]
                 exceso = " (supera 250 KB sin optimizar)" if kb > PRESUPUESTO_ACCESORIO_KB else ""

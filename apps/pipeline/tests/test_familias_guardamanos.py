@@ -113,7 +113,8 @@ def test_las_cotas_del_sku_salen_de_la_ficha_con_su_fuente() -> None:
         ficha.id, ficha.nombre, (*ficha.cotas[:2], Cota("grosor_pared", 2.5, "calibre", "2026-11-11", "media"))
     )
     pieza = GUARDAMANOS.generar({"ranuras_mlok": 5}, ficha=completa)
-    assert pieza.nivel == "T2_candidato"
+    assert pieza.malla is not None
+    assert (pieza.nivel, pieza.publicable_3d) == ("T0", False)  # sin vistas de referencia no pasa la puerta
     assert pieza.es_demo is False
     assert np.array_equal(pieza.malla.vertices, GUARDAMANOS.generar(BASE).malla.vertices)  # misma geometría
 

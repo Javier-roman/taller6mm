@@ -44,6 +44,15 @@ class _PiezaDeBoca(Familia):
     def requiere_de(self, p: Mapping[str, Valor]) -> tuple[str, ...]:
         return (e.ROSCAS_BOCA[str(p["rosca"])],)
 
+    @staticmethod
+    def _nominales(p: Mapping[str, Valor]) -> tuple[float, float, float]:
+        return (float(p["longitud"]), float(p["diametro"]), float(p["diametro"]))
+
+    @staticmethod
+    def _vaciados(p: Mapping[str, Valor]) -> int:
+        """Huecos modelados: el paso interior y el alojamiento de la rosca, si tienen dato."""
+        return int(p["diametro_paso"] is not None) + int(p["profundidad_rosca"] is not None)
+
     def _cuerpo(self, p: Mapping[str, Valor]) -> tuple[Any, list[str]]:
         largo, radio = float(p["longitud"]), float(p["diametro"]) / 2
         cuerpo, notas = _cilindro(radio, largo), [NOTA_ROSCA]
@@ -70,7 +79,7 @@ class Silenciador(_PiezaDeBoca):
 
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         cuerpo, notas = self._cuerpo(p)
-        return Geometria(cuerpo, (), (), tuple(notas))
+        return Geometria(cuerpo, (), (), tuple(notas), self._nominales(p), self._vaciados(p))
 
 
 class Bocacha(_PiezaDeBoca):
@@ -107,4 +116,5 @@ class Bocacha(_PiezaDeBoca):
             # Cada ranura corta la pared desde el eje hacia fuera y queda abierta por la cara delantera.
             corte = Pos(largo - lr, 0, 0) * Box(lr + 1, radio + 1, ar, align=(Align.MIN, Align.MIN, Align.CENTER))
             cuerpo = cuerpo - [Rot(i * 360.0 / n, 0, 0) * corte for i in range(n)]
-        return Geometria(cuerpo, (), (), tuple(notas))
+            return Geometria(cuerpo, (), (), tuple(notas), self._nominales(p), self._vaciados(p) + n)
+        return Geometria(cuerpo, (), (), tuple(notas), self._nominales(p), self._vaciados(p))

@@ -73,7 +73,7 @@ def test_glb_se_vuelve_a_leer_con_sus_nodos_y_en_metros() -> None:
     assert socket["extras"]["interfaz"] == "picatinny"
     assert socket["extras"]["ranuras"] == 5
     extras = doc["nodes"][0]["extras"]
-    assert extras["nivel"] == "T2_candidato"
+    assert (extras["nivel"], extras["publicable_3d"], extras["tiene_malla"]) == ("T0", False, True)
     assert extras["es_demo"] is True
     assert all(c["fuente"] for c in extras["cotas"])
     pos = leer_posiciones_m(pieza.glb())

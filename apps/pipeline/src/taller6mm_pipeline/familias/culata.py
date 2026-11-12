@@ -65,7 +65,8 @@ class TuboCulata(Familia):
             (0.0, 1.0, 0.0),  # sin eje de deslizamiento transversal: +X local apunta arriba
             {"diametro_mm": diametro, "longitud_mm": largo, "referencia": "extremo trasero del tubo"},
         )
-        return Geometria(cuerpo, (socket,), (), tuple(notas))
+        grueso = diametro if p["longitud_rosca"] is None else e.TUBO_ROSCA_DIAMETRO.valor_mm
+        return Geometria(cuerpo, (socket,), (), tuple(notas), (largo, grueso, grueso))
 
 
 class CulataTelescopica(Familia):
