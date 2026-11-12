@@ -35,6 +35,34 @@ class Malla:
         (x0, y0, z0), (x1, y1, z1) = self.caja_mm
         return (round(x1 - x0, DECIMALES_MM), round(y1 - y0, DECIMALES_MM), round(z1 - z0, DECIMALES_MM))
 
+    @property
+    def volumen_mm3(self) -> float:
+        """Volumen con signo (teorema de la divergencia): positivo si las caras miran hacia fuera."""
+        a, b, c = (self.vertices[self.triangulos[:, i]] for i in range(3))
+        return float(np.einsum("ij,ij->i", a, np.cross(b, c)).sum() / 6.0)
+
+    def aristas_abiertas(self) -> int:
+        """Aristas que no están compartidas por exactamente dos triángulos de sentido opuesto (0 = malla cerrada).
+
+        Los vértices se sueldan por posición, porque OCCT no los comparte entre caras del B-rep.
+        """
+        _, soldado = np.unique(np.round(self.vertices, 3), axis=0, return_inverse=True)
+        t = soldado.reshape(-1)[self.triangulos.astype(np.int64)]
+        t = t[(t[:, 0] != t[:, 1]) & (t[:, 1] != t[:, 2]) & (t[:, 2] != t[:, 0])]
+        origen = np.concatenate([t[:, 0], t[:, 1], t[:, 2]])
+        destino = np.concatenate([t[:, 1], t[:, 2], t[:, 0]])
+        n = int(soldado.max()) + 1
+        dirigidas, veces = np.unique(origen * n + destino, return_counts=True)
+        opuestas = (dirigidas % n) * n + dirigidas // n
+        return int((veces != 1).sum() + (~np.isin(opuestas, dirigidas)).sum())
+
+    def normales_hacia_fuera(self) -> float:
+        """Fracción de triángulos cuya normal de cara coincide con las normales de sus vértices (1.0 = todas)."""
+        a, b, c = (self.vertices[self.triangulos[:, i]] for i in range(3))
+        cara = np.cross(b - a, c - a)
+        media = self.normales[self.triangulos].astype(np.float64).sum(axis=1)
+        return float((np.einsum("ij,ij->i", cara, media) > 0).mean())
+
 
 def teselar(solido: Any, tolerancia_mm: float, tolerancia_angular: float) -> Malla:
     """Tesela un `Shape` de build123d. Descarta triángulos degenerados y calcula normales por vértice."""

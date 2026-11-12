@@ -192,6 +192,8 @@ class Familia(ABC):
     # Tolerancias de teselado (mm y radianes): forman parte del resultado, así que cambiarlas sube `version`.
     tolerancia_mm: ClassVar[float] = 0.05
     tolerancia_angular: ClassVar[float] = 0.35
+    # Si no hay cotas verificables para una geometría creíble, la familia lo dice aquí y solo produce T0.
+    motivo_sin_malla: ClassVar[str | None] = None
 
     def validar(self, params: Mapping[str, Valor]) -> dict[str, Valor]:
         """Devuelve los parámetros normalizados (con valores por defecto) o lanza `ParametroInvalidoError`."""
