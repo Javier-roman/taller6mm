@@ -95,6 +95,8 @@ Nota: RMBG-2.0 (BRIA) es **no comercial** salvo que se compre licencia. No usar.
    - informe HTML con superposición y deslizador antes/después.
 8. Revisión: subagente `revisor-fidelidad` y aprobación humana en la Trastienda.
 
+**Puerta de realismo** (`apps/pipeline/src/taller6mm_pipeline/realismo.py`): ningún modelo 3D se publica como «fiel» sin IoU ≥ 0,95 en ≥ 2 vistas licenciadas y cotas clave a ≤ 1 % o ≤ 2 mm; si no, baja a T1/T0 y no se publica como 3D.
+
 ### 6.4 T3 · Escaneado y verificado
 - **Fotogrametría**:
   1. Entre 80 y 150 fotos alrededor de la réplica, con luz difusa y una **hoja de marcadores ArUco impresa**, que da escala y pose automáticas.
@@ -131,9 +133,106 @@ Base: texturas CC0 (Poly Haven, ambientCG) ajustadas a mano y validadas con un r
 - Cuadernos reproducibles en `apps/pipeline/notebooks/`.
 - Registro de modelos de IA, con licencia, enlace y fecha de verificación, en `apps/pipeline/MODELOS.md`.
 
+## 11. Escala: miles de réplicas y accesorios combinables (decisión de Javi, 11-11-2026)
+
+> Objetivo de Javi: poder montar una réplica real con muchísimas opciones, con miles de réplicas y miles de accesorios, como en la vida real, y no un par de decenas.
+
+### 11.1 Principio: modelar piezas e interfaces, no combinaciones
+- No se modela cada combinación. Con N plataformas y M accesorios, las combinaciones se **componen**, no se fabrican una a una.
+- Se modelan **piezas** (una culata, un guardamanos, un silenciador) y **interfaces** (la ranura, la rosca, el pozo de cargador) que las unen.
+- Quién decide si encaja: el motor de compatibilidad (docs/03). El build es un árbol: réplica → ranuras → piezas → ranuras.
+- Cada pieza lleva nodos `socket.<slotKey>` en el glTF (§4). Ahí se engancha lo que va debajo.
+
+### 11.2 Registro de interfaces estándar
+Cada interfaz se guarda en la tabla `interfaces` (§3) con sus cotas y su fuente. **Ninguna cota está verificada todavía**: cada una se confirma con fuente, una a una, antes de usarla.
+
+| Interfaz | Cotas | Fuente y confianza |
+|---|---|---|
+| Picatinny | pendiente de verificar | pendiente |
+| M-LOK | pendiente de verificar | pendiente |
+| KeyMod | pendiente de verificar | pendiente |
+| Rosca de boca 14 mm, horaria | pendiente de verificar | pendiente |
+| Rosca de boca 14 mm, antihoraria | pendiente de verificar | pendiente |
+| Pozos de cargador, por plataforma | pendiente de verificar | pendiente |
+| Tubo de culata (mil-spec y comercial) | pendiente de verificar | pendiente |
+| Montura de óptica | pendiente de verificar | pendiente |
+| Otras (se añaden según el piloto) | pendiente | pendiente |
+
+### 11.3 Familias paramétricas
+- **Familia** = generador por código (Blender Python o build123d/CadQuery, §6.3) + parámetros.
+- **SKU** = familia + parámetros + acabado + fuente y confianza.
+- La idea es que pocos cientos de familias den miles de SKU. Esto es una hipótesis: **pendiente de confirmar con el piloto**.
+
+Parámetros típicos (los de cada familia se fijan al crearla):
+
+| Familia (ejemplos) | Parámetros |
+|---|---|
+| Guardamanos M-LOK | longitud, diámetro, nº de ranuras, rosca, peso |
+| Silenciador o apagallamas | longitud, diámetro, rosca, peso |
+| Cañón exterior | longitud, diámetro, rosca, peso |
+| Culata y tubo | longitud, tipo de tubo, peso |
+| Cargador, por plataforma | pendiente de definir |
+| Carcasa de miras, por modelo | pendiente de definir |
+
+### 11.4 Plataformas base
+- Una base por plataforma **y mecanismo**. AEG, GBB y otros cambian el cargador y el receptor, así que no valen igual.
+- Orden previsto:
+  1. familia M4/AR-15, con la Tokyo Marui M.W.S. de Javi como piloto;
+  2. AK, MP5, MP7, pistolas (Glock, 1911), MPX, MCX, SCAR, etc.
+- Una réplica concreta = base + parámetros + piezas de serie.
+
+### 11.5 Niveles honestos
+- Casi todo el catálogo sale en **T0 o T1**: ficha con cotas y silueta.
+- **T2** solo con fotos licenciadas, medidas con calibre o CAD cedido.
+- La web muestra el nivel real de cada pieza (principio de fidelidad, §1 y §2). Nunca se disfraza.
+
+### 11.6 Alimentación en volumen
+Fuentes, por orden de preferencia:
+- fichas de fabricantes (grupo A de `docs/fuentes/marcas.md`);
+- feeds con permiso de tiendas;
+- comunidad, con la hoja de marcadores ArUco (§7);
+- CAD o renders cedidos.
+
+Los parámetros se extraen de las fichas, cada uno con su fuente y su confianza. Herramientas previstas en `apps/pipeline`: extracción desde ficha, plano T0 y validación IoU. **Estado de implementación: pendiente de confirmar.**
+
+### 11.7 Piloto
+- La M.W.S. de Javi es la **primera base M4**.
+- Sus accesorios (culata, guardamanos M-LOK, miras rojas y silenciador) son **familias**, no modelos sueltos.
+- El piloto servirá para medir el coste real por familia.
+
+### 11.8 Cuellos de botella
+- Tiempo de modelado por familia: **pendiente de medir**.
+- Verificación de cotas (§3).
+- Licencias de las fotos (§5).
+- Coste por familia: **pendiente de medir** en el piloto.
+
+### 11.9 Opción aparcada: IA de imagen a 3D para borradores
+- Idea: generar borradores de piezas con IA de imagen a 3D (§6.3).
+- Necesita una **GPU alquilada por horas**. Antes de usarla se pregunta a Javi por el coste (§10).
+- **No puede usarse sobre fotos con reserva de IA**: las que llevan `Content-Signal` con `ai-train=no` o `ai-input=no`.
+- **Sin decidir.**
+
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
 - [ ] T0 generado para todo el catálogo semilla.
 - [ ] Al menos 5 réplicas en T2 con informe de validación (IoU ≥ 0,95 en 2 vistas y cotas dentro de tolerancia), aprobadas por `revisor-fidelidad` y por Javi.
 - [ ] Piezas estándar paramétricas (Picatinny, M-LOK, rosca de 14 mm) con cotas verificadas.
 - [ ] Insignias de fidelidad visibles en el configurador y en las fichas.
+
+## Anexo A · Idea original aparcada: el vaciado de cada réplica
+
+La idea original era **vaciar** cada réplica y cada accesorio uno a uno: escanearlo o modelarlo a 1:1 con niveles T2 o T3.
+
+- **Ventaja**: máxima fidelidad.
+- **Problema**: coste alto por pieza. No escala a miles de réplicas y accesorios (§11).
+- **Estado**: aparcada. Se conserva por si un día vuelve.
+
+Cuándo tendría sentido:
+- CAD cedido por marcas (§6.4);
+- escaneo en tiendas colaboradoras (§7);
+- presupuesto para escáner o GPU (§10). **Importe: pendiente de decidir.**
+
+Qué se reutilizaría:
+- las mismas herramientas de validación: IoU de silueta y comparación de cotas (§6.3, paso 7);
+- los mismos niveles T2 y T3 (§2);
+- las familias paramétricas y el registro de interfaces (§11) como esqueleto.

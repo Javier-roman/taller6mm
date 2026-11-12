@@ -71,7 +71,10 @@
       "Edit(./**/.dev.vars.preview)",
       "Edit(./**/.dev.vars.production)",
       "Edit(~/.gemini/**)",
-      "Write(~/.gemini/**)"
+      "Write(~/.gemini/**)",
+      "Read(~/.kaggle/**)",
+      "Edit(~/.kaggle/**)",
+      "Write(~/.kaggle/**)"
     ]
   },
   "hooks": {
