@@ -56,7 +56,7 @@ def test_parametro_desconocido() -> None:
 def test_id_y_hash_deterministas() -> None:
     a, b = RAIL.generar({"ranuras": 7}), RAIL.generar({"ranuras": 7.0})
     assert a.id_variante == b.id_variante
-    assert a.id_variante.startswith("rail.picatinny@v1-")
+    assert a.id_variante.startswith("rail.picatinny@v2-")
     assert a.glb() == b.glb()
     assert a.sha256() == b.sha256()
     assert RAIL.generar({"ranuras": 8}).sha256() != a.sha256()

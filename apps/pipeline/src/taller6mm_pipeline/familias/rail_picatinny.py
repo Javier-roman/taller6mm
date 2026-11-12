@@ -51,10 +51,14 @@ def perfil_picatinny(altura_mm: float | None = None) -> Any:
     return Plane.YZ * Polygon(*puntos, align=None)
 
 
-def solido_rail(ranuras: int, altura_mm: float | None = None) -> Any:
-    """Raíl de N ranuras con el origen en su extremo trasero y la base en Y=0."""
+def solido_rail(ranuras: int, altura_mm: float | None = None, longitud_mm: float | None = None) -> Any:
+    """Raíl de N ranuras con el origen en su extremo trasero y la base en Y=0.
+
+    Con `longitud_mm`, el perfil llega hasta esa longitud (el tramo que sobra tras la última ranura queda
+    como un diente más largo), para que el raíl de un guardamanos acabe a ras de su extremo.
+    """
     alto = e.PICATINNY_ALTURA.valor_mm if altura_mm is None else altura_mm
-    cuerpo = extrude(perfil_picatinny(alto), longitud_rail_mm(ranuras))
+    cuerpo = extrude(perfil_picatinny(alto), longitud_rail_mm(ranuras) if longitud_mm is None else longitud_mm)
     ancho_r, prof = e.PICATINNY_ANCHO_RANURA.valor_mm, e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm
     corte = Box(ancho_r, prof + 1, e.PICATINNY_ANCHO.valor_mm + 2, align=(Align.CENTER, Align.MIN, Align.CENTER))
     return cuerpo - [Pos(x, alto - prof, 0) * corte for x in centros_ranuras_mm(ranuras)]
@@ -62,6 +66,7 @@ def solido_rail(ranuras: int, altura_mm: float | None = None) -> Any:
 
 class RailPicatinny(Familia):
     id = "rail.picatinny"
+    version = 2  # v2: los sockets llevan orientación
     nombre = "Raíl Picatinny"
     requiere = ("mlok",)
     ofrece = ("picatinny",)
@@ -78,7 +83,9 @@ class RailPicatinny(Familia):
             "rail.top",
             (0.0, e.PICATINNY_ALTURA.valor_mm, 0.0),
             "picatinny",
-            {"longitud_mm": largo, "paso_mm": e.PICATINNY_PASO.valor_mm, "ranuras": n, "eje": "+X"},
+            (0.0, 1.0, 0.0),
+            (1.0, 0.0, 0.0),
+            {"longitud_mm": largo, "paso_mm": e.PICATINNY_PASO.valor_mm, "ranuras": n},
         )
         derivada = Cota(
             "longitud", largo, "derivada: N x paso + un diente (paso - ancho de ranura)", e.FECHA, Confianza.MEDIA

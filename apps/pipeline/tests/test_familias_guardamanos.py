@@ -116,3 +116,46 @@ def test_las_cotas_del_sku_salen_de_la_ficha_con_su_fuente() -> None:
     assert pieza.nivel == "T2_candidato"
     assert pieza.es_demo is False
     assert np.array_equal(pieza.malla.vertices, GUARDAMANOS.generar(BASE).malla.vertices)  # misma geometría
+
+
+@pytest.mark.parametrize("longitud", [150.0, 254.0, 425.0])
+def test_el_rail_superior_llega_a_ras_de_los_dos_extremos(longitud: float) -> None:
+    pieza = GUARDAMANOS.generar({**BASE, "longitud": longitud, "ranuras_mlok": 3})
+    v = pieza.malla.vertices
+    alto = 20.0 + e.PICATINNY_ALTURA.valor_mm
+    arriba = v[np.isclose(v[:, 1], alto, atol=1e-3)]
+    # El plano superior del raíl empieza en x = 0 y acaba en x = longitud: sin escalón en la punta.
+    assert arriba[:, 0].min() == pytest.approx(0.0, abs=1e-3)
+    assert arriba[:, 0].max() == pytest.approx(longitud, abs=1e-3)
+    # Y las ranuras siguen al paso del estándar: tantas como caben.
+    fondo = v[np.isclose(v[:, 1], alto - e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm, atol=1e-3)]
+    assert len(np.unique(np.round(fondo[:, 0], 3))) == 2 * ranuras_rail_que_caben(longitud)
+
+
+@pytest.mark.parametrize("seccion", ["redonda", "octogonal"])
+def test_rail_superior_false_no_deja_nada_por_encima_del_tubo(seccion: str) -> None:
+    pieza = GUARDAMANOS.generar({**BASE, "longitud": 425.0, "seccion": seccion, "rail_superior": False})
+    assert pieza.malla.caja_mm[1][1] == pytest.approx(20.0, abs=0.01)  # nada sobresale del radio
+    assert all(s.interfaz == "mlok" for s in pieza.sockets)
+    assert "socket.rail.top" not in [s.nombre_nodo for s in pieza.sockets]
+    con_rail = GUARDAMANOS.generar({**BASE, "longitud": 425.0, "seccion": seccion})
+    assert con_rail.malla.caja_mm[1][1] == pytest.approx(20.0 + e.PICATINNY_ALTURA.valor_mm, abs=0.01)
+
+
+def test_la_seccion_octogonal_es_un_octogono_y_la_redonda_un_circulo() -> None:
+    def radios_exteriores(seccion: str) -> np.ndarray:
+        pieza = GUARDAMANOS.generar({**BASE, "seccion": seccion, "rail_superior": False})
+        v = pieza.malla.vertices
+        cara_trasera = v[np.isclose(v[:, 0], 0.0, atol=1e-3)]
+        r = np.hypot(cara_trasera[:, 1], cara_trasera[:, 2])
+        return r[r > 19.5]  # contorno exterior (el interior no pasa de 18,95 mm)
+
+    np.testing.assert_allclose(radios_exteriores("redonda"), 20.0, atol=1e-3)
+    octogonal = np.unique(np.round(radios_exteriores("octogonal"), 3))
+    # Solo hay vértices exteriores en las ocho esquinas, a la distancia del circunradio (apotema / cos 22,5°).
+    np.testing.assert_allclose(octogonal, 20.0 / np.cos(np.pi / 8), atol=1e-3)
+    pieza = GUARDAMANOS.generar({**BASE, "seccion": "octogonal", "rail_superior": False})
+    v = pieza.malla.vertices
+    esquinas = v[np.isclose(v[:, 0], 0.0, atol=1e-3) & (np.hypot(v[:, 1], v[:, 2]) > 19.5)]
+    assert len(np.unique(np.round(esquinas[:, 1:], 2), axis=0)) == 8
+    assert pieza.malla.dimensiones_mm == pytest.approx((254.0, 40.0, 40.0), abs=1e-3)

@@ -27,6 +27,7 @@ def _cilindro_atras(radio: float, largo: float) -> Any:
 
 class TuboCulata(Familia):
     id = "culata.tubo"
+    version = 2  # v2: el socket lleva orientación
     nombre = "Tubo de culata"
     requiere = ("rosca.1_3/16-16",)
     estandares = e.TUBO
@@ -60,7 +61,9 @@ class TuboCulata(Familia):
             "stock",
             (-largo, 0.0, 0.0),
             f"tubo_culata.{p['especificacion']}",
-            {"diametro_mm": diametro, "longitud_mm": largo, "eje": "-X", "referencia": "extremo trasero del tubo"},
+            (-1.0, 0.0, 0.0),  # la culata entra por detrás
+            (0.0, 1.0, 0.0),  # sin eje de deslizamiento transversal: +X local apunta arriba
+            {"diametro_mm": diametro, "longitud_mm": largo, "referencia": "extremo trasero del tubo"},
         )
         return Geometria(cuerpo, (socket,), (), tuple(notas))
 

@@ -24,7 +24,7 @@ def test_genera_archivos_informe_y_manifiesto_deterministas(tmp_path: Path) -> N
         assert datos == (tmp_path / "b" / fila["archivo"]).read_bytes()  # misma entrada, mismos bytes
         if pieza.malla is None:
             assert fila["archivo"].endswith(".t0.svg")
-            assert b"sin dato" in datos
+            assert datos.startswith(b"<svg")
             continue
         doc, _ = leer_glb(datos)
         nombres = [n["name"] for n in doc["nodes"]]

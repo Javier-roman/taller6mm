@@ -50,7 +50,14 @@ def escribir_glb(malla: Malla, sockets: Sequence[Socket], metadatos: Mapping[str
             {
                 "name": s.nombre_nodo,
                 "translation": [_m(v) for v in s.posicion_mm],
-                "extras": {"interfaz": s.interfaz, **dict(s.extras)},
+                # +Z local = normal de montaje (hacia fuera); +X local = eje del raíl o de la ranura.
+                "rotation": list(s.cuaternion()),
+                "extras": {
+                    "interfaz": s.interfaz,
+                    "normal": list(s.normal),
+                    "tangente": list(s.tangente),
+                    **dict(s.extras),
+                },
             }
         )
     doc = {

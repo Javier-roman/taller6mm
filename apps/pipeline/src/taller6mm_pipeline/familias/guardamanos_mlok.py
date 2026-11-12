@@ -41,6 +41,7 @@ def ranuras_rail_que_caben(longitud_mm: float) -> int:
 
 class GuardamanosMlok(Familia):
     id = "guardamanos.mlok"
+    version = 2  # v2: el raíl superior llega a ras del extremo y los sockets llevan orientación
     nombre = "Guardamanos M-LOK"
     requiere = ("guardamanos.ar15",)
     ofrece = ("mlok", "picatinny")
@@ -89,17 +90,18 @@ class GuardamanosMlok(Familia):
             # El raíl se apoya en la tangente superior del tubo; su cuello baja hasta la mitad de la pared.
             y_base = math.sqrt((radio - pared / 2) ** 2 - (e.PICATINNY_ANCHO_PLANO.valor_mm / 2) ** 2)
             y_alto = radio + e.PICATINNY_ALTURA.valor_mm
-            cuerpo = cuerpo + Pos(0, y_base, 0) * solido_rail(n_rail, y_alto - y_base)
+            cuerpo = cuerpo + Pos(0, y_base, 0) * solido_rail(n_rail, y_alto - y_base, largo)
             sockets.append(
                 Socket(
                     "rail.top",
                     (0.0, round(y_alto, 4), 0.0),
                     "picatinny",
+                    (0.0, 1.0, 0.0),
+                    (1.0, 0.0, 0.0),
                     {
                         "longitud_mm": longitud_rail_mm(n_rail),
                         "paso_mm": e.PICATINNY_PASO.valor_mm,
                         "ranuras": n_rail,
-                        "eje": "+X",
                     },
                 )
             )
@@ -121,7 +123,9 @@ class GuardamanosMlok(Familia):
                         f"mlok.{cara}.{i}",
                         (x, ny * radio, nz * radio),
                         "mlok",
-                        {"normal": [nx, ny, nz], "largo_ranura_mm": e.MLOK_LARGO_RANURA.valor_mm},
+                        (float(nx), float(ny), float(nz)),
+                        (1.0, 0.0, 0.0),
+                        {"largo_ranura_mm": e.MLOK_LARGO_RANURA.valor_mm},
                     )
                 )
         return Geometria(cuerpo, tuple(sockets), (), tuple(notas))

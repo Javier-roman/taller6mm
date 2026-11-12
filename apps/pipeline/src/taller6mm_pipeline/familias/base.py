@@ -87,16 +87,59 @@ class Parametro:
 
 @dataclass(frozen=True, slots=True)
 class Socket:
-    """Anclaje que la pieza ofrece: nodo vacío `socket.<slot_key>` (docs/05 §4). Posición en mm, ejes canónicos."""
+    """Anclaje que la pieza ofrece: nodo vacío `socket.<slot_key>` (docs/05 §4). Posición en mm, ejes canónicos.
+
+    Convención de ejes locales del socket (la misma para todas las familias):
+
+    - **+Z local = `normal`**: normal de montaje, hacia fuera de la pieza (por donde llega el accesorio);
+    - **+X local = `tangente`**: eje del raíl o de la ranura (dirección de deslizamiento), perpendicular a la normal;
+    - **+Y local = Z x X** (regla de la mano derecha).
+
+    El nodo glTF lleva esa orientación en `rotation`, y `normal`/`tangente` se repiten en `extras`.
+    """
 
     slot_key: str
     posicion_mm: tuple[float, float, float]
     interfaz: str
+    normal: tuple[float, float, float]
+    tangente: tuple[float, float, float]
     extras: Mapping[str, Valor] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        n, t = self.normal, self.tangente
+        if not (math.isclose(math.hypot(*n), 1.0, abs_tol=1e-6) and math.isclose(math.hypot(*t), 1.0, abs_tol=1e-6)):
+            raise ValueError(f"socket {self.slot_key!r}: normal y tangente deben ser unitarias")
+        if abs(sum(a * b for a, b in zip(n, t, strict=True))) > 1e-6:
+            raise ValueError(f"socket {self.slot_key!r}: la tangente debe ser perpendicular a la normal")
 
     @property
     def nombre_nodo(self) -> str:
         return f"socket.{self.slot_key}"
+
+    @property
+    def ejes(self) -> tuple[tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]]:
+        """Ejes locales (X, Y, Z) expresados en los ejes de la pieza."""
+        (zx, zy, zz), (xx, xy, xz) = self.normal, self.tangente
+        return self.tangente, (zy * xz - zz * xy, zz * xx - zx * xz, zx * xy - zy * xx), self.normal
+
+    def cuaternion(self) -> tuple[float, float, float, float]:
+        """Rotación del nodo como cuaternión glTF (x, y, z, w), con w >= 0 y sin `-0.0`."""
+        (m00, m10, m20), (m01, m11, m21), (m02, m12, m22) = self.ejes  # columnas de la matriz de rotación
+        traza = m00 + m11 + m22
+        if traza > 0:
+            s = math.sqrt(traza + 1.0) * 2
+            q = ((m21 - m12) / s, (m02 - m20) / s, (m10 - m01) / s, s / 4)
+        elif m00 > m11 and m00 > m22:
+            s = math.sqrt(1.0 + m00 - m11 - m22) * 2
+            q = (s / 4, (m01 + m10) / s, (m02 + m20) / s, (m21 - m12) / s)
+        elif m11 > m22:
+            s = math.sqrt(1.0 + m11 - m00 - m22) * 2
+            q = ((m01 + m10) / s, s / 4, (m12 + m21) / s, (m02 - m20) / s)
+        else:
+            s = math.sqrt(1.0 + m22 - m00 - m11) * 2
+            q = ((m02 + m20) / s, (m12 + m21) / s, s / 4, (m10 - m01) / s)
+        signo = -1.0 if (q[3] < -1e-12 or (abs(q[3]) <= 1e-12 and next(v for v in q if abs(v) > 1e-12) < 0)) else 1.0
+        return tuple(round(signo * v, 7) + 0.0 for v in q)  # type: ignore[return-value]
 
 
 @dataclass(frozen=True, slots=True)
@@ -161,6 +204,8 @@ class Pieza:
                 {
                     "nodo": s.nombre_nodo,
                     "posicion_mm": list(s.posicion_mm),
+                    "normal": list(s.normal),
+                    "tangente": list(s.tangente),
                     "interfaz": s.interfaz,
                     **dict(s.extras),
                 }
