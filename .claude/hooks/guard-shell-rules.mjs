@@ -25,7 +25,7 @@ const SECRET = /(?<![\w.-])(?:\.dev\.vars|\.env)(?:\.(?!(?:example|sample|templa
 
 // Credenciales del propio Javi: tokens de wrangler y gh, claves SSH, .npmrc, .git-credentials, .netrc.
 const CREDENTIAL =
-  /(?:\.wrangler[\\/]config\b|xdg\.config[\\/]\.wrangler|[\\/](?:gh|GitHub CLI)[\\/]hosts\.yml|[\\/]\.ssh(?:[\\/]|\b)|\.git-credentials\b|(?<![\w.-])\.npmrc\b|(?<![\w.-])\.netrc\b)/i;
+  /(?:\.wrangler[\\/]config\b|xdg\.config[\\/]\.wrangler|[\\/](?:gh|GitHub CLI)[\\/]hosts\.yml|[\\/]\.ssh(?:[\\/]|\b)|[\\/]\.kaggle(?:[\\/]|\b)|\.git-credentials\b|(?<![\w.-])\.npmrc\b|(?<![\w.-])\.netrc\b)/i;
 const CREDENTIAL_MSG =
   'Las credenciales de Javi (tokens de wrangler y gh, claves SSH, .npmrc, .git-credentials) no se leen ni se muestran.';
 
@@ -167,6 +167,11 @@ const DENY = [
   [
     /\bgh\s+auth\s+(?:token\b|status\b[^;|&]*--show-token)|\bwrangler\s+auth\s+token\b/i,
     'Mostrar tokens de gh o wrangler está bloqueado: Claude Code nunca maneja tus credenciales.',
+  ],
+  // Kaggle: Javi inicia sesión (`kaggle auth login`); Claude usa la herramienta sin ver ni imprimir el token.
+  [
+    /\bkaggle(?:\.exe)?\b[^;|&\n]*\bauth\s+(?:print-access-token|login|revoke)\b|\bKAGGLE_(?:KEY|API_TOKEN)\b/i,
+    'El token de Kaggle no se imprime, no se cambia ni se maneja desde aquí: Javi inicia sesión con `kaggle auth login` y Claude solo usa la herramienta.',
   ],
   [
     /\b(?:iex|Invoke-Expression)\b[^;|]*\b(?:iwr|irm|Invoke-WebRequest|Invoke-RestMethod|DownloadString|curl|wget)\b/i,
