@@ -1,0 +1,1193 @@
+{
+  "esquema": 1,
+  "titulo": "Interfaces",
+  "generado": "2026-11-11",
+  "nota": "Datos de catálogo. Lo desconocido es pendiente; ninguna cota sin fuente (ver catalogo.test.mjs).",
+  "interfaces": [
+    {
+      "id": "picatinny-mil-std-1913",
+      "nombre": "Picatinny (MIL-STD-1913)",
+      "tipo": "raíl",
+      "descripcion": "Raíl de ranuras transversales; estándar de facto en raíles superiores, guardamanos y accesorios. Admite muchas monturas Weaver; al revés, no siempre.",
+      "cotas": [
+        {
+          "nombre": "ancho de ranura",
+          "valor": 5.23,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "0,206 in"
+        },
+        {
+          "nombre": "paso entre ranuras (centro a centro)",
+          "valor": 10.01,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "0,394 in"
+        },
+        {
+          "nombre": "profundidad de ranura",
+          "valor": 3,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "0,118 in"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Picatinny_rail",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "Ancho total del raíl: pendiente (la fuente consultada no lo da). Fuente primaria (norma MIL-STD-1913) pendiente de consulta; confianza media por ser Wikipedia."
+    },
+    {
+      "id": "weaver",
+      "nombre": "Weaver",
+      "tipo": "raíl",
+      "descripcion": "Predecesor del Picatinny con ranuras más estrechas y separación irregular entre centros.",
+      "cotas": [
+        {
+          "nombre": "ancho de ranura",
+          "valor": 4.57,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Weaver_rail_mount",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "0,180 in"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Weaver_rail_mount",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "Separación entre ranuras: no uniforme según la fuente; pendiente."
+    },
+    {
+      "id": "mlok",
+      "nombre": "M-LOK",
+      "tipo": "ranura-guardamanos",
+      "descripcion": "Sistema de ranuras para accesorios en guardamanos, con tuerca en T de cuarto de vuelta.",
+      "cotas": [
+        {
+          "nombre": "longitud de ranura",
+          "valor": 32,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "≈ 1,260 in"
+        },
+        {
+          "nombre": "ancho de ranura",
+          "valor": 7,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "0,276 in"
+        },
+        {
+          "nombre": "separación entre ranuras",
+          "valor": 8,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "0,315 in"
+        },
+        {
+          "nombre": "radio de esquina",
+          "valor": 2.38,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "≈ 0,094 in"
+        },
+        {
+          "nombre": "intervalo entre ranuras (paso)",
+          "valor": 20,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/M-LOK",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "Tornillería habitual según la fuente: #8-32 o 10-24 UNC (EE. UU.), M4 o M5 (internacional). Especificación original de Magpul pendiente de consulta directa."
+    },
+    {
+      "id": "kmod",
+      "nombre": "KeyMod",
+      "tipo": "ranura-guardamanos",
+      "descripcion": "Sistema de orificios con ranura para tuercas de cerradura; hoy menos frecuente que M-LOK.",
+      "cotas": [
+        {
+          "nombre": "diámetro del orificio pasante",
+          "valor": 0.375,
+          "unidad": "in",
+          "fuente": "https://en.wikipedia.org/wiki/KeyMod",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "aproximado (≈ 3/8 in)"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/KeyMod",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "Separación basada en Picatinny según la fuente, sin cifra; dibujos técnicos oficiales pendientes de consulta."
+    },
+    {
+      "id": "rail-11mm-cola-milano",
+      "nombre": "Raíl de cola de milano de 11 mm",
+      "tipo": "raíl",
+      "descripcion": "Carril de óptica frecuente en réplicas de muelle y algunos francotiradores y fusiles clásicos.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente. Se usa mucho en airsoft; confirmar con ficha de fabricante."
+    },
+    {
+      "id": "nato-stanag-4694",
+      "nombre": "Raíl NATO STANAG 4694",
+      "tipo": "raíl",
+      "descripcion": "Evolución del Picatinny con ranura de posición y más especificaciones de resistencia.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente. Relación exacta con MIL-STD-1913 a confirmar con la norma."
+    },
+    {
+      "id": "rail-pistola-glock-universal",
+      "nombre": "Raíl universal de pistola (tipo Glock)",
+      "tipo": "raíl",
+      "descripcion": "Raíl de bajo perfil en el guardamanos de pistola para linternas y láseres; no es idéntico a Picatinny.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "rosca-m14x1-cw",
+      "nombre": "Rosca de boca 14 mm horaria (CW)",
+      "tipo": "rosca",
+      "descripcion": "Rosca M14x1 a derechas; usada en bocachas y silenciadores de algunas réplicas.",
+      "cotas": [
+        {
+          "nombre": "diámetro nominal",
+          "valor": 14,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "M14x1"
+        },
+        {
+          "nombre": "paso",
+          "valor": 1,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "M14x1"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Barrel_threads",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "La fuente confirma M14x1 como rosca común y su uso en airsoft; la nomenclatura «14 mm CW» es de tiendas. Tolerancias pendiente."
+    },
+    {
+      "id": "rosca-m14x1-ccw",
+      "nombre": "Rosca de boca 14 mm antihoraria (CCW)",
+      "tipo": "rosca",
+      "descripcion": "Rosca M14x1 a izquierdas; la más común en el cañón exterior de la mayoría de réplicas AEG.",
+      "cotas": [
+        {
+          "nombre": "diámetro nominal",
+          "valor": 14,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "M14x1 a izquierdas"
+        },
+        {
+          "nombre": "paso",
+          "valor": 1,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "M14x1 a izquierdas"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Barrel_threads",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "La fuente indica que la versión a izquierdas es habitual en airsoft. Tolerancias pendiente. Los listados de tiendas equiparan «14 mm CCW» con M14x1 LH (ver docs/catalogo/interfaces.md)."
+    },
+    {
+      "id": "rosca-m11-ccw",
+      "nombre": "Rosca de boca 11 mm antihoraria",
+      "tipo": "rosca",
+      "descripcion": "Rosca habitual en pistolas GBB de gama Tokyo Marui y similares.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y paso pendiente."
+    },
+    {
+      "id": "rosca-m12-ccw",
+      "nombre": "Rosca de boca 12 mm antihoraria",
+      "tipo": "rosca",
+      "descripcion": "Rosca en algunas pistolas y subfusiles de airsoft; cuidado: no confundir con 14 mm.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y paso pendiente."
+    },
+    {
+      "id": "rosca-1-2x28",
+      "nombre": "Rosca de boca 1/2\"-28",
+      "tipo": "rosca",
+      "descripcion": "Rosca de arma real habitual en réplicas GBBR y en bocachas «de arma real» para AR-15 (calibre .223/9 mm).",
+      "cotas": [
+        {
+          "nombre": "diámetro nominal",
+          "valor": 12.7,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "M12.7x0.907 según la fuente"
+        },
+        {
+          "nombre": "paso",
+          "valor": 0.907,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "28 hilos por pulgada"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Barrel_threads",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "Solo se usa en airsoft cuando la réplica la trae de serie (algunas GBBR, HPA)."
+    },
+    {
+      "id": "rosca-5-8x24",
+      "nombre": "Rosca de boca 5/8\"-24",
+      "tipo": "rosca",
+      "descripcion": "Rosca de arma real para 7,62 mm; aparece en réplicas de gama alta (DMR, SCAR-H).",
+      "cotas": [
+        {
+          "nombre": "diámetro nominal",
+          "valor": 15.88,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "M15.88x1.058 según la fuente"
+        },
+        {
+          "nombre": "paso",
+          "valor": 1.058,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "24 hilos por pulgada"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Barrel_threads",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "Cuidado con confundir con 14 mm CCW; la compatibilidad se declara por interfaz, no por apariencia."
+    },
+    {
+      "id": "tubo-culata-mil-spec",
+      "nombre": "Tubo de culata mil-spec (AR-15)",
+      "tipo": "tubo-culata",
+      "descripcion": "Tubo de culata de diámetro exterior más pequeño que el comercial; las culatas se fabrican para uno u otro.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cota pendiente: las cifras de tiendas discrepan (≈ 1,146–1,148 in); se espera la norma o la ficha del fabricante."
+    },
+    {
+      "id": "tubo-culata-comercial",
+      "nombre": "Tubo de culata comercial (AR-15)",
+      "tipo": "tubo-culata",
+      "descripcion": "Tubo de culata de diámetro exterior mayor que mil-spec; no es intercambiable con culatas mil-spec.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cota pendiente: tiendas indican ≈ 1,17 in, sin fuente primaria."
+    },
+    {
+      "id": "tubo-culata-airsoft-m4-ligero",
+      "nombre": "Tubo de culata M4 de AEG (cableado dentro)",
+      "tipo": "tubo-culata",
+      "descripcion": "Muchos AEG M4 llevan el cable de batería o el cargador interno en el tubo; no equivale a uno de arma real.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente. Se declara por fabricante y modelo."
+    },
+    {
+      "id": "montaje-culata-ak",
+      "nombre": "Montaje de culata AK (fija, madera/polímero)",
+      "tipo": "montaje-culata",
+      "descripcion": "Culata fija AK por tornillos.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "montaje-culata-ak-plegable-lateral",
+      "nombre": "Montaje de culata AK plegable lateral",
+      "tipo": "montaje-culata",
+      "descripcion": "Culatas plegables AKS/AK74M; el soporte forma parte del cuerpo.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "montaje-culata-mp5",
+      "nombre": "Montaje de culata MP5 (A2/A3/SD)",
+      "tipo": "montaje-culata",
+      "descripcion": "Culatas MP5 con pasador y anclaje de cuerpo.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "montaje-culata-g3",
+      "nombre": "Montaje de culata G3",
+      "tipo": "montaje-culata",
+      "descripcion": "Culatas G3/HK51.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "montaje-culata-g36",
+      "nombre": "Montaje de culata G36",
+      "tipo": "montaje-culata",
+      "descripcion": "Culata G36 integrada en el cuerpo.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "montaje-culata-vsr",
+      "nombre": "Montaje de culata VSR-10 / L96",
+      "tipo": "montaje-culata",
+      "descripcion": "Culatas de francotirador de muelle; chasis y culatas intercambiables.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "anclaje-correa-qd-socket",
+      "nombre": "Anclaje de correa QD (socket / «sling swivel»)",
+      "tipo": "anclaje",
+      "descripcion": "Anclaje de acoplamiento rápido con zócalo.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "anclaje-correa-qd-picatinny",
+      "nombre": "Anclaje de correa en Picatinny / M-LOK",
+      "tipo": "anclaje",
+      "descripcion": "Puntos de correa que se montan en raíl o ranura.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente; depende de las interfaces de raíl."
+    },
+    {
+      "id": "anclaje-linterna-picatinny",
+      "nombre": "Anclaje de linterna sobre Picatinny",
+      "tipo": "anclaje",
+      "descripcion": "Montaje de linterna y láser sobre raíl.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "anclaje-linterna-scout",
+      "nombre": "Montura «scout» para linterna",
+      "tipo": "anclaje",
+      "descripcion": "Montura tipo scout para linternas de arma.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "anillo-optica-25-4mm",
+      "nombre": "Anillo de óptica de 25,4 mm (1 in)",
+      "tipo": "óptica",
+      "descripcion": "Tubo de visor de 1 pulgada.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "anillo-optica-30mm",
+      "nombre": "Anillo de óptica de 30 mm",
+      "tipo": "óptica",
+      "descripcion": "Tubo de visor de 30 mm.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "anillo-optica-34mm",
+      "nombre": "Anillo de óptica de 34 mm",
+      "tipo": "óptica",
+      "descripcion": "Tubo de visor de 34 mm.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "huella-rmr",
+      "nombre": "Huella Trijicon RMR",
+      "tipo": "óptica",
+      "descripcion": "Huella de red dot de pistola.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "huella-t1-micro",
+      "nombre": "Huella Aimpoint Micro T-1",
+      "tipo": "óptica",
+      "descripcion": "Huella de red dot compacto.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "huella-docter-rms",
+      "nombre": "Huella Docter / Noblex / Meopta / Shield RMSc",
+      "tipo": "óptica",
+      "descripcion": "Huellas de mini-red-dots.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "huella-delta-point-pro",
+      "nombre": "Huella Leupold DeltaPoint Pro",
+      "tipo": "óptica",
+      "descripcion": "Huella de red dot de pistola.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "huella-holosun-k",
+      "nombre": "Huella Holosun K / 407K",
+      "tipo": "óptica",
+      "descripcion": "Huella de red dot de serie K.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "corredera-glock-rmr",
+      "nombre": "Corte de corredera para óptica (tipo Glock MOS)",
+      "tipo": "pistola",
+      "descripcion": "Corte en corredera para placas de adaptación de red dot.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente."
+    },
+    {
+      "id": "conector-bateria-mini-tamiya",
+      "nombre": "Conector Mini Tamiya",
+      "tipo": "batería",
+      "descripcion": "Conector habitual de baterías de AEG de serie.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Pendiente de fuente."
+    },
+    {
+      "id": "conector-bateria-tamiya",
+      "nombre": "Conector Tamiya grande",
+      "tipo": "batería",
+      "descripcion": "Conector de baterías.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Pendiente de fuente."
+    },
+    {
+      "id": "conector-bateria-deans",
+      "nombre": "Conector Deans (T)",
+      "tipo": "batería",
+      "descripcion": "Conector usado en AEG de gama alta.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Pendiente de fuente."
+    },
+    {
+      "id": "gearbox-ver2",
+      "nombre": "Gearbox Ver. 2",
+      "tipo": "interno",
+      "descripcion": "Gearbox estándar de la mayoría de AEG tipo M4.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente (fase de internos)."
+    },
+    {
+      "id": "gearbox-ver3",
+      "nombre": "Gearbox Ver. 3",
+      "tipo": "interno",
+      "descripcion": "Gearbox típico de AK y plataformas similares.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente (fase de internos)."
+    },
+    {
+      "id": "gearbox-ver7",
+      "nombre": "Gearbox Ver. 7",
+      "tipo": "interno",
+      "descripcion": "Variante de Ver. 2 con cableado distinto.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas pendiente (fase de internos)."
+    },
+    {
+      "id": "municion-bb-6mm",
+      "nombre": "Munición BB de 6 mm",
+      "tipo": "consumible",
+      "descripcion": "Calibre de munición estándar de airsoft.",
+      "cotas": [
+        {
+          "nombre": "diámetro",
+          "valor": 6,
+          "unidad": "mm",
+          "fuente": "https://en.wikipedia.org/wiki/Airsoft_gun",
+          "fecha_consulta": "2026-11-11",
+          "confianza": "media",
+          "nota": "la fuente cita 6 mm para la bola"
+        }
+      ],
+      "estado": "verificado",
+      "fuente": {
+        "url": "https://en.wikipedia.org/wiki/Airsoft_gun",
+        "fecha_consulta": "2026-11-11"
+      },
+      "confianza": "media",
+      "notas": "El diámetro real de bolas de 6 mm es nominal; cañones interiores, pendiente."
+    },
+    {
+      "id": "pozo-stanag-m4",
+      "nombre": "Pozo de cargador: AR-15 / M4 (tipo STANAG)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-ak",
+      "nombre": "Pozo de cargador: AK (cargador curvo)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mp5",
+      "nombre": "Pozo de cargador: MP5",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-g3",
+      "nombre": "Pozo de cargador: G3 / HK51 / PSG-1",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-g36",
+      "nombre": "Pozo de cargador: G36",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mp7",
+      "nombre": "Pozo de cargador: MP7",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-ump",
+      "nombre": "Pozo de cargador: UMP",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-p90",
+      "nombre": "Pozo de cargador: P90",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-aug",
+      "nombre": "Pozo de cargador: AUG",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-famas",
+      "nombre": "Pozo de cargador: FAMAS",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-scar-l",
+      "nombre": "Pozo de cargador: SCAR-L",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-scar-h",
+      "nombre": "Pozo de cargador: SCAR-H",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mpx",
+      "nombre": "Pozo de cargador: MPX",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mcx",
+      "nombre": "Pozo de cargador: MCX / Rattler",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-acr",
+      "nombre": "Pozo de cargador: ACR / Masada",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-sig55x",
+      "nombre": "Pozo de cargador: SIG 55x / 516",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-vss",
+      "nombre": "Pozo de cargador: VSS / AS VAL",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-honey-badger",
+      "nombre": "Pozo de cargador: Honey Badger",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-scorpion",
+      "nombre": "Pozo de cargador: Scorpion EVO",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-uzi",
+      "nombre": "Pozo de cargador: Uzi",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mac10",
+      "nombre": "Pozo de cargador: MAC-10 / Ingram",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-vector",
+      "nombre": "Pozo de cargador: KRISS Vector",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mp9",
+      "nombre": "Pozo de cargador: MP9 / TP9",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-m14",
+      "nombre": "Pozo de cargador: M14",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-fal",
+      "nombre": "Pozo de cargador: FAL",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-m249-caja",
+      "nombre": "Pozo de cargador: M249 / Mk46 (caja)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-pkm-caja",
+      "nombre": "Pozo de cargador: PKM (caja)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mg42-cinta",
+      "nombre": "Pozo de cargador: MG42 (cinta)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-bizon",
+      "nombre": "Pozo de cargador: PP-19 Bizon",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-vz58",
+      "nombre": "Pozo de cargador: Vz. 58",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-tavor",
+      "nombre": "Pozo de cargador: Tavor TAR-21",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-bren2",
+      "nombre": "Pozo de cargador: Bren 2",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-l85",
+      "nombre": "Pozo de cargador: L85 / SA80",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-m4-hpa",
+      "nombre": "Pozo de cargador: M4 HPA (chasis Wolverine)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-glock-gbb",
+      "nombre": "Pozo de cargador: Glock (GBB)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-1911-gbb",
+      "nombre": "Pozo de cargador: 1911 (GBB)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-hi-capa",
+      "nombre": "Pozo de cargador: Hi-Capa 5.1 / 4.3 / 7.0 (GBB)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-m9",
+      "nombre": "Pozo de cargador: Beretta M9 / 92 (GBB)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-p226",
+      "nombre": "Pozo de cargador: SIG P226 / P229 / P320 (GBB)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-usp",
+      "nombre": "Pozo de cargador: HK USP / USP Compact",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-cz75",
+      "nombre": "Pozo de cargador: CZ 75 / Shadow 2 / P-09",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-deagle",
+      "nombre": "Pozo de cargador: Desert Eagle",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-p99",
+      "nombre": "Pozo de cargador: Walther P99 / PPQ",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-mp-pistola",
+      "nombre": "Pozo de cargador: S&W M&P / Springfield XD(M)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-five-seven",
+      "nombre": "Pozo de cargador: FN Five-seveN",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-revolver-cartucho",
+      "nombre": "Pozo de cargador: Revólver (cartuchos o speedloader)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    },
+    {
+      "id": "pozo-escopeta-cartucho",
+      "nombre": "Pozo de cargador: Escopeta (cartuchos)",
+      "tipo": "pozo-cargador",
+      "descripcion": "Interfaz de cargador de la plataforma; la compatibilidad entre marcas se declara por ficha de fabricante.",
+      "cotas": [],
+      "estado": "pendiente",
+      "fuente": null,
+      "confianza": null,
+      "notas": "Cotas y equivalencias entre marcas pendiente."
+    }
+  ]
+}
