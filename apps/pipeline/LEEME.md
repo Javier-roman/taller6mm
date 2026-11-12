@@ -20,3 +20,42 @@ Dependencia de ejecución: `numpy` (fijada). Módulos en `src/taller6mm_pipeline
 - `plano_t0.py`: `generar_plano_svg(ficha)` devuelve el plano T0 en SVG, determinista y con «sin dato» en las cotas `null`.
 - `validacion.py`: `iou_silueta`, `binarizar` y `validar(siluetas, cotas)` aplican el criterio T2 (IoU ≥ 0,95 en ≥ 2 vistas; cotas ≤ 1 % o ≤ 2 mm).
 - `informe.py`: `generar_informe_html(titulo, resultado, siluetas)` crea un HTML autocontenido con superposición, IoU, deslizador antes/después y tabla de cotas.
+
+## Familias paramétricas (`src/taller6mm_pipeline/familias/`)
+
+Generadores por código de piezas estándar (docs/05 §4 y §6.3): parámetros en mm → sólido con [build123d](https://build123d.readthedocs.io/) 0.13.0 (Apache-2.0, fijado) → GLB propio y determinista (escena en metros, nodo `pieza` y un nodo vacío `socket.<slotKey>` por anclaje, metadatos en `extras`).
+
+| Familia (`id`) | Archivo | Estándar verificado | Cotas del SKU |
+|---|---|---|---|
+| `rail.picatinny` | `rail_picatinny.py` | MIL-STD-1913: ranura 5,23 mm, paso 10,01, profundidad 3,00, ancho 21,21, plano 15,67, apoyos a 45° | — (solo nº de ranuras) |
+| `guardamanos.mlok` | `guardamanos_mlok.py` | M-LOK: ranura 32 × 7 mm, separación 8, radio 2,38 (confianza media) + Picatinny | longitud, diámetro, pared |
+| `boca.bocacha`, `boca.silenciador` | `boca.py` | Rosca M14x1 a derechas (CW) o a izquierdas (CCW) | longitud, diámetros, ranuras |
+| `culata.tubo`, `culata.telescopica` | `culata.py` | Tubo mil-spec 29,16 mm y comercial 29,67 mm; rosca 1 3/16"-16 | longitudes, altura, ancho, pared |
+| `cargador.m4` | `cargador_m4.py` | Ninguno verificable: sin cotas del SKU sale T0 | largo, ancho, altura |
+
+```bash
+uv run python -m taller6mm_pipeline.familias.muestras   # tanda de 40 variantes + informe.html en salida/ (ignorada por git)
+```
+
+```python
+from taller6mm_pipeline.familias import FAMILIAS
+
+pieza = FAMILIAS["rail.picatinny"].generar({"ranuras": 13})  # barrido: es_demo=True
+pieza = FAMILIAS["guardamanos.mlok"].generar({"ranuras_mlok": 5}, ficha=ficha_del_sku)  # cotas del SKU desde la ficha
+pieza.glb()
+pieza.sha256()
+pieza.metadatos()
+pieza.ficha()
+```
+
+Reglas: las cotas de estándar viven en `estandares.py` con fuente, fecha y confianza; las de cada SKU llegan por una `Ficha` (la clave de la cota es la del parámetro). Si falta una cota crítica, la pieza sale **T0 sin malla** con el parámetro `null`; si falta una no crítica, esa parte no se modela y queda anotada. El nivel con malla es `T2_candidato`: aún debe pasar `validacion.py` y el `revisor-fidelidad`. Los GLB salen sin optimizar (Meshopt, KTX2 y LODs los pone gltf-transform después).
+
+### Cómo añadir una familia
+
+1. Verifica las cotas de estándar en una fuente pública y añádelas a `estandares.py` como `Cota` (valor en mm, URL, fecha, confianza). Lo que no puedas verificar va a `PENDIENTES` con valor `None`: no lo estimes.
+2. Copia `cargador_m4.py` (el caso mínimo) o `boca.py` (con cotas opcionales) a `familias/<nombre>.py` y crea una subclase de `Familia` con `id` (`grupo.nombre`, estable), `nombre`, `material`, `requiere`/`ofrece` (o `requiere_de`/`ofrece_de` si dependen de los parámetros) y `estandares`.
+3. Declara `parametros` con `Parametro(clave, descripción, tipo, unidad, minimo, maximo)`. Marca `de_sku=True` lo que dependa del producto y `critico=False` lo que pueda faltar sin impedir la geometría. Las validaciones cruzadas van en `comprobar`.
+4. Implementa `construir(p)`: sólido en mm con los ejes canónicos (+X boca, +Y arriba, +Z izquierda del tirador), origen en el punto de montaje (documéntalo en el docstring) y devuelve `Geometria(solido, sockets, cotas_derivadas, notas)`. Cada `Socket(slot_key, posicion_mm, interfaz, extras)` usa las claves de ranura de docs/03 §3.1. Anota en `notas` toda simplificación.
+5. Regístrala en `FAMILIAS` (`familias/__init__.py`) y añade sus variantes a `tanda()` en `muestras.py`.
+6. Escribe `tests/test_familias_<nombre>.py` con: cotas del estándar contra la fuente, dimensiones de la malla, parámetros fuera de rango, hash estable, nodos del GLB releído y el caso T0.
+7. Si cambias la geometría de una familia ya publicada, sube su `version` (cambia el `id_variante`). Termina con `uv run ruff check`, `uv run ruff format` y `uv run pytest`.
