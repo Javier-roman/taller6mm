@@ -95,6 +95,8 @@ Nota: RMBG-2.0 (BRIA) es **no comercial** salvo que se compre licencia. No usar.
    - informe HTML con superposición y deslizador antes/después.
 8. Revisión: subagente `revisor-fidelidad` y aprobación humana en la Trastienda.
 
+**Puerta de realismo** (`apps/pipeline/src/taller6mm_pipeline/realismo.py`): ningún modelo 3D se publica como «fiel» sin IoU ≥ 0,95 en ≥ 2 vistas licenciadas y cotas clave a ≤ 1 % o ≤ 2 mm; si no, baja a T1/T0 y no se publica como 3D.
+
 ### 6.4 T3 · Escaneado y verificado
 - **Fotogrametría**:
   1. Entre 80 y 150 fotos alrededor de la réplica, con luz difusa y una **hoja de marcadores ArUco impresa**, que da escala y pose automáticas.
