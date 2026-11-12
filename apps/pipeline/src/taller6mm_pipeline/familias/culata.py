@@ -1,8 +1,8 @@
-"""Familias de culata AR-15/M4: tubo de culata (mil-spec o comercial) y culata telescópica simple.
+"""Familias de culata AR-15/M4: tubo de culata (mil-spec o comercial) y culata telescópica.
 
 Origen del tubo: centro de su cara delantera (la del receptor), sobre el eje; el tubo va hacia -X.
-Origen de la culata: centro de la boca de su alojamiento, sobre el eje del tubo; la culata va hacia -X.
-El diámetro del tubo es un estándar; las longitudes y la forma de la culata son cotas del SKU.
+El diámetro del tubo es un estándar. La culata telescópica es **solo T0**: registra parámetros, interfaz y
+cotas del SKU (plano T0 y ficha), pero no genera malla porque su forma no tiene cotas verificables.
 """
 
 from __future__ import annotations
@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Circle, Plane, Polygon, Pos, extrude
+from build123d import Circle, Plane, Pos, extrude
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
@@ -69,6 +69,10 @@ class CulataTelescopica(Familia):
     id = "culata.telescopica"
     nombre = "Culata telescópica"
     material = "mat.polimero_negro"
+    motivo_sin_malla = (
+        "Sin malla: el cuerpo de una culata (vaciados, almohadilla, quilla, palanca) no tiene cotas públicas "
+        "verificables; solo lo está el diámetro del tubo. Hace falta un plano o un escaneo con licencia del SKU."
+    )
     parametros = (
         _ESPECIFICACION,
         Parametro("longitud", "Longitud total", float, "mm", minimo=100, maximo=300, de_sku=True),
@@ -94,14 +98,4 @@ class CulataTelescopica(Familia):
         return f"Culata telescópica para tubo {p['especificacion']}, {largo}"
 
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
-        largo, altura, ancho, pared = (float(p[k]) for k in ("longitud", "altura", "ancho", "pared"))
-        diametro = e.TUBO_DIAMETROS[str(p["especificacion"])].valor_mm
-        arriba = diametro / 2 + pared
-        # Perfil lateral (plano XY): funda del tubo arriba y cuña hasta la cantonera, que cae por detrás.
-        perfil = Polygon((0, arriba), (-largo, arriba), (-largo, arriba - altura), (0, -arriba), align=None)
-        cuerpo = extrude(perfil, ancho / 2, both=True) - _cilindro_atras(diametro / 2, largo - pared)
-        notas = (
-            "Forma simplificada (funda y cuña): la silueta real depende del SKU.",
-            "Alojamiento con el diámetro nominal del tubo: la holgura no está verificada.",
-        )
-        return Geometria(cuerpo, (), (), notas)
+        raise NotImplementedError(self.motivo_sin_malla)

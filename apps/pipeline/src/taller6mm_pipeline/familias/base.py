@@ -276,6 +276,9 @@ class Familia(ABC):
             "ofrece": self.ofrece_de(p),
             "pendientes": tuple(pendientes),
         }
+        if self.motivo_sin_malla is not None:
+            comun["pendientes"] = (*pendientes, "geometria")
+            return Pieza(nivel="T0", cotas=tuple(cotas), notas=(self.motivo_sin_malla,), **comun)
         if criticos_sin_dato:
             return Pieza(nivel="T0", cotas=tuple(cotas), notas=(), **comun)
         geo = self.construir(p)

@@ -1,16 +1,14 @@
-"""Familia: cargador de M4 por capacidad.
+"""Familia: cargador de M4 por capacidad. **Solo T0**: no hay cotas verificables para una geometría creíble.
 
-Origen: centro de la cara superior (la que entra en el brocal); el cargador baja hacia -Y, con el largo en X
-y el ancho en Z. No hay una fuente pública verificable de las cotas exteriores (el STANAG 4179 no publica el
-plano y cada fabricante de airsoft varía): las tres son cotas del SKU y, sin ellas, la pieza sale T0. La
-capacidad es un dato de la variante y **no** se convierte en medidas.
+No existe una fuente pública verificable de las cotas exteriores (el STANAG 4179 no publica el plano y cada
+fabricante de airsoft varía), ni de la curvatura, los labios o la retenida. Una caja recta con tres medidas
+no es un cargador: hasta tener un plano o un escaneo con licencia, la familia registra los parámetros y las
+cotas del SKU (para el plano T0 y la ficha) y **no genera malla**. La capacidad nunca se convierte en medidas.
 """
 
 from __future__ import annotations
 
 from collections.abc import Mapping
-
-from build123d import Align, Box
 
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, Valor
 
@@ -19,6 +17,10 @@ class CargadorM4(Familia):
     id = "cargador.m4"
     nombre = "Cargador de M4"
     material = "mat.polimero_negro"
+    motivo_sin_malla = (
+        "Sin malla: curvatura, labios, retenida y sección del cargador no tienen fuente pública verificable "
+        "(el STANAG 4179 no publica el plano). Hace falta un plano o un escaneo con licencia."
+    )
     parametros = (
         Parametro("capacidad", "Capacidad en bolas", int, "ud", minimo=20, maximo=600),
         Parametro("sistema", "Sistema de la réplica", str, opciones=("aeg", "gbb"), por_defecto="aeg"),
@@ -34,7 +36,4 @@ class CargadorM4(Familia):
         return f"Cargador de M4 ({p['sistema']}) de {p['capacidad']} bolas"
 
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
-        largo, ancho, altura = float(p["largo"]), float(p["ancho"]), float(p["altura"])
-        cuerpo = Box(largo, altura, ancho, align=(Align.CENTER, Align.MAX, Align.CENTER))
-        notas = ("Prisma recto: curvatura, labios y retenida sin verificar, no se modelan.",)
-        return Geometria(cuerpo, (), (), notas)
+        raise NotImplementedError(self.motivo_sin_malla)

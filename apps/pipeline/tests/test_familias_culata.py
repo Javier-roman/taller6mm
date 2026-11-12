@@ -40,10 +40,19 @@ def test_tubo_con_tramo_roscado() -> None:
 def test_culata_encaja_en_su_tubo() -> None:
     pieza = CULATA.generar(CUL)
     assert pieza.requiere == ("tubo_culata.milspec",)
-    assert pieza.malla.dimensiones_mm == pytest.approx((180.0, 120.0, 40.0), abs=1e-3)
     assert CULATA.generar({**CUL, "especificacion": "comercial"}).requiere == ("tubo_culata.comercial",)
-    assert pieza.sha256() == CULATA.generar(CUL).sha256()
-    assert pieza.sha256() != CULATA.generar({**CUL, "especificacion": "comercial"}).sha256()
+    assert pieza.id_variante != CULATA.generar({**CUL, "especificacion": "comercial"}).id_variante
+
+
+def test_culata_es_solo_t0_aunque_tenga_todas_las_cotas() -> None:
+    pieza = CULATA.generar(CUL)
+    assert pieza.nivel == "T0"  # un trapecio macizo no es una culata: sin forma verificada no hay malla
+    assert pieza.malla is None
+    assert pieza.pendientes == ("geometria",)
+    assert "Sin malla" in pieza.notas[0]
+    assert pieza.ficha().cota("longitud").valor_mm == 180.0
+    with pytest.raises(ValueError, match="T0"):
+        pieza.glb()
 
 
 @pytest.mark.parametrize(
