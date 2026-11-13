@@ -6,7 +6,7 @@ readme = "LEEME.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "build123d==0.13.0",
-    "numpy>=2.5.4",
+    "numpy==2.5.4",
 ]
 
 [dependency-groups]

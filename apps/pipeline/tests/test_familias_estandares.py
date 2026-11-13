@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 from taller6mm_pipeline.familias import FAMILIAS
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.muestras import tanda
@@ -69,3 +71,10 @@ def test_cada_id_de_interfaz_usado_existe_en_el_catalogo() -> None:
 
 def test_las_familias_no_declaran_el_nodo_de_un_estandar_inexistente() -> None:
     assert "guardamanos.ar15" not in FAMILIAS["guardamanos.mlok"].requiere
+
+
+def test_el_id_de_variante_cambia_si_cambia_un_estandar(monkeypatch: pytest.MonkeyPatch) -> None:
+    rail = FAMILIAS["rail.picatinny"]
+    antes = rail.id_variante({"ranuras": 13})
+    monkeypatch.setattr(type(rail), "estandares", (Cota("picatinny.paso", 10.0, "x", "2026-11-11", Confianza.BAJA),))
+    assert rail.id_variante({"ranuras": 13}) != antes

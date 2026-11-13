@@ -745,7 +745,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "build123d", specifier = "==0.13.0" },
-    { name = "numpy", specifier = ">=2.5.4" },
+    { name = "numpy", specifier = "==2.5.4" },
 ]
 
 [package.metadata.requires-dev]

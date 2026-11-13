@@ -15,7 +15,7 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 ## Puerta de realismo
 
 - `taller6mm_pipeline.realismo.decidir_nivel(cotas=…, vistas=…, tiene_malla=…, malla=…)` devuelve el nivel publicable honesto (T0–T3), si el 3D es publicable y los motivos.
-- T2 exige IoU de silueta ≥ 0,95 en ≥ 2 vistas con licencia publicable y cotas clave a ≤ 1 % o ≤ 2 mm; T3 además pide verificación física.
+- T2 exige IoU de silueta ≥ 0,95 en ≥ 2 vistas con licencia publicable y cotas clave a ≤ 1 % o ≤ 2 mm; T3 además pide verificación física (el marco de familias nunca la da).
 - Una vista con una sola pasada es T1; sin vistas, o con una malla que no pasa, es T0 y `publicable_3d = False`.
 - Las fotos con licencia no publicable solo son referencia interna y no suben de nivel; una malla «caja» (volumen/bbox > 0,9 sin vaciados) se marca `sospechosa_de_cubo`.
 - `explicar(decision)` da el texto «Nivel T0 porque…» para la Trastienda y el CI.
@@ -57,7 +57,7 @@ pieza.metadatos()
 pieza.ficha()
 ```
 
-Reglas: las cotas de estándar viven en `estandares.py` con fuente, fecha y confianza; las de cada SKU llegan por una `Ficha` (la clave de la cota es la del parámetro). Si falta una cota crítica, la pieza sale **T0 sin malla** con el parámetro `null`; si falta una no crítica, esa parte no se modela y queda anotada. El `nivel` de cada pieza lo fija la **puerta de realismo** (`realismo.decidir_nivel`, llamada desde `Familia.generar`): sin vistas de referencia licenciadas, una malla es **T0 y `publicable_3d = False`** (queda como candidata), con una vista que pasa es T1, con dos (IoU ≥ 0,95) y la caja envolvente dentro de tolerancia es T2, y solo `verificado_fisicamente=True` da T3. Las vistas se pasan con `generar(params, vistas=[VistaIoU(...)])`; `construir` debe declarar `dimensiones_nominales_mm` (largo, alto, ancho esperados) y `vaciados` en su `Geometria`. Después queda el `revisor-fidelidad`. Los GLB salen sin optimizar (Meshopt, KTX2 y LODs los pone gltf-transform después). Una familia sin cotas verificables para una forma creíble declara `motivo_sin_malla` y **solo** produce T0 (parámetros, interfaz y cotas para el plano): mejor ninguna malla que una caja de juguete.
+Reglas: las cotas de estándar viven en `estandares.py` con fuente, fecha y confianza; las de cada SKU llegan por una `Ficha` (la clave de la cota es la del parámetro). Si falta una cota crítica, la pieza sale **T0 sin malla** con el parámetro `null`; si falta una no crítica, esa parte no se modela y queda anotada. El `nivel` de cada pieza lo fija la **puerta de realismo** (`realismo.decidir_nivel`, llamada desde `Familia.generar`): sin vistas de referencia licenciadas, una malla es **T0 y `publicable_3d = False`** (queda como candidata), con una vista que pasa es T1 y con dos (IoU ≥ 0,95) y la caja envolvente dentro de tolerancia podría ser T2. **Ninguna familia da T3**: la verificación física (escaneo, CAD oficial o calibre) es externa y no se puede afirmar desde `generar`. Además, una pieza `es_demo`, con cotas pendientes (entran en la puerta como desconocidas), con simplificaciones declaradas (`notas`) o con cotas de confianza baja queda en **T1 como mucho y `publicable_3d = False`** (`_limitar` en `base.py`); por eso hoy ninguna familia llega a T2 y la comparación de la malla con los nominales del propio generador solo prueba coherencia interna, no fidelidad. Las vistas se pasan con `generar(params, vistas=[VistaIoU(...)])`; `construir` debe declarar `dimensiones_nominales_mm` (largo, alto, ancho esperados) y `vaciados` en su `Geometria`. Después queda el `revisor-fidelidad`. Los GLB salen sin optimizar (Meshopt, KTX2 y LODs los pone gltf-transform después). Una familia sin cotas verificables para una forma creíble declara `motivo_sin_malla` y **solo** produce T0 (parámetros, interfaz y cotas para el plano): mejor ninguna malla que una caja de juguete.
 
 **Convención de ejes de los sockets** (fijada en `Socket` y en `rotation` del nodo glTF, probada en `tests/test_familias_sockets.py`): **+Z local = normal de montaje, hacia fuera de la pieza**; **+X local = eje del raíl o de la ranura** (dirección de deslizamiento); +Y local = Z × X. Ejemplos: `rail.top` tiene Z = +Y de la pieza y X = +X; `mlok.side.l` tiene Z = +Z; `mlok.side.r`, Z = −Z; `mlok.bottom`, Z = −Y.
 
@@ -72,3 +72,11 @@ Salud de la malla: `tests/test_familias_malla.py` exige para todas las familias 
 5. Regístrala en `FAMILIAS` (`familias/__init__.py`) y añade sus variantes a `tanda()` en `muestras.py`.
 6. Escribe `tests/test_familias_<nombre>.py` con: cotas del estándar contra la fuente, dimensiones de la malla, parámetros fuera de rango, hash estable, nodos del GLB releído y el caso T0. Añade un caso a `CASOS` en `tests/test_familias_regresion.py`; la malla cerrada y los sockets se comprueban solos al estar en la tanda.
 7. Si cambias la geometría de una familia ya publicada, sube su `version` (cambia el `id_variante`). Termina con `uv run ruff check`, `uv run ruff format` y `uv run pytest`.
+
+## Pendiente (revisión de fidelidad)
+
+- **Material del GLB** (`glb.py`): los factores PBR son fijos (negro 0,08, metálico 0, rugosidad 0,6) para cualquier material; un anodizado debería ser metálico y los polímeros no. Falta un mapa `material → PBR` propio de cada familia.
+- **Optimización**: los GLB salen sin Meshopt ni LOD, y los más grandes (guardamanos largo, ≈ 264 KB) superan el presupuesto de 250 KB de accesorio (docs/05 §4); hay que pasarlos por gltf-transform.
+- **M-LOK en superficie curva**: las ranuras se cortan rectas y planas en tubos redondos u octogonales; la ranura real se adapta a la pared curva.
+- **Tubo de culata**: diámetro exterior y rosca son del SKU (el catálogo los deja pendientes); no se usan cifras de AR-15 reales.
+- **Unión guardamanos-receptor**: `catalogo/interfaces.json` aún no tiene su id, así que `guardamanos.mlok` no declara `requiere`.

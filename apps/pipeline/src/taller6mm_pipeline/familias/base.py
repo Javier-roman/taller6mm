@@ -306,8 +306,15 @@ class Familia(ABC):
         """Validaciones cruzadas entre parámetros (p. ej. que las ranuras quepan en la longitud)."""
 
     def id_variante(self, params: Mapping[str, Valor]) -> str:
-        """Id estable: familia, versión y hash de los parámetros normalizados."""
-        canon = json.dumps(self.validar(params), sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        """Id estable: familia, versión y hash de los parámetros normalizados y de las cotas de estándar.
+
+        Los estándares entran en el hash: si se corrige una cota (p. ej. 0,835 in), la variante cambia de id.
+        """
+        normal = {
+            "parametros": self.validar(params),
+            "estandares": [[c.clave, c.valor_mm, str(c.confianza)] for c in self.estandares],
+        }
+        canon = json.dumps(normal, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
         return f"{self.id}@v{self.version}-{hashlib.sha256(canon.encode()).hexdigest()[:12]}"
 
     def params_desde_ficha(self, ficha: Ficha) -> dict[str, Valor]:
