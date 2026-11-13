@@ -62,5 +62,7 @@ worker-configuration.d.ts
 **/test-results/
 **/playwright-report/
 
+# Muestras generadas por las familias paramétricas (apps/pipeline)
+apps/pipeline/salida/
 # Copias de trabajo de los subagentes (git worktree)
 .claude/worktrees/
