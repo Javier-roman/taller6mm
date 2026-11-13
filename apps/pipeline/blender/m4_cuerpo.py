@@ -85,7 +85,7 @@ BASE_Z_SUELO_RAIL = 0.254  # fondo de las ranuras del raíl de la base
 
 # Registro foto <-> modelo (afín: traslación, giro y una escala por eje, porque la foto es oblicua).
 # `kx` sale de la cota; el resto se ajusta por búsqueda con `--ajustar` y se fija aquí.
-REGISTRO = {"u0": 377.3, "v0": 124.1, "kx": 1.657, "kz": 1.86, "giro": 0.95}
+REGISTRO = {"u0": 396.3, "v0": 122.35, "kx": 1.657, "kz": 1.7775, "giro": 0.5}
 
 # Zona de comparación en px del recorte: receptores + pistolete + culata. Lo demás se enmascara.
 ZONA_U_MIN, ZONA_U_MAX = 20, 706  # a la derecha de 706 empieza el guardamanos (accesorio)
@@ -94,11 +94,14 @@ VISOR_U = (548, 676)  # visor: se ignora lo que queda por encima del raíl en es
 SOPORTE_PARED = ((583, 338), (698, 248))  # soporte de pared bajo el pozo y su correa delantera
 U_CULATA = 352  # a la izquierda, culata y tubo; a la derecha, receptores y pistolete
 
+# Calibración por pieza contra la foto: el pistolete de la base cae más tendido que el de la réplica de Javi.
+PISTOLETE_GIRO_GRADOS = -2.7  # giro alrededor de su punto de montaje (eje transversal)
+
 PX_POR_MM_MASCARA = 4.0  # resolución del render de silueta del modelo
 CAJA_MASCARA_MM = (-330.0, 230.0, -235.0, 45.0)  # x_min, x_max, z_min, z_max
 
 MATERIALES = {
-    "mat.anodizado_negro": ((0.020, 0.020, 0.022), 0.70, 0.45),  # color lineal, metalizado, rugosidad
+    "mat.anodizado_negro": ((0.020, 0.020, 0.022), 0.25, 0.48),  # color lineal, metalizado, rugosidad
     "mat.polimero_negro": ((0.018, 0.018, 0.018), 0.00, 0.62),
     "mat.polimero_fde": ((0.300, 0.205, 0.120), 0.00, 0.58),
     "mat.goma_negra": ((0.012, 0.012, 0.012), 0.00, 0.85),
@@ -147,7 +150,9 @@ def material(nombre: str) -> bpy.types.Material:
     return mat
 
 
-def objeto(nombre: str, bm: bmesh.types.BMesh, mat: str, *, soldar_mm: float = 0.0) -> bpy.types.Object:
+def objeto(
+    nombre: str, bm: bmesh.types.BMesh, mat: str, *, soldar_mm: float = 0.0, extra: tuple[str, ...] = ()
+) -> bpy.types.Object:
     """Crea el objeto (geometría en mm -> metros), con aristas vivas a más de 32° y el resto suavizado."""
     if soldar_mm:
         bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=soldar_mm)
@@ -160,7 +165,8 @@ def objeto(nombre: str, bm: bmesh.types.BMesh, mat: str, *, soldar_mm: float = 0
     me = bpy.data.meshes.new(nombre)
     bm.to_mesh(me)
     bm.free()
-    me.materials.append(material(mat))
+    for nombre_mat in (mat, *extra):
+        me.materials.append(material(nombre_mat))
     ob = bpy.data.objects.new(nombre, me)
     bpy.context.scene.collection.objects.link(ob)
     return ob
@@ -370,6 +376,167 @@ def unir(destino: bmesh.types.BMesh, origen: bmesh.types.BMesh) -> None:
 
 
 # ----------------------------------------------------------------------------------------------------------
+# 3. Culata de la réplica de Javi, desde cero: perfil trazado sobre SU foto (px del recorte)
+# ----------------------------------------------------------------------------------------------------------
+# Ninguna base CC trae esta forma (culata telescópica con compartimentos laterales y cantonera de goma), así
+# que se modela aquí. El perfil lateral sale de la foto; los ANCHOS no se ven en una foto lateral: son
+# estimaciones de forma, de confianza baja, hasta tener una vista trasera o un calibre.
+
+CULATA_CONTORNO_PX = [
+    (324, 149), (176, 147), (97, 145), (55, 143), (45, 147), (38, 154), (31, 173), (30, 191), (41, 229),
+    (51, 277), (56, 317), (57, 353), (61, 360), (72, 366), (96, 368), (127, 367), (135, 362), (137, 339),
+    (142, 332), (147, 331), (217, 300), (235, 293), (245, 291), (266, 277), (283, 270), (292, 263),
+    (303, 258), (313, 252), (335, 252), (341, 246), (350, 226), (350, 207), (322, 207),
+]  # fmt: skip
+CULATA_FUNDA_PX = [
+    (324, 149), (176, 147), (97, 145), (55, 143), (45, 147), (38, 154), (31, 173), (30, 191), (41, 229),
+    (58, 232), (120, 242), (165, 248), (300, 246), (324, 247),
+]  # fmt: skip
+CULATA_COLUMNA_PX = [
+    (41, 229), (51, 277), (56, 317), (57, 353), (61, 360), (72, 366), (96, 368), (127, 367), (135, 362),
+    (137, 339), (128, 300), (122, 262), (120, 242), (58, 232),
+]  # fmt: skip
+CULATA_LOBULOS_PX = [
+    (222, 250), (240, 222), (300, 215), (322, 207), (350, 207), (350, 226), (339, 250), (313, 252),
+    (245, 291), (235, 293), (224, 290), (218, 270),
+]  # fmt: skip
+CULATA_VENTANA_PX = [
+    (124, 266),
+    (150, 262),
+    (204, 257),
+    (212, 262),
+    (190, 279),
+    (157, 295),
+    (134, 303),
+    (123, 295),
+]
+CULATA_RANURA_CORREA_PX = ((139, 318), (170, 302))  # eje de la ranura de la correa
+CULATA_QD_PX = (72, 278)  # anclaje QD de correa
+CULATA_PALANCA_PX = [
+    (128, 254),
+    (140, 254),
+    (150, 270),
+    (150, 296),
+    (146, 300),
+    (142, 285),
+    (134, 268),
+]
+CULATA_GOMA_PX = 8.0  # grosor de la cantonera de goma, medido en la foto
+# Semianchos en mm: ESTIMADOS (confianza baja).
+CULATA_SEMIANCHO = {
+    "alma": 8.0,
+    "funda": 19.0,
+    "columna": 20.0,
+    "lobulos": 24.0,
+    "goma": 21.0,
+    "palanca": 3.0,
+}
+
+
+def foto_a_mm(u: float, v: float) -> tuple[float, float]:
+    """Px del recorte de la foto -> (x, z) en mm canónicos, con el registro fijado en `REGISTRO`."""
+    c, s = (
+        math.cos(math.radians(REGISTRO["giro"])),
+        math.sin(math.radians(REGISTRO["giro"])),
+    )
+    du, dv = u - REGISTRO["u0"], v - REGISTRO["v0"]
+    return (du * c + dv * s) / REGISTRO["kx"], -(-du * s + dv * c) / REGISTRO["kz"]
+
+
+def _temporal(bm: bmesh.types.BMesh) -> bpy.types.Object:
+    me = bpy.data.meshes.new("tmp")
+    bm.to_mesh(me)
+    bm.free()
+    ob = bpy.data.objects.new("tmp", me)
+    bpy.context.scene.collection.objects.link(ob)
+    return ob
+
+
+def construir_culata(eje_z_mm: float, radio_tubo_mm: float) -> tuple[bmesh.types.BMesh, int]:
+    """Culata en mm canónicos. Índices de material: 0 cuerpo, 1 goma, 2 palanca. Devuelve (malla, vaciados)."""
+
+    trasera = CULATA_CONTORNO_PX[4:13]  # canto trasero: ahí va la cantonera de goma, no el cuerpo
+
+    def mm(pts: list[tuple[float, float]], *, sin_goma: bool = False) -> list[tuple[float, float]]:
+        return [foto_a_mm(u + CULATA_GOMA_PX if sin_goma and (u, v) in trasera else u, v) for u, v in pts]
+
+    a = CULATA_SEMIANCHO
+    cuerpo = _temporal(prisma(mm(CULATA_CONTORNO_PX, sin_goma=True), -a["alma"], a["alma"], 1.0))
+    for clave, perfil, bisel in (
+        ("funda", CULATA_FUNDA_PX, 5.0),
+        ("columna", CULATA_COLUMNA_PX, 3.0),
+        ("lobulos", CULATA_LOBULOS_PX, 3.5),
+    ):
+        aplicar_booleana(
+            cuerpo,
+            _temporal(prisma(mm(perfil, sin_goma=True), -a[clave], a[clave], bisel, 3)),
+            "UNION",
+        )
+    qx, qz = foto_a_mm(*CULATA_QD_PX)
+    aplicar_booleana(
+        cuerpo,
+        _temporal(
+            cilindro(
+                Vector((qx, -a["columna"] - 1.2, qz)),
+                Vector((qx, a["columna"] + 1.2, qz)),
+                6.5,
+            )
+        ),
+        "UNION",
+    )
+
+    # Vaciados: ventana triangular, ranura de correa, alojamientos QD y entrada del tubo (solo visual).
+    aplicar_booleana(cuerpo, _temporal(prisma(mm(CULATA_VENTANA_PX), -40, 40)), "DIFFERENCE")
+    (x0, z0), (x1, z1) = (foto_a_mm(*p) for p in CULATA_RANURA_CORREA_PX)
+    eje = Vector((x1 - x0, 0, z1 - z0)).normalized()
+    normal = Vector((-eje.z, 0, eje.x)) * 1.8
+    capsula = [(x0 - eje.x * 1.8, z0 - eje.z * 1.8)]
+    capsula += [
+        (x0 - normal.x, z0 - normal.z),
+        (x1 - normal.x, z1 - normal.z),
+        (x1 + eje.x * 1.8, z1 + eje.z * 1.8),
+    ]
+    capsula += [(x1 + normal.x, z1 + normal.z), (x0 + normal.x, z0 + normal.z)]
+    aplicar_booleana(cuerpo, _temporal(prisma(capsula, -40, 40)), "DIFFERENCE")
+    for lado in (-1, 1):
+        fondo = Vector((qx, lado * (a["columna"] - 4.0), qz))
+        aplicar_booleana(
+            cuerpo,
+            _temporal(cilindro(fondo, Vector((qx, lado * 30.0, qz)), 4.6)),
+            "DIFFERENCE",
+        )
+    frente_x = foto_a_mm(350, 207)[0]
+    aplicar_booleana(
+        cuerpo,
+        _temporal(
+            cilindro(
+                Vector((frente_x - 150, 0, eje_z_mm)),
+                Vector((frente_x + 5, 0, eje_z_mm)),
+                radio_tubo_mm + 0.4,
+                40,
+            )
+        ),
+        "DIFFERENCE",
+    )
+
+    # Cantonera de goma: la franja trasera del contorno, como malla aparte con su material.
+    goma_px = trasera + [(u + CULATA_GOMA_PX, v) for u, v in reversed(trasera)]
+    bm = bmesh.new()
+    bm.from_mesh(cuerpo.data)
+    bpy.data.objects.remove(cuerpo)
+    for indice, parte in (
+        (1, prisma(mm(goma_px), -a["goma"], a["goma"], 2.5, 3)),
+        (2, prisma(mm(CULATA_PALANCA_PX), -a["palanca"], a["palanca"], 0.8)),
+    ):
+        antes = len(bm.faces)
+        unir(bm, parte)
+        bm.faces.ensure_lookup_table()
+        for cara in bm.faces[antes:]:
+            cara.material_index = indice
+    return bm, 5  # ventana, ranura, dos alojamientos QD y entrada del tubo
+
+
+# ----------------------------------------------------------------------------------------------------------
 # 4. Piezas, sockets y exportación
 # ----------------------------------------------------------------------------------------------------------
 
@@ -422,7 +589,9 @@ def definir_sockets() -> None:
     SOCKETS["tubo_culata"] = [("stock", ORIGEN_PIEZA["culata_car"], (-1, 0, 0), (0, 0, 1), "tubo-culata-mil-spec")]
     SOCKETS["pistolete"] = []
     SOCKETS["culata_car"] = []
-    SOCKETS["culata_str"] = [("sling.qd", (0.0, 0.0, 0.0), (0, -1, 0), (1, 0, 0), "anclaje-correa-qd-socket")]
+    qx, qz = foto_a_mm(*CULATA_QD_PX)
+    qd = (qx, -CULATA_SEMIANCHO["columna"], qz)
+    SOCKETS["culata_str"] = [("sling.qd", qd, (0, -1, 0), (1, 0, 0), "anclaje-correa-qd-socket")]
     _ = largo_rail
 
 
@@ -460,7 +629,7 @@ def camara(nombre: str, pos_mm, hacia_mm, *, orto_mm: float | None = None, focal
     cam = bpy.data.objects.new(nombre, datos)
     bpy.context.scene.collection.objects.link(cam)
     pos, hacia = Vector(pos_mm) * M, Vector(hacia_mm) * M
-    cam.matrix_world = Matrix.Translation(pos) @ (hacia - pos).to_track_quat("-Z", "Z").to_matrix().to_4x4()
+    cam.matrix_world = Matrix.Translation(pos) @ (hacia - pos).to_track_quat("-Z", "Y").to_matrix().to_4x4()
     return cam
 
 
@@ -511,7 +680,7 @@ def render_piezas(ruta: Path, objetos: dict[str, bpy.types.Object]) -> None:
 
 
 def renders_cycles(carpeta: Path, visibles: list[bpy.types.Object]) -> None:
-    """Lateral, perspectiva y trasera con Cycles (32 muestras, CPU)."""
+    """Lateral derecho, lateral izquierdo, perspectiva y trasera con Cycles (32 muestras, CPU)."""
     esc = bpy.context.scene
     esc.render.engine = "CYCLES"
     esc.cycles.device = "CPU"
@@ -528,12 +697,12 @@ def renders_cycles(carpeta: Path, visibles: list[bpy.types.Object]) -> None:
         0.45,
         1.0,
     )
-    mundo.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.9
+    mundo.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.4
     esc.world = mundo
     for nombre, pos, energia, lado in (
-        ("luz.principal", (250, -900, 600), 260.0, 900),
-        ("luz.relleno", (-700, -500, 150), 90.0, 1200),
-        ("luz.contra", (-300, 700, 500), 160.0, 800),
+        ("luz.principal", (250, -900, 600), 30.0, 900),
+        ("luz.relleno", (-700, -500, 150), 10.0, 1200),
+        ("luz.contra", (-300, 700, 500), 25.0, 800),
     ):
         luz = bpy.data.lights.new(nombre, "AREA")
         luz.energy = energia
@@ -542,15 +711,16 @@ def renders_cycles(carpeta: Path, visibles: list[bpy.types.Object]) -> None:
         esc.collection.objects.link(ob)
         p = Vector(pos) * M
         ob.matrix_world = (
-            Matrix.Translation(p) @ (Vector((-0.06, 0, -0.09)) - p).to_track_quat("-Z", "Z").to_matrix().to_4x4()
+            Matrix.Translation(p) @ (Vector((-0.06, 0, -0.09)) - p).to_track_quat("-Z", "Y").to_matrix().to_4x4()
         )
-    cs = [ob.matrix_world @ Vector(c) for ob in visibles for c in ob.bound_box]
+    cs = [ob.matrix_world @ v.co for ob in visibles for v in ob.data.vertices]
     centro = Vector([(min(c[i] for c in cs) + max(c[i] for c in cs)) / 2 for i in range(3)]) / M
     largo = (max(c.x for c in cs) - min(c.x for c in cs)) / M
     vistas = {
-        "lateral": camara("cam.lateral", (centro.x, -2000, centro.z), centro, orto_mm=largo * 1.12),
-        "perspectiva": camara("cam.persp", (centro.x + 520, -620, centro.z + 260), centro, focal=85),
-        "trasera": camara("cam.trasera", (centro.x - 780, -150, centro.z + 110), centro, focal=85),
+        "lateral": camara("cam.lateral", (centro.x, -2000, centro.z), centro, orto_mm=largo * 1.2),
+        "izquierda": camara("cam.izquierda", (centro.x, 2000, centro.z), centro, orto_mm=largo * 1.2),
+        "perspectiva": camara("cam.persp", (centro.x + 600, -830, centro.z + 370), centro, focal=70),
+        "trasera": camara("cam.trasera", (centro.x - 820, -560, centro.z + 300), centro, focal=70),
     }
     for nombre, cam in vistas.items():
         esc.camera = cam
@@ -658,7 +828,7 @@ def ajustar_registro(
     return {k: round(v, 4) for k, v in mejor.items()}
 
 
-def comparar(foto: Path, silueta: Path, carpeta: Path, ajustar: bool) -> dict[str, float]:
+def comparar(foto: Path, silueta: Path, carpeta: Path, ajustar: bool, sufijo: str = "") -> dict[str, float]:
     x, y, ancho, alto = FOTO_RECORTE
     rgb = leer_imagen(foto)[y : y + alto, x : x + ancho, :3]
     ref = mascara_foto(rgb)
@@ -692,14 +862,14 @@ def comparar(foto: Path, silueta: Path, carpeta: Path, ajustar: bool) -> dict[st
     vista[~zona] *= 0.45
     recorte = vista[80:490, 0:760]
     guardar_imagen(
-        carpeta / "m4_cuerpo_comparacion.png",
+        carpeta / f"m4_cuerpo_comparacion{sufijo}.png",
         np.repeat(np.repeat(recorte, 2, axis=0), 2, axis=1),
     )
     resultado["registro"] = reg
     return resultado
 
 
-def nivel_de(nombre: str, ob: bpy.types.Object, iou: float, licencia: str) -> dict[str, object]:
+def nivel_de(nombre: str, ob: bpy.types.Object, iou: float, licencia: str, vaciados: int = 0) -> dict[str, object]:
     """Nivel honesto con la puerta de realismo. Sin cotas de fabricante: todas entran como desconocidas."""
     from taller6mm_pipeline import realismo
 
@@ -729,7 +899,7 @@ def nivel_de(nombre: str, ob: bpy.types.Object, iou: float, licencia: str) -> di
         ],
         vistas=[realismo.VistaIoU("derecha", iou, "propio")],  # la foto es de Javi; la malla hereda `licencia`
         tiene_malla=True,
-        malla=realismo.Malla(volumen, dims[0] * dims[1] * dims[2], vaciados=0),
+        malla=realismo.Malla(volumen, dims[0] * dims[1] * dims[2], vaciados=vaciados),
     )
     return {
         "pieza": nombre,
@@ -809,6 +979,12 @@ def main() -> None:
     )
     objetos = {n: objeto(f"m4.{n}", bm, MATERIAL_PIEZA[n], soldar_mm=0.02) for n, bm in mallas.items()}
 
+    malla_culata, vaciados_culata = construir_culata(ORIGEN_PIEZA["tubo_culata"][2], 0.131 * MM_POR_UNIDAD)
+    objetos["culata_str"] = objeto(
+        "m4.culata_str", malla_culata, "mat.polimero_fde", extra=("mat.goma_negra", "mat.polimero_negro")
+    )
+    vaciados = {"culata_str": vaciados_culata}
+
     # Cada pieza queda con su origen en el punto de montaje y colocada en la plataforma.
     for nombre, ob in objetos.items():
         origen = Vector(ORIGEN_PIEZA[nombre])
@@ -816,16 +992,25 @@ def main() -> None:
         ob.location = origen * M
         for slot, pos, normal, tangente, interfaz in SOCKETS[nombre]:
             crear_socket(ob, slot, pos, normal, tangente, interfaz, origen)
+    giro = Matrix.Rotation(math.radians(PISTOLETE_GIRO_GRADOS), 4, "Y")
+    objetos["pistolete"].data.transform(giro)
     bpy.context.view_layer.update()
 
     otra = "culata_car" if op.culata == "str" else "culata_str"
-    if otra in objetos:
-        objetos[otra].hide_render = True
+    objetos[otra].hide_render = True
     visibles = [ob for n, ob in objetos.items() if n != otra]
     render_silueta(op.renders / "m4_cuerpo_silueta.png")
     render_piezas(op.renders / "m4_cuerpo_piezas.png", objetos)
     medidas = comparar(op.foto, op.renders / "m4_cuerpo_silueta.png", op.renders, op.ajustar)
     print("IOU", json.dumps(medidas, ensure_ascii=False))
+    # La otra culata se mide aparte, con el mismo registro, para poder comparar las dos.
+    objetos[otra].hide_render, objetos[f"culata_{op.culata}"].hide_render = False, True
+    render_silueta(op.renders / "m4_cuerpo_silueta_otra_culata.png")
+    medidas_otra = comparar(
+        op.foto, op.renders / "m4_cuerpo_silueta_otra_culata.png", op.renders, False, "_otra_culata"
+    )
+    objetos[otra].hide_render, objetos[f"culata_{op.culata}"].hide_render = True, False
+    print(f"IOU con {otra}", json.dumps(medidas_otra, ensure_ascii=False))
 
     zona_de = {
         "receptor_superior": "receptores",
@@ -837,6 +1022,8 @@ def main() -> None:
         "escala_px_mm": round(KX_COTA, 4),
         "mm_por_unidad_base": round(MM_POR_UNIDAD, 2),
         "iou": medidas,
+        "iou_con_la_otra_culata": medidas_otra,
+        "culata_del_montaje": f"culata_{op.culata}",
         "piezas": [],
     }
     for nombre, ob in objetos.items():
@@ -846,8 +1033,9 @@ def main() -> None:
         ficha = nivel_de(
             nombre,
             ob,
-            medidas[zona_de.get(nombre, "culata")] if nombre != otra else 0.0,
+            (medidas_otra if nombre == otra else medidas)[zona_de.get(nombre, "culata")],
             "propio" if propia else "cc_by",
+            vaciados.get(nombre, 0),
         )
         informe["piezas"].append(ficha)
         ob["id"] = f"m4.{nombre}"
