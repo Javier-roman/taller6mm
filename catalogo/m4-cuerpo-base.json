@@ -1,0 +1,114 @@
+{
+  "esquema": "m4-cuerpo-base/v1",
+  "titulo": "Cuerpo base M4/AR-15 de airsoft (oleada 1): piezas derivadas y su procedencia",
+  "generado": "2026-11-13",
+  "nota": "Solo forma exterior de réplicas de airsoft. Los GLB se generan con apps/pipeline/blender/m4_cuerpo.py en apps/pipeline/salida/ (ignorada por git); aquí solo se rastrea la procedencia. Ninguna pieza es publicable como 3D: todas son candidatas T0/T1 (puerta de realismo).",
+  "generador": "apps/pipeline/blender/m4_cuerpo.py",
+  "base_de_forma": {
+    "id": "spatialneglect-ar15",
+    "titulo": "AR-15 style rifle",
+    "autor": "SpatialNeglect",
+    "url": "https://sketchfab.com/3d-models/ar-15-style-rifle-50d33435445e439c95e3b36e9d4bd798",
+    "licencia": "CC BY 4.0",
+    "url_licencia": "https://creativecommons.org/licenses/by/4.0/",
+    "license_status": "cc_by",
+    "licencia_reverificada": "2026-11-13",
+    "como_se_verifico": "API pública de Sketchfab (https://api.sketchfab.com/v3/models/50d33435445e439c95e3b36e9d4bd798): license.slug = «by», isDownloadable = true; la ficha dice que el autor sustituyó los logotipos reales por ficticios",
+    "archivo": "assets-src/raw/modelos-cc/spatialneglect-ar15.glb",
+    "sha256": "150c07c7773c4245b3387762f9bf3c4e35d415eec59a89f60818284c4467f6c8",
+    "atribucion": "«AR-15 style rifle» de SpatialNeglect, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/ar-15-style-rifle-50d33435445e439c95e3b36e9d4bd798",
+    "cambios": "Partido en piezas por islas de malla; eliminados portacerrojo, balas, óptica, GPS, cargador, correa, cañón y guardamanos; eliminadas todas las texturas (ahí iban los rótulos ficticios); dientes del raíl sustituidos por un Picatinny generado por código; reescalado a mm; pistolete girado -2,7° sobre su montaje."
+  },
+  "referencia_de_silueta": {
+    "archivo": "assets-src/raw/tokyo-marui-mws/foto-14-8aa7ca57-image.jpg",
+    "license_status": "propio",
+    "vista": "derecha",
+    "nota": "Foto de Javi de su réplica colgada en la pared. Es oblicua (unos 20° de guiñada estimados): se compara con un registro afín. Se enmascaran el visor, el guardamanos y el soporte de pared."
+  },
+  "escala": {
+    "cota": "paso del raíl Picatinny, 10,0076 mm (apps/pipeline/src/taller6mm_pipeline/familias/estandares.py)",
+    "medida_px": 16.58,
+    "px_por_mm": 1.657,
+    "confianza": "baja",
+    "nota": "Una sola cota, medida en una sola foto oblicua. El raíl del guardamanos de la misma foto da 18,6 px por paso: la escala absoluta puede errar un ±10 %."
+  },
+  "piezas": [
+    {
+      "id": "m4.receptor_superior",
+      "archivo": "apps/pipeline/salida/m4-cuerpo/m4_receptor_superior.glb",
+      "origen": "derivada de la base CC BY",
+      "license_status": "cc_by",
+      "atribucion_obligatoria": true,
+      "material": "mat.anodizado_negro",
+      "sockets": ["socket.rail.top", "socket.handguard", "socket.lower"],
+      "triangulos": 3397,
+      "iou_derecha": 0.9051,
+      "zona_iou": "receptores (superior e inferior juntos: su unión no es un borde de silueta)",
+      "nivel": "T0",
+      "publicable_3d": false
+    },
+    {
+      "id": "m4.receptor_inferior",
+      "archivo": "apps/pipeline/salida/m4-cuerpo/m4_receptor_inferior.glb",
+      "origen": "derivada de la base CC BY",
+      "license_status": "cc_by",
+      "atribucion_obligatoria": true,
+      "material": "mat.anodizado_negro",
+      "sockets": ["socket.grip", "socket.stock_tube", "socket.magazine"],
+      "triangulos": 2406,
+      "iou_derecha": 0.9051,
+      "zona_iou": "receptores",
+      "nivel": "T0",
+      "publicable_3d": false
+    },
+    {
+      "id": "m4.pistolete",
+      "archivo": "apps/pipeline/salida/m4-cuerpo/m4_pistolete.glb",
+      "origen": "derivada de la base CC BY",
+      "license_status": "cc_by",
+      "atribucion_obligatoria": true,
+      "material": "mat.polimero_negro",
+      "sockets": [],
+      "triangulos": 281,
+      "iou_derecha": 0.9016,
+      "zona_iou": "pistolete",
+      "nivel": "T0",
+      "publicable_3d": false
+    },
+    {
+      "id": "m4.culata_car",
+      "archivo": "apps/pipeline/salida/m4-cuerpo/m4_culata_car.glb",
+      "origen": "derivada de la base CC BY",
+      "license_status": "cc_by",
+      "atribucion_obligatoria": true,
+      "material": "mat.polimero_negro",
+      "sockets": [],
+      "triangulos": 861,
+      "iou_derecha": 0.6447,
+      "zona_iou": "culata",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "nota": "Culata CAR genérica. El IoU es bajo porque la réplica de la foto monta otra culata: no hay vista licenciada de una CAR."
+    },
+    {
+      "id": "m4.culata_str",
+      "archivo": "apps/pipeline/salida/m4-cuerpo/m4_culata_str.glb",
+      "origen": "propia: modelada desde cero con el perfil trazado sobre la foto de Javi",
+      "license_status": "propio",
+      "atribucion_obligatoria": false,
+      "material": "mat.polimero_fde (cantonera mat.goma_negra, palanca mat.polimero_negro)",
+      "sockets": ["socket.sling.qd"],
+      "triangulos": 2148,
+      "iou_derecha": 0.9677,
+      "zona_iou": "culata",
+      "nivel": "T1",
+      "publicable_3d": false,
+      "nota": "Candidata: el IoU sale de la misma foto con la que se trazó el perfil (no es una comprobación independiente) y los anchos son estimados."
+    }
+  ],
+  "iou_del_conjunto": {
+    "con_culata_str": 0.9307,
+    "con_culata_car": 0.797,
+    "receptores_y_pistolete": 0.9067
+  }
+}

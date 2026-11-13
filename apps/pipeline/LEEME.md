@@ -20,6 +20,10 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 - Las fotos con licencia no publicable solo son referencia interna y no suben de nivel; una malla «caja» (volumen/bbox > 0,9 sin vaciados) se marca `sospechosa_de_cubo`.
 - `explicar(decision)` da el texto «Nivel T0 porque…» para la Trastienda y el CI.
 
+## Cuerpo base M4 (Blender)
+
+`blender/m4_cuerpo.py` (Blender 5.2 sin interfaz; no entra en `pytest`) genera el receptor superior, el inferior, el pistolete y dos culatas a partir de una base CC BY 4.0 y de la foto propia de Javi, exporta los GLB con `socket.*` a `salida/m4-cuerpo/` y mide el IoU de silueta con `validacion.py` y la puerta de realismo. Procedencia y atribución en `catalogo/m4-cuerpo-base.json`; resultados en `docs/catalogo/m4-cuerpo-base.md`.
+
 ## Herramientas del piloto de fidelidad
 
 Dependencia de ejecución: `numpy` (fijada). Módulos en `src/taller6mm_pipeline/`:
