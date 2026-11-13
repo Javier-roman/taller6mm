@@ -54,7 +54,7 @@ catalog:
   "@types/react-dom": 19.3.0
   # Cloudflare y servidor
   wrangler: 4.154.0
-  hono: 4.13.14
+  hono: 4.13.16
   # Datos
   drizzle-orm: 0.45.4
   drizzle-kit: 0.31.11
