@@ -1,0 +1,4135 @@
+{
+  "esquema": "ar-m4/v1",
+  "titulo": "Mapa exhaustivo de la familia M4/AR-15 de réplicas de airsoft",
+  "generado": "2026-11-13",
+  "nota": "Solo airsoft (AEG, GBBR, HPA, muelle) y sus accesorios; formas exteriores e interfaces, sin medidas de fabricación de armas reales. Sin cotas verificadas: cada elemento está pendiente hasta tener fuente, URL y fecha. Los nombres de marca son solo texto descriptivo.",
+  "fuentes_tipo": {
+    "FAB": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)",
+    "CAT": "ficha pública del fabricante de la pieza (catálogo oficial)",
+    "STD": "estándar público de la interfaz (catalogo/interfaces.json)",
+    "MED": "medición con calibre sobre pieza propia de Javi o de la comunidad (docs/05 §7)"
+  },
+  "interfaces_nuevas": [
+    {
+      "id": "montaje-asa-a2",
+      "descripcion": "Asa de transporte A2 integrada en el receptor superior (cuerpo del asa y alojamiento de la mira trasera)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "union-superior-inferior-ar",
+      "descripcion": "Unión superior/inferior de la réplica AR (pasadores o tornillos de unión y su posición; cambia entre AEG y GBBR)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "tuerca-guardamanos-ar",
+      "descripcion": "Fijación del guardamanos al receptor superior (tuerca de cañón, delta ring o tornillos)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-pistolete-ar",
+      "descripcion": "Fijación del pistolete al receptor inferior (tornillo y forma del cuello; distinta en AEG y GBBR)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-bloque-gas-ar",
+      "descripcion": "Alojamiento del bloque de gas y punto de mira sobre el cañón exterior (A2 con alojamiento de bayoneta, bajo perfil, con raíl)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-mira-trasera-a2",
+      "descripcion": "Alojamiento de la mira trasera del asa A2 (ruedas de elevación y deriva)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-bocacha-qd",
+      "descripcion": "Montaje rápido de silenciador o apagallamas sobre bocacha o adaptador (QD; compatibilidad cruzada limitada)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-culata-plegable-ar",
+      "descripcion": "Bisagra o adaptador de culata plegable al tubo de culata o al receptor inferior",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-culata-bateria-ar",
+      "descripcion": "Hueco de batería en culata, tubo o guardamanos (solo como referencia de compatibilidad, sin cotas de fabricación)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "pozo-gbbr-m4-mws",
+      "descripcion": "Pozo de cargador de GBBR tipo Tokyo Marui MWS y compatibles (cargador de gas; no intercambiable con cargadores de AEG)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "pozo-gbbr-m4-wa-ghk",
+      "descripcion": "Pozo de cargador de GBBR estilo WA/WE-GHK (compatibilidad cruzada por confirmar)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "huella-aimpoint-micro",
+      "descripcion": "Huella de montura de red dot estilo Aimpoint Micro (marca solo como texto descriptivo)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "huella-eotech-xps",
+      "descripcion": "Huella de montura de holográfica estilo EOTech XPS/EXPS (marca solo como texto descriptivo)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-lpvo-30mm",
+      "descripcion": "Montaje LPVO de tubo de 30 mm (anillos o cantilever; ver anillo-optica-30mm)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-flip-up-picatinny",
+      "descripcion": "Mira abatible sobre raíl Picatinny (altura de la línea de mira sobre el raíl)",
+      "estado": "propuesta"
+    },
+    {
+      "id": "montaje-asa-carga-ar",
+      "descripcion": "Alojamiento del asa de armado (charging handle) y su palanca en el receptor superior",
+      "estado": "propuesta"
+    },
+    {
+      "id": "ranura-cubierta-eyeccion",
+      "descripcion": "Bisagra y alojamiento de la cubierta de la ventana de eyección",
+      "estado": "propuesta"
+    }
+  ],
+  "zonas": [
+    {
+      "id": "cuerpos",
+      "nombre": "A. Cuerpos y variantes de réplica"
+    },
+    {
+      "id": "receptor-superior",
+      "nombre": "B1. Receptor superior (upper)"
+    },
+    {
+      "id": "receptor-inferior",
+      "nombre": "B2. Receptor inferior (lower)"
+    },
+    {
+      "id": "pistolete",
+      "nombre": "B3. Pistoletes"
+    },
+    {
+      "id": "culata",
+      "nombre": "B4. Culatas"
+    },
+    {
+      "id": "tubo-culata",
+      "nombre": "B5. Tubos de culata"
+    },
+    {
+      "id": "canon-gas",
+      "nombre": "B6. Cañón exterior, bloque de gas y punto de mira"
+    },
+    {
+      "id": "guardamanos",
+      "nombre": "B7. Guardamanos"
+    },
+    {
+      "id": "bocacha",
+      "nombre": "B8. Bocachas, silenciadores y simuladores"
+    },
+    {
+      "id": "cargador",
+      "nombre": "B9. Cargadores y pozo"
+    },
+    {
+      "id": "miras-mecanicas",
+      "nombre": "B10. Miras mecánicas"
+    },
+    {
+      "id": "opticas",
+      "nombre": "B11. Ópticas y monturas"
+    },
+    {
+      "id": "accesorios",
+      "nombre": "B12. Accesorios"
+    }
+  ],
+  "orden_oleada1": [
+    {
+      "orden": 1,
+      "zona": "receptor-superior",
+      "motivo": "Es la pieza que casi todas las réplicas M4 comparten y fija el raíl, la ventana y los puntos de montaje de lo demás."
+    },
+    {
+      "orden": 2,
+      "zona": "receptor-inferior",
+      "motivo": "Va con el superior; define el pozo de cargador, el pistolete y el tubo de culata (las ranuras principales del banco)."
+    },
+    {
+      "orden": 3,
+      "zona": "cargador",
+      "motivo": "Un STANAG midcap/lowcap/highcap encaja en casi todas las AEG; el cargador de GBBR cubre la MWS de Javi."
+    },
+    {
+      "orden": 4,
+      "zona": "pistolete",
+      "motivo": "Pocos modelos (A2, MOE, ergonómicos) cubren casi todo el mercado."
+    },
+    {
+      "orden": 5,
+      "zona": "tubo-culata",
+      "motivo": "Mil-spec y comercial: dos interfaces desbloquean todas las culatas."
+    },
+    {
+      "orden": 6,
+      "zona": "culata",
+      "motivo": "CAR/6 posiciones y las tipo Magpul son lo más repetido en tiendas."
+    },
+    {
+      "orden": 7,
+      "zona": "guardamanos",
+      "motivo": "Longitudes (7, 9, 10, 12, 13,5) en M-LOK y quad rail: familias paramétricas, mucho SKU con poco modelado."
+    },
+    {
+      "orden": 8,
+      "zona": "bocacha",
+      "motivo": "Apagallamas, frenos y silenciadores con la rosca de 14 mm: de las piezas más compradas."
+    },
+    {
+      "orden": 9,
+      "zona": "canon-gas",
+      "motivo": "Cañón exterior, bloque de gas y punto de mira: necesarios para el perfil de silueta completo."
+    },
+    {
+      "orden": 10,
+      "zona": "opticas",
+      "motivo": "Red dot, holográfica y magnificador son los accesorios más montados."
+    },
+    {
+      "orden": 11,
+      "zona": "miras-mecanicas",
+      "motivo": "BUIS y asa A2: completan el perfil de la réplica."
+    },
+    {
+      "orden": 12,
+      "zona": "accesorios",
+      "motivo": "Empuñaduras, linternas, láseres y anclajes de correa."
+    },
+    {
+      "orden": 13,
+      "zona": "cuerpos",
+      "motivo": "Las variantes de réplica se componen con las piezas anteriores (base + piezas de serie, docs/05 §11.4): no se modelan antes."
+    }
+  ],
+  "elementos": [
+    {
+      "id": "cuerpo-replica-m4a1-m4-carabina-aeg",
+      "nombre": "Réplica M4A1 / M4 carabina AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": [
+        "longitud total con culata cerrada",
+        "longitud del cañón exterior",
+        "peso",
+        "formato de batería",
+        "tipo de gearbox (Ver. 2)"
+      ],
+      "interfaces_usa": [
+        "picatinny-mil-std-1913",
+        "rosca-m14x1-ccw",
+        "tubo-culata-mil-spec",
+        "pozo-stanag-m4",
+        "gearbox-ver2"
+      ],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m4-cqb-cqb-r-aeg",
+      "nombre": "Réplica M4 CQB / CQB-R AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["guardamanos corto con raíl", "cañón corto (pendiente)", "culata CAR"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "rosca-m14x1-ccw", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m4-ris-ras-m4a1-ris-aeg",
+      "nombre": "Réplica M4 RIS / RAS (M4A1 RIS) AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["guardamanos quad", "longitud", "peso"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m16a1-aeg-triangular-asa-de-transporte-culata-fija",
+      "nombre": "Réplica M16A1 AEG (triangular, asa de transporte, culata fija)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m16"],
+      "parametros": ["longitud total", "guardamanos triangular", "mira trasera A1"],
+      "interfaces_usa": ["montaje-asa-a2", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m16a2-aeg",
+      "nombre": "Réplica M16A2 AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m16"],
+      "parametros": ["guardamanos A2", "asa de transporte A2", "culata fija A2"],
+      "interfaces_usa": ["montaje-asa-a2", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m16a4-m16-flat-top-aeg",
+      "nombre": "Réplica M16A4 / M16 flat-top AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m16"],
+      "parametros": ["raíl superior largo", "guardamanos RIS o A2"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-mk18-mod-0-mod-1-aeg",
+      "nombre": "Réplica Mk18 Mod 0 / Mod 1 AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["guardamanos RAS corto", "cañón corto", "peso"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m4-urx-estilo-urx",
+      "nombre": "Réplica M4 URX / estilo URX",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["guardamanos M-LOK o KeyMod", "longitud"],
+      "interfaces_usa": ["mlok", "kmod", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-m4-block-ii-estilo-block-ii",
+      "nombre": "Réplica M4 Block II / estilo Block II",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["guardamanos moderno", "culata de 6 posiciones"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-hk416-d10-d14-5-aeg",
+      "nombre": "Réplica HK416 D10 / D14.5 AEG",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["guardamanos HK", "pistón corto simulado", "culata HK"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-hk416a5-estilo-urx",
+      "nombre": "Réplica HK416A5 / estilo URX",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["guardamanos con raíl corto y M-LOK"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-hk416-d10rs",
+      "nombre": "Réplica HK416 D10RS",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["guardamanos RS", "culata HK"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-hk416-de-14-5-pulgadas-gbbr",
+      "nombre": "Réplica HK416 de 14.5 pulgadas (GBBR)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["longitud", "peso", "cargador de GBBR"],
+      "interfaces_usa": ["pozo-gbbr-m4-mws"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-mk12-spr-dmr-estilo-mk12",
+      "nombre": "Réplica Mk12 SPR / DMR estilo Mk12",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["cañón largo", "óptica de bajo aumento", "bípode"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-sr-15-mk12-de-canon-medio",
+      "nombre": "Réplica SR-15 / Mk12 de cañón medio",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["cañón medio", "guardamanos free-float"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-dmr-spr-de-canon-largo-aeg",
+      "nombre": "Réplica DMR / SPR de cañón largo (AEG)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m16"],
+      "parametros": ["longitud de cañón", "peso", "gearbox reforzado"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-ar-15-pdw-sbr-de-canon-muy-corto-aeg",
+      "nombre": "Réplica AR-15 PDW / SBR de cañón muy corto (AEG)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["ar15-comerciales-sbr"],
+      "parametros": ["cañón muy corto", "culata mínima"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-pistol-style-ar-sin-culata-estilo-pistolete-ar",
+      "nombre": "Réplica pistol-style AR (sin culata, estilo pistolete AR)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["ar15-comerciales-sbr"],
+      "parametros": ["tubo de culata ausente", "tirante o brazo estabilizador"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-de-estilo-sig-mcx-virtus",
+      "nombre": "Réplica de estilo SIG MCX Virtus",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["mcx"],
+      "parametros": ["longitud", "guardamanos M-LOK", "culata plegable"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "pozo-mcx"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-replica-ar-10-dmr-7-62-estilo-sr-25",
+      "nombre": "Réplica AR-10 / DMR 7,62 (estilo SR-25)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["sr25"],
+      "parametros": ["longitud", "cargador de AR-10 de airsoft"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-m-w-s-gbbr-estandar-tokyo-marui",
+      "nombre": "M.W.S. GBBR estándar (Tokyo Marui)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["mws"],
+      "parametros": ["longitud", "peso", "cargador de gas", "carcasa de recámara"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "rosca-m14x1-ccw", "pozo-gbbr-m4-mws"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-m-w-s-m4a1-urg-i-mk18-variantes-tokyo-marui",
+      "nombre": "M.W.S. M4A1 / URG-I / Mk18 (variantes Tokyo Marui)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["mws"],
+      "parametros": ["guardamanos", "cañón exterior", "mira"],
+      "interfaces_usa": ["pozo-gbbr-m4-mws", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-gbbr-aftermarket-tipo-wa-we-ghk",
+      "nombre": "GBBR aftermarket tipo WA / WE / GHK",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["compatibilidad de cargador", "carcasa de recámara"],
+      "interfaces_usa": ["pozo-gbbr-m4-wa-ghk", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-gbbr-kwa-ksc-style-sistema-propio",
+      "nombre": "GBBR KWA / KSC-style (sistema propio)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["compatibilidad", "cargador propio"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-tokyo-marui-ngrs-aeg-de-nueva-generacion",
+      "nombre": "Tokyo Marui NGRS (AEG de nueva generación)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["tm-ngrs-ar"],
+      "parametros": ["gearbox NGRS", "cargador", "culata"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-m4-hpa-replica-convertida-a-aire-comprimido",
+      "nombre": "M4 HPA (réplica convertida a aire comprimido)",
+      "zona": "cuerpos",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4-hpa"],
+      "parametros": ["línea de aire", "regulador", "cargador"],
+      "interfaces_usa": ["pozo-m4-hpa"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-cuerpos-de-marcas-conocidas-g-g-cyma-specna-aps-e-c",
+      "nombre": "Cuerpos de marcas conocidas: G&G / Cyma / Specna / APS / E&C",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["marca", "grupo de gearbox", "cargador", "tolerancias de montaje"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-cuerpos-de-marcas-conocidas-vfc-krytac-classic-army-king-arms",
+      "nombre": "Cuerpos de marcas conocidas: VFC / Krytac / Classic Army / King Arms",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["marca", "licencia (grupo B)", "grupo de gearbox"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "cuerpo-cuerpos-de-marcas-conocidas-we-kwa-ghk-lancer-evolution",
+      "nombre": "Cuerpos de marcas conocidas: WE / KWA / GHK / Lancer / Evolution",
+      "zona": "cuerpos",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["marca", "sistema de gas/AEG", "compatibilidad"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-a1-sin-forward-assist-con-asa-fija",
+      "nombre": "Receptor superior A1 (sin forward assist, con asa fija)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m16"],
+      "parametros": ["forma de la ventana de eyección", "asa", "ausencia de forward assist"],
+      "interfaces_usa": ["montaje-asa-a2", "union-superior-inferior-ar"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw", "tuerca-guardamanos-ar"],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-a2-con-asa-de-transporte-carry-handle-integrada",
+      "nombre": "Receptor superior A2 con asa de transporte (carry handle) integrada",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m16"],
+      "parametros": ["asa", "ventana de eyección", "cubierta", "forward assist"],
+      "interfaces_usa": ["montaje-asa-a2", "union-superior-inferior-ar"],
+      "interfaces_ofrece": ["montaje-mira-trasera-a2", "tuerca-guardamanos-ar"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-flat-top-rail-superior-picatinny",
+      "nombre": "Receptor superior flat-top (raíl superior Picatinny)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud del raíl", "forward assist", "cubierta", "ranura de eyección"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "union-superior-inferior-ar"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-flat-top-con-ventana-de-eyeccion-ampliada-gen-2-o-forjado",
+      "nombre": "Receptor superior flat-top con ventana de eyección ampliada (Gen 2 o forjado)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma de la ventana de eyección", "deflector", "forma del refuerzo"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-de-canon-corto-cqb",
+      "nombre": "Receptor superior de cañón corto (CQB)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "extremo con raíl"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["tuerca-guardamanos-ar"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-gbbr-estilo-mws-cerrojo-recamara-y-cubierta-funcionales",
+      "nombre": "Receptor superior GBBR estilo MWS (cerrojo, recámara y cubierta funcionales)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["mws"],
+      "parametros": ["forma de cubierta", "recámara", "cerrojo"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "union-superior-inferior-ar"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-hk416-forma-y-rail-propios",
+      "nombre": "Receptor superior HK416 (forma y raíl propios)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["raíl superior", "ventana"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-receptor-superior-gen-3-gen-4-forjado-de-marca-variantes-de-replica",
+      "nombre": "Receptor superior Gen 3 / Gen 4 / forjado de marca (variantes de réplica)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["ventana", "hop-up", "tolerancia de carcasa"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-cubierta-de-la-ventana-de-eyeccion-dust-cover",
+      "nombre": "Cubierta de la ventana de eyección (dust cover)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma y abertura", "resorte", "bisagra"],
+      "interfaces_usa": ["ranura-cubierta-eyeccion"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-forward-assist-boton-lateral",
+      "nombre": "Forward assist (botón lateral)",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma del botón", "funcional o fijo"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-asa-de-armado-charging-handle-y-palanca",
+      "nombre": "Asa de armado (charging handle) y palanca",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma del asa", "palanca ambidiestra", "funcional o fijo"],
+      "interfaces_usa": ["montaje-asa-carga-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "sup-cubierta-de-hop-up-ventana-de-ajuste",
+      "nombre": "Cubierta de hop-up / ventana de ajuste",
+      "zona": "receptor-superior",
+      "familia": "cuerpo-superior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["tipo de ventana", "ruleta o palanca de ajuste"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-receptor-inferior-aeg-estandar-m4-m16-gearbox-ver-2",
+      "nombre": "Receptor inferior AEG estándar (M4/M16, gearbox Ver. 2)",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["selector", "gatillo", "guardamonte", "pozo de cargador", "hueco para pistolete"],
+      "interfaces_usa": [
+        "montaje-pistolete-ar",
+        "tubo-culata-mil-spec",
+        "gearbox-ver2",
+        "pozo-stanag-m4",
+        "union-superior-inferior-ar"
+      ],
+      "interfaces_ofrece": ["pozo-stanag-m4", "montaje-pistolete-ar", "tubo-culata-mil-spec", "tubo-culata-comercial"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-receptor-inferior-aeg-con-pistolete-adaptable",
+      "nombre": "Receptor inferior AEG con pistolete adaptable",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["ranura del pistolete", "tornillo", "forma del cuello"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-receptor-inferior-gbbr-estilo-mws",
+      "nombre": "Receptor inferior GBBR estilo MWS",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["mws"],
+      "parametros": ["selector", "seguro de cargador", "pozo de cargador", "compatibilidad de pistolete"],
+      "interfaces_usa": ["pozo-gbbr-m4-mws", "montaje-pistolete-ar", "tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["pozo-gbbr-m4-mws", "tubo-culata-mil-spec"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-receptor-inferior-estilo-hk416",
+      "nombre": "Receptor inferior estilo HK416",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["selector ambidiestro", "seguro de cargador", "pistolete HK"],
+      "interfaces_usa": ["montaje-pistolete-ar", "pozo-stanag-m4"],
+      "interfaces_ofrece": ["pozo-stanag-m4", "tubo-culata-mil-spec"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-receptor-inferior-ambidiestro-selector-y-seguro-de-cargador-a-ambos-lados",
+      "nombre": "Receptor inferior ambidiestro (selector y seguro de cargador a ambos lados)",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["selector doble", "botón de cargador doble", "placa"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-selector-palanca-de-modo-estandar",
+      "nombre": "Selector (palanca de modo) estándar",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "cierre", "marcas"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-selector-ambidiestro-de-palanca-corta",
+      "nombre": "Selector ambidiestro / de palanca corta",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["palancas", "ángulo de recorrido"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-gatillo-y-guardamonte-estandar",
+      "nombre": "Gatillo y guardamonte estándar",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["tamaño de guardamonte", "forma del gatillo"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-guardamonte-ampliado-para-guantes",
+      "nombre": "Guardamonte ampliado (para guantes)",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["perfil", "guarda"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-gatillo-plano-o-curvo-aftermarket",
+      "nombre": "Gatillo plano o curvo aftermarket",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["geometría"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-pozo-de-cargador-magazine-well-estandar",
+      "nombre": "Pozo de cargador (magazine well) estándar",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["abertura", "perfil del pozo"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": ["pozo-stanag-m4"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-pozo-de-cargador-acampanado-flared-tipo-magpul",
+      "nombre": "Pozo de cargador acampanado (flared, tipo Magpul)",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["abertura ampliada", "perfil"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": ["pozo-stanag-m4"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-seguro-de-cargador-boton-de-expulsion-estandar",
+      "nombre": "Seguro de cargador (botón de expulsión) estándar",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["tamaño del botón", "placa"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-seguro-de-cargador-ambidiestro-ampliado",
+      "nombre": "Seguro de cargador ambidiestro / ampliado",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["botón"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "inf-reten-de-cerrojo-bolt-catch-exterior",
+      "nombre": "Retén de cerrojo (bolt catch) exterior",
+      "zona": "receptor-inferior",
+      "familia": "cuerpo-inferior-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["palanca"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-a2-estandar-de-replica-aeg",
+      "nombre": "Pistolete A2 estándar de réplica AEG",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma del cuello", "tamaño", "compartimento de cableado"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-a1-triangular-ranurado",
+      "nombre": "Pistolete A1 (triangular, ranurado)",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m16"],
+      "parametros": ["ranuras", "perfil"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-moe-de-polimero",
+      "nombre": "Pistolete MOE de polímero",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["textura", "cuello", "compartimento"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-moe-k-de-cuello-corto",
+      "nombre": "Pistolete MOE-K / de cuello corto",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["ángulo", "cuello", "textura"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-ergonomico-tipo-a-ergo-ranuras-laterales",
+      "nombre": "Pistolete ergonómico tipo A (ergo, ranuras laterales)",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["ranuras", "perfil"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-ergonomico-tipo-b-ergo-con-apoyo-del-pulgar",
+      "nombre": "Pistolete ergonómico tipo B (ergo con apoyo del pulgar)",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["perfil", "apoyo"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-hk416-original-y-de-replica",
+      "nombre": "Pistolete HK416 (original y de réplica)",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["hk416"],
+      "parametros": ["forma", "ranura", "cuello"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-de-gbbr-mws-compatible",
+      "nombre": "Pistolete de GBBR (MWS / compatible)",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["mws"],
+      "parametros": ["forma", "cuello", "espacio para selector"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-con-compartimento-de-bateria",
+      "nombre": "Pistolete con compartimento de batería",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["volumen interior de referencia", "tapa"],
+      "interfaces_usa": ["montaje-pistolete-ar", "montaje-culata-bateria-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "pist-pistolete-con-cuello-reducido-o-relleno",
+      "nombre": "Pistolete con cuello reducido o relleno",
+      "zona": "pistolete",
+      "familia": "pistolete-ar",
+      "plataformas": ["m4a1"],
+      "parametros": ["ángulo", "textura"],
+      "interfaces_usa": ["montaje-pistolete-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-fija-a2-carabina-larga-con-compartimento",
+      "nombre": "Culata fija A2 (carabina larga, con compartimento)",
+      "zona": "culata",
+      "familia": "culata-fija",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "tipo de cantonera", "compartimento"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-fija-a1-mas-corta-sin-compartimento",
+      "nombre": "Culata fija A1 (más corta, sin compartimento)",
+      "zona": "culata",
+      "familia": "culata-fija",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "cantonera"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-car-m4-de-6-posiciones-tipo-m4-original",
+      "nombre": "Culata CAR (M4 de 6 posiciones, tipo M4 original)",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud mín. y máx.", "nº de posiciones", "cantonera"],
+      "interfaces_usa": ["tubo-culata-mil-spec", "tubo-culata-comercial"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-de-6-posiciones-tipo-carabina-generica",
+      "nombre": "Culata de 6 posiciones (tipo carabina, genérica)",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud mín.-máx.", "nº de posiciones", "cantonera"],
+      "interfaces_usa": ["tubo-culata-mil-spec", "tubo-culata-comercial"],
+      "interfaces_ofrece": ["montaje-culata-bateria-ar", "anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-de-7-posiciones",
+      "nombre": "Culata de 7 posiciones",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud mín.-máx.", "nº de posiciones"],
+      "interfaces_usa": ["tubo-culata-mil-spec", "tubo-culata-comercial"],
+      "interfaces_ofrece": ["montaje-culata-bateria-ar"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-estilo-magpul-ctr",
+      "nombre": "Culata estilo Magpul CTR",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "posición", "cantonera", "pestaña de mejilla"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-estilo-magpul-moe",
+      "nombre": "Culata estilo Magpul MOE",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "cantonera", "forma", "compartimento"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-estilo-magpul-str",
+      "nombre": "Culata estilo Magpul STR",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "pestaña", "cantonera"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-estilo-magpul-acs-acs-l",
+      "nombre": "Culata estilo Magpul ACS / ACS-L",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "cantonera", "posición"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-hk416-corredera-propia",
+      "nombre": "Culata HK416 (corredera propia)",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["hk416"],
+      "parametros": ["longitud", "perfil", "cantonera"],
+      "interfaces_usa": ["tubo-culata-comercial"],
+      "interfaces_ofrece": ["anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-plegable-lateral-con-adaptador-ar",
+      "nombre": "Culata plegable lateral con adaptador AR",
+      "zona": "culata",
+      "familia": "culata-plegable",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud plegada y desplegada", "bisagra", "cantonera"],
+      "interfaces_usa": ["montaje-culata-plegable-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-plegable-de-bisagra-estilo-sig-mcx",
+      "nombre": "Culata plegable de bisagra estilo SIG MCX",
+      "zona": "culata",
+      "familia": "culata-plegable",
+      "plataformas": ["mcx"],
+      "parametros": ["longitud", "bisagra", "cantonera"],
+      "interfaces_usa": ["montaje-culata-plegable-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-estilo-magpul-prs-apoyo-para-dmr",
+      "nombre": "Culata estilo Magpul PRS (apoyo para DMR)",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["sr25"],
+      "parametros": ["longitud", "apoyo de mejilla", "ajuste"],
+      "interfaces_usa": ["tubo-culata-mil-spec", "tubo-culata-comercial"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-minima-de-pdw-sbr-tipo-cuchara-o-tirante",
+      "nombre": "Culata mínima de PDW / SBR (tipo cuchara o tirante)",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["ar15-comerciales-sbr"],
+      "parametros": ["longitud", "perfil"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-culata-con-tirante-estabilizador-pistol-brace",
+      "nombre": "Culata con tirante estabilizador (pistol brace)",
+      "zona": "culata",
+      "familia": "culata-telescopica",
+      "plataformas": ["ar15-comerciales-sbr"],
+      "parametros": ["longitud", "perfil", "ajuste"],
+      "interfaces_usa": ["tubo-culata-mil-spec", "tubo-culata-comercial"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-cantonera-de-goma-de-impacto",
+      "nombre": "Cantonera de goma / de impacto",
+      "zona": "culata",
+      "familia": "cantonera-mejilla",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma", "material", "anclaje"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-apoyo-de-mejilla-cheek-rest-adaptable",
+      "nombre": "Apoyo de mejilla (cheek rest) adaptable",
+      "zona": "culata",
+      "familia": "cantonera-mejilla",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura", "forma", "fijación"],
+      "interfaces_usa": [],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "culata-adaptador-de-culata-de-otro-sistema-a-ar",
+      "nombre": "Adaptador de culata de otro sistema (a AR)",
+      "zona": "culata",
+      "familia": "adaptador-culata",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "tipo de adaptador"],
+      "interfaces_usa": ["montaje-culata-plegable-ar", "tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-tubo-de-culata-mil-spec-ar-15",
+      "nombre": "Tubo de culata mil-spec (AR-15)",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "tipo de pasador"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["tubo-culata-mil-spec"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "STD",
+        "descripcion": "estándar público de la interfaz (catalogo/interfaces.json)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-tubo-de-culata-comercial-ar-15",
+      "nombre": "Tubo de culata comercial (AR-15)",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "tipo de pasador"],
+      "interfaces_usa": ["tubo-culata-comercial"],
+      "interfaces_ofrece": ["tubo-culata-comercial"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "STD",
+        "descripcion": "estándar público de la interfaz (catalogo/interfaces.json)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-tubo-de-culata-de-aeg-cableado-dentro",
+      "nombre": "Tubo de culata de AEG (cableado dentro)",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "pasaje de cable", "tipo de rosca"],
+      "interfaces_usa": ["tubo-culata-airsoft-m4-ligero"],
+      "interfaces_ofrece": ["tubo-culata-airsoft-m4-ligero"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-tubo-de-culata-de-gbbr-sin-cableado-con-tampon-de-retroceso",
+      "nombre": "Tubo de culata de GBBR (sin cableado, con tampón de retroceso)",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["mws"],
+      "parametros": ["longitud", "diámetro", "tipo de pasador"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": ["tubo-culata-mil-spec"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-tubo-de-culata-corto-car-con-anillo-y-tuerca",
+      "nombre": "Tubo de culata corto (CAR) con anillo y tuerca",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "anillo"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-tubo-de-culata-de-hk416-propio",
+      "nombre": "Tubo de culata de HK416 (propio)",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["hk416"],
+      "parametros": ["longitud", "pasaje"],
+      "interfaces_usa": ["tubo-culata-comercial"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "tubo-anillo-y-tuerca-del-tubo-de-culata-castle-nut-y-placa-de-retencion",
+      "nombre": "Anillo y tuerca del tubo de culata (castle nut y placa de retención)",
+      "zona": "tubo-culata",
+      "familia": "tubo-culata",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma", "diámetro"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-canon-exterior-de-m4a1-perfil-estandar-con-punto-de-mira",
+      "nombre": "Cañón exterior de M4A1 (perfil estándar con punto de mira)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "perfil"],
+      "interfaces_usa": ["montaje-bloque-gas-ar", "rosca-m14x1-ccw"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw", "montaje-bloque-gas-ar"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-canon-exterior-m16-con-perfil-a2-pesado",
+      "nombre": "Cañón exterior M16 con perfil A2 (pesado)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "diámetro del perfil"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-canon-exterior-cqb-corto",
+      "nombre": "Cañón exterior CQB (corto)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-canon-exterior-largo-dmr-spr",
+      "nombre": "Cañón exterior largo (DMR / SPR)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "perfil"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-canon-exterior-de-hk416-liso-tipo-piston",
+      "nombre": "Cañón exterior de HK416 (liso, tipo pistón)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["hk416"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-canon-exterior-de-gbbr-rosca-de-boca-ccw",
+      "nombre": "Cañón exterior de GBBR (rosca de boca CCW)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["mws"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-bloque-de-gas-tipo-a2-con-alojamiento-de-bayoneta",
+      "nombre": "Bloque de gas tipo A2 (con alojamiento de bayoneta)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m16"],
+      "parametros": ["forma del bloque", "pasadores"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-bloque-de-gas-bajo-perfil-bajo-guardamanos",
+      "nombre": "Bloque de gas bajo perfil (bajo guardamanos)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m4a1"],
+      "parametros": ["forma", "ancho"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-bloque-de-gas-con-rail-estilo-picatinny",
+      "nombre": "Bloque de gas con raíl (estilo Picatinny)",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud de raíl", "forma"],
+      "interfaces_usa": ["montaje-bloque-gas-ar", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-punto-de-mira-de-bloque-de-gas-tipo-poste-a2",
+      "nombre": "Punto de mira de bloque de gas (tipo poste A2)",
+      "zona": "canon-gas",
+      "familia": "mira-mecanica-delantera",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura", "forma del poste"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-punto-de-mira-abatible-flip-up-sobre-bloque-de-gas",
+      "nombre": "Punto de mira abatible (flip-up) sobre bloque de gas",
+      "zona": "canon-gas",
+      "familia": "mira-mecanica-delantera",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura", "forma"],
+      "interfaces_usa": ["montaje-bloque-gas-ar", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-tuerca-de-canon-delta-ring-estandar",
+      "nombre": "Tuerca de cañón / delta ring estándar",
+      "zona": "canon-gas",
+      "familia": "canon-exterior",
+      "plataformas": ["m4a1"],
+      "parametros": ["diámetro", "perfil"],
+      "interfaces_usa": ["tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["tuerca-guardamanos-ar"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "canon-adaptador-de-rosca-de-boca-cw-ccw",
+      "nombre": "Adaptador de rosca de boca (CW <-> CCW)",
+      "zona": "canon-gas",
+      "familia": "adaptador-rosca",
+      "plataformas": ["m4a1"],
+      "parametros": ["rosca de entrada", "rosca de salida"],
+      "interfaces_usa": ["rosca-m14x1-ccw", "rosca-m14x1-cw"],
+      "interfaces_ofrece": ["rosca-m14x1-ccw", "rosca-m14x1-cw"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "STD",
+        "descripcion": "estándar público de la interfaz (catalogo/interfaces.json)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-a2-de-dos-mitades-con-escudo-termico",
+      "nombre": "Guardamanos A2 de dos mitades (con escudo térmico)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-tubular",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "perfil", "fijación"],
+      "interfaces_usa": ["tuerca-guardamanos-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m4-car-de-dos-mitades-corto-con-escudo",
+      "nombre": "Guardamanos M4 CAR de dos mitades (corto con escudo)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-tubular",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "perfil"],
+      "interfaces_usa": ["tuerca-guardamanos-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m4-ris-rail-interface-system",
+      "nombre": "Guardamanos M4 RIS (Rail Interface System)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "nº de ranuras Picatinny"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m4-ras-con-paneles-de-agarre",
+      "nombre": "Guardamanos M4 RAS (con paneles de agarre)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "paneles"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-quad-rail-de-7-pulgadas",
+      "nombre": "Guardamanos quad rail de 7 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud (pulgadas)", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-quad-rail-de-9-pulgadas",
+      "nombre": "Guardamanos quad rail de 9 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud (pulgadas)", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-quad-rail-de-10-pulgadas",
+      "nombre": "Guardamanos quad rail de 10 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud (pulgadas)", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-quad-rail-de-12-pulgadas",
+      "nombre": "Guardamanos quad rail de 12 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud (pulgadas)", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-quad-rail-de-15-pulgadas",
+      "nombre": "Guardamanos quad rail de 15 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud (pulgadas)", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m-lok-de-7-pulgadas",
+      "nombre": "Guardamanos M-LOK de 7 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-mlok",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras M-LOK por cara"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m-lok-de-9-pulgadas",
+      "nombre": "Guardamanos M-LOK de 9 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-mlok",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m-lok-de-10-pulgadas",
+      "nombre": "Guardamanos M-LOK de 10 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-mlok",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m-lok-de-12-pulgadas",
+      "nombre": "Guardamanos M-LOK de 12 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-mlok",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m-lok-de-13-5-pulgadas",
+      "nombre": "Guardamanos M-LOK de 13,5 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-mlok",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-m-lok-de-15-pulgadas",
+      "nombre": "Guardamanos M-LOK de 15 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-mlok",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-keymod-de-7-pulgadas",
+      "nombre": "Guardamanos KeyMod de 7 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-keymod",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "orificios"],
+      "interfaces_usa": ["kmod", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["kmod", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-keymod-de-10-pulgadas",
+      "nombre": "Guardamanos KeyMod de 10 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-keymod",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "orificios"],
+      "interfaces_usa": ["kmod", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["kmod", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-keymod-de-12-pulgadas",
+      "nombre": "Guardamanos KeyMod de 12 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-keymod",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "orificios"],
+      "interfaces_usa": ["kmod", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["kmod", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-keymod-de-15-pulgadas",
+      "nombre": "Guardamanos KeyMod de 15 pulgadas",
+      "zona": "guardamanos",
+      "familia": "guardamanos-keymod",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "orificios"],
+      "interfaces_usa": ["kmod", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["kmod", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-slim-de-tubo-redondo-con-ranuras",
+      "nombre": "Guardamanos slim de tubo redondo con ranuras",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-freefloat",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "perfil redondo"],
+      "interfaces_usa": ["mlok", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-free-float-octogonal-estilo-daniel-defense-noveske",
+      "nombre": "Guardamanos free-float octogonal (estilo Daniel Defense/Noveske)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-freefloat",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "perfil octogonal"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-hk416-de-rail-largo",
+      "nombre": "Guardamanos HK416 de raíl largo",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-freefloat",
+      "plataformas": ["hk416"],
+      "parametros": ["longitud", "raíles", "hueco para batería"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "tuerca-guardamanos-ar"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-hk416a5-estilo-urx",
+      "nombre": "Guardamanos HK416A5 / estilo URX",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-freefloat",
+      "plataformas": ["hk416"],
+      "parametros": ["longitud", "ranuras M-LOK", "raíl"],
+      "interfaces_usa": ["mlok", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-de-mk18-ras-corto",
+      "nombre": "Guardamanos de Mk18 (RAS corto)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-de-mws-tokyo-marui-o-compatible",
+      "nombre": "Guardamanos de MWS (Tokyo Marui o compatible)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-freefloat",
+      "plataformas": ["mws"],
+      "parametros": ["longitud", "tipo"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok"],
+      "interfaces_ofrece": ["mlok", "picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-con-hueco-de-bateria",
+      "nombre": "Guardamanos con hueco de batería",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-quad",
+      "plataformas": ["m4a1"],
+      "parametros": ["volumen de referencia", "tapa"],
+      "interfaces_usa": ["montaje-culata-bateria-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "gm-guardamanos-de-mk12-spr-free-float-largo",
+      "nombre": "Guardamanos de Mk12 / SPR (free-float largo)",
+      "zona": "guardamanos",
+      "familia": "guardamanos-ar-freefloat",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "perfil"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-bocacha-a1-cuatro-ranuras-birdcage-simple",
+      "nombre": "Bocacha A1 (cuatro ranuras, birdcage simple)",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "diámetro", "rosca"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-bocacha-a2-compensador-cerrado-por-abajo",
+      "nombre": "Bocacha A2 (compensador cerrado por abajo)",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "diámetro", "rosca"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-bocacha-a3-a2-con-puntas-abiertas",
+      "nombre": "Bocacha A3 (A2 con puntas abiertas)",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-apagallamas-de-jaula-birdcage",
+      "nombre": "Apagallamas de jaula (birdcage)",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "rosca"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-apagallamas-de-rejilla-tipo-baston-de-tenedor",
+      "nombre": "Apagallamas de rejilla (tipo bastón de tenedor)",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-apagallamas-largo-de-cuatro-pinzas",
+      "nombre": "Apagallamas largo de cuatro pinzas",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-freno-de-boca-muzzle-brake-estandar",
+      "nombre": "Freno de boca (muzzle brake) estándar",
+      "zona": "bocacha",
+      "familia": "freno-boca",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "rosca"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-freno-de-boca-conico-de-pina",
+      "nombre": "Freno de boca cónico / de piña",
+      "zona": "bocacha",
+      "familia": "freno-boca",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-compensador-de-boca-sin-supresion",
+      "nombre": "Compensador de boca (sin supresión)",
+      "zona": "bocacha",
+      "familia": "freno-boca",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-bocacha-con-adaptador-de-silenciador-qd",
+      "nombre": "Bocacha con adaptador de silenciador (QD)",
+      "zona": "bocacha",
+      "familia": "apagallamas",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "rosca", "sistema QD"],
+      "interfaces_usa": ["rosca-m14x1-ccw", "montaje-bocacha-qd"],
+      "interfaces_ofrece": ["montaje-bocacha-qd"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-silenciador-simulador-corto-cuerpo-cilindrico",
+      "nombre": "Silenciador / simulador corto (cuerpo cilíndrico)",
+      "zona": "bocacha",
+      "familia": "silenciador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "rosca"],
+      "interfaces_usa": ["rosca-m14x1-ccw", "rosca-m14x1-cw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-silenciador-simulador-medio",
+      "nombre": "Silenciador / simulador medio",
+      "zona": "bocacha",
+      "familia": "silenciador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw", "rosca-m14x1-cw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-silenciador-simulador-largo",
+      "nombre": "Silenciador / simulador largo",
+      "zona": "bocacha",
+      "familia": "silenciador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw", "rosca-m14x1-cw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-silenciador-con-interfaz-qd",
+      "nombre": "Silenciador con interfaz QD",
+      "zona": "bocacha",
+      "familia": "silenciador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "sistema QD"],
+      "interfaces_usa": ["montaje-bocacha-qd"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-silenciador-integral-canon-con-silenciador-de-aeg-dmr",
+      "nombre": "Silenciador integral (cañón con silenciador de AEG/DMR)",
+      "zona": "bocacha",
+      "familia": "silenciador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud total", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-trazadora-de-boca-tracer-con-rosca",
+      "nombre": "Trazadora de boca (tracer) con rosca",
+      "zona": "bocacha",
+      "familia": "trazadora",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "rosca"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "boca-simulador-de-supresor-ceramico-airsoft",
+      "nombre": "Simulador de supresor cerámico (airsoft)",
+      "zona": "bocacha",
+      "familia": "silenciador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro"],
+      "interfaces_usa": ["rosca-m14x1-ccw"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-stanag-midcap-120-a-150-bolas",
+      "nombre": "Cargador STANAG midcap (120 a 150 bolas)",
+      "zona": "cargador",
+      "familia": "cargador-ar-midcap",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "longitud", "ancho", "perfil"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-stanag-lowcap-30-a-80-bolas",
+      "nombre": "Cargador STANAG lowcap (30 a 80 bolas)",
+      "zona": "cargador",
+      "familia": "cargador-ar-lowcap",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "longitud", "perfil"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-stanag-highcap-300-a-500-bolas",
+      "nombre": "Cargador STANAG highcap (300 a 500 bolas)",
+      "zona": "cargador",
+      "familia": "cargador-ar-hicap",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "longitud", "perfil", "ruleta"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-stanag-highcap-con-rueda-de-carga",
+      "nombre": "Cargador STANAG highcap con rueda de carga",
+      "zona": "cargador",
+      "familia": "cargador-ar-hicap",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "longitud", "rueda"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-estilo-magpul-pmag-aspecto-exterior",
+      "nombre": "Cargador estilo Magpul PMAG (aspecto exterior)",
+      "zona": "cargador",
+      "familia": "cargador-ar-midcap",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "longitud", "curvatura"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-metalico-de-muelle-stanag-lowcap-de-replica",
+      "nombre": "Cargador metálico de muelle (STANAG lowcap de réplica)",
+      "zona": "cargador",
+      "familia": "cargador-ar-lowcap",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "longitud"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-de-gbbr-tokyo-marui-mws-gas",
+      "nombre": "Cargador de GBBR Tokyo Marui MWS (gas)",
+      "zona": "cargador",
+      "familia": "cargador-gbbr",
+      "plataformas": ["mws"],
+      "parametros": ["capacidad", "depósito de gas"],
+      "interfaces_usa": ["pozo-gbbr-m4-mws"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-de-gbbr-aftermarket-wa-we-ghk",
+      "nombre": "Cargador de GBBR aftermarket (WA/WE-GHK)",
+      "zona": "cargador",
+      "familia": "cargador-gbbr",
+      "plataformas": ["m4a1"],
+      "parametros": ["capacidad", "depósito de gas"],
+      "interfaces_usa": ["pozo-gbbr-m4-wa-ghk"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-cargador-hpa-sin-muelle-con-tubo-de-aire",
+      "nombre": "Cargador HPA (sin muelle, con tubo de aire)",
+      "zona": "cargador",
+      "familia": "cargador-ar-midcap",
+      "plataformas": ["m4-hpa"],
+      "parametros": ["capacidad", "conexión"],
+      "interfaces_usa": ["pozo-m4-hpa"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T2",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-placa-de-pozo-magazine-well-estilo-mws-stanag",
+      "nombre": "Placa de pozo (magazine well) estilo MWS/STANAG",
+      "zona": "cargador",
+      "familia": "cargador-ar-midcap",
+      "plataformas": ["m4a1"],
+      "parametros": ["perfil", "espesor"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "carg-acople-de-cargadores-coupler",
+      "nombre": "Acople de cargadores (coupler)",
+      "zona": "cargador",
+      "familia": "cargador-ar-midcap",
+      "plataformas": ["m4a1"],
+      "parametros": ["perfil", "doble cargador"],
+      "interfaces_usa": ["pozo-stanag-m4"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-asa-de-transporte-a2-con-mira-trasera-integrada",
+      "nombre": "Asa de transporte A2 con mira trasera integrada",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-trasera",
+      "plataformas": ["m16"],
+      "parametros": ["longitud", "ruedas de deriva y elevación"],
+      "interfaces_usa": ["montaje-asa-a2"],
+      "interfaces_ofrece": ["montaje-mira-trasera-a2"],
+      "nivel_esperado": "T2",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-asa-de-transporte-desmontable-con-rail",
+      "nombre": "Asa de transporte desmontable con raíl",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-trasera",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura", "raíl"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-buis-trasera-abatible-back-up-iron-sight",
+      "nombre": "BUIS trasera abatible (back-up iron sight)",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-trasera",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura", "apertura", "fijación"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-buis-delantera-abatible",
+      "nombre": "BUIS delantera abatible",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-delantera",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura", "poste"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-mira-abatible-de-45-grados-offset",
+      "nombre": "Mira abatible de 45 grados (offset)",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-trasera",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura", "ángulo"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-mira-trasera-de-apertura-fija-tipo-a1",
+      "nombre": "Mira trasera de apertura fija (tipo A1)",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-trasera",
+      "plataformas": ["m16"],
+      "parametros": ["apertura", "altura"],
+      "interfaces_usa": ["montaje-flip-up-picatinny"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-mira-abatible-de-bloque-de-gas-frontal",
+      "nombre": "Mira abatible de bloque de gas (frontal)",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-delantera",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura"],
+      "interfaces_usa": ["montaje-bloque-gas-ar"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "mira-mira-de-anillo-ghost-ring-o-apertura-ancha",
+      "nombre": "Mira de anillo (ghost ring) o apertura ancha",
+      "zona": "miras-mecanicas",
+      "familia": "mira-mecanica-trasera",
+      "plataformas": ["m4a1"],
+      "parametros": ["apertura", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-red-dot-compacta-estilo-aimpoint-micro-tubular-con-montura",
+      "nombre": "Red dot compacta estilo Aimpoint Micro (tubular, con montura)",
+      "zona": "opticas",
+      "familia": "red-dot",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro de tubo", "montaje"],
+      "interfaces_usa": ["huella-aimpoint-micro", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-red-dot-estilo-aimpoint-compm4-t1-con-anillos",
+      "nombre": "Red dot estilo Aimpoint CompM4 / T1 (con anillos)",
+      "zona": "opticas",
+      "familia": "red-dot",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "anillos"],
+      "interfaces_usa": ["anillo-optica-30mm", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-red-dot-cerrada-estilo-holosun-vortex",
+      "nombre": "Red dot cerrada estilo Holosun / Vortex",
+      "zona": "opticas",
+      "familia": "red-dot",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura", "ancho"],
+      "interfaces_usa": ["huella-holosun-k", "huella-t1-micro", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-red-dot-de-montaje-en-rail-micro-estilo-rmr",
+      "nombre": "Red dot de montaje en raíl (micro, estilo RMR)",
+      "zona": "opticas",
+      "familia": "red-dot",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura"],
+      "interfaces_usa": ["huella-rmr", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-holografica-estilo-eotech-552-553",
+      "nombre": "Holográfica estilo EOTech 552 / 553",
+      "zona": "opticas",
+      "familia": "holografica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho", "altura"],
+      "interfaces_usa": ["huella-eotech-xps", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-holografica-estilo-eotech-exps-xps",
+      "nombre": "Holográfica estilo EOTech EXPS / XPS",
+      "zona": "opticas",
+      "familia": "holografica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho", "altura"],
+      "interfaces_usa": ["huella-eotech-xps", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-holografica-de-montaje-en-rail-con-palanca",
+      "nombre": "Holográfica de montaje en raíl con palanca",
+      "zona": "opticas",
+      "familia": "holografica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-lpvo-1-4x-1-6x-tubo-de-30-mm",
+      "nombre": "LPVO 1-4x / 1-6x (tubo de 30 mm)",
+      "zona": "opticas",
+      "familia": "lpvo",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro de objetivo", "tubo de 30 mm"],
+      "interfaces_usa": ["anillo-optica-30mm", "montaje-lpvo-30mm"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-lpvo-1-8x-1-10x",
+      "nombre": "LPVO 1-8x / 1-10x",
+      "zona": "opticas",
+      "familia": "lpvo",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "objetivo", "tubo"],
+      "interfaces_usa": ["anillo-optica-30mm", "montaje-lpvo-30mm"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-mira-telescopica-3-9x-tubo-de-25-4-mm",
+      "nombre": "Mira telescópica 3-9x (tubo de 25,4 mm)",
+      "zona": "opticas",
+      "familia": "mira-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "objetivo", "tubo de 25,4 mm"],
+      "interfaces_usa": ["anillo-optica-25-4mm"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-mira-telescopica-3-9x-tubo-de-30-mm",
+      "nombre": "Mira telescópica 3-9x (tubo de 30 mm)",
+      "zona": "opticas",
+      "familia": "mira-telescopica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "objetivo"],
+      "interfaces_usa": ["anillo-optica-30mm"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-magnificador-3x-en-rail-abatible",
+      "nombre": "Magnificador 3x (en raíl, abatible)",
+      "zona": "opticas",
+      "familia": "magnificador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura", "ancho"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-magnificador-4x-o-5x",
+      "nombre": "Magnificador 4x o 5x",
+      "zona": "opticas",
+      "familia": "magnificador",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-montura-de-pivote-para-magnificador-flip-to-side",
+      "nombre": "Montura de pivote para magnificador (flip to side)",
+      "zona": "opticas",
+      "familia": "montura-optica",
+      "plataformas": ["m4a1"],
+      "parametros": ["ángulo", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-montura-de-elevacion-riser-qd-de-red-dot",
+      "nombre": "Montura de elevación (riser / QD) de red dot",
+      "zona": "opticas",
+      "familia": "montura-optica",
+      "plataformas": ["m4a1"],
+      "parametros": ["altura de elevación", "QD"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["huella-aimpoint-micro", "huella-t1-micro"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-montura-desplazada-offset-45-grados-de-red-dot",
+      "nombre": "Montura desplazada (offset 45 grados) de red dot",
+      "zona": "opticas",
+      "familia": "montura-optica",
+      "plataformas": ["m4a1"],
+      "parametros": ["ángulo", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["huella-rmr"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-montura-cantilever-para-lpvo",
+      "nombre": "Montura cantilever para LPVO",
+      "zona": "opticas",
+      "familia": "montura-optica",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["anillo-optica-30mm"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "opt-visor-termico-de-simulacion-clip-on",
+      "nombre": "Visor térmico de simulación (clip-on)",
+      "zona": "opticas",
+      "familia": "visor-nocturno-termico",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-empunadura-vertical-foregrip-de-poste",
+      "nombre": "Empuñadura vertical (foregrip) de poste",
+      "zona": "accesorios",
+      "familia": "empunadura-vertical",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "textura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-empunadura-vertical-con-bipode",
+      "nombre": "Empuñadura vertical con bípode",
+      "zona": "accesorios",
+      "familia": "empunadura-bipode",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "patas", "diámetro"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-empunadura-angular-angled-foregrip",
+      "nombre": "Empuñadura angular (angled foregrip)",
+      "zona": "accesorios",
+      "familia": "empunadura-angular",
+      "plataformas": ["m4a1"],
+      "parametros": ["ángulo", "longitud", "perfil"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-apoyo-de-mano-hand-stop",
+      "nombre": "Apoyo de mano (hand stop)",
+      "zona": "accesorios",
+      "familia": "apoyo-mano",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-linterna-de-mano-cuerpo-cilindrico",
+      "nombre": "Linterna de mano (cuerpo cilíndrico)",
+      "zona": "accesorios",
+      "familia": "linterna",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "montura"],
+      "interfaces_usa": ["anclaje-linterna-picatinny", "anclaje-linterna-scout"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-linterna-con-cola-de-interruptor-cable",
+      "nombre": "Linterna con cola de interruptor / cable",
+      "zona": "accesorios",
+      "familia": "linterna",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "diámetro", "interruptor"],
+      "interfaces_usa": ["anclaje-linterna-picatinny"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-modulo-laser-rojo-verde-simulado-o-real-de-airsoft",
+      "nombre": "Módulo láser (rojo/verde) simulado o real de airsoft",
+      "zona": "accesorios",
+      "familia": "laser",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-modulo-combinado-laser-y-linterna",
+      "nombre": "Módulo combinado láser y linterna",
+      "zona": "accesorios",
+      "familia": "modulo-laser-linterna",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-interruptor-remoto-pressure-switch",
+      "nombre": "Interruptor remoto (pressure switch)",
+      "zona": "accesorios",
+      "familia": "interruptor-remoto",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "cable"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-bipode-de-patas-abatibles",
+      "nombre": "Bípode de patas abatibles",
+      "zona": "accesorios",
+      "familia": "bipode",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "patas", "montura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-bipode-de-montaje-en-rail-rapido",
+      "nombre": "Bípode de montaje en raíl rápido",
+      "zona": "accesorios",
+      "familia": "bipode",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "patas"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-punto-de-anclaje-de-correa-qd-socket-en-culata-o-receptor",
+      "nombre": "Punto de anclaje de correa (QD socket en culata o receptor)",
+      "zona": "accesorios",
+      "familia": "anclaje-correa",
+      "plataformas": ["m4a1"],
+      "parametros": ["ojal", "perfil"],
+      "interfaces_usa": ["anclaje-correa-qd-socket"],
+      "interfaces_ofrece": ["anclaje-correa-qd-socket"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-anclaje-de-correa-en-rail-qd-picatinny",
+      "nombre": "Anclaje de correa en raíl (QD Picatinny)",
+      "zona": "accesorios",
+      "familia": "anclaje-correa",
+      "plataformas": ["m4a1"],
+      "parametros": ["ojal", "ancho"],
+      "interfaces_usa": ["anclaje-correa-qd-picatinny", "picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["anclaje-correa-qd-picatinny"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-correa-de-un-punto",
+      "nombre": "Correa de un punto",
+      "zona": "accesorios",
+      "familia": "correa",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho"],
+      "interfaces_usa": ["anclaje-correa-qd-socket"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-correa-de-dos-puntos",
+      "nombre": "Correa de dos puntos",
+      "zona": "accesorios",
+      "familia": "correa",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ancho"],
+      "interfaces_usa": ["anclaje-correa-qd-socket", "anclaje-correa-qd-picatinny"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-segmento-de-rail-picatinny-corto",
+      "nombre": "Segmento de raíl Picatinny corto",
+      "zona": "accesorios",
+      "familia": "segmento-rail",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "ranuras"],
+      "interfaces_usa": ["picatinny-mil-std-1913", "mlok"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-protector-de-rail-rail-cover",
+      "nombre": "Protector de raíl (rail cover)",
+      "zona": "accesorios",
+      "familia": "protector-rail",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "perfil"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 1,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-soporte-offset-45-grados",
+      "nombre": "Soporte offset 45 grados",
+      "zona": "accesorios",
+      "familia": "soporte-offset",
+      "plataformas": ["m4a1"],
+      "parametros": ["ángulo", "altura"],
+      "interfaces_usa": ["picatinny-mil-std-1913"],
+      "interfaces_ofrece": ["picatinny-mil-std-1913"],
+      "nivel_esperado": "T1",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-contrapeso-peso-de-culata",
+      "nombre": "Contrapeso / peso de culata",
+      "zona": "accesorios",
+      "familia": "peso-contrapeso",
+      "plataformas": ["m4a1"],
+      "parametros": ["longitud", "peso"],
+      "interfaces_usa": ["tubo-culata-mil-spec"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T1",
+      "oleada": 3,
+      "fuente_cotas": {
+        "tipo": "CAT",
+        "descripcion": "ficha pública del fabricante de la pieza (catálogo oficial)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    },
+    {
+      "id": "acc-bateria-volumen-de-referencia-stick-mini-cuadrada",
+      "nombre": "Batería (volumen de referencia: stick, mini, cuadrada)",
+      "zona": "accesorios",
+      "familia": "bateria",
+      "plataformas": ["m4a1"],
+      "parametros": ["tipo", "capacidad", "conector", "volumen"],
+      "interfaces_usa": ["conector-bateria-mini-tamiya", "conector-bateria-tamiya", "conector-bateria-deans"],
+      "interfaces_ofrece": [],
+      "nivel_esperado": "T0",
+      "oleada": 2,
+      "fuente_cotas": {
+        "tipo": "FAB",
+        "descripcion": "ficha de fabricante de la réplica (grupo A de docs/fuentes/marcas.md)"
+      },
+      "estado": "pendiente",
+      "cotas": [],
+      "notas": "Parámetros por conocimiento general del sector; ninguna cota verificada. Forma exterior e interfaces de accesorios, sin tolerancias de mecanizado."
+    }
+  ]
+}
