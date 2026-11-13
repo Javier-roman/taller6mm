@@ -1,0 +1,32 @@
+{
+  "esquema": 1,
+  "titulo": "Referencias fotográficas de licencia abierta",
+  "generado": "2026-11-12",
+  "nota": "Solo CC0, CC-BY o dominio público. Los archivos viven en assets-src/raw/referencias-cc/ (ignorada por git). CC BY-SA no se admite como textura publicable: solo referencia interna. No se han descargado fotos de tiendas.",
+  "referencias": [
+    {
+      "id": "ca-m15a4-aimpoint",
+      "archivo": "assets-src/raw/referencias-cc/Ca_m15a4.jpg",
+      "sha256": "d3c6e20e21a9b1dfa842bd05eda55496ba41dc972de7427ab95d49bfebb282e0",
+      "resolucion": "1024x851",
+      "url": "https://commons.wikimedia.org/wiki/File:Ca_m15a4.jpg",
+      "url_archivo": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Ca_m15a4.jpg",
+      "autor": "English Wikipedia user AlecMoody",
+      "licencia": "Dominio público",
+      "atribucion": "Ca m15a4.jpg, AlecMoody, dominio público, Wikimedia Commons",
+      "vista": "lateral, réplica Classic Army M15A4 SPC con visor tipo Aimpoint",
+      "fecha_consulta": "2026-11-12",
+      "uso": "referencia interna de proporciones; baja resolución, sin escala"
+    }
+  ],
+  "descartadas": [
+    {
+      "titulo": "Airsoft plastic M7 bayonet.JPG",
+      "motivo": "CC BY-SA 3.0: no es CC0/CC-BY/dominio público según la regla del encargo, y es una bayoneta, no la plataforma M4."
+    },
+    {
+      "titulo": "Weapons range 140220-N-LP801-036.jpg",
+      "motivo": "Dominio público, pero muestra a una persona disparando; sin utilidad de referencia de pieza."
+    }
+  ]
+}
