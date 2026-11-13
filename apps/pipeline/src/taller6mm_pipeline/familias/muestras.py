@@ -68,11 +68,24 @@ def tanda() -> Iterator[tuple[str, dict[str, Valor]]]:
                 "longitud_ranura": 20.0,
             },
         )
-    for especificacion in ("milspec", "comercial"):
-        yield "culata.tubo", {"especificacion": especificacion, "longitud": 184.15}
-        yield "culata.tubo", {"especificacion": especificacion, "longitud": 184.15, "longitud_rosca": 20.0}
+    # Diámetros de barrido (demo): el catálogo deja el tubo pendiente, el dato real llegará con la ficha del SKU.
+    for especificacion, diametro in (("milspec", 29.0), ("comercial", 29.5)):
+        yield "culata.tubo", {"especificacion": especificacion, "diametro": diametro, "longitud": 184.15}
+        yield (
+            "culata.tubo",
+            {
+                "especificacion": especificacion,
+                "diametro": diametro,
+                "longitud": 184.15,
+                "longitud_rosca": 20.0,
+                "diametro_rosca": 30.0,
+            },
+        )
     for largo, altura in ((170, 110), (185, 125), (200, 135)):
-        yield "culata.telescopica", {"longitud": float(largo), "altura": float(altura), "ancho": 42.0, "pared": 3.0}
+        yield (
+            "culata.telescopica",
+            {"longitud": float(largo), "altura": float(altura), "ancho": 42.0, "pared": 3.0, "diametro_tubo": 29.0},
+        )
     yield "cargador.m4", {"capacidad": 120}  # sin cotas del SKU: T0
     for capacidad, altura in ((120, 180), (300, 180), (450, 230)):
         yield "cargador.m4", {"capacidad": capacidad, "largo": 60.0, "ancho": 22.0, "altura": float(altura)}
@@ -184,7 +197,7 @@ def generar_informe_html(filas: list[dict[str, object]]) -> str:
         '<thead><tr><th scope="col">Cota</th><th scope="col">Valor</th><th scope="col">Confianza</th>'
         '<th scope="col">Fuente</th></tr></thead>\n<tbody>'
     )
-    partes.extend(_fila_cota(c) for c in (*e.PICATINNY, *e.MLOK, *e.ROSCA_14, *e.TUBO, *e.PENDIENTES))
+    partes.extend(_fila_cota(c) for c in (*e.PICATINNY, *e.MLOK, *e.ROSCA_14, *e.PENDIENTES))
     partes.append("</tbody>\n</table></div>\n</body>\n</html>\n")
     return "\n".join(partes)
 

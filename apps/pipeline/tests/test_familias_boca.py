@@ -17,8 +17,8 @@ def test_rosca_de_boca_m14x1() -> None:
     assert e.ROSCA_14_DIAMETRO.valor_mm == 14.0
     assert e.ROSCA_14_PASO.valor_mm == 1.0
     assert "M14x1" in e.ROSCA_14_DIAMETRO.fuente
-    assert SILENCIADOR.generar(SIL).requiere == ("rosca.m14x1.lh",)  # por defecto, CCW (a izquierdas)
-    assert SILENCIADOR.generar({**SIL, "rosca": "14mm_cw"}).requiere == ("rosca.m14x1.rh",)
+    assert SILENCIADOR.generar(SIL).requiere == ("rosca-m14x1-ccw",)  # por defecto, CCW (a izquierdas)
+    assert SILENCIADOR.generar({**SIL, "rosca": "14mm_cw"}).requiere == ("rosca-m14x1-cw",)
     assert SILENCIADOR.generar(SIL).sha256() != SILENCIADOR.generar({**SIL, "rosca": "14mm_cw"}).sha256()
 
 

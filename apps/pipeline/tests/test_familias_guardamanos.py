@@ -21,7 +21,7 @@ def test_cotas_mlok_de_la_especificacion_citada() -> None:
     assert e.MLOK_PASO_MM == 40.0
     for cota in e.MLOK:
         assert "M-LOK" in cota.fuente
-        assert cota.confianza is Confianza.MEDIA  # la fuente pública da valores aproximados
+        assert cota.confianza is Confianza.BAJA  # Wikipedia dice «approximately» y cita un foro
 
 
 def test_las_ranuras_mlok_de_la_malla_miden_32_por_7_a_paso_40() -> None:

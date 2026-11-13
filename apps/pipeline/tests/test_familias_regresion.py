@@ -12,8 +12,8 @@ from taller6mm_pipeline.familias.rail_picatinny import longitud_rail_mm
 
 ALTO_RAIL = e.PICATINNY_ALTURA.valor_mm
 ANCHO_RAIL = e.PICATINNY_ANCHO.valor_mm
-D_MILSPEC = e.TUBO_DIAMETRO_MILSPEC.valor_mm
-D_ROSCA = e.TUBO_ROSCA_DIAMETRO.valor_mm
+D_MILSPEC = 29.1592  # parámetros de barrido: el diámetro del tubo es pendiente en el catálogo
+D_ROSCA = 30.1625
 
 # (familia, parámetros, caja esperada (mín, máx) en mm deducida de los parámetros, volumen mm³, triángulos)
 CASOS = [
@@ -69,7 +69,7 @@ CASOS = [
     ),
     (
         "culata.tubo",
-        {"longitud": 184.15, "longitud_rosca": 20.0},
+        {"longitud": 184.15, "diametro": D_MILSPEC, "longitud_rosca": 20.0, "diametro_rosca": D_ROSCA},
         ((-184.15, -D_ROSCA / 2, -D_ROSCA / 2), (0, D_ROSCA / 2, D_ROSCA / 2)),
         123280.4,
         284,
@@ -102,7 +102,7 @@ def test_los_volumenes_cuadran_con_el_calculo_a_mano() -> None:
     ranuras = 4 * 20 * 3 * (11 - 4.5)  # cuatro ranuras de 20 x 3 mm a través de la pared (aprox. prismática)
     assert bocacha == pytest.approx(cuerpo - ranuras, rel=0.02)
 
-    tubo = FAMILIAS["culata.tubo"].generar({"longitud": 184.15}).malla.volumen_mm3
+    tubo = FAMILIAS["culata.tubo"].generar({"longitud": 184.15, "diametro": D_MILSPEC}).malla.volumen_mm3
     assert tubo == pytest.approx(math.pi * (D_MILSPEC / 2) ** 2 * 184.15, rel=0.01)
 
     # Raíl: área del perfil por longitud, menos N ranuras de ancho x profundidad x ancho del plano superior.

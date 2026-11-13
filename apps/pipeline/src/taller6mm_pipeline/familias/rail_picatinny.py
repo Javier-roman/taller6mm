@@ -15,8 +15,8 @@ from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, Sock
 from taller6mm_pipeline.ficha import Confianza, Cota
 
 NOTA_PERFIL = (
-    "Perfil simplificado bajo las superficies de apoyo: el cuello tiene el ancho del plano superior y el canto "
-    "es una arista viva (ancho del cuello y altura del canto sin verificar)."
+    "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista "
+    "viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
 )
 
 
@@ -68,8 +68,8 @@ class RailPicatinny(Familia):
     id = "rail.picatinny"
     version = 2  # v2: los sockets llevan orientación
     nombre = "Raíl Picatinny"
-    requiere = ("mlok",)
-    ofrece = ("picatinny",)
+    requiere = (e.INTERFAZ_MLOK,)
+    ofrece = (e.INTERFAZ_PICATINNY,)
     estandares = e.PICATINNY
     parametros = (Parametro("ranuras", "Número de ranuras transversales", int, "ud", minimo=2, maximo=60),)
 
@@ -82,7 +82,7 @@ class RailPicatinny(Familia):
         socket = Socket(
             "rail.top",
             (0.0, e.PICATINNY_ALTURA.valor_mm, 0.0),
-            "picatinny",
+            e.INTERFAZ_PICATINNY,
             (0.0, 1.0, 0.0),
             (1.0, 0.0, 0.0),
             {"longitud_mm": largo, "paso_mm": e.PICATINNY_PASO.valor_mm, "ranuras": n},

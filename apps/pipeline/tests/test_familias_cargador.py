@@ -27,7 +27,7 @@ def test_ni_con_las_cotas_del_sku_se_fabrica_una_caja() -> None:
     assert pieza.malla is None
     assert pieza.pendientes == ("geometria",)
     assert "STANAG 4179" in pieza.notas[0]
-    assert pieza.requiere == ("cargador.m4.aeg",)
+    assert pieza.requiere == ("pozo-stanag-m4",)
     with pytest.raises(ValueError, match="T0"):
         pieza.glb()
     # Las cotas sí sirven para el plano T0.

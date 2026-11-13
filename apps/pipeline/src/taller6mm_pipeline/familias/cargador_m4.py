@@ -30,7 +30,7 @@ class CargadorM4(Familia):
     )
 
     def requiere_de(self, p: Mapping[str, Valor]) -> tuple[str, ...]:
-        return (f"cargador.m4.{p['sistema']}",)
+        return ("pozo-stanag-m4",)  # id de catalogo/interfaces.json (aún pendiente de cotas)
 
     def describir(self, p: Mapping[str, Valor]) -> str:
         return f"Cargador de M4 ({p['sistema']}) de {p['capacidad']} bolas"

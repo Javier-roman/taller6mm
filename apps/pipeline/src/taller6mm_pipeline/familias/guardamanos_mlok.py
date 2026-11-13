@@ -43,8 +43,10 @@ class GuardamanosMlok(Familia):
     id = "guardamanos.mlok"
     version = 2  # v2: el raíl superior llega a ras del extremo y los sockets llevan orientación
     nombre = "Guardamanos M-LOK"
-    requiere = ("guardamanos.ar15",)
-    ofrece = ("mlok", "picatinny")
+    # `catalogo/interfaces.json` aún no tiene la unión guardamanos-receptor (tuerca de cañón, delta ring…):
+    # no se inventa un id; se añadirá cuando el catálogo la defina.
+    requiere = ()
+    ofrece = (e.INTERFAZ_MLOK, e.INTERFAZ_PICATINNY)
     estandares = (*e.MLOK, *e.PICATINNY)
     parametros = (
         Parametro("longitud", "Longitud total", float, "mm", minimo=100, maximo=450, de_sku=True),
@@ -83,7 +85,11 @@ class GuardamanosMlok(Familia):
         cuerpo = extrude(Plane.YZ * (exterior - interior), largo)
 
         sockets: list[Socket] = []
-        notas = ["La unión al receptor (tuerca de cañón) no se modela: depende del SKU."]
+        notas = [
+            "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+            "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) "
+            "la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        ]
         caras = ["side.l", "side.r", "bottom"]
         if con_rail:
             n_rail = ranuras_rail_que_caben(largo)
@@ -95,7 +101,7 @@ class GuardamanosMlok(Familia):
                 Socket(
                     "rail.top",
                     (0.0, round(y_alto, 4), 0.0),
-                    "picatinny",
+                    e.INTERFAZ_PICATINNY,
                     (0.0, 1.0, 0.0),
                     (1.0, 0.0, 0.0),
                     {
@@ -122,7 +128,7 @@ class GuardamanosMlok(Familia):
                     Socket(
                         f"mlok.{cara}.{i}",
                         (x, ny * radio, nz * radio),
-                        "mlok",
+                        e.INTERFAZ_MLOK,
                         (float(nx), float(ny), float(nz)),
                         (1.0, 0.0, 0.0),
                         {"largo_ranura_mm": e.MLOK_LARGO_RANURA.valor_mm},

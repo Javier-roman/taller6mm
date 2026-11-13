@@ -7,20 +7,25 @@ from taller6mm_pipeline.familias import FAMILIAS, ParametroInvalidoError
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.glb import leer_glb, leer_posiciones_m
 from taller6mm_pipeline.familias.rail_picatinny import centros_ranuras_mm, longitud_rail_mm
+from taller6mm_pipeline.ficha import Confianza
 
 RAIL = FAMILIAS["rail.picatinny"]
 
 
 def test_cotas_del_estandar_mil_std_1913() -> None:
-    # Valores en pulgadas de la norma, convertidos a mm (1 in = 25,4 mm).
+    # Valores en pulgadas, convertidos a mm (1 in = 25,4 mm). Los tres primeros salen de Wikipedia (media); el ancho
+    # total, el del plano superior y la altura no figuran en la fuente citada: son estimados (baja).
     assert e.PICATINNY_ANCHO_RANURA.valor_mm == pytest.approx(0.206 * 25.4, abs=1e-4)  # 5,23 mm
     assert e.PICATINNY_PASO.valor_mm == pytest.approx(0.394 * 25.4, abs=1e-4)  # 10,01 mm
     assert e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm == pytest.approx(0.118 * 25.4, abs=1e-4)  # 3,00 mm
     assert e.PICATINNY_ANCHO.valor_mm == pytest.approx(0.835 * 25.4, abs=1e-4)  # 21,21 mm
     assert e.PICATINNY_ANCHO_PLANO.valor_mm == pytest.approx(0.617 * 25.4, abs=1e-4)  # 15,67 mm
-    for cota in e.PICATINNY:
-        assert "MIL-STD-1913" in cota.fuente
-        assert cota.confianza is not None
+    for cota in (e.PICATINNY_ANCHO_RANURA, e.PICATINNY_PASO, e.PICATINNY_PROFUNDIDAD_RANURA):
+        assert cota.fuente.startswith("https://en.wikipedia.org/wiki/Picatinny_rail")
+        assert cota.confianza is Confianza.MEDIA
+    for cota in (e.PICATINNY_ANCHO, e.PICATINNY_ANCHO_PLANO, e.PICATINNY_ALTURA):
+        assert cota.confianza is Confianza.BAJA
+        assert cota.fuente.startswith("estimado")
 
 
 def test_la_malla_del_rail_mide_lo_que_dice_el_estandar() -> None:
@@ -70,7 +75,7 @@ def test_glb_se_vuelve_a_leer_con_sus_nodos_y_en_metros() -> None:
     socket = doc["nodes"][1]
     assert "mesh" not in socket
     assert socket["translation"] == pytest.approx([0.0, e.PICATINNY_ALTURA.valor_mm / 1000, 0.0])
-    assert socket["extras"]["interfaz"] == "picatinny"
+    assert socket["extras"]["interfaz"] == "picatinny-mil-std-1913"
     assert socket["extras"]["ranuras"] == 5
     extras = doc["nodes"][0]["extras"]
     assert (extras["nivel"], extras["publicable_3d"], extras["tiene_malla"]) == ("T0", False, True)
