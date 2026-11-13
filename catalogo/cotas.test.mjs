@@ -93,6 +93,6 @@ test('manifiesto de referencias CC: licencia abierta y hash', () => {
     assert.match(r.sha256, /^[0-9a-f]{64}$/, r.id);
     assert.match(r.url, /^https:\/\/\S+$/, r.id);
     assert.ok(r.autor && r.atribucion && r.vista, r.id);
-    assert.match(r.licencia, /^(CC0|CC BY \d|CC-BY|Dominio público)/, `${r.id}: licencia no admitida`);
+    assert.match(r.licencia, /^(CC0|CC BY \d|CC-BY|Public domain|Dominio público)/, `${r.id}: licencia no admitida`);
   }
 });
