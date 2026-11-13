@@ -241,6 +241,40 @@ class Pieza:
         return hashlib.sha256(self.glb()).hexdigest()
 
 
+def _limitar(
+    decision: realismo.Decision,
+    *,
+    es_demo: bool,
+    pendientes: Sequence[str],
+    notas: Sequence[str],
+    cotas: Sequence[Cota],
+) -> realismo.Decision:
+    """Tope de nivel por lo que la puerta de realismo no ve: el origen de los datos y lo que no se modela.
+
+    La puerta compara la malla con los nominales del propio generador, así que una pieza coherente consigo
+    misma pasaría aunque sus cotas sean de barrido, estén pendientes o la geometría esté simplificada.
+    Con cualquiera de esas razones, la pieza es T1 como mucho y no se publica como modelo 3D.
+    """
+    razones: list[str] = []
+    if es_demo:
+        razones.append("pieza de demostración (parámetros de barrido, sin ficha de SKU)")
+    if pendientes:
+        razones.append(f"cotas pendientes: {', '.join(pendientes)}")
+    if notas:
+        razones.append(f"geometría simplificada ({len(notas)} simplificación(es) declarada(s))")
+    bajas = sorted({c.clave for c in cotas if c.valor_mm is not None and c.confianza in (None, Confianza.BAJA)})
+    if bajas:
+        razones.append(f"cotas de confianza baja o sin confianza: {', '.join(bajas)}")
+    if not razones:
+        return decision
+    return realismo.Decision(
+        nivel=min(decision.nivel, realismo.Nivel.T1),
+        publicable_3d=False,
+        sospechosa_de_cubo=decision.sospechosa_de_cubo,
+        motivos=[*decision.motivos, *(f"Tope T1 y no publicable: {r}." for r in razones)],
+    )
+
+
 class Familia(ABC):
     """Clase base. Una familia nueva define los atributos de clase y `construir` (ver `LEEME.md`)."""
 
@@ -301,12 +335,14 @@ class Familia(ABC):
         params: Mapping[str, Valor],
         ficha: Ficha | None = None,
         vistas: Sequence[realismo.VistaIoU] = (),
-        verificado_fisicamente: bool = False,
     ) -> Pieza:
         """Genera la variante. Con `ficha`, las cotas `de_sku` salen de ella (y mandan sobre `params`).
 
         El nivel lo decide la puerta de realismo: `vistas` son los IoU de silueta medidos contra fotos de
-        referencia (sin ellas, la malla no pasa de T0) y `verificado_fisicamente` es lo único que da T3.
+        referencia (sin ellas, la malla no pasa de T0). Una familia nunca da T3: la verificación física (escaneo,
+        CAD oficial o calibre) es un acto externo que no puede afirmar el propio generador. Además, una pieza
+        `es_demo`, con cotas pendientes, con simplificaciones declaradas o con cotas de confianza baja queda en
+        T1 como mucho y con `publicable_3d = False` (`_limitar`).
         """
         entrada = dict(params)
         if ficha is not None:
@@ -373,25 +409,29 @@ class Familia(ABC):
             raise ValueError(f"{self.id}: `construir` debe declarar `dimensiones_nominales_mm`")
         malla = teselar(geo.solido, self.tolerancia_mm, self.tolerancia_angular)
         medidas = malla.dimensiones_mm
+        # Coherencia interna: la malla mide lo que dicen los parámetros. NO prueba fidelidad a la realidad.
         claves = [
             realismo.Cota(nombre, float(nominal), medida, "caja envolvente de la malla frente a los parámetros")
             for nombre, nominal, medida in zip(
                 ("largo", "alto", "ancho"), geo.dimensiones_nominales_mm, medidas, strict=True
             )
         ]
+        # Las cotas pendientes de la pieza entran en la puerta como desconocidas: no se pueden dar por buenas.
+        claves += [realismo.Cota(clave, None, None) for clave in pendientes]
         decision = realismo.decidir_nivel(
             cotas=claves,
             vistas=list(vistas),
             tiene_malla=True,
             malla=realismo.Malla(malla.volumen_mm3, medidas[0] * medidas[1] * medidas[2], geo.vaciados),
-            verificado_fisicamente=verificado_fisicamente,
         )
+        todas = (*cotas, *geo.cotas)
+        decision = _limitar(decision, es_demo=ficha is None, pendientes=pendientes, notas=geo.notas, cotas=todas)
         return Pieza(
             nivel=decision.nivel.name,
             publicable_3d=decision.publicable_3d,
             sospechosa_de_cubo=decision.sospechosa_de_cubo,
             motivos_nivel=tuple(decision.motivos),
-            cotas=(*cotas, *geo.cotas),
+            cotas=todas,
             notas=geo.notas,
             sockets=geo.sockets,
             malla=malla,

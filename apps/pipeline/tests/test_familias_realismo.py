@@ -3,11 +3,12 @@
 from collections.abc import Mapping
 
 import pytest
-from build123d import Box
+from build123d import Align, Box, Cylinder
 
 from taller6mm_pipeline.familias import FAMILIAS, Familia, Geometria, Parametro
 from taller6mm_pipeline.familias.glb import leer_glb
 from taller6mm_pipeline.familias.muestras import tanda
+from taller6mm_pipeline.ficha import Ficha
 from taller6mm_pipeline.realismo import VistaIoU
 
 RAIL = FAMILIAS["rail.picatinny"]
@@ -26,18 +27,65 @@ def test_sin_vistas_de_referencia_ninguna_malla_pasa_de_t0() -> None:
         else:
             con_malla += 1
             assert pieza.sospechosa_de_cubo is False  # ninguna familia con malla es una caja disfrazada
-            assert not any("fuera de tolerancia" in m for m in pieza.motivos_nivel)  # la caja mide lo nominal
+            # la caja mide lo nominal (las cotas pendientes sí figuran como desconocidas)
+            assert not any(f"Cota «{c}» fuera" in m for c in ("largo", "alto", "ancho") for m in pieza.motivos_nivel)
     assert con_malla == 32
 
 
-def test_el_nivel_sube_solo_con_vistas_licenciadas_que_pasan() -> None:
+def test_una_pieza_demo_nunca_pasa_de_t1_ni_es_publicable() -> None:
     una = RAIL.generar({"ranuras": 13}, vistas=BUENAS[:1])
     assert (una.nivel, una.publicable_3d) == ("T1", False)
-    dos = RAIL.generar({"ranuras": 13}, vistas=BUENAS)
-    assert (dos.nivel, dos.publicable_3d) == ("T2", True)
-    assert any("Sin verificación física" in m for m in dos.motivos_nivel)
-    tres = RAIL.generar({"ranuras": 13}, vistas=BUENAS, verificado_fisicamente=True)
-    assert (tres.nivel, tres.publicable_3d) == ("T3", True)
+    dos = RAIL.generar({"ranuras": 13}, vistas=BUENAS)  # raíl es_demo con dos vistas que pasan
+    assert dos.es_demo is True
+    assert (dos.nivel, dos.publicable_3d) == ("T1", False)
+    assert any("demostración" in m for m in dos.motivos_nivel)
+
+
+def test_generar_no_acepta_verificacion_fisica_afirmada_por_el_llamante() -> None:
+    with pytest.raises(TypeError):
+        RAIL.generar({"ranuras": 13}, vistas=BUENAS, verificado_fisicamente=True)  # type: ignore[call-arg]
+
+
+@pytest.mark.parametrize(
+    ("familia", "params"),
+    [
+        ("boca.silenciador", {"longitud": 150.0, "diametro": 35.0}),  # macizo: sin paso interior ni rosca
+        ("culata.tubo", {"diametro": 29.0, "longitud": 184.15}),  # tubo macizo
+    ],
+)
+def test_piezas_macizas_con_cotas_pendientes_nunca_son_t2_ni_t3(familia: str, params: dict[str, object]) -> None:
+    pieza = FAMILIAS[familia].generar(params, vistas=BUENAS)
+    assert pieza.pendientes  # cotas pendientes
+    assert pieza.nivel in {"T0", "T1"}
+    assert pieza.publicable_3d is False
+
+
+def test_con_ficha_pero_con_simplificaciones_o_cotas_bajas_sigue_en_t1() -> None:
+    ficha = Ficha("sku.prueba", "Raíl de prueba")
+    pieza = RAIL.generar({"ranuras": 13}, ficha=ficha, vistas=BUENAS)
+    assert pieza.es_demo is False and pieza.pendientes == ()
+    assert (pieza.nivel, pieza.publicable_3d) == ("T1", False)  # perfil simplificado y cotas estimadas
+    assert any("simplificada" in m for m in pieza.motivos_nivel)
+
+
+class _Limpia(Familia):
+    """Pieza sin cotas pendientes, sin simplificaciones y con ficha: lo único que puede llegar a T2."""
+
+    id = "prueba.limpia"
+    nombre = "Limpia"
+    parametros = (Parametro("lado", "Lado", float, "mm", minimo=1, maximo=100),)
+
+    def construir(self, p: Mapping[str, object]) -> Geometria:
+        lado = float(p["lado"])
+        hueco = Cylinder(lado / 4, lado, align=(Align.CENTER, Align.CENTER, Align.CENTER))
+        return Geometria(Box(lado, lado, lado) - hueco, dimensiones_nominales_mm=(lado,) * 3, vaciados=1)
+
+
+def test_t2_solo_es_alcanzable_con_ficha_sin_pendientes_ni_simplificaciones_y_nunca_t3() -> None:
+    pieza = _Limpia().generar({"lado": 50.0}, ficha=Ficha("sku.limpio", "Limpio"), vistas=BUENAS)
+    assert (pieza.nivel, pieza.publicable_3d) == ("T2", True)
+    assert any("Sin verificación física" in m for m in pieza.motivos_nivel)
+    assert _Limpia().generar({"lado": 50.0}, vistas=BUENAS).nivel == "T1"  # sin ficha: demo
 
 
 def test_vistas_sin_licencia_o_con_iou_bajo_no_suben_de_nivel() -> None:
@@ -80,7 +128,7 @@ class _Caja(Familia):
 
 
 def test_una_caja_no_pasa_la_puerta_ni_con_vistas_perfectas() -> None:
-    pieza = _Caja().generar({"lado": 50.0}, vistas=BUENAS, verificado_fisicamente=True)
+    pieza = _Caja().generar({"lado": 50.0}, ficha=Ficha("sku.caja", "Caja"), vistas=BUENAS)
     assert pieza.sospechosa_de_cubo is True
     assert pieza.publicable_3d is False
     assert pieza.nivel == "T1"
