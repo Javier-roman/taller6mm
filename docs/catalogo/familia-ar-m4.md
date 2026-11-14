@@ -351,6 +351,36 @@ Estado honesto: todas son piezas **candidatas de demostración** (`es_demo`): la
 | Empuñadura angular (angled foregrip) (`acc-empunadura-angular-angled-foregrip`) | 1 | `acc-vertical-angular` | `accesorio.empunadura_vertical` |
 | Asa de armado (charging handle) y palanca (`sup-asa-de-armado-charging-handle-y-palanca`) | 2 | `sup-palanca-armado` | `sup.palanca_armado` |
 
+## Cobertura de la oleada 1: cuerpos, cañón, tubo y monturas (generadores paramétricos)
+
+Registro: `catalogo/m4-oleada1-cuerpos.json` (`python -m taller6mm_pipeline.familias.oleada1_cuerpos --registro catalogo/m4-oleada1-cuerpos.json`; código en `apps/pipeline/src/taller6mm_pipeline/familias/`: `canon.py`, `receptores.py`, `amortiguador.py`, `monturas.py`, `detalle.py`). Cubre **12 elementos de la oleada 1** y 7 de la oleada 2 de adelanto: cañón exterior (carabina, CQB, mid, A2 pesado y largo; perfil ligero o pesado), bloque de gas (bajo perfil, A2 con mira y raíl), receptor superior (A3 plano y A2 con asa; ventana de eyección con tapa cerrada o abierta, refuerzo de forja, empuñadura de armado y forward assist), receptor inferior (pozo de cargador, guardamonte, selector con ranura y leyenda neutra, botón de cargador, torre del tubo), tubo de amortiguador (carabina con quilla y rifle), bloqueo (tuerca de castillo y placa) y monturas de óptica (elevador de red dot y anillos de 25,4, 30 y 34 mm).
+
+Estado honesto: solo **formas exteriores**, sin internos (gearbox, cerrojo, muelles). Todo es **candidato de demostración** (`es_demo`): las medidas son parámetros de barrido y las proporciones de detalle son estimadas, ambas de confianza baja, sin ficha de SKU; sin vistas licenciadas son T0 y `publicable_3d = false` (tope T1). Los datos desconocidos van como `null` con bandera (p. ej. separación de tornillos de la huella, paso de la quilla). El texto grabado usa una fuente de puntos propia y solo letras neutras (sin marcas ni logos). Las interfaces `*` (p. ej. `montaje-bloque-gas-ar`) siguen siendo propuestas. Los elementos siguen en `pendiente`: tener geometría no verifica sus cotas.
+
+| Elemento | Oleada | Pieza | Familia |
+|---|---:|---|---|
+| Cañón exterior de M4A1 (perfil estándar con punto de mira) (`canon-canon-exterior-de-m4a1-perfil-estandar-con-punto-de-mira`) | 1 | `canon-carabina-ligero` | `canon.exterior` |
+| Cañón exterior CQB (corto) (`canon-canon-exterior-cqb-corto`) | 1 | `canon-cqb-corto` | `canon.exterior` |
+| (extra, sin elemento propio) | - | `canon-mid-ligero` | `canon.exterior` |
+| Cañón exterior M16 con perfil A2 (pesado) (`canon-canon-exterior-m16-con-perfil-a2-pesado`) | 2 | `canon-a2-pesado` | `canon.exterior` |
+| Cañón exterior largo (DMR / SPR) (`canon-canon-exterior-largo-dmr-spr`) | 2 | `canon-largo-pesado` | `canon.exterior` |
+| Bloque de gas bajo perfil (bajo guardamanos) (`canon-bloque-de-gas-bajo-perfil-bajo-guardamanos`) | 1 | `bloque-gas-bajo-perfil` | `canon.bloque_gas` |
+| Bloque de gas tipo A2 (con alojamiento de bayoneta) (`canon-bloque-de-gas-tipo-a2-con-alojamiento-de-bayoneta`) | 2 | `bloque-gas-a2-mira` | `canon.bloque_gas` |
+| Bloque de gas con raíl (estilo Picatinny) (`canon-bloque-de-gas-con-rail-estilo-picatinny`) | 2 | `bloque-gas-rail` | `canon.bloque_gas` |
+| Receptor superior flat-top (raíl superior Picatinny) (`sup-receptor-superior-flat-top-rail-superior-picatinny`) | 1 | `receptor-superior-a3` | `receptor.superior` |
+| Receptor superior flat-top con ventana de eyección ampliada (Gen 2 o forjado) (`sup-receptor-superior-flat-top-con-ventana-de-eyeccion-ampliada-gen-2-o-forjado`) | 2 | `receptor-superior-a3-forjado` | `receptor.superior` |
+| Receptor superior A2 con asa de transporte (carry handle) integrada (`sup-receptor-superior-a2-con-asa-de-transporte-carry-handle-integrada`) | 1 | `receptor-superior-a2-asa` | `receptor.superior` |
+| Receptor superior de cañón corto (CQB) (`sup-receptor-superior-de-canon-corto-cqb`) | 1 | `receptor-superior-cqb` | `receptor.superior` |
+| Receptor inferior AEG estándar (M4/M16, gearbox Ver. 2) (`inf-receptor-inferior-aeg-estandar-m4-m16-gearbox-ver-2`) | 1 | `receptor-inferior-estandar` | `receptor.inferior` |
+| Receptor inferior AEG con pistolete adaptable (`inf-receptor-inferior-aeg-con-pistolete-adaptable`) | 1 | `receptor-inferior-ambidiestro` | `receptor.inferior` |
+| Tubo de culata mil-spec (AR-15) (`tubo-tubo-de-culata-mil-spec-ar-15`) | 1 | `tubo-amortiguador-carabina` | `amortiguador.tubo` |
+| Tubo de culata comercial (AR-15) (`tubo-tubo-de-culata-comercial-ar-15`) | 1 | `tubo-amortiguador-rifle` | `amortiguador.tubo` |
+| Anillo y tuerca del tubo de culata (castle nut y placa de retención) (`tubo-anillo-y-tuerca-del-tubo-de-culata-castle-nut-y-placa-de-retencion`) | 3 | `bloqueo-tubo` | `amortiguador.bloqueo` |
+| Montura de elevación (riser / QD) de red dot (`opt-montura-de-elevacion-riser-qd-de-red-dot`) | 1 | `montura-riser-t1` | `montura.riser` |
+| (extra, sin elemento propio) | - | `montura-riser-rmr` | `montura.riser` |
+| Red dot estilo Aimpoint CompM4 / T1 (con anillos) (`opt-red-dot-estilo-aimpoint-compm4-t1-con-anillos`) | 1 | `montura-anillos-30` | `montura.anillos` |
+| Montura cantilever para LPVO (`opt-montura-cantilever-para-lpvo`) | 2 | `montura-anillos-34` | `montura.anillos` |
+
 ## Interfaces nuevas propuestas (`*`)
 
 No existen aún en `catalogo/interfaces.json` (no se ha tocado). Se proponen para añadirlas en un PR aparte, con cotas pendientes.
