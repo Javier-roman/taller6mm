@@ -24,6 +24,10 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 
 `blender/m4_cuerpo.py` (Blender 5.2 sin interfaz; no entra en `pytest`) genera el receptor superior, el inferior, el pistolete y dos culatas a partir de una base CC BY 4.0 y de la foto propia de Javi, exporta los GLB con `socket.*` a `salida/m4-cuerpo/` y mide el IoU de silueta con `validacion.py` y la puerta de realismo. Procedencia y atribución en `catalogo/m4-cuerpo-base.json`; resultados en `docs/catalogo/m4-cuerpo-base.md`.
 
+## Kit esencial M4 (Blender)
+
+`blender/kit_esencial_m4.py` separa piezas sueltas (cargador, bocacha, silenciador, red dot, culata) de modelos CC ya descargados por el importador: quita mallas ajenas y todos los materiales del autor, orienta (+X boca, +Z arriba), escala por UNA cota con fuente (confianza baja) o de forma relativa, añade `socket.*` y exporta a `salida/kit-m4/`. `--modo vistas` dibuja dos vistas por pieza con los sockets marcados. `blender/kit_inspeccion.py` lista las mallas de un GLB. Procedencia y nivel en `catalogo/kit-esencial-m4.json` (`kit_esencial.py` y su test); el guardamanos M-LOK sale del generador paramétrico. Nada es publicable.
+
 ## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
 
 Busca modelos ya hechos con licencia abierta (CC0 / CC BY) para una pieza de `catalogo/ar-m4.json`, sin gastar tokens: lo repetitivo lo hace el script. Los términos por pieza están en `catalogo/importador-terminos.json`.
