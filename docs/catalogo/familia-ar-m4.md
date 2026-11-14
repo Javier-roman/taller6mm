@@ -319,6 +319,38 @@ Dentro de cada zona, el orden es el de las tablas de abajo (los de oleada 1 prim
 | Batería (volumen de referencia: stick, mini, cuadrada) (`acc-bateria-volumen-de-referencia-stick-mini-cuadrada`) | tipo; capacidad; conector; volumen | `conector-bateria-mini-tamiya`, `conector-bateria-tamiya`, `conector-bateria-deans` | — | T0 | 2 | FAB |
 | Contrapeso / peso de culata (`acc-contrapeso-peso-de-culata`) | longitud; peso | `tubo-culata-mil-spec` | — | T1 | 3 | CAT |
 
+## Cobertura de la oleada 1 por generadores paramétricos
+
+Registro: `catalogo/m4-oleada1-piezas.json` (generado con `python -m taller6mm_pipeline.familias.oleada1`; código en `apps/pipeline/src/taller6mm_pipeline/familias/`: `empunaduras.py`, `guardamanos_variantes.py`, `miras.py`, `accesorios_ar.py`). Cubre **19 de los 85 elementos de la oleada 1** (pistoletes A2 y MOE, guardamanos de carabina, mid, RIS, quad y M-LOK, asa A2, BUIS trasera y delantera, empuñaduras vertical y angular) y 2 de la oleada 2 de adelanto (pistolete ergonómico tipo A y palanca de armado).
+
+Estado honesto: todas son piezas **candidatas de demostración** (`es_demo`): las medidas son parámetros de barrido de confianza baja, sin ficha de SKU; sin vistas licenciadas son T0 y `publicable_3d = false` (tope T1). Los elementos siguen en `pendiente` en el mapa: tener geometría no verifica sus cotas. Las siluetas (ranuras de dedos, juntas, aros) son simplificaciones declaradas en las notas de cada pieza.
+
+| Elemento | Oleada | Pieza | Familia |
+|---|---:|---|---|
+| Pistolete A2 estándar de réplica AEG (`pist-pistolete-a2-estandar-de-replica-aeg`) | 1 | `pist-a2` | `empunadura.pistolete` |
+| Pistolete MOE de polímero (`pist-pistolete-moe-de-polimero`) | 1 | `pist-moe` | `empunadura.pistolete` |
+| Pistolete ergonómico tipo A (ergo, ranuras laterales) (`pist-pistolete-ergonomico-tipo-a-ergo-ranuras-laterales`) | 2 | `pist-ergo` | `empunadura.pistolete` |
+| Guardamanos A2 de dos mitades (con escudo térmico) (`gm-guardamanos-a2-de-dos-mitades-con-escudo-termico`) | 1 | `gm-a2-mid` | `guardamanos.variantes` |
+| Guardamanos M4 CAR de dos mitades (corto con escudo) (`gm-guardamanos-m4-car-de-dos-mitades-corto-con-escudo`) | 1 | `gm-carabina` | `guardamanos.variantes` |
+| Guardamanos M4 RIS (Rail Interface System) (`gm-guardamanos-m4-ris-rail-interface-system`) | 1 | `gm-ris-m4` | `guardamanos.variantes` |
+| Guardamanos de Mk18 (RAS corto) (`gm-guardamanos-de-mk18-ras-corto`) | 1 | `gm-ris-mk18` | `guardamanos.variantes` |
+| Guardamanos quad rail de 7 pulgadas (`gm-guardamanos-quad-rail-de-7-pulgadas`) | 1 | `gm-quad-7` | `guardamanos.variantes` |
+| Guardamanos quad rail de 9 pulgadas (`gm-guardamanos-quad-rail-de-9-pulgadas`) | 1 | `gm-quad-9` | `guardamanos.variantes` |
+| Guardamanos quad rail de 10 pulgadas (`gm-guardamanos-quad-rail-de-10-pulgadas`) | 1 | `gm-quad-10` | `guardamanos.variantes` |
+| Guardamanos M-LOK de 7 pulgadas (`gm-guardamanos-m-lok-de-7-pulgadas`) | 1 | `gm-mlok-7` | `guardamanos.variantes` |
+| Guardamanos M-LOK de 9 pulgadas (`gm-guardamanos-m-lok-de-9-pulgadas`) | 1 | `gm-mlok-9` | `guardamanos.variantes` |
+| Guardamanos M-LOK de 10 pulgadas (`gm-guardamanos-m-lok-de-10-pulgadas`) | 1 | `gm-mlok-10` | `guardamanos.variantes` |
+| Guardamanos M-LOK de 12 pulgadas (`gm-guardamanos-m-lok-de-12-pulgadas`) | 1 | `gm-mlok-12` | `guardamanos.variantes` |
+| Guardamanos M-LOK de 13,5 pulgadas (`gm-guardamanos-m-lok-de-13-5-pulgadas`) | 1 | `gm-mlok-13-5` | `guardamanos.variantes` |
+| (extra, sin elemento propio) | - | `gm-mlok-15` | `guardamanos.variantes` |
+| Asa de transporte A2 con mira trasera integrada (`mira-asa-de-transporte-a2-con-mira-trasera-integrada`) | 1 | `mira-asa-a2` | `mira.asa_a2` |
+| BUIS trasera abatible (back-up iron sight) (`mira-buis-trasera-abatible-back-up-iron-sight`) | 1 | `mira-buis-trasera` | `mira.buis` |
+| BUIS delantera abatible (`mira-buis-delantera-abatible`) | 1 | `mira-buis-delantera` | `mira.buis` |
+| (extra, sin elemento propio) | - | `mira-buis-trasera-abatida` | `mira.buis` |
+| Empuñadura vertical (foregrip) de poste (`acc-empunadura-vertical-foregrip-de-poste`) | 1 | `acc-vertical-poste` | `accesorio.empunadura_vertical` |
+| Empuñadura angular (angled foregrip) (`acc-empunadura-angular-angled-foregrip`) | 1 | `acc-vertical-angular` | `accesorio.empunadura_vertical` |
+| Asa de armado (charging handle) y palanca (`sup-asa-de-armado-charging-handle-y-palanca`) | 2 | `sup-palanca-armado` | `sup.palanca_armado` |
+
 ## Interfaces nuevas propuestas (`*`)
 
 No existen aún en `catalogo/interfaces.json` (no se ha tocado). Se proponen para añadirlas en un PR aparte, con cotas pendientes.

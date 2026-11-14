@@ -1,0 +1,2822 @@
+{
+  "esquema": "m4-oleada1-piezas/v1",
+  "generado": "2026-11-14",
+  "nota": "Piezas de la oleada 1 del M4/AR-15 generadas por código (apps/pipeline/src/taller6mm_pipeline/familias/oleada1.py). Los GLB viven en apps/pipeline/salida/ (ignorada por git). Todo es de demostración (es_demo): ninguna medida está verificada y nada es publicable.",
+  "piezas": [
+    {
+      "id": "pist-a2",
+      "elemento": "pist-pistolete-a2-estandar-de-replica-aeg",
+      "origen": "generador",
+      "familia": "empunadura.pistolete",
+      "id_variante": "empunadura.pistolete@v1-e49c8e1778b8",
+      "glb": "apps/pipeline/salida/m4-oleada1/pist-a2.glb",
+      "sha256_glb": "5d79c2ffa1c5740b49ad610e41c388f67337c379a7dc487a73da44db3bb994af",
+      "bytes": 12656,
+      "parametros": {
+        "altura": 95.0,
+        "profundidad": 38.0,
+        "ancho": 33.0,
+        "inclinacion": 25.0,
+        "perfil": "a2"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 95.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 38.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 33.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.montaje-pistolete"],
+      "requiere": ["montaje-pistolete-ar"],
+      "ofrece": [],
+      "triangulos": 192,
+      "notas": [
+        "Silueta de ranuras de los dedos, repecho y panza trasera simplificada y de proporciones estimadas.",
+        "El interior (compartimento, tornillo, cuello de unión al receptor) no se modela: es macizo."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, ancho, inclinacion, profundidad."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "pist-moe",
+      "elemento": "pist-pistolete-moe-de-polimero",
+      "origen": "generador",
+      "familia": "empunadura.pistolete",
+      "id_variante": "empunadura.pistolete@v1-450e26d08c9a",
+      "glb": "apps/pipeline/salida/m4-oleada1/pist-moe.glb",
+      "sha256_glb": "b81be15de25c8dfebb1b682132222a32d84626039dbcc8e52111702f7ff96b75",
+      "bytes": 11892,
+      "parametros": {
+        "altura": 95.0,
+        "profundidad": 38.0,
+        "ancho": 33.0,
+        "inclinacion": 25.0,
+        "perfil": "moe"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 95.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 38.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 33.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.montaje-pistolete"],
+      "requiere": ["montaje-pistolete-ar"],
+      "ofrece": [],
+      "triangulos": 176,
+      "notas": [
+        "Silueta de ranuras de los dedos, repecho y panza trasera simplificada y de proporciones estimadas.",
+        "El interior (compartimento, tornillo, cuello de unión al receptor) no se modela: es macizo."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, ancho, inclinacion, profundidad."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "pist-ergo",
+      "elemento": "pist-pistolete-ergonomico-tipo-a-ergo-ranuras-laterales",
+      "origen": "generador",
+      "familia": "empunadura.pistolete",
+      "id_variante": "empunadura.pistolete@v1-39757a0ea05b",
+      "glb": "apps/pipeline/salida/m4-oleada1/pist-ergo.glb",
+      "sha256_glb": "43d26b2352a049997ecdf42984c0ea679ed6ecc5b45f3e9926fc7f9a2c4e8a54",
+      "bytes": 15040,
+      "parametros": {
+        "altura": 95.0,
+        "profundidad": 38.0,
+        "ancho": 33.0,
+        "inclinacion": 25.0,
+        "perfil": "ergo"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 95.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 38.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 33.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.montaje-pistolete"],
+      "requiere": ["montaje-pistolete-ar"],
+      "ofrece": [],
+      "triangulos": 240,
+      "notas": [
+        "Silueta de ranuras de los dedos, repecho y panza trasera simplificada y de proporciones estimadas.",
+        "El interior (compartimento, tornillo, cuello de unión al receptor) no se modela: es macizo.",
+        "Repisa del pulgar (16 x 12 x 3 mm) estimada, sin cota de ningún SKU."
+      ],
+      "nota": "oleada 2: cubierto de adelanto",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, ancho, inclinacion, profundidad."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-a2-mid",
+      "elemento": "gm-guardamanos-a2-de-dos-mitades-con-escudo-termico",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-97f9246b9e14",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-a2-mid.glb",
+      "sha256_glb": "a25bf8c0f4288df7b88a836536ab872c3450574e1ec9e002b73c1fe21582fc26",
+      "bytes": 28064,
+      "parametros": {
+        "tipo": "mid",
+        "longitud": 243.8,
+        "diametro_exterior": 46.0,
+        "grosor_pared": 2.5
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 243.8,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 2.5,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": [],
+      "triangulos": 600,
+      "notas": [
+        "El escudo térmico interior y la unión al receptor no se modelan; el aro es una simplificación.",
+        "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-carabina",
+      "elemento": "gm-guardamanos-m4-car-de-dos-mitades-corto-con-escudo",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-9968706549ef",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-carabina.glb",
+      "sha256_glb": "10f59593d362aa9124ad560dc0cc445abb64e00fea1e699d4ab35a6e5e448834",
+      "bytes": 23324,
+      "parametros": {
+        "tipo": "carabina",
+        "longitud": 170.2,
+        "diametro_exterior": 46.0,
+        "grosor_pared": 2.5
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 170.2,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 2.5,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": [],
+      "triangulos": 468,
+      "notas": [
+        "El escudo térmico interior y la unión al receptor no se modelan; el aro es una simplificación.",
+        "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-ris-m4",
+      "elemento": "gm-guardamanos-m4-ris-rail-interface-system",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-a6615ce8e9cd",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-ris-m4.glb",
+      "sha256_glb": "6b93c7f2767cde4204df4cae910bf4317badcd9f7c10ab40848dc98f787d8c3e",
+      "bytes": 93748,
+      "parametros": {
+        "tipo": "ris",
+        "longitud": 170.2,
+        "diametro_exterior": 36.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 170.2,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913"],
+      "triangulos": 1824,
+      "notas": [
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
+        "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-ris-mk18",
+      "elemento": "gm-guardamanos-de-mk18-ras-corto",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-b7ed40ac2b1f",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-ris-mk18.glb",
+      "sha256_glb": "289212d151c694ca46805b58be26043cf4288576dbd4d2dd380f82753af8de44",
+      "bytes": 102956,
+      "parametros": {
+        "tipo": "ris",
+        "longitud": 190.5,
+        "diametro_exterior": 36.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 190.5,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913"],
+      "triangulos": 2016,
+      "notas": [
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
+        "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-quad-7",
+      "elemento": "gm-guardamanos-quad-rail-de-7-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-d58a678137cd",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-7.glb",
+      "sha256_glb": "5317ab949005e7d492afeca24ca59545e3feaad6a922fa145e82a13c3ab42af5",
+      "bytes": 98356,
+      "parametros": {
+        "tipo": "ris",
+        "longitud": 177.8,
+        "diametro_exterior": 36.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 177.8,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913"],
+      "triangulos": 1920,
+      "notas": [
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
+        "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-quad-9",
+      "elemento": "gm-guardamanos-quad-rail-de-9-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-42fcb2d22c57",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-9.glb",
+      "sha256_glb": "23b38bf864f753dfe5ae4ee524749a850c6da4d7f4c03143da05b83e0e3baa3c",
+      "bytes": 121400,
+      "parametros": {
+        "tipo": "ris",
+        "longitud": 228.6,
+        "diametro_exterior": 36.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 228.6,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913"],
+      "triangulos": 2400,
+      "notas": [
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
+        "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-quad-10",
+      "elemento": "gm-guardamanos-quad-rail-de-10-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-9e335b500791",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-10.glb",
+      "sha256_glb": "0c9a54d44b752eae93deefa33039fae21de3dfef3af67f3235e5989e6db74ddf",
+      "bytes": 130612,
+      "parametros": {
+        "tipo": "ris",
+        "longitud": 254.0,
+        "diametro_exterior": 36.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 254.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913"],
+      "triangulos": 2592,
+      "notas": [
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
+        "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-mlok-7",
+      "elemento": "gm-guardamanos-m-lok-de-7-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-342c537bc1e7",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-7.glb",
+      "sha256_glb": "07aaeb2b3ba1f8b092dc6204e1596945367c9b52b9e49ec2d9b63cb5201cf722",
+      "bytes": 140172,
+      "parametros": {
+        "tipo": "mlok",
+        "longitud": 177.8,
+        "diametro_exterior": 40.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 177.8,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": [
+        "socket.union-receptor",
+        "socket.rail.top",
+        "socket.mlok.side.l.1",
+        "socket.mlok.side.l.2",
+        "socket.mlok.side.l.3",
+        "socket.mlok.side.l.4",
+        "socket.mlok.side.r.1",
+        "socket.mlok.side.r.2",
+        "socket.mlok.side.r.3",
+        "socket.mlok.side.r.4",
+        "socket.mlok.bottom.1",
+        "socket.mlok.bottom.2",
+        "socket.mlok.bottom.3",
+        "socket.mlok.bottom.4"
+      ],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913", "mlok"],
+      "triangulos": 3344,
+      "notas": [
+        "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+        "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-mlok-9",
+      "elemento": "gm-guardamanos-m-lok-de-9-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-551495f99447",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-9.glb",
+      "sha256_glb": "533523937ff3aee21f815888ecf75f4383aa01a46a62d29d6bc47bba641bead3",
+      "bytes": 171624,
+      "parametros": {
+        "tipo": "mlok",
+        "longitud": 228.6,
+        "diametro_exterior": 40.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 228.6,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": [
+        "socket.union-receptor",
+        "socket.rail.top",
+        "socket.mlok.side.l.1",
+        "socket.mlok.side.l.2",
+        "socket.mlok.side.l.3",
+        "socket.mlok.side.l.4",
+        "socket.mlok.side.l.5",
+        "socket.mlok.side.r.1",
+        "socket.mlok.side.r.2",
+        "socket.mlok.side.r.3",
+        "socket.mlok.side.r.4",
+        "socket.mlok.side.r.5",
+        "socket.mlok.bottom.1",
+        "socket.mlok.bottom.2",
+        "socket.mlok.bottom.3",
+        "socket.mlok.bottom.4",
+        "socket.mlok.bottom.5"
+      ],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913", "mlok"],
+      "triangulos": 4124,
+      "notas": [
+        "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+        "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-mlok-10",
+      "elemento": "gm-guardamanos-m-lok-de-10-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-66224ff9054c",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-10.glb",
+      "sha256_glb": "6a97d3ca33d99d9666a530ce8aa3fbbd2e0c1107a04d79be9538fede9eaad22b",
+      "bytes": 199596,
+      "parametros": {
+        "tipo": "mlok",
+        "longitud": 254.0,
+        "diametro_exterior": 40.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 254.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": [
+        "socket.union-receptor",
+        "socket.rail.top",
+        "socket.mlok.side.l.1",
+        "socket.mlok.side.l.2",
+        "socket.mlok.side.l.3",
+        "socket.mlok.side.l.4",
+        "socket.mlok.side.l.5",
+        "socket.mlok.side.l.6",
+        "socket.mlok.side.r.1",
+        "socket.mlok.side.r.2",
+        "socket.mlok.side.r.3",
+        "socket.mlok.side.r.4",
+        "socket.mlok.side.r.5",
+        "socket.mlok.side.r.6",
+        "socket.mlok.bottom.1",
+        "socket.mlok.bottom.2",
+        "socket.mlok.bottom.3",
+        "socket.mlok.bottom.4",
+        "socket.mlok.bottom.5",
+        "socket.mlok.bottom.6"
+      ],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913", "mlok"],
+      "triangulos": 4832,
+      "notas": [
+        "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+        "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-mlok-12",
+      "elemento": "gm-guardamanos-m-lok-de-12-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-be1fd5b519b2",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-12.glb",
+      "sha256_glb": "0caa7920bfe0274543bce09b33fbda4a47648331fc52506c0f54915ed4e1cacf",
+      "bytes": 231064,
+      "parametros": {
+        "tipo": "mlok",
+        "longitud": 304.8,
+        "diametro_exterior": 40.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 304.8,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": [
+        "socket.union-receptor",
+        "socket.rail.top",
+        "socket.mlok.side.l.1",
+        "socket.mlok.side.l.2",
+        "socket.mlok.side.l.3",
+        "socket.mlok.side.l.4",
+        "socket.mlok.side.l.5",
+        "socket.mlok.side.l.6",
+        "socket.mlok.side.l.7",
+        "socket.mlok.side.r.1",
+        "socket.mlok.side.r.2",
+        "socket.mlok.side.r.3",
+        "socket.mlok.side.r.4",
+        "socket.mlok.side.r.5",
+        "socket.mlok.side.r.6",
+        "socket.mlok.side.r.7",
+        "socket.mlok.bottom.1",
+        "socket.mlok.bottom.2",
+        "socket.mlok.bottom.3",
+        "socket.mlok.bottom.4",
+        "socket.mlok.bottom.5",
+        "socket.mlok.bottom.6",
+        "socket.mlok.bottom.7"
+      ],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913", "mlok"],
+      "triangulos": 5612,
+      "notas": [
+        "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+        "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-mlok-13-5",
+      "elemento": "gm-guardamanos-m-lok-de-13-5-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-f7339a703311",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-13-5.glb",
+      "sha256_glb": "f12831332a2f4a18af5f30f8c6b5ffe4c6062bd23d27800e13a30352159dc6e2",
+      "bytes": 261404,
+      "parametros": {
+        "tipo": "mlok",
+        "longitud": 342.9,
+        "diametro_exterior": 40.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 342.9,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": [
+        "socket.union-receptor",
+        "socket.rail.top",
+        "socket.mlok.side.l.1",
+        "socket.mlok.side.l.2",
+        "socket.mlok.side.l.3",
+        "socket.mlok.side.l.4",
+        "socket.mlok.side.l.5",
+        "socket.mlok.side.l.6",
+        "socket.mlok.side.l.7",
+        "socket.mlok.side.l.8",
+        "socket.mlok.side.r.1",
+        "socket.mlok.side.r.2",
+        "socket.mlok.side.r.3",
+        "socket.mlok.side.r.4",
+        "socket.mlok.side.r.5",
+        "socket.mlok.side.r.6",
+        "socket.mlok.side.r.7",
+        "socket.mlok.side.r.8",
+        "socket.mlok.bottom.1",
+        "socket.mlok.bottom.2",
+        "socket.mlok.bottom.3",
+        "socket.mlok.bottom.4",
+        "socket.mlok.bottom.5",
+        "socket.mlok.bottom.6",
+        "socket.mlok.bottom.7",
+        "socket.mlok.bottom.8"
+      ],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913", "mlok"],
+      "triangulos": 6368,
+      "notas": [
+        "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+        "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "gm-mlok-15",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "guardamanos.variantes",
+      "id_variante": "guardamanos.variantes@v1-ded51b44aecc",
+      "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-15.glb",
+      "sha256_glb": "2f6210b146e911e35a6b4c5cd71d2d56153f0cb733d97a7bc8cb157a19f86941",
+      "bytes": 291652,
+      "parametros": {
+        "tipo": "mlok",
+        "longitud": 381.0,
+        "diametro_exterior": 40.0,
+        "grosor_pared": 3.0
+      },
+      "cotas": [
+        {
+          "clave": "picatinny.ancho_ranura",
+          "valor_mm": 5.2324,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.paso",
+          "valor_mm": 10.0076,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.profundidad_ranura",
+          "valor_mm": 2.9972,
+          "fuente": "https://en.wikipedia.org/wiki/Picatinny_rail (norma MIL-STD-1913 no consultada directamente)",
+          "fecha": "2026-11-11",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_max",
+          "valor_mm": 21.209,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.ancho_plano_superior_max",
+          "valor_mm": 15.6718,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "picatinny.altura_perfil_min",
+          "valor_mm": 9.3218,
+          "fuente": "estimado: no figura en https://en.wikipedia.org/wiki/Picatinny_rail ni se consultó la norma MIL-STD-1913; valor de memoria, a verificar contra la norma o un calibre",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.largo_ranura",
+          "valor_mm": 32.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.ancho_ranura",
+          "valor_mm": 7.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.separacion_entre_ranuras",
+          "valor_mm": 8.0,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mlok.radio_esquina",
+          "valor_mm": 2.38,
+          "fuente": "https://en.wikipedia.org/wiki/M-LOK (dice «approximately» y cita un foro y un GrabCAD estimado; el plano oficial solo se entrega con la licencia gratuita de Magpul)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 381.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_exterior",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor_pared",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": [
+        "socket.union-receptor",
+        "socket.rail.top",
+        "socket.mlok.side.l.1",
+        "socket.mlok.side.l.2",
+        "socket.mlok.side.l.3",
+        "socket.mlok.side.l.4",
+        "socket.mlok.side.l.5",
+        "socket.mlok.side.l.6",
+        "socket.mlok.side.l.7",
+        "socket.mlok.side.l.8",
+        "socket.mlok.side.l.9",
+        "socket.mlok.side.r.1",
+        "socket.mlok.side.r.2",
+        "socket.mlok.side.r.3",
+        "socket.mlok.side.r.4",
+        "socket.mlok.side.r.5",
+        "socket.mlok.side.r.6",
+        "socket.mlok.side.r.7",
+        "socket.mlok.side.r.8",
+        "socket.mlok.side.r.9",
+        "socket.mlok.bottom.1",
+        "socket.mlok.bottom.2",
+        "socket.mlok.bottom.3",
+        "socket.mlok.bottom.4",
+        "socket.mlok.bottom.5",
+        "socket.mlok.bottom.6",
+        "socket.mlok.bottom.7",
+        "socket.mlok.bottom.8",
+        "socket.mlok.bottom.9"
+      ],
+      "requiere": ["tuerca-guardamanos-ar"],
+      "ofrece": ["picatinny-mil-std-1913", "mlok"],
+      "triangulos": 7124,
+      "notas": [
+        "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
+        "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nota": "extra: 15 pulgadas no figura como elemento del mapa",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "mira-asa-a2",
+      "elemento": "mira-asa-de-transporte-a2-con-mira-trasera-integrada",
+      "origen": "generador",
+      "familia": "mira.asa_a2",
+      "id_variante": "mira.asa_a2@v1-bd07384c7a0f",
+      "glb": "apps/pipeline/salida/m4-oleada1/mira-asa-a2.glb",
+      "sha256_glb": "1678fa4c10c7688320142aa5fe5fa9eefe18471a654098af02465a64b4372f3c",
+      "bytes": 5444,
+      "parametros": {
+        "longitud": 130.0,
+        "altura": 55.0,
+        "ancho": 20.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 130.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura",
+          "valor_mm": 55.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.montaje-asa-a2", "socket.mira-trasera"],
+      "requiere": ["montaje-asa-a2"],
+      "ofrece": ["montaje-mira-trasera-a2"],
+      "triangulos": 44,
+      "notas": [
+        "Silueta de perfil con proporciones estimadas; las ruedas de deriva y elevación y el tambor no se modelan.",
+        "El raíl de montaje superior del asa desmontable no se modela."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, ancho, longitud."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "mira-buis-trasera",
+      "elemento": "mira-buis-trasera-abatible-back-up-iron-sight",
+      "origen": "generador",
+      "familia": "mira.buis",
+      "id_variante": "mira.buis@v1-5610ed5e369c",
+      "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera.glb",
+      "sha256_glb": "f4ed17ffbf4eb63e3ad0616da98573bd8ae27fab0980fd92c60a2fd984417815",
+      "bytes": 5508,
+      "parametros": {
+        "lado": "trasera",
+        "posicion": "erguida",
+        "longitud_base": 25.0,
+        "altura_base": 12.0,
+        "altura": 40.0,
+        "ancho": 20.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud_base",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura_base",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.rail.base"],
+      "requiere": ["picatinny-mil-std-1913"],
+      "ofrece": [],
+      "triangulos": 48,
+      "notas": [
+        "Pinza al raíl, bisagra, resorte y muelle no se modelan; silueta de proporciones estimadas.",
+        "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, altura_base, ancho, longitud_base."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "mira-buis-delantera",
+      "elemento": "mira-buis-delantera-abatible",
+      "origen": "generador",
+      "familia": "mira.buis",
+      "id_variante": "mira.buis@v1-6c6286c81766",
+      "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-delantera.glb",
+      "sha256_glb": "332f4ff6b7db00db255c0ae2d84b8dcde267a5c83351190c164560b5ee2794ca",
+      "bytes": 4696,
+      "parametros": {
+        "lado": "delantera",
+        "posicion": "erguida",
+        "longitud_base": 25.0,
+        "altura_base": 12.0,
+        "altura": 40.0,
+        "ancho": 20.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud_base",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura_base",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.rail.base"],
+      "requiere": ["picatinny-mil-std-1913"],
+      "ofrece": [],
+      "triangulos": 28,
+      "notas": [
+        "Pinza al raíl, bisagra, resorte y muelle no se modelan; silueta de proporciones estimadas.",
+        "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, altura_base, ancho, longitud_base."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "mira-buis-trasera-abatida",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "mira.buis",
+      "id_variante": "mira.buis@v1-aa91c71e16f0",
+      "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera-abatida.glb",
+      "sha256_glb": "c7ba0ec54444e814ab7ece75eb4ea826776147f8997d2b5868d8b91300262f56",
+      "bytes": 5896,
+      "parametros": {
+        "lado": "trasera",
+        "posicion": "abatida",
+        "longitud_base": 25.0,
+        "altura_base": 12.0,
+        "altura": 40.0,
+        "ancho": 20.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud_base",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura_base",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "altura",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.rail.base"],
+      "requiere": ["picatinny-mil-std-1913"],
+      "ofrece": [],
+      "triangulos": 56,
+      "notas": [
+        "Pinza al raíl, bisagra, resorte y muelle no se modelan; silueta de proporciones estimadas.",
+        "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
+      ],
+      "nota": "extra: estado abatido de la BUIS trasera",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: altura, altura_base, ancho, longitud_base."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "acc-vertical-poste",
+      "elemento": "acc-empunadura-vertical-foregrip-de-poste",
+      "origen": "generador",
+      "familia": "accesorio.empunadura_vertical",
+      "id_variante": "accesorio.empunadura_vertical@v1-7541790c2994",
+      "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-poste.glb",
+      "sha256_glb": "2bcaddbae72fb4e752d1def11bed2a74c5cbade97d1b2e24c261037646aad2d5",
+      "bytes": 9592,
+      "parametros": {
+        "longitud_total": 100.0,
+        "diametro": 32.0,
+        "largo_base": 40.0,
+        "alto_base": 20.0,
+        "angulo": 0.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud_total",
+          "valor_mm": 100.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 32.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "largo_base",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_base",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.rail.agarre"],
+      "requiere": ["picatinny-mil-std-1913"],
+      "ofrece": [],
+      "triangulos": 160,
+      "notas": [
+        "Poste liso: sin textura ni tapa. La base es una caja, sin la pinza ni el tornillo de apriete.",
+        "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: alto_base, diametro, largo_base, longitud_total."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "acc-vertical-angular",
+      "elemento": "acc-empunadura-angular-angled-foregrip",
+      "origen": "generador",
+      "familia": "accesorio.empunadura_vertical",
+      "id_variante": "accesorio.empunadura_vertical@v1-bf0c03d46f8e",
+      "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-angular.glb",
+      "sha256_glb": "8492abb3a4e8542669a9311d610b3e488ed6baea42e16352c56f9da599720b66",
+      "bytes": 9972,
+      "parametros": {
+        "longitud_total": 100.0,
+        "diametro": 32.0,
+        "largo_base": 40.0,
+        "alto_base": 20.0,
+        "angulo": 30.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud_total",
+          "valor_mm": 100.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 32.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "largo_base",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_base",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.rail.agarre"],
+      "requiere": ["picatinny-mil-std-1913"],
+      "ofrece": [],
+      "triangulos": 172,
+      "notas": [
+        "Poste liso: sin textura ni tapa. La base es una caja, sin la pinza ni el tornillo de apriete.",
+        "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja)."
+      ],
+      "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: alto_base, diametro, largo_base, longitud_total."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "sup-palanca-armado",
+      "elemento": "sup-asa-de-armado-charging-handle-y-palanca",
+      "origen": "generador",
+      "familia": "sup.palanca_armado",
+      "id_variante": "sup.palanca_armado@v1-e62b0b73f304",
+      "glb": "apps/pipeline/salida/m4-oleada1/sup-palanca-armado.glb",
+      "sha256_glb": "2d985af5db0b7948df584da24959ff9c4e0c1efbb712f98c32bddccdf708e046",
+      "bytes": 5016,
+      "parametros": {
+        "largo_cuerpo": 110.0,
+        "ancho_cuerpo": 16.0,
+        "alto": 10.0,
+        "ancho_total": 55.0,
+        "largo_palanca": 25.0,
+        "tipo": "estandar"
+      },
+      "cotas": [
+        {
+          "clave": "largo_cuerpo",
+          "valor_mm": 110.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_cuerpo",
+          "valor_mm": 16.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 10.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_total",
+          "valor_mm": 55.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "largo_palanca",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "fecha": "2026-11-11",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "sockets": ["socket.montaje-asa-carga"],
+      "requiere": ["montaje-asa-carga-ar"],
+      "ofrece": [],
+      "triangulos": 28,
+      "notas": [
+        "Pestillo, resorte y muescas del cuerpo no se modelan; las alas son cajas de proporciones estimadas.",
+        "La palanca ambidiestra amplía el ala 1,5 veces en vertical (estimación de silueta, sin cota de SKU)."
+      ],
+      "nota": "oleada 2: cubierto de adelanto",
+      "es_demo": true,
+      "nivel": null,
+      "nivel_realismo": "T0",
+      "publicable_3d": false,
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas licenciadas no hay nivel publicable: pieza candidata (tope T1).",
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D.",
+        "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
+        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: cotas de confianza baja o sin confianza: alto, ancho_cuerpo, ancho_total, largo_cuerpo, largo_palanca."
+      ],
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    }
+  ]
+}
