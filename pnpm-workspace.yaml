@@ -25,6 +25,9 @@ allowBuilds:
 # arrastra ya incluya la versión corregida.
 # Todas las versiones de destino ya estaban en el lockfile: no entra ningún paquete nuevo.
 overrides:
+  # astro 7.4.7 arrastra @emnapi/runtime 2.0.0-beta.2 como peer de @astrojs/check y rompe el typecheck:
+  # sin betas en la cadena, se queda en la 1.11.3 estable que ya usaba el lockfile.
+  "@emnapi/runtime@>=2.0.0-0 <2.0.0": 1.11.3
   # GHSA-qrxm-fqhp-jwvm y otras tres altas de undici < 7.30.1, vía miniflare (desarrollo y build).
   "undici@>=7.0.0 <7.30.1": 7.30.1
   # GHSA-mrhx-c7xc-m3w5 (alta): zod < 4.6.6, fijado exacto por @cloudflare/vitest-pool-workers
@@ -44,7 +47,7 @@ overrides:
 # Versiones exactas; Renovate las actualiza respetando la edad mínima (renovate.json).
 catalog:
   # Web
-  astro: 7.4.3
+  astro: 7.4.7
   "@astrojs/cloudflare": 14.4.3
   "@astrojs/react": 7.1.2
   "@astrojs/check": 0.9.12
