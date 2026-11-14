@@ -734,6 +734,7 @@ source = { editable = "." }
 dependencies = [
     { name = "build123d" },
     { name = "numpy" },
+    { name = "pillow" },
 ]
 
 [package.dev-dependencies]
@@ -746,6 +747,7 @@ dev = [
 requires-dist = [
     { name = "build123d", specifier = "==0.13.0" },
     { name = "numpy", specifier = "==2.5.4" },
+    { name = "pillow", specifier = "==13.0.0" },
 ]
 
 [package.metadata.requires-dev]

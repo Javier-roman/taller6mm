@@ -1,0 +1,170 @@
+{
+  "esquema": "importador-terminos/v1",
+  "nota": "Tabla pieza -> términos de búsqueda para el importador (apps/pipeline/src/taller6mm_pipeline/importador). Solo texto de búsqueda sobre nombres y etiquetas públicas; los nombres de marca son descriptivos. 'fuertes' puntúa más; 'debiles' solo cuenta si el nombre o las etiquetas traen algún término de 'contexto'. Cualquier término de 'excluir' (de la pieza o global) descarta el candidato.",
+  "licencias_admitidas": ["cc0", "by"],
+  "caras_globales": { "min": 300, "max": 250000 },
+  "contexto": [
+    "ar-15",
+    "ar15",
+    "ar 15",
+    "m4",
+    "m4a1",
+    "m16",
+    "carbine",
+    "rifle",
+    "airsoft",
+    "tactical",
+    "picatinny",
+    "weapon",
+    "gun",
+    "magpul"
+  ],
+  "excluir_global": ["minecraft", "lego", "nerf", "toy", "cartoon", "voxel", "ak 47", "ak47", "akm"],
+  "piezas": {
+    "culata-magpul-str": {
+      "elemento": "culata-culata-estilo-magpul-str",
+      "nombre": "Culata telescópica de polímero tipo Magpul STR",
+      "fuertes": [
+        "magpul str",
+        "str stock",
+        "magpul stock",
+        "magpul ctr",
+        "magpul moe stock",
+        "magpul moe",
+        "ar 15 stock",
+        "ar15 stock",
+        "m4 stock",
+        "buttstock",
+        "butt stock",
+        "collapsible stock",
+        "carbine stock"
+      ],
+      "debiles": ["stock", "rifle stock", "tactical stock", "adjustable stock"],
+      "excluir": [
+        "fold",
+        "folding",
+        "wood",
+        "wooden",
+        "ak stock",
+        "shotgun",
+        "sniper",
+        "sks",
+        "mosin",
+        "cheytac",
+        "bolt action"
+      ],
+      "caras": { "min": 500, "max": 80000, "ideal_max": 30000 }
+    },
+    "guardamanos-mlok": {
+      "elemento": "gm-guardamanos-m-lok-de-13-5-pulgadas",
+      "nombre": "Guardamanos M-LOK largo",
+      "fuertes": ["m lok", "mlok", "m lok handguard", "free float handguard", "freefloat handguard"],
+      "debiles": ["handguard", "hand guard", "forend", "fore end", "keymod", "quad rail", "rail system", "ris", "ras"],
+      "excluir": ["bayonet", "mp5", "aks 74u", "katana", "ak 74", "sword"],
+      "caras": { "min": 500, "max": 80000, "ideal_max": 30000 }
+    },
+    "cargador-stanag": {
+      "elemento": "carg-cargador-stanag-lowcap-30-a-80-bolas",
+      "nombre": "Cargador STANAG de M4/AR-15",
+      "fuertes": [
+        "stanag",
+        "pmag",
+        "ar 15 magazine",
+        "ar15 magazine",
+        "m4 magazine",
+        "m16 magazine",
+        "m4 mag",
+        "ar 15 mag",
+        "ar15 mag",
+        "30 round magazine",
+        "30rd magazine",
+        "30 rnd"
+      ],
+      "debiles": ["magazine", "mag", "clip"],
+      "excluir": [
+        "weapon skin",
+        "glock",
+        "pistol magazine",
+        "ak magazine",
+        "drum",
+        "belt",
+        "ammo box",
+        "bullet",
+        "cartridge",
+        "shell",
+        "round only"
+      ],
+      "caras": { "min": 300, "max": 60000, "ideal_max": 20000 }
+    },
+    "bocacha-a2": {
+      "elemento": "boca-bocacha-a2-compensador-cerrado-por-abajo",
+      "nombre": "Bocacha A2 / apagallamas",
+      "fuertes": [
+        "a2 flash hider",
+        "a2 muzzle",
+        "flash hider",
+        "flash suppressor",
+        "birdcage",
+        "bird cage",
+        "muzzle brake",
+        "compensator",
+        "muzzle device",
+        "a2 birdcage"
+      ],
+      "debiles": ["muzzle", "flash", "brake"],
+      "excluir": ["brake pad", "car brake", "disc brake", "bicycle"],
+      "caras": { "min": 200, "max": 40000, "ideal_max": 12000 }
+    },
+    "silenciador": {
+      "elemento": "boca-silenciador-simulador-medio",
+      "nombre": "Silenciador / simulador",
+      "fuertes": [
+        "suppressor",
+        "silencer",
+        "sound suppressor",
+        "rifle suppressor",
+        "rifle silencer",
+        "ar 15 suppressor",
+        "m4 suppressor"
+      ],
+      "debiles": ["moderator", "muzzle can", "tube"],
+      "excluir": ["pistol suppressor", "9mm", "glock", "pistol silencer"],
+      "caras": { "min": 200, "max": 60000, "ideal_max": 20000 }
+    },
+    "red-dot": {
+      "elemento": "opt-red-dot-compacta-estilo-aimpoint-micro-tubular-con-montura",
+      "nombre": "Red dot compacta",
+      "fuertes": [
+        "red dot",
+        "reddot",
+        "red dot sight",
+        "aimpoint",
+        "compm4",
+        "comp m4",
+        "eotech",
+        "holosight",
+        "holographic sight",
+        "holographic weapon sight",
+        "reflex sight",
+        "holosun",
+        "micro t 2",
+        "t1 micro",
+        "rmr",
+        "romeo 5",
+        "romeo5"
+      ],
+      "debiles": ["sight", "optic", "optics", "scope"],
+      "excluir": [
+        "acog",
+        "sniper scope",
+        "night vision",
+        "thermal",
+        "binocular",
+        "telescope",
+        "magnifier only",
+        "iron sight"
+      ],
+      "caras": { "min": 300, "max": 80000, "ideal_max": 30000 }
+    }
+  }
+}
