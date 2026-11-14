@@ -28,6 +28,10 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 
 `blender/kit_esencial_m4.py` separa piezas sueltas (cargador, bocacha provisional, silenciador, red dot) de modelos CC ya descargados por el importador: quita mallas ajenas y todos los materiales del autor, orienta (+X boca, +Z arriba), escala por UNA cota con fuente (confianza baja) o de forma relativa, añade `socket.*` y exporta a `salida/kit-m4/`. `--modo vistas` dibuja dos vistas por pieza con los sockets marcados. `blender/kit_inspeccion.py` lista las mallas de un GLB. Procedencia y nivel en `catalogo/kit-esencial-m4.json` (`kit_esencial.py` y su test); el guardamanos M-LOK sale del generador paramétrico. Nada es publicable. La culata NIXO se descartó (marca real, brace de pistola, malla abierta) y queda como hueco: pendiente: culata telescópica tipo STR. La bocacha es provisional (no es una A2): hay que rehacerla con el generador paramétrico.
 
+## Oleada 1 por generadores (`familias/oleada1.py`)
+
+Pistoletes (A2, MOE, ergo), guardamanos por tipo (carabina, mid, RIS cuadrado, M-LOK), asa A2, BUIS, empuñadura vertical y palanca de armado, con sockets `socket.*` y GLB determinista. Registro en `catalogo/m4-oleada1-piezas.json` y cobertura en `docs/catalogo/familia-ar-m4.md`. Todo es `es_demo`, T0 sin vistas licenciadas y no publicable. `uv run python -m taller6mm_pipeline.familias.oleada1` regenera los GLB y el registro.
+
 ## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
 
 Busca modelos ya hechos con licencia abierta (CC0 / CC BY) para una pieza de `catalogo/ar-m4.json`, sin gastar tokens: lo repetitivo lo hace el script. Los términos por pieza están en `catalogo/importador-terminos.json`.
