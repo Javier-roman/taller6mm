@@ -24,6 +24,18 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 
 `blender/m4_cuerpo.py` (Blender 5.2 sin interfaz; no entra en `pytest`) genera el receptor superior, el inferior, el pistolete y dos culatas a partir de una base CC BY 4.0 y de la foto propia de Javi, exporta los GLB con `socket.*` a `salida/m4-cuerpo/` y mide el IoU de silueta con `validacion.py` y la puerta de realismo. Procedencia y atribución en `catalogo/m4-cuerpo-base.json`; resultados en `docs/catalogo/m4-cuerpo-base.md`.
 
+## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
+
+Busca modelos ya hechos con licencia abierta (CC0 / CC BY) para una pieza de `catalogo/ar-m4.json`, sin gastar tokens: lo repetitivo lo hace el script. Los términos por pieza están en `catalogo/importador-terminos.json`.
+
+```bash
+uv run python -m taller6mm_pipeline.importador meta                  # una vez: metadatos de Objaverse (~600 MB, ignorados)
+uv run python -m taller6mm_pipeline.importador buscar --pieza red-dot # top 5 en JSON, sin red
+uv run python -m taller6mm_pipeline.importador todo --pieza red-dot silenciador --hojas <carpeta>
+```
+
+`todo` busca (nombre, etiquetas, caras), **reverifica la licencia viva en Sketchfab** (1 s entre peticiones, User-Agent `Taller6mmBot`, sin credenciales; descarta borrados y NC/ND/SA), descarga como mucho 3 a `assets-src/raw/modelos-cc/`, mide con Blender (`C:\tools\blender\blender.exe`, un proceso a la vez), genera miniaturas y `<hojas>/<pieza>/hoja.png`, y registra todo en `catalogo/importador-manifiesto.json`. El veredicto «candidato»/«descartado» es solo automático: `publicable` es siempre `false` y el nivel lo decide `realismo.decidir_nivel`.
+
 ## Herramientas del piloto de fidelidad
 
 Dependencia de ejecución: `numpy` (fijada). Módulos en `src/taller6mm_pipeline/`:
