@@ -35,12 +35,14 @@ PIEZAS: dict[str, dict] = {
         "uid": "1eadc947c0894aa0bbac0c6226a21bda",
         "euler": (0, 0, 90),
         "curva_adelante": True,
-        "escala": {"modo": "cota", "eje": "y", "mm": 22.75, "cota": "cargador-g105-lado-lado-boca"},
+        # Sin cota aplicada: la boca de un midcap G&G (22,75 mm) no es el ancho total de este modelo.
+        "escala": {"modo": "relativa", "largo_mm": 100.0},
         "origen": ("c", "c", "max"),
         "material": "polimero_negro",
         "sockets": [("magazine", ("c", "c", "max"), (0, 0, 1), (1, 0, 0), "pozo-stanag-m4")],
     },
-    "bocacha-a2": {
+    # PROVISIONAL: silueta orgánica, no una A2. Rehacer con el generador paramétrico (familias/).
+    "bocacha-organica-provisional": {
         "uid": "799512bc33b4475387a43e98fdbdd2ac",
         "euler": (0, 90, 0),
         "invertir": False,
@@ -67,16 +69,6 @@ PIEZAS: dict[str, dict] = {
         "origen": ("c", "c", "min"),
         "material": "polimero_negro",
         "sockets": [("rail", ("c", "c", "min"), (0, 0, -1), (1, 0, 0), "picatinny-mil-std-1913")],
-    },
-    "culata-nixo": {
-        "uid": "71e7aace224141ada9b33164ad5f2b98",
-        "euler": (0, 0, 0),
-        "invertir": False,
-        "escala": {"modo": "relativa", "largo_mm": 200.0},
-        "origen": ("max", "c", "c"),
-        "material": "polimero_negro",
-        "decimar": 15000,
-        "sockets": [("stock_tube", ("max", "c", "c"), (1, 0, 0), (0, 0, 1), "tubo-culata-mil-spec")],
     },
 }
 

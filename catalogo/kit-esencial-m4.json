@@ -1,7 +1,7 @@
 {
   "esquema": "kit-esencial-m4/v1",
   "generado": "2026-11-14",
-  "nota": "Kit esencial de piezas sueltas M4/AR-15 de airsoft. Los GLB viven en apps/pipeline/salida/ (ignorada por git). Nada es publicable: sin vistas licenciadas el nivel es T0/T1 candidata (realismo.decidir_nivel). Escalas con una sola cota de confianza baja o relativas.",
+  "nota": "Kit esencial de piezas sueltas M4/AR-15 de airsoft. Los GLB viven en apps/pipeline/salida/ (ignorada por git). Nada es publicable: sin vistas licenciadas el pieza es candidata, sin nivel asignado (nivel null). Escalas con una sola cota de confianza baja o relativas.",
   "descartadas": [
     {
       "pieza": "cargador-stanag",
@@ -17,6 +17,12 @@
       "pieza": "culata-magpul-str",
       "uid": "c747a945188648c88de096b79a0617b7",
       "motivo": "M16A1 con culata fija A1 y fusil en 3 mallas: no hay culata telescópica que separar"
+    },
+    {
+      "pieza": "culata-nixo",
+      "uid": "71e7aace224141ada9b33164ad5f2b98",
+      "estado": "descartado",
+      "motivo": "Marca de armas real en el título y la atribución (Daniel Defense) y diseño comercial de esa marca; relieve con aspecto de logo sin confirmar; es un brace de pistola y no una culata telescópica tipo STR; 10.369 aristas abiertas; ancho Y de 200 mm imposible. Su GLB se eliminó de la salida."
     }
   ],
   "piezas": [
@@ -33,34 +39,35 @@
       "atribucion": "\"30 rounds 5.56mm STANAG MAG\" de GAMGO, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/30-rounds-556mm-stanag-mag-1eadc947c0894aa0bbac0c6226a21bda (modificado: pieza separada, reescalada)",
       "archivo_fuente": "assets-src/raw/modelos-cc/1eadc947c0894aa0bbac0c6226a21bda.glb",
       "glb": "apps/pipeline/salida/kit-m4/cargador-stanag.glb",
-      "sha256_glb": "694328e15f66d44d018ee69c84ee7965e55699f4690432847dc094edd9fad869",
-      "bytes": 70172,
+      "sha256_glb": "0f62f965f1abf2e8bdd519f8a6f07d78315bc579ef01273cb3af8a79cb40fe2d",
+      "bytes": 70180,
       "triangulos": 2798,
       "aristas_abiertas": 50,
-      "dim_mm": [106.76, 22.75, 218.1],
+      "dim_mm": null,
       "escala": {
-        "modo": "cota",
-        "cota": "cargador-g105-lado-lado-boca",
-        "mm": 22.75,
-        "eje": "ancho (lado a lado)",
-        "confianza": "baja",
-        "fuente": "https://www.evike.com/products/20017/reviews"
+        "modo": "relativa",
+        "largo_mm": 100.0,
+        "confianza": "ninguna",
+        "fuente": "sin cota aplicada: largo normalizado, no sirve para medir. Cota descartada: boca de un midcap G&G de 22,75 mm (reseña de Evike), que no equivale al ancho total de este modelo."
       },
       "sockets": ["magazine"],
       "calidad": "aceptable",
-      "nota": "Forma limpia (2 mallas, cerrada salvo costuras). Alto resultante 218 mm: la proporción del modelo no está verificada.",
-      "nivel": "T0",
+      "nota": "Forma limpia (2 mallas, cerradas salvo costuras). Sin medidas reales: el alto de 218 mm de la versión anterior salía de aplicar la cota de la boca al ancho total y se retira. La segunda malla (234 triángulos, seguidor/labios de la boca) no son cartuchos: comprobado por mallas, sin cambios en el GLB.",
+      "nivel": null,
       "publicable_3d": false,
       "motivos": [
         "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
         "La ficha no tiene cotas clave que comprobar.",
         "La malla no pasa la puerta: no es publicable como modelo 3D."
       ],
-      "publicable": false
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 §2 exige escala y cotas): pieza candidata.",
+      "license_status": "cc_by"
     },
     {
-      "id": "bocacha-a2",
-      "elemento": "boca-bocacha-a2-compensador-cerrado-por-abajo",
+      "id": "bocacha-organica-provisional",
+      "elemento": "boca-compensador-provisional",
       "origen": "modelo-cc",
       "titulo": "Flash Hider",
       "autor": "FFeller",
@@ -70,9 +77,9 @@
       "licencia_verificada": "2026-11-14",
       "atribucion": "\"Flash Hider\" de FFeller, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/flash-hider-799512bc33b4475387a43e98fdbdd2ac (modificado: pieza separada, reescalada)",
       "archivo_fuente": "assets-src/raw/modelos-cc/799512bc33b4475387a43e98fdbdd2ac.glb",
-      "glb": "apps/pipeline/salida/kit-m4/bocacha-a2.glb",
-      "sha256_glb": "b048b5432a6f1abbd0a6c349fd451db08aff4f7f6c1c1a7f50e7df12a199db09",
-      "bytes": 44604,
+      "glb": "apps/pipeline/salida/kit-m4/bocacha-organica-provisional.glb",
+      "sha256_glb": "09aea8f6196fd48797bfb22380c616d47bdf9ad9e73f2abca754858e9fd78f2b",
+      "bytes": 44640,
       "triangulos": 1616,
       "aristas_abiertas": 0,
       "dim_mm": [100.0, 40.74, 40.74],
@@ -84,15 +91,19 @@
       },
       "sockets": ["muzzle"],
       "calidad": "blanda",
-      "nota": "Silueta blanda y orgánica, sin las ranuras rectas de una A2 real; vale solo como bocacha ranurada genérica. Sin rosca modelada.",
-      "nivel": "T0",
+      "nota": "PROVISIONAL: silueta blanda y orgánica, no es una A2 ni tiene sus ranuras rectas; vale solo como bocacha ranurada genérica. Sin rosca modelada. Hay que rehacerla con el generador paramétrico.",
+      "nivel": null,
       "publicable_3d": false,
       "motivos": [
         "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
         "La ficha no tiene cotas clave que comprobar.",
         "La malla no pasa la puerta: no es publicable como modelo 3D."
       ],
-      "publicable": false
+      "publicable": false,
+      "provisional": true,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 §2 exige escala y cotas): pieza candidata.",
+      "license_status": "cc_by"
     },
     {
       "id": "silenciador",
@@ -123,18 +134,21 @@
       "sockets": ["muzzle"],
       "calidad": "aceptable",
       "nota": "Forma limpia. Largo resultante 168 mm por conservar la proporción del modelo (el producto citado mide 130 mm).",
-      "nivel": "T0",
+      "nivel": null,
       "publicable_3d": false,
       "motivos": [
         "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
         "La ficha no tiene cotas clave que comprobar.",
         "La malla no pasa la puerta: no es publicable como modelo 3D."
       ],
-      "publicable": false
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 §2 exige escala y cotas): pieza candidata.",
+      "license_status": "cc_by"
     },
     {
       "id": "red-dot",
-      "elemento": "opt-red-dot-compacta-estilo-aimpoint-micro-tubular-con-montura",
+      "elemento": "opt-red-dot-de-ventana-abierta-holografica",
       "origen": "modelo-cc",
       "titulo": "Red Dot Sight",
       "autor": "re1monsen",
@@ -159,50 +173,18 @@
       "sockets": ["rail"],
       "calidad": "aceptable",
       "nota": "Visor de ventana abierta (no tubular); se quitó la tapa de la pila. Sin cota ni huella de montura verificada.",
-      "nivel": "T0",
+      "nivel": null,
       "publicable_3d": false,
       "motivos": [
         "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
         "La ficha no tiene cotas clave que comprobar.",
         "La malla no pasa la puerta: no es publicable como modelo 3D."
       ],
-      "publicable": false
-    },
-    {
-      "id": "culata-nixo",
-      "elemento": "culata-culata-estilo-magpul-str",
-      "origen": "modelo-cc",
-      "titulo": "( FREE )  DANIEL DEFENSE PISTOL BUTTSTOCK",
-      "autor": "NIXO",
-      "url": "https://sketchfab.com/3d-models/free-daniel-defense-pistol-buttstock-71e7aace224141ada9b33164ad5f2b98",
-      "licencia": "CC BY 4.0",
-      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
-      "licencia_verificada": "2026-11-14",
-      "atribucion": "\"( FREE )  DANIEL DEFENSE PISTOL BUTTSTOCK\" de NIXO, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/free-daniel-defense-pistol-buttstock-71e7aace224141ada9b33164ad5f2b98 (modificado: pieza separada, reescalada)",
-      "archivo_fuente": "assets-src/raw/modelos-cc/71e7aace224141ada9b33164ad5f2b98.glb",
-      "glb": "apps/pipeline/salida/kit-m4/culata-nixo.glb",
-      "sha256_glb": "b82e9e04a313145d37c5467c6ee0ea53356b2d4e129a558568fd6943f3dc2897",
-      "bytes": 389532,
-      "triangulos": 15000,
-      "aristas_abiertas": 10369,
-      "dim_mm": [164.85, 200.11, 174.63],
-      "escala": {
-        "modo": "relativa",
-        "largo_mm": 200.0,
-        "confianza": "ninguna",
-        "fuente": "sin cota: largo normalizado, no sirve para medir"
-      },
-      "sockets": ["stock_tube"],
-      "calidad": "dudosa",
-      "nota": "Culata de pistola (tipo brace) sobre tubo; no es una Magpul STR. Malla de 532k triángulos decimada a 15k, con costuras abiertas; tiene una zona texturada en la parte alta que hay que revisar por si lleva marcaje.",
-      "nivel": "T0",
-      "publicable_3d": false,
-      "motivos": [
-        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
-        "La ficha no tiene cotas clave que comprobar.",
-        "La malla no pasa la puerta: no es publicable como modelo 3D."
-      ],
-      "publicable": false
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 §2 exige escala y cotas): pieza candidata.",
+      "nota_rendimiento": "sin optimizar (> 250 KB, falta Meshopt/LOD)",
+      "license_status": "cc_by"
     },
     {
       "id": "guardamanos-mlok",
@@ -210,7 +192,6 @@
       "origen": "generador",
       "familia": "guardamanos.mlok",
       "id_variante": "guardamanos.mlok@v2-1cabe2fd996f",
-      "licencia": "propia (generador paramétrico)",
       "glb": "apps/pipeline/salida/kit-m4/guardamanos-mlok.glb",
       "sha256_glb": "0d54082880290330bd309cb1cfeaaf66d0cee168938fcc7dd4a14090f778dd0e",
       "bytes": 261068,
@@ -226,9 +207,22 @@
       "sockets": ["mlok.*", "rail.*"],
       "calidad": "aceptable",
       "nota": "Generado por código con M-LOK y Picatinny de estándar (familias/guardamanos_mlok.py).",
-      "nivel": "T0",
+      "nivel": null,
       "publicable_3d": false,
-      "publicable": false
+      "publicable": false,
+      "candidata": true,
+      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 §2 exige escala y cotas): pieza candidata.",
+      "nota_rendimiento": "sin optimizar (> 250 KB, falta Meshopt/LOD)",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    }
+  ],
+  "huecos": [
+    {
+      "elemento": "culata-culata-estilo-magpul-str",
+      "estado": "pendiente",
+      "nota": "pendiente: culata telescópica tipo STR (sin modelo CC válido; hay que modelarla con el generador paramétrico o conseguirla cedida)"
     }
   ]
 }

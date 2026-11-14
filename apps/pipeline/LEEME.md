@@ -26,7 +26,7 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 
 ## Kit esencial M4 (Blender)
 
-`blender/kit_esencial_m4.py` separa piezas sueltas (cargador, bocacha, silenciador, red dot, culata) de modelos CC ya descargados por el importador: quita mallas ajenas y todos los materiales del autor, orienta (+X boca, +Z arriba), escala por UNA cota con fuente (confianza baja) o de forma relativa, añade `socket.*` y exporta a `salida/kit-m4/`. `--modo vistas` dibuja dos vistas por pieza con los sockets marcados. `blender/kit_inspeccion.py` lista las mallas de un GLB. Procedencia y nivel en `catalogo/kit-esencial-m4.json` (`kit_esencial.py` y su test); el guardamanos M-LOK sale del generador paramétrico. Nada es publicable.
+`blender/kit_esencial_m4.py` separa piezas sueltas (cargador, bocacha provisional, silenciador, red dot) de modelos CC ya descargados por el importador: quita mallas ajenas y todos los materiales del autor, orienta (+X boca, +Z arriba), escala por UNA cota con fuente (confianza baja) o de forma relativa, añade `socket.*` y exporta a `salida/kit-m4/`. `--modo vistas` dibuja dos vistas por pieza con los sockets marcados. `blender/kit_inspeccion.py` lista las mallas de un GLB. Procedencia y nivel en `catalogo/kit-esencial-m4.json` (`kit_esencial.py` y su test); el guardamanos M-LOK sale del generador paramétrico. Nada es publicable. La culata NIXO se descartó (marca real, brace de pistola, malla abierta) y queda como hueco: pendiente: culata telescópica tipo STR. La bocacha es provisional (no es una A2): hay que rehacerla con el generador paramétrico.
 
 ## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
 
