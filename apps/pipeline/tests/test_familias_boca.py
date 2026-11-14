@@ -63,6 +63,48 @@ def test_parametros_fuera_de_rango(cambio: dict[str, object]) -> None:
         BOCACHA.generar({**BOC, **cambio})
 
 
+A2 = FAMILIAS["boca.apagallamas_a2"]
+A2_PARAMS = {**SIL, "longitud": 55.0, "diametro": 22.0, "ancho_ranura": 3.0, "longitud_ranura": 25.0}
+
+
+def test_apagallamas_a2_cuatro_ranuras_rosca_ccw_y_socket_muzzle() -> None:
+    pieza = A2.generar(A2_PARAMS)
+    assert pieza.malla is not None
+    assert pieza.malla.dimensiones_mm == pytest.approx((55.0, 22.0, 22.0), abs=0.05)
+    assert pieza.requiere == ("rosca-m14x1-ccw",)
+    assert [s.nombre_nodo for s in pieza.sockets] == ["socket.muzzle"]
+    assert pieza.sockets[0].interfaz == "rosca-m14x1-ccw"
+    doc, _ = leer_glb(pieza.glb())
+    assert "socket.muzzle" in [n["name"] for n in doc["nodes"]]
+    lisa = BOCACHA.generar({**A2_PARAMS, "ranuras": 0})
+    assert lisa.malla is not None
+    assert pieza.malla.volumen_mm3 < lisa.malla.volumen_mm3
+
+
+def test_apagallamas_a2_es_demo_y_nunca_publicable_ni_con_vistas() -> None:
+    from taller6mm_pipeline import realismo
+
+    pieza = A2.generar(A2_PARAMS)
+    assert pieza.es_demo is True
+    assert all(c.fuente for c in pieza.cotas)
+    assert pieza.nivel in ("T0", "T1")
+    assert pieza.publicable_3d is False
+    vistas = [realismo.VistaIoU(v, 0.99, "propio") for v in ("lateral", "frontal")]
+    con_vistas = A2.generar(A2_PARAMS, vistas=vistas)
+    assert con_vistas.nivel in ("T0", "T1")
+    assert con_vistas.publicable_3d is False
+
+
+def test_apagallamas_a2_sin_cotas_de_ranura_avisa_y_marca_pendientes() -> None:
+    p = A2.generar({"longitud": 55.0, "diametro": 22.0})
+    assert p.malla is not None
+    assert "ancho_ranura" in p.pendientes and "longitud_ranura" in p.pendientes
+    assert any("no se modelan" in n for n in p.notas)
+    assert p.publicable_3d is False
+    with pytest.raises(ParametroInvalidoError):
+        A2.generar({**A2_PARAMS, "longitud_ranura": 55.0})
+
+
 def test_sin_longitud_es_t0_y_el_hash_es_estable() -> None:
     assert SILENCIADOR.generar({**SIL, "longitud": None}).nivel == "T0"
     assert BOCACHA.generar(BOC).sha256() == BOCACHA.generar(BOC).sha256()
