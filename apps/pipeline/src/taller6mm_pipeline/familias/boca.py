@@ -13,7 +13,14 @@ from typing import Any
 from build123d import Align, Box, Circle, Plane, Pos, Rot, extrude
 
 from taller6mm_pipeline.familias import estandares as e
-from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Valor
+from taller6mm_pipeline.familias.base import (
+    Familia,
+    Geometria,
+    Parametro,
+    ParametroInvalidoError,
+    Socket,
+    Valor,
+)
 
 NOTA_ROSCA = "La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales."
 _ROSCA = Parametro("rosca", "Rosca de boca", str, opciones=tuple(e.ROSCAS_BOCA), por_defecto="14mm_ccw")
@@ -118,3 +125,53 @@ class Bocacha(_PiezaDeBoca):
             cuerpo = cuerpo - [Rot(i * 360.0 / n, 0, 0) * corte for i in range(n)]
             return Geometria(cuerpo, (), (), tuple(notas), self._nominales(p), self._vaciados(p) + n)
         return Geometria(cuerpo, (), (), tuple(notas), self._nominales(p), self._vaciados(p))
+
+
+class ApagallamasA2(_PiezaDeBoca):
+    """Apagallamas tipo A2 de M4/AR: cuatro ranuras abiertas por delante, a 0, 90, 180 y 270 grados.
+
+    El socket `socket.muzzle` está en la cara trasera (donde entra la rosca), con la normal hacia atrás. Las cotas
+    son del SKU: sin ficha son de barrido y la pieza sale `es_demo` (T1 como máximo, `publicable_3d = False`).
+    """
+
+    id = "boca.apagallamas_a2"
+    nombre = "Apagallamas A2"
+    RANURAS = 4
+    parametros = (
+        *_COMUNES,
+        _ROSCA,
+        Parametro("ancho_ranura", "Ancho de cada ranura", float, "mm", 1, 12, de_sku=True, critico=False),
+        Parametro("longitud_ranura", "Longitud de cada ranura", float, "mm", 3, 80, de_sku=True, critico=False),
+    )
+
+    def comprobar(self, p: dict[str, Valor]) -> None:
+        super().comprobar(p)
+        largo, ranura = p["longitud"], p["longitud_ranura"]
+        if largo is not None and ranura is not None and float(ranura) >= float(largo):
+            raise ParametroInvalidoError("longitud_ranura: debe ser menor que la longitud")
+
+    def describir(self, p: Mapping[str, Valor]) -> str:
+        largo = "longitud sin dato" if p["longitud"] is None else f"{float(p['longitud']):g} mm"
+        return f"Apagallamas A2 de {largo}, {self.RANURAS} ranuras, rosca {p['rosca']}"
+
+    def construir(self, p: Mapping[str, Valor]) -> Geometria:
+        cuerpo, notas = self._cuerpo(p)
+        vaciados = self._vaciados(p)
+        if p["ancho_ranura"] is None or p["longitud_ranura"] is None:
+            notas.append("Ranuras sin cotas: no se modelan.")
+        else:
+            largo, radio = float(p["longitud"]), float(p["diametro"]) / 2
+            lr, ar = float(p["longitud_ranura"]), float(p["ancho_ranura"])
+            corte = Pos(largo - lr, 0, 0) * Box(lr + 1, radio + 1, ar, align=(Align.MIN, Align.MIN, Align.CENTER))
+            n = self.RANURAS
+            cuerpo = cuerpo - [Rot(i * 360.0 / n, 0, 0) * corte for i in range(n)]
+            vaciados += n
+        socket = Socket(
+            "muzzle",
+            (0.0, 0.0, 0.0),
+            e.ROSCAS_BOCA[str(p["rosca"])],
+            (-1.0, 0.0, 0.0),  # la rosca entra por detrás, hacia el cañón
+            (0.0, 0.0, 1.0),
+            {"referencia": "centro de la cara trasera", "diametro_rosca_mm": e.ROSCA_14_DIAMETRO.valor_mm},
+        )
+        return Geometria(cuerpo, (socket,), (), tuple(notas), self._nominales(p), vaciados)

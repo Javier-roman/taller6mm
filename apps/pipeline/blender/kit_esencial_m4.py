@@ -41,16 +41,7 @@ PIEZAS: dict[str, dict] = {
         "material": "polimero_negro",
         "sockets": [("magazine", ("c", "c", "max"), (0, 0, 1), (1, 0, 0), "pozo-stanag-m4")],
     },
-    # PROVISIONAL: silueta orgánica, no una A2. Rehacer con el generador paramétrico (familias/).
-    "bocacha-organica-provisional": {
-        "uid": "799512bc33b4475387a43e98fdbdd2ac",
-        "euler": (0, 90, 0),
-        "invertir": False,
-        "escala": {"modo": "relativa", "largo_mm": 100.0},
-        "origen": ("min", "c", "c"),
-        "material": "anodizado_negro",
-        "sockets": [("muzzle", ("min", "c", "c"), (-1, 0, 0), (0, 0, 1), "rosca-m14x1-ccw")],
-    },
+    # La bocacha A2 ya no sale de un modelo CC: la genera `familias/boca.py` (ApagallamasA2).
     "silenciador": {
         "uid": "888677a7fd5b46818153df3477b21a5e",
         "euler": (0, 0, -90),
@@ -59,6 +50,17 @@ PIEZAS: dict[str, dict] = {
         "origen": ("min", "c", "c"),
         "material": "anodizado_negro",
         "sockets": [("muzzle", ("min", "c", "c"), (-1, 0, 0), (0, 0, 1), "rosca-m14x1-ccw")],
+    },
+    # Culata telescópica separada de un M4A1 completo: solo la malla `Stock_lambert4_0` (ver `partes` del importador).
+    "culata-telescopica-m4": {
+        "uid": "9bb8f18ad94d4b468e447a2d43bd08b9",
+        "conservar": ["Stock_lambert4_0"],
+        "euler": (0, 0, 0),
+        "invertir": False,
+        "escala": {"modo": "relativa", "largo_mm": 100.0},
+        "origen": ("max", "c", "c"),
+        "material": "polimero_negro",
+        "sockets": [("tube", ("max", "c", "c"), (1, 0, 0), (0, 0, 1), "tubo-culata-mil-spec")],
     },
     "red-dot": {
         "uid": "75726806834644f49770ca1565850b39",
@@ -133,7 +135,8 @@ def extraer(clave: str, cfg: dict, raw: Path, salida: Path) -> dict:
     if lente:
         lo_l, hi_l = caja(lente)
     for o in list(bpy.context.scene.objects):
-        if o.type != "MESH" or any(q in o.name for q in cfg.get("quitar", [])):
+        sobra = bool(cfg.get("conservar")) and not any(c in o.name for c in cfg["conservar"])
+        if o.type != "MESH" or sobra or any(q in o.name for q in cfg.get("quitar", [])):
             bpy.data.objects.remove(o, do_unlink=True)
     mallas = [o for o in bpy.context.scene.objects if o.type == "MESH"]
     bpy.ops.object.select_all(action="DESELECT")

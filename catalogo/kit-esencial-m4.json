@@ -23,6 +23,12 @@
       "uid": "71e7aace224141ada9b33164ad5f2b98",
       "estado": "descartado",
       "motivo": "Marca de armas real en el título y la atribución (Daniel Defense) y diseño comercial de esa marca; relieve con aspecto de logo sin confirmar; es un brace de pistola y no una culata telescópica tipo STR; 10.369 aristas abiertas; ancho Y de 200 mm imposible. Su GLB se eliminó de la salida."
+    },
+    {
+      "pieza": "bocacha-organica-provisional",
+      "uid": "799512bc33b4475387a43e98fdbdd2ac",
+      "estado": "sustituida",
+      "motivo": "silueta organica sin ranuras rectas; sustituida por bocacha-a2 del generador parametrico"
     }
   ],
   "piezas": [
@@ -66,44 +72,90 @@
       "license_status": "cc_by"
     },
     {
-      "id": "bocacha-organica-provisional",
+      "id": "bocacha-a2",
       "elemento": "boca-compensador-provisional",
-      "origen": "modelo-cc",
-      "titulo": "Flash Hider",
-      "autor": "FFeller",
-      "url": "https://sketchfab.com/3d-models/flash-hider-799512bc33b4475387a43e98fdbdd2ac",
-      "licencia": "CC BY 4.0",
-      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
-      "licencia_verificada": "2026-11-14",
-      "atribucion": "\"Flash Hider\" de FFeller, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/flash-hider-799512bc33b4475387a43e98fdbdd2ac (modificado: pieza separada, reescalada)",
-      "archivo_fuente": "assets-src/raw/modelos-cc/799512bc33b4475387a43e98fdbdd2ac.glb",
-      "glb": "apps/pipeline/salida/kit-m4/bocacha-organica-provisional.glb",
-      "sha256_glb": "09aea8f6196fd48797bfb22380c616d47bdf9ad9e73f2abca754858e9fd78f2b",
-      "bytes": 44640,
-      "triangulos": 1616,
-      "aristas_abiertas": 0,
-      "dim_mm": [100.0, 40.74, 40.74],
-      "escala": {
-        "modo": "relativa",
-        "largo_mm": 100.0,
-        "confianza": "ninguna",
-        "fuente": "sin cota: largo normalizado, no sirve para medir"
+      "origen": "generador",
+      "familia": "boca.apagallamas_a2",
+      "id_variante": "boca.apagallamas_a2@v1-66f498b493f6",
+      "glb": "apps/pipeline/salida/kit-m4/bocacha-a2.glb",
+      "sha256_glb": "a3b75a6b65152a0fce3323c204e609a0d419f0b8477d0b01924cb2599f71ea42",
+      "bytes": 23184,
+      "parametros": {
+        "longitud_mm": 55.0,
+        "diametro_exterior_mm": 22.0,
+        "ranuras": 4,
+        "rosca": "M14x1 izquierdas (CCW), estandar con fuente en familias/estandares.py",
+        "demo": "longitud, diametro, paso, alojamiento y ranuras son valores de demostracion sin cota verificada de un SKU (es_demo); quedan null + bandera hasta tener ficha con fuente"
       },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 55.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 9.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_ranura",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_ranura",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
       "sockets": ["muzzle"],
-      "calidad": "blanda",
-      "nota": "PROVISIONAL: silueta blanda y orgánica, no es una A2 ni tiene sus ranuras rectas; vale solo como bocacha ranurada genérica. Sin rosca modelada. Hay que rehacerla con el generador paramétrico.",
+      "calidad": "aceptable",
+      "nota": "Generada por codigo (familias/boca.py, ApagallamasA2): 4 ranuras abiertas por delante, rosca de 14 mm CCW sin helice. Sustituye a la bocacha organica provisional.",
       "nivel": null,
       "publicable_3d": false,
-      "motivos": [
-        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
-        "La ficha no tiene cotas clave que comprobar.",
-        "La malla no pasa la puerta: no es publicable como modelo 3D."
-      ],
       "publicable": false,
-      "provisional": true,
       "candidata": true,
-      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 §2 exige escala y cotas): pieza candidata.",
-      "license_status": "cc_by"
+      "nivel_nota": "Familia: nivel T0 como maximo por es_demo (T1 tope con vistas licenciadas); sin escala con cota ni vistas verificadas es pieza candidata.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador parametrico)"
     },
     {
       "id": "silenciador",
@@ -216,13 +268,53 @@
       "es_demo": true,
       "license_status": "propio",
       "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-telescopica-m4",
+      "elemento": "culata-culata-estilo-magpul-str",
+      "origen": "modelo-cc",
+      "titulo": "M4A1 Carbine",
+      "autor": "MrM0lten",
+      "url": "https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9",
+      "licencia": "CC BY 4.0",
+      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+      "licencia_verificada": "2026-11-14",
+      "atribucion": "\"M4A1 Carbine\" de MrM0lten, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9 (modificado: pieza separada, reescalada)",
+      "archivo_fuente": "assets-src/raw/modelos-cc/9bb8f18ad94d4b468e447a2d43bd08b9.glb",
+      "parte_separada": "malla Stock_lambert4_0 (separada del fusil por nombre con importador/partes.py)",
+      "glb": "apps/pipeline/salida/kit-m4/culata-telescopica-m4.glb",
+      "sha256_glb": "17a792abe7129a696554ad63ad1fb4de164e2eabd8cc0ac84ae9c5077e908b10",
+      "bytes": 94564,
+      "triangulos": 2714,
+      "aristas_abiertas": 118,
+      "dim_mm": null,
+      "escala": {
+        "modo": "relativa",
+        "largo_mm": 100.0,
+        "confianza": "ninguna",
+        "fuente": "sin cota: largo normalizado, no sirve para medir"
+      },
+      "sockets": ["tube"],
+      "calidad": "aceptable",
+      "nota": "Culata telescopica M4 generica de 6 posiciones con tubo, separada del fusil. NO es una Magpul STR/CTR: es la culata clasica de carabina. Incluye una anilla de correa; 118 aristas abiertas por costuras del autor. Interfaz de tubo tubo-culata-mil-spec sin medir.",
+      "nivel": null,
+      "candidata": true,
+      "publicable_3d": false,
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La ficha no tiene cotas clave que comprobar.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D."
+      ],
+      "publicable": false,
+      "nivel_nota": "Sin escala con cota ni vistas verificadas no hay nivel T0 (docs/05 2 exige escala y cotas): pieza candidata.",
+      "license_status": "cc_by"
     }
   ],
   "huecos": [
     {
       "elemento": "culata-culata-estilo-magpul-str",
       "estado": "pendiente",
-      "nota": "pendiente: culata telescópica tipo STR (sin modelo CC válido; hay que modelarla con el generador paramétrico o conseguirla cedida)"
+      "nota": "pendiente: culata telescópica tipo STR exacta (Sketchfab CC-BY/CC0 reverificado el 2026-11-14: ningún modelo suelto de Magpul STR/CTR; la culata M4 genérica del kit la cubre solo de forma provisional)"
     }
   ]
 }

@@ -10,7 +10,7 @@ from taller6mm_pipeline.familias.base import (
     Pieza,
     Socket,
 )
-from taller6mm_pipeline.familias.boca import Bocacha, Silenciador
+from taller6mm_pipeline.familias.boca import ApagallamasA2, Bocacha, Silenciador
 from taller6mm_pipeline.familias.cargador_m4 import CargadorM4
 from taller6mm_pipeline.familias.culata import CulataTelescopica, TuboCulata
 from taller6mm_pipeline.familias.guardamanos_mlok import GuardamanosMlok
@@ -22,6 +22,7 @@ FAMILIAS: dict[str, Familia] = {
         RailPicatinny(),
         GuardamanosMlok(),
         Bocacha(),
+        ApagallamasA2(),
         Silenciador(),
         TuboCulata(),
         CulataTelescopica(),

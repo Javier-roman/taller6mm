@@ -12,7 +12,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from . import hoja, manifiesto, objaverse, puntuacion, sketchfab
+from . import hoja, manifiesto, objaverse, partes, puntuacion, sketchfab
 from .red import Cliente, ClienteHttp
 
 RAIZ = Path(__file__).resolve().parents[5]
@@ -22,7 +22,8 @@ META = RAIZ / "assets-src" / "raw" / "objaverse-meta"
 MODELOS = RAIZ / "assets-src" / "raw" / "modelos-cc"
 MEDIR = RAIZ / "apps" / "pipeline" / "blender" / "importador_medir.py"
 BLENDER = Path("C:/tools/blender/blender.exe")
-MAX_DESCARGAS = 3
+MAX_DESCARGAS = 3  # por defecto; `--max-descargas` lo sube hasta TOPE_DESCARGAS
+TOPE_DESCARGAS = 12
 MAX_BYTES = 120_000_000
 
 
@@ -39,6 +40,12 @@ def buscar_piezas(claves: list[str], terminos: dict[str, Any], carpeta: Path = M
             if p is not None:
                 pendientes[c].append(p)
     return {c: puntuacion.elegir(v, n) for c, v in pendientes.items()}
+
+
+def uid_manual(uid: str) -> puntuacion.Puntuado:
+    """Candidato elegido a mano (p. ej. hallado en la búsqueda de Sketchfab): se reverifica igual que el resto."""
+    a = puntuacion.Anotacion(uid, "", (), "by", "", f"https://sketchfab.com/3d-models/{uid}", None)
+    return puntuacion.Puntuado(a, 0.0, ("uid-manual",))
 
 
 def sha256(ruta: Path) -> str:
@@ -78,6 +85,7 @@ def procesar_pieza(
     cliente: Cliente,
     hojas: Path,
     blender: Path,
+    max_descargas: int = MAX_DESCARGAS,
 ) -> list[dict[str, Any]]:
     hoy = dt.datetime.now(dt.UTC).date().isoformat()
     admitidas = tuple(terminos["licencias_admitidas"])
@@ -105,8 +113,8 @@ def procesar_pieza(
         r["_ok"], r["_motivo"] = v.ok, v.motivo
         if not v.ok:
             continue
-        if descargados >= MAX_DESCARGAS:
-            r["_ok"], r["_motivo"] = False, f"licencia ok, pero ya hay {MAX_DESCARGAS} descargas de esta pieza"
+        if descargados >= max_descargas:
+            r["_ok"], r["_motivo"] = False, f"licencia ok, pero ya hay {max_descargas} descargas de esta pieza"
             continue
         destino = MODELOS / f"{a.uid}.glb"
         try:
@@ -143,6 +151,9 @@ def procesar_pieza(
         )
         r.pop("_ok")
         if m and not m.get("error"):
+            separadas = partes.separar(m.get("nombres_mallas", []))
+            if separadas:
+                r["partes"] = separadas
             r.update(
                 mallas=m["mallas"],
                 triangulos=m["triangulos"],
@@ -164,6 +175,8 @@ def main(argv: list[str] | None = None) -> int:
     t.add_argument("--pieza", nargs="+", required=True)
     t.add_argument("--hojas", type=Path, required=True, help="carpeta de salida: <hojas>/<pieza>/hoja.png")
     t.add_argument("--blender", type=Path, default=BLENDER)
+    t.add_argument("--max-descargas", type=int, default=MAX_DESCARGAS, help=f"por pieza (máximo {TOPE_DESCARGAS})")
+    t.add_argument("--uid", nargs="*", default=[], help="uids de Sketchfab a evaluar (sin `meta`)")
     args = ap.parse_args(argv)
 
     terminos = cargar_terminos()
@@ -174,10 +187,14 @@ def main(argv: list[str] | None = None) -> int:
     if desconocidas:
         print(f"piezas desconocidas: {desconocidas}; hay: {sorted(terminos['piezas'])}", file=sys.stderr)
         return 2
-    if not any(META.glob("000-*.json.gz")):
+    manuales = list(getattr(args, "uid", []))
+    if not manuales and not any(META.glob("000-*.json.gz")):
         print("faltan metadatos: ejecuta primero `meta`", file=sys.stderr)
         return 2
-    encontrados = buscar_piezas(args.pieza, terminos)
+    if manuales or not any(META.glob("000-*.json.gz")):
+        encontrados = {c: [uid_manual(u) for u in manuales] for c in args.pieza}
+    else:
+        encontrados = buscar_piezas(args.pieza, terminos)
     if args.orden == "buscar":
         salida = {
             c: [
@@ -191,7 +208,9 @@ def main(argv: list[str] | None = None) -> int:
     cliente = ClienteHttp()
     mani = manifiesto.cargar(MANIFIESTO)
     for clave, puntuados in encontrados.items():
-        regs = procesar_pieza(clave, puntuados, terminos, cliente, args.hojas, args.blender)
+        regs = procesar_pieza(
+            clave, puntuados, terminos, cliente, args.hojas, args.blender, min(args.max_descargas, TOPE_DESCARGAS)
+        )
         manifiesto.registrar(
             mani, clave, terminos["piezas"][clave]["elemento"], dt.datetime.now(dt.UTC).date().isoformat(), regs
         )
