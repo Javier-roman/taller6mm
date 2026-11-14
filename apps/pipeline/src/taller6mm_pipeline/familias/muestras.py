@@ -68,6 +68,19 @@ def tanda() -> Iterator[tuple[str, dict[str, Valor]]]:
                 "longitud_ranura": 20.0,
             },
         )
+    for rosca in ("14mm_ccw", "14mm_cw"):
+        yield (
+            "boca.apagallamas_a2",
+            {
+                "longitud": 55.0,
+                "diametro": 22.0,
+                "diametro_paso": 9.0,
+                "profundidad_rosca": 12.0,
+                "rosca": rosca,
+                "ancho_ranura": 3.0,
+                "longitud_ranura": 25.0,
+            },
+        )
     # Diámetros de barrido (demo): el catálogo deja el tubo pendiente, el dato real llegará con la ficha del SKU.
     for especificacion, diametro in (("milspec", 29.0), ("comercial", 29.5)):
         yield "culata.tubo", {"especificacion": especificacion, "diametro": diametro, "longitud": 184.15}

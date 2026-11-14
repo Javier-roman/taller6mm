@@ -88,7 +88,10 @@ def cargar(ruta: Path) -> dict[str, Any]:
 def registrar(
     manifiesto: dict[str, Any], clave: str, elemento: str, fecha: str, candidatos: list[dict[str, Any]]
 ) -> None:
-    manifiesto["piezas"][clave] = {"elemento": elemento, "consulta": fecha, "candidatos": candidatos}
+    # Los candidatos de consultas anteriores se conservan (salvo que se vuelvan a evaluar: manda el nuevo).
+    nuevos = {c["uid"] for c in candidatos}
+    previos = [c for c in manifiesto["piezas"].get(clave, {}).get("candidatos", []) if c.get("uid") not in nuevos]
+    manifiesto["piezas"][clave] = {"elemento": elemento, "consulta": fecha, "candidatos": [*previos, *candidatos]}
     manifiesto["piezas"] = dict(sorted(manifiesto["piezas"].items()))
     validar(manifiesto)
 

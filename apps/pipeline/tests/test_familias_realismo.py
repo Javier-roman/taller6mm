@@ -29,7 +29,7 @@ def test_sin_vistas_de_referencia_ninguna_malla_pasa_de_t0() -> None:
             assert pieza.sospechosa_de_cubo is False  # ninguna familia con malla es una caja disfrazada
             # la caja mide lo nominal (las cotas pendientes sí figuran como desconocidas)
             assert not any(f"Cota «{c}» fuera" in m for c in ("largo", "alto", "ancho") for m in pieza.motivos_nivel)
-    assert con_malla == 32
+    assert con_malla == 34
 
 
 def test_una_pieza_demo_nunca_pasa_de_t1_ni_es_publicable() -> None:

@@ -52,7 +52,17 @@ def medir(ruta: str) -> dict:
     nombres |= {o.name for o in bpy.context.scene.objects if o.type in {"FONT", "CURVE", "MESH"}}
     sospechosos = sorted(n for n in nombres if SOSPECHOSO.search(n))
     dim = (maximo - minimo) if mallas else Vector((0, 0, 0))
+    detalle = []
+    for o in mallas[:300]:
+        padres, p = [], o.parent
+        while p is not None and len(padres) < 8:
+            padres.append(p.name)
+            p = p.parent
+        detalle.append(
+            {"nombre": o.name, "padres": padres, "triangulos": int(sum(len(q.vertices) - 2 for q in o.data.polygons))}
+        )
     return {
+        "nombres_mallas": detalle,
         "mallas": len(mallas),
         "triangulos": int(triangulos),
         "bbox_m": [round(dim.x, 6), round(dim.y, 6), round(dim.z, 6)],
