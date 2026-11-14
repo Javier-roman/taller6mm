@@ -3,15 +3,18 @@
 Origen: extremo trasero de la montura, centrada, con el plano superior del raíl en y = 0. La montura avanza
 hacia +X; las mordazas bajan por los flancos del raíl (y < 0) y el taco de retroceso entra en una ranura.
 El ancho y la altura del raíl salen de `estandares.py` (confianza baja en el ancho); lo demás son cotas del SKU o
-proporciones estimadas. El bulón de apriete se representa por sus cabezas, sin rosca.
+proporciones estimadas. El bulón de apriete se representa por su cabeza con hueco hexagonal, la tuerca hexagonal
+y la punta que asoma, sin rosca. Todo lo añadido se hunde en su pieza madre o la atraviesa (nunca contactos
+tangentes o coplanares).
 """
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Axis, Box, Cylinder, Plane, Pos, RegularPolygon, extrude, fillet
+from build123d import Axis, Box, Cylinder, Plane, Polygon, Pos, RegularPolygon, Rot, extrude, fillet
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
@@ -22,32 +25,55 @@ ANILLOS = {"25.4": "anillo-optica-25-4mm", "30": "anillo-optica-30mm", "34": "an
 GRUESO_MORDAZA_MM = 3.5
 PROF_MORDAZA_MM = 8.0
 NOTA_CLAMP = (
-    "Mordazas, taco de retroceso y bulón simplificados: se ven las cabezas, no la rosca ni el muelle del apriete. "
-    "El ancho del raíl es de confianza baja."
+    "Mordazas, taco de retroceso y bulón simplificados: se ven la cabeza con hexágono, la tuerca y la punta, no la "
+    "rosca ni el muelle del apriete. Las ranuras de la base van al paso del Picatinny. El ancho del raíl es de "
+    "confianza baja."
 )
+
+
+def _perno(xb: float, yb: float, zc: float) -> Any:
+    """Bulón de apriete: cabeza con hexágono (z < 0), tuerca hexagonal y punta (z > 0). `zc` = cara exterior de la
+    mordaza. Cabeza y tuerca se hunden 0,4 mm en la mordaza; el hexágono de la llave entra 1,8 mm."""
+    cabeza = Pos(xb, yb, -zc - 1.2) * Cylinder(3.6, 3.2)
+    cabeza = cabeza - Pos(xb, yb, -zc - 2.0) * extrude(Plane.XY * RegularPolygon(1.9, 6), 1.0, both=True)
+    tuerca = Pos(xb, yb, zc + 1.3) * extrude(Plane.XY * RegularPolygon(4.0, 6), 1.7, both=True)
+    punta = Pos(xb, yb, zc + 3.7) * Cylinder(1.9, 1.8)
+    return cabeza + tuerca + punta
 
 
 def _base_sobre_rail(x0: float, x1: float) -> tuple[Any, float]:
     """Mordazas y taco de retroceso entre x0 y x1. Devuelve el sólido y el semiancho exterior."""
     semi = e.PICATINNY_ANCHO.valor_mm / 2
     largo = x1 - x0
+    zc = semi + GRUESO_MORDAZA_MM
+    paso = e.PICATINNY_PASO.valor_mm
+    # Las mordazas suben 0,5 mm dentro de la pieza que las recibe (solape en volumen, no contacto de cara).
+    alto_m = PROF_MORDAZA_MM + 0.5
     mordazas = [
-        Pos((x0 + x1) / 2, -PROF_MORDAZA_MM / 2, z * (semi + GRUESO_MORDAZA_MM / 2))
-        * Box(largo, PROF_MORDAZA_MM, GRUESO_MORDAZA_MM)
+        Pos((x0 + x1) / 2, (0.5 - PROF_MORDAZA_MM) / 2, z * (semi + GRUESO_MORDAZA_MM / 2))
+        * Box(largo, alto_m, GRUESO_MORDAZA_MM)
         for z in (-1, 1)
     ]
-    taco = Pos((x0 + x1) / 2, -e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm / 2, 0) * Box(
+    # Ranuras de la base, al paso del Picatinny: muescas en el canto inferior de las mordazas (las que agarran el
+    # raíl); la primera y la última dejan 2 mm de margen para no cortar los extremos.
+    n = max(1, int((largo - 4.0) // paso))
+    xc0 = (x0 + x1) / 2 - (n - 1) * paso / 2
+    muescas = [
+        Pos(xc0 + k * paso, -PROF_MORDAZA_MM + 0.8, 0) * Box(e.PICATINNY_ANCHO_RANURA.valor_mm - 1.2, 2.0, 2 * zc + 2.0)
+        for k in range(n)
+    ]
+    # Surcos de agarre en la cara exterior de las mordazas.
+    surcos = [
+        Pos(x0 + largo * f, -PROF_MORDAZA_MM * 0.55, s * zc) * Box(1.0, 3.0, 1.2) for f in (0.2, 0.35) for s in (-1, 1)
+    ]
+    taco = Pos((x0 + x1) / 2, (0.5 - e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm) / 2, 0) * Box(
         e.PICATINNY_ANCHO_RANURA.valor_mm - 0.4,
-        e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm,
+        e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm + 0.5,
         e.PICATINNY_ANCHO_PLANO.valor_mm,
     )
-    conjunto = mordazas[0] + mordazas[1] + taco
-    # Cabeza del bulón (derecha) y tuerca hexagonal (izquierda).
-    xb, yb = x0 + 0.7 * largo, -4.0
-    zc = semi + GRUESO_MORDAZA_MM
-    cabeza = Pos(xb, yb, -zc - 1.6) * Cylinder(4.4, 3.2) - Pos(xb, yb, -zc - 2.8) * Box(5.0, 1.0, 1.6)
-    tuerca = Pos(xb, yb, zc + 1.6) * extrude(Plane.XY * RegularPolygon(4.6, 6), 1.6, both=True)
-    return conjunto + cabeza + tuerca, semi + GRUESO_MORDAZA_MM
+    conjunto = (mordazas[0] + mordazas[1]) - muescas - surcos
+    conjunto = conjunto + taco + _perno(x0 + 0.7 * largo, -4.0, zc)
+    return conjunto, zc
 
 
 class MonturaRiser(Familia):
@@ -89,28 +115,50 @@ class MonturaRiser(Familia):
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         largo, alto, w = float(p["longitud"]), float(p["altura"]), float(p["ancho"])
         base, _semi = _base_sobre_rail(0.0, largo)
-        cuerpo = fillet((Pos(largo / 2, alto / 2, 0) * Box(largo, alto, w)).edges().filter_by(Axis.Z), radius=3.0)
-        # Aligeramientos laterales (ranuras ovaladas) y plataforma de apoyo de la óptica.
+        # Perfil con los laterales inclinados (~9 grados): ancha en la base, más estrecha en la plataforma de la
+        # óptica. Sección en el plano YZ (x local = Y, y local = Z), extruida a lo largo de X.
+        inclinacion = math.radians(9.0)
+        zt = max(w / 2 - alto * math.tan(inclinacion), w * 0.3)
+        tilt = math.degrees(math.atan((w / 2 - zt) / alto))
+        perfil = Polygon((0.0, -w / 2), (alto, -zt), (alto, zt), (0.0, w / 2), align=None)
+        cuerpo = extrude(Plane.YZ * perfil, largo)
+        cuerpo = fillet(cuerpo.edges().filter_by(Axis.Z), radius=min(3.0, alto / 4))
+
+        def z_pared(y: float) -> float:
+            return w / 2 - (w / 2 - zt) * y / alto
+
+        # Aligeramientos laterales inclinados a juego con la pared y plataforma de apoyo de la óptica.
         for z in (-1, 1):
-            cuerpo = cuerpo - Pos(largo / 2, alto * 0.45, z * (w / 2)) * Box(largo * 0.5, alto * 0.4, 4.0)
-        cuerpo = cuerpo - Pos(largo / 2, alto, 0) * Box(largo * 0.7, 1.6, w * 0.55)
+            hueco = (
+                Pos(largo / 2, alto * 0.45, z * z_pared(alto * 0.45))
+                * Rot(-z * tilt, 0, 0)
+                * Box(largo * 0.5, alto * 0.4, 5.0)
+            )
+            cuerpo = cuerpo - hueco
+        cuerpo = cuerpo - Pos(largo / 2, alto, 0) * Box(largo * 0.7, 1.6, zt * 2 * 0.7)
         notas = [NOTA_CLAMP, "Huella genérica: la forma real de la óptica no se modela, solo el apoyo y los tornillos."]
         vaciados = 3
         if p["separacion_tornillos"] is None:
             notas.append("Separación de tornillos sin dato: no se modelan los taladros de la huella.")
         else:
             for dx in (-0.5, 0.5):
-                cuerpo = cuerpo - Pos(largo / 2 + dx * float(p["separacion_tornillos"]), alto - 2.0, 0) * Cylinder(
-                    1.5, 5.0
-                ).rotate(Axis.X, 90)
-            vaciados += 2
+                x_t = largo / 2 + dx * float(p["separacion_tornillos"])
+                cuerpo = cuerpo - Pos(x_t, alto - 2.0, 0) * Cylinder(1.5, 5.0).rotate(Axis.X, 90)
+                # Hexágono de la cabeza del tornillo de la huella, en el fondo del rebaje de la plataforma.
+                cuerpo = cuerpo - Pos(x_t, alto - 0.8, 0) * extrude(Plane.XZ * RegularPolygon(2.3, 6), 0.9, both=True)
+            vaciados += 4
         if p["qd"]:
+            yq = alto * 0.45
+            zq = z_pared(yq)
             cuerpo = (
                 cuerpo
-                + Pos(largo * 0.3, alto * 0.45, w / 2 + 3.0) * Cylinder(3.0, 6.0)
-                + Pos(largo * 0.3 + 6.0, alto * 0.45, w / 2 + 5.0) * Box(14.0, 4.0, 3.0)
+                + Pos(largo * 0.3, yq, zq + 2.5) * Cylinder(3.0, 6.0)
+                + Pos(largo * 0.3 + 6.0, yq, zq + 4.5) * Box(14.0, 4.0, 3.0)
             )
             notas.append("Palanca QD reducida a una leva fija.")
+        notas.append(
+            "Laterales inclinados unos 9 grados (estimado, confianza baja); ranuras de la base al paso del raíl."
+        )
         cuerpo = cuerpo + base
         sockets = (
             Socket("rail", (largo / 2, 0.0, 0.0), e.INTERFAZ_PICATINNY, (0.0, -1.0, 0.0), (1.0, 0.0, 0.0), {}),
@@ -122,7 +170,7 @@ class MonturaRiser(Familia):
             (estimada("montura.mordaza_profundidad", PROF_MORDAZA_MM),),
             tuple(notas),
             nominales_de(cuerpo),
-            vaciados,
+            vaciados + 3,
         )
 
 
@@ -179,22 +227,30 @@ class MonturaAnillos(Familia):
         semi = e.PICATINNY_ANCHO.valor_mm / 2 + GRUESO_MORDAZA_MM
         cuerpo: Any = None
         vaciados = 0
-        notas = [NOTA_CLAMP, "Tornillos de la tapa reducidos a sus cabezas con hueco hexagonal."]
+        notas = [
+            NOTA_CLAMP,
+            "Orejas y tornillos de la tapa: cabezas con hexágono; la junta es una rendija estimada.",
+        ]
         for x in xs:
             pie = Pos(x, (eje - 6) / 2, 0) * Box(ancho, eje - 6, 2 * semi)
             aro = Pos(x, eje, 0) * Cylinder(r_ext, ancho).rotate(Axis.Y, 90)
             pieza = fillet(pie.edges().filter_by(Axis.X), radius=2.0) + aro
-            pieza = pieza - Pos(x, eje, 0) * Cylinder(r, ancho + 2).rotate(Axis.Y, 90)
-            # Junta de la tapa: rendija a la altura del eje en ambos lados.
-            pieza = pieza - [Pos(x, eje, s * (r + 2.5)) * Box(ancho + 2, 0.5, 5.0) for s in (-1, 1)]
+            # Orejas de la tapa a ambos lados, a la altura del eje: se hunden 2,5 mm en la pared del aro.
             for s in (-1, 1):
-                for dx in (-0.25, 0.25):
-                    cab = Pos(x + dx * ancho, eje + 2.6, s * (r + 2.8)) * Cylinder(2.2, 1.6).rotate(Axis.X, 90)
+                oreja = Pos(x, eje, s * (r_ext + 1.0)) * Box(ancho, 8.0, 7.0)
+                pieza = pieza + fillet(oreja.edges().filter_by(Axis.X), radius=1.5)
+            pieza = pieza - Pos(x, eje, 0) * Cylinder(r, ancho + 2).rotate(Axis.Y, 90)
+            # Junta de la tapa: rendija de 0,5 mm en cada oreja que entra 1 mm en el aro (nunca tangente al ánima).
+            pieza = pieza - [Pos(x, eje, s * (r_ext + 2.25)) * Box(ancho + 2, 0.5, 6.5) for s in (-1, 1)]
+            # Tornillos de la tapa: cabeza cilíndrica con hexágono, hundida 0,3 mm en la oreja.
+            posiciones = (-0.25, 0.25) if ancho >= 14 else (0.0,)
+            for s in (-1, 1):
+                for dx in posiciones:
+                    xt, zt = x + dx * ancho, s * (r_ext + 1.0)
                     pieza = (
                         pieza
-                        + cab
-                        - Pos(x + dx * ancho, eje + 3.2, s * (r + 2.8))
-                        * extrude(Plane.XZ * RegularPolygon(1.0, 6), 1.0, both=True)
+                        + Pos(xt, eje + 4.6, zt) * Cylinder(2.6, 1.8).rotate(Axis.X, 90)
+                        - Pos(xt, eje + 5.1, zt) * extrude(Plane.XZ * RegularPolygon(1.5, 6), 0.8, both=True)
                     )
             base, _ = _base_sobre_rail(x - ancho / 2, x + ancho / 2)
             pieza = pieza + base
