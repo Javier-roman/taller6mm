@@ -104,3 +104,11 @@ Salud de la malla: `tests/test_familias_malla.py` exige para todas las familias 
 - **M-LOK en superficie curva**: las ranuras se cortan rectas y planas en tubos redondos u octogonales; la ranura real se adapta a la pared curva.
 - **Tubo de culata**: diámetro exterior y rosca son del SKU (el catálogo los deja pendientes); no se usan cifras de AR-15 reales.
 - **Unión guardamanos-receptor**: `catalogo/interfaces.json` aún no tiene su id, así que `guardamanos.mlok` no declara `requiere`.
+
+## Cuerpos, cañón, tubo y monturas del M4 (generadores)
+
+`familias/canon.py`, `receptores.py`, `amortiguador.py` y `monturas.py` generan formas exteriores (sin internos) con `build123d`; `familias/oleada1_cuerpos.py` tiene su propia tanda (`FAMILIAS_CUERPOS`) y escribe los GLB en `salida/cuerpos-m4/` y el registro `catalogo/m4-oleada1-cuerpos.json`. Todo es `es_demo` (confianza baja), T0 y no publicable. `detalle.py` graba texto neutro con una fuente de puntos propia.
+
+```bash
+uv run python -m taller6mm_pipeline.familias.oleada1_cuerpos --registro ../../catalogo/m4-oleada1-cuerpos.json
+```
