@@ -1,0 +1,234 @@
+{
+  "esquema": "kit-esencial-m4/v1",
+  "generado": "2026-11-14",
+  "nota": "Kit esencial de piezas sueltas M4/AR-15 de airsoft. Los GLB viven en apps/pipeline/salida/ (ignorada por git). Nada es publicable: sin vistas licenciadas el nivel es T0/T1 candidata (realismo.decidir_nivel). Escalas con una sola cota de confianza baja o relativas.",
+  "descartadas": [
+    {
+      "pieza": "cargador-stanag",
+      "uid": "fedcdb11d92d4a74bb686f8c4f25c32d",
+      "motivo": "Weapon Clip de Ben: losa de 18.432 triángulos sin la forma de un cargador STANAG"
+    },
+    {
+      "pieza": "bocacha-a2",
+      "uid": "fa059302f02146b99394f526ba1b0f5b",
+      "motivo": "forma de bote, sin parecido con una A2"
+    },
+    {
+      "pieza": "culata-magpul-str",
+      "uid": "c747a945188648c88de096b79a0617b7",
+      "motivo": "M16A1 con culata fija A1 y fusil en 3 mallas: no hay culata telescópica que separar"
+    }
+  ],
+  "piezas": [
+    {
+      "id": "cargador-stanag",
+      "elemento": "carg-cargador-stanag-lowcap-30-a-80-bolas",
+      "origen": "modelo-cc",
+      "titulo": "30 rounds 5.56mm STANAG MAG",
+      "autor": "GAMGO",
+      "url": "https://sketchfab.com/3d-models/30-rounds-556mm-stanag-mag-1eadc947c0894aa0bbac0c6226a21bda",
+      "licencia": "CC BY 4.0",
+      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+      "licencia_verificada": "2026-11-14",
+      "atribucion": "\"30 rounds 5.56mm STANAG MAG\" de GAMGO, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/30-rounds-556mm-stanag-mag-1eadc947c0894aa0bbac0c6226a21bda (modificado: pieza separada, reescalada)",
+      "archivo_fuente": "assets-src/raw/modelos-cc/1eadc947c0894aa0bbac0c6226a21bda.glb",
+      "glb": "apps/pipeline/salida/kit-m4/cargador-stanag.glb",
+      "sha256_glb": "694328e15f66d44d018ee69c84ee7965e55699f4690432847dc094edd9fad869",
+      "bytes": 70172,
+      "triangulos": 2798,
+      "aristas_abiertas": 50,
+      "dim_mm": [106.76, 22.75, 218.1],
+      "escala": {
+        "modo": "cota",
+        "cota": "cargador-g105-lado-lado-boca",
+        "mm": 22.75,
+        "eje": "ancho (lado a lado)",
+        "confianza": "baja",
+        "fuente": "https://www.evike.com/products/20017/reviews"
+      },
+      "sockets": ["magazine"],
+      "calidad": "aceptable",
+      "nota": "Forma limpia (2 mallas, cerrada salvo costuras). Alto resultante 218 mm: la proporción del modelo no está verificada.",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La ficha no tiene cotas clave que comprobar.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D."
+      ],
+      "publicable": false
+    },
+    {
+      "id": "bocacha-a2",
+      "elemento": "boca-bocacha-a2-compensador-cerrado-por-abajo",
+      "origen": "modelo-cc",
+      "titulo": "Flash Hider",
+      "autor": "FFeller",
+      "url": "https://sketchfab.com/3d-models/flash-hider-799512bc33b4475387a43e98fdbdd2ac",
+      "licencia": "CC BY 4.0",
+      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+      "licencia_verificada": "2026-11-14",
+      "atribucion": "\"Flash Hider\" de FFeller, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/flash-hider-799512bc33b4475387a43e98fdbdd2ac (modificado: pieza separada, reescalada)",
+      "archivo_fuente": "assets-src/raw/modelos-cc/799512bc33b4475387a43e98fdbdd2ac.glb",
+      "glb": "apps/pipeline/salida/kit-m4/bocacha-a2.glb",
+      "sha256_glb": "b048b5432a6f1abbd0a6c349fd451db08aff4f7f6c1c1a7f50e7df12a199db09",
+      "bytes": 44604,
+      "triangulos": 1616,
+      "aristas_abiertas": 0,
+      "dim_mm": [100.0, 40.74, 40.74],
+      "escala": {
+        "modo": "relativa",
+        "largo_mm": 100.0,
+        "confianza": "ninguna",
+        "fuente": "sin cota: largo normalizado, no sirve para medir"
+      },
+      "sockets": ["muzzle"],
+      "calidad": "blanda",
+      "nota": "Silueta blanda y orgánica, sin las ranuras rectas de una A2 real; vale solo como bocacha ranurada genérica. Sin rosca modelada.",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La ficha no tiene cotas clave que comprobar.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D."
+      ],
+      "publicable": false
+    },
+    {
+      "id": "silenciador",
+      "elemento": "boca-silenciador-simulador-medio",
+      "origen": "modelo-cc",
+      "titulo": "Custom Rifle Suppressor",
+      "autor": "Socksthecat",
+      "url": "https://sketchfab.com/3d-models/custom-rifle-suppressor-888677a7fd5b46818153df3477b21a5e",
+      "licencia": "CC BY 4.0",
+      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+      "licencia_verificada": "2026-11-14",
+      "atribucion": "\"Custom Rifle Suppressor\" de Socksthecat, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/custom-rifle-suppressor-888677a7fd5b46818153df3477b21a5e (modificado: pieza separada, reescalada)",
+      "archivo_fuente": "assets-src/raw/modelos-cc/888677a7fd5b46818153df3477b21a5e.glb",
+      "glb": "apps/pipeline/salida/kit-m4/silenciador.glb",
+      "sha256_glb": "6acae993d48141dfbd4d5fe19ddf19daee3df3ea731ea85ecc736853b7ebe216",
+      "bytes": 61128,
+      "triangulos": 1847,
+      "aristas_abiertas": 93,
+      "dim_mm": [168.15, 35.0, 33.88],
+      "escala": {
+        "modo": "cota",
+        "cota": "silenciador-cyma-diametro",
+        "mm": 35.0,
+        "eje": "diámetro",
+        "confianza": "baja",
+        "fuente": "https://www.patrolbase.co.uk/cyma-mock-silencer-for-14mm-ccw"
+      },
+      "sockets": ["muzzle"],
+      "calidad": "aceptable",
+      "nota": "Forma limpia. Largo resultante 168 mm por conservar la proporción del modelo (el producto citado mide 130 mm).",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La ficha no tiene cotas clave que comprobar.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D."
+      ],
+      "publicable": false
+    },
+    {
+      "id": "red-dot",
+      "elemento": "opt-red-dot-compacta-estilo-aimpoint-micro-tubular-con-montura",
+      "origen": "modelo-cc",
+      "titulo": "Red Dot Sight",
+      "autor": "re1monsen",
+      "url": "https://sketchfab.com/3d-models/red-dot-sight-75726806834644f49770ca1565850b39",
+      "licencia": "CC BY 4.0",
+      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+      "licencia_verificada": "2026-11-14",
+      "atribucion": "\"Red Dot Sight\" de re1monsen, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/red-dot-sight-75726806834644f49770ca1565850b39 (modificado: pieza separada, reescalada)",
+      "archivo_fuente": "assets-src/raw/modelos-cc/75726806834644f49770ca1565850b39.glb",
+      "glb": "apps/pipeline/salida/kit-m4/red-dot.glb",
+      "sha256_glb": "ac0926b1163b70bd8061de262326026629527e720a251ea65e53bbe56b5596df",
+      "bytes": 455044,
+      "triangulos": 16109,
+      "aristas_abiertas": 55,
+      "dim_mm": [100.0, 86.52, 71.53],
+      "escala": {
+        "modo": "relativa",
+        "largo_mm": 100.0,
+        "confianza": "ninguna",
+        "fuente": "sin cota: largo normalizado, no sirve para medir"
+      },
+      "sockets": ["rail"],
+      "calidad": "aceptable",
+      "nota": "Visor de ventana abierta (no tubular); se quitó la tapa de la pila. Sin cota ni huella de montura verificada.",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La ficha no tiene cotas clave que comprobar.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D."
+      ],
+      "publicable": false
+    },
+    {
+      "id": "culata-nixo",
+      "elemento": "culata-culata-estilo-magpul-str",
+      "origen": "modelo-cc",
+      "titulo": "( FREE )  DANIEL DEFENSE PISTOL BUTTSTOCK",
+      "autor": "NIXO",
+      "url": "https://sketchfab.com/3d-models/free-daniel-defense-pistol-buttstock-71e7aace224141ada9b33164ad5f2b98",
+      "licencia": "CC BY 4.0",
+      "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
+      "licencia_verificada": "2026-11-14",
+      "atribucion": "\"( FREE )  DANIEL DEFENSE PISTOL BUTTSTOCK\" de NIXO, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/free-daniel-defense-pistol-buttstock-71e7aace224141ada9b33164ad5f2b98 (modificado: pieza separada, reescalada)",
+      "archivo_fuente": "assets-src/raw/modelos-cc/71e7aace224141ada9b33164ad5f2b98.glb",
+      "glb": "apps/pipeline/salida/kit-m4/culata-nixo.glb",
+      "sha256_glb": "b82e9e04a313145d37c5467c6ee0ea53356b2d4e129a558568fd6943f3dc2897",
+      "bytes": 389532,
+      "triangulos": 15000,
+      "aristas_abiertas": 10369,
+      "dim_mm": [164.85, 200.11, 174.63],
+      "escala": {
+        "modo": "relativa",
+        "largo_mm": 200.0,
+        "confianza": "ninguna",
+        "fuente": "sin cota: largo normalizado, no sirve para medir"
+      },
+      "sockets": ["stock_tube"],
+      "calidad": "dudosa",
+      "nota": "Culata de pistola (tipo brace) sobre tubo; no es una Magpul STR. Malla de 532k triángulos decimada a 15k, con costuras abiertas; tiene una zona texturada en la parte alta que hay que revisar por si lleva marcaje.",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "motivos": [
+        "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
+        "La ficha no tiene cotas clave que comprobar.",
+        "La malla no pasa la puerta: no es publicable como modelo 3D."
+      ],
+      "publicable": false
+    },
+    {
+      "id": "guardamanos-mlok",
+      "elemento": "gm-guardamanos-m-lok-de-13-5-pulgadas",
+      "origen": "generador",
+      "familia": "guardamanos.mlok",
+      "id_variante": "guardamanos.mlok@v2-1cabe2fd996f",
+      "licencia": "propia (generador paramétrico)",
+      "glb": "apps/pipeline/salida/kit-m4/guardamanos-mlok.glb",
+      "sha256_glb": "0d54082880290330bd309cb1cfeaaf66d0cee168938fcc7dd4a14090f778dd0e",
+      "bytes": 261068,
+      "parametros": {
+        "longitud_mm": 343.0,
+        "longitud_fuente": "https://www.redwolfairsoft.com/airsoft-artisan-mk16-13-5-inch-m-lok-handguard-rail-for-m4-m16-series-aeg-gbb-ptw-black.html",
+        "longitud_confianza": "baja",
+        "diametro_exterior_mm": 40.0,
+        "grosor_pared_mm": 3.0,
+        "ranuras_mlok": 8,
+        "demo": "diámetro, pared y ranuras son valores de demostración sin cota verificada (es_demo)"
+      },
+      "sockets": ["mlok.*", "rail.*"],
+      "calidad": "aceptable",
+      "nota": "Generado por código con M-LOK y Picatinny de estándar (familias/guardamanos_mlok.py).",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "publicable": false
+    }
+  ]
+}
