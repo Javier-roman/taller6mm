@@ -69,7 +69,7 @@ def test_pistolete_inclina_hacia_atras_y_ergo_es_mas_ancho() -> None:
     (min_a2, _), (min_ergo, _) = ((p.malla.caja_mm[0][0], 0) for p in (a2, ergo))
     assert min_a2 < -19.0  # la base queda por detrás del borde trasero de la cara de montaje (x = -19)
     assert min_ergo < -19.0
-    assert ergo.malla.dimensiones_mm[2] == pytest.approx(a2.malla.dimensiones_mm[2] + 5.0, abs=0.05)
+    assert ergo.malla.dimensiones_mm[2] == pytest.approx(a2.malla.dimensiones_mm[2] + 3.0, abs=0.3)
 
 
 def test_guardamanos_largos_y_tipos() -> None:

@@ -8,10 +8,10 @@
       "elemento": "pist-pistolete-a2-estandar-de-replica-aeg",
       "origen": "generador",
       "familia": "empunadura.pistolete",
-      "id_variante": "empunadura.pistolete@v1-e49c8e1778b8",
+      "id_variante": "empunadura.pistolete@v2-e49c8e1778b8",
       "glb": "apps/pipeline/salida/m4-oleada1/pist-a2.glb",
-      "sha256_glb": "5d79c2ffa1c5740b49ad610e41c388f67337c379a7dc487a73da44db3bb994af",
-      "bytes": 12656,
+      "sha256_glb": "c865353d74edad2563fefabee25a2091f29b8b314cd185c5500a746fa927ff2f",
+      "bytes": 110988,
       "parametros": {
         "altura": 95.0,
         "profundidad": 38.0,
@@ -56,10 +56,10 @@
       "sockets": ["socket.montaje-pistolete"],
       "requiere": ["montaje-pistolete-ar"],
       "ofrece": [],
-      "triangulos": 192,
+      "triangulos": 3852,
       "notas": [
-        "Silueta de ranuras de los dedos, repecho y panza trasera simplificada y de proporciones estimadas.",
-        "El interior (compartimento, tornillo, cuello de unión al receptor) no se modela: es macizo."
+        "Silueta del dorso, las ranuras de los dedos y la panza de la base estimada, no medida en ningún SKU.",
+        "El interior (compartimento, cuello de unión al receptor) no se modela: es macizo."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
       "es_demo": true,
@@ -84,10 +84,10 @@
       "elemento": "pist-pistolete-moe-de-polimero",
       "origen": "generador",
       "familia": "empunadura.pistolete",
-      "id_variante": "empunadura.pistolete@v1-450e26d08c9a",
+      "id_variante": "empunadura.pistolete@v2-450e26d08c9a",
       "glb": "apps/pipeline/salida/m4-oleada1/pist-moe.glb",
-      "sha256_glb": "b81be15de25c8dfebb1b682132222a32d84626039dbcc8e52111702f7ff96b75",
-      "bytes": 11892,
+      "sha256_glb": "eccc3b6b4bd8bde09f8f21ddd804521bef0492fcf53aafc4cff5b6ffd536c1b1",
+      "bytes": 105424,
       "parametros": {
         "altura": 95.0,
         "profundidad": 38.0,
@@ -132,10 +132,10 @@
       "sockets": ["socket.montaje-pistolete"],
       "requiere": ["montaje-pistolete-ar"],
       "ofrece": [],
-      "triangulos": 176,
+      "triangulos": 3686,
       "notas": [
-        "Silueta de ranuras de los dedos, repecho y panza trasera simplificada y de proporciones estimadas.",
-        "El interior (compartimento, tornillo, cuello de unión al receptor) no se modela: es macizo."
+        "Silueta del dorso, las ranuras de los dedos y la panza de la base estimada, no medida en ningún SKU.",
+        "El interior (compartimento, cuello de unión al receptor) no se modela: es macizo."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
       "es_demo": true,
@@ -160,10 +160,10 @@
       "elemento": "pist-pistolete-ergonomico-tipo-a-ergo-ranuras-laterales",
       "origen": "generador",
       "familia": "empunadura.pistolete",
-      "id_variante": "empunadura.pistolete@v1-39757a0ea05b",
+      "id_variante": "empunadura.pistolete@v2-39757a0ea05b",
       "glb": "apps/pipeline/salida/m4-oleada1/pist-ergo.glb",
-      "sha256_glb": "43d26b2352a049997ecdf42984c0ea679ed6ecc5b45f3e9926fc7f9a2c4e8a54",
-      "bytes": 15040,
+      "sha256_glb": "836d62716f375a8ae3ad8eb9650ba5c2836d0562d89178f07173167691d01ad7",
+      "bytes": 126984,
       "parametros": {
         "altura": 95.0,
         "profundidad": 38.0,
@@ -208,11 +208,11 @@
       "sockets": ["socket.montaje-pistolete"],
       "requiere": ["montaje-pistolete-ar"],
       "ofrece": [],
-      "triangulos": 240,
+      "triangulos": 4294,
       "notas": [
-        "Silueta de ranuras de los dedos, repecho y panza trasera simplificada y de proporciones estimadas.",
-        "El interior (compartimento, tornillo, cuello de unión al receptor) no se modela: es macizo.",
-        "Repisa del pulgar (16 x 12 x 3 mm) estimada, sin cota de ningún SKU."
+        "Silueta del dorso, las ranuras de los dedos y la panza de la base estimada, no medida en ningún SKU.",
+        "El interior (compartimento, cuello de unión al receptor) no se modela: es macizo.",
+        "Repisa del pulgar de 3 mm de saliente estimada, sin cota de ningún SKU."
       ],
       "nota": "oleada 2: cubierto de adelanto",
       "es_demo": true,
@@ -2289,10 +2289,10 @@
       "elemento": "mira-asa-de-transporte-a2-con-mira-trasera-integrada",
       "origen": "generador",
       "familia": "mira.asa_a2",
-      "id_variante": "mira.asa_a2@v1-bd07384c7a0f",
+      "id_variante": "mira.asa_a2@v2-bd07384c7a0f",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-asa-a2.glb",
-      "sha256_glb": "1678fa4c10c7688320142aa5fe5fa9eefe18471a654098af02465a64b4372f3c",
-      "bytes": 5444,
+      "sha256_glb": "204873ff9a1b3e1705255c07b8a96ba49425c1f47410340c504e520d18008547",
+      "bytes": 192284,
       "parametros": {
         "longitud": 130.0,
         "altura": 55.0,
@@ -2327,10 +2327,10 @@
       "sockets": ["socket.montaje-asa-a2", "socket.mira-trasera"],
       "requiere": ["montaje-asa-a2"],
       "ofrece": ["montaje-mira-trasera-a2"],
-      "triangulos": 44,
+      "triangulos": 5968,
       "notas": [
-        "Silueta de perfil con proporciones estimadas; las ruedas de deriva y elevación y el tambor no se modelan.",
-        "El raíl de montaje superior del asa desmontable no se modela."
+        "Silueta del arco, guardas, placa y mandos con proporciones estimadas, sin cota de SKU.",
+        "El raíl de montaje superior del asa desmontable y la hélice de los mandos no se modelan."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
       "es_demo": true,
@@ -2355,10 +2355,10 @@
       "elemento": "mira-buis-trasera-abatible-back-up-iron-sight",
       "origen": "generador",
       "familia": "mira.buis",
-      "id_variante": "mira.buis@v1-5610ed5e369c",
+      "id_variante": "mira.buis@v2-5610ed5e369c",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera.glb",
-      "sha256_glb": "f4ed17ffbf4eb63e3ad0616da98573bd8ae27fab0980fd92c60a2fd984417815",
-      "bytes": 5508,
+      "sha256_glb": "0bc4ad02e39bb7aff4662a1f9dee71c44a6946e6c413190fee879ced12db47f4",
+      "bytes": 235924,
       "parametros": {
         "lado": "trasera",
         "posicion": "erguida",
@@ -2404,9 +2404,9 @@
       "sockets": ["socket.rail.base"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 48,
+      "triangulos": 7142,
       "notas": [
-        "Pinza al raíl, bisagra, resorte y muelle no se modelan; silueta de proporciones estimadas.",
+        "Pinza al raíl, muelles y trinquete de la bisagra no se modelan; proporciones estimadas.",
         "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
@@ -2432,10 +2432,10 @@
       "elemento": "mira-buis-delantera-abatible",
       "origen": "generador",
       "familia": "mira.buis",
-      "id_variante": "mira.buis@v1-6c6286c81766",
+      "id_variante": "mira.buis@v2-6c6286c81766",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-delantera.glb",
-      "sha256_glb": "332f4ff6b7db00db255c0ae2d84b8dcde267a5c83351190c164560b5ee2794ca",
-      "bytes": 4696,
+      "sha256_glb": "bb37fe58ab4049e0126e9a4e4d985b1476d10b10dfae51e74c4a490fd0af3558",
+      "bytes": 189728,
       "parametros": {
         "lado": "delantera",
         "posicion": "erguida",
@@ -2481,9 +2481,9 @@
       "sockets": ["socket.rail.base"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 28,
+      "triangulos": 6008,
       "notas": [
-        "Pinza al raíl, bisagra, resorte y muelle no se modelan; silueta de proporciones estimadas.",
+        "Pinza al raíl, muelles y trinquete de la bisagra no se modelan; proporciones estimadas.",
         "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
@@ -2509,10 +2509,10 @@
       "elemento": null,
       "origen": "generador",
       "familia": "mira.buis",
-      "id_variante": "mira.buis@v1-aa91c71e16f0",
+      "id_variante": "mira.buis@v2-aa91c71e16f0",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera-abatida.glb",
-      "sha256_glb": "c7ba0ec54444e814ab7ece75eb4ea826776147f8997d2b5868d8b91300262f56",
-      "bytes": 5896,
+      "sha256_glb": "c9444fc45797c0e6f4d3d7a8f0638f7a3593fad007116b198b58f84ee9829695",
+      "bytes": 237700,
       "parametros": {
         "lado": "trasera",
         "posicion": "abatida",
@@ -2558,9 +2558,9 @@
       "sockets": ["socket.rail.base"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 56,
+      "triangulos": 7206,
       "notas": [
-        "Pinza al raíl, bisagra, resorte y muelle no se modelan; silueta de proporciones estimadas.",
+        "Pinza al raíl, muelles y trinquete de la bisagra no se modelan; proporciones estimadas.",
         "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
       ],
       "nota": "extra: estado abatido de la BUIS trasera",
@@ -2586,10 +2586,10 @@
       "elemento": "acc-empunadura-vertical-foregrip-de-poste",
       "origen": "generador",
       "familia": "accesorio.empunadura_vertical",
-      "id_variante": "accesorio.empunadura_vertical@v1-7541790c2994",
+      "id_variante": "accesorio.empunadura_vertical@v2-7541790c2994",
       "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-poste.glb",
-      "sha256_glb": "2bcaddbae72fb4e752d1def11bed2a74c5cbade97d1b2e24c261037646aad2d5",
-      "bytes": 9592,
+      "sha256_glb": "89a4abf983fabd05ec29dad861d1d6bc370e77f2c88ea873c354d8f7bc6657bf",
+      "bytes": 196828,
       "parametros": {
         "longitud_total": 100.0,
         "diametro": 32.0,
@@ -2634,9 +2634,9 @@
       "sockets": ["socket.rail.agarre"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 160,
+      "triangulos": 6264,
       "notas": [
-        "Poste liso: sin textura ni tapa. La base es una caja, sin la pinza ni el tornillo de apriete.",
+        "Anillos, collar y base de proporciones estimadas; la pinza del raíl es solo la ranura superior.",
         "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja)."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
@@ -2662,10 +2662,10 @@
       "elemento": "acc-empunadura-angular-angled-foregrip",
       "origen": "generador",
       "familia": "accesorio.empunadura_vertical",
-      "id_variante": "accesorio.empunadura_vertical@v1-bf0c03d46f8e",
+      "id_variante": "accesorio.empunadura_vertical@v2-bf0c03d46f8e",
       "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-angular.glb",
-      "sha256_glb": "8492abb3a4e8542669a9311d610b3e488ed6baea42e16352c56f9da599720b66",
-      "bytes": 9972,
+      "sha256_glb": "fae069112383234cb72ea9b3b7904a39f03ec72636d3845dc09f818d35cc6347",
+      "bytes": 206840,
       "parametros": {
         "longitud_total": 100.0,
         "diametro": 32.0,
@@ -2710,9 +2710,9 @@
       "sockets": ["socket.rail.agarre"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 172,
+      "triangulos": 6676,
       "notas": [
-        "Poste liso: sin textura ni tapa. La base es una caja, sin la pinza ni el tornillo de apriete.",
+        "Anillos, collar y base de proporciones estimadas; la pinza del raíl es solo la ranura superior.",
         "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja)."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
@@ -2738,10 +2738,10 @@
       "elemento": "sup-asa-de-armado-charging-handle-y-palanca",
       "origen": "generador",
       "familia": "sup.palanca_armado",
-      "id_variante": "sup.palanca_armado@v1-e62b0b73f304",
+      "id_variante": "sup.palanca_armado@v2-e62b0b73f304",
       "glb": "apps/pipeline/salida/m4-oleada1/sup-palanca-armado.glb",
-      "sha256_glb": "2d985af5db0b7948df584da24959ff9c4e0c1efbb712f98c32bddccdf708e046",
-      "bytes": 5016,
+      "sha256_glb": "5aa91e10f5bf5fc4a90afbab90c66a45765d7643e9829dd7add65ddd32cc8e5f",
+      "bytes": 209780,
       "parametros": {
         "largo_cuerpo": 110.0,
         "ancho_cuerpo": 16.0,
@@ -2795,9 +2795,9 @@
       "sockets": ["socket.montaje-asa-carga"],
       "requiere": ["montaje-asa-carga-ar"],
       "ofrece": [],
-      "triangulos": 28,
+      "triangulos": 6720,
       "notas": [
-        "Pestillo, resorte y muescas del cuerpo no se modelan; las alas son cajas de proporciones estimadas.",
+        "Resorte del pestillo y muescas del cuerpo no se modelan; alas y pestillo de proporciones estimadas.",
         "La palanca ambidiestra amplía el ala 1,5 veces en vertical (estimación de silueta, sin cota de SKU)."
       ],
       "nota": "oleada 2: cubierto de adelanto",
