@@ -16,6 +16,7 @@ from build123d import Align, Box, Location, Plane
 from taller6mm_pipeline.ficha import Confianza, Cota
 
 FECHA = "2026-11-14"
+SOLAPE_PUNTO_MM = 0.04
 FUENTE_ESTIMADO = (
     "estimado a ojo de las proporciones generales de la familia AR-15 de airsoft; sin fuente ni calibre "
     "(14-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre."
@@ -74,9 +75,15 @@ def grabar(
                 fin = col
                 while fin < 3 and bits[fin] == "1":
                     fin += 1
+                # Cada punto se agranda SOLAPE_PUNTO_MM por lado: los puntos que se tocan solo por la esquina (la
+                # diagonal de una A o una R) comparten una arista con cuatro caras y dejan la malla abierta; así se
+                # solapan en volumen y el corte sale de una pieza.
                 caja = Box(
-                    (fin - col) * punto, punto, profundidad_mm + 0.2, align=(Align.MIN, Align.MIN, Align.MAX)
-                ).moved(Location(((i * 4 + col) * punto, (4 - fila) * punto, 0.2)))
+                    (fin - col) * punto + 2 * SOLAPE_PUNTO_MM,
+                    punto + 2 * SOLAPE_PUNTO_MM,
+                    profundidad_mm + 0.2,
+                    align=(Align.MIN, Align.MIN, Align.MAX),
+                ).moved(Location(((i * 4 + col) * punto - SOLAPE_PUNTO_MM, (4 - fila) * punto - SOLAPE_PUNTO_MM, 0.2)))
                 cajas.append(caja)
                 col = fin
     resultado = cajas[0]

@@ -15,7 +15,21 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Align, Axis, Box, Cylinder, Plane, Polygon, Pos, Rot, extrude, fillet
+from build123d import (
+    Align,
+    Axis,
+    Box,
+    Cylinder,
+    Ellipse,
+    Plane,
+    Polygon,
+    Pos,
+    RectangleRounded,
+    Rot,
+    extrude,
+    fillet,
+    loft,
+)
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
@@ -49,6 +63,24 @@ def _caja(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float) -> A
 
 def _redondear_z(solido: Any, radio: float) -> Any:
     return fillet(solido.edges().filter_by(Axis.Z), radius=radio)
+
+
+def _palanca_selector(xs: float, ys: float, zl: float) -> Any:
+    """Palanca del selector del lado izquierdo: cubo, brazo cónico con puntero y lengüeta de pulgar con estrías.
+
+    Se hunde 0,4 mm en el cuerpo (cara en z = zl). Apunta a +X con el selector en «seguro».
+    """
+    brazo = extrude(
+        Plane.XY * Polygon((0, -4.5), (11, -3.4), (20, -3.0), (24.5, 0.0), (20, 3.0), (11, 3.4), (0, 4.5), align=None),
+        1.5,
+        both=True,
+    )
+    cubo = _cil("z", 5.6, 3.0, (0, 0, 1.1))
+    pieza = Pos(0, 0, 1.1) * brazo + cubo
+    tab = fillet(_caja(11.0, 21.0, -3.2, 3.2, 2.2, 3.8).edges().filter_by(Axis.Z), radius=1.0)
+    for k in range(3):  # estrías de la lengüeta: 0,6 mm de profundidad, rebasan la cara superior
+        tab = tab - _caja(13.0 + k * 2.6, 13.8 + k * 2.6, -4.0, 4.0, 3.2, 4.4)
+    return Pos(xs, ys, zl) * (pieza + tab)
 
 
 class ReceptorSuperior(Familia):
@@ -260,7 +292,9 @@ class ReceptorInferior(Familia):
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         ll, w = float(p["longitud"]), float(p["ancho"])
         hmag = 66.0 if p["profundidad_pozo"] is None else float(p["profundidad_pozo"])
-        hg, lt, r_torre = hmag - 16.0, 22.0, 15.0
+        lt, r_torre = 22.0, 15.0
+        # Silueta del cuerpo: solo la parte que llena todo el ancho (torre del tubo aparte). El guardamonte y el
+        # asiento del pistolete se unen después, más estrechos y solapados con el cuerpo.
         sil = Polygon(
             (0, 0),
             (ll, 0),
@@ -268,9 +302,7 @@ class ReceptorInferior(Familia):
             (ll - 8, -30),
             (ll - 8, -hmag),
             (ll - 62, -hmag),
-            (ll - 62, -hg),
-            (ll - 112, -hg),
-            (ll - 112, -34),
+            (ll - 62, -34),
             (0, -34),
             align=None,
         )
@@ -285,30 +317,56 @@ class ReceptorInferior(Familia):
         notas = [
             "Solo forma exterior: sin gearbox, gatillo ni cableado; macizo salvo pozo, guardamonte y torre.",
             "Sin pistolete: el receptor lo recibe por el socket.pistolete. Ángulos del selector simplificados.",
+            "Guardamonte en arco, asiento del pistolete con tornillo y ranura del talón, boca del pozo acampanada, "
+            "palanca del selector con lengüeta y pasadores en alojamientos: formas estimadas (confianza baja).",
         ]
 
-        # Pozo del cargador pasante, con embudo inferior, y guardamonte.
+        # Pozo del cargador pasante, con la boca acampanada (embudo troncopiramidal de esquinas redondeadas).
         xm = ll - 35.0
-        cuerpo = (
-            cuerpo
-            - _caja(xm - 22, xm + 22, -hmag - 1, 1, -12, 12)
-            - _caja(xm - 24.5, xm + 24.5, -hmag - 1, -hmag + 3, -14.5, 14.5)
+        eje_pozo = Plane(origin=(xm, 1.0, 0.0), x_dir=(1, 0, 0), z_dir=(0, -1, 0))
+        tramo = extrude(eje_pozo * RectangleRounded(44.0, 24.0, 3.0), hmag + 1.0 - 6.0)  # hasta y = 6 - hmag
+        y_embudo = -hmag + 7.0
+        embudo = loft(
+            [
+                Plane(origin=(xm, y_embudo, 0.0), x_dir=(1, 0, 0), z_dir=(0, 1, 0)) * RectangleRounded(44.0, 24.0, 3.0),
+                Plane(origin=(xm, -hmag - 0.5, 0.0), x_dir=(1, 0, 0), z_dir=(0, 1, 0))
+                * RectangleRounded(49.4, 29.4, 4.5),
+            ],
+            ruled=True,
         )
-        guarda = fillet(_caja(ll - 106, ll - 68, -hg + 5, -24, -w, w).edges().filter_by(Axis.Z), radius=6.0)
-        cuerpo = cuerpo - guarda
+        cuerpo = cuerpo - tramo - embudo
+        vaciados += 1
 
-        # Selector (izquierda): asiento, muescas, palanca y leyenda neutra.
+        # Guardamonte: arco elíptico más estrecho que el cuerpo, solapado 1 mm con la cara inferior y con el
+        # frente del pozo. La ventana es la parte interior del arco.
+        centro_g = (ll - 82.0, -34.0)
+        exterior = Pos(centro_g[0], centro_g[1], 0) * extrude(Plane.XY * Ellipse(24.0, 19.0), 5.5, both=True)
+        interior = Pos(centro_g[0], centro_g[1], 0) * extrude(Plane.XY * Ellipse(19.0, 15.0), 7.0, both=True)
+        solo_abajo = _caja(centro_g[0] - 30, centro_g[0] + 30, -60.0, -33.0, -8, 8)
+        arco = (exterior - interior) & solo_abajo
+        cuerpo = cuerpo + arco
+        vaciados += 1
+
+        # Asiento del pistolete: plataforma que sobresale 2 mm bajo la cara inferior (solape 0,5 mm), con tornillo
+        # del pistolete y ranura del talón. El socket `grip` se apoya en su cara inferior.
+        x_asiento = ll - 140.0
+        base = fillet(_caja(x_asiento, x_asiento + 36.0, -36.0, -33.5, -12, 12).edges().filter_by(Axis.Y), radius=5.0)
+        base = base - _cil("y", 2.7, 14.5, (x_asiento + 22.0, -29.25, 0))  # taladro del tornillo, 3,5 mm hacia arriba
+        base = base - _caja(x_asiento + 5, x_asiento + 14, -36.5, -34.3, -8, 8)  # ranura del talón
+        cuerpo = cuerpo + base
+        vaciados += 2
+
+        # Selector (izquierda): asiento, muescas, palanca con puntero y lengüeta, y leyenda neutra.
         xs, ys, zl, zr = ll - 100.0, -14.0, w / 2, -w / 2
         cuerpo = cuerpo - (_cil("z", 10.0, 1.6, (xs, ys, zl)) - _cil("z", 9.0, 1.6, (xs, ys, zl)))
         for ang in (0, 90, 180):
-            cuerpo = cuerpo - Pos(xs, ys, zl) * Rot(0, 0, ang) * Pos(11.5, 0, 0) * Box(5, 1.4, 1.6)
+            cuerpo = cuerpo - Pos(xs, ys, zl) * Rot(0, 0, ang) * Pos(11.5, 0, 0) * Box(5, 1.4, 2.4)
         grados = {"seguro": 0, "semi": 90, "auto": 180}[str(p["selector"])]
-        palanca = _cil("z", 5.0, 3.0, (xs, ys, zl + 1.0)) + Pos(xs + 10, ys, zl + 1.0) * Box(20, 5.5, 3.0)
-        cuerpo = cuerpo + palanca.rotate(Axis((xs, ys, 0), (0, 0, 1)), grados)
+        izquierda = _palanca_selector(xs, ys, zl)
+        cuerpo = cuerpo + izquierda.rotate(Axis((xs, ys, 0), (0, 0, 1)), grados)
         if p["selector_ambidiestro"]:
-            cuerpo = cuerpo + (
-                _cil("z", 5.0, 3.0, (xs, ys, zr - 1.0)) + Pos(xs - 10, ys, zr - 1.0) * Box(20, 5.5, 3.0)
-            ).rotate(Axis((xs, ys, 0), (0, 0, 1)), grados)
+            derecha = izquierda.mirror(Plane.XY)
+            cuerpo = cuerpo + derecha.rotate(Axis((xs, ys, 0), (0, 0, 1)), grados)
         cuerpo = cuerpo - grabar("SAFE SEMI AUTO", 2.8, (xs - 17.0, -8.0, zl), (1, 0, 0), (0, 0, 1))
         sockets.append(
             Socket(
@@ -328,13 +386,14 @@ class ReceptorInferior(Familia):
             boton = boton - Pos(xb, yb, zr - 4.0) * Rot(0, 0, k * 22.5) * Box(0.8, 12.0, 1.0)
         cuerpo = cuerpo + boton
 
-        # Cabezas de pasadores, línea de partición y leyenda de la derecha.
-        for xp in (ll - 14.0, 12.0):
-            for z in (zl, zr):
-                cabeza = _cil("z", 4.2, 2.0, (xp, -9.0, z)) - _cil(
-                    "z", 1.3, 1.0, (xp, -9.0, z + (0.5 if z > 0 else -0.5) * 1.5)
-                )
-                cuerpo = cuerpo + cabeza
+        # Pasadores en sus alojamientos (a ambos lados): del pivote y del desmontaje, y del gatillo y del martillo
+        # (estos dos, más pequeños). Cada uno es un alojamiento con la cabeza del pasador hundida y un hexágono.
+        pasadores = ((ll - 14.0, -9.0, 3.2), (12.0, -9.0, 3.2), (ll - 124.0, -18.0, 2.3), (ll - 146.0, -14.0, 2.3))
+        for xp, yp, r_hueco in pasadores:
+            for lado in (-1, 1):
+                cuerpo = cuerpo - _cil("z", r_hueco, 3.2, (xp, yp, lado * zl))
+                cuerpo = cuerpo + _cil("z", r_hueco - 0.9, 1.1, (xp, yp, lado * (zl - 1.35)))
+                cuerpo = cuerpo - _cil("z", 0.9, 1.0, (xp, yp, lado * (zl - 1.0)))
         cuerpo = cuerpo - [Pos(ll / 2, -1.5, s * w / 2) * Box(ll - 10, 0.5, 1.2) for s in (-1, 1)]
         cuerpo = cuerpo - grabar("AIRSOFT 6MM", 3.2, (ll - 20.0, -46.0, zr), (-1, 0, 0), (0, 0, -1))
 
@@ -349,7 +408,7 @@ class ReceptorInferior(Familia):
             ),
             Socket("upper", (ll / 2, 0.0, 0.0), INTERFAZ_UNION, (0.0, 1.0, 0.0), (1.0, 0.0, 0.0), {}),
             Socket("magwell", (xm, -hmag, 0.0), INTERFAZ_POZO, (0.0, -1.0, 0.0), (1.0, 0.0, 0.0), {}),
-            Socket("grip", (ll - 131.0, -34.0, 0.0), INTERFAZ_PISTOLETE, (0.0, -1.0, 0.0), (1.0, 0.0, 0.0), {}),
+            Socket("grip", (ll - 131.0, -36.0, 0.0), INTERFAZ_PISTOLETE, (0.0, -1.0, 0.0), (1.0, 0.0, 0.0), {}),
         ]
         cotas = (estimada("receptor.eje_sobre_union", EJE_SOBRE_UNION_MM),)
-        return Geometria(cuerpo, tuple(sockets), cotas, tuple(notas), nominales_de(cuerpo), vaciados + 6)
+        return Geometria(cuerpo, tuple(sockets), cotas, tuple(notas), nominales_de(cuerpo), vaciados + 10)
