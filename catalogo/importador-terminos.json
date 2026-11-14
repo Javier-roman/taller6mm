@@ -40,7 +40,19 @@
         "carbine stock"
       ],
       "debiles": ["stock", "rifle stock", "tactical stock", "adjustable stock"],
-      "excluir": ["fold", "folding", "wood", "wooden", "ak stock", "shotgun"],
+      "excluir": [
+        "fold",
+        "folding",
+        "wood",
+        "wooden",
+        "ak stock",
+        "shotgun",
+        "sniper",
+        "sks",
+        "mosin",
+        "cheytac",
+        "bolt action"
+      ],
       "caras": { "min": 500, "max": 80000, "ideal_max": 30000 }
     },
     "guardamanos-mlok": {
@@ -48,7 +60,7 @@
       "nombre": "Guardamanos M-LOK largo",
       "fuertes": ["m lok", "mlok", "m lok handguard", "free float handguard", "freefloat handguard"],
       "debiles": ["handguard", "hand guard", "forend", "fore end", "keymod", "quad rail", "rail system", "ris", "ras"],
-      "excluir": ["bayonet"],
+      "excluir": ["bayonet", "mp5", "aks 74u", "katana", "ak 74", "sword"],
       "caras": { "min": 500, "max": 80000, "ideal_max": 30000 }
     },
     "cargador-stanag": {
@@ -70,6 +82,7 @@
       ],
       "debiles": ["magazine", "mag", "clip"],
       "excluir": [
+        "weapon skin",
         "glock",
         "pistol magazine",
         "ak magazine",

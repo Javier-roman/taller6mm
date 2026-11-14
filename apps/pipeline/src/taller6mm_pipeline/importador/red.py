@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -15,6 +16,7 @@ from typing import Any, Protocol
 
 from . import USER_AGENT
 
+DOMINIOS_PERMITIDOS = ("huggingface.co", "hf.co", "sketchfab.com")
 PAUSA_MIN_S = 1.0
 
 
@@ -48,12 +50,17 @@ class ClienteHttp:
         self._ultima = self.reloj()
 
     def _abrir(self, url: str) -> Any:
-        if not url.startswith("https://"):
+        partes = urllib.parse.urlsplit(url)
+        if partes.scheme != "https":
             raise ValueError(f"solo https: {url}")
+        host = (partes.hostname or "").lower()
+        if not any(host == d or host.endswith("." + d) for d in DOMINIOS_PERMITIDOS):
+            raise ValueError(f"dominio no permitido: {host}")
         self._esperar()
         peticion = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})  # noqa: S310
         try:
-            return urllib.request.urlopen(peticion, timeout=60)  # noqa: S310
+            # El esquema es https y el dominio inicial está en la lista blanca (arriba): sin file:// ni dominios libres.
+            return urllib.request.urlopen(peticion, timeout=60)  # noqa: S310  # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
         except urllib.error.HTTPError as e:
             raise ErrorHttp(e.code, url) from e
 
