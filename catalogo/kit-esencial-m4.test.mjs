@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const raiz = path.resolve(dir, '..');
-const { piezas } = JSON.parse(fs.readFileSync(path.join(dir, 'kit-esencial-m4.json'), 'utf8'));
+const { piezas, descartadas, huecos } = JSON.parse(fs.readFileSync(path.join(dir, 'kit-esencial-m4.json'), 'utf8'));
 const LICENCIAS = ['CC0 1.0', 'CC BY 4.0'];
 
 test('hay piezas con ids únicos', () => {
@@ -49,4 +49,19 @@ test('ninguna escala inventa una cota: o hay fuente o es relativa', () => {
 test('ningún GLB está rastreado por git', () => {
   const rastreados = execFileSync('git', ['ls-files'], { cwd: raiz, encoding: 'utf8' });
   assert.ok(!/\.(glb|gltf)$/im.test(rastreados));
+});
+
+test('la culata NIXO está descartada y queda un hueco explícito', () => {
+  assert.ok(!piezas.some((p) => p.id === 'culata-nixo'));
+  assert.ok(descartadas.some((d) => d.pieza === 'culata-nixo' && d.estado === 'descartado'));
+  assert.ok(huecos.some((h) => /pendiente: culata telescópica tipo STR/.test(h.nota)));
+});
+
+test('sin escala con cota no hay nivel: candidata con nivel null', () => {
+  for (const p of piezas) {
+    if (p.escala?.modo === 'relativa' || p.origen === 'generador') {
+      assert.equal(p.nivel, null, p.id);
+      assert.equal(p.candidata, true, p.id);
+    }
+  }
 });
