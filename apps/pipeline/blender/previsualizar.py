@@ -3,7 +3,9 @@
     blender --background --factory-startup --python apps/pipeline/blender/previsualizar.py -- \
         --lista lista.json
 
-`lista.json`: [{"glb": "ruta.glb", "png": "salida.png", "mat": "polimero|anodizado", "vista": "izq|der|atras"}].
+`lista.json`: [{"glb": "ruta.glb", "png": "salida.png", "mat": "polimero|anodizado|auto", "vista": "izq|der|atras|lado"}].
+Con `"mat": "auto"` (conjuntos del ensamblador) cada objeto toma el material por su nombre y su `rol`: los
+`marcador.*` (piezas sin malla) salen en naranja translúcido; pistolete y guardamanos, en polímero; el resto, anodizado.
 Solo para revisar a ojo cómo se ve una pieza: el material es procedural y propio (no sale de ninguna foto) y nada
 de lo que se renderiza aquí se publica. Los GLB se importan tal cual (mm en datos, metros en escena).
 """
@@ -50,7 +52,11 @@ def material(nombre: str) -> bpy.types.Material:
     bump = nodos.new("ShaderNodeBump")
     bump.inputs["Strength"].default_value = 0.12
     bump.inputs["Distance"].default_value = 0.0005
-    if nombre == "anodizado":
+    if nombre == "marcador":
+        bsdf.inputs["Base Color"].default_value = (0.95, 0.42, 0.08, 1.0)
+        bsdf.inputs["Alpha"].default_value = 0.55
+        bsdf.inputs["Roughness"].default_value = 0.7
+    elif nombre == "anodizado":
         bsdf.inputs["Base Color"].default_value = (0.045, 0.047, 0.052, 1.0)
         bsdf.inputs["Metallic"].default_value = 0.85
         rampa.inputs["To Min"].default_value = 0.28
@@ -89,13 +95,27 @@ def renderizar(item: dict[str, str]) -> None:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=item["glb"])
     mallas = [o for o in bpy.context.scene.objects if o.type == "MESH"]
-    mat = material(item.get("mat", "polimero"))
+    modo = item.get("mat", "polimero")
+    cache: dict[str, bpy.types.Material] = {}
+
+    def mat_de(o: bpy.types.Object) -> bpy.types.Material:
+        if modo != "auto":
+            nombre = modo
+        elif o.name.startswith("marcador"):
+            nombre = "marcador"
+        else:
+            nombre = "polimero" if o.get("rol") in ("pistolete", "guardamanos", "empunadura_vertical") else "anodizado"
+        if nombre not in cache:
+            cache[nombre] = material(nombre)
+        return cache[nombre]
+
     for o in mallas:
         o.data.materials.clear()
-        o.data.materials.append(mat)
+        o.data.materials.append(mat_de(o))
         bpy.context.view_layer.objects.active = o
         o.select_set(True)
         bpy.ops.object.shade_smooth_by_angle(angle=0.6)
+    mat = next(iter(cache.values()))
     print("MATS", [(o.name, [s.material.name if s.material else None for s in o.material_slots]) for o in mallas])
     print(
         "NODOS",
