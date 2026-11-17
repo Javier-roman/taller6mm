@@ -61,7 +61,7 @@ Generadores por código de piezas estándar (docs/05 §4 y §6.3): parámetros e
 |---|---|---|---|
 | `rail.picatinny` | `rail_picatinny.py` | MIL-STD-1913: ranura 5,23 mm, paso 10,01, profundidad 3,00, ancho 21,21, plano 15,67, apoyos a 45° | — (solo nº de ranuras) |
 | `guardamanos.mlok` | `guardamanos_mlok.py` | M-LOK: ranura 32 × 7 mm, separación 8, radio 2,38 (confianza media) + Picatinny | longitud, diámetro, pared |
-| `boca.bocacha`, `boca.silenciador` | `boca.py` | Rosca M14x1 a derechas (CW) o a izquierdas (CCW) | longitud, diámetros, ranuras |
+| `boca.bocacha`, `boca.apagallamas_a2`, `boca.silenciador` | `boca.py` | Rosca M14x1 a derechas (CW) o a izquierdas (CCW) | longitud, diámetros, ranuras |
 | `culata.tubo` | `culata.py` | Tubo mil-spec 29,16 mm y comercial 29,67 mm; rosca 1 3/16"-16 | longitud, tramo roscado |
 | `culata.telescopica` | `culata.py` | **Solo T0** (`motivo_sin_malla`): la forma del cuerpo no tiene cotas verificables | longitud, altura, ancho, pared |
 | `cargador.m4` | `cargador_m4.py` | **Solo T0** (`motivo_sin_malla`): curvatura, labios y sección sin fuente pública | largo, ancho, altura |
@@ -96,6 +96,17 @@ Salud de la malla: `tests/test_familias_malla.py` exige para todas las familias 
 5. Regístrala en `FAMILIAS` (`familias/__init__.py`) y añade sus variantes a `tanda()` en `muestras.py`.
 6. Escribe `tests/test_familias_<nombre>.py` con: cotas del estándar contra la fuente, dimensiones de la malla, parámetros fuera de rango, hash estable, nodos del GLB releído y el caso T0. Añade un caso a `CASOS` en `tests/test_familias_regresion.py`; la malla cerrada y los sockets se comprueban solos al estar en la tanda.
 7. Si cambias la geometría de una familia ya publicada, sube su `version` (cambia el `id_variante`). Termina con `uv run ruff check`, `uv run ruff format` y `uv run pytest`.
+
+## Hojas de revisión visual (`vistas.py` + `blender/previsualizar.py`)
+
+```bash
+uv run python -m taller6mm_pipeline.vistas                      # todas las piezas con malla
+uv run python -m taller6mm_pipeline.vistas --solo boca.silenciador,mira.buis
+```
+
+Renderiza cada pieza en 3/4 (perspectiva) y lateral (alzado ortográfico) con Cycles (96 muestras, mínimo 64), con la pieza al 80 % del cuadro (medido proyectando los vértices; queda en `<pieza>.json`), material procedural propio (grano, bisel de arista, canto gastado) y estudio suave, y monta una hoja de contacto por familia a 1600 px por celda en `assets-src/vistas/` (ignorada por git), más páginas reducidas en `reducidas/`. Solo vuelve a renderizar la pieza cuyo GLB o el script hayan cambiado. `blender/previsualizar.py` es el único script de render; los GLB del kit que salen de modelos CC entran si existen en `salida/kit-m4/`. Son renders de revisión interna: nada se publica.
+
+El teselado (`familias/malla.py`) da a cada vértice la normal analítica de su superficie: el sombreado es liso aunque la malla sea gruesa. Las piezas de boca (`boca.py`, v2) son sólidos de revolución con detalle torneado y fresado (gargantas, moleteado, planos de llave, corona, filetes de rosca en anillos); el apagallamas A2 lleva cinco ranuras cerradas y la base ciega.
 
 ## Pendiente (revisión de fidelidad)
 

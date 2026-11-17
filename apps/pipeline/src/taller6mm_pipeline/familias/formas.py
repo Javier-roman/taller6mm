@@ -12,7 +12,23 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from build123d import Axis, Cylinder, Edge, Face, Line, Plane, Pos, Rot, Solid, Spline, Wire, extrude
+from build123d import (
+    Axis,
+    Box,
+    Cylinder,
+    Edge,
+    Face,
+    Line,
+    Plane,
+    Polygon,
+    Pos,
+    Rot,
+    Solid,
+    Spline,
+    Wire,
+    extrude,
+    revolve,
+)
 
 PUNTOS_SECCION = 32
 
@@ -135,3 +151,72 @@ def biselar(solido: Any, distancia: float, aristas: Sequence[Edge] | None = None
     except Exception:
         return solido
     return cortado if cortado.is_valid and cortado.volume > 0 else solido
+
+
+# --- Detalle fino de piezas torneadas (eje X): rosca en anillos, moleteado, planos de llave y taladros de cara. ---
+
+# Altura del filete de una rosca métrica ISO (perfil básico ISO 68-1): 5/8 de H, con H = 0,866 x paso.
+ALTURA_FILETE_ISO = 0.5413
+
+
+def revolucion_x(perfil: Sequence[tuple[float, float]]) -> Any:
+    """Sólido de revolución alrededor del eje X. `perfil`: polígono cerrado de puntos (x, radio), con radio >= 0.
+
+    Un solo sólido con todos sus escalones, chaflanes, gargantas y dientes de rosca: sale de una pieza, sin booleanas
+    tangentes. Para una pieza hueca, el polígono recorre la pared exterior y vuelve por la interior.
+    """
+    limpio = [q for q, anterior in zip(perfil, [perfil[-1], *perfil[:-1]], strict=True) if q != anterior]
+    return revolve(Plane.XY * Polygon(*limpio, align=None), axis=Axis.X)
+
+
+def dientes_rosca(x0: float, x1: float, r_raiz: float, r_cresta: float, paso: float) -> list[tuple[float, float]]:
+    """Puntos (x, radio) de una rosca en V hecha de anillos (sin hélice) entre `x0` y `x1`; empieza y acaba en la raíz.
+
+    Vale para rosca exterior (cresta > raíz) o interior (cresta < raíz) y en los dos sentidos de X. El paso se
+    ajusta para que quepa un número entero de filetes.
+    """
+    n = max(1, round(abs(x1 - x0) / paso))
+    d = (x1 - x0) / n
+    puntos = [(x0, r_raiz)]
+    for i in range(n):
+        xa = x0 + i * d
+        puntos += [(xa + 0.42 * d, r_cresta), (xa + 0.58 * d, r_cresta), (xa + d, r_raiz)]
+    return puntos
+
+
+def estrias_x(radio: float, x0: float, x1: float, n: int, hondo: float, *, fase: float = 0.0) -> list[Any]:
+    """Herramientas de corte de un moleteado recto: `n` estrías en V a lo largo de X sobre un cilindro de `radio`."""
+    medio = 0.5 * math.tau * radio / n * 0.62  # media anchura de la estría en la superficie
+    cuna = extrude(
+        Plane.YZ * Polygon((radio - hondo, 0.0), (radio + 0.4, medio * 1.6), (radio + 0.4, -medio * 1.6), align=None),
+        x1 - x0,
+    )
+    return [Rot(fase + 360.0 * k / n, 0, 0) * Pos(x0, 0, 0) * cuna for k in range(n)]
+
+
+def planos_llave_x(radio: float, x0: float, x1: float, entre_caras: float, n: int = 2) -> list[Any]:
+    """Herramientas de corte de `n` planos de llave (caras planas repartidas) en un cilindro de eje X."""
+    alto = radio + 1.0 - entre_caras / 2
+    caja = Pos((x0 + x1) / 2, entre_caras / 2 + alto / 2, 0) * Box(x1 - x0, alto, 2 * radio + 2)
+    return [Rot(360.0 * k / n, 0, 0) * caja for k in range(n)]
+
+
+def taladros_cara_x(x: float, radio_circulo: float, n: int, diametro: float, hondo: float) -> list[Any]:
+    """Herramientas de corte: `n` taladros ciegos repartidos en una cara perpendicular a X (para llave de pivotes).
+
+    `hondo` > 0 taladra hacia -X desde `x`; < 0, hacia +X.
+    """
+    broca = Pos(x - hondo / 2, radio_circulo, 0) * Rot(0, 90, 0) * Cylinder(diametro / 2, abs(hondo) + 0.02)
+    return [Rot(360.0 * k / n, 0, 0) * broca for k in range(n)]
+
+
+def ranura_oblonga(largo: float, ancho: float, alto: float) -> Any:
+    """Prisma oblongo (extremos semicirculares) de `largo` en X y `ancho` en Z, extruido `alto` hacia +Y desde Y = 0.
+
+    Centrado en X y en Z: es la herramienta de una ventana fresada (ranura de apagallamas, aligeramiento).
+    """
+    recto = max(largo - ancho, 0.01)
+    caja = Pos(0, alto / 2, 0) * Box(recto, alto, ancho)
+    for lado in (1, -1):
+        caja = caja + Pos(lado * recto / 2, alto / 2, 0) * Rot(90, 0, 0) * Cylinder(ancho / 2, alto)
+    return caja

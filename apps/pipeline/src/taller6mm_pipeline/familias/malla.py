@@ -1,8 +1,9 @@
 """Teselado determinista de un sólido de build123d a una malla de triángulos (numpy).
 
 OCCT tesela cara a cara: los vértices no se comparten entre caras del B-rep, así que las normales por vértice
-salen suaves dentro de cada cara (un cilindro) y con arista viva entre caras (un chaflán). Las coordenadas se
-redondean a la décima de micra para que el mismo sólido dé siempre los mismos bytes.
+salen suaves dentro de cada cara (un cilindro) y con arista viva entre caras (un chaflán). Cada vértice lleva la
+normal analítica de su superficie (no el promedio de sus triángulos): el sombreado es liso aunque la malla sea
+gruesa. Las coordenadas se redondean a la décima de micra para que el mismo sólido dé siempre los mismos bytes.
 """
 
 from __future__ import annotations
@@ -12,6 +13,11 @@ from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
+from OCP.BRep import BRep_Tool
+from OCP.BRepAdaptor import BRepAdaptor_Surface
+from OCP.BRepLProp import BRepLProp_SLProps
+from OCP.TopAbs import TopAbs_Orientation
+from OCP.TopLoc import TopLoc_Location
 
 DECIMALES_MM = 4
 
@@ -64,8 +70,39 @@ class Malla:
         return float((np.einsum("ij,ij->i", cara, media) > 0).mean())
 
 
+def _normales_exactas(solido: Any) -> NDArray[np.float64] | None:
+    """Normal de la superficie del B-rep en cada vértice del teselado (mismo orden que `Shape.tessellate`).
+
+    El promedio de las caras vecinas deja manchas de sombreado en las superficies curvas con triángulos largos
+    (lofts, filetes); la normal analítica de OCCT no. Donde no está definida (polos, vértices de cono) devuelve
+    ceros y `teselar` se queda con el promedio. `None` si OCCT no da coordenadas UV para alguna cara.
+    """
+    filas: list[tuple[float, float, float]] = []
+    for cara in solido.faces():
+        loc = TopLoc_Location()
+        poly = BRep_Tool.Triangulation_s(cara.wrapped, loc)
+        if poly is None or not poly.HasUVNodes():
+            return None
+        invertida = cara.wrapped.Orientation() == TopAbs_Orientation.TopAbs_REVERSED
+        superficie = BRepAdaptor_Surface(cara.wrapped)
+        for i in range(1, poly.NbNodes() + 1):
+            uv = poly.UVNode(i)
+            props = BRepLProp_SLProps(superficie, uv.X(), uv.Y(), 1, 1e-7)
+            if not props.IsNormalDefined():
+                filas.append((0.0, 0.0, 0.0))
+                continue
+            n = props.Normal()
+            signo = -1.0 if invertida else 1.0
+            filas.append((signo * n.X(), signo * n.Y(), signo * n.Z()))
+    return np.array(filas, dtype=np.float64).reshape(-1, 3)
+
+
 def teselar(solido: Any, tolerancia_mm: float, tolerancia_angular: float) -> Malla:
-    """Tesela un `Shape` de build123d. Descarta triángulos degenerados y calcula normales por vértice."""
+    """Tesela un `Shape` de build123d. Descarta triángulos degenerados y calcula normales por vértice.
+
+    La normal es la analítica de la superficie; si falta o contradice a las caras vecinas (no debería), se usa el
+    promedio ponderado por área de los triángulos que comparten el vértice.
+    """
     vs, ts = solido.tessellate(tolerancia_mm, tolerancia_angular)
     vertices = np.round(np.array([(v.X, v.Y, v.Z) for v in vs], dtype=np.float64), DECIMALES_MM) + 0.0
     triangulos = np.array(ts, dtype=np.uint32).reshape(-1, 3)
@@ -78,4 +115,8 @@ def teselar(solido: Any, tolerancia_mm: float, tolerancia_angular: float) -> Mal
         np.add.at(suma, triangulos[:, i], caras)
     norma = np.linalg.norm(suma, axis=1, keepdims=True)
     normales = np.where(norma > 1e-12, suma / np.maximum(norma, 1e-12), (0.0, 1.0, 0.0))
+    exactas = _normales_exactas(solido)
+    if exactas is not None and exactas.shape == normales.shape:
+        fiables = np.einsum("ij,ij->i", exactas, normales) > 0.2
+        normales = np.where(fiables[:, None], exactas, normales)
     return Malla(vertices, np.round(normales, 5).astype(np.float32) + np.float32(0.0), triangulos)

@@ -66,3 +66,5 @@ worker-configuration.d.ts
 apps/pipeline/salida/
 # Copias de trabajo de los subagentes (git worktree)
 .claude/worktrees/
+# Hojas y renders de revisión de piezas 3D (taller6mm_pipeline.vistas)
+assets-src/vistas/

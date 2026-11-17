@@ -49,8 +49,8 @@ CASOS = [
         "boca.silenciador",
         {"longitud": 150.0, "diametro": 35.0, "diametro_paso": 10.0, "profundidad_rosca": 12.0},
         ((0, -17.5, -17.5), (150, 17.5, 17.5)),
-        130963.8,
-        432,
+        125366.6,
+        5502,
     ),
     (
         "boca.bocacha",
@@ -64,8 +64,8 @@ CASOS = [
             "longitud_ranura": 20.0,
         },
         ((0, -11, -11), (45, 11, 11)),
-        11538.5,
-        498,
+        11218.2,
+        3874,
     ),
     (
         "culata.tubo",
@@ -94,13 +94,13 @@ def test_los_volumenes_cuadran_con_el_calculo_a_mano() -> None:
     """El volumen de la malla se parece al analítico (algo menor: el teselado inscribe polígonos en los círculos)."""
     silenciador = FAMILIAS["boca.silenciador"].generar(CASOS[3][1]).malla.volumen_mm3
     analitico = math.pi * (17.5**2 * 150 - 5**2 * 150 - (7**2 - 5**2) * 12)
-    assert silenciador == pytest.approx(analitico, rel=0.01)
+    assert silenciador > 0.93 * analitico  # el detalle (gargantas, moleteado, corona, filetes) quita material
     assert silenciador < analitico
 
     bocacha = FAMILIAS["boca.bocacha"].generar(CASOS[4][1]).malla.volumen_mm3
     cuerpo = math.pi * (11**2 * 45 - 4.5**2 * 45 - (7**2 - 4.5**2) * 12)
     ranuras = 4 * 20 * 3 * (11 - 4.5)  # cuatro ranuras de 20 x 3 mm a través de la pared (aprox. prismática)
-    assert bocacha == pytest.approx(cuerpo - ranuras, rel=0.02)
+    assert bocacha == pytest.approx(cuerpo - ranuras, rel=0.05)  # planos de llave, garganta y corona
 
     tubo = FAMILIAS["culata.tubo"].generar({"longitud": 184.15, "diametro": D_MILSPEC}).malla.volumen_mm3
     assert tubo == pytest.approx(math.pi * (D_MILSPEC / 2) ** 2 * 184.15, rel=0.01)

@@ -10,7 +10,7 @@
       "familia": "empunadura.pistolete",
       "id_variante": "empunadura.pistolete@v2-e49c8e1778b8",
       "glb": "apps/pipeline/salida/m4-oleada1/pist-a2.glb",
-      "sha256_glb": "c865353d74edad2563fefabee25a2091f29b8b314cd185c5500a746fa927ff2f",
+      "sha256_glb": "20a4f52aee1c8368bce76f4ae828592863a29218e475e41f855e16c23c8032f5",
       "bytes": 110988,
       "parametros": {
         "altura": 95.0,
@@ -86,7 +86,7 @@
       "familia": "empunadura.pistolete",
       "id_variante": "empunadura.pistolete@v2-450e26d08c9a",
       "glb": "apps/pipeline/salida/m4-oleada1/pist-moe.glb",
-      "sha256_glb": "eccc3b6b4bd8bde09f8f21ddd804521bef0492fcf53aafc4cff5b6ffd536c1b1",
+      "sha256_glb": "9c5d27c3ffb16ec81a61b2686261766d8c1ff4f9fb52fa25065fb018af3e1cb7",
       "bytes": 105424,
       "parametros": {
         "altura": 95.0,
@@ -162,7 +162,7 @@
       "familia": "empunadura.pistolete",
       "id_variante": "empunadura.pistolete@v2-39757a0ea05b",
       "glb": "apps/pipeline/salida/m4-oleada1/pist-ergo.glb",
-      "sha256_glb": "836d62716f375a8ae3ad8eb9650ba5c2836d0562d89178f07173167691d01ad7",
+      "sha256_glb": "bf3b726df5573ca349c85aaa8ec821ff51f6ac233f3c29b63a023d7b336a621c",
       "bytes": 126984,
       "parametros": {
         "altura": 95.0,
@@ -239,7 +239,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-97f9246b9e14",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-a2-mid.glb",
-      "sha256_glb": "a25bf8c0f4288df7b88a836536ab872c3450574e1ec9e002b73c1fe21582fc26",
+      "sha256_glb": "43d3f8bb83db3025f77d0911cd9c7fb610749dc8dea6c1427fe6ffe853083e95",
       "bytes": 28064,
       "parametros": {
         "tipo": "mid",
@@ -386,7 +386,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-9968706549ef",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-carabina.glb",
-      "sha256_glb": "10f59593d362aa9124ad560dc0cc445abb64e00fea1e699d4ab35a6e5e448834",
+      "sha256_glb": "59d380c5e87bad737e52d6dbdfeef53c6ff247203deb18b82e5e995bd2069838",
       "bytes": 23324,
       "parametros": {
         "tipo": "carabina",
@@ -533,7 +533,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-a6615ce8e9cd",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-ris-m4.glb",
-      "sha256_glb": "6b93c7f2767cde4204df4cae910bf4317badcd9f7c10ab40848dc98f787d8c3e",
+      "sha256_glb": "f946332e052e6cc0b5ad06cd6f4a59eb3900c91373941e8baadc9f71d6199d29",
       "bytes": 93748,
       "parametros": {
         "tipo": "ris",
@@ -680,7 +680,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-b7ed40ac2b1f",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-ris-mk18.glb",
-      "sha256_glb": "289212d151c694ca46805b58be26043cf4288576dbd4d2dd380f82753af8de44",
+      "sha256_glb": "3e325d453331b3177971ef2e53c3b411c206ce05c97ed6663257feeba7b13359",
       "bytes": 102956,
       "parametros": {
         "tipo": "ris",
@@ -827,7 +827,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-d58a678137cd",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-7.glb",
-      "sha256_glb": "5317ab949005e7d492afeca24ca59545e3feaad6a922fa145e82a13c3ab42af5",
+      "sha256_glb": "7ffe6fe3861466f316b2a07f0602f059a3b33d833599da8cbb66daa600e3dbc6",
       "bytes": 98356,
       "parametros": {
         "tipo": "ris",
@@ -974,7 +974,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-42fcb2d22c57",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-9.glb",
-      "sha256_glb": "23b38bf864f753dfe5ae4ee524749a850c6da4d7f4c03143da05b83e0e3baa3c",
+      "sha256_glb": "8eed57bf337e291a86f0de3f550080e9ae9825a52dad77e6a72263b7f6939c70",
       "bytes": 121400,
       "parametros": {
         "tipo": "ris",
@@ -1121,7 +1121,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-9e335b500791",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-10.glb",
-      "sha256_glb": "0c9a54d44b752eae93deefa33039fae21de3dfef3af67f3235e5989e6db74ddf",
+      "sha256_glb": "27f174e4975b1c752c78fc0950f04d36484430e414b289dc57da9657fd55f107",
       "bytes": 130612,
       "parametros": {
         "tipo": "ris",
@@ -1268,7 +1268,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-342c537bc1e7",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-7.glb",
-      "sha256_glb": "07aaeb2b3ba1f8b092dc6204e1596945367c9b52b9e49ec2d9b63cb5201cf722",
+      "sha256_glb": "6ad96bf4bae7a5260653e82079de684eb2bc82606967d79fbfdc2ce423039bba",
       "bytes": 140172,
       "parametros": {
         "tipo": "mlok",
@@ -1431,7 +1431,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-551495f99447",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-9.glb",
-      "sha256_glb": "533523937ff3aee21f815888ecf75f4383aa01a46a62d29d6bc47bba641bead3",
+      "sha256_glb": "4238f912a7a7b57b8962ba1ca83e21e7b6983e5eebd207adc2d479e45bfba643",
       "bytes": 171624,
       "parametros": {
         "tipo": "mlok",
@@ -1597,7 +1597,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-66224ff9054c",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-10.glb",
-      "sha256_glb": "6a97d3ca33d99d9666a530ce8aa3fbbd2e0c1107a04d79be9538fede9eaad22b",
+      "sha256_glb": "6b57e977724c3bd80093988fe6ad6766ea8a57bf163701f557274e7be5d922b8",
       "bytes": 199596,
       "parametros": {
         "tipo": "mlok",
@@ -1766,7 +1766,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-be1fd5b519b2",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-12.glb",
-      "sha256_glb": "0caa7920bfe0274543bce09b33fbda4a47648331fc52506c0f54915ed4e1cacf",
+      "sha256_glb": "7573f0bd31b3a3db383680f5ac957207a25962f1c959328bea29d751fbfe1f7e",
       "bytes": 231064,
       "parametros": {
         "tipo": "mlok",
@@ -1938,7 +1938,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-f7339a703311",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-13-5.glb",
-      "sha256_glb": "f12831332a2f4a18af5f30f8c6b5ffe4c6062bd23d27800e13a30352159dc6e2",
+      "sha256_glb": "c2beeac320b20ab176cf2377abf64d16c57b7fecd4c0e0cd285ca75ac41f2526",
       "bytes": 261404,
       "parametros": {
         "tipo": "mlok",
@@ -2113,7 +2113,7 @@
       "familia": "guardamanos.variantes",
       "id_variante": "guardamanos.variantes@v1-ded51b44aecc",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-15.glb",
-      "sha256_glb": "2f6210b146e911e35a6b4c5cd71d2d56153f0cb733d97a7bc8cb157a19f86941",
+      "sha256_glb": "614c46ffdba8f5e10f5d8edcdccb71dd931ba15dfcdf0d34a5f4d62209e9a9a2",
       "bytes": 291652,
       "parametros": {
         "tipo": "mlok",
@@ -2291,7 +2291,7 @@
       "familia": "mira.asa_a2",
       "id_variante": "mira.asa_a2@v2-bd07384c7a0f",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-asa-a2.glb",
-      "sha256_glb": "204873ff9a1b3e1705255c07b8a96ba49425c1f47410340c504e520d18008547",
+      "sha256_glb": "ad9cf3f9186827252758eea1abe64e5fd02d6bf4c737ae4fbcde509c4ee70cd1",
       "bytes": 192284,
       "parametros": {
         "longitud": 130.0,
@@ -2357,7 +2357,7 @@
       "familia": "mira.buis",
       "id_variante": "mira.buis@v2-5610ed5e369c",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera.glb",
-      "sha256_glb": "0bc4ad02e39bb7aff4662a1f9dee71c44a6946e6c413190fee879ced12db47f4",
+      "sha256_glb": "6376abc6469b23c3da275d37ee92570207cade05296d6efaffb7639b2b695b71",
       "bytes": 235924,
       "parametros": {
         "lado": "trasera",
@@ -2434,7 +2434,7 @@
       "familia": "mira.buis",
       "id_variante": "mira.buis@v2-6c6286c81766",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-delantera.glb",
-      "sha256_glb": "bb37fe58ab4049e0126e9a4e4d985b1476d10b10dfae51e74c4a490fd0af3558",
+      "sha256_glb": "ed938c31b7cfab90d5302e5a9c3b053c28f65c35afd23f1d3216fb4db02bf647",
       "bytes": 189728,
       "parametros": {
         "lado": "delantera",
@@ -2511,7 +2511,7 @@
       "familia": "mira.buis",
       "id_variante": "mira.buis@v2-aa91c71e16f0",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera-abatida.glb",
-      "sha256_glb": "c9444fc45797c0e6f4d3d7a8f0638f7a3593fad007116b198b58f84ee9829695",
+      "sha256_glb": "e4ec263217db99422fa8409cc1476abb8243accac569e4908d157e2cb19d766f",
       "bytes": 237700,
       "parametros": {
         "lado": "trasera",
@@ -2588,7 +2588,7 @@
       "familia": "accesorio.empunadura_vertical",
       "id_variante": "accesorio.empunadura_vertical@v2-7541790c2994",
       "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-poste.glb",
-      "sha256_glb": "89a4abf983fabd05ec29dad861d1d6bc370e77f2c88ea873c354d8f7bc6657bf",
+      "sha256_glb": "de4567e9f5e4104b640314fa664b2a5e9de14b9941d630c05e0f05784745625d",
       "bytes": 196828,
       "parametros": {
         "longitud_total": 100.0,
@@ -2664,7 +2664,7 @@
       "familia": "accesorio.empunadura_vertical",
       "id_variante": "accesorio.empunadura_vertical@v2-bf0c03d46f8e",
       "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-angular.glb",
-      "sha256_glb": "fae069112383234cb72ea9b3b7904a39f03ec72636d3845dc09f818d35cc6347",
+      "sha256_glb": "a0fb4ee83fd9c84b0bc4394d687046cbfb9f0af3dd33cdc9580b163367b67cb3",
       "bytes": 206840,
       "parametros": {
         "longitud_total": 100.0,
@@ -2740,7 +2740,7 @@
       "familia": "sup.palanca_armado",
       "id_variante": "sup.palanca_armado@v2-e62b0b73f304",
       "glb": "apps/pipeline/salida/m4-oleada1/sup-palanca-armado.glb",
-      "sha256_glb": "5aa91e10f5bf5fc4a90afbab90c66a45765d7643e9829dd7add65ddd32cc8e5f",
+      "sha256_glb": "d3fa0b2ff2db0741cf9b0ff5cac537f0c21bb5531bb190ee918c6b38d7a9dba2",
       "bytes": 209780,
       "parametros": {
         "largo_cuerpo": 110.0,

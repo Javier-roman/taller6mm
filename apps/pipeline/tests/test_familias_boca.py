@@ -67,11 +67,12 @@ A2 = FAMILIAS["boca.apagallamas_a2"]
 A2_PARAMS = {**SIL, "longitud": 55.0, "diametro": 22.0, "ancho_ranura": 3.0, "longitud_ranura": 25.0}
 
 
-def test_apagallamas_a2_cuatro_ranuras_rosca_ccw_y_socket_muzzle() -> None:
+def test_apagallamas_a2_cinco_ranuras_rosca_ccw_y_socket_muzzle() -> None:
     pieza = A2.generar(A2_PARAMS)
     assert pieza.malla is not None
     assert pieza.malla.dimensiones_mm == pytest.approx((55.0, 22.0, 22.0), abs=0.05)
     assert pieza.requiere == ("rosca-m14x1-ccw",)
+    assert A2.RANURAS == 5 and 180.0 not in A2.ANGULOS  # jaula A2: cinco ranuras y la base ciega
     assert [s.nombre_nodo for s in pieza.sockets] == ["socket.muzzle"]
     assert pieza.sockets[0].interfaz == "rosca-m14x1-ccw"
     doc, _ = leer_glb(pieza.glb())
