@@ -12,7 +12,24 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from build123d import Axis, Cylinder, Edge, Face, Line, Plane, Pos, Rot, Solid, Spline, Wire, extrude
+from build123d import (
+    Align,
+    Axis,
+    Cylinder,
+    Edge,
+    Face,
+    Helix,
+    Line,
+    Plane,
+    Polygon,
+    Pos,
+    Rot,
+    Solid,
+    Spline,
+    Wire,
+    extrude,
+    sweep,
+)
 
 PUNTOS_SECCION = 32
 
@@ -135,3 +152,27 @@ def biselar(solido: Any, distancia: float, aristas: Sequence[Edge] | None = None
     except Exception:
         return solido
     return cortado if cortado.is_valid and cortado.volume > 0 else solido
+
+
+def rosca_helicoidal(radio_cresta: float, profundidad: float, paso: float, largo: float) -> Any:
+    """Hilo helicoidal en V (flancos de 60°, cresta plana) sobre el eje +Z, de z = 0 a z = `largo`.
+
+    Devuelve solo el hilo: se une a un núcleo cilíndrico de radio `radio_cresta - profundidad`. El hilo entra 0,2 mm
+    en el núcleo para que la unión sea sólida, y se recorta a la longitud pedida (los extremos son planos).
+    """
+    entra = 0.2
+    r_hel = radio_cresta - profundidad - entra
+    medio_cresta = 0.06 * paso
+    medio_base = min(medio_cresta + (profundidad + entra) * math.tan(math.radians(30.0)), 0.47 * paso)
+    hel = Helix(pitch=paso, height=largo + 2 * paso, radius=r_hel)
+    plano = Plane(origin=(r_hel, 0, 0), x_dir=(1, 0, 0), z_dir=(0, 1, 0))
+    perfil = plano * Polygon(
+        (0, -medio_base),
+        (profundidad + entra, -medio_cresta),
+        (profundidad + entra, medio_cresta),
+        (0, medio_base),
+        align=None,
+    )
+    hilo = Pos(0, 0, -paso) * sweep(perfil, path=hel, is_frenet=True)
+    corte = Cylinder(radio_cresta + 1.0, largo, align=(Align.CENTER, Align.CENTER, Align.MIN))
+    return hilo & corte

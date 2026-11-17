@@ -19,6 +19,7 @@ from build123d import Axis, Box, Cylinder, Plane, Polygon, Pos, RegularPolygon, 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.detalle import estimada, nominales_de
+from taller6mm_pipeline.familias.formas import filetear
 
 HUELLAS = {"t1": "huella-t1-micro", "rmr": "huella-rmr", "holosun_k": "huella-holosun-k"}
 ANILLOS = {"25.4": "anillo-optica-25-4mm", "30": "anillo-optica-30mm", "34": "anillo-optica-34mm"}
@@ -35,6 +36,7 @@ def _perno(xb: float, yb: float, zc: float) -> Any:
     """Bulón de apriete: cabeza con hexágono (z < 0), tuerca hexagonal y punta (z > 0). `zc` = cara exterior de la
     mordaza. Cabeza y tuerca se hunden 0,4 mm en la mordaza; el hexágono de la llave entra 1,8 mm."""
     cabeza = Pos(xb, yb, -zc - 1.2) * Cylinder(3.6, 3.2)
+    cabeza = filetear(cabeza, 0.9, [cabeza.edges().sort_by(Axis.Z)[0]])  # cabeza abombada por fuera
     cabeza = cabeza - Pos(xb, yb, -zc - 2.0) * extrude(Plane.XY * RegularPolygon(1.9, 6), 1.0, both=True)
     tuerca = Pos(xb, yb, zc + 1.3) * extrude(Plane.XY * RegularPolygon(4.0, 6), 1.7, both=True)
     punta = Pos(xb, yb, zc + 3.7) * Cylinder(1.9, 1.8)
@@ -123,6 +125,8 @@ class MonturaRiser(Familia):
         perfil = Polygon((0.0, -w / 2), (alto, -zt), (alto, zt), (0.0, w / 2), align=None)
         cuerpo = extrude(Plane.YZ * perfil, largo)
         cuerpo = fillet(cuerpo.edges().filter_by(Axis.Z), radius=min(3.0, alto / 4))
+        # Cantos largos de la plataforma y las paredes: filete de 1,2 mm (solo los de arriba y los laterales).
+        cuerpo = filetear(cuerpo, 1.2, cuerpo.edges().filter_by(Axis.X).filter_by_position(Axis.Y, 0.5, alto + 1.0))
 
         def z_pared(y: float) -> float:
             return w / 2 - (w / 2 - zt) * y / alto
@@ -150,11 +154,10 @@ class MonturaRiser(Familia):
         if p["qd"]:
             yq = alto * 0.45
             zq = z_pared(yq)
-            cuerpo = (
-                cuerpo
-                + Pos(largo * 0.3, yq, zq + 2.5) * Cylinder(3.0, 6.0)
-                + Pos(largo * 0.3 + 6.0, yq, zq + 4.5) * Box(14.0, 4.0, 3.0)
-            )
+            cubo = filetear(Pos(largo * 0.3, yq, zq + 2.5) * Cylinder(3.0, 6.0), 0.7)
+            leva = Pos(largo * 0.3 + 6.0, yq, zq + 4.5) * Box(14.0, 4.0, 3.0)
+            leva = filetear(leva, 1.1)
+            cuerpo = cuerpo + cubo + leva
             notas.append("Palanca QD reducida a una leva fija.")
         notas.append(
             "Laterales inclinados unos 9 grados (estimado, confianza baja); ranuras de la base al paso del raíl."
@@ -234,6 +237,7 @@ class MonturaAnillos(Familia):
         for x in xs:
             pie = Pos(x, (eje - 6) / 2, 0) * Box(ancho, eje - 6, 2 * semi)
             aro = Pos(x, eje, 0) * Cylinder(r_ext, ancho).rotate(Axis.Y, 90)
+            aro = filetear(aro, min(1.4, ancho / 6))  # cantos del aro redondeados
             pieza = fillet(pie.edges().filter_by(Axis.X), radius=2.0) + aro
             # Orejas de la tapa a ambos lados, a la altura del eje: se hunden 2,5 mm en la pared del aro.
             for s in (-1, 1):

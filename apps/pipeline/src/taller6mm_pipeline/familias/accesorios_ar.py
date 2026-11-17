@@ -29,12 +29,13 @@ def _perfil_poste(radio: float, largo: float) -> list[tuple[float, float]]:
     pts.append((0.97 * radio, -0.88 * largo))
     # Anillos: tres surcos poco profundos en la zona de agarre (fracción de la longitud medida desde la cima).
     for centro in (0.66, 0.50, 0.34):
-        a, b = centro - 0.035, centro + 0.035
+        a, b = centro - 0.045, centro + 0.045
         pts += [
-            (radio, -(b + 0.02) * largo),
-            (0.90 * radio, -b * largo),
-            (0.90 * radio, -a * largo),
-            (radio, -(a - 0.02) * largo),
+            (radio, -(b + 0.03) * largo),
+            (0.82 * radio, -b * largo),
+            (0.80 * radio, -(a + b) / 2 * largo),
+            (0.82 * radio, -a * largo),
+            (radio, -(a - 0.03) * largo),
         ]
     pts += [(0.96 * radio, -0.16 * largo), (0.88 * radio, -0.07 * largo), (0.88 * radio, 0.0)]
     return pts
@@ -90,7 +91,7 @@ class EmpunaduraVertical(Familia):
                 Line((lb, -2.6), (-lb, -2.6)),
                 Line((-lb, -2.6), (-lb, 0.8)),
             ],
-            e.PICATINNY_ANCHO.valor_mm,
+            e.PICATINNY_ANCHO.valor_mm + 0.3,  # holgura de 0,15 mm por lado: la pinza abraza el raíl sin solaparse
         )
         base = base - ranura
         # Tornillo de apriete: cabeza estriada rehundida en el lateral izquierdo.
@@ -103,7 +104,8 @@ class EmpunaduraVertical(Familia):
         cuerpo = base + cabeza + poste
         caja = cuerpo.bounding_box()
         nominal = (caja.size.X, caja.size.Y, caja.size.Z)
-        socket = Socket("rail.agarre", (0.0, 0.0, 0.0), e.INTERFAZ_PICATINNY, (0.0, 1.0, 0.0), (1.0, 0.0, 0.0))
+        # El socket va 0,15 mm sobre el fondo de la ranura (y = -2,6): ahí queda la cara exterior del raíl, con holgura.
+        socket = Socket("rail.agarre", (0.0, -2.45, 0.0), e.INTERFAZ_PICATINNY, (0.0, 1.0, 0.0), (1.0, 0.0, 0.0))
         notas = (
             "Anillos, collar y base de proporciones estimadas; la pinza del raíl es solo la ranura superior.",
             "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja).",

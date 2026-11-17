@@ -11,11 +11,12 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Align, Axis, Box, Circle, Cylinder, Plane, Polygon, Pos, extrude, revolve
+from build123d import Align, Axis, Box, Circle, Cylinder, GeomType, Plane, Polygon, Pos, Rot, extrude, revolve
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.detalle import estimada, nominales_de
+from taller6mm_pipeline.familias.formas import filetear
 from taller6mm_pipeline.familias.rail_picatinny import NOTA_PERFIL, longitud_rail_mm, solido_rail
 
 INTERFAZ_BLOQUE_GAS = "montaje-bloque-gas-ar"  # propuesta del catálogo (ar-m4.json), aún no está en interfaces.json
@@ -26,6 +27,7 @@ GAS_POR_VARIANTE = {"carabina": 190.0, "mid": 240.0, "a2": 300.0, "largo": 360.0
 VARIANTES = tuple(GAS_POR_VARIANTE)
 LARGO_BRIDA_MM = 10.0
 LARGO_BLOQUE_MM = 24.0
+HOLGURA_AJUSTE_MM = 0.15
 
 
 def _cil_x(radio: float, x0: float, x1: float) -> Any:
@@ -157,6 +159,28 @@ class CanonExterior(Familia):
         return Geometria(cuerpo, sockets, cotas, notas, nominales, vaciados=3)
 
 
+def _tornillo_hex(x: float, lado: int, rc: float, ro: float) -> Any:
+    """Tornillo de fijación radial del bloque en z = lado·r: vástago que baja al hoyuelo del cañón (Ø 2,6 frente a los
+    Ø 3 del hoyuelo, 0,2 mm de holgura) y cabeza abombada con hexágono interior."""
+    z0 = rc - 0.8
+    z1 = ro + 0.4
+    vastago = Pos(0, 0, (z0 + z1) / 2) * Cylinder(1.3, z1 - z0)
+    cabeza = Pos(0, 0, ro + 0.1) * Cylinder(2.6, 1.0)
+    arista_alta = cabeza.edges().filter_by(GeomType.CIRCLE).sort_by(Axis.Z)[-1]
+    cabeza = filetear(cabeza, 0.55, [arista_alta])
+    hexagono = Pos(0, 0, ro + 0.6 - 0.6) * extrude(
+        Plane.XY
+        * Polygon(
+            *[(1.1 * math.cos(math.radians(60 * k)), 1.1 * math.sin(math.radians(60 * k))) for k in range(6)],
+            align=None,
+        ),
+        0.8,
+    )
+    pieza = (vastago + cabeza) - Pos(0, 0, 0.1) * hexagono
+    pieza = Rot(180, 0, 0) * pieza if lado < 0 else pieza
+    return Pos(x, 0, 0) * pieza
+
+
 class BloqueGas(Familia):
     id = "canon.bloque_gas"
     nombre = "Bloque de gas"
@@ -190,8 +214,11 @@ class BloqueGas(Familia):
         ro = rc + pared
         largo = LARGO_BLOQUE_MM
         cuerpo = _cil_x(ro, 0, largo)
-        # Chaflán de las dos caras del collar.
-        cuerpo = cuerpo.chamfer(0.8, None, cuerpo.edges().filter_by(Axis.X, reverse=True))
+        # Filete grande en el canto exterior de las dos caras del collar (en vez de un chaflán plano).
+        cuerpo = filetear(cuerpo, 1.4, cuerpo.edges().filter_by(Axis.X, reverse=True))
+        # Collar de retención y boca del tubo de gas: anillo trasero y cuello superior donde entra el tubo.
+        cuerpo = cuerpo + filetear(_cil_x(ro + 0.9, 1.5, 3.9), 0.7)
+        cuerpo = cuerpo + filetear(_cil_x(ro + 0.9, largo - 3.9, largo - 1.5), 0.7)
         sockets: list[Socket] = [
             Socket("bore", (0.0, 0.0, 0.0), INTERFAZ_BLOQUE_GAS, (-1.0, 0.0, 0.0), (0.0, 1.0, 0.0), {})
         ]
@@ -240,13 +267,23 @@ class BloqueGas(Familia):
             cuerpo = cuerpo + Pos(largo / 2, ro - 0.8, 0) * Box(
                 largo * 0.8, 2.0, 2 * ro * 0.5, align=(Align.CENTER, Align.MIN, Align.CENTER)
             )
-        # Dos pasadores transversales (cabezas visibles en ambos lados) y tornillo inferior.
-        for z in (-1, 1):
-            cuerpo = cuerpo + Pos(largo * 0.3, 0, z * (ro - 0.3)) * Cylinder(
-                2.2, 1.6, align=(Align.CENTER, Align.CENTER, Align.CENTER)
-            )
-            cuerpo = cuerpo + Pos(largo * 0.75, 0, z * (ro - 0.3)) * Cylinder(
-                2.2, 1.6, align=(Align.CENTER, Align.CENTER, Align.CENTER)
-            )
-        cuerpo = cuerpo - _cil_x(rc, -1, largo + 1)
+        # Boca trasera del tubo de gas: cuello cilíndrico sobre el collar con su orificio.
+        if p["tipo"] != "rail":
+            cuerpo = cuerpo + filetear(Pos(0, ro - 0.2, 0) * extrude(Plane.YZ * Circle(3.4), 7.0), 0.5)
+        # Ajuste con holgura: el orificio es 0,15 mm mayor por lado que el cañón (si no, el collar y el cañón se
+        # solapan por redondeo y los hoyuelos de los tornillos asoman en el cilindro).
+        cuerpo = cuerpo - _cil_x(rc + HOLGURA_AJUSTE_MM, -1, largo + 1)
+        if p["tipo"] != "rail":
+            cuerpo = cuerpo - Pos(-0.1, ro - 0.2, 0) * extrude(Plane.YZ * Circle(1.7), 6.5)
+        # Bisel de entrada del orificio del cañón en las dos caras (facilita el montaje; es un cono real).
+        for cono in (
+            _revolucion([(0.0, 0.0), (0.0, rc + 1.05), (0.9, rc + HOLGURA_AJUSTE_MM), (0.9, 0.0)]),
+            _revolucion([(largo - 0.9, 0.0), (largo - 0.9, rc + HOLGURA_AJUSTE_MM), (largo, rc + 1.05), (largo, 0.0)]),
+        ):
+            cuerpo = cuerpo - cono
+        # Cuatro tornillos de fijación (dos pares, a ambos lados): vástago que entra en los hoyuelos del cañón
+        # (z = ±(rc - 0.9), hasta 0,1 mm de holgura) y cabeza abombada con hexágono interior.
+        for xt in (6.0, largo - 6.0):
+            for z in (-1, 1):
+                cuerpo = cuerpo + _tornillo_hex(xt, z, rc, ro)
         return Geometria(cuerpo, tuple(sockets), (), tuple(notas), nominales_de(cuerpo), vaciados=1)
