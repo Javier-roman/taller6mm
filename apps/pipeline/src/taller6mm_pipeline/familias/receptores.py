@@ -21,8 +21,8 @@ from build123d import (
     Box,
     Circle,
     Cylinder,
-    Location,
     Ellipse,
+    Location,
     Plane,
     Polygon,
     Pos,
@@ -89,7 +89,7 @@ def _palanca_selector(xs: float, ys: float, zl: float) -> Any:
 
 class ReceptorSuperior(Familia):
     id = "receptor.superior"
-    version = 1
+    version = 2
     nombre = "Receptor superior"
     requiere = (INTERFAZ_UNION,)
     ofrece = (INTERFAZ_TUERCA,)
@@ -232,8 +232,8 @@ class ReceptorSuperior(Familia):
                     -w / 2 - 0.4,
                 )
             if p["tapa"] == "abierta":
-                # Abierta: cuelga hacia abajo y hacia fuera (150°), como una tapa real sobre su varilla de bisagra.
-                placa = placa.rotate(Axis((wx0, wy0, -w / 2), (1, 0, 0)), -150)
+                # Abierta: cuelga hacia abajo y hacia fuera (142°), como una tapa real sobre su varilla de bisagra.
+                placa = placa.rotate(Axis((wx0, wy0, -w / 2), (1, 0, 0)), -142)
             cuerpo = cuerpo + placa + _cil("x", 1.4, wl + 6, ((wx0 + wx1) / 2, wy0 + 0.2, -w / 2 + 1.0))
             # Nudillos de la bisagra: sobre el eje de giro, así la tapa (abierta o cerrada) siempre queda unida.
             cuerpo = cuerpo + _cil("x", 1.7, wl - 1.2, ((wx0 + wx1) / 2, wy0, -w / 2))
@@ -279,18 +279,16 @@ class ReceptorSuperior(Familia):
             nariz = nariz - Rot(k * 20.0, 0, 0) * Pos(largo + 3.6, 14.0, 0) * Box(5.6, 1.4, 1.5)
         nariz = nariz - (_cil("x", 14.6, 0.9, (largo + 5.6, 0, 0)) - _cil("x", 13.2, 0.9, (largo + 5.6, 0, 0)))
         nariz = nariz - _cil("x", 8.5, 14.0, (largo + 1.0, 0, 0))
-        nariz = nariz - extrude(
-            Plane.YZ * (Circle(10.4) - Circle(8.5)), 1.9, dir=(1, 0, 0)
-        ).moved(Location((largo + 5.1, 0, 0)))
+        nariz = nariz - extrude(Plane.YZ * (Circle(10.4) - Circle(8.5)), 1.9, dir=(1, 0, 0)).moved(
+            Location((largo + 5.1, 0, 0))
+        )
         cuerpo = cuerpo + nariz
         vaciados += 1
         sockets += [
             Socket("handguard", (largo + 7.0, 0.0, 0.0), INTERFAZ_TUERCA, (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), {}),
             # Cara frontal del cuerpo: el guardamanos se apoya aquí y abraza la nariz de la tuerca (el cañón sigue
             # en `handguard`, al final de la nariz).
-            Socket(
-                "handguard_front", (largo, 0.0, 0.0), INTERFAZ_TUERCA, (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), {}
-            ),
+            Socket("handguard_front", (largo, 0.0, 0.0), INTERFAZ_TUERCA, (1.0, 0.0, 0.0), (0.0, 1.0, 0.0), {}),
             Socket("lower", (largo / 2, y0, 0.0), INTERFAZ_UNION, (0.0, -1.0, 0.0), (1.0, 0.0, 0.0), {}),
         ]
 
@@ -305,7 +303,7 @@ class ReceptorSuperior(Familia):
 
 class ReceptorInferior(Familia):
     id = "receptor.inferior"
-    version = 1
+    version = 2
     nombre = "Receptor inferior"
     requiere = (INTERFAZ_UNION,)
     ofrece = (INTERFAZ_POZO, INTERFAZ_PISTOLETE)

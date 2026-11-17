@@ -15,7 +15,7 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Axis, Box, Plane, Polygon, Pos, Rot, extrude, revolve
+from build123d import Align, Axis, Box, Cylinder, Plane, Polygon, Pos, RegularPolygon, Rot, extrude, revolve
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.ak_formas import (
@@ -29,7 +29,7 @@ from taller6mm_pipeline.familias.ak_formas import (
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, Socket, Valor
 from taller6mm_pipeline.familias.comun_oleada1 import mm, prisma
 from taller6mm_pipeline.familias.detalle import nominales_de
-from taller6mm_pipeline.familias.formas import filetear
+from taller6mm_pipeline.familias.formas import con_rosca_interna_x, filetear, rosca_helicoidal, suavizar
 
 INT_CANON = "montaje-canon-ak"
 INT_GUARDAMANOS = "montaje-guardamanos-ak"
@@ -86,13 +86,18 @@ class CanonAK(Familia):
             (x_mira, r),
             (x_mira, r - 0.8),
             (largo - lr, r - 0.8),
-            (largo - lr, rr + 0.8),
-            (largo - 0.5, rr + 0.8),
-            (largo, rr + 0.3),
+            (largo - lr, rr + 0.2),
+            (largo - 0.5, rr + 0.2),
+            (largo, rr - 0.3),
             (largo, 0),
         ]
         cuerpo = _rev_x(perfil)
         vaciados = 0
+        # Rosca de la boca: hilo helicoidal en V al paso M14 x 1 (cresta en rr + 0,8 como antes, 0,6 de profundidad).
+        hilo = Pos(largo - lr + 0.5, 0, 0) * Rot(0, 90, 0) * rosca_helicoidal(
+            rr + 0.8, 0.6, e.ROSCA_14_PASO.valor_mm, lr - 1.5
+        )
+        cuerpo = cuerpo + hilo
         # Bloque de gas con su alojamiento superior y el tubo de gas hasta el receptor.
         cuerpo = cuerpo + cilindro_x(r + 3.4, x_gas, x_gas + 26)
         cuerpo = cuerpo + caja_redonda(x_gas, x_gas + 26, r, Y_TUBO_GAS + 6.5, -7.5, 7.5, 4.0, ejes="x")
@@ -147,7 +152,7 @@ class CanonAK(Familia):
         cotas = (estimada("canon.x_bloque_gas", x_gas), estimada("canon.x_base_mira", x_mira))
         notas = (
             "Solo forma exterior: el cañón interior de precisión y el conducto de gas no se modelan.",
-            "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+            "La rosca de boca es una hélice en V de 14 mm nominales y 1 mm de paso (perfil estimado).",
             "Posición del bloque de gas, perfil y proporciones de la mira estimados (confianza baja).",
         )
         return Geometria(cuerpo, sockets, cotas, notas, nominales_de(cuerpo), vaciados=vaciados)
@@ -216,6 +221,9 @@ class FrenoBocaAK(Familia):
             vaciados += 2
             salida = 3.8
         cuerpo = cuerpo - cilindro_x(rr, -1, largo * 0.4)  # alojamiento de la rosca
+        cuerpo = suavizar(cuerpo, (0.35, 0.25, 0.15))  # cantos de lumbreras y cortes redondeados
+        # Rosca interior M14 x 1 en el alojamiento (hilo helicoidal en V, perfil estimado).
+        cuerpo = con_rosca_interna_x(cuerpo, rr, largo * 0.4 - 1.0, e.ROSCA_14_PASO.valor_mm, 1.0, 0.7)
         cuerpo = cuerpo - cilindro_x(salida, largo * 0.3, largo + 1)  # paso del proyectil
         vaciados += 2
         sockets = (
@@ -283,6 +291,18 @@ class MiraTraseraAK(Familia):
             cuerpo = cuerpo + cilindro_y(2.2, 1.6, largo * 0.15, 7.0, lado * hw * 0.62)
         vaciados += 3
         cuerpo = filetear(cuerpo, 0.6)
+        # Tornillo de deriva: pomo estriado (14 estrías) sobre el lateral izquierdo, con su cabeza hexagonal.
+        xk, yk, zk = largo * 0.55, 9.0, hw + 1.0
+        pomo = Pos(xk, yk, zk) * Cylinder(3.4, 3.6)
+        for k in range(14):
+            pomo = pomo - Pos(xk, yk, zk) * Rot(0, 0, k * 360.0 / 14) * Pos(3.5, 0, 0) * Box(1.0, 0.9, 3.8)
+        pomo = pomo - Pos(xk, yk, zk + 1.0) * extrude(Plane.XY * RegularPolygon(1.4, 6), 1.0)
+        cuerpo = cuerpo + filetear(pomo, 0.3)
+        # Extremo roscado del tornillo de deriva asomando por el lado derecho (hilo de paso 1,25 mm, estimado).
+        espiga = Pos(xk, yk, -hw - 4.0) * Cylinder(2.3, 6.0, align=(Align.CENTER, Align.CENTER, Align.MIN))
+        hilo = Pos(xk, yk, -hw - 4.0) * rosca_helicoidal(3.1, 0.8, 1.25, 5.0)
+        cuerpo = cuerpo + espiga + hilo
+        vaciados += 3
         socket = Socket("base", (largo / 2, 0.0, 0.0), INT_MIRA_TRASERA, (0.0, -1.0, 0.0), (1.0, 0.0, 0.0), {})
         notas = (
             "Solo forma exterior: el muelle, el tornillo de deriva y los números de la escala no se modelan.",
@@ -313,7 +333,8 @@ class RielLateralAK(Familia):
         placa = caja_redonda(0, largo, 0, alto, 0, 4.0, 5.0, ejes="z")
         # Cola de milano: más ancha arriba que abajo, a lo largo de la placa.
         a, b = alto * 0.22, alto * 0.78
-        perfil = Plane.YZ * Polygon((a, 4.0), (b, 4.0), (b + 2.4, 11.5), (a - 2.4, 11.5), align=None)
+        # Cola de milano con cuello: la base entra 4 mm por cada lado y la parte alta vuela 2,4 mm.
+        perfil = Plane.YZ * Polygon((a + 4.0, 4.0), (b - 4.0, 4.0), (b + 2.4, 11.5), (a - 2.4, 11.5), align=None)
         riel = extrude(perfil, largo - 20.0)
         cuerpo = placa + Pos(10.0, 0, 0) * riel
         vaciados = 1
@@ -322,10 +343,32 @@ class RielLateralAK(Familia):
             x = 20.0 + (i + 0.5) * paso
             cuerpo = cuerpo - caja_redonda(x - 1.6, x + 1.6, a - 4, b + 4, 8.6, 13, 0.0)
             vaciados += 1
+        # Ventanas de aligeramiento pasantes en la placa (dos filas, arriba y abajo del riel), entre los tornillos.
+        n_v = max(2, int((largo - 40.0) // 36.0))
+        paso_v = (largo - 40.0) / n_v
+        for fila_y in (a * 0.5, (b + alto) / 2):
+            alto_v = 0.5 * min(a, alto - b) - 1.0
+            if alto_v < 1.6:
+                continue
+            for i in range(n_v):
+                xv = 20.0 + (i + 0.5) * paso_v
+                if abs(xv - largo / 2) < paso_v * 0.35 + 6.0 and fila_y > alto / 2:
+                    continue  # el tornillo central de la fila alta
+                cuerpo = cuerpo - caja_redonda(
+                    xv - paso_v * 0.35,
+                    xv + paso_v * 0.35,
+                    fila_y - alto_v / 2,
+                    fila_y + alto_v / 2,
+                    -1,
+                    5,
+                    alto_v / 2 - 0.05,
+                    ejes="z",
+                )
+                vaciados += 1
         for x, y in ((6.0, alto * 0.5), (largo - 6.0, alto * 0.5), (largo / 2, alto - 5.0)):
             cuerpo = cuerpo + cilindro_z(2.6, 1.8, x, y, 4.8)
             vaciados += 1
-        cuerpo = filetear(cuerpo, 0.5)
+        cuerpo = suavizar(cuerpo, (0.5, 0.35, 0.25, 0.15))
         sockets = (
             Socket(
                 "receiver_side", (largo / 2, alto / 2, 0.0), INT_RIEL_LATERAL, (0.0, 0.0, -1.0), (1.0, 0.0, 0.0), {}

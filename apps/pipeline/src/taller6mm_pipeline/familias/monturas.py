@@ -80,6 +80,7 @@ def _base_sobre_rail(x0: float, x1: float) -> tuple[Any, float]:
 
 class MonturaRiser(Familia):
     id = "montura.riser"
+    version = 2
     nombre = "Montura elevadora de red dot"
     requiere = (e.INTERFAZ_PICATINNY,)
     parametros = (
@@ -179,6 +180,7 @@ class MonturaRiser(Familia):
 
 class MonturaAnillos(Familia):
     id = "montura.anillos"
+    version = 2
     nombre = "Anillos de visor"
     requiere = (e.INTERFAZ_PICATINNY,)
     parametros = (

@@ -154,25 +154,55 @@ def biselar(solido: Any, distancia: float, aristas: Sequence[Edge] | None = None
     return cortado if cortado.is_valid and cortado.volume > 0 else solido
 
 
-def rosca_helicoidal(radio_cresta: float, profundidad: float, paso: float, largo: float) -> Any:
+def rosca_helicoidal(
+    radio_cresta: float, profundidad: float, paso: float, largo: float, *, interna: bool = False
+) -> Any:
     """Hilo helicoidal en V (flancos de 60°, cresta plana) sobre el eje +Z, de z = 0 a z = `largo`.
 
-    Devuelve solo el hilo: se une a un núcleo cilíndrico de radio `radio_cresta - profundidad`. El hilo entra 0,2 mm
-    en el núcleo para que la unión sea sólida, y se recorta a la longitud pedida (los extremos son planos).
+    Externa (por defecto): devuelve solo el hilo, con la cresta en `radio_cresta`; se une a un núcleo de radio
+    `radio_cresta - profundidad`. Interna: el hilo apunta hacia el eje, con la cresta en `radio_cresta` y la raíz en
+    `radio_cresta + profundidad` (se une a la pared de un taladro de ese radio). Entra 0,2 mm en el núcleo para que
+    la unión sea sólida y se recorta a la longitud pedida (los extremos son planos).
     """
     entra = 0.2
-    r_hel = radio_cresta - profundidad - entra
+    signo = -1.0 if interna else 1.0
+    r_hel = radio_cresta + profundidad + entra if interna else radio_cresta - profundidad - entra
     medio_cresta = 0.06 * paso
     medio_base = min(medio_cresta + (profundidad + entra) * math.tan(math.radians(30.0)), 0.47 * paso)
     hel = Helix(pitch=paso, height=largo + 2 * paso, radius=r_hel)
     plano = Plane(origin=(r_hel, 0, 0), x_dir=(1, 0, 0), z_dir=(0, 1, 0))
-    perfil = plano * Polygon(
-        (0, -medio_base),
-        (profundidad + entra, -medio_cresta),
-        (profundidad + entra, medio_cresta),
-        (0, medio_base),
-        align=None,
-    )
+    alto = signo * (profundidad + entra)
+    perfil = plano * Polygon((0, -medio_base), (alto, -medio_cresta), (alto, medio_cresta), (0, medio_base), align=None)
     hilo = Pos(0, 0, -paso) * sweep(perfil, path=hel, is_frenet=True)
-    corte = Cylinder(radio_cresta + 1.0, largo, align=(Align.CENTER, Align.CENTER, Align.MIN))
+    corte = Cylinder(max(r_hel, radio_cresta) + 1.0, largo, align=(Align.CENTER, Align.CENTER, Align.MIN))
     return hilo & corte
+
+
+def suavizar(solido: Any, radios: Sequence[float] = (0.4, 0.3, 0.2)) -> Any:
+    """Filete de todas las aristas con el mayor de `radios` que OCCT admita; si ninguno, el sólido sin tocar.
+
+    Para piezas con muchos cantos vivos (raíles, ranuras): redondear los cantos es lo que hace el anodizado y el
+    mecanizado reales, y no cambia las cotas de la pieza (menos de 0,4 mm).
+    """
+    for r in radios:
+        redondeado = filetear(solido, r)
+        if redondeado is not solido:
+            return redondeado
+    return solido
+
+
+def con_rosca_interna_x(
+    solido: Any, radio_taladro: float, largo: float, paso: float, inicio: float = 0.0, profundidad: float = 0.8
+) -> Any:
+    """Une a `solido` una rosca interior sobre el eje X: un manguito sobre la pared del taladro (de radio
+    `radio_taladro`) con un surco helicoidal en V.
+
+    Se construye aparte porque un corte helicoidal directo sobre una pieza completa puede no teselarse en OCCT, y se une
+    después. Si la unión no es válida devuelve el sólido sin tocar (nunca una pieza rota).
+    """
+    base = (Align.CENTER, Align.CENTER, Align.MIN)
+    manguito = Cylinder(radio_taladro + 0.5, largo, align=base) - Cylinder(radio_taladro - profundidad, largo, align=base)
+    surco = Pos(0, 0, 1.0) * rosca_helicoidal(radio_taladro - 0.05, profundidad, paso, largo - 2.0)
+    rosca = Pos(inicio, 0, 0) * Rot(0, 90, 0) * (manguito - surco)
+    unido = solido + rosca
+    return unido if unido.is_valid and unido.volume > solido.volume else solido

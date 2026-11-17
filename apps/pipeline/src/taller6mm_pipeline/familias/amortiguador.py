@@ -38,6 +38,7 @@ def _cil_x(radio: float, x0: float, x1: float) -> Any:
 
 class TuboAmortiguador(Familia):
     id = "amortiguador.tubo"
+    version = 2
     nombre = "Tubo de amortiguador"
     material = "mat.anodizado_negro"
     parametros = (
@@ -117,7 +118,8 @@ class TuboAmortiguador(Familia):
         lr = 22.0 if p["longitud_rosca"] is None else float(p["longitud_rosca"])
         pared = 2.2 if p["pared"] is None else float(p["pared"])
         # Tramo roscado: núcleo y hilo helicoidal de cresta en `rr` (antes, un cilindro liso).
-        hilo = Pos(-lr, 0, 0) * Rot(0, 90, 0) * rosca_helicoidal(rr, PROFUNDIDAD_ROSCA_MM, PASO_ROSCA_MM, lr)
+        # El hilo termina 1,5 mm antes de la cara delantera: ahí apoya el receptor y no debe morder su cara.
+        hilo = Pos(-lr, 0, 0) * Rot(0, 90, 0) * rosca_helicoidal(rr, PROFUNDIDAD_ROSCA_MM, PASO_ROSCA_MM, lr - 1.5)
         cuerpo = _cil_x(rr - PROFUNDIDAD_ROSCA_MM, -lr, 0) + hilo + _cil_x(r, -largo, -lr)
         anillo = filetear(_cil_x(r + 1.0, -largo, -largo + 6.0), 0.8)  # anillo trasero con los cantos redondeados
         cuerpo = cuerpo + anillo
@@ -175,6 +177,7 @@ class TuboAmortiguador(Familia):
 
 class BloqueoTubo(Familia):
     id = "amortiguador.bloqueo"
+    version = 2
     nombre = "Bloqueo del tubo (tuerca de castillo y placa)"
     material = "mat.anodizado_negro"
     requiere = ()
@@ -208,7 +211,14 @@ class BloqueoTubo(Familia):
             muesca = Pos(-placa_t - h + 1.4, rr + 4.0, 0) * Box(3.0, 4.0, 5.0)
             tuerca = tuerca - Rot(i * 360.0 / n, 0, 0) * muesca
         # Avellanado de la boca trasera de la tuerca y de la cara delantera de la placa (conos reales).
-        avellanado_t = _revolucion_x([(-placa_t - h - 0.01, 0.0), (-placa_t - h - 0.01, rr + 1.2), (-placa_t - h + 1.2, rr), (-placa_t - h + 1.2, 0.0)])
+        avellanado_t = _revolucion_x(
+            [
+                (-placa_t - h - 0.01, 0.0),
+                (-placa_t - h - 0.01, rr + 1.2),
+                (-placa_t - h + 1.2, rr),
+                (-placa_t - h + 1.2, 0.0),
+            ]
+        )
         avellanado_p = _revolucion_x([(0.01, 0.0), (0.01, rr + 1.2), (-1.2, rr), (-1.2, 0.0)])
         conjunto = placa + orejeta + tuerca - _cil_x(rr, -placa_t - h - 1, 1) - avellanado_t - avellanado_p
         sockets = (

@@ -25,25 +25,25 @@ INTERFAZ_ASA_CARGA = "montaje-asa-carga-ar"  # propuesta en catalogo/ar-m4.json 
 
 def _perfil_poste(radio: float, largo: float) -> list[tuple[float, float]]:
     """Perfil (radio, y) del poste de abajo arriba, con la cima en y = 0: collar, tres anillos, panza y base redonda."""
-    pts: list[tuple[float, float]] = [(0.0, -largo), (0.60 * radio, -largo), (0.86 * radio, -largo + 0.045 * largo)]
+    pts: list[tuple[float, float]] = [(0.0, -largo), (0.50 * radio, -largo), (0.78 * radio, -largo + 0.05 * largo)]
     pts.append((0.97 * radio, -0.88 * largo))
     # Anillos: tres surcos poco profundos en la zona de agarre (fracción de la longitud medida desde la cima).
     for centro in (0.66, 0.50, 0.34):
         a, b = centro - 0.045, centro + 0.045
         pts += [
             (radio, -(b + 0.03) * largo),
-            (0.82 * radio, -b * largo),
-            (0.80 * radio, -(a + b) / 2 * largo),
-            (0.82 * radio, -a * largo),
+            (0.76 * radio, -b * largo),
+            (0.72 * radio, -(a + b) / 2 * largo),
+            (0.76 * radio, -a * largo),
             (radio, -(a - 0.03) * largo),
         ]
-    pts += [(0.96 * radio, -0.16 * largo), (0.88 * radio, -0.07 * largo), (0.88 * radio, 0.0)]
+    pts += [(0.92 * radio, -0.16 * largo), (0.78 * radio, -0.07 * largo), (0.70 * radio, 0.0)]
     return pts
 
 
 class EmpunaduraVertical(Familia):
     id = "accesorio.empunadura_vertical"
-    version = 2  # v2: base lofteada con ranura y tornillo, poste de revolución con anillos (antes, caja y cilindro)
+    version = 3  # v2: base lofteada con ranura y tornillo, poste de revolución con anillos (antes, caja y cilindro)
     nombre = "Empuñadura vertical"
     requiere = (e.INTERFAZ_PICATINNY,)
     ofrece = ()
@@ -79,9 +79,9 @@ class EmpunaduraVertical(Familia):
         # Base: loft de tres secciones (arriba ancha, abajo más estrecha) con la ranura del raíl en la cara superior.
         base = loftear(
             [
-                superelipse(0.0, 0.0, ancho_base / 2, lb / 2, n=3.6),
-                superelipse(-0.45 * hb, 0.0, 0.46 * ancho_base, 0.47 * lb, n=3.2),
-                superelipse(-hb, 0.0, 0.40 * ancho_base, 0.34 * lb, n=2.6),
+                superelipse(0.0, 0.0, ancho_base / 2, lb / 2, n=2.5),
+                superelipse(-0.45 * hb, 0.0, 0.46 * ancho_base, 0.47 * lb, n=2.2),
+                superelipse(-hb, 0.0, 0.40 * ancho_base, 0.34 * lb, n=2.0),
             ]
         )
         ranura = extruir_perfil(

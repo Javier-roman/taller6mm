@@ -183,6 +183,7 @@ def _tornillo_hex(x: float, lado: int, rc: float, ro: float) -> Any:
 
 class BloqueGas(Familia):
     id = "canon.bloque_gas"
+    version = 2
     nombre = "Bloque de gas"
     requiere = (INTERFAZ_BLOQUE_GAS,)
     estandares = ()

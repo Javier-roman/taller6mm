@@ -16,12 +16,13 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Box, Line, Pos, Rot, Spline
+from build123d import Axis, Box, Line, Pos, Rot, Spline
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.comun_oleada1 import mm
 from taller6mm_pipeline.familias.formas import (
+    biselar,
     cilindro_en,
     extruir_perfil,
     filetear,
@@ -153,7 +154,7 @@ class AsaTransporteA2(Familia):
 
 class Buis(Familia):
     id = "mira.buis"
-    version = 2  # v2: base con tornillo, bisagra y cuerpo plegable con tambor o poste (antes, cajas)
+    version = 3  # v2: base con tornillo, bisagra y cuerpo plegable con tambor o poste (antes, cajas)
     nombre = "BUIS abatible"
     requiere = (e.INTERFAZ_PICATINNY,)
     ofrece = ()
@@ -195,6 +196,12 @@ class Buis(Familia):
             Line((-0.5 * lb, 0.55 * hb), (-0.5 * lb, 0.0)),
         ]
         base = extruir_perfil(lateral, ancho)
+        # Esquinas de la huella (aristas verticales, en planta) y cantos largos con bisel: la pinza real no es un taco.
+        base = biselar(base, 0.22 * lb, base.edges().filter_by(Axis.Y))
+        base = biselar(base, min(2.6, 0.30 * hb), base.edges().filter_by(Axis.X).filter_by_position(Axis.Y, -0.1, 0.1))
+        base = biselar(
+            base, min(2.0, 0.24 * hb), base.edges().filter_by(Axis.X).filter_by_position(Axis.Y, hb - 0.1, hb + 0.1)
+        )
         base = filetear(base, min(1.2, 0.12 * hb))
         # Tornillo de apriete: cabeza cilíndrica con ranura, rehundida en un avellanado del lateral izquierdo.
         x_t, y_t = -0.22 * lb, 0.45 * hb
@@ -211,7 +218,7 @@ class Buis(Familia):
         r_eje = min(0.12 * hb + 1.3, 0.35 * max(3.0, 0.30 * lb))
         alto_cuerpo = h - hb - 0.2 * r_eje  # de la bisagra al punto más alto
         grueso = max(3.0, 0.30 * lb)
-        w = 0.62 * ancho  # ancho del cuerpo plegable
+        w = 0.52 * ancho  # ancho del cuerpo plegable
         trasera = p["lado"] == "trasera"
         # Orejas de bisagra y su eje (extremos del eje visibles a cada lado).
         z_oreja = w / 2 + 1.3
