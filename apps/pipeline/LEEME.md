@@ -47,6 +47,10 @@ blender --background --factory-startup --python blender/previsualizar.py -- --li
 - Las piezas sin malla (culata telescópica, cargador, red dot) entran como **marcador visual** naranja translúcido en el socket del padre: sus medidas son de dibujo (`es_cota: false`), no datos. Todo el conjunto es T0, `es_demo` y `publicable_3d = false`.
 - Hallazgos de los generadores (no se editaron): el asa de armado integrada del receptor superior (`asa_armado`) solapa con la torre del inferior (el asa queda 7 mm sobre el eje y la torre llega a 15 mm), por eso los builds la desactivan; el guardamanos no toca el receptor (no hay tuerca de cañón modelada: hueco de 1 a 6,5 mm); el cañón lleva el tramo roscado a Ø15,6 mm frente al alojamiento Ø14 de la bocacha, así que se monta a tope.
 
+## Bucle de calidad (`src/taller6mm_pipeline/calidad/`)
+
+`uv run python -m taller6mm_pipeline.calidad.bucle [--familia …] [--hoja]` mide todas las piezas con la puerta de `catalogo/calidad-minimos.json`, escribe `assets-src/calidad/cola.json` (peor primero, con fallo y sugerencia) y un historial con alerta de regresión; con `--hoja` dibuja la hoja de contacto en `salida/calidad/`. Detalle y umbrales en `docs/05` §12; skill `/mejorar-piezas` y subagente `mejorador-piezas`.
+
 ## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
 
 Busca modelos ya hechos con licencia abierta (CC0 / CC BY) para una pieza de `catalogo/ar-m4.json`, sin gastar tokens: lo repetitivo lo hace el script. Los términos por pieza están en `catalogo/importador-terminos.json`.

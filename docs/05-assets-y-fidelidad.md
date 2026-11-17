@@ -212,6 +212,45 @@ Los parámetros se extraen de las fichas, cada uno con su fuente y su confianza.
 - **No puede usarse sobre fotos con reserva de IA**: las que llevan `Content-Signal` con `ai-train=no` o `ai-input=no`.
 - **Sin decidir.**
 
+## 12. Bucle de calidad (puerta medible por pieza)
+
+Las piezas generadas necesitaban muchas mejoras y nadie las medía. El módulo `apps/pipeline/src/taller6mm_pipeline/calidad/` pasa cada pieza (GLB + ficha) por una puerta automática, escribe una cola de trabajo y deja una hoja de contacto para el juicio visual. Solo scripts y numpy: determinista (semilla fija `20261117`), sin IA y sin gastar tokens.
+
+```bash
+cd apps/pipeline
+uv run python -m taller6mm_pipeline.calidad.bucle [--familia receptor] [--id 'gm-*'] [--max-iteraciones 3 --mejorador "<cmd>"] [--hoja] [--sin-ensamblajes] [--glb <carpeta>]
+```
+
+Entradas: las variantes de `oleada1` y `oleada1_cuerpos` (generadas en proceso, así que se ve siempre el código actual), los GLB de `salida/kit-m4/` si existen (se generan con Blender desde modelos CC que no viven en git: si faltan, el bucle los apunta como hueco y no inventa nada), los builds de `catalogo/m4-builds.json` reensamblados y cualquier carpeta pasada con `--glb` (así entran tanda 3, AK o pistolas cuando se fusionen). Salidas: `assets-src/calidad/cola.json` y `historial.json` (ignorados por git) y, en `apps/pipeline/salida/calidad/`, un `informes/<id>.json` por pieza, `tabla.md` y, con `--hoja`, `hoja.html` y `hoja-NN.png` (de peor a mejor; 3/4 y lateral con la pieza al 80 % del cuadro, material PBR procedural de `blender/previsualizar.py`).
+
+### 12.1 Criterios y por qué
+
+Los umbrales viven en `catalogo/calidad-minimos.json`: un `defecto` y sobrescrituras por familia (guardamanos, empuñadura, óptica, receptor, cañón…). Una pieza **pasa** si cumple el mínimo de todos los criterios y su puntuación llega a 75. La puntuación (0-100) es la media ponderada de la fracción que cumple cada criterio; lo desconocido (una cota `null`, una familia sin mapeo de cotas) es una `bandera` que no puntúa ni penaliza, y su peso se reparte entre lo medible.
+
+| Criterio (peso) | Mínimo por defecto | Por qué |
+|---|---|---|
+| Malla cerrada (15, duro) | 0 aristas abiertas | Sin malla estanca no hay volumen, ni colisiones, ni impresión. |
+| Relleno de la caja (8, duro) | volumen / caja ≤ 0,65 | Un bloque macizo ronda 0,9-1,0: es el «cubito». Misma cifra que `test_formas_reales`. |
+| Nº de triángulos (8, duro) | ≥ 1500 (3000 en cañón y receptores) | Una caja son 12; una pieza con filetes y huecos, miles. |
+| Orientaciones de cara (6) | ≥ 300 normales distintas (a 0,1) | Una caja achaflanada tiene ~26: mide la variedad de superficie. |
+| Transiciones suaves (7) | ≥ 2 aristas de 4°-60° por cm² | Proxy de filetes y curvatura: densidad de detalle sobre el área. |
+| Aristas vivas (7) | ≤ 45 % de la longitud de arista con diedro > 60° | Lo real tiene filetes; lo de juguete, esquinas vivas. |
+| Silueta en 3 vistas (12) | no rectangular ≥ 0,2 (0,1 en cañón y tubo) | `max(1 − relleno, complejidad − 1)` medio en XY, XZ y ZY: 0 es un rectángulo puro. |
+| Escala (4, duro) | dimensión mayor entre 3 y 1500 mm | Caza errores de unidad. |
+| Cotas vs ficha (10, duro) | ±1 % o ±2 mm (`realismo.cota_ok`) | Solo con mapeo explícito clave→eje por familia; sin él, bandera. |
+| Sockets (10, duro) | `sockets_requeridos` de la familia presentes y a ≤ 40 mm de la caja | Sin sockets no se puede ensamblar. |
+| Eje largo (4) | el de la familia (+X boca, +Y arriba, +Z derecha) | Ejes canónicos (§4). |
+| Simetría (4) | centro de masa a ≤ 3 % (5 % en curvas) del centro de la caja | Lo lateral debe estar centrado en Z. |
+| Componentes (5) | ≤ 6 (24 en la BUIS, que lleva piezas móviles) | Caza flotantes y uniones mal hechas. |
+
+Los umbrales se calibraron sobre las piezas actuales: no certifican realismo (eso es el IoU de §6.3 y el `revisor-fidelidad`), solo dejan fuera lo evidentemente pobre y dan al `mejorador-piezas` objetivos concretos. Un umbral que parezca injusto para una familia se cambia en el JSON con su motivo, nunca desactivando el criterio.
+
+**Ensamblajes**: pasan si no hay colisiones entre piezas montadas, ni huecos físicos de más de 1 mm entre piezas que deben tocarse, ni montajes incompatibles, sin datos o sin colocar (los huecos de datos se listan como banderas).
+
+### 12.2 Bucle y regresiones
+
+Cada ejecución añade una entrada a `historial.json` (puntuación y estado de cada pieza). Si una pieza baja más de 1 punto o pasa de «pasa» a «no pasa» respecto a la última ejecución que la contenía, el bucle imprime `REGRESION` y la anota en la cola (`--estricto` devuelve el código 2). La cola va de peor a mejor (fallos duros primero) con el fallo principal, la sugerencia concreta y el archivo del generador. El subagente `mejorador-piezas` (Sonnet) toma el primero, lo mejora, vuelve a medir y repite hasta pasar o llegar al máximo de rondas; la skill `/mejorar-piezas` lo lanza. La hoja de contacto es para el revisor visual: la puerta mide, no juzga el parecido.
+
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
 - [ ] T0 generado para todo el catálogo semilla.
