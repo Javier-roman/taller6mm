@@ -200,7 +200,7 @@ class PistoleteGbbr(EmpunaduraPistolete):
         for k in range(5):
             u = 0.30 + 0.10 * k
             x = -desplaza * u - 0.04 * prof * u - 0.5 * prof * 0.82
-            cuerpo = cuerpo - Pos(x, -u * alto, 0.0) * Box(2.4, 2.2, 0.62 * ancho)
+            cuerpo = cuerpo - cilindro_en("z", 1.7, 0.62 * ancho, (x - 0.3, -u * alto, 0.0))
         # Mejilla del pulgar: resalte lofteado en el lado izquierdo, para distinguirlo del pistolete de AEG.
         cuerpo = cuerpo + loftear(
             [
