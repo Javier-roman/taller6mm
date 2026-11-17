@@ -32,6 +32,21 @@ Política de dependencias: `exclude-newer = "3 days"` en `pyproject.toml`, la mi
 
 Pistoletes (A2, MOE, ergo), guardamanos por tipo (carabina, mid, RIS cuadrado, M-LOK), asa A2, BUIS, empuñadura vertical y palanca de armado, con sockets `socket.*` y GLB determinista. Registro en `catalogo/m4-oleada1-piezas.json` y cobertura en `docs/catalogo/familia-ar-m4.md`. Todo es `es_demo`, T0 sin vistas licenciadas y no publicable. `uv run python -m taller6mm_pipeline.familias.oleada1` regenera los GLB y el registro.
 
+## Ensamblador de builds (`src/taller6mm_pipeline/ensamblador/`)
+
+Encaja las piezas de un build del M4 por sus `socket.*`, calcula las transformaciones en mm, escribe un GLB único del conjunto y un informe JSON. Los builds viven en `catalogo/m4-builds.json` (M4A1 carabina, M4 CQB con RIS, M16A2 con asa): cada pieza es una familia con parámetros (o un GLB del kit) y cada montaje `hijo -> padre` nombra los dos sockets.
+
+```bash
+uv run python -m taller6mm_pipeline.ensamblador [--build m4a1-carabina]   # salida/ensamblador/<id>.glb + <id>.informe.json
+blender --background --factory-startup --python blender/previsualizar.py -- --lista lista.json   # "mat": "auto", vistas izq y lado
+```
+
+- Modos de montaje: `opuestos` (los marcos de los dos sockets se enfrentan: normales opuestas, tangentes alineadas) y `coaxial` (solo la posición sobre el eje; para el bloque de gas sobre el cañón o una pieza sin socket). `deslizar_mm`, `posicion_riel_mm` (centro de la montura medido desde el extremo trasero del raíl, que se mide en la malla), `ranura_riel` (centro de una ranura Picatinny, para el taco de retroceso) y `alinear: origen_comun` ajustan la posición sobre la tangente.
+- Veredicto por montaje (`reglas.py`): interfaz de `catalogo/interfaces.json` (incluye el sentido de la rosca), diámetro del collar del bloque de gas frente al cañón, rosca de la tuerca del tubo y que la montura quepa en el raíl. Cada uno lleva motivo, fuente y confianza; una cota desconocida da `sin_datos`, nunca un sí.
+- Informe: `colisiones` (solapes por sondeo de 0,5 mm hacia dentro con paridad de rayos; las caras que se tocan no cuentan), `huecos_entre_piezas` (piezas montadas con holgura > 1 mm, precisión ~1 mm) y `huecos_de_datos` (piezas sin malla, sockets ausentes, GLB del kit que falta y cotas `null`).
+- Las piezas sin malla (culata telescópica, cargador, red dot) entran como **marcador visual** naranja translúcido en el socket del padre: sus medidas son de dibujo (`es_cota: false`), no datos. Todo el conjunto es T0, `es_demo` y `publicable_3d = false`.
+- Hallazgos de los generadores (no se editaron): el asa de armado integrada del receptor superior (`asa_armado`) solapa con la torre del inferior (el asa queda 7 mm sobre el eje y la torre llega a 15 mm), por eso los builds la desactivan; el guardamanos no toca el receptor (no hay tuerca de cañón modelada: hueco de 1 a 6,5 mm); el cañón lleva el tramo roscado a Ø15,6 mm frente al alojamiento Ø14 de la bocacha, así que se monta a tope.
+
 ## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
 
 Busca modelos ya hechos con licencia abierta (CC0 / CC BY) para una pieza de `catalogo/ar-m4.json`, sin gastar tokens: lo repetitivo lo hace el script. Los términos por pieza están en `catalogo/importador-terminos.json`.
