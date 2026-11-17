@@ -1,0 +1,832 @@
+{
+  "esquema": "m4-builds/v1",
+  "generado": "2026-11-15",
+  "nota": "Builds de ejemplo del M4/M16 para el ensamblador (apps/pipeline/src/taller6mm_pipeline/ensamblador). Las piezas salen de los generadores con parámetros de barrido (es_demo) y las que no tienen malla ni modelo (culata, cargador, red dot) entran como marcador visual sin cotas. Todo es T0 y publicable_3d=false.",
+  "builds": [
+    {
+      "id": "m4a1-carabina",
+      "nombre": "M4A1 carabina",
+      "descripcion": "Carabina de 6,7 in: receptor plano con raíl, cañón de 300 mm, guardamanos de dos mitades, apagallamas A2, tubo de culata mil-spec y mira BUIS trasera.",
+      "piezas": [
+        {
+          "id": "receptor-superior",
+          "rol": "receptor_superior",
+          "familia": "receptor.superior",
+          "params": {
+            "longitud": 250.0,
+            "ancho": 34.0,
+            "alto": 40.0,
+            "asa_armado": false,
+            "variante": "a3_plano"
+          }
+        },
+        {
+          "id": "receptor-inferior",
+          "rol": "receptor_inferior",
+          "familia": "receptor.inferior",
+          "params": {
+            "longitud": 190.0,
+            "ancho": 34.0,
+            "profundidad_pozo": 66.0,
+            "tubo": "milspec"
+          }
+        },
+        {
+          "id": "canon",
+          "rol": "canon",
+          "familia": "canon.exterior",
+          "params": {
+            "perfil": "ligero",
+            "diametro": 18.0,
+            "diametro_boca": 16.0,
+            "variante": "carabina",
+            "longitud": 300.0,
+            "longitud_rosca": 14.0
+          }
+        },
+        {
+          "id": "bloque-gas",
+          "rol": "bloque_gas",
+          "familia": "canon.bloque_gas",
+          "params": {
+            "tipo": "a2_mira",
+            "diametro_canon": 18.0,
+            "pared": 4.0,
+            "altura_mira": 22.0
+          }
+        },
+        {
+          "id": "guardamanos",
+          "rol": "guardamanos",
+          "familia": "guardamanos.variantes",
+          "params": {
+            "tipo": "carabina",
+            "longitud": 170.2,
+            "diametro_exterior": 46.0,
+            "grosor_pared": 2.5
+          }
+        },
+        {
+          "id": "apagallamas",
+          "rol": "bocacha",
+          "familia": "boca.apagallamas_a2",
+          "params": {
+            "longitud": 60.0,
+            "diametro": 22.0,
+            "diametro_paso": 9.0,
+            "profundidad_rosca": 12.0,
+            "rosca": "14mm_ccw",
+            "ancho_ranura": 3.0,
+            "longitud_ranura": 30.0
+          }
+        },
+        {
+          "id": "tubo",
+          "rol": "tubo_culata",
+          "familia": "amortiguador.tubo",
+          "params": {
+            "diametro": 29.16,
+            "diametro_rosca": 30.16,
+            "longitud_rosca": 22.0,
+            "pared": 2.2,
+            "variante": "carabina",
+            "especificacion": "milspec",
+            "longitud": 180.0,
+            "posiciones": 6,
+            "paso_quilla": 12.0
+          }
+        },
+        {
+          "id": "bloqueo-tubo",
+          "rol": "bloqueo_tubo",
+          "familia": "amortiguador.bloqueo",
+          "params": {
+            "diametro_rosca": 30.16,
+            "altura_tuerca": 8.0,
+            "almenas": 6,
+            "especificacion": "milspec"
+          }
+        },
+        {
+          "id": "pistolete",
+          "rol": "pistolete",
+          "familia": "empunadura.pistolete",
+          "params": {
+            "altura": 95.0,
+            "profundidad": 38.0,
+            "ancho": 33.0,
+            "inclinacion": 25.0,
+            "perfil": "a2"
+          }
+        },
+        {
+          "id": "culata",
+          "rol": "culata",
+          "familia": "culata.telescopica",
+          "params": {
+            "especificacion": "milspec",
+            "longitud": null,
+            "altura": null,
+            "ancho": null,
+            "pared": null,
+            "diametro_tubo": null
+          },
+          "marcador": {
+            "forma": "caja",
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
+            "centro_mm": [0, 0, -25],
+            "dim_mm": [44, 36, 150]
+          }
+        },
+        {
+          "id": "cargador",
+          "rol": "cargador",
+          "familia": "cargador.m4",
+          "params": {
+            "capacidad": 120,
+            "sistema": "aeg",
+            "largo": null,
+            "ancho": null,
+            "altura": null
+          },
+          "marcador": {
+            "forma": "caja",
+            "centro_mm": [0, 0, -3],
+            "dim_mm": [40, 22, 106],
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta"
+          }
+        },
+        {
+          "id": "buis-trasera",
+          "rol": "mira",
+          "familia": "mira.buis",
+          "params": {
+            "longitud_base": 25.0,
+            "altura_base": 12.0,
+            "altura": 40.0,
+            "ancho": 20.0,
+            "posicion": "erguida",
+            "lado": "trasera"
+          }
+        }
+      ],
+      "montajes": [
+        {
+          "hijo": "receptor-inferior",
+          "padre": "receptor-superior",
+          "socket_hijo": "upper",
+          "socket_padre": "lower",
+          "modo": "opuestos",
+          "alinear": "origen_comun",
+          "nota": "Los dos receptores comparten el extremo trasero: el socket de unión es de centro y no da posición axial (supuesto)."
+        },
+        {
+          "hijo": "canon",
+          "padre": "receptor-superior",
+          "socket_hijo": "receiver",
+          "socket_padre": "handguard",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor-superior",
+          "socket_hijo": "union-receptor",
+          "socket_padre": "handguard",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "bloque-gas",
+          "padre": "canon",
+          "socket_hijo": "bore",
+          "socket_padre": "gas_block",
+          "modo": "coaxial",
+          "eje": "x"
+        },
+        {
+          "hijo": "apagallamas",
+          "padre": "canon",
+          "socket_hijo": "muzzle",
+          "socket_padre": "muzzle",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "tubo",
+          "padre": "receptor-inferior",
+          "socket_hijo": "receiver",
+          "socket_padre": "buffer_tube",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "bloqueo-tubo",
+          "padre": "tubo",
+          "socket_hijo": "receiver",
+          "socket_padre": "receiver",
+          "modo": "coaxial",
+          "eje": "x"
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor-inferior",
+          "socket_hijo": "montaje-pistolete",
+          "socket_padre": "grip",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "culata",
+          "padre": "tubo",
+          "socket_hijo": null,
+          "socket_padre": "stock",
+          "modo": "opuestos",
+          "nota": "Sin malla ni sockets: marcador visual."
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor-inferior",
+          "socket_hijo": null,
+          "socket_padre": "magwell",
+          "modo": "opuestos",
+          "nota": "Sin malla ni sockets: marcador visual."
+        },
+        {
+          "hijo": "buis-trasera",
+          "padre": "receptor-superior",
+          "socket_hijo": "rail.base",
+          "socket_padre": "rail.top",
+          "modo": "opuestos",
+          "posicion_riel_mm": 15.0
+        }
+      ]
+    },
+    {
+      "id": "m4-cqb-ris",
+      "nombre": "M4 CQB con RIS",
+      "descripcion": "CQB: receptor corto sin tapa, cañón de 240 mm, guardamanos RIS cuadrado con raíles en las cuatro caras, bocacha, empuñadura vertical, BUIS y red dot sobre elevador.",
+      "piezas": [
+        {
+          "id": "receptor-superior",
+          "rol": "receptor_superior",
+          "familia": "receptor.superior",
+          "params": {
+            "longitud": 200.0,
+            "ancho": 34.0,
+            "alto": 40.0,
+            "asa_armado": false,
+            "variante": "a3_plano",
+            "tapa": "sin",
+            "forward_assist": false
+          }
+        },
+        {
+          "id": "receptor-inferior",
+          "rol": "receptor_inferior",
+          "familia": "receptor.inferior",
+          "params": {
+            "longitud": 190.0,
+            "ancho": 34.0,
+            "profundidad_pozo": 66.0,
+            "tubo": "milspec"
+          }
+        },
+        {
+          "id": "canon",
+          "rol": "canon",
+          "familia": "canon.exterior",
+          "params": {
+            "perfil": "ligero",
+            "diametro": 18.0,
+            "diametro_boca": 16.0,
+            "variante": "carabina",
+            "longitud": 240.0,
+            "longitud_rosca": 14.0
+          }
+        },
+        {
+          "id": "bloque-gas",
+          "rol": "bloque_gas",
+          "familia": "canon.bloque_gas",
+          "params": {
+            "tipo": "bajo_perfil",
+            "diametro_canon": 18.0,
+            "pared": 4.0,
+            "altura_mira": null
+          }
+        },
+        {
+          "id": "guardamanos",
+          "rol": "guardamanos",
+          "familia": "guardamanos.variantes",
+          "params": {
+            "tipo": "ris",
+            "longitud": 170.2,
+            "diametro_exterior": 36.0,
+            "grosor_pared": 3.0
+          }
+        },
+        {
+          "id": "apagallamas",
+          "rol": "bocacha",
+          "familia": "boca.bocacha",
+          "params": {
+            "longitud": 60.0,
+            "diametro": 22.0,
+            "diametro_paso": 9.0,
+            "profundidad_rosca": 12.0,
+            "rosca": "14mm_ccw",
+            "ancho_ranura": 3.0,
+            "longitud_ranura": 30.0,
+            "ranuras": 6
+          }
+        },
+        {
+          "id": "tubo",
+          "rol": "tubo_culata",
+          "familia": "amortiguador.tubo",
+          "params": {
+            "diametro": 29.16,
+            "diametro_rosca": 30.16,
+            "longitud_rosca": 22.0,
+            "pared": 2.2,
+            "variante": "carabina",
+            "especificacion": "milspec",
+            "longitud": 180.0,
+            "posiciones": 6,
+            "paso_quilla": 12.0
+          }
+        },
+        {
+          "id": "bloqueo-tubo",
+          "rol": "bloqueo_tubo",
+          "familia": "amortiguador.bloqueo",
+          "params": {
+            "diametro_rosca": 30.16,
+            "altura_tuerca": 8.0,
+            "almenas": 6,
+            "especificacion": "milspec"
+          }
+        },
+        {
+          "id": "pistolete",
+          "rol": "pistolete",
+          "familia": "empunadura.pistolete",
+          "params": {
+            "altura": 95.0,
+            "profundidad": 38.0,
+            "ancho": 33.0,
+            "inclinacion": 25.0,
+            "perfil": "moe"
+          }
+        },
+        {
+          "id": "culata",
+          "rol": "culata",
+          "familia": "culata.telescopica",
+          "params": {
+            "especificacion": "milspec",
+            "longitud": null,
+            "altura": null,
+            "ancho": null,
+            "pared": null,
+            "diametro_tubo": null
+          },
+          "marcador": {
+            "forma": "caja",
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
+            "centro_mm": [0, 0, -25],
+            "dim_mm": [44, 36, 150]
+          }
+        },
+        {
+          "id": "cargador",
+          "rol": "cargador",
+          "familia": "cargador.m4",
+          "params": {
+            "capacidad": 120,
+            "sistema": "aeg",
+            "largo": null,
+            "ancho": null,
+            "altura": null
+          },
+          "marcador": {
+            "forma": "caja",
+            "centro_mm": [0, 0, -3],
+            "dim_mm": [40, 22, 106],
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta"
+          }
+        },
+        {
+          "id": "buis-trasera",
+          "rol": "mira",
+          "familia": "mira.buis",
+          "params": {
+            "longitud_base": 25.0,
+            "altura_base": 12.0,
+            "altura": 40.0,
+            "ancho": 20.0,
+            "posicion": "erguida",
+            "lado": "trasera"
+          }
+        },
+        {
+          "id": "buis-delantera",
+          "rol": "mira",
+          "familia": "mira.buis",
+          "params": {
+            "longitud_base": 25.0,
+            "altura_base": 12.0,
+            "altura": 40.0,
+            "ancho": 20.0,
+            "posicion": "erguida",
+            "lado": "delantera"
+          }
+        },
+        {
+          "id": "empunadura-vertical",
+          "rol": "empunadura_vertical",
+          "familia": "accesorio.empunadura_vertical",
+          "params": {
+            "longitud_total": 100.0,
+            "diametro": 32.0,
+            "largo_base": 40.0,
+            "alto_base": 20.0
+          }
+        },
+        {
+          "id": "elevador",
+          "rol": "montura",
+          "familia": "montura.riser",
+          "params": {
+            "huella": "t1",
+            "longitud": 50.0,
+            "altura": 22.0,
+            "ancho": 32.0,
+            "separacion_tornillos": null,
+            "qd": true
+          }
+        },
+        {
+          "id": "red-dot",
+          "rol": "optica",
+          "marcador": {
+            "forma": "caja",
+            "centro_mm": [0, 0, 20],
+            "dim_mm": [60, 35, 40],
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
+            "requiere": ["huella-t1-micro"]
+          }
+        }
+      ],
+      "montajes": [
+        {
+          "hijo": "receptor-inferior",
+          "padre": "receptor-superior",
+          "socket_hijo": "upper",
+          "socket_padre": "lower",
+          "modo": "opuestos",
+          "alinear": "origen_comun",
+          "nota": "Los dos receptores comparten el extremo trasero: el socket de unión es de centro y no da posición axial (supuesto)."
+        },
+        {
+          "hijo": "canon",
+          "padre": "receptor-superior",
+          "socket_hijo": "receiver",
+          "socket_padre": "handguard",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor-superior",
+          "socket_hijo": "union-receptor",
+          "socket_padre": "handguard",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "bloque-gas",
+          "padre": "canon",
+          "socket_hijo": "bore",
+          "socket_padre": "gas_block",
+          "modo": "coaxial",
+          "eje": "x"
+        },
+        {
+          "hijo": "apagallamas",
+          "padre": "canon",
+          "socket_hijo": null,
+          "socket_padre": "muzzle",
+          "modo": "coaxial",
+          "eje": "x",
+          "nota": "La bocacha no define socket: va con su origen en el extremo del cañón."
+        },
+        {
+          "hijo": "tubo",
+          "padre": "receptor-inferior",
+          "socket_hijo": "receiver",
+          "socket_padre": "buffer_tube",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "bloqueo-tubo",
+          "padre": "tubo",
+          "socket_hijo": "receiver",
+          "socket_padre": "receiver",
+          "modo": "coaxial",
+          "eje": "x"
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor-inferior",
+          "socket_hijo": "montaje-pistolete",
+          "socket_padre": "grip",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "culata",
+          "padre": "tubo",
+          "socket_hijo": null,
+          "socket_padre": "stock",
+          "modo": "opuestos",
+          "nota": "Sin malla ni sockets: marcador visual."
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor-inferior",
+          "socket_hijo": null,
+          "socket_padre": "magwell",
+          "modo": "opuestos",
+          "nota": "Sin malla ni sockets: marcador visual."
+        },
+        {
+          "hijo": "buis-trasera",
+          "padre": "receptor-superior",
+          "socket_hijo": "rail.base",
+          "socket_padre": "rail.top",
+          "modo": "opuestos",
+          "posicion_riel_mm": 25.0
+        },
+        {
+          "hijo": "buis-delantera",
+          "padre": "guardamanos",
+          "socket_hijo": "rail.base",
+          "socket_padre": "rail.top",
+          "modo": "opuestos",
+          "posicion_riel_mm": 120.0
+        },
+        {
+          "hijo": "empunadura-vertical",
+          "padre": "guardamanos",
+          "socket_hijo": "rail.agarre",
+          "socket_padre": "rail.bottom",
+          "modo": "opuestos",
+          "posicion_riel_mm": 70.0
+        },
+        {
+          "hijo": "elevador",
+          "padre": "receptor-superior",
+          "socket_hijo": "rail",
+          "socket_padre": "rail.top",
+          "modo": "opuestos",
+          "ranura_riel": 7
+        },
+        {
+          "hijo": "red-dot",
+          "padre": "elevador",
+          "socket_hijo": null,
+          "socket_padre": "optic",
+          "modo": "opuestos",
+          "nota": "Sin modelo: marcador visual."
+        }
+      ]
+    },
+    {
+      "id": "m16a2-asa",
+      "nombre": "M16A2 con asa de transporte",
+      "descripcion": "Rifle largo: receptor superior con asa de transporte integrada, cañón pesado de 450 mm, guardamanos medio, bloque de gas con mira A2, apagallamas A2 y tubo de culata comercial.",
+      "piezas": [
+        {
+          "id": "receptor-superior",
+          "rol": "receptor_superior",
+          "familia": "receptor.superior",
+          "params": {
+            "longitud": 250.0,
+            "ancho": 34.0,
+            "alto": 40.0,
+            "asa_armado": false,
+            "variante": "a2_asa"
+          }
+        },
+        {
+          "id": "receptor-inferior",
+          "rol": "receptor_inferior",
+          "familia": "receptor.inferior",
+          "params": {
+            "longitud": 190.0,
+            "ancho": 34.0,
+            "profundidad_pozo": 66.0,
+            "tubo": "comercial"
+          }
+        },
+        {
+          "id": "canon",
+          "rol": "canon",
+          "familia": "canon.exterior",
+          "params": {
+            "perfil": "pesado",
+            "diametro": 24.0,
+            "diametro_boca": 17.0,
+            "variante": "a2",
+            "longitud": 450.0
+          }
+        },
+        {
+          "id": "bloque-gas",
+          "rol": "bloque_gas",
+          "familia": "canon.bloque_gas",
+          "params": {
+            "tipo": "a2_mira",
+            "diametro_canon": 24.0,
+            "pared": 4.0,
+            "altura_mira": 22.0
+          }
+        },
+        {
+          "id": "guardamanos",
+          "rol": "guardamanos",
+          "familia": "guardamanos.variantes",
+          "params": {
+            "tipo": "mid",
+            "longitud": 243.8,
+            "diametro_exterior": 46.0,
+            "grosor_pared": 2.5
+          }
+        },
+        {
+          "id": "apagallamas",
+          "rol": "bocacha",
+          "familia": "boca.apagallamas_a2",
+          "params": {
+            "longitud": 60.0,
+            "diametro": 22.0,
+            "diametro_paso": 9.0,
+            "profundidad_rosca": 12.0,
+            "rosca": "14mm_ccw",
+            "ancho_ranura": 3.0,
+            "longitud_ranura": 30.0
+          }
+        },
+        {
+          "id": "tubo",
+          "rol": "tubo_culata",
+          "familia": "amortiguador.tubo",
+          "params": {
+            "diametro": 29.16,
+            "diametro_rosca": 30.16,
+            "longitud_rosca": 22.0,
+            "pared": 2.2,
+            "variante": "rifle",
+            "especificacion": "comercial",
+            "longitud": 225.0,
+            "posiciones": 0,
+            "paso_quilla": null
+          }
+        },
+        {
+          "id": "bloqueo-tubo",
+          "rol": "bloqueo_tubo",
+          "familia": "amortiguador.bloqueo",
+          "params": {
+            "diametro_rosca": 30.16,
+            "altura_tuerca": 8.0,
+            "almenas": 6,
+            "especificacion": "comercial"
+          }
+        },
+        {
+          "id": "pistolete",
+          "rol": "pistolete",
+          "familia": "empunadura.pistolete",
+          "params": {
+            "altura": 95.0,
+            "profundidad": 38.0,
+            "ancho": 33.0,
+            "inclinacion": 25.0,
+            "perfil": "a2"
+          }
+        },
+        {
+          "id": "culata",
+          "rol": "culata",
+          "familia": "culata.telescopica",
+          "params": {
+            "especificacion": "comercial",
+            "longitud": null,
+            "altura": null,
+            "ancho": null,
+            "pared": null,
+            "diametro_tubo": null
+          },
+          "marcador": {
+            "forma": "caja",
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
+            "centro_mm": [0, 0, -70],
+            "dim_mm": [60, 36, 260]
+          }
+        },
+        {
+          "id": "cargador",
+          "rol": "cargador",
+          "familia": "cargador.m4",
+          "params": {
+            "capacidad": 120,
+            "sistema": "aeg",
+            "largo": null,
+            "ancho": null,
+            "altura": null
+          },
+          "marcador": {
+            "forma": "caja",
+            "centro_mm": [0, 0, -3],
+            "dim_mm": [40, 22, 106],
+            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta"
+          }
+        }
+      ],
+      "montajes": [
+        {
+          "hijo": "receptor-inferior",
+          "padre": "receptor-superior",
+          "socket_hijo": "upper",
+          "socket_padre": "lower",
+          "modo": "opuestos",
+          "alinear": "origen_comun",
+          "nota": "Los dos receptores comparten el extremo trasero: el socket de unión es de centro y no da posición axial (supuesto)."
+        },
+        {
+          "hijo": "canon",
+          "padre": "receptor-superior",
+          "socket_hijo": "receiver",
+          "socket_padre": "handguard",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor-superior",
+          "socket_hijo": "union-receptor",
+          "socket_padre": "handguard",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "bloque-gas",
+          "padre": "canon",
+          "socket_hijo": "bore",
+          "socket_padre": "gas_block",
+          "modo": "coaxial",
+          "eje": "x"
+        },
+        {
+          "hijo": "apagallamas",
+          "padre": "canon",
+          "socket_hijo": "muzzle",
+          "socket_padre": "muzzle",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "tubo",
+          "padre": "receptor-inferior",
+          "socket_hijo": "receiver",
+          "socket_padre": "buffer_tube",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "bloqueo-tubo",
+          "padre": "tubo",
+          "socket_hijo": "receiver",
+          "socket_padre": "receiver",
+          "modo": "coaxial",
+          "eje": "x"
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor-inferior",
+          "socket_hijo": "montaje-pistolete",
+          "socket_padre": "grip",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "culata",
+          "padre": "tubo",
+          "socket_hijo": null,
+          "socket_padre": "stock",
+          "modo": "opuestos",
+          "nota": "Sin malla ni sockets: marcador visual."
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor-inferior",
+          "socket_hijo": null,
+          "socket_padre": "magwell",
+          "modo": "opuestos",
+          "nota": "Sin malla ni sockets: marcador visual."
+        }
+      ]
+    }
+  ]
+}

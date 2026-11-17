@@ -63,7 +63,14 @@ class CanonExterior(Familia):
             raise ParametroInvalidoError("diametro_boca: no puede superar el diámetro del cuerpo")
         if db is not None and float(db) <= e.ROSCA_14_DIAMETRO.valor_mm + 1.0:
             raise ParametroInvalidoError("diametro_boca: debe superar la rosca de 14 mm con un resalte mínimo")
-        if largo is not None and float(largo) < GAS_POR_VARIANTE[str(p["variante"])] + LARGO_BLOQUE_MM + 20:
+        lr = 14.0 if p["longitud_rosca"] is None else float(p["longitud_rosca"])
+        if largo is not None and float(largo) < (
+            GAS_POR_VARIANTE[str(p["variante"])]
+            + LARGO_BLOQUE_MM
+            + (27.0 if p["perfil"] == "pesado" else 2.0)
+            + lr
+            + 3.0
+        ):
             raise ParametroInvalidoError(f"longitud: no llega al bloque de gas de la variante {p['variante']}")
 
     def ofrece_de(self, p: Mapping[str, Valor]) -> tuple[str, ...]:
@@ -81,35 +88,45 @@ class CanonExterior(Familia):
         x_fin_cuerpo = x_gas + LARGO_BLOQUE_MM
         brida = r + 3.0
         c = 0.6
+        r_cuello = r + 1.2  # escalón de la extensión del cañón, tras la brida
+        # Perfil (x, radio) de atrás adelante: brida de apoyo, escalón de la extensión, cuerpo, escalón del bloque
+        # de gas, hombro de boca, garganta de la rosca y rosca. Todo dentro del polígono: sin booleanas tangentes.
+        perfil = [
+            (0, 0),
+            (0, brida - c),
+            (c, brida),
+            (LARGO_BRIDA_MM, brida),
+            (LARGO_BRIDA_MM, r_cuello),
+            (LARGO_BRIDA_MM + 5.0, r_cuello),
+            (LARGO_BRIDA_MM + 5.0, r),
+            (x_fin_cuerpo, r),
+        ]
         if p["perfil"] == "pesado":
-            # Hombro cónico por delante del bloque, como el escalón de los perfiles gruesos.
-            perfil = [
-                (0, 0),
-                (0, brida - c),
-                (c, brida),
-                (LARGO_BRIDA_MM, brida),
-                (LARGO_BRIDA_MM, r),
-                (x_fin_cuerpo, r),
-                (x_fin_cuerpo + 25, rb),
-            ]
+            # Hombro cónico por delante del bloque y un segundo escalón corto antes de afinar a la boca.
+            r_medio = (r + rb) / 2
+            perfil += [(x_fin_cuerpo + 18, r_medio), (x_fin_cuerpo + 18, r_medio - 0.5), (x_fin_cuerpo + 26, rb)]
         else:
-            perfil = [
-                (0, 0),
-                (0, brida - c),
-                (c, brida),
-                (LARGO_BRIDA_MM, brida),
-                (LARGO_BRIDA_MM, r),
-                (x_fin_cuerpo, r),
-                (x_fin_cuerpo, rb),
-            ]
-        perfil += [(largo - lr, rb), (largo - lr, rr + 0.8), (largo - 0.5, rr + 0.8), (largo, rr + 0.3), (largo, 0)]
+            perfil += [(x_fin_cuerpo, rb + 0.6), (x_fin_cuerpo + 1.2, rb)]
+        # Hombro de boca, garganta de la rosca y rosca de perfil en V al paso de `estandares` (anillos: sin hélice).
+        paso = e.ROSCA_14_PASO.valor_mm
+        r_raiz, x_rosca = rr - 0.6, largo - lr
+        n_dientes = max(1, int((lr - 1.0) / paso))
+        perfil += [(x_rosca - 2.2, rb), (x_rosca - 2.2, r_raiz - 0.3), (x_rosca, r_raiz - 0.3), (x_rosca, r_raiz)]
+        for i in range(n_dientes):
+            x0 = x_rosca + i * paso
+            perfil += [(x0 + 0.5 * paso - 0.06, rr), (x0 + 0.5 * paso + 0.06, rr), (x0 + paso, r_raiz)]
+        perfil += [(largo - 0.5, r_raiz), (largo, r_raiz - 0.5), (largo, 0)]
         cuerpo = _revolucion(perfil)
-        # Ranuras anulares de retención (a ras del bloque, para que el bloque las tape) y garganta de la rosca.
+        # Ranuras anulares de retención (a ras del bloque, para que el bloque las tape).
         for x in (x_gas - 3.0, x_gas + LARGO_BLOQUE_MM + 3.0):
             cuerpo = cuerpo - (_cil_x(r + 1, x, x + 1.2) - _cil_x(r - 0.5, x, x + 1.2))
-        cuerpo = cuerpo - (
-            _cil_x(rb + 1, largo - lr - 1.5, largo - lr) - _cil_x(rr + 0.3, largo - lr - 1.5, largo - lr)
-        )
+        # Cuello del gas: el orificio del tubo de gas arriba y los dos hoyuelos de los tornillos del bloque.
+        cuerpo = cuerpo - Pos(x_gas + LARGO_BLOQUE_MM / 2, 0, 0) * Cylinder(
+            0.9, r + 1.0, align=(Align.CENTER, Align.CENTER, Align.MIN)
+        ).rotate(Axis.X, -90)
+        for dx in (6.0, LARGO_BLOQUE_MM - 6.0):
+            for z in (-1, 1):
+                cuerpo = cuerpo - Pos(x_gas + dx, 0, z * (r - 0.1)) * Cylinder(1.5, 1.6)
         sockets = (
             Socket(
                 "muzzle",
@@ -132,7 +149,8 @@ class CanonExterior(Familia):
         cotas = (estimada("canon.distancia_bloque_gas", x_gas), estimada("canon.largo_brida", LARGO_BRIDA_MM))
         notas = (
             "Solo forma exterior: el cañón interior de precisión no se modela.",
-            "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+            "La rosca de boca son anillos en V al paso de 14 x 1 mm (sin hélice), con garganta y hombro.",
+            "Escalones de extensión y boca, orificio del gas y hoyuelos del bloque: forma estimada.",
             "Distancia al bloque de gas y proporciones del escalón estimadas (confianza baja).",
         )
         nominales = (largo, 2 * brida, 2 * brida)

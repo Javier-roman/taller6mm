@@ -381,6 +381,59 @@ Estado honesto: solo **formas exteriores**, sin internos (gearbox, cerrojo, muel
 | Red dot estilo Aimpoint CompM4 / T1 (con anillos) (`opt-red-dot-estilo-aimpoint-compm4-t1-con-anillos`) | 1 | `montura-anillos-30` | `montura.anillos` |
 | Montura cantilever para LPVO (`opt-montura-cantilever-para-lpvo`) | 2 | `montura-anillos-34` | `montura.anillos` |
 
+## Cobertura de la tanda 3: ópticas, accesorios, guardamanos, pistolete GBBR y cargadores (generadores paramétricos)
+
+Registro: `catalogo/m4-tanda3.json` (`uv run python -m taller6mm_pipeline.familias.tanda3 --registro ../../catalogo/m4-tanda3.json`, desde `apps/pipeline`; código en `apps/pipeline/src/taller6mm_pipeline/familias/`: `tanda3_opticas.py`, `tanda3_opticas_largas.py`, `tanda3_accesorios.py`, `tanda3_cuerpos.py`, `tanda3_comun.py` y el registro `tanda3.py`). Cubre **18 elementos de la oleada 1**, 4 de la oleada 2 y 1 de la oleada 3, más 6 piezas extra sin elemento propio en el mapa (visor nocturno, tres tapas de lente, bípode plegado y torre de mira delantera). Los elementos de la lista pueden figurar también en otros registros (por ejemplo el red dot de 30 mm, cuya montura con anillos es `montura-anillos-30`, o el cargador de 30 bolas del kit esencial, que viene de un modelo CC-BY): aquí son alternativas generadas por código.
+
+Piezas: red dot tubular (micro y de 30 mm), holográfica abierta (grande y compacta), mira telescópica con torretas (1-4x de tubo de 30 mm y 3-9x de 25,4 y 30 mm), magnificador con pivote, visor nocturno monocular (solo carcasa), tapas abatibles de lente (objetivo cerrada y abatida, ocular), linterna (con y sin puerto de cable), láser y módulo combinado, bípodes (patas desplegadas, plegadas y base de montaje rápido), mira delantera tipo A2 (torre con collarín y poste suelto), guardamanos estilo HK416, free-float octogonal y estilo MWS, pistolete de GBBR y cargadores (30, 120 y 300 bolas de AEG y 30 bolas de GBBR).
+
+Estado honesto: solo **formas exteriores**, sin internos. Todo es **candidato de demostración** (`es_demo`): las medidas son parámetros de barrido y las proporciones de detalle son estimadas, ambas de confianza baja, sin ficha de SKU; sin vistas licenciadas son T0 y `publicable_3d = false` (tope T1). Sin marcas ni leyendas grabadas. Los tubos de las ópticas, las linternas y los guardamanos son huecos, con las lentes de cristal planas rehundidas: no hay óptica, emisor ni cañón interior. La prueba `apps/pipeline/tests/test_familias_tanda3.py` aplica a cada pieza la prueba anti-cubitos de `test_formas_reales.py` (relleno de la caja, triángulos y orientaciones de cara), exige malla cerrada y comprueba que los sockets usan interfaces conocidas.
+
+Cotas: las de los parámetros llevan como fuente «parámetro de barrido» y las de detalle, «estimado a ojo»; todas con confianza baja. Las del raíl Picatinny vienen de `estandares.py` (ancho de confianza baja). Lo que depende de un SKU y no se conoce (por ejemplo una longitud sin dato) se registra como `null` con bandera y la pieza sale T0 sin malla.
+
+**Cargadores.** Se reutiliza la familia `CargadorM4` (`cargador_m4.py`, sin editarla) como clase base: la nueva `cargador.m4_forma` hereda los parámetros y la interfaz `pozo-stanag-m4` y sí genera malla, pero es una silueta curva estimada (el plano del STANAG 4179 no es público): nunca pasa de T1 ni se publica, y la familia original sigue siendo T0 sin malla. La capacidad en bolas no se convierte en medidas. El **cargador de una sola bola no se ha generado**: no hay un elemento en el mapa que lo defina y `CargadorM4` exige al menos 20 bolas.
+
+**Pistolete GBBR.** Variante de `EmpunaduraPistolete` con rebajes dorsales y mejilla del pulgar; la diferencia real de interfaz con el de AEG no tiene fuente y no se modela.
+
+| Elemento | Oleada | Pieza | Familia |
+|---|---:|---|---|
+| Red dot compacta estilo Aimpoint Micro (tubular, con montura) (`opt-red-dot-compacta-estilo-aimpoint-micro-tubular-con-montura`) | 1 | `opt-red-dot-micro` | `optica.red_dot_tubular` |
+| Red dot estilo Aimpoint CompM4 / T1 (con anillos) (`opt-red-dot-estilo-aimpoint-compm4-t1-con-anillos`) | 1 | `opt-red-dot-30` | `optica.red_dot_tubular` |
+| Holográfica estilo EOTech 552 / 553 (`opt-holografica-estilo-eotech-552-553`) | 1 | `opt-holo-grande` | `optica.holografica_abierta` |
+| Holográfica estilo EOTech EXPS / XPS (`opt-holografica-estilo-eotech-exps-xps`) | 1 | `opt-holo-compacta` | `optica.holografica_abierta` |
+| LPVO 1-4x / 1-6x (tubo de 30 mm) (`opt-lpvo-1-4x-1-6x-tubo-de-30-mm`) | 2 | `opt-lpvo-1-4x` | `optica.telescopica` |
+| Mira telescópica 3-9x (tubo de 25,4 mm) (`opt-mira-telescopica-3-9x-tubo-de-25-4-mm`) | 2 | `opt-telescopica-3-9x` | `optica.telescopica` |
+| Mira telescópica 3-9x (tubo de 30 mm) (`opt-mira-telescopica-3-9x-tubo-de-30-mm`) | 3 | `opt-telescopica-3-9x-30` | `optica.telescopica` |
+| Magnificador 3x (en raíl, abatible) (`opt-magnificador-3x-en-rail-abatible`) | 1 | `opt-magnificador` | `optica.magnificador` |
+| (extra, sin elemento propio) | - | `opt-visor-nocturno` | `optica.visor_nocturno` |
+| (extra, sin elemento propio) | - | `tapa-objetivo-cerrada` | `optica.tapa_lente_abatible` |
+| (extra, sin elemento propio) | - | `tapa-objetivo-abierta` | `optica.tapa_lente_abatible` |
+| (extra, sin elemento propio) | - | `tapa-ocular-cerrada` | `optica.tapa_lente_abatible` |
+| Linterna de mano (cuerpo cilíndrico) (`acc-linterna-de-mano-cuerpo-cilindrico`) | 1 | `acc-linterna-tactica` | `accesorio.luz_laser_tactico` |
+| Linterna con cola de interruptor / cable (`acc-linterna-con-cola-de-interruptor-cable`) | 1 | `acc-linterna-cable` | `accesorio.luz_laser_tactico` |
+| Módulo láser (rojo/verde) simulado o real de airsoft (`acc-modulo-laser-rojo-verde-simulado-o-real-de-airsoft`) | 1 | `acc-laser` | `accesorio.luz_laser_tactico` |
+| Módulo combinado láser y linterna (`acc-modulo-combinado-laser-y-linterna`) | 1 | `acc-luz-laser` | `accesorio.luz_laser_tactico` |
+| Bípode de patas abatibles (`acc-bipode-de-patas-abatibles`) | 2 | `acc-bipode-desplegado` | `accesorio.bipode` |
+| (extra, sin elemento propio) | - | `acc-bipode-plegado` | `accesorio.bipode` |
+| Bípode de montaje en raíl rápido (`acc-bipode-de-montaje-en-rail-rapido`) | 2 | `acc-bipode-rapido` | `accesorio.bipode` |
+| (extra, sin elemento propio) | - | `mira-delantera-torre-a2` | `mira.delantera_a2` |
+| Punto de mira de bloque de gas (tipo poste A2) (`canon-punto-de-mira-de-bloque-de-gas-tipo-poste-a2`) | 1 | `mira-delantera-poste-a2` | `mira.delantera_a2` |
+| Guardamanos HK416 de raíl largo (`gm-guardamanos-hk416-de-rail-largo`) | 1 | `gm-hk416` | `guardamanos.tanda3` |
+| Guardamanos free-float octogonal (estilo Daniel Defense/Noveske) (`gm-guardamanos-free-float-octogonal-estilo-daniel-defense-noveske`) | 1 | `gm-octogonal` | `guardamanos.tanda3` |
+| Guardamanos de MWS (Tokyo Marui o compatible) (`gm-guardamanos-de-mws-tokyo-marui-o-compatible`) | 1 | `gm-mws` | `guardamanos.tanda3` |
+| Pistolete de GBBR (MWS / compatible) (`pist-pistolete-de-gbbr-mws-compatible`) | 1 | `pist-gbbr` | `empunadura.pistolete_gbbr` |
+| Cargador STANAG lowcap (30 a 80 bolas) (`carg-cargador-stanag-lowcap-30-a-80-bolas`) | 1 | `carg-30` | `cargador.m4_forma` |
+| Cargador STANAG midcap (120 a 150 bolas) (`carg-cargador-stanag-midcap-120-a-150-bolas`) | 1 | `carg-120` | `cargador.m4_forma` |
+| Cargador STANAG highcap (300 a 500 bolas) (`carg-cargador-stanag-highcap-300-a-500-bolas`) | 1 | `carg-300` | `cargador.m4_forma` |
+| Cargador de GBBR Tokyo Marui MWS (gas) (`carg-cargador-de-gbbr-tokyo-marui-mws-gas`) | 1 | `carg-gbb-30` | `cargador.m4_forma` |
+
+Interfaces nuevas propuestas por esta tanda (solo en el registro `catalogo/m4-tanda3.json`, sin tocar `interfaces.json` ni `ar-m4.json`):
+
+| Id | Descripción |
+|---|---|
+| `montaje-tapa-lente` | Collarín de una tapa abatible sobre el casquillo del objetivo o del ocular (según su diámetro) |
+| `optica.eje` | Eje óptico de una óptica de tubo (punto y dirección de visión, para alinear tapas y más) |
+
 ## Interfaces nuevas propuestas (`*`)
 
 No existen aún en `catalogo/interfaces.json` (no se ha tocado). Se proponen para añadirlas en un PR aparte, con cotas pendientes.
