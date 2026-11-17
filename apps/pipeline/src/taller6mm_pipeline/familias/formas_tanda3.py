@@ -13,7 +13,14 @@ from typing import Any
 
 from build123d import Box, Plane, Pos, Rot, Spline, Torus, Wire
 
-from taller6mm_pipeline.familias.formas import PUNTOS_SECCION, cilindro_en, extruir_perfil, interpolar, loftear, revolucion
+from taller6mm_pipeline.familias.formas import (
+    PUNTOS_SECCION,
+    cilindro_en,
+    extruir_perfil,
+    interpolar,
+    loftear,
+    revolucion,
+)
 
 __all__ = [
     "anillo_en_x",

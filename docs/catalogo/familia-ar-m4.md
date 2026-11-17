@@ -434,6 +434,32 @@ Interfaces nuevas propuestas por esta tanda (solo en el registro `catalogo/m4-ta
 | `montaje-tapa-lente` | Collarín de una tapa abatible sobre el casquillo del objetivo o del ocular (según su diámetro) |
 | `optica.eje` | Eje óptico de una óptica de tubo (punto y dirección de visión, para alinear tapas y más) |
 
+## Cobertura de la tanda 3: culatas y bocachas (generadores paramétricos)
+
+Registro: `catalogo/m4-tanda3-culatas.json` (`python -m taller6mm_pipeline.familias.tanda3_culatas --registro catalogo/m4-tanda3-culatas.json`; código en `apps/pipeline/src/taller6mm_pipeline/familias/`: `culatas_m4.py`, `bocas_m4.py`, `formas_tanda3.py`, `tanda3_culatas.py`). Cubre **17 piezas** con formas reales (lofts por secciones, revolución, ventanas y ranuras con el fondo redondo; nada de cajas). Las culatas de estilo polímero y el brace son **formas genéricas**, sin marcas ni copia de un producto; el brace no va ligado a ningún arma real.
+
+Estado honesto: todas son candidatas de demostración (`es_demo`): medidas de barrido de confianza baja, sin ficha de SKU; sin vistas licenciadas son T0 y `publicable_3d = false`. La hélice de la rosca no se modela (la «rosca falsa» son anillos en V con el paso de 1 mm). Rosca de boca siempre de 14 mm (CW o CCW). Los GLB viven en `apps/pipeline/salida/` (ignorada por git).
+
+| Elemento | Pieza | Familia |
+|---|---|---|
+| Culata de 6 posiciones (tipo carabina, genérica) (`culata-culata-de-6-posiciones-tipo-carabina-generica`) | `culata-6pos-cerrada` | `culata.telescopica_6pos` |
+| Culata CAR (M4 de 6 posiciones, tipo M4 original) (`culata-culata-car-m4-de-6-posiciones-tipo-m4-original`) | `culata-6pos-extendida` | `culata.telescopica_6pos` |
+| Culata estilo Magpul STR (`culata-culata-estilo-magpul-str`) | `culata-polimero-str` | `culata.telescopica_polimero` |
+| Culata estilo Magpul CTR (`culata-culata-estilo-magpul-ctr`) | `culata-polimero-ctr` | `culata.telescopica_polimero` |
+| Culata estilo Magpul MOE (`culata-culata-estilo-magpul-moe`) | `culata-polimero-moe` | `culata.telescopica_polimero` |
+| Culata fija A2 (carabina larga, con compartimento) (`culata-culata-fija-a2-carabina-larga-con-compartimento`) | `culata-fija-a2` | `culata.fija_a2` |
+| Culata plegable lateral con adaptador AR (`culata-culata-plegable-lateral-con-adaptador-ar`) | `culata-plegable-desplegada` | `culata.plegable_lateral` |
+| (extra, sin elemento propio) | `culata-plegable-plegada` | `culata.plegable_lateral` |
+| Culata mínima de PDW / SBR (tipo cuchara o tirante) (`culata-culata-minima-de-pdw-sbr-tipo-cuchara-o-tirante`) | `culata-skeleton` | `culata.skeleton` |
+| Culata con tirante estabilizador (pistol brace) (`culata-culata-con-tirante-estabilizador-pistol-brace`) | `culata-brace-pistola` | `culata.brace_pistola` |
+| Apagallamas de jaula (birdcage) (`boca-apagallamas-de-jaula-birdcage`) | `boca-jaula-a1` | `boca.jaula_a1` |
+| Compensador de boca (sin supresión) (`boca-compensador-de-boca-sin-supresion`) | `boca-compensador-2` | `boca.compensador_camaras` |
+| (extra, sin elemento propio) | `boca-compensador-3` | `boca.compensador_camaras` |
+| Freno de boca (muzzle brake) estándar (`boca-freno-de-boca-muzzle-brake-estandar`) | `boca-cuna-freno` | `boca.cuna_freno` |
+| Bocacha con adaptador de silenciador (QD) (`boca-bocacha-con-adaptador-de-silenciador-qd`) | `boca-adaptador-silenciador` | `boca.adaptador_silenciador` |
+| (extra, sin elemento propio) | `boca-rosca-falsa` | `boca.rosca_falsa` |
+| (extra, sin elemento propio) | `boca-tapon-rosca` | `boca.tapon_rosca` |
+
 ## Interfaces nuevas propuestas (`*`)
 
 No existen aún en `catalogo/interfaces.json` (no se ha tocado). Se proponen para añadirlas en un PR aparte, con cotas pendientes.

@@ -21,7 +21,7 @@ from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.comun_oleada1 import mm
 from taller6mm_pipeline.familias.detalle import nominales_de
-from taller6mm_pipeline.familias.formas import cilindro_en, filetear
+from taller6mm_pipeline.familias.formas import cilindro_en
 from taller6mm_pipeline.familias.formas_tanda3 import ranura_radial, revolucion_x, ventana_radial
 
 NOTA_ROSCA = "La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales."
@@ -179,7 +179,6 @@ class CompensadorCamaras(_BocaBase):
             notas.append(
                 "Cámaras abiertas arriba y a los lados; los tabiques se modelan como anillos macizos con paso."
             )
-        cuerpo = filetear(cuerpo, 0.4)
         return self._final(cuerpo, p, notas, vaciados)
 
 
@@ -238,7 +237,6 @@ class CunaFreno(_BocaBase):
                 corte = Pos(xc, 0, 0) * Rot(0, 28.0, 0) * Box(ar, 1.05 * r, 3 * r)
                 cuerpo = cuerpo - corte
                 vaciados += 1
-        cuerpo = filetear(cuerpo, 0.35)
         return self._final(cuerpo, p, notas, vaciados)
 
 
@@ -407,11 +405,9 @@ class TaponRosca(_BocaBase):
             cuerpo = cuerpo - cilindro_en("x", R_ROSCA, prof + 1.0, ((prof - 1.0) / 2, 0, 0))
         n = int(p["estrias"])
         vaciados = 1 + n
-        for i in range(n):
-            cuerpo = cuerpo - Rot(i * 360.0 / n, 0, 0) * cilindro_en(
-                "x", 0.55, largo - 7.0, ((largo - 7.0) / 2 + 3.0, r, 0)
-            )
-        cuerpo = filetear(cuerpo, 0.3) if n == 0 else cuerpo
+        if n:
+            surco = cilindro_en("x", 0.55, largo - 7.0, ((largo - 7.0) / 2 + 3.0, r, 0))
+            cuerpo = cuerpo - [Rot(i * 360.0 / n, 0, 0) * surco for i in range(n)]
         return self._final(cuerpo, p, notas, vaciados)
 
 
