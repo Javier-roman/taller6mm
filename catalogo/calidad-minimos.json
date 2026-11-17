@@ -1,0 +1,147 @@
+{
+  "esquema": "calidad-minimos/v1",
+  "nota": "Umbrales mínimos de la puerta de calidad por familia (apps/pipeline/src/taller6mm_pipeline/calidad, docs/05 «Bucle de calidad»). `defecto` vale para toda familia que no lo sobrescriba. Se resuelve por id exacto de familia, luego por patrón con `*` y por último por el prefijo anterior al primer punto. Los GLB sin familia propia (kit externo) se asignan con `alias_id`. Una pieza pasa si cumple el mínimo de todos los criterios y su puntuación llega a `puntuacion_minima`; los `duros` son los fallos que la cola atiende primero (la pieza está rota, no solo pobre).",
+  "puntuacion_minima": 75,
+  "pesos": {
+    "cerrada": 15,
+    "relleno": 8,
+    "triangulos": 8,
+    "orientaciones": 6,
+    "filetes": 7,
+    "aristas_vivas": 7,
+    "silueta": 12,
+    "escala": 4,
+    "cotas": 10,
+    "sockets": 10,
+    "eje_largo": 4,
+    "simetria": 4,
+    "componentes": 5
+  },
+  "duros": ["cerrada", "relleno", "triangulos", "escala", "cotas", "sockets"],
+  "ensamblaje": {
+    "colisiones_entre_montados_max": 0,
+    "huecos_entre_piezas_max": 0,
+    "incompatibles_max": 0,
+    "sin_colocar_max": 0,
+    "sin_datos_max": 0,
+    "puntuacion_minima": 75
+  },
+  "defecto": {
+    "relleno_max": 0.65,
+    "triangulos_min": 1500,
+    "orientaciones_min": 300,
+    "transiciones_por_cm2_min": 2.0,
+    "viva_frac_max": 0.45,
+    "silueta_no_rectangular_min": 0.2,
+    "componentes_max": 6,
+    "escala_mm": [3, 1500],
+    "eje_largo": null,
+    "simetria_max": 0.03,
+    "simetria_ejes": [],
+    "sockets_min": 1,
+    "sockets_requeridos": [],
+    "cotas_ejes": []
+  },
+  "familias": {
+    "guardamanos.variantes": {
+      "eje_largo": "x",
+      "simetria_ejes": ["z"],
+      "sockets_requeridos": ["union-receptor"],
+      "cotas_ejes": [{ "clave": "longitud", "eje": "x" }]
+    },
+    "canon.exterior": {
+      "triangulos_min": 3000,
+      "silueta_no_rectangular_min": 0.1,
+      "eje_largo": "x",
+      "simetria_max": 0.05,
+      "simetria_ejes": ["y", "z"],
+      "sockets_requeridos": ["muzzle", "gas_block", "receiver"],
+      "cotas_ejes": [{ "clave": "longitud", "eje": "x" }]
+    },
+    "canon.bloque_gas": {
+      "simetria_ejes": ["z"],
+      "sockets_requeridos": ["bore"]
+    },
+    "amortiguador.tubo": {
+      "orientaciones_min": 300,
+      "silueta_no_rectangular_min": 0.1,
+      "eje_largo": "x",
+      "simetria_ejes": ["y", "z"],
+      "sockets_requeridos": ["receiver", "stock"],
+      "cotas_ejes": [{ "clave": "longitud", "eje": "x" }]
+    },
+    "amortiguador.bloqueo": {
+      "sockets_requeridos": ["receiver"]
+    },
+    "receptor.superior": {
+      "triangulos_min": 3000,
+      "eje_largo": "x",
+      "simetria_ejes": ["z"],
+      "sockets_requeridos": ["lower", "handguard", "charging_handle"]
+    },
+    "receptor.inferior": {
+      "triangulos_min": 3000,
+      "eje_largo": "x",
+      "simetria_ejes": ["z"],
+      "sockets_requeridos": ["upper", "grip", "magwell", "buffer_tube"]
+    },
+    "montura.riser": {
+      "sockets_requeridos": ["rail", "optic"],
+      "cotas_ejes": [{ "clave": "longitud", "eje": "x" }]
+    },
+    "montura.anillos": {
+      "sockets_requeridos": ["rail", "tube"],
+      "simetria_ejes": ["z"]
+    },
+    "empunadura.pistolete": {
+      "eje_largo": "y",
+      "simetria_ejes": ["z"],
+      "simetria_max": 0.05,
+      "sockets_requeridos": ["montaje-pistolete"],
+      "cotas_ejes": [{ "clave": "altura", "eje": "y" }]
+    },
+    "accesorio.empunadura_vertical": {
+      "eje_largo": "y",
+      "sockets_requeridos": ["rail.agarre"]
+    },
+    "mira.asa_a2": {
+      "eje_largo": "x",
+      "simetria_ejes": ["z"],
+      "simetria_max": 0.05,
+      "sockets_requeridos": ["montaje-asa-a2", "mira-trasera"],
+      "cotas_ejes": [
+        { "clave": "longitud", "eje": "x" },
+        { "clave": "altura", "eje": "y" },
+        { "clave": "ancho", "eje": "z" }
+      ]
+    },
+    "mira.buis": {
+      "componentes_max": 24,
+      "sockets_requeridos": ["rail.base"],
+      "cotas_ejes": [{ "clave": "ancho", "eje": "z" }]
+    },
+    "sup.palanca_armado": {
+      "eje_largo": "x",
+      "simetria_ejes": ["z"],
+      "simetria_max": 0.05,
+      "sockets_requeridos": ["montaje-asa-carga"],
+      "cotas_ejes": [{ "clave": "ancho_total", "eje": "z" }, { "clave": "alto", "eje": "y" }]
+    },
+    "cargador": {
+      "eje_largo": "y",
+      "sockets_requeridos": []
+    },
+    "boca.*": {
+      "eje_largo": "x",
+      "simetria_ejes": ["y", "z"]
+    }
+  },
+  "alias_id": {
+    "cargador-*": "cargador",
+    "bocacha-*": "boca.bocacha",
+    "silenciador*": "boca.silenciador",
+    "guardamanos-*": "guardamanos.variantes",
+    "culata-*": "culata",
+    "red-dot*": "optica"
+  }
+}
