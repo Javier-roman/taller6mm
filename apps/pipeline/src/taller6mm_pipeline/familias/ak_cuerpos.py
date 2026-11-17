@@ -141,6 +141,8 @@ def _paralela_z(e: Any) -> bool:
 
 class TapaAK(Familia):
     id = "ak.tapa"
+    tolerancia_mm = 0.02  # cúpula casi plana: teselado fino para que no se vea facetada
+    tolerancia_angular = 0.2
     nombre = "Tapa de receptor AK"
     material = "mat.acero_negro"
     requiere = (INT_TAPA,)

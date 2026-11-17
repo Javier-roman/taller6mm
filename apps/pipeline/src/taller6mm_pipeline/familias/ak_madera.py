@@ -51,9 +51,7 @@ class GuardamanosInferiorAK(Familia):
     parametros = (
         Parametro("longitud", "Longitud total", float, "mm", 100, 280, de_sku=True),
         Parametro("ancho", "Ancho máximo", float, "mm", 30, 48, de_sku=True),
-        Parametro(
-            "alto", "Alto máximo (bajo el eje)", float, "mm", 22, 42, de_sku=True
-        ),
+        Parametro("alto", "Alto máximo (bajo el eje)", float, "mm", 22, 42, de_sku=True),
         Parametro(
             "estilo",
             "Estilo de agarre",
@@ -82,19 +80,21 @@ class GuardamanosInferiorAK(Familia):
             # Tres surcos transversales de agarre bajo el cuerpo, redondeados.
             for i in range(3):
                 x = largo * 0.42 + i * 22.0
-                cuerpo = cuerpo - caja_redonda(
-                    x - 4, x + 4, -alto - 1, -alto + 3.4, -hw - 1, hw + 1, 3.0, ejes="y"
-                )
+                cuerpo = cuerpo - caja_redonda(x - 4, x + 4, -alto - 1, -alto + 3.4, -hw - 1, hw + 1, 3.0, ejes="y")
                 vaciados += 1
+            # Escotaduras laterales de los dedos: tres cuencos poco profundos a cada lado.
+            for lado in (1, -1):
+                for i in range(3):
+                    x = largo * 0.42 + i * 22.0
+                    cuerpo = cuerpo - cilindro_y(7.0, 2 * alto, x, -alto / 2, lado * (hw + 3.2))
+                    vaciados += 1
         else:
             # Estrías longitudinales a los dos lados y escalón trasero.
             for lado in (1, -1):
                 for k in range(5):
                     y = -alto + 5 + k * 4.6
                     z0, z1 = (hw - 2.3, hw + 2) if lado > 0 else (-hw - 2, -hw + 2.3)
-                    cuerpo = cuerpo - caja_redonda(
-                        largo * 0.12, largo * 0.88, y - 1.1, y + 1.1, z0, z1, 1.0
-                    )
+                    cuerpo = cuerpo - caja_redonda(22.0, largo - 12.0, y - 1.1, y + 1.1, z0, z1, 1.0)
                     vaciados += 1
         # Escotadura trasera para la cuna delantera del receptor y rebaje delantero.
         cuerpo = cuerpo - caja_redonda(-1, 12, -6, 6, -hw + 4, hw - 4, 2.5, ejes="y")
@@ -140,9 +140,7 @@ class CubremanoAK(Familia):
     parametros = (
         Parametro("longitud", "Longitud total", float, "mm", 90, 260, de_sku=True),
         Parametro("ancho", "Ancho máximo", float, "mm", 28, 44, de_sku=True),
-        Parametro(
-            "alto", "Alto sobre el eje del cañón", float, "mm", 22, 36, de_sku=True
-        ),
+        Parametro("alto", "Alto sobre el eje del cañón", float, "mm", 22, 36, de_sku=True),
         Parametro(
             "ventilacion",
             "Cortes superiores",
@@ -153,9 +151,7 @@ class CubremanoAK(Familia):
     )
 
     def describir(self, p: Mapping[str, Valor]) -> str:
-        return (
-            f"Cubre-mano AK de {mm(p, 'longitud')} con ventilación {p['ventilacion']}"
-        )
+        return f"Cubre-mano AK de {mm(p, 'longitud')} con ventilación {p['ventilacion']}"
 
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         largo, ancho, alto = float(p["longitud"]), float(p["ancho"]), float(p["alto"])
@@ -170,10 +166,14 @@ class CubremanoAK(Familia):
         cuerpo = loft_x(0, largo, nudos, radio=11.0)
         r_canal = 10.2
         cuerpo = cuerpo - cilindro_x(r_canal, -1, largo + 1, y=Y_TUBO_GAS)
-        cuerpo = cuerpo - caja_redonda(
-            -1, largo + 1, 0, Y_TUBO_GAS, -r_canal, r_canal, 0.0
-        )  # abierto por abajo
+        cuerpo = cuerpo - caja_redonda(-1, largo + 1, 0, Y_TUBO_GAS, -r_canal, r_canal, 0.0)  # abierto por abajo
         vaciados = 2
+        # Dos surcos longitudinales a cada lado, para que ninguna variante sea un tubo liso.
+        for lado in (1, -1):
+            z0, z1 = (hw - 1.0, hw + 2) if lado > 0 else (-hw - 2, -hw + 1.0)
+            for y in (y_sup * 0.32, y_sup * 0.62):
+                cuerpo = cuerpo - caja_redonda(largo * 0.1, largo * 0.9, y - 1.0, y + 1.0, z0, z1, 0.9)
+                vaciados += 1
         if p["ventilacion"] == "ranuras":
             paso = 17.0
             n = max(2, int((largo * 0.78) // paso))
@@ -196,9 +196,7 @@ class CubremanoAK(Familia):
             n = max(3, int((largo * 0.7) // 8.0))
             for i in range(n):
                 x = largo * 0.15 + i * 8.0
-                cuerpo = cuerpo - caja_redonda(
-                    x, x + 2.2, y_sup - 1.3, y_sup + 1, -hw - 1, hw + 1, 0.8, ejes="y"
-                )
+                cuerpo = cuerpo - caja_redonda(x, x + 2.2, y_sup - 1.3, y_sup + 1, -hw - 1, hw + 1, 0.8, ejes="y")
                 vaciados += 1
         sockets = (
             Socket(
@@ -238,9 +236,7 @@ class CulataFijaAK(Familia):
     requiere = (INT_CULATA,)
     ofrece = ()
     parametros = (
-        Parametro(
-            "longitud", "Longitud de la culata", float, "mm", 200, 440, de_sku=True
-        ),
+        Parametro("longitud", "Longitud de la culata", float, "mm", 200, 440, de_sku=True),
         Parametro(
             "alto_culata",
             "Alto en la plancha de culata",
@@ -276,9 +272,7 @@ class CulataFijaAK(Familia):
             f = k / 12
             arriba, abajo = _perfil_culata(f, alto_c)
             cintura = 1.0 - 0.10 * (1 - abs(2 * f - 0.9)) if f < 0.9 else 1.0
-            nudos.append(
-                (-cuerpo_largo * f, arriba, abajo, hw * cintura * (1.0 + 0.05 * f))
-            )
+            nudos.append((-cuerpo_largo * f, arriba, abajo, hw * cintura * (1.0 + 0.05 * f)))
         nudos.sort(key=lambda q: q[0])
         cuerpo = loft_x(-cuerpo_largo, 0, nudos, radio=8.0)
         a_t, a_b = _perfil_culata(1.0, alto_c)
@@ -347,9 +341,7 @@ class CulataFijaAK(Familia):
         )
 
 
-Z_BISAGRA = (
-    22.0  # eje del pasador de la bisagra, a la izquierda del receptor (estimado)
-)
+Z_BISAGRA = 22.0  # eje del pasador de la bisagra, a la izquierda del receptor (estimado)
 X_BISAGRA = -14.0
 
 
@@ -369,12 +361,8 @@ class CulataPlegableAK(Familia):
             400,
             de_sku=True,
         ),
-        Parametro(
-            "alto_culata", "Alto de la culata", float, "mm", 90, 150, de_sku=True
-        ),
-        Parametro(
-            "grosor", "Grosor lateral del bastidor", float, "mm", 8, 20, de_sku=True
-        ),
+        Parametro("alto_culata", "Alto de la culata", float, "mm", 90, 150, de_sku=True),
+        Parametro("grosor", "Grosor lateral del bastidor", float, "mm", 8, 20, de_sku=True),
         Parametro(
             "posicion",
             "Extendida o plegada a la izquierda",
@@ -390,9 +378,7 @@ class CulataPlegableAK(Familia):
             and p["alto_culata"] is not None
             and float(p["alto_culata"]) > float(p["longitud"]) * 0.6
         ):
-            raise ParametroInvalidoError(
-                "alto_culata: demasiado alta para la longitud (bastidor deformado)"
-            )
+            raise ParametroInvalidoError("alto_culata: demasiado alta para la longitud (bastidor deformado)")
 
     def describir(self, p: Mapping[str, Valor]) -> str:
         return f"Culata plegable lateral AK de {mm(p, 'longitud')} ({p['posicion']})"
@@ -415,9 +401,7 @@ class CulataPlegableAK(Familia):
         marco = prisma(exterior, grosor) - prisma(interior, grosor + 4)
         marco = filetear(marco, 2.5, aristas_paralelas(marco, "z"))
         # Alojamiento y pasador de la bisagra: pieza fija junto al receptor.
-        brazo = caja_redonda(
-            -26, -2, -14, 10, -grosor / 2, Z_BISAGRA + 5, 4.0, ejes="y"
-        )
+        brazo = caja_redonda(-26, -2, -14, 10, -grosor / 2, Z_BISAGRA + 5, 4.0, ejes="y")
         cuerpo = marco + brazo
         # Zapata trasera, abombada y redondeada.
         zapata = loft_x(
@@ -434,9 +418,7 @@ class CulataPlegableAK(Familia):
         if p["posicion"] == "plegada":
             cuerpo = cuerpo.rotate(Axis((X_BISAGRA, 0, Z_BISAGRA), (0, 1, 0)), 180)
         carcasa = caja_redonda(-30, 0, -20, 12, -14, Z_BISAGRA + 5, 5.0, ejes="y")
-        pasador = cilindro_y(5.0, 34.0, X_BISAGRA, -4.0, Z_BISAGRA) + cilindro_y(
-            7.0, 3.0, X_BISAGRA, 13.5, Z_BISAGRA
-        )
+        pasador = cilindro_y(5.0, 34.0, X_BISAGRA, -4.0, Z_BISAGRA) + cilindro_y(7.0, 3.0, X_BISAGRA, 13.5, Z_BISAGRA)
         cuerpo = cuerpo + carcasa + pasador
         # Resalte del cierre en el costado de la carcasa.
         cuerpo = cuerpo + cilindro_z(3.2, 3.0, -22.0, -8.0, -14.5)

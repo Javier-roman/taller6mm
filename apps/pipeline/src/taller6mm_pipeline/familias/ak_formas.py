@@ -54,8 +54,10 @@ def seccion_x(
     return Wire([Spline(*pts, periodic=True)])
 
 
-def seccion_x_redondeada(x: float, y_arriba: float, y_abajo: float, semiancho: float, radio: float, cz: float = 0.0) -> Wire:
-    """Sección rectangular con esquinas de radio `radio` (líneas y arcos: sus lados planos salen planos, sin ondas)."""
+def seccion_x_redondeada(
+    x: float, y_arriba: float, y_abajo: float, semiancho: float, radio: float, cz: float = 0.0
+) -> Wire:
+    """Sección rectangular con esquinas de radio `radio` (líneas y arcos: lados planos, sin ondas)."""
     alto = y_arriba - y_abajo
     r = min(radio, alto / 2 * 0.98, semiancho * 0.98)
     plano = Plane(origin=(x, (y_arriba + y_abajo) / 2, cz), x_dir=(0, 0, 1), z_dir=(1, 0, 0))

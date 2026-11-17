@@ -127,3 +127,11 @@ Salud de la malla: `tests/test_familias_malla.py` exige para todas las familias 
 ```bash
 uv run python -m taller6mm_pipeline.familias.oleada1_cuerpos --registro ../../catalogo/m4-oleada1-cuerpos.json
 ```
+
+## Familia AK (generadores)
+
+`familias/ak_formas.py`, `ak_cuerpos.py` (receptor, tapa, pistolete, cargador curvo), `ak_madera.py` (guardamanos, cubre-mano, culatas fija y plegable) y `ak_canon.py` (cañón con bloque de gas y mira, bocas, mira trasera, riel lateral) tienen su registro propio `FAMILIAS_AK` en `ak_piezas.py`, que escribe los GLB en `salida/ak/` y el registro `catalogo/ak-piezas.json`. Todo es `es_demo`, T0 y no publicable; cobertura en `docs/catalogo/familia-ak.md`.
+
+```bash
+uv run python -m taller6mm_pipeline.familias.ak_piezas --registro ../../catalogo/ak-piezas.json
+```

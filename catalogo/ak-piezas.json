@@ -1,0 +1,2705 @@
+{
+  "esquema": "ak-piezas/v1",
+  "generado": "2026-11-17",
+  "nota": "Familia AK de airsoft (AK-47, AKM, AK-74, AKS-74U, AK-105) por generador paramétrico: formas exteriores, sin internos. Los GLB viven en apps/pipeline/salida/ (ignorada por git). Todo es es_demo: parámetros de barrido y proporciones estimadas (confianza baja). Nada es publicable ni pasa de T1 sin vistas licenciadas.",
+  "piezas": [
+    {
+      "id": "receptor-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.receptor",
+      "id_variante": "ak.receptor@v1-0abf41219f3f",
+      "glb": "apps/pipeline/salida/ak/receptor-akm.glb",
+      "sha256_glb": "74d50e625dfcd7c226cbe8be28bcf0f05e64e2e0ce8e1d6944eee64a52fe1a83",
+      "bytes": 282500,
+      "triangulos": 9106,
+      "aristas_abiertas": 0,
+      "dim_mm": [398.0, 71.9217, 42.0],
+      "parametros": {
+        "longitud": 380.0,
+        "alto": 46.0,
+        "ancho": 36.0,
+        "nervaduras": true
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 380.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.y_eje_sobre_base",
+          "valor_mm": 28.52,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.x_pozo_desde_cara",
+          "valor_mm": 136.8,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": [
+        "socket.barrel",
+        "socket.handguard",
+        "socket.dust_cover",
+        "socket.mag_well",
+        "socket.grip",
+        "socket.stock"
+      ],
+      "requiere": [],
+      "ofrece": [
+        "montaje-canon-ak",
+        "montaje-tapa-ak",
+        "montaje-guardamanos-ak",
+        "montaje-pistolete-ak",
+        "pozo-ak",
+        "montaje-culata-ak"
+      ],
+      "calidad": "aceptable",
+      "nota": "Receptor estampado con ventana y nervaduras.",
+      "notas_geometria": [
+        "Solo forma exterior: el interior estampado (carriles, gearbox) no se modela; el cuerpo es macizo.",
+        "Perfil, nervaduras, ventana, guardamonte y posición del pozo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "receptor-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.receptor",
+      "id_variante": "ak.receptor@v1-0abf41219f3f",
+      "glb": "apps/pipeline/salida/ak/receptor-ak74.glb",
+      "sha256_glb": "74d50e625dfcd7c226cbe8be28bcf0f05e64e2e0ce8e1d6944eee64a52fe1a83",
+      "bytes": 282500,
+      "triangulos": 9106,
+      "aristas_abiertas": 0,
+      "dim_mm": [398.0, 71.9217, 42.0],
+      "parametros": {
+        "longitud": 380.0,
+        "alto": 46.0,
+        "ancho": 36.0,
+        "nervaduras": true
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 380.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.y_eje_sobre_base",
+          "valor_mm": 28.52,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.x_pozo_desde_cara",
+          "valor_mm": 136.8,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": [
+        "socket.barrel",
+        "socket.handguard",
+        "socket.dust_cover",
+        "socket.mag_well",
+        "socket.grip",
+        "socket.stock"
+      ],
+      "requiere": [],
+      "ofrece": [
+        "montaje-canon-ak",
+        "montaje-tapa-ak",
+        "montaje-guardamanos-ak",
+        "montaje-pistolete-ak",
+        "pozo-ak",
+        "montaje-culata-ak"
+      ],
+      "calidad": "aceptable",
+      "nota": "Mismo cuerpo estampado; difiere en la tapa y el cañón.",
+      "notas_geometria": [
+        "Solo forma exterior: el interior estampado (carriles, gearbox) no se modela; el cuerpo es macizo.",
+        "Perfil, nervaduras, ventana, guardamonte y posición del pozo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "receptor-corto-aks74u",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.receptor",
+      "id_variante": "ak.receptor@v1-f1427b0fa05e",
+      "glb": "apps/pipeline/salida/ak/receptor-corto-aks74u.glb",
+      "sha256_glb": "4ad09b1babb9d173a6cf1695732cfa810afd97cd8604c2bf2b43c074cd9ce355",
+      "bytes": 283072,
+      "triangulos": 9116,
+      "aristas_abiertas": 0,
+      "dim_mm": [318.0, 71.9217, 42.0],
+      "parametros": {
+        "longitud": 300.0,
+        "alto": 46.0,
+        "ancho": 36.0,
+        "nervaduras": true
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 300.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.y_eje_sobre_base",
+          "valor_mm": 28.52,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.x_pozo_desde_cara",
+          "valor_mm": 108.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": [
+        "socket.barrel",
+        "socket.handguard",
+        "socket.dust_cover",
+        "socket.mag_well",
+        "socket.grip",
+        "socket.stock"
+      ],
+      "requiere": [],
+      "ofrece": [
+        "montaje-canon-ak",
+        "montaje-tapa-ak",
+        "montaje-guardamanos-ak",
+        "montaje-pistolete-ak",
+        "pozo-ak",
+        "montaje-culata-ak"
+      ],
+      "calidad": "aceptable",
+      "nota": "Receptor acortado del carabina compacta.",
+      "notas_geometria": [
+        "Solo forma exterior: el interior estampado (carriles, gearbox) no se modela; el cuerpo es macizo.",
+        "Perfil, nervaduras, ventana, guardamonte y posición del pozo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "receptor-liso",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.receptor",
+      "id_variante": "ak.receptor@v1-ecce33a24777",
+      "glb": "apps/pipeline/salida/ak/receptor-liso.glb",
+      "sha256_glb": "d52d89fd8fdbaf289cc724e734168fec22de3bd7eee0ad252b7fbdcbb54abc45",
+      "bytes": 214988,
+      "triangulos": 7320,
+      "aristas_abiertas": 0,
+      "dim_mm": [398.0, 71.9217, 42.0],
+      "parametros": {
+        "longitud": 380.0,
+        "alto": 46.0,
+        "ancho": 36.0,
+        "nervaduras": false
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 380.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.y_eje_sobre_base",
+          "valor_mm": 28.52,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "receptor.x_pozo_desde_cara",
+          "valor_mm": 136.8,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": [
+        "socket.barrel",
+        "socket.handguard",
+        "socket.dust_cover",
+        "socket.mag_well",
+        "socket.grip",
+        "socket.stock"
+      ],
+      "requiere": [],
+      "ofrece": [
+        "montaje-canon-ak",
+        "montaje-tapa-ak",
+        "montaje-guardamanos-ak",
+        "montaje-pistolete-ak",
+        "pozo-ak",
+        "montaje-culata-ak"
+      ],
+      "calidad": "aceptable",
+      "nota": "Sin ventana ni nervaduras.",
+      "notas_geometria": [
+        "Solo forma exterior: el interior estampado (carriles, gearbox) no se modela; el cuerpo es macizo.",
+        "Perfil, nervaduras, ventana, guardamonte y posición del pozo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "tapa-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.tapa",
+      "id_variante": "ak.tapa@v1-a05bb411f1a0",
+      "glb": "apps/pipeline/salida/ak/tapa-akm.glb",
+      "sha256_glb": "2a243888a4fe2d6298314e5371646df131b27d8c73729487a7c40ca5446119d5",
+      "bytes": 75180,
+      "triangulos": 2106,
+      "aristas_abiertas": 0,
+      "dim_mm": [295.0, 19.0, 36.0],
+      "parametros": {
+        "longitud": 290.0,
+        "alto": 19.0,
+        "ancho": 36.0,
+        "nervaduras": 2,
+        "rail": false
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 290.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 19.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "tapa.alto_cupula",
+          "valor_mm": 19.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.base"],
+      "requiere": ["montaje-tapa-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Tapa abombada con dos nervaduras.",
+      "notas_geometria": [
+        "Solo forma exterior; el interior y la bisagra delantera no se modelan.",
+        "Curvatura, nervaduras y casquillo trasero estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "tapa-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.tapa",
+      "id_variante": "ak.tapa@v1-747a376ad24a",
+      "glb": "apps/pipeline/salida/ak/tapa-ak74.glb",
+      "sha256_glb": "9f5d4bd95da5e5fb9eaa8dbedb5ac56f1be53e95e1703ed8a827d919c7e46085",
+      "bytes": 100140,
+      "triangulos": 2790,
+      "aristas_abiertas": 0,
+      "dim_mm": [295.0, 19.0, 36.0],
+      "parametros": {
+        "longitud": 290.0,
+        "alto": 19.0,
+        "ancho": 36.0,
+        "nervaduras": 4,
+        "rail": false
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 290.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 19.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "tapa.alto_cupula",
+          "valor_mm": 19.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.base"],
+      "requiere": ["montaje-tapa-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Tapa con cuatro nervaduras transversales.",
+      "notas_geometria": [
+        "Solo forma exterior; el interior y la bisagra delantera no se modelan.",
+        "Curvatura, nervaduras y casquillo trasero estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "tapa-corta-aks74u",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.tapa",
+      "id_variante": "ak.tapa@v1-e3cd938389bf",
+      "glb": "apps/pipeline/salida/ak/tapa-corta-aks74u.glb",
+      "sha256_glb": "3df2b4926132d1c3115dc8f4a32167a0e2666f5f107975287e959a6d51fb84c4",
+      "bytes": 48108,
+      "triangulos": 1344,
+      "aristas_abiertas": 0,
+      "dim_mm": [235.0, 19.0, 36.0],
+      "parametros": {
+        "longitud": 230.0,
+        "alto": 19.0,
+        "ancho": 36.0,
+        "nervaduras": 0,
+        "rail": false
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 230.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 19.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "tapa.alto_cupula",
+          "valor_mm": 19.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.base"],
+      "requiere": ["montaje-tapa-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Tapa corta sin nervaduras.",
+      "notas_geometria": [
+        "Solo forma exterior; el interior y la bisagra delantera no se modelan.",
+        "Curvatura, nervaduras y casquillo trasero estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "tapa-con-rail",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.tapa",
+      "id_variante": "ak.tapa@v1-6ac49a48f953",
+      "glb": "apps/pipeline/salida/ak/tapa-con-rail.glb",
+      "sha256_glb": "2f6297f74cc37b850c96dc72bb5a9d26566e5e9d7f988ae1dbee8083b2ef8051",
+      "bytes": 91692,
+      "triangulos": 2526,
+      "aristas_abiertas": 0,
+      "dim_mm": [295.0, 27.1218, 36.0],
+      "parametros": {
+        "longitud": 290.0,
+        "alto": 19.0,
+        "ancho": 36.0,
+        "nervaduras": 0,
+        "rail": true
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 290.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 19.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "tapa.alto_cupula",
+          "valor_mm": 19.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.base", "socket.rail.top"],
+      "requiere": ["montaje-tapa-ak"],
+      "ofrece": ["picatinny-mil-std-1913"],
+      "calidad": "aceptable",
+      "nota": "Tapa con raíl Picatinny superior.",
+      "notas_geometria": [
+        "Solo forma exterior; el interior y la bisagra delantera no se modelan.",
+        "Curvatura, nervaduras y casquillo trasero estimados (confianza baja).",
+        "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "guardamanos-madera-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.guardamanos_inferior",
+      "id_variante": "ak.guardamanos_inferior@v1-522cb7c67e0d",
+      "glb": "apps/pipeline/salida/ak/guardamanos-madera-akm.glb",
+      "sha256_glb": "2c0bea105738abaa8efd506b2ed61630e2b84fdbddd054ec28052b7a0f0ed08c",
+      "bytes": 63996,
+      "triangulos": 1698,
+      "aristas_abiertas": 0,
+      "dim_mm": [190.0, 34.8246, 40.0],
+      "parametros": {
+        "longitud": 190.0,
+        "ancho": 40.0,
+        "alto": 30.0,
+        "estilo": "madera_surcos"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 190.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 30.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "guardamanos_inf.alto",
+          "valor_mm": 30.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver", "socket.upper"],
+      "requiere": ["montaje-guardamanos-ak"],
+      "ofrece": ["montaje-cubremano-ak"],
+      "calidad": "aceptable",
+      "nota": "Madera con tres surcos de agarre.",
+      "notas_geometria": [
+        "Solo forma exterior: muescas de encaje, pasadores y herrajes no se modelan.",
+        "Sección, surcos y estrías estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "guardamanos-polimero-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.guardamanos_inferior",
+      "id_variante": "ak.guardamanos_inferior@v1-3bcabd97dcf9",
+      "glb": "apps/pipeline/salida/ak/guardamanos-polimero-ak74.glb",
+      "sha256_glb": "40efd79e2100e170216002e4f0e5aa82b6bb39ce2ebecc2710a450e3ef28007b",
+      "bytes": 77036,
+      "triangulos": 2046,
+      "aristas_abiertas": 0,
+      "dim_mm": [190.0, 34.8246, 40.0],
+      "parametros": {
+        "longitud": 190.0,
+        "ancho": 40.0,
+        "alto": 30.0,
+        "estilo": "polimero_estriado"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 190.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 30.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "guardamanos_inf.alto",
+          "valor_mm": 30.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver", "socket.upper"],
+      "requiere": ["montaje-guardamanos-ak"],
+      "ofrece": ["montaje-cubremano-ak"],
+      "calidad": "aceptable",
+      "nota": "Polímero con estrías laterales.",
+      "notas_geometria": [
+        "Solo forma exterior: muescas de encaje, pasadores y herrajes no se modelan.",
+        "Sección, surcos y estrías estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "guardamanos-corto-aks74u",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.guardamanos_inferior",
+      "id_variante": "ak.guardamanos_inferior@v1-c90f46a6c11b",
+      "glb": "apps/pipeline/salida/ak/guardamanos-corto-aks74u.glb",
+      "sha256_glb": "5a4df119cd0a15e443c991ed2d191331b1be48fef41225f3b0048610796def3e",
+      "bytes": 71348,
+      "triangulos": 1852,
+      "aristas_abiertas": 0,
+      "dim_mm": [120.0, 34.7222, 40.0],
+      "parametros": {
+        "longitud": 120.0,
+        "ancho": 40.0,
+        "alto": 30.0,
+        "estilo": "polimero_estriado"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 120.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 30.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "guardamanos_inf.alto",
+          "valor_mm": 30.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver", "socket.upper"],
+      "requiere": ["montaje-guardamanos-ak"],
+      "ofrece": ["montaje-cubremano-ak"],
+      "calidad": "aceptable",
+      "nota": "Guardamanos corto.",
+      "notas_geometria": [
+        "Solo forma exterior: muescas de encaje, pasadores y herrajes no se modelan.",
+        "Sección, surcos y estrías estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "guardamanos-ak105",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.guardamanos_inferior",
+      "id_variante": "ak.guardamanos_inferior@v1-d97c094ddcc4",
+      "glb": "apps/pipeline/salida/ak/guardamanos-ak105.glb",
+      "sha256_glb": "009cf3d84e101a3401adb24ee728fec2d75846106447813ded678eee35be0f53",
+      "bytes": 75332,
+      "triangulos": 1990,
+      "aristas_abiertas": 0,
+      "dim_mm": [160.0, 34.7917, 40.0],
+      "parametros": {
+        "longitud": 160.0,
+        "ancho": 40.0,
+        "alto": 30.0,
+        "estilo": "polimero_estriado"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 160.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 30.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "guardamanos_inf.alto",
+          "valor_mm": 30.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver", "socket.upper"],
+      "requiere": ["montaje-guardamanos-ak"],
+      "ofrece": ["montaje-cubremano-ak"],
+      "calidad": "aceptable",
+      "nota": "Longitud intermedia.",
+      "notas_geometria": [
+        "Solo forma exterior: muescas de encaje, pasadores y herrajes no se modelan.",
+        "Sección, surcos y estrías estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "cubremano-nervios-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cubremano",
+      "id_variante": "ak.cubremano@v1-68d2b3685bcb",
+      "glb": "apps/pipeline/salida/ak/cubremano-nervios-akm.glb",
+      "sha256_glb": "b444088c24d00a8423843f7c6a7f2ce2d35f4f7724471a2052e855e8a7e582fc",
+      "bytes": 60664,
+      "triangulos": 1534,
+      "aristas_abiertas": 0,
+      "dim_mm": [180.0, 25.5154, 36.0],
+      "parametros": {
+        "longitud": 180.0,
+        "ancho": 36.0,
+        "alto": 26.0,
+        "ventilacion": "nervios"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 180.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cubremano.eje_tubo_gas",
+          "valor_mm": 14.5,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.lower"],
+      "requiere": ["montaje-cubremano-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Nervios transversales (madera).",
+      "notas_geometria": [
+        "Solo forma exterior: grapa de retención y pantalla térmica interior no se modelan.",
+        "Sección, canal del tubo de gas y cortes estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "cubremano-ranuras-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cubremano",
+      "id_variante": "ak.cubremano@v1-af6d6abe5cb7",
+      "glb": "apps/pipeline/salida/ak/cubremano-ranuras-ak74.glb",
+      "sha256_glb": "57528c723b8ada20e4c60f24e879c16ceed3e23439bc5f28ca718f8c78490add",
+      "bytes": 177668,
+      "triangulos": 4744,
+      "aristas_abiertas": 0,
+      "dim_mm": [180.0, 25.5243, 36.0],
+      "parametros": {
+        "longitud": 180.0,
+        "ancho": 36.0,
+        "alto": 26.0,
+        "ventilacion": "ranuras"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 180.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cubremano.eje_tubo_gas",
+          "valor_mm": 14.5,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.lower"],
+      "requiere": ["montaje-cubremano-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Dos filas de ranuras de ventilación.",
+      "notas_geometria": [
+        "Solo forma exterior: grapa de retención y pantalla térmica interior no se modelan.",
+        "Sección, canal del tubo de gas y cortes estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "cubremano-corto-aks74u",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cubremano",
+      "id_variante": "ak.cubremano@v1-995f005a7e8c",
+      "glb": "apps/pipeline/salida/ak/cubremano-corto-aks74u.glb",
+      "sha256_glb": "859dec8b412c736f3fb80cebd362aad3f061b3a3e668b308a98ec70d1d3ba17d",
+      "bytes": 125228,
+      "triangulos": 3324,
+      "aristas_abiertas": 0,
+      "dim_mm": [110.0, 25.5243, 36.0],
+      "parametros": {
+        "longitud": 110.0,
+        "ancho": 36.0,
+        "alto": 26.0,
+        "ventilacion": "ranuras"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 110.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cubremano.eje_tubo_gas",
+          "valor_mm": 14.5,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.lower"],
+      "requiere": ["montaje-cubremano-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Cubre-mano corto ventilado.",
+      "notas_geometria": [
+        "Solo forma exterior: grapa de retención y pantalla térmica interior no se modelan.",
+        "Sección, canal del tubo de gas y cortes estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "cubremano-liso",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cubremano",
+      "id_variante": "ak.cubremano@v1-d24bfdf8d3a2",
+      "glb": "apps/pipeline/salida/ak/cubremano-liso.glb",
+      "sha256_glb": "2f08f5fcb90e36df3e20cf29146246223564c036aecc1546a51fcb5028cdb8db",
+      "bytes": 39108,
+      "triangulos": 988,
+      "aristas_abiertas": 0,
+      "dim_mm": [160.0, 25.5243, 36.0],
+      "parametros": {
+        "longitud": 160.0,
+        "ancho": 36.0,
+        "alto": 26.0,
+        "ventilacion": "ninguna"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 160.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cubremano.eje_tubo_gas",
+          "valor_mm": 14.5,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.lower"],
+      "requiere": ["montaje-cubremano-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Sin cortes.",
+      "notas_geometria": [
+        "Solo forma exterior: grapa de retención y pantalla térmica interior no se modelan.",
+        "Sección, canal del tubo de gas y cortes estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "culata-fija-madera-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.culata_fija",
+      "id_variante": "ak.culata_fija@v1-6789ba27f4a4",
+      "glb": "apps/pipeline/salida/ak/culata-fija-madera-akm.glb",
+      "sha256_glb": "69981a39cdebf3e8eeb4ebec74dc6e627fbea20ceced680b347d132b32e8165a",
+      "bytes": 84496,
+      "triangulos": 2082,
+      "aristas_abiertas": 0,
+      "dim_mm": [321.2, 136.2, 38.1],
+      "parametros": {
+        "longitud": 320.0,
+        "alto_culata": 115.0,
+        "ancho": 34.0,
+        "material": "madera"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 320.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_culata",
+          "valor_mm": 115.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 34.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "culata.alto_plancha",
+          "valor_mm": 115.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver"],
+      "requiere": ["montaje-culata-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Madera con plancha.",
+      "notas_geometria": [
+        "Solo forma exterior: la caja del estuche de limpieza y los herrajes interiores no se modelan.",
+        "Perfil de alzado, cintura y proporciones estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "culata-fija-polimero-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.culata_fija",
+      "id_variante": "ak.culata_fija@v1-f48613ae6525",
+      "glb": "apps/pipeline/salida/ak/culata-fija-polimero-ak74.glb",
+      "sha256_glb": "04ab0456173c9f07306c6f6badd857be8ec9dc2d2cb4110cf89f998fb262e7cf",
+      "bytes": 104396,
+      "triangulos": 2576,
+      "aristas_abiertas": 0,
+      "dim_mm": [321.2, 136.2, 38.1],
+      "parametros": {
+        "longitud": 320.0,
+        "alto_culata": 115.0,
+        "ancho": 34.0,
+        "material": "polimero"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 320.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_culata",
+          "valor_mm": 115.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 34.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "culata.alto_plancha",
+          "valor_mm": 115.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver"],
+      "requiere": ["montaje-culata-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Polímero con aligeramientos laterales.",
+      "notas_geometria": [
+        "Solo forma exterior: la caja del estuche de limpieza y los herrajes interiores no se modelan.",
+        "Perfil de alzado, cintura y proporciones estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "culata-plegable-extendida",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.culata_plegable",
+      "id_variante": "ak.culata_plegable@v1-e1d023962f22",
+      "glb": "apps/pipeline/salida/ak/culata-plegable-extendida.glb",
+      "sha256_glb": "8c19517d994aa1396f9dea73c251b12b872c056b08f2d93bd8c8d24d517f5a7d",
+      "bytes": 42176,
+      "triangulos": 1024,
+      "aristas_abiertas": 0,
+      "dim_mm": [310.0, 128.0, 45.0],
+      "parametros": {
+        "longitud": 300.0,
+        "alto_culata": 110.0,
+        "grosor": 10.0,
+        "posicion": "extendida"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 300.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_culata",
+          "valor_mm": 110.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor",
+          "valor_mm": 10.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "culata_plegable.z_bisagra",
+          "valor_mm": 22.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver"],
+      "requiere": ["montaje-culata-ak-plegable-lateral"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Bastidor triangular lateral extendido.",
+      "notas_geometria": [
+        "Solo forma exterior: el resorte, el cierre y el pasador son siluetas; no se modela su mecanismo.",
+        "Bastidor triangular, zapata y posición de la bisagra estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "culata-plegable-plegada",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.culata_plegable",
+      "id_variante": "ak.culata_plegable@v1-4965295384cf",
+      "glb": "apps/pipeline/salida/ak/culata-plegable-plegada.glb",
+      "sha256_glb": "68d1a7d19780b0532dab9b01d184463c97695fc9c1ab2e956f501f089345015f",
+      "bytes": 48528,
+      "triangulos": 1188,
+      "aristas_abiertas": 0,
+      "dim_mm": [312.0, 128.0, 76.0],
+      "parametros": {
+        "longitud": 300.0,
+        "alto_culata": 110.0,
+        "grosor": 10.0,
+        "posicion": "plegada"
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 300.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_culata",
+          "valor_mm": 110.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "grosor",
+          "valor_mm": 10.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "culata_plegable.z_bisagra",
+          "valor_mm": 22.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver"],
+      "requiere": ["montaje-culata-ak-plegable-lateral"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Plegada contra el lado izquierdo.",
+      "notas_geometria": [
+        "Solo forma exterior: el resorte, el cierre y el pasador son siluetas; no se modela su mecanismo.",
+        "Bastidor triangular, zapata y posición de la bisagra estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "pistolete-bakelita",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.pistolete",
+      "id_variante": "ak.pistolete@v1-cf326f1c947c",
+      "glb": "apps/pipeline/salida/ak/pistolete-bakelita.glb",
+      "sha256_glb": "ae1768777ea5c44c7c7187ebf58f10c42901233b031aaeebe99c7774065d2276",
+      "bytes": 92664,
+      "triangulos": 2794,
+      "aristas_abiertas": 0,
+      "dim_mm": [74.7542, 100.0, 31.976],
+      "parametros": {
+        "altura": 100.0,
+        "profundidad": 36.0,
+        "ancho": 32.0,
+        "inclinacion": 22.0,
+        "estilo": "bakelita"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 100.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 32.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.grip"],
+      "requiere": ["montaje-pistolete-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Dos surcos laterales.",
+      "notas_geometria": [
+        "Dorso, panza de la base y estriado estimados, no medidos en ningún SKU.",
+        "El interior (espiga, tornillo) no se modela: la pieza es maciza con rebajes superficiales."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "pistolete-polimero",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.pistolete",
+      "id_variante": "ak.pistolete@v1-0b7489f53592",
+      "glb": "apps/pipeline/salida/ak/pistolete-polimero.glb",
+      "sha256_glb": "b30f8e933b641eb8820fd1a06d8b7481c73601a35938ed4130509034d17865ee",
+      "bytes": 146308,
+      "triangulos": 4210,
+      "aristas_abiertas": 0,
+      "dim_mm": [74.7542, 100.0, 31.9852],
+      "parametros": {
+        "altura": 100.0,
+        "profundidad": 36.0,
+        "ancho": 32.0,
+        "inclinacion": 22.0,
+        "estilo": "polimero"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 100.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 32.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.grip"],
+      "requiere": ["montaje-pistolete-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Estriado fino lateral.",
+      "notas_geometria": [
+        "Dorso, panza de la base y estriado estimados, no medidos en ningún SKU.",
+        "El interior (espiga, tornillo) no se modela: la pieza es maciza con rebajes superficiales."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "cargador-acero",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cargador",
+      "id_variante": "ak.cargador@v1-46e73bcf8dcd",
+      "glb": "apps/pipeline/salida/ak/cargador-acero.glb",
+      "sha256_glb": "96de0f469d9f85403a403c05749d8682a2d26c0da403be82ba24e8fd7dea0f66",
+      "bytes": 67820,
+      "triangulos": 2074,
+      "aristas_abiertas": 0,
+      "dim_mm": [126.4004, 246.4339, 29.9558],
+      "parametros": {
+        "altura": 250.0,
+        "profundidad": 44.0,
+        "ancho": 28.0,
+        "radio_curva": 420.0,
+        "material": "acero"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 250.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 44.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 28.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "radio_curva",
+          "valor_mm": 420.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.profundidad_boca",
+          "valor_mm": 44.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.mag_well"],
+      "requiere": ["pozo-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Surcos prensados.",
+      "notas_geometria": [
+        "Solo forma exterior: labios, muelle y seguidor no se modelan; el cuerpo es macizo.",
+        "Curvatura, estriado, gancho y tetón estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "cargador-polimero",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cargador",
+      "id_variante": "ak.cargador@v1-8466aa0e53ee",
+      "glb": "apps/pipeline/salida/ak/cargador-polimero.glb",
+      "sha256_glb": "e742122a89b7c5cd564b21c6303cb00a333b75cbad6d8fd2001557b02bef0011",
+      "bytes": 66192,
+      "triangulos": 1896,
+      "aristas_abiertas": 0,
+      "dim_mm": [126.4004, 246.4339, 29.9558],
+      "parametros": {
+        "altura": 250.0,
+        "profundidad": 44.0,
+        "ancho": 28.0,
+        "radio_curva": 420.0,
+        "material": "polimero"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 250.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 44.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 28.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "radio_curva",
+          "valor_mm": 420.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.profundidad_boca",
+          "valor_mm": 44.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.mag_well"],
+      "requiere": ["pozo-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Estriado fino.",
+      "notas_geometria": [
+        "Solo forma exterior: labios, muelle y seguidor no se modelan; el cuerpo es macizo.",
+        "Curvatura, estriado, gancho y tetón estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "cargador-corto-acero",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.cargador",
+      "id_variante": "ak.cargador@v1-46b7be10b5f9",
+      "glb": "apps/pipeline/salida/ak/cargador-corto-acero.glb",
+      "sha256_glb": "82ba04ee05260a3c8ee1978d1d04a5f920c26c819797e93e2f80bc63ae78fad4",
+      "bytes": 60280,
+      "triangulos": 1762,
+      "aristas_abiertas": 0,
+      "dim_mm": [87.7317, 175.2274, 29.9558],
+      "parametros": {
+        "altura": 170.0,
+        "profundidad": 44.0,
+        "ancho": 28.0,
+        "radio_curva": 420.0,
+        "material": "acero"
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 170.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 44.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 28.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "radio_curva",
+          "valor_mm": 420.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.profundidad_boca",
+          "valor_mm": 44.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.mag_well"],
+      "requiere": ["pozo-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Capacidad media, mismo pozo.",
+      "notas_geometria": [
+        "Solo forma exterior: labios, muelle y seguidor no se modelan; el cuerpo es macizo.",
+        "Curvatura, estriado, gancho y tetón estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "canon-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.canon",
+      "id_variante": "ak.canon@v1-4977b5a62fb5",
+      "glb": "apps/pipeline/salida/ak/canon-akm.glb",
+      "sha256_glb": "4ce045b04aa8e01e0f9866f8b292df3cf6a0c88c8d21c767186a189ee272cba4",
+      "bytes": 92880,
+      "triangulos": 2356,
+      "aristas_abiertas": 0,
+      "dim_mm": [370.0, 55.6, 22.7982],
+      "parametros": {
+        "longitud": 370.0,
+        "diametro": 16.0,
+        "longitud_rosca": 14.0,
+        "mira": "capucha",
+        "fraccion_gas": 0.62
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 370.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 16.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 14.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_bloque_gas",
+          "valor_mm": 229.4,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_base_mira",
+          "valor_mm": 332.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.receiver", "socket.handguard", "socket.gas_block", "socket.front_sight"],
+      "requiere": ["montaje-canon-ak"],
+      "ofrece": ["montaje-guardamanos-ak", "rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Mira con capucha circular.",
+      "notas_geometria": [
+        "Solo forma exterior: el cañón interior de precisión y el conducto de gas no se modelan.",
+        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "Posición del bloque de gas, perfil y proporciones de la mira estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "canon-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.canon",
+      "id_variante": "ak.canon@v1-aaef7c2cc5d5",
+      "glb": "apps/pipeline/salida/ak/canon-ak74.glb",
+      "sha256_glb": "4578481cf9a700883c6776715e2395767829bc0da08c5a2652384e9e65b42074",
+      "bytes": 93548,
+      "triangulos": 2356,
+      "aristas_abiertas": 0,
+      "dim_mm": [370.0, 55.0, 22.7982],
+      "parametros": {
+        "longitud": 370.0,
+        "diametro": 16.0,
+        "longitud_rosca": 14.0,
+        "mira": "orejas",
+        "fraccion_gas": 0.62
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 370.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 16.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 14.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_bloque_gas",
+          "valor_mm": 229.4,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_base_mira",
+          "valor_mm": 332.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.receiver", "socket.handguard", "socket.gas_block", "socket.front_sight"],
+      "requiere": ["montaje-canon-ak"],
+      "ofrece": ["montaje-guardamanos-ak", "rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Mira con dos orejas laterales.",
+      "notas_geometria": [
+        "Solo forma exterior: el cañón interior de precisión y el conducto de gas no se modelan.",
+        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "Posición del bloque de gas, perfil y proporciones de la mira estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "canon-ak105",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.canon",
+      "id_variante": "ak.canon@v1-5e2a1e01f1aa",
+      "glb": "apps/pipeline/salida/ak/canon-ak105.glb",
+      "sha256_glb": "bd2938335f28cecb7a75686df786f9e04532c5f901c4989116c56ab7f99b5523",
+      "bytes": 93548,
+      "triangulos": 2356,
+      "aristas_abiertas": 0,
+      "dim_mm": [270.0, 55.0, 22.7982],
+      "parametros": {
+        "longitud": 270.0,
+        "diametro": 16.0,
+        "longitud_rosca": 14.0,
+        "mira": "orejas",
+        "fraccion_gas": 0.62
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 270.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 16.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 14.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_bloque_gas",
+          "valor_mm": 167.4,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_base_mira",
+          "valor_mm": 232.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.receiver", "socket.handguard", "socket.gas_block", "socket.front_sight"],
+      "requiere": ["montaje-canon-ak"],
+      "ofrece": ["montaje-guardamanos-ak", "rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Cañón intermedio.",
+      "notas_geometria": [
+        "Solo forma exterior: el cañón interior de precisión y el conducto de gas no se modelan.",
+        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "Posición del bloque de gas, perfil y proporciones de la mira estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "canon-corto-aks74u",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.canon",
+      "id_variante": "ak.canon@v1-e1d4ab741fed",
+      "glb": "apps/pipeline/salida/ak/canon-corto-aks74u.glb",
+      "sha256_glb": "dcc4aea3f1ccc513226e7f90399cc9612fac42c9110938f24477db68c41fe55c",
+      "bytes": 93544,
+      "triangulos": 2356,
+      "aristas_abiertas": 0,
+      "dim_mm": [160.0, 55.0, 22.7982],
+      "parametros": {
+        "longitud": 160.0,
+        "diametro": 16.0,
+        "longitud_rosca": 14.0,
+        "mira": "orejas",
+        "fraccion_gas": 0.5
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 160.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 16.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 14.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_bloque_gas",
+          "valor_mm": 80.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.x_base_mira",
+          "valor_mm": 122.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.receiver", "socket.handguard", "socket.gas_block", "socket.front_sight"],
+      "requiere": ["montaje-canon-ak"],
+      "ofrece": ["montaje-guardamanos-ak", "rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Cañón corto con bloque de gas adelantado.",
+      "notas_geometria": [
+        "Solo forma exterior: el cañón interior de precisión y el conducto de gas no se modelan.",
+        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "Posición del bloque de gas, perfil y proporciones de la mira estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "boca-oblicuo-akm",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.boca",
+      "id_variante": "ak.boca@v1-afea0c57ccb8",
+      "glb": "apps/pipeline/salida/ak/boca-oblicuo-akm.glb",
+      "sha256_glb": "1f74fe126d7b6c9438714ede51b25f884306156e57c16f6be57806706428e697",
+      "bytes": 45532,
+      "triangulos": 1144,
+      "aristas_abiertas": 0,
+      "dim_mm": [40.0, 21.0, 20.994],
+      "parametros": {
+        "tipo": "oblicuo",
+        "longitud": 40.0,
+        "diametro": 21.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 21.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "boca.largo",
+          "valor_mm": 40.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle_mount"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Corte oblicuo con lumbrera superior.",
+      "notas_geometria": [
+        "Solo forma exterior: la rosca es un alojamiento liso de 14 mm nominales y no se modela el interior real.",
+        "Lumbreras, cámaras y corte oblicuo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm"]
+    },
+    {
+      "id": "boca-dos-camaras-ak74",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.boca",
+      "id_variante": "ak.boca@v1-b05c39f28b16",
+      "glb": "apps/pipeline/salida/ak/boca-dos-camaras-ak74.glb",
+      "sha256_glb": "82d69684b6a8c7dfc1124b9a6aa82fd01a806376c459123e6c480ab8bb11050e",
+      "bytes": 160840,
+      "triangulos": 4324,
+      "aristas_abiertas": 0,
+      "dim_mm": [58.0, 23.0, 22.9928],
+      "parametros": {
+        "tipo": "dos_camaras",
+        "longitud": 58.0,
+        "diametro": 23.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 58.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 23.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "boca.largo",
+          "valor_mm": 58.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle_mount"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Dos cámaras con ventanas y orificios.",
+      "notas_geometria": [
+        "Solo forma exterior: la rosca es un alojamiento liso de 14 mm nominales y no se modela el interior real.",
+        "Lumbreras, cámaras y corte oblicuo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "boca-embudo-aks74u",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.boca",
+      "id_variante": "ak.boca@v1-8fd2b1f14221",
+      "glb": "apps/pipeline/salida/ak/boca-embudo-aks74u.glb",
+      "sha256_glb": "6fa22e2a0d4e7c2951002567d71b03caaa234f966726afefb5a4db329c9d38e6",
+      "bytes": 52172,
+      "triangulos": 1418,
+      "aristas_abiertas": 0,
+      "dim_mm": [42.0, 24.7678, 24.7678],
+      "parametros": {
+        "tipo": "embudo",
+        "longitud": 42.0,
+        "diametro": 25.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 42.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 25.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "boca.largo",
+          "valor_mm": 42.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle_mount"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Apagallamas en embudo con cuatro ranuras.",
+      "notas_geometria": [
+        "Solo forma exterior: la rosca es un alojamiento liso de 14 mm nominales y no se modela el interior real.",
+        "Lumbreras, cámaras y corte oblicuo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "boca-ranurado-ak105",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.boca",
+      "id_variante": "ak.boca@v1-772b6a89dbaf",
+      "glb": "apps/pipeline/salida/ak/boca-ranurado-ak105.glb",
+      "sha256_glb": "587adacccea39e528901db0b4f25c866f3082b7be52875f83c5230d10dd80fa6",
+      "bytes": 45268,
+      "triangulos": 1110,
+      "aristas_abiertas": 0,
+      "dim_mm": [34.0, 20.0, 20.0],
+      "parametros": {
+        "tipo": "ranurado",
+        "longitud": 34.0,
+        "diametro": 20.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 34.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "boca.largo",
+          "valor_mm": 34.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle_mount"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Apagallamas ranurado de seis lumbreras.",
+      "notas_geometria": [
+        "Solo forma exterior: la rosca es un alojamiento liso de 14 mm nominales y no se modela el interior real.",
+        "Lumbreras, cámaras y corte oblicuo estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    },
+    {
+      "id": "mira-trasera-tangente",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.mira_trasera",
+      "id_variante": "ak.mira_trasera@v1-405575376088",
+      "glb": "apps/pipeline/salida/ak/mira-trasera-tangente.glb",
+      "sha256_glb": "0caacd9639d2e56cb6ea9ae26fd2ac05fe5f8df01a11dff8de9418b987e33d24",
+      "bytes": 53568,
+      "triangulos": 1304,
+      "aristas_abiertas": 0,
+      "dim_mm": [64.0, 33.0, 24.0],
+      "parametros": {
+        "longitud": 64.0,
+        "ancho": 24.0,
+        "alto": 26.0
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 64.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 24.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.alto_hoja",
+          "valor_mm": 26.0,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.base"],
+      "requiere": ["montaje-mira-trasera-ak"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Hoja con marcas y cursor en U.",
+      "notas_geometria": [
+        "Solo forma exterior: el muelle, el tornillo de deriva y los números de la escala no se modelan.",
+        "Pendiente de la hoja, cursor y marcas estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "riel-lateral-6",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.riel_lateral",
+      "id_variante": "ak.riel_lateral@v1-6fd02004d1d2",
+      "glb": "apps/pipeline/salida/ak/riel-lateral-6.glb",
+      "sha256_glb": "eab4226691088a600301f8dc5f1d3b927c1c2fbf0eccd5cfca25766c7bfff691",
+      "bytes": 418744,
+      "triangulos": 14032,
+      "aristas_abiertas": 0,
+      "dim_mm": [180.0, 46.0, 11.5],
+      "parametros": {
+        "longitud": 180.0,
+        "alto": 46.0,
+        "ranuras": 6
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 180.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "riel_lateral.altura_riel",
+          "valor_mm": 11.5,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver_side", "socket.rail.side"],
+      "requiere": ["montaje-riel-lateral-ak"],
+      "ofrece": ["rail-11mm-cola-milano"],
+      "calidad": "aceptable",
+      "nota": "Placa con cola de milano y seis ranuras.",
+      "notas_geometria": [
+        "Solo forma exterior: la placa es plana y no copia la curvatura del receptor.",
+        "Perfil de cola de milano, ranuras y tornillos estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["akm", "ak74"]
+    },
+    {
+      "id": "riel-lateral-corto",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "ak.riel_lateral",
+      "id_variante": "ak.riel_lateral@v1-e0fd7063e607",
+      "glb": "apps/pipeline/salida/ak/riel-lateral-corto.glb",
+      "sha256_glb": "a778208ea08ea466c010e2bc55611e98b24dd5fd317b3534df624b7af0f0a18e",
+      "bytes": 310160,
+      "triangulos": 10552,
+      "aristas_abiertas": 0,
+      "dim_mm": [120.0, 40.0, 11.5],
+      "parametros": {
+        "longitud": 120.0,
+        "alto": 40.0,
+        "ranuras": 3
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 120.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "riel_lateral.altura_riel",
+          "valor_mm": 11.5,
+          "fuente": "estimado a ojo de las proporciones generales de la familia AK de airsoft (AKM, AK-74, AKS-74U, AK-105); sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.receiver_side", "socket.rail.side"],
+      "requiere": ["montaje-riel-lateral-ak"],
+      "ofrece": ["rail-11mm-cola-milano"],
+      "calidad": "aceptable",
+      "nota": "Versión corta.",
+      "notas_geometria": [
+        "Solo forma exterior: la placa es plana y no copia la curvatura del receptor.",
+        "Perfil de cola de milano, ranuras y tornillos estimados (confianza baja)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["ak74"]
+    }
+  ]
+}
