@@ -251,6 +251,35 @@ Los umbrales se calibraron sobre las piezas actuales: no certifican realismo (es
 
 Cada ejecución añade una entrada a `historial.json` (puntuación y estado de cada pieza). Si una pieza baja más de 1 punto o pasa de «pasa» a «no pasa» respecto a la última ejecución que la contenía, el bucle imprime `REGRESION` y la anota en la cola (`--estricto` devuelve el código 2). La cola va de peor a mejor (fallos duros primero) con el fallo principal, la sugerencia concreta y el archivo del generador. El subagente `mejorador-piezas` (Sonnet) toma el primero, lo mejora, vuelve a medir y repite hasta pasar o llegar al máximo de rondas; la skill `/mejorar-piezas` lo lanza. La hoja de contacto es para el revisor visual: la puerta mide, no juzga el parecido.
 
+## 13. Escalera de calidad (de «pasa la puerta» a «imagen viva»)
+
+La puerta de §12 solo mide forma. La escalera añade cuatro peldaños por encima, que se superan **uno a uno**: el nivel de una pieza es el último superado sin saltarse ninguno, y la cola de trabajo es siempre el siguiente peldaño. Todo es determinista (semilla `20261117`, Cycles con semilla fija) y no gasta tokens.
+
+```bash
+cd apps/pipeline
+uv run python -m taller6mm_pipeline.calidad.escalera [--nivel N] [--familia canon|pistolete|mlok|todas] [--hasta N] [--id 'gm-*'] [--hoja] [--sin-render] [--forzar] [--imagenes] [--estricto]
+```
+
+Por defecto trabaja con las tres familias mejor posicionadas hoy: cañones exteriores (`canon.exterior`), pistoletes (`empunadura.pistolete`) y guardamanos M-LOK (`gm-mlok-*`). Con `--hasta 2` no usa Blender (segundos). Salidas: `assets-src/calidad/escalera-cola.json` y `escalera-historial.json` (la regresión de un nivel, más de 1 punto o pasar de «supera» a «no supera», se imprime como `REGRESION` y `--estricto` devuelve el código 2) y, en `assets-src/vistas/` (ignorada por git, nada se publica), las vistas `<grupo>/<id>.nN.png`, las sondas de medida, `previo/` (el render anterior, para el antes/después), `hoja-escalera.png` (una fila por familia, columnas N1 → N5) e `informe-escalera.md`.
+
+| Nivel | Qué eleva | Métricas objetivas (umbrales en `catalogo/escalera-niveles.json`) |
+|---|---|---|
+| **N1 Forma** | La puerta de §12 (umbral 75) | Malla cerrada, relleno, triángulos, silueta, cotas, sockets… |
+| **N2 Detalle fino** | Roscas, tornillos, líneas de partición, chaflanes con radio real, relieve de agarre | Área en triángulos ≤ 1,5 mm; transiciones finas por cm²; aristas vivas ≤ 25 %; periodicidad axial (autocorrelación del perfil: roscas, estrías); escalones del perfil por 100 mm; rasgos pequeños (grupos conectados de 1,5-15 mm: tornillos, rebajes) |
+| **N3 Materiales** | Biblioteca PBR procedural propia asignada por familia | Cobertura de materiales; desviación de la rugosidad y CV del albedo (sonda de emisión); error frente a la receta; energía de alta frecuencia de la textura |
+| **N4 Desgaste y contraste** | Bordes pulidos por uso, roce metálico en aristas, suciedad en cavidades por oclusión, variación entre piezas del conjunto | Cobertura y contraste del roce en aristas; cobertura de suciedad (oclusión ambiental); no-uniformidad por bloques; aumento de la varianza de rugosidad frente a N3; variación entre piezas del mismo conjunto y material |
+| **N5 Imagen viva** | Estudio con contraluz, reflejos, profundidad de campo, Cycles con denoiser OIDN | Contraste (P98-P2); reflejos; contraluz (P90 del contorno / interior); círculo de confusión por la lente fina a partir de la sonda de profundidad; fracción enfocada; ruido residual; muestras y denoiser |
+
+Cada nivel puntúa 0-100 con la media ponderada de la fracción que cumple cada criterio (lo sin dato es bandera, no penaliza). `umbral` = se supera el peldaño; `techo` = hasta donde sigue elevando el agente. Las cifras de N3-N5 salen de **sondas**: renders de emisión pura, sin gestión de color (8 bits «Raw»), del albedo, la rugosidad, la máscara de aristas, la de suciedad, la silueta y la profundidad, con la misma cámara que el render final. Miden la receta, no la estética.
+
+**Materiales** (`apps/pipeline/src/taller6mm_pipeline/materiales/biblioteca.py`): anodizado negro con micro-rayas, parkerizado, polímero con grano, madera con veta, acero pavonado, goma y vidrio de lente con reflejo. Todos son nodos procedurales de Blender (ruido, Voronoi, onda, bisel y oclusión): ninguna foto de terceros, ningún logo ni marcaje, y `biblioteca.validar` rechaza cualquier referencia a una imagen. El **asignador** (`materiales/asignador.py`, catálogo `catalogo/materiales-piezas.json`) resuelve por patrón de id, familia exacta, familia con `*` y prefijo; lo que cae al defecto cuenta como no cubierto. La variación entre piezas del mismo conjunto sale del CRC32 del id, así que es reproducible.
+
+**Render** (`apps/pipeline/blender/escalera_render.py`, Blender portátil de `C:\tools\blender`): N1 arcilla gris; N2 arcilla con oclusión y realce de aristas para ver el detalle; N3 PBR; N4 con desgaste y suciedad; N5 con estudio (clave grande, relleno, dos tiras de contraluz, suelo semirreflectante, f/5,6) y Cycles con denoiser. Las vistas se cachean por hash del GLB, de la receta y del script.
+
+**Reglas**: la apariencia no cambia el nivel de fidelidad (todo sigue en T0 y `publicable_3d=false`, §1); las fotos de terceros nunca son textura; un umbral injusto se cambia en el JSON con su motivo, nunca desactivando el criterio. El subagente `escalador-calidad` (Sonnet) y la skill `/escalar-piezas` toman la cola del siguiente peldaño y la elevan sin parar hasta el techo: en N1 y N2 editan el generador de la familia; en N3-N5, solo la biblioteca, el catálogo y el script de render.
+
+**Huecos conocidos**: el ensamblaje completo con piezas coherentes de N5 se mide hoy por la coherencia de variación entre piezas de un mismo material y por el render de conjunto de cada familia; el ensamblaje de un build entero espera a que el kit M4 esté disponible en local. N2 mide si el detalle fino existe, no si es el correcto (eso es el `revisor-fidelidad`).
+
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
 - [ ] T0 generado para todo el catálogo semilla.
