@@ -3,7 +3,9 @@
     blender --background --factory-startup --python apps/pipeline/blender/previsualizar.py -- \
         --lista lista.json
 
-`lista.json`: [{"glb": "a.glb", "png": "a.png", "mat": "polimero|anodizado|auto", "vista": "izq|der|atras|lado"}].
+`lista.json`: [{"glb": "a.glb", "png": "a.png", "mat": "polimero|anodizado|auto", "vista": "izq|der|atras|lado",
+"encuadre": 0.8}]. Con `encuadre` (0-1) la cámara se ajusta para que la pieza ocupe esa fracción del cuadro (la hoja de
+contacto del bucle de calidad usa 0,8); sin él, distancia fija como antes.
 Con `"mat": "auto"` (conjuntos del ensamblador) cada objeto toma el material por su nombre y su `rol`: los
 `marcador.*` (piezas sin malla) salen en naranja translúcido; pistolete y guardamanos, en polímero; el resto, anodizado.
 Solo para revisar a ojo cómo se ve una pieza: el material es procedural y propio (no sale de ninguna foto) y nada
@@ -82,6 +84,26 @@ def caja(obs: list) -> tuple[Vector, Vector]:
     return minimo, maximo
 
 
+def encuadrar(
+    cam: bpy.types.Object, centro: Vector, direccion: Vector, lo: Vector, hi: Vector, objetivo: float
+) -> None:
+    """Acerca o aleja la cámara hasta que la caja de la pieza ocupe `objetivo` (0-1) del lado limitante del cuadro."""
+    from bpy_extras.object_utils import world_to_camera_view
+
+    escena = bpy.context.scene
+    esquinas = [Vector((x, y, z)) for x in (lo.x, hi.x) for y in (lo.y, hi.y) for z in (lo.z, hi.z)]
+    for _ in range(10):
+        bpy.context.view_layer.update()
+        puntos = [world_to_camera_view(escena, cam, e) for e in esquinas]
+        extension = max(max(abs(2 * p.x - 1), abs(2 * p.y - 1)) for p in puntos)
+        if abs(extension - objetivo) < 0.01:
+            break
+        distancia = (cam.location - centro).length * extension / objetivo
+        cam.location = centro + direccion * distancia
+        cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
+    cam.data.clip_end = max(cam.data.clip_end, (cam.location - centro).length * 4)
+
+
 def luz(nombre: str, loc: Vector, energia: float, tam: float, objetivo: Vector) -> None:
     d = bpy.data.lights.new(nombre, "AREA")
     d.energy, d.size = energia, tam
@@ -155,6 +177,8 @@ def renderizar(item: dict[str, str]) -> None:
     cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
     escena.collection.objects.link(cam)
     escena.camera = cam
+    if float(item.get("encuadre", 0)):
+        encuadrar(cam, centro, v, lo, hi, float(item["encuadre"]))
     luz("clave", centro + Vector((0.3, -1.0, 1.2)) * diag * 1.2, 110 * diag**2, diag * 1.2, centro)
     luz("relleno", centro + Vector((1.2, 0.8, 0.5)) * diag * 1.5, 40 * diag**2, diag * 1.5, centro)
     luz("contra", centro + Vector((-1.2, 0.4, 0.9)) * diag * 1.5, 70 * diag**2, diag, centro)
