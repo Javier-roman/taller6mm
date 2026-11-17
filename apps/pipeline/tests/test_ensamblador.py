@@ -175,7 +175,7 @@ def test_el_build_pequeno_encaja_sin_solapes_ni_huecos(conjunto) -> None:
 
 def test_la_montura_se_coloca_a_la_distancia_pedida_sobre_el_rail(conjunto) -> None:
     m = conjunto.informe["montajes"][0]
-    # Raíl con origen en su extremo trasero: la base de la BUIS queda centrada a 20 mm (la primera pieza está en el origen).
+    # Raíl con origen en su extremo trasero: la base de la BUIS queda centrada a 20 mm.
     assert m["transformacion_hijo"]["traslacion_mm"][0] == pytest.approx(20.0, abs=0.01)
     assert m["deslizar_mm"] == pytest.approx(20.0, abs=0.01)
 
