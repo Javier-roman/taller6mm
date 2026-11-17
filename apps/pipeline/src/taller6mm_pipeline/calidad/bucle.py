@@ -12,6 +12,7 @@ import argparse
 import fnmatch
 import inspect
 import json
+import shlex
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -212,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"REGRESION {g['id']}: {g['antes']} -> {g['ahora']}", file=sys.stderr)
         if not pendientes or not args.mejorador or n == args.max_iteraciones:
             break
-        subprocess.run(args.mejorador, shell=True, check=True)  # noqa: S602
+        subprocess.run(shlex.split(args.mejorador), check=True)  # noqa: S603  # comando local del propio usuario, sin shell
     for r in resultados:
         f = r.fallo_principal
         print(f"{r.puntuacion:5.1f} {'pasa' if r.pasa else 'NO  '} {r.id} ({r.familia}) {f.id if f else ''}")
