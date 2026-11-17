@@ -53,8 +53,8 @@ La «pistolera de mira» del encargo se ha interpretado como las bases de mira: 
 | `cubremano-liso` | `ak.cubremano` | akm, ak74 | 160 × 26 × 36 | 988 | Sin cortes. |
 | `culata-fija-madera-akm` | `ak.culata_fija` | akm | 321 × 136 × 38 | 2082 | Madera con plancha. |
 | `culata-fija-polimero-ak74` | `ak.culata_fija` | ak74 | 321 × 136 × 38 | 2576 | Polímero con aligeramientos laterales. |
-| `culata-plegable-extendida` | `ak.culata_plegable` | ak74 | 310 × 128 × 45 | 1024 | Bastidor triangular lateral extendido. |
-| `culata-plegable-plegada` | `ak.culata_plegable` | ak74 | 312 × 128 × 76 | 1188 | Plegada contra el lado izquierdo. |
+| `culata-ak-plegable-extendida` | `ak.culata_plegable` | ak74 | 310 × 128 × 45 | 1024 | Bastidor triangular lateral extendido. |
+| `culata-ak-plegable-plegada` | `ak.culata_plegable` | ak74 | 312 × 128 × 76 | 1188 | Plegada contra el lado izquierdo. |
 | `pistolete-bakelita` | `ak.pistolete` | akm | 75 × 100 × 32 | 2794 | Dos surcos laterales. |
 | `pistolete-polimero` | `ak.pistolete` | ak74 | 75 × 100 × 32 | 4210 | Estriado fino lateral. |
 | `cargador-acero` | `ak.cargador` | akm, ak74 | 126 × 246 × 30 | 2074 | Surcos prensados. |

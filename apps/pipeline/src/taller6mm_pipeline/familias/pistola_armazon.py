@@ -36,6 +36,7 @@ POZO_CLASICO = "pozo-1911-gbb"
 RIEL_UNIVERSAL = "rail-pistola-glock-universal"
 ANCHO_POZO = 23.0  # ancho (Z) del hueco del cargador; es el del cargador + holgura (estimado)
 PROFUNDIDAD_POZO = 34.0
+MURO_POZO = 2.4  # pared mínima entre el pozo del cargador y la cara del agarre
 
 
 def _marco(x_sup: float, y_sup: float, inclinacion: float) -> Any:
@@ -110,10 +111,18 @@ class ArmazonPolimero(Familia):
         secciones = []
         for u in _NIVELES:
             f, t, w = (interpolar(us, [r[i] for r in _SECCIONES_POLIMERO], u) for i in (1, 2, 3))
+            w = max(w, (ANCHO_POZO / 2 + MURO_POZO) / (ancho / 2))  # el pozo nunca rompe la pared del agarre
             y = y_sup - u * alto
             cx = x_c - tan * (y_sup - y) - 2.5 * math.sin(math.pi * u)  # el dorso se arquea un poco
             secciones.append(superelipse(y, cx, w * ancho / 2, f * prof / 2, t * prof / 2, n=3.4))
         grip = loftear(secciones)
+        sitio = _marco(x_c, y_sup, inc)
+        # El pozo sube hasta 4 mm por debajo del cubrecañón (nunca coplanar con él) y sale por la base del agarre.
+        y_techo = Y0 - 25.0 - y_sup  # techo del pozo en el marco del agarre
+        alto_pozo = y_techo + alto + 1.0
+        pozo = sitio * Pos(0.7, (y_techo - alto - 1.0) / 2, 0) * Box(PROFUNDIDAD_POZO, abs(alto_pozo), ANCHO_POZO)
+        pozo = filetear(pozo, 3.0, [a for a in pozo.edges() if abs(a.length - abs(alto_pozo)) < 0.01])
+        grip = grip - pozo
 
         # Cuerpo superior: cubrecañón con el borde delantero achaflanado y el cuello trasero (cola de castor).
         perfil = [
@@ -162,15 +171,11 @@ class ArmazonPolimero(Familia):
         )
 
         # Ranuras de los dedos en el frente del agarre, hueco del cargador y chaflán de la boca del pozo.
-        sitio = _marco(x_c, y_sup, inc)
         for k in range(3):
             u = 0.34 + 0.15 * k
             y = y_sup - u * alto
             frente = x_c - tan * (y_sup - y) + prof / 2 * 0.98 - 0.6
             cuerpo = cuerpo - _capsula(frente + 4.3, y, 5.4, 0.9 * ancho)
-        pozo = sitio * Pos(0.0, -alto + 31.0, 0) * Box(PROFUNDIDAD_POZO, 64.0, ANCHO_POZO)
-        pozo = filetear(pozo, 3.0, [a for a in pozo.edges() if abs(a.length - 64.0) < 0.01])
-        cuerpo = cuerpo - pozo
         vaciados = 5
 
         # Punteado de las dos caras del agarre.
@@ -178,7 +183,14 @@ class ArmazonPolimero(Familia):
             puntos = []
             for a, b in hexagonal(-9.0, 9.0, 20.0, alto * 0.82, 3.4):
                 u = b / alto
-                w = interpolar(us, [r[3] for r in _SECCIONES_POLIMERO], u) * ancho / 2
+                w = (
+                    max(
+                        interpolar(us, [r[3] for r in _SECCIONES_POLIMERO], u),
+                        (ANCHO_POZO / 2 + MURO_POZO) / (ancho / 2),
+                    )
+                    * ancho
+                    / 2
+                )
                 for lado in (1, -1):
                     puntos.append(sitio * Pos(a, -b, lado * (w + 0.62)))
             esferas = Compound([Pos(*q.position) * Sphere(1.05) for q in puntos])

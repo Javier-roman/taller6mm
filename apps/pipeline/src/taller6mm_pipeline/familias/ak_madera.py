@@ -33,7 +33,7 @@ from taller6mm_pipeline.familias.base import (
 )
 from taller6mm_pipeline.familias.comun_oleada1 import mm, prisma
 from taller6mm_pipeline.familias.detalle import nominales_de
-from taller6mm_pipeline.familias.formas import filetear
+from taller6mm_pipeline.familias.formas import filetear, interpolar
 
 INT_GUARDAMANOS = "montaje-guardamanos-ak"
 INT_CUBREMANO = "montaje-cubremano-ak"
@@ -67,11 +67,14 @@ class GuardamanosInferiorAK(Familia):
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         largo, ancho, alto = float(p["longitud"]), float(p["ancho"]), float(p["alto"])
         hw = ancho / 2
+        # Perfil de «esquí»: profundo y ancho atrás, con barriga a un tercio, y fino y levantado hacia la boca.
         nudos = [
             (0.0, 5.0, -alto, hw),
-            (largo * 0.18, 4.5, -alto + 0.5, hw - 0.4),
-            (largo * 0.7, 3.5, -alto + 2.5, hw - 1.8),
-            (largo, 2.5, -alto + 4.5, hw - 2.6),
+            (largo * 0.1, 4.8, -alto + 0.1, hw - 0.2),
+            (largo * 0.3, 4.3, -alto + 1.2, hw + 0.5),
+            (largo * 0.55, 3.8, -alto + 5.5, max(hw - 3.0, 11.0)),
+            (largo * 0.8, 3.0, -alto + 14.0, max(hw - 7.0, 11.0)),
+            (largo, 2.4, -alto + 24.0, max(hw - 9.5, 11.0)),
         ]
         cuerpo = loft_x(0, largo, nudos, radio=10.0)
         cuerpo = cuerpo - cilindro_x(9.3, -1, largo + 1)  # canal del cañón
@@ -99,6 +102,22 @@ class GuardamanosInferiorAK(Familia):
         # Escotadura trasera para la cuna delantera del receptor y rebaje delantero.
         cuerpo = cuerpo - caja_redonda(-1, 12, -6, 6, -hw + 4, hw - 4, 2.5, ejes="y")
         vaciados += 1
+        # Cuencos laterales de agarre cerca de la boca y chaflán del canto delantero inferior.
+        for lado in (1, -1):
+            for x in (largo * 0.72, largo * 0.9):
+                cuerpo = cuerpo - cilindro_y(
+                    5.0,
+                    2 * alto,
+                    x,
+                    -alto / 2,
+                    lado * (interpolar([n[0] for n in nudos], [n[3] for n in nudos], x) + 3.2),
+                )
+                vaciados += 1
+        cuerpo = filetear(
+            cuerpo,
+            1.6,
+            [e for e in cuerpo.edges() if e.center().X > largo - 0.5 and e.center().Y < 0.0 and e.length > 3],
+        )
         sockets = (
             Socket(
                 "receiver",

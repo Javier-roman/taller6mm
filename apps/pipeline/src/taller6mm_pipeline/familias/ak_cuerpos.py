@@ -164,11 +164,34 @@ class TapaAK(Familia):
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         largo, alto, ancho = float(p["longitud"]), float(p["alto"]), float(p["ancho"])
         w = ancho / 2
-        # Alzado de la cúpula: baja hacia los dos extremos (fracciones de la longitud, de atrás adelante).
-        perfil = ((0.0, 0.78, 0.96), (0.12, 0.90, 0.99), (0.4, 1.0, 1.0), (0.75, 0.97, 1.0), (1.0, 0.86, 0.99))
+        # Alzado de la cúpula: baja hacia los dos extremos (fracciones de la longitud, de atrás adelante). La chapa
+        # estampada real se estrecha y baja hacia delante (hacia el tubo de gases) y trae un escalón trasero.
+        perfil = (
+            (0.0, 0.5, 0.8),
+            (0.07, 0.8, 0.95),
+            (0.3, 1.0, 1.0),
+            (0.6, 0.95, 0.96),
+            (0.84, 0.66, 0.78),
+            (1.0, 0.5, 0.62),
+        )
         nudos = [(-largo * (1 - f), alto * k, -alto * k, w * kw) for f, k, kw in perfil]
-        cupula = loft_x(-largo, 0, nudos, radio=alto * 0.95)
-        cuerpo = cupula - Pos(-largo / 2, -alto - 5, 0) * Box(largo + 40, 2 * alto + 10, ancho + 20)
+        radio = alto * 0.95
+        cupula = loft_x(-largo, 0, nudos, radio=radio)
+        # Chapa de 1,4 mm: el interior se vacía por debajo (abierto delante y por la base, cerrado atrás).
+        grosor = 1.4
+        interior = loft_x(
+            -largo + grosor,
+            1.0,
+            [(x, yt - grosor, yb, sw - grosor) for x, yt, yb, sw in nudos],
+            radio=radio - grosor,
+        )
+        cuerpo = (cupula - interior) - Pos(-largo / 2, -alto - 5, 0) * Box(largo + 40, 2 * alto + 10, ancho + 20)
+        # Reborde inferior a cada lado, con la muesca trasera para la palanca de retención.
+        for lado in (1, -1):
+            za, zb = sorted((lado * (w - 0.4), lado * (w + 2.6)))
+            cuerpo = cuerpo + caja_redonda(-largo * 0.93, -largo * 0.05, 0.0, 1.3, za, zb, 0.5, ejes="y")
+            za, zb = sorted((lado * (w - 3.0), lado * (w + 4.0)))
+            cuerpo = cuerpo - caja_redonda(-largo * 0.8, -largo * 0.7, -1.0, 2.0, za, zb, 1.0, ejes="y")
         # Casquillo trasero de la varilla del muelle, con su orificio.
         cuerpo = cuerpo + cilindro_x(5.8, -largo - 5, -largo + 12, alto * 0.5)
         cuerpo = cuerpo - cilindro_x(2.0, -largo - 6, -largo + 1, alto * 0.5)

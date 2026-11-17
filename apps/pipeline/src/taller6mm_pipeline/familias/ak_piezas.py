@@ -190,7 +190,7 @@ TANDA: tuple[Variante, ...] = (
         (_AK74,),
     ),
     Variante(
-        "culata-plegable-extendida",
+        "culata-ak-plegable-extendida",
         None,
         "ak.culata_plegable",
         {"longitud": 300.0, "alto_culata": 110.0, "grosor": 10.0, "posicion": "extendida"},
@@ -198,7 +198,7 @@ TANDA: tuple[Variante, ...] = (
         (_U, _105),
     ),
     Variante(
-        "culata-plegable-plegada",
+        "culata-ak-plegable-plegada",
         None,
         "ak.culata_plegable",
         {"longitud": 300.0, "alto_culata": 110.0, "grosor": 10.0, "posicion": "plegada"},
