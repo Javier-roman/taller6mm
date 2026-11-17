@@ -324,7 +324,7 @@ class CargadorAK(Familia):
         nudos = [0.0, 0.05, 0.95, 1.0]
         k_a, k_b = [0.96, 1.0, 1.0, 1.0], [0.85, 1.0, 1.0, 1.0]
         pasos = 22
-        s_fin = largo - 6.0
+        s_fin = largo - 4.0
         secc = []
         for i in range(pasos + 1):
             s = s_fin * i / pasos
@@ -334,7 +334,7 @@ class CargadorAK(Familia):
         cuerpo = loftear(secc)
         # Placa de base: ligeramente más grande que el cuerpo.
         placa = []
-        for s, k in ((largo - 9.0, 1.02), (largo - 4.5, 1.07), (largo, 1.05)):
+        for s, k in ((largo - 12.0, 1.08), (largo - 6.0, 1.09), (largo, 1.07)):
             c, t = _espina(s, radio, theta0)
             placa.append(seccion_curva(c, t, a * k, b * k, n=3.2))
         cuerpo = cuerpo + loftear(placa)
@@ -363,13 +363,13 @@ class CargadorAK(Familia):
         c, t = _espina(0.03 * largo, radio, theta0)
         nx, ny = t[1], -t[0]
         giro = math.degrees(math.atan2(t[0], -t[1]))
-        cuerpo = cuerpo + Pos(c[0] - nx * (a + 1.5), c[1] - ny * (a + 1.5), 0) * Rot(0, 0, giro) * caja_redonda(
+        cuerpo = cuerpo + Pos(c[0] - nx * (a + 0.5), c[1] - ny * (a + 0.5), 0) * Rot(0, 0, giro) * caja_redonda(
             -3.5, 3.5, -5, 5, -b * 0.55, b * 0.55, 1.2, ejes="x"
         )
         c, t = _espina(0.12 * largo, radio, theta0)
         nx, ny = t[1], -t[0]
         giro = math.degrees(math.atan2(t[0], -t[1]))
-        cuerpo = cuerpo + Pos(c[0] + nx * (a + 1.0), c[1] + ny * (a + 1.0), 0) * Rot(0, 0, giro) * caja_redonda(
+        cuerpo = cuerpo + Pos(c[0] + nx * a, c[1] + ny * a, 0) * Rot(0, 0, giro) * caja_redonda(
             -2.5, 2.5, -7, 7, -b * 0.5, b * 0.5, 1.0, ejes="x"
         )
         vaciados += 2
