@@ -1,0 +1,1365 @@
+{
+  "esquema": "m4-tanda3-culatas/v1",
+  "generado": "2026-11-17",
+  "nota": "Tanda 3 de culatas (telescópicas, fija A2, plegable, skeleton, brace) y bocas (jaula A1, compensadores, cuña, adaptador de silenciador, rosca falsa y tapón) por generador paramétrico: solo formas exteriores, genéricas y sin marcas. Los GLB viven en apps/pipeline/salida/ (ignorada por git). Todo es es_demo: parámetros de barrido y proporciones estimadas (confianza baja). Nada es publicable ni pasa de T1 sin vistas licenciadas.",
+  "piezas": [
+    {
+      "id": "culata-6pos-cerrada",
+      "elemento": "culata-culata-de-6-posiciones-tipo-carabina-generica",
+      "origen": "generador",
+      "familia": "culata.telescopica_6pos",
+      "id_variante": "culata.telescopica_6pos@v1-201b8d96c51b",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-6pos-cerrada.glb",
+      "sha256_glb": "62d0cd7081b206d11d4c83e2f27a28984e475a5c6c5646b49d0ae20270e0f898",
+      "bytes": 177792,
+      "triangulos": 5380,
+      "aristas_abiertas": 0,
+      "dim_mm": [258.0, 90.1355, 46.8699],
+      "parametros": {
+        "especificacion": "milspec",
+        "diametro_tubo": 29.16,
+        "incluir_tubo": true,
+        "longitud_cuerpo": 170.0,
+        "alto_cantonera": 93.0,
+        "ancho": 46.0,
+        "paso_posicion": 12.0,
+        "posicion": 1
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_cuerpo",
+          "valor_mm": 170.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 93.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "paso_posicion",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Posición 1 (cerrada): el tubo queda dentro del cuerpo.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`.",
+        "Posición 1 de 6 (12 mm por posición, estimado)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-6pos-extendida",
+      "elemento": "culata-culata-car-m4-de-6-posiciones-tipo-m4-original",
+      "origen": "generador",
+      "familia": "culata.telescopica_6pos",
+      "id_variante": "culata.telescopica_6pos@v1-9032c2800a78",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-6pos-extendida.glb",
+      "sha256_glb": "f3bb0f0d1c3f6f1b5a98eae2ad34179a9529c6f04b8e71bba3e5804f9b29fe27",
+      "bytes": 212184,
+      "triangulos": 6336,
+      "aristas_abiertas": 0,
+      "dim_mm": [258.0, 90.1355, 46.8699],
+      "parametros": {
+        "especificacion": "milspec",
+        "diametro_tubo": 29.16,
+        "incluir_tubo": true,
+        "longitud_cuerpo": 170.0,
+        "alto_cantonera": 93.0,
+        "ancho": 46.0,
+        "paso_posicion": 12.0,
+        "posicion": 5
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_cuerpo",
+          "valor_mm": 170.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 93.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "paso_posicion",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Posición 5: se ve el tubo con su quilla y los taladros de posición.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`.",
+        "Posición 5 de 6 (12 mm por posición, estimado)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-polimero-str",
+      "elemento": "culata-culata-estilo-magpul-str",
+      "origen": "generador",
+      "familia": "culata.telescopica_polimero",
+      "id_variante": "culata.telescopica_polimero@v1-8e4458fd3dfe",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-polimero-str.glb",
+      "sha256_glb": "e336309a578f866c72e14988b6b036f6b4e29b0aecc141237798513f570c1e18",
+      "bytes": 164020,
+      "triangulos": 4966,
+      "aristas_abiertas": 0,
+      "dim_mm": [258.0, 95.8177, 51.8777],
+      "parametros": {
+        "especificacion": "milspec",
+        "diametro_tubo": 29.16,
+        "incluir_tubo": true,
+        "longitud_cuerpo": 170.0,
+        "alto_cantonera": 93.0,
+        "ancho": 46.0,
+        "paso_posicion": 12.0,
+        "posicion": 3,
+        "estilo": "str"
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_cuerpo",
+          "valor_mm": 170.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 93.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "paso_posicion",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Silueta genérica de mejilla alta y palanca ancha; sin marcas.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`.",
+        "Posición 3 de 6 (12 mm por posición, estimado)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-polimero-ctr",
+      "elemento": "culata-culata-estilo-magpul-ctr",
+      "origen": "generador",
+      "familia": "culata.telescopica_polimero",
+      "id_variante": "culata.telescopica_polimero@v1-4fdfa992260f",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-polimero-ctr.glb",
+      "sha256_glb": "45764e73eef3e456c8884de0f2ec217c34c931038f31e0923831eccb7554a40a",
+      "bytes": 213148,
+      "triangulos": 6624,
+      "aristas_abiertas": 0,
+      "dim_mm": [258.0, 83.2823, 49.7],
+      "parametros": {
+        "especificacion": "milspec",
+        "diametro_tubo": 29.16,
+        "incluir_tubo": true,
+        "longitud_cuerpo": 170.0,
+        "alto_cantonera": 93.0,
+        "ancho": 46.0,
+        "paso_posicion": 12.0,
+        "posicion": 3,
+        "estilo": "ctr"
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_cuerpo",
+          "valor_mm": 170.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 93.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "paso_posicion",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Silueta genérica esbelta con casquillos de correa laterales; sin marcas.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`.",
+        "Posición 3 de 6 (12 mm por posición, estimado)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-polimero-moe",
+      "elemento": "culata-culata-estilo-magpul-moe",
+      "origen": "generador",
+      "familia": "culata.telescopica_polimero",
+      "id_variante": "culata.telescopica_polimero@v1-98161b561da9",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-polimero-moe.glb",
+      "sha256_glb": "f69238fdef618a947b698f9428b21d6be574a1a33098e23b6f223cbc3f293db5",
+      "bytes": 177940,
+      "triangulos": 5564,
+      "aristas_abiertas": 0,
+      "dim_mm": [258.0, 88.0422, 50.9868],
+      "parametros": {
+        "especificacion": "milspec",
+        "diametro_tubo": 29.16,
+        "incluir_tubo": true,
+        "longitud_cuerpo": 170.0,
+        "alto_cantonera": 93.0,
+        "ancho": 46.0,
+        "paso_posicion": 12.0,
+        "posicion": 3,
+        "estilo": "moe"
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_cuerpo",
+          "valor_mm": 170.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 93.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "paso_posicion",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Silueta genérica redondeada; sin marcas.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`.",
+        "Posición 3 de 6 (12 mm por posición, estimado)."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-fija-a2",
+      "elemento": "culata-culata-fija-a2-carabina-larga-con-compartimento",
+      "origen": "generador",
+      "familia": "culata.fija_a2",
+      "id_variante": "culata.fija_a2@v1-9c65cd619ca3",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-fija-a2.glb",
+      "sha256_glb": "2857eaa7cecae4926284791e06360c1fa710b886d53e3e6ccd9f579731bcbae5",
+      "bytes": 155492,
+      "triangulos": 5028,
+      "aristas_abiertas": 0,
+      "dim_mm": [250.0, 114.6648, 50.7638],
+      "parametros": {
+        "especificacion": "milspec",
+        "incluir_tubo": true,
+        "longitud": 250.0,
+        "alto_cantonera": 112.0,
+        "ancho": 46.0,
+        "diametro_tubo": 29.16
+      },
+      "cotas": [
+        {
+          "clave": "longitud",
+          "valor_mm": 250.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 112.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Cuerpo largo con tapa de compartimento marcada, tornillo superior y tetón con anilla.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "Sin tubo propio: la culata fija envuelve el tubo de amortiguador."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-plegable-desplegada",
+      "elemento": "culata-culata-plegable-lateral-con-adaptador-ar",
+      "origen": "generador",
+      "familia": "culata.plegable_lateral",
+      "id_variante": "culata.plegable_lateral@v1-96926c7eb5f1",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-plegable-desplegada.glb",
+      "sha256_glb": "5fb80a7327da591f0d2ebcc5fdb64187b98d5c190c0c025f57b2401a4c2b6631",
+      "bytes": 141836,
+      "triangulos": 4206,
+      "aristas_abiertas": 0,
+      "dim_mm": [250.4532, 117.8983, 66.4992],
+      "parametros": {
+        "longitud_brazo": 200.0,
+        "alto_cantonera": 85.0,
+        "desplazamiento_bisagra": 32.0,
+        "plegada": false
+      },
+      "cotas": [
+        {
+          "clave": "longitud_brazo",
+          "valor_mm": 200.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 85.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "desplazamiento_bisagra",
+          "valor_mm": 32.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["montaje-culata-plegable-ar"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Adaptador con bisagra lateral, brazo calado y cantonera.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "Brazo y cantonera descentrados hacia la bisagra (forma genérica); sin mecanismo de bloqueo."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-plegable-plegada",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "culata.plegable_lateral",
+      "id_variante": "culata.plegable_lateral@v1-4a5b110025fa",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-plegable-plegada.glb",
+      "sha256_glb": "07a04e1834a5d29f341d548d6134109dbb5dfbd625b0e66a0260ebdb1640960f",
+      "bytes": 144392,
+      "triangulos": 4262,
+      "aristas_abiertas": 0,
+      "dim_mm": [232.416, 117.8938, 86.4924],
+      "parametros": {
+        "longitud_brazo": 200.0,
+        "alto_cantonera": 85.0,
+        "desplazamiento_bisagra": 32.0,
+        "plegada": true
+      },
+      "cotas": [
+        {
+          "clave": "longitud_brazo",
+          "valor_mm": 200.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 85.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "desplazamiento_bisagra",
+          "valor_mm": 32.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["montaje-culata-plegable-ar"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Misma culata con el brazo girado 180 grados hacia delante.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "Brazo y cantonera descentrados hacia la bisagra (forma genérica); sin mecanismo de bloqueo."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-skeleton",
+      "elemento": "culata-culata-minima-de-pdw-sbr-tipo-cuchara-o-tirante",
+      "origen": "generador",
+      "familia": "culata.skeleton",
+      "id_variante": "culata.skeleton@v1-b0b7194523dc",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-skeleton.glb",
+      "sha256_glb": "f7c32bbe69db184d529e7104a9e8722741dc5d95adba1e09911720cf78dc9c55",
+      "bytes": 487052,
+      "triangulos": 17228,
+      "aristas_abiertas": 0,
+      "dim_mm": [226.9917, 129.0346, 46.7055],
+      "parametros": {
+        "especificacion": "milspec",
+        "incluir_tubo": true,
+        "diametro_tubo": 29.16,
+        "longitud": 220.0,
+        "alto_cantonera": 100.0,
+        "ancho": 46.0
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 220.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_cantonera",
+          "valor_mm": 100.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo", "socket.correa"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": ["anclaje-correa-qd-socket"],
+      "calidad": "aceptable",
+      "nota": "Dos largueros calados unidos por collar, travesaño y cantonera.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "Largueros planos de proporción estimada; sin posiciones de ajuste.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "culata-brace-pistola",
+      "elemento": "culata-culata-con-tirante-estabilizador-pistol-brace",
+      "origen": "generador",
+      "familia": "culata.brace_pistola",
+      "id_variante": "culata.brace_pistola@v1-50873ee7b3a7",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/culata-brace-pistola.glb",
+      "sha256_glb": "60acf914afff53d127ae982f67b8fa2affad19486daa57556470eee6436f78e3",
+      "bytes": 82204,
+      "triangulos": 2306,
+      "aristas_abiertas": 0,
+      "dim_mm": [190.0, 58.5124, 58.1654],
+      "parametros": {
+        "especificacion": "milspec",
+        "incluir_tubo": true,
+        "diametro_tubo": 29.16,
+        "longitud": 190.0,
+        "ancho_mayor": 62.0,
+        "alto_mayor": 60.0
+      },
+      "cotas": [
+        {
+          "clave": "diametro_tubo",
+          "valor_mm": 29.16,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 190.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_mayor",
+          "valor_mm": 62.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_mayor",
+          "valor_mm": 60.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.tubo"],
+      "requiere": ["tubo-culata-mil-spec"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Solo la forma de un brace de antebrazo genérico; no ligada a ningún arma real.",
+      "notas_geometria": [
+        "Solo forma exterior: sin hueco de batería, muelles ni mecanismo de bloqueo.",
+        "Solo la forma de un brace de antebrazo genérico: sin correa, sin ligar a ningún arma real.",
+        "El tubo y su quilla son referencia visual: el tubo real lo aporta `amortiguador.tubo`."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-jaula-a1",
+      "elemento": "boca-apagallamas-de-jaula-birdcage",
+      "origen": "generador",
+      "familia": "boca.jaula_a1",
+      "id_variante": "boca.jaula_a1@v1-d4a10a74559a",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-jaula-a1.glb",
+      "sha256_glb": "858a6222911fff8aa9f80e0a883226cfb20fbfa33360d5caf57dfdee5be0ab68",
+      "bytes": 63388,
+      "triangulos": 1582,
+      "aristas_abiertas": 0,
+      "dim_mm": [65.0, 19.0, 19.0],
+      "parametros": {
+        "longitud": 65.0,
+        "diametro": 19.0,
+        "diametro_paso": 8.0,
+        "profundidad_rosca": 12.0,
+        "rosca": "14mm_ccw",
+        "ancho_ranura": 3.0,
+        "longitud_ranura": 46.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 65.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 19.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 8.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_ranura",
+          "valor_mm": 3.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_ranura",
+          "valor_mm": 46.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Seis ranuras abiertas por delante con el fondo redondo.",
+      "notas_geometria": ["La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales."],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-compensador-2",
+      "elemento": "boca-compensador-de-boca-sin-supresion",
+      "origen": "generador",
+      "familia": "boca.compensador_camaras",
+      "id_variante": "boca.compensador_camaras@v1-9b6e322d030e",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-compensador-2.glb",
+      "sha256_glb": "9c67a3b2a3dab58117dbb355a78646c66dea6dbd537356184eb04beb21a82614",
+      "bytes": 65296,
+      "triangulos": 1674,
+      "aristas_abiertas": 0,
+      "dim_mm": [54.2, 22.0, 22.0],
+      "parametros": {
+        "longitud": 55.0,
+        "diametro": 22.0,
+        "diametro_paso": 8.0,
+        "profundidad_rosca": 12.0,
+        "rosca": "14mm_ccw",
+        "camaras": 2,
+        "ancho_ventana": 9.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 55.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 8.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_ventana",
+          "valor_mm": 9.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Dos cámaras abiertas arriba y a los lados, cara inferior cerrada.",
+      "notas_geometria": [
+        "La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales.",
+        "Cámaras abiertas arriba y a los lados; los tabiques se modelan como anillos macizos con paso."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-compensador-3",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "boca.compensador_camaras",
+      "id_variante": "boca.compensador_camaras@v1-be9980d481b3",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-compensador-3.glb",
+      "sha256_glb": "805e49458d73452bc4adcc78cd3aabd051894fb39c193950c8f7a37ef725e812",
+      "bytes": 82288,
+      "triangulos": 2134,
+      "aristas_abiertas": 0,
+      "dim_mm": [69.2, 22.0, 22.0],
+      "parametros": {
+        "longitud": 70.0,
+        "diametro": 22.0,
+        "diametro_paso": 8.0,
+        "profundidad_rosca": 12.0,
+        "rosca": "14mm_ccw",
+        "camaras": 3,
+        "ancho_ventana": 9.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 70.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 8.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_ventana",
+          "valor_mm": 9.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Tres cámaras; el mapa aún no tiene elemento propio.",
+      "notas_geometria": [
+        "La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales.",
+        "Cámaras abiertas arriba y a los lados; los tabiques se modelan como anillos macizos con paso."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-cuna-freno",
+      "elemento": "boca-freno-de-boca-muzzle-brake-estandar",
+      "origen": "generador",
+      "familia": "boca.cuna_freno",
+      "id_variante": "boca.cuna_freno@v1-908d69627321",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-cuna-freno.glb",
+      "sha256_glb": "97205ddddd67285677fc4e512cb08744c0445caebed5d0075471b11a8c8962a5",
+      "bytes": 62976,
+      "triangulos": 1614,
+      "aristas_abiertas": 0,
+      "dim_mm": [48.0, 24.0, 24.0],
+      "parametros": {
+        "longitud": 48.0,
+        "diametro": 24.0,
+        "diametro_paso": 8.0,
+        "profundidad_rosca": 12.0,
+        "rosca": "14mm_ccw",
+        "ranuras_laterales": 3,
+        "ancho_ranura": 2.6,
+        "angulo_cuna": 38.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 48.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 24.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 8.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho_ranura",
+          "valor_mm": 2.6,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Cara delantera en cuña y tres ranuras laterales inclinadas.",
+      "notas_geometria": ["La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales."],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-adaptador-silenciador",
+      "elemento": "boca-bocacha-con-adaptador-de-silenciador-qd",
+      "origen": "generador",
+      "familia": "boca.adaptador_silenciador",
+      "id_variante": "boca.adaptador_silenciador@v1-e38984f1cc13",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-adaptador-silenciador.glb",
+      "sha256_glb": "76322e526e524659128472bb8e53f7ec5809749bc1821bd8ef1e555dc2a8da49",
+      "bytes": 53388,
+      "triangulos": 1320,
+      "aristas_abiertas": 0,
+      "dim_mm": [34.0, 22.2782, 22.0],
+      "parametros": {
+        "longitud": 34.0,
+        "diametro": 22.0,
+        "diametro_paso": 8.0,
+        "profundidad_rosca": 12.0,
+        "rosca": "14mm_ccw",
+        "rosca_salida": "14mm_cw",
+        "largo_hexagono": 9.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 34.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 8.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "largo_hexagono",
+          "valor_mm": 9.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.salida"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": ["rosca-m14x1-cw"],
+      "calidad": "aceptable",
+      "nota": "Entrada 14 mm CCW, hexágono de llave y macho de salida 14 mm CW.",
+      "notas_geometria": [
+        "La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales.",
+        "El macho de salida es liso (sin hélice) y con la garganta de descarga a su base."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-rosca-falsa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "boca.rosca_falsa",
+      "id_variante": "boca.rosca_falsa@v1-c26f30567c62",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-rosca-falsa.glb",
+      "sha256_glb": "5e02b0fb6e214dda26c32a29481e0f4b64ddb685a17808a4fe052d2063363104",
+      "bytes": 110312,
+      "triangulos": 2916,
+      "aristas_abiertas": 0,
+      "dim_mm": [24.0, 21.0, 21.0],
+      "parametros": {
+        "longitud": 24.0,
+        "diametro": 21.0,
+        "longitud_rosca": 16.0,
+        "diametro_paso": 8.0,
+        "rosca": "14mm_ccw"
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 24.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 21.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 16.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro_paso",
+          "valor_mm": 8.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Anillos en V con el paso de 1 mm (no es hélice).",
+      "notas_geometria": [
+        "Rosca falsa: anillos en V con el paso real de 1 mm, no una hélice; solo aspecto.",
+        "No es una rosca funcional: no se modela el acoplamiento."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    },
+    {
+      "id": "boca-tapon-rosca",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "boca.tapon_rosca",
+      "id_variante": "boca.tapon_rosca@v1-6725d5fbd576",
+      "glb": "apps/pipeline/salida/tanda3-culatas-m4/boca-tapon-rosca.glb",
+      "sha256_glb": "0bf75562792ef82a8f85529a4860b15084e0fb3d42eb07f1b39b0e53904f3468",
+      "bytes": 96756,
+      "triangulos": 2480,
+      "aristas_abiertas": 0,
+      "dim_mm": [20.0, 21.0, 21.0],
+      "parametros": {
+        "longitud": 20.0,
+        "diametro": 21.0,
+        "profundidad_rosca": 14.0,
+        "rosca": "14mm_ccw",
+        "estrias": 24
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 21.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad_rosca",
+          "valor_mm": 14.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle"],
+      "requiere": ["rosca-m14x1-ccw"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Tapón ciego con 24 estrías de agarre.",
+      "notas_geometria": [
+        "La hélice de la rosca no se modela: el alojamiento es un taladro liso de 14 mm nominales.",
+        "Tapón ciego: sin la junta de goma ni la hélice interior."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)"
+    }
+  ]
+}
