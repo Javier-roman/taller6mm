@@ -4,10 +4,12 @@ import json
 from pathlib import Path
 
 import pytest
+from build123d import Align, Box, Pos
 
 from taller6mm_pipeline.familias import ParametroInvalidoError
 from taller6mm_pipeline.familias.detalle import grabar
 from taller6mm_pipeline.familias.glb import leer_glb
+from taller6mm_pipeline.familias.malla import teselar
 from taller6mm_pipeline.familias.oleada1_cuerpos import (
     FAMILIAS_CUERPOS,
     REGISTRO_POR_DEFECTO,
@@ -106,6 +108,31 @@ def test_dato_desconocido_es_null_con_bandera_y_nunca_inventado() -> None:
 def test_parametros_incoherentes_se_rechazan(familia: str, params: dict[str, object]) -> None:
     with pytest.raises(ParametroInvalidoError):
         FAMILIAS_CUERPOS[familia].generar(params)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("vid", [v.id for v in TANDA])
+def test_todas_las_mallas_de_la_tanda_estan_cerradas(vid: str) -> None:
+    malla = PIEZAS[vid].malla
+    assert malla is not None
+    assert malla.aristas_abiertas() == 0
+    assert malla.volumen_mm3 > 0
+
+
+def test_el_grabado_de_todas_las_letras_no_deja_aristas_abiertas() -> None:
+    # Los puntos de la fuente que se tocan por la esquina (A, R, M, S...) no deben dejar aristas de cuatro caras.
+    texto = "AIRSOFT 6MM SAFE SEMI AUTO"
+    placa = Pos(0, 0, 0) * Box(260.0, 12.0, 10.0, align=(Align.MIN, Align.MIN, Align.MAX))
+    pieza = placa - grabar(texto, 6.0, (2.0, 3.0, 0.0), (1, 0, 0), (0, 0, 1))
+    assert teselar(pieza, 0.05, 0.3).aristas_abiertas() == 0
+
+
+def test_canon_a2_tiene_escalones_y_rosca_en_anillos_sin_pasarse_de_la_longitud() -> None:
+    a2, ligero = PIEZAS["canon-a2-pesado"], PIEZAS["canon-carabina-ligero"]
+    assert a2.malla.dimensiones_mm[0] == pytest.approx(450.0, abs=0.01)
+    assert ligero.malla.dimensiones_mm[0] == pytest.approx(300.0, abs=0.01)
+    assert any("anillos en V" in n for n in a2.notas)
+    # La rosca de 14 x 1 aporta dientes: más triángulos que un tramo liso de la misma longitud.
+    assert len(a2.malla.triangulos) > 1300
 
 
 def test_grabado_usa_solo_letras_neutras() -> None:

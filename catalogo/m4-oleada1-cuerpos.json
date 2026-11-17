@@ -10,9 +10,9 @@
       "familia": "canon.exterior",
       "id_variante": "canon.exterior@v1-3c94be5a24c8",
       "glb": "apps/pipeline/salida/cuerpos-m4/canon-carabina-ligero.glb",
-      "sha256_glb": "8f1af6a8678d3cc95919866567e9a35f8e7c0bf33764e71218c5f07d860feda5",
-      "bytes": 47208,
-      "triangulos": 1148,
+      "sha256_glb": "abfa9f57a56f0aba48b419de1db4caf002664b9a7403c4730cccc6872c30e94b",
+      "bytes": 186944,
+      "triangulos": 4964,
       "aristas_abiertas": 0,
       "dim_mm": [300.0, 24.0, 24.0],
       "parametros": {
@@ -90,7 +90,8 @@
       "nota": "Perfil ligero de carabina.",
       "notas_geometria": [
         "Solo forma exterior: el cañón interior de precisión no se modela.",
-        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "La rosca de boca son anillos en V al paso de 14 x 1 mm (sin hélice), con garganta y hombro.",
+        "Escalones de extensión y boca, orificio del gas y hoyuelos del bloque: forma estimada.",
         "Distancia al bloque de gas y proporciones del escalón estimadas (confianza baja)."
       ],
       "nivel": null,
@@ -110,9 +111,9 @@
       "familia": "canon.exterior",
       "id_variante": "canon.exterior@v1-a66c7fc006cc",
       "glb": "apps/pipeline/salida/cuerpos-m4/canon-cqb-corto.glb",
-      "sha256_glb": "7f1e54482218d89b1ed17a95a96059305a72e8c8b3380d68a2d986ae8884cce5",
-      "bytes": 47208,
-      "triangulos": 1148,
+      "sha256_glb": "e351b32222580ed91229bbf050efe15e49ef9207b12830757b18e0fe699abb4e",
+      "bytes": 186944,
+      "triangulos": 4964,
       "aristas_abiertas": 0,
       "dim_mm": [240.0, 24.0, 24.0],
       "parametros": {
@@ -190,7 +191,8 @@
       "nota": "Cañón corto de CQB (gas de carabina).",
       "notas_geometria": [
         "Solo forma exterior: el cañón interior de precisión no se modela.",
-        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "La rosca de boca son anillos en V al paso de 14 x 1 mm (sin hélice), con garganta y hombro.",
+        "Escalones de extensión y boca, orificio del gas y hoyuelos del bloque: forma estimada.",
         "Distancia al bloque de gas y proporciones del escalón estimadas (confianza baja)."
       ],
       "nivel": null,
@@ -210,9 +212,9 @@
       "familia": "canon.exterior",
       "id_variante": "canon.exterior@v1-2ac9581d936e",
       "glb": "apps/pipeline/salida/cuerpos-m4/canon-mid-ligero.glb",
-      "sha256_glb": "708cde0b707c6ca1e0e98b70b1f41ee8c87430805b8a08d58c51a27a8392a50b",
-      "bytes": 47200,
-      "triangulos": 1148,
+      "sha256_glb": "694a00943d9ab6f2fbe528b5ceb39d25b51ed1786844d1dd7fe82d1f6a51aa7d",
+      "bytes": 186932,
+      "triangulos": 4964,
       "aristas_abiertas": 0,
       "dim_mm": [360.0, 24.0, 24.0],
       "parametros": {
@@ -290,7 +292,8 @@
       "nota": "Sistema de gas intermedio; el mapa aún no tiene elemento propio.",
       "notas_geometria": [
         "Solo forma exterior: el cañón interior de precisión no se modela.",
-        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "La rosca de boca son anillos en V al paso de 14 x 1 mm (sin hélice), con garganta y hombro.",
+        "Escalones de extensión y boca, orificio del gas y hoyuelos del bloque: forma estimada.",
         "Distancia al bloque de gas y proporciones del escalón estimadas (confianza baja)."
       ],
       "nivel": null,
@@ -310,9 +313,9 @@
       "familia": "canon.exterior",
       "id_variante": "canon.exterior@v1-fd273de81a3a",
       "glb": "apps/pipeline/salida/cuerpos-m4/canon-a2-pesado.glb",
-      "sha256_glb": "e1265bce0f694c6aa1886462aabb9a5fc818a345a64458a75a125cadb177a144",
-      "bytes": 57884,
-      "triangulos": 1472,
+      "sha256_glb": "91a6c9504e3bcb6760344faccd0195ed8df9cec77b81aad49e3bdf2e8a004496",
+      "bytes": 203692,
+      "triangulos": 5468,
       "aristas_abiertas": 0,
       "dim_mm": [450.0, 30.0, 30.0],
       "parametros": {
@@ -390,7 +393,8 @@
       "nota": "Perfil pesado con hombro cónico.",
       "notas_geometria": [
         "Solo forma exterior: el cañón interior de precisión no se modela.",
-        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "La rosca de boca son anillos en V al paso de 14 x 1 mm (sin hélice), con garganta y hombro.",
+        "Escalones de extensión y boca, orificio del gas y hoyuelos del bloque: forma estimada.",
         "Distancia al bloque de gas y proporciones del escalón estimadas (confianza baja)."
       ],
       "nivel": null,
@@ -410,9 +414,9 @@
       "familia": "canon.exterior",
       "id_variante": "canon.exterior@v1-000fc00d4a57",
       "glb": "apps/pipeline/salida/cuerpos-m4/canon-largo-pesado.glb",
-      "sha256_glb": "e6e2093809146045ef02a8ba04119b57f24a1a807d409f12a586e95eeb846762",
-      "bytes": 60484,
-      "triangulos": 1544,
+      "sha256_glb": "0187d1258a846dfa44e6eada09e4f21365ea3c21a1cd93836e18f91f07c5f361",
+      "bytes": 203700,
+      "triangulos": 5468,
       "aristas_abiertas": 0,
       "dim_mm": [560.0, 28.0, 28.0],
       "parametros": {
@@ -490,7 +494,8 @@
       "nota": "Cañón largo tipo DMR.",
       "notas_geometria": [
         "Solo forma exterior: el cañón interior de precisión no se modela.",
-        "La rosca de boca es un cilindro liso de 14 mm nominales (la hélice no se modela).",
+        "La rosca de boca son anillos en V al paso de 14 x 1 mm (sin hélice), con garganta y hombro.",
+        "Escalones de extensión y boca, orificio del gas y hoyuelos del bloque: forma estimada.",
         "Distancia al bloque de gas y proporciones del escalón estimadas (confianza baja)."
       ],
       "nivel": null,
@@ -690,10 +695,10 @@
       "familia": "receptor.superior",
       "id_variante": "receptor.superior@v1-9b2ad85eb1c0",
       "glb": "apps/pipeline/salida/cuerpos-m4/receptor-superior-a3.glb",
-      "sha256_glb": "14e908bd0a82252446d3ae3650244e238f1030e67057d431830d2f986fa3f179",
-      "bytes": 117228,
-      "triangulos": 2642,
-      "aristas_abiertas": 10,
+      "sha256_glb": "b63fc55dad88b4a2ec4094b8ab9670ddc07ef4c5584e2c50b4ddb1b52b7add0b",
+      "bytes": 117372,
+      "triangulos": 2652,
+      "aristas_abiertas": 0,
       "dim_mm": [281.0, 49.3218, 44.577],
       "parametros": {
         "variante": "a3_plano",
@@ -769,10 +774,10 @@
       "familia": "receptor.superior",
       "id_variante": "receptor.superior@v1-6eeac84df525",
       "glb": "apps/pipeline/salida/cuerpos-m4/receptor-superior-a3-forjado.glb",
-      "sha256_glb": "caf3e389de47179c797c0578453d0778f74fdbaea51e1be08f56114f66b6b2d0",
-      "bytes": 122396,
-      "triangulos": 2762,
-      "aristas_abiertas": 10,
+      "sha256_glb": "de823514faa2d50ac4cf29dc70574d745a8c1b7d92ee7689b20e551c3da66ad1",
+      "bytes": 122540,
+      "triangulos": 2772,
+      "aristas_abiertas": 0,
       "dim_mm": [281.0, 49.3218, 54.6002],
       "parametros": {
         "variante": "a3_plano",
@@ -849,10 +854,10 @@
       "familia": "receptor.superior",
       "id_variante": "receptor.superior@v1-17dbdf741906",
       "glb": "apps/pipeline/salida/cuerpos-m4/receptor-superior-a2-asa.glb",
-      "sha256_glb": "83dfa73f67a278dfe6f209cb6b9318406c4458396e76717253a54a6b0cffa729",
-      "bytes": 126128,
-      "triangulos": 2950,
-      "aristas_abiertas": 10,
+      "sha256_glb": "fcd280d57e6c0009d49d588453e65e9c2f269e826b6c9b587c55be533c05329a",
+      "bytes": 126272,
+      "triangulos": 2960,
+      "aristas_abiertas": 0,
       "dim_mm": [281.0, 79.0, 44.577],
       "parametros": {
         "variante": "a2_asa",
@@ -928,10 +933,10 @@
       "familia": "receptor.superior",
       "id_variante": "receptor.superior@v1-cb38aa70e87c",
       "glb": "apps/pipeline/salida/cuerpos-m4/receptor-superior-cqb.glb",
-      "sha256_glb": "de256f075c29be432e12971285dc89f4d0c73df8282072885531c8ed93677208",
-      "bytes": 88048,
-      "triangulos": 1922,
-      "aristas_abiertas": 10,
+      "sha256_glb": "e26b33f42d8e21350b08ce7d105521cb8e44093a15a9c26bd769975e98e6e102",
+      "bytes": 88192,
+      "triangulos": 1932,
+      "aristas_abiertas": 0,
       "dim_mm": [231.0, 49.3218, 44.0],
       "parametros": {
         "variante": "a3_plano",
@@ -1001,11 +1006,11 @@
       "familia": "receptor.inferior",
       "id_variante": "receptor.inferior@v1-725304712866",
       "glb": "apps/pipeline/salida/cuerpos-m4/receptor-inferior-estandar.glb",
-      "sha256_glb": "c557ada2bd9777a1565c2e6b5ae21fe4e3c2004a5089eacc4d25ea3b26a8e560",
-      "bytes": 172084,
-      "triangulos": 4102,
-      "aristas_abiertas": 20,
-      "dim_mm": [212.0, 105.0, 40.5],
+      "sha256_glb": "1705f034644bb94b0daa7f568c9f55468af2c6ebeafdec8e44d50d1271400fae",
+      "bytes": 289456,
+      "triangulos": 7278,
+      "aristas_abiertas": 0,
+      "dim_mm": [212.0, 105.0, 41.8],
       "parametros": {
         "longitud": 190.0,
         "ancho": 34.0,
@@ -1052,7 +1057,8 @@
       "nota": "Selector en seguro, tubo mil-spec.",
       "notas_geometria": [
         "Solo forma exterior: sin gearbox, gatillo ni cableado; macizo salvo pozo, guardamonte y torre.",
-        "Sin pistolete: el receptor lo recibe por el socket.pistolete. Ángulos del selector simplificados."
+        "Sin pistolete: el receptor lo recibe por el socket.pistolete. Ángulos del selector simplificados.",
+        "Guardamonte en arco, asiento del pistolete con tornillo y ranura del talón, boca del pozo acampanada, palanca del selector con lengüeta y pasadores en alojamientos: formas estimadas (confianza baja)."
       ],
       "nivel": null,
       "nivel_puerta": "T0",
@@ -1071,11 +1077,11 @@
       "familia": "receptor.inferior",
       "id_variante": "receptor.inferior@v1-cb78bec4f689",
       "glb": "apps/pipeline/salida/cuerpos-m4/receptor-inferior-ambidiestro.glb",
-      "sha256_glb": "a685ff5d589dbef14f52d82b94550bbe9b9518f5f95655c1969287759a33a6cc",
-      "bytes": 176884,
-      "triangulos": 4230,
-      "aristas_abiertas": 20,
-      "dim_mm": [212.0, 105.0, 40.5],
+      "sha256_glb": "e9dba9ed98c88ce0e15677b51c8f937894b74353be9bec3b912d1a256f627d55",
+      "bytes": 303908,
+      "triangulos": 7638,
+      "aristas_abiertas": 0,
+      "dim_mm": [212.0, 105.0, 41.8],
       "parametros": {
         "longitud": 190.0,
         "ancho": 34.0,
@@ -1122,7 +1128,8 @@
       "nota": "Selector doble en automático, tubo comercial.",
       "notas_geometria": [
         "Solo forma exterior: sin gearbox, gatillo ni cableado; macizo salvo pozo, guardamonte y torre.",
-        "Sin pistolete: el receptor lo recibe por el socket.pistolete. Ángulos del selector simplificados."
+        "Sin pistolete: el receptor lo recibe por el socket.pistolete. Ángulos del selector simplificados.",
+        "Guardamonte en arco, asiento del pistolete con tornillo y ranura del talón, boca del pozo acampanada, palanca del selector con lengüeta y pasadores en alojamientos: formas estimadas (confianza baja)."
       ],
       "nivel": null,
       "nivel_puerta": "T0",
@@ -1392,11 +1399,11 @@
       "familia": "montura.riser",
       "id_variante": "montura.riser@v1-eabd36f395c5",
       "glb": "apps/pipeline/salida/cuerpos-m4/montura-riser-t1.glb",
-      "sha256_glb": "a1ff09f74c6965a945300d66d936ec8755f8c8a61510c757ff9ea15c3fb21a60",
-      "bytes": 30056,
-      "triangulos": 630,
+      "sha256_glb": "0d7b93290bb9d87e1441cd3aa062a8c04c00e88e0208383cfb01919ab122e25e",
+      "bytes": 48776,
+      "triangulos": 1082,
       "aristas_abiertas": 0,
-      "dim_mm": [50.0, 30.4, 39.8045],
+      "dim_mm": [50.0, 30.0, 37.3365],
       "parametros": {
         "huella": "t1",
         "longitud": 50.0,
@@ -1449,10 +1456,11 @@
       "calidad": "aceptable",
       "nota": "Elevador con palanca; separación de tornillos sin dato.",
       "notas_geometria": [
-        "Mordazas, taco de retroceso y bulón simplificados: se ven las cabezas, no la rosca ni el muelle del apriete. El ancho del raíl es de confianza baja.",
+        "Mordazas, taco de retroceso y bulón simplificados: se ven la cabeza con hexágono, la tuerca y la punta, no la rosca ni el muelle del apriete. Las ranuras de la base van al paso del Picatinny. El ancho del raíl es de confianza baja.",
         "Huella genérica: la forma real de la óptica no se modela, solo el apoyo y los tornillos.",
         "Separación de tornillos sin dato: no se modelan los taladros de la huella.",
-        "Palanca QD reducida a una leva fija."
+        "Palanca QD reducida a una leva fija.",
+        "Laterales inclinados unos 9 grados (estimado, confianza baja); ranuras de la base al paso del raíl."
       ],
       "nivel": null,
       "nivel_puerta": "T0",
@@ -1471,11 +1479,11 @@
       "familia": "montura.riser",
       "id_variante": "montura.riser@v1-b7cc7bdbb687",
       "glb": "apps/pipeline/salida/cuerpos-m4/montura-riser-rmr.glb",
-      "sha256_glb": "9a382047c7ba965f1029aefcc674cf650db63ccb705391dc7bdebc2e3bba7564",
-      "bytes": 33728,
-      "triangulos": 748,
+      "sha256_glb": "57c6fa671d452c4349ea00768e078c3a50d398bf31573b9b5850951c0b7a84f1",
+      "bytes": 53764,
+      "triangulos": 1226,
       "aristas_abiertas": 0,
-      "dim_mm": [40.0, 22.4, 34.609],
+      "dim_mm": [40.0, 22.0, 35.609],
       "parametros": {
         "huella": "rmr",
         "longitud": 40.0,
@@ -1528,8 +1536,9 @@
       "calidad": "aceptable",
       "nota": "Montura baja para huella tipo RMR.",
       "notas_geometria": [
-        "Mordazas, taco de retroceso y bulón simplificados: se ven las cabezas, no la rosca ni el muelle del apriete. El ancho del raíl es de confianza baja.",
-        "Huella genérica: la forma real de la óptica no se modela, solo el apoyo y los tornillos."
+        "Mordazas, taco de retroceso y bulón simplificados: se ven la cabeza con hexágono, la tuerca y la punta, no la rosca ni el muelle del apriete. Las ranuras de la base van al paso del Picatinny. El ancho del raíl es de confianza baja.",
+        "Huella genérica: la forma real de la óptica no se modela, solo el apoyo y los tornillos.",
+        "Laterales inclinados unos 9 grados (estimado, confianza baja); ranuras de la base al paso del raíl."
       ],
       "nivel": null,
       "nivel_puerta": "T0",
@@ -1548,11 +1557,11 @@
       "familia": "montura.anillos",
       "id_variante": "montura.anillos@v1-592ca7627c79",
       "glb": "apps/pipeline/salida/cuerpos-m4/montura-anillos-30.glb",
-      "sha256_glb": "64f9fe59abea5fd1328d7a9cd198365d1d5b8efe54d70789150148343870194d",
-      "bytes": 68936,
-      "triangulos": 1564,
-      "aristas_abiertas": 8,
-      "dim_mm": [86.0, 60.4, 40.0],
+      "sha256_glb": "79171935b4617be7475d78c2ce7ce1a574ffdeab06c266de6fd2043a017a85d1",
+      "bytes": 128416,
+      "triangulos": 3144,
+      "aristas_abiertas": 0,
+      "dim_mm": [86.0, 60.0, 49.0],
       "parametros": {
         "diametro_tubo": "30",
         "anillos": 2,
@@ -1597,8 +1606,8 @@
       "calidad": "aceptable",
       "nota": "Dos anillos de 30 mm.",
       "notas_geometria": [
-        "Mordazas, taco de retroceso y bulón simplificados: se ven las cabezas, no la rosca ni el muelle del apriete. El ancho del raíl es de confianza baja.",
-        "Tornillos de la tapa reducidos a sus cabezas con hueco hexagonal."
+        "Mordazas, taco de retroceso y bulón simplificados: se ven la cabeza con hexágono, la tuerca y la punta, no la rosca ni el muelle del apriete. Las ranuras de la base van al paso del Picatinny. El ancho del raíl es de confianza baja.",
+        "Orejas y tornillos de la tapa: cabezas con hexágono; la junta es una rendija estimada."
       ],
       "nivel": null,
       "nivel_puerta": "T0",
@@ -1617,11 +1626,11 @@
       "familia": "montura.anillos",
       "id_variante": "montura.anillos@v1-8bb49256328e",
       "glb": "apps/pipeline/salida/cuerpos-m4/montura-anillos-34.glb",
-      "sha256_glb": "ccd6734da942192cdf474b0b9f10d7b8e89096aed9bbf3cdee68c5778cc4dda3",
-      "bytes": 35812,
-      "triangulos": 768,
-      "aristas_abiertas": 4,
-      "dim_mm": [22.0, 64.4, 44.0],
+      "sha256_glb": "82f75d6f26f1e8246d43141fff31adf5923907ecb6516ef1ba872c8b2775e50d",
+      "bytes": 65996,
+      "triangulos": 1566,
+      "aristas_abiertas": 0,
+      "dim_mm": [22.0, 64.0, 53.0],
       "parametros": {
         "diametro_tubo": "34",
         "anillos": 1,
@@ -1666,8 +1675,8 @@
       "calidad": "aceptable",
       "nota": "Un anillo de 34 mm.",
       "notas_geometria": [
-        "Mordazas, taco de retroceso y bulón simplificados: se ven las cabezas, no la rosca ni el muelle del apriete. El ancho del raíl es de confianza baja.",
-        "Tornillos de la tapa reducidos a sus cabezas con hueco hexagonal."
+        "Mordazas, taco de retroceso y bulón simplificados: se ven la cabeza con hexágono, la tuerca y la punta, no la rosca ni el muelle del apriete. Las ranuras de la base van al paso del Picatinny. El ancho del raíl es de confianza baja.",
+        "Orejas y tornillos de la tapa: cabezas con hexágono; la junta es una rendija estimada."
       ],
       "nivel": null,
       "nivel_puerta": "T0",
