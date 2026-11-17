@@ -37,6 +37,7 @@ from taller6mm_pipeline.ensamblador.reglas import (
     Veredicto,
     evaluar_union,
 )
+from taller6mm_pipeline.familias.rail_picatinny import centros_ranuras_mm
 
 ESQUEMA_MANIFIESTO = "m4-builds/v1"
 ESQUEMA_INFORME = "m4-ensamblaje/v1"
@@ -85,7 +86,7 @@ def _caja_marcador(centro: tuple[float, float, float], dim: tuple[float, float, 
         ],
         dtype=np.uint32,
     )
-    return v, t
+    return v, np.ascontiguousarray(t[:, ::-1])  # orientación hacia fuera (la lista de arriba está al revés)
 
 
 def _validar_manifiesto(build: Mapping[str, Any]) -> None:
@@ -246,7 +247,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
                 {
                     "tipo": "socket_ausente",
                     "pieza": hid,
-                    "detalle": f"{hijo.familia_id} no define socket: se coloca en el socket «{sp.slot_key}» de {pid} con su origen",
+                    "detalle": f"{hijo.familia_id} no define socket: va en «{sp.slot_key}» de {pid} con su origen",
                 }
             )
         mp = mundo[pid]
@@ -255,7 +256,12 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
         tang = marco_p[:3, 0]
         desliz = float(m.get("deslizar_mm", 0.0))
         riel = None
-        if m.get("posicion_riel_mm") is not None:
+        pos_riel = m.get("posicion_riel_mm")
+        if m.get("ranura_riel") is not None:
+            # El taco de retroceso de la montura (en el centro de su socket) va en el centro de una ranura.
+            k = int(m["ranura_riel"])
+            pos_riel = centros_ranuras_mm(k + 1)[k]
+        if pos_riel is not None:
             tramo = _tramo_riel(padre, sp)
             if tramo is None:
                 huecos.append(
@@ -267,7 +273,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
                 )
             else:
                 sock_t = 0.0  # el tramo se mide en el marco del propio socket
-                desliz += tramo[0] + float(m["posicion_riel_mm"]) - sock_t
+                desliz += tramo[0] + float(pos_riel) - sock_t
         if m.get("alinear") == "origen_comun":
             # Los dos cuerpos comparten el origen (extremo trasero) sobre la tangente: el socket de unión es de
             # centro y no da posición axial.
@@ -276,7 +282,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
             desliz += float(np.dot(origen_padre - origen_hijo, tang))
         mh = geometria.trasladar(*(tang * desliz)) @ mh
         mundo[hid] = mh
-        if hijo.tiene_malla and padre.tiene_malla and m.get("posicion_riel_mm") is not None and sp is not None:
+        if hijo.tiene_malla and padre.tiene_malla and pos_riel is not None:
             tramo = _tramo_riel(padre, sp)
             if tramo is not None:
                 local = (geometria.aplicar(mh, hijo.vertices_mm) - marco_p[:3, 3]) @ marco_p[:3, :3]  # type: ignore[arg-type]
@@ -296,6 +302,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
         montajes_out.append(entrada)
         pares_montados.add(frozenset((hid, pid)))
         frame = mh @ _marco(sh) if sh is not None else marco_p
+        entrada["_centro"] = [float(v) for v in frame[:3, 3]]
         vacios.append(
             NodoVacio(
                 f"montaje.{hid}.{pid}",
@@ -392,7 +399,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
         if m_out.get("estado") == "sin_colocar" or a not in mallas_mundo or b not in mallas_mundo:
             continue
         sp = piezas[b].socket(m_out["socket_padre"])
-        centro = (mundo[b] @ _marco(sp))[:3, 3]  # type: ignore[arg-type]
+        centro = np.asarray(m_out["_centro"])
         h = colisiones.holgura(mallas_mundo[a], mallas_mundo[b], centro)
         m_out["holgura_mm"] = None if h == float("inf") else round(h, 2)
         if h > HUECO_FISICO_MM:
@@ -406,6 +413,8 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
                 }
             )
 
+    for m_out in montajes_out:
+        m_out.pop("_centro", None)
     cruzadas = _cruzadas(piezas)
     estados = [m.get("estado") for m in montajes_out]
     informe = {

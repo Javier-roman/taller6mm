@@ -16,6 +16,7 @@
             "longitud": 250.0,
             "ancho": 34.0,
             "alto": 40.0,
+            "asa_armado": false,
             "variante": "a3_plano"
           }
         },
@@ -269,6 +270,7 @@
             "longitud": 200.0,
             "ancho": 34.0,
             "alto": 40.0,
+            "asa_armado": false,
             "variante": "a3_plano",
             "tapa": "sin",
             "forward_assist": false
@@ -508,9 +510,11 @@
         {
           "hijo": "apagallamas",
           "padre": "canon",
-          "socket_hijo": "muzzle",
+          "socket_hijo": null,
           "socket_padre": "muzzle",
-          "modo": "opuestos"
+          "modo": "coaxial",
+          "eje": "x",
+          "nota": "La bocacha no define socket: va con su origen en el extremo del cañón."
         },
         {
           "hijo": "tubo",
@@ -556,7 +560,7 @@
           "socket_hijo": "rail.base",
           "socket_padre": "rail.top",
           "modo": "opuestos",
-          "posicion_riel_mm": 10.0
+          "posicion_riel_mm": 25.0
         },
         {
           "hijo": "buis-delantera",
@@ -580,7 +584,7 @@
           "socket_hijo": "rail",
           "socket_padre": "rail.top",
           "modo": "opuestos",
-          "posicion_riel_mm": 70.0
+          "ranura_riel": 7
         },
         {
           "hijo": "red-dot",
@@ -605,6 +609,7 @@
             "longitud": 250.0,
             "ancho": 34.0,
             "alto": 40.0,
+            "asa_armado": false,
             "variante": "a2_asa"
           }
         },

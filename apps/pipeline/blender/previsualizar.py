@@ -3,7 +3,7 @@
     blender --background --factory-startup --python apps/pipeline/blender/previsualizar.py -- \
         --lista lista.json
 
-`lista.json`: [{"glb": "ruta.glb", "png": "salida.png", "mat": "polimero|anodizado|auto", "vista": "izq|der|atras|lado"}].
+`lista.json`: [{"glb": "a.glb", "png": "a.png", "mat": "polimero|anodizado|auto", "vista": "izq|der|atras|lado"}].
 Con `"mat": "auto"` (conjuntos del ensamblador) cada objeto toma el material por su nombre y su `rol`: los
 `marcador.*` (piezas sin malla) salen en naranja translúcido; pistolete y guardamanos, en polímero; el resto, anodizado.
 Solo para revisar a ojo cómo se ve una pieza: el material es procedural y propio (no sale de ninguna foto) y nada
