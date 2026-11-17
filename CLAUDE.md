@@ -100,8 +100,8 @@ docs              Especificación, ADRs, informes de fase, runbooks, referencias
 - Tarea no trivial → **modo plan** primero: propuesta, OK de Javi, implementación en rebanadas verticales.
 - Decisión con impacto → ADR (`/adr`). Cambio de comportamiento → actualiza el doc de `docs/` en el mismo PR.
 - **Pregunta antes de**: contratar o activar servicios de pago, cambiar un ADR aceptado, dar de alta un dominio para rastrear, cualquier petición `--live` a tiendas, desplegar a producción, migraciones remotas, borrar datos, añadir una dependencia de cliente de más de 30 KB gz.
-- Skills: `/verify` (antes de cada commit), `/revisar-ui <ruta>`, `/nueva-tienda`, `/nueva-replica`, `/adr`, `/informe-fase <n>`, `/gemini <tarea>`.
-- Subagentes: `critico-diseno`, `revisor-seguridad`, `ingeniero-ingesta`, `revisor-fidelidad`, `auditor-rendimiento` (pásalos al cerrar cada rebanada de su área), `documentador` (docs, CHANGELOG, README) y `delegado-gemini`. Para búsquedas amplias en el código, `Explore`.
+- Skills: `/verify` (antes de cada commit), `/revisar-ui <ruta>`, `/nueva-tienda`, `/nueva-replica`, `/adr`, `/informe-fase <n>`, `/gemini <tarea>`, `/mejorar-piezas [familia]`.
+- Subagentes: `critico-diseno`, `revisor-seguridad`, `ingeniero-ingesta`, `revisor-fidelidad`, `auditor-rendimiento` (pásalos al cerrar cada rebanada de su área), `documentador` (docs, CHANGELOG, README), `mejorador-piezas` (mejora las piezas 3D hasta pasar la puerta de calidad, docs/05 §12) y `delegado-gemini`. Para búsquedas amplias en el código, `Explore`.
 - **Mira lo que construyes**: usa el MCP de Playwright (capturas a 390 px y 1440 px) antes de dar algo por bueno.
 - **El diseño es lo más importante para Javi.** En cada hito visual, para y enséñale capturas en escritorio y móvil, pasadas antes por `critico-diseno`. No continúes ni fusiones sin su OK explícito. Antes de construir La Armería (Fase 1), presenta varias propuestas con capturas basadas en `docs/referencias/` y espera a que elija.
 - Explica a Javi cada decisión importante en 2-3 líneas: qué, por qué y qué alternativa descartaste. Sin jerga innecesaria.
