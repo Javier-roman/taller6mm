@@ -1,0 +1,327 @@
+/*
+ * Visor de prueba (/visor-prueba). Solo tokens de @taller6mm/ui: colores, espacios, radios, trazos,
+ * duraciones y curvas. Los únicos valores propios son proporciones del lienzo (dvh) y columnas hechas con
+ * múltiplos de tokens. Móvil (390 px) como base; el panel pasa al lado a partir de escritorio.
+ */
+@layer components {
+  .t6-visor {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-6);
+    inline-size: 100%;
+    max-inline-size: var(--ancho-pagina);
+    margin-inline: auto;
+    padding: var(--espacio-4);
+  }
+
+  .t6-visor__cabecera {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+  }
+
+  .t6-visor__titulo {
+    margin: 0;
+    font-family: var(--fuente-grabado);
+    font-size: var(--texto-2xl);
+    letter-spacing: var(--interletra-grabado);
+    text-transform: uppercase;
+  }
+
+  .t6-visor__aviso,
+  .t6-visor__ayuda,
+  .t6-visor__nota,
+  .t6-visor__descripcion {
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-s);
+    max-inline-size: var(--ancho-entradilla);
+  }
+
+  .t6-visor__cuerpo {
+    display: grid;
+    gap: var(--espacio-6);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .t6-visor__escena {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-3);
+    min-inline-size: 0;
+  }
+
+  /* Lienzo: el fondo lo pinta la escena (color del preset); aquí solo el marco. */
+  .t6-visor__lienzo {
+    position: relative;
+    overflow: hidden;
+    block-size: 62dvh;
+    min-block-size: calc(var(--espacio-24) * 3.5);
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-l);
+    background-color: var(--carbon);
+    box-shadow: var(--sombra-hundida);
+    touch-action: pan-y;
+  }
+
+  .t6-visor__lienzo canvas {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .t6-visor__estado {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--espacio-6);
+    pointer-events: none;
+  }
+
+  .t6-visor__estado--texto {
+    margin: 0;
+    color: var(--hueso);
+    text-align: center;
+    pointer-events: auto;
+  }
+
+  .t6-visor__barra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2);
+  }
+
+  .t6-visor__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+    min-inline-size: 0;
+  }
+
+  .t6-visor__campo,
+  .t6-visor__luces {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .t6-visor__etiqueta {
+    padding: 0;
+    color: var(--niebla);
+    font-family: var(--fuente-rotulo);
+    font-size: var(--texto-s);
+    letter-spacing: var(--interletra-rotulo);
+    text-transform: uppercase;
+  }
+
+  .t6-visor__selector {
+    inline-size: 100%;
+    min-block-size: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-3);
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-m);
+    background-color: var(--carbon);
+    color: var(--hueso);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-s);
+  }
+
+  .t6-visor__selector:disabled {
+    color: var(--estado-desconocido);
+  }
+
+  /* Presets: radios nativos con aspecto de botones; el foco del radio se ve en la etiqueta. */
+  .t6-visor__opciones {
+    display: grid;
+    gap: var(--espacio-2);
+    grid-template-columns: repeat(auto-fit, minmax(calc(var(--espacio-12) * 2), 1fr));
+  }
+
+  .t6-visor__opcion {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-3);
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-m);
+    background-color: var(--carbon);
+    box-shadow: var(--sombra-boton);
+    color: var(--hueso);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      border-color var(--duracion-micro) var(--curva-mecanica),
+      background-color var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-visor__opcion:hover {
+    border-color: var(--laton);
+  }
+
+  .t6-visor__opcion input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .t6-visor__opcion:has(input:checked) {
+    border-color: var(--laton);
+    background-color: var(--laton);
+    box-shadow: var(--sombra-hundida);
+    color: var(--negro-pavonado);
+  }
+
+  .t6-visor__opcion:has(input:focus-visible) {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  .t6-visor__mas-luz {
+    align-self: flex-start;
+  }
+
+  .t6-visor__ficha {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+  }
+
+  .t6-visor__ficha p {
+    margin: 0;
+  }
+
+  .t6-visor__nombre {
+    font-weight: var(--peso-semi);
+    line-height: var(--interlineado-compacto);
+  }
+
+  .t6-visor__datos {
+    display: grid;
+    gap: var(--espacio-2);
+    margin: 0;
+  }
+
+  .t6-visor__datos > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--espacio-1) var(--espacio-4);
+  }
+
+  .t6-visor__datos dt {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+  }
+
+  .t6-visor__datos dd {
+    margin: 0;
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-s);
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  .t6-visor__detalle {
+    border-block-start: var(--trazo-fino) solid var(--acero);
+    padding-block-start: var(--espacio-3);
+  }
+
+  .t6-visor__detalle > summary {
+    min-block-size: var(--objetivo-tactil);
+    display: flex;
+    align-items: center;
+    color: var(--hueso);
+    font-weight: var(--peso-medio);
+    cursor: pointer;
+  }
+
+  .t6-visor__lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--texto-s);
+  }
+
+  .t6-visor__lista li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-1) var(--espacio-3);
+  }
+
+  .t6-visor__lista--notas li {
+    display: list-item;
+    margin-inline-start: var(--espacio-4);
+    list-style: disc;
+    color: var(--niebla);
+  }
+
+  .t6-visor__rol {
+    color: var(--hueso);
+    text-transform: capitalize;
+  }
+
+  .t6-visor__familia {
+    color: var(--niebla);
+    font-family: var(--fuente-datos);
+  }
+
+  .t6-visor__marca {
+    color: var(--estado-aviso);
+  }
+
+  .t6-visor__tabla {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: var(--texto-xs);
+  }
+
+  .t6-visor__tabla :is(th, td) {
+    padding: var(--espacio-1) var(--espacio-2);
+    border-block-end: var(--trazo-fino) solid var(--acero);
+    text-align: start;
+    font-family: var(--fuente-datos);
+    font-weight: var(--peso-regular);
+    overflow-wrap: anywhere;
+  }
+
+  .t6-visor__tabla thead th {
+    color: var(--niebla);
+    font-family: var(--fuente-interfaz);
+  }
+
+  .t6-visor__sin-js {
+    padding: var(--espacio-4);
+    color: var(--hueso);
+  }
+
+  /* Escritorio: lienzo a la izquierda y panel a la derecha, a la altura de la ventana. */
+  @media (min-width: 52.125rem) {
+    .t6-visor {
+      padding: var(--espacio-8);
+    }
+
+    .t6-visor__cuerpo {
+      grid-template-columns: minmax(0, 1fr) calc(var(--espacio-24) * 4);
+      align-items: start;
+    }
+
+    .t6-visor__lienzo {
+      block-size: 72dvh;
+      min-block-size: calc(var(--espacio-24) * 5);
+    }
+  }
+}

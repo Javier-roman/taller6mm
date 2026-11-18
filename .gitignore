@@ -10,6 +10,9 @@ coverage/
 playwright-report/
 test-results/
 .lighthouseci/
+# Modelos de desarrollo del visor de prueba (se generan con apps/web/scripts/prototipos/visor-preparar.mjs; T0, no publicables)
+apps/web/public/dev/
+
 # Salida del MCP de Playwright (instantáneas, capturas sin nombre, consola)
 .playwright-mcp/
 

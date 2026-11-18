@@ -1,0 +1,29 @@
+---
+// /visor-prueba: visor 3D de prueba, germen de El Banco (no El Banco). Ruta interna: `noindex`, sin
+// enlaces desde el resto de la web y con los modelos T0 de desarrollo (public/dev/, ignorada por git).
+// El 3D es una isla `client:only="react"`; el 3D con Meshopt necesita WebAssembly, así que la CSP se
+// amplía SOLO en esta ruta con `'wasm-unsafe-eval'` (ADR-0002 §6) y nada más: ni workers `blob:` ni `img-src blob:`.
+import '../components/visor/visor.css';
+import VisorPrueba from '../components/visor/VisorPrueba.tsx';
+import Base from '../layouts/Base.astro';
+
+export const prerender = true;
+
+Astro.csp?.insertScriptResource("'wasm-unsafe-eval'");
+---
+
+<Base
+  title="Visor de prueba"
+  description="Prototipo interno del visor 3D de Taller6mm: piezas y montajes M4 de demostración con distintas luces."
+  noindex
+>
+  <main id="contenido">
+    <noscript>
+      <p class="t6-visor__sin-js">
+        El visor 3D necesita JavaScript. Sin él no hay escena, pero la lista de piezas del catálogo sigue en la
+        documentación del proyecto.
+      </p>
+    </noscript>
+    <VisorPrueba client:only="react" />
+  </main>
+</Base>
