@@ -245,13 +245,13 @@ Los umbrales viven en `catalogo/calidad-minimos.json`: un `defecto` y sobrescrit
 | Simetría (4) | centro de masa a ≤ 3 % (5 % en curvas) del centro de la caja | Lo lateral debe estar centrado en Z. |
 | Componentes (5) | ≤ 6 (24 en la BUIS, que lleva piezas móviles) | Caza flotantes y uniones mal hechas. |
 
-Los umbrales se calibraron sobre las piezas actuales: no certifican realismo (eso es el IoU de §6.3 y el `revisor-fidelidad`), solo dejan fuera lo evidentemente pobre y dan al `mejorador-piezas` objetivos concretos. Un umbral que parezca injusto para una familia se cambia en el JSON con su motivo, nunca desactivando el criterio.
+Los umbrales se calibraron sobre las piezas actuales: no certifican realismo (eso es el IoU de §6.3 y el `revisor-fidelidad`), solo dejan fuera lo evidentemente pobre y dan al `mejorador-escalador` objetivos concretos. Un umbral que parezca injusto para una familia se cambia en el JSON con su motivo, nunca desactivando el criterio.
 
 **Ensamblajes**: pasan si no hay colisiones entre piezas montadas, ni huecos físicos de más de 1 mm entre piezas que deben tocarse, ni montajes incompatibles, sin datos o sin colocar (los huecos de datos se listan como banderas).
 
 ### 12.2 Bucle y regresiones
 
-Cada ejecución añade una entrada a `historial.json` (puntuación y estado de cada pieza). Si una pieza baja más de 1 punto o pasa de «pasa» a «no pasa» respecto a la última ejecución que la contenía, el bucle imprime `REGRESION` y la anota en la cola (`--estricto` devuelve el código 2). La cola va de peor a mejor (fallos duros primero) con el fallo principal, la sugerencia concreta y el archivo del generador. El subagente `mejorador-piezas` (Sonnet) toma el primero, lo mejora, vuelve a medir y repite hasta pasar o llegar al máximo de rondas; la skill `/mejorar-piezas` lo lanza. La hoja de contacto es para el revisor visual: la puerta mide, no juzga el parecido.
+Cada ejecución añade una entrada a `historial.json` (puntuación y estado de cada pieza). Si una pieza baja más de 1 punto o pasa de «pasa» a «no pasa» respecto a la última ejecución que la contenía, el bucle imprime `REGRESION` y la anota en la cola (`--estricto` devuelve el código 2). La cola va de peor a mejor (fallos duros primero) con el fallo principal, la sugerencia concreta y el archivo del generador. El subagente `mejorador-escalador` (Sonnet) toma el primero, lo mejora, vuelve a medir y repite hasta pasar o llegar al máximo de rondas; la skill `/mejorar-piezas` lo lanza. La hoja de contacto es para el revisor visual: la puerta mide, no juzga el parecido.
 
 ## 13. Escalera de calidad (de «pasa la puerta» a «imagen viva»)
 
@@ -278,7 +278,7 @@ Cada nivel puntúa 0-100 con la media ponderada de la fracción que cumple cada 
 
 **Render** (`apps/pipeline/blender/escalera_render.py`, Blender portátil de `C:\tools\blender`): N1 arcilla gris; N2 arcilla con oclusión y realce de aristas para ver el detalle; N3 PBR; N4 con desgaste y suciedad; N5 con estudio (guía §7: fondo gris medio, clave, relleno 3:1, dos tiras de contraluz, suelo semirreflectante, f/5,6) y Cycles con denoiser. Cada familia tiene además un render de conjunto N5 con todas sus piezas bajo la misma luz. Las vistas se cachean por hash del GLB, de la receta, de los mapas CC0 y del script.
 
-**Reglas**: la apariencia no cambia el nivel de fidelidad (todo sigue en T0 y `publicable_3d=false`, §1); las fotos de terceros nunca son textura; un umbral injusto se cambia en el JSON con su motivo, nunca desactivando el criterio. El subagente `escalador-calidad` (Sonnet) y la skill `/escalar-piezas` toman la cola del siguiente peldaño y la elevan sin parar hasta el techo: en N1 y N2 editan el generador de la familia; en N3-N5, solo la biblioteca, el catálogo y el script de render.
+**Reglas**: la apariencia no cambia el nivel de fidelidad (todo sigue en T0 y `publicable_3d=false`, §1); las fotos de terceros nunca son textura; un umbral injusto se cambia en el JSON con su motivo, nunca desactivando el criterio. El subagente `mejorador-escalador` (Sonnet) y la skill `/escalar-piezas` toman la cola del siguiente peldaño y la elevan sin parar hasta el techo: en N1 y N2 editan el generador de la familia; en N3-N5, solo la biblioteca, el catálogo y el script de render.
 
 **Huecos conocidos**: el ensamblaje de un build entero (N5 «piezas coherentes») se mide hoy por la variación entre piezas de un mismo material y por el render de conjunto de cada familia; el build completo espera a que el kit M4 esté disponible en local. Faltan el HDRI de estudio CC0 de la guía §7 (se usa un entorno procedural con cajas de luz), el contraste entre materiales adyacentes (§3, solo hay piezas de un material) y la luz rasante de control (§7.4). N2 mide si el detalle fino existe, no si es el correcto (eso es el `revisor-fidelidad`).
 
