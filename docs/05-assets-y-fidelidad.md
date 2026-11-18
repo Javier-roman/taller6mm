@@ -282,6 +282,32 @@ Cada nivel puntúa 0-100 con la media ponderada de la fracción que cumple cada 
 
 **Huecos conocidos**: el ensamblaje de un build entero (N5 «piezas coherentes») se mide hoy por la variación entre piezas de un mismo material y por el render de conjunto de cada familia; el build completo espera a que el kit M4 esté disponible en local. Faltan el HDRI de estudio CC0 de la guía §7 (se usa un entorno procedural con cajas de luz), el contraste entre materiales adyacentes (§3, solo hay piezas de un material) y la luz rasante de control (§7.4). N2 mide si el detalle fino existe, no si es el correcto (eso es el `revisor-fidelidad`).
 
+### 13.1 Iluminación y brillo (`catalogo/iluminacion-presets.json`)
+
+La escalera salía demasiado brillante y reluciente: el estudio antiguo tenía luces pequeñas y duras y un suelo casi espejo. Ahora la luz es un catálogo con tres presets, una sola fuente de verdad que leen Blender y el visor web:
+
+| Preset | Para qué | Rasgos |
+|---|---|---|
+| `mate_suave` (por defecto) | Juzgar forma y material; imagen de la escalera y de los ensamblajes | Softboxes grandes (2,6-2,8 d), clave y relleno casi 2:1, contraluz tenue (0,4-0,65 de la clave), suelo rugoso (0,75), exposición -0,35 EV, +0,06 de rugosidad |
+| `estudio_contraste` | Producto con más contraste | Luces pequeñas y duras, contraluz marcado (hasta 1,4 de la clave), suelo 0,45 |
+| `dramatica_penumbra` | Portada, La Armería | Fondo oscuro, clave lateral y contraluz que dibuja la silueta, -0,6 EV |
+
+```bash
+uv run python -m taller6mm_pipeline.calidad.escalera --iluminacion estudio_contraste --brillo 0.9 --brillo-material acero_pavonado=0.7
+uv run python -m taller6mm_pipeline.ensamblador.portada --iluminacion mate_suave   # ver §13.3
+```
+
+**Control de brillo.** `--brillo` (global, 0,5-1,5) mueve la exposición (EV del preset + log2 del factor) y desplaza la rugosidad de todos los materiales en `(1 - factor) x 0,12`. `--brillo-material id=f` (0,6-1,4) hace lo mismo para un material. La rugosidad media final de cada material **no sale nunca de la banda `rugosidad_media` de su base CC0 (`catalogo/materiales-cc0.json`) +/- 0,10** (guía de aspecto §2.3): un anodizado no puede ser espejo, ni un pavonado quedar mate. Solo el render de imagen (N3-N5 visual) usa esa rugosidad; las **sondas** de medida siguen leyendo la receta, para que las métricas de N3 y N4 no dependan de la luz. La clave de caché incluye el preset y el brillo.
+
+**Formato para el visor web.** El visor lee el mismo JSON y no tiene que reimplementar nada del pipeline:
+
+- `defecto`: nombre del preset por defecto. `presets.<nombre>`: `exposicion_ev`, `tono` (`AgX`, que three.js tiene como `AgXToneMapping`), `mundo` (`abajo` y `arriba`: degradado vertical del fondo y del entorno, RGB lineal, y `intensidad`), `suelo` (color, rugosidad, metálico), `rugosidad_delta` y `luces`.
+- Cada luz: `id`, `dir` (dirección desde el centro de la pieza hacia la luz, sin normalizar), `dist` y `tam_d` en múltiplos de `d` (diagonal de la caja de la pieza, en metros), `color` y `energia_d2`. **El visor usa solo la razón `energia_d2 / energia_d2 de la clave`** como intensidad relativa de un `RectAreaLight` de lado `tam_d x d`, y fija la intensidad absoluta de la clave por exposición (Blender trabaja en vatios, three.js en cd/m2: no son comparables). Posición = centro + `dir` normalizada x `dist` x `d`, mirando al centro.
+- Brillo: la misma fórmula que arriba (`exposicion_ev + log2(brillo)`; rugosidad de cada material = media de la receta + `rugosidad_delta` + `(1 - factor) x rug_por_factor`, acotada a `banda_rugosidad` alrededor de la medida CC0). Los límites del control (`brillo.global`, `brillo.por_material`) son los del JSON: el control del visor debe respetarlos.
+- `materiales/iluminacion.py` (`resolver`, `aplicar`) es la implementación de referencia; devuelve el «plan de luz» (`iluminacion-plan/v1`) ya resuelto, con `relativa` en cada luz.
+
+Es apariencia interna: no cambia el nivel de fidelidad (T0) ni `publicable_3d`.
+
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
 - [ ] T0 generado para todo el catálogo semilla.
