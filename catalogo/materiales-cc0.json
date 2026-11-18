@@ -1,0 +1,653 @@
+{
+  "esquema": 1,
+  "titulo": "Biblioteca de materiales PBR de fuente abierta (CC0)",
+  "generado": "2026-11-17",
+  "nota": "Solo CC0 1.0 Universal. Los archivos viven en assets-src/materiales-cc0/ (ignorada por git); aquí solo hashes y procedencia. Son materia prima para la biblioteca propia (docs/05 §8): se ajustan a mano y se validan con un render común antes de usarse. Nunca se publican tal cual ni se mezclan con fotos de terceros. Las medidas (albedo y rugosidad medios) se calcularon sobre los mapas 1K con Pillow.",
+  "fuentes": [
+    {
+      "nombre": "ambientCG",
+      "licencia_leida": "CC0 1.0 Universal",
+      "pagina": "https://docs.ambientcg.com/license/",
+      "consulta": "2026-11-17",
+      "robots": "Allow: / (solo Disallow: /hx/)",
+      "via": "API v2 full_json y descarga oficial get?file="
+    },
+    {
+      "nombre": "Poly Haven",
+      "licencia_leida": "CC0 (enlace a creativecommons.org/publicdomain/zero/1.0/)",
+      "pagina": "https://polyhaven.com/license",
+      "consulta": "2026-11-17",
+      "robots": "sin restricciones para /api; la web prohíbe scraping, se usó solo api.polyhaven.com con User-Agent identificado",
+      "via": "api.polyhaven.com (files, info) y dl.polyhaven.org, md5 comprobado contra la API"
+    }
+  ],
+  "materiales": [
+    {
+      "id": "acg-metal027",
+      "fuente": "ambientCG",
+      "id_fuente": "Metal027",
+      "rol": "anodizado_negro",
+      "descripcion": "Metal negro mate recubierto (aproximación a anodizado/pintura en polvo)",
+      "url": "https://ambientcg.com/a/Metal027",
+      "url_descarga": "https://ambientcg.com/get?file=Metal027_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["black", "covered", "metal", "painted", "powder", "steel"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Metal027",
+      "archivos": [
+        {
+          "nombre": "Metal027.png",
+          "sha256": "2b6b4dbda2219a99fc8e95ddf622640ea081839ab993c5182df7d6d7049b9eb8"
+        },
+        {
+          "nombre": "Metal027_1K-JPG_Color.jpg",
+          "sha256": "8e2e69e767b2692da211723ccb7def5f27b9c7712c6952bc45c526e2a5183ae0"
+        },
+        {
+          "nombre": "Metal027_1K-JPG_Displacement.jpg",
+          "sha256": "6b492371d8146f6552c0ed2ac834adec5f7d35962d9945cd6c67231afa158b8c"
+        },
+        {
+          "nombre": "Metal027_1K-JPG_Metalness.jpg",
+          "sha256": "843102638fa0a5bf897888868877efab8ccdc4cb84a48e57bdb52bfb30f5e714"
+        },
+        {
+          "nombre": "Metal027_1K-JPG_NormalDX.jpg",
+          "sha256": "5f7cd5554bcd5f150130f150e1acadfe8a5d9cf8a8fa5c3784be0f1f77b325d8"
+        },
+        {
+          "nombre": "Metal027_1K-JPG_NormalGL.jpg",
+          "sha256": "afbf8ca3df45111ac5543174582b6b98cb1bf154f7c7ee8f198720042b92d7c8"
+        },
+        {
+          "nombre": "Metal027_1K-JPG_Roughness.jpg",
+          "sha256": "8f01484981a8bf83199d4f4cb435a344294cd80cb4ee623cf8567a7726fb289e"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [46, 45, 53],
+        "rugosidad_media": 0.649,
+        "metalico_medio": 1
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-metal038",
+      "fuente": "ambientCG",
+      "id_fuente": "Metal038",
+      "rol": "parkerizado",
+      "descripcion": "Acero gris oscuro con micro-rayado (aproximación a parkerizado y desgaste)",
+      "url": "https://ambientcg.com/a/Metal038",
+      "url_descarga": "https://ambientcg.com/get?file=Metal038_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["metal", "scratched", "steel"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Metal038",
+      "archivos": [
+        {
+          "nombre": "Metal038.png",
+          "sha256": "9eee1bbfc0e1db4b1f5894470ad899c998d0e59a8b1fd0ca5814987c969bd0c9"
+        },
+        {
+          "nombre": "Metal038_1K-JPG_Color.jpg",
+          "sha256": "f89631556587042a5973806c822af39928098743c28effcbab531d3dc68d7421"
+        },
+        {
+          "nombre": "Metal038_1K-JPG_Displacement.jpg",
+          "sha256": "303ee38d82cce5389283befd2bacba54393577ac7e0e11ac0084ba1d7a930151"
+        },
+        {
+          "nombre": "Metal038_1K-JPG_Metalness.jpg",
+          "sha256": "5f8ecd7ef3ac085d42b65f26c6ed099dbb8c25d687973e6bb60abd8b7e788e87"
+        },
+        {
+          "nombre": "Metal038_1K-JPG_NormalDX.jpg",
+          "sha256": "58c41873e852b6e75f36ffe7076f6d9cbd146d5424ee81461fb4984c36b72f77"
+        },
+        {
+          "nombre": "Metal038_1K-JPG_NormalGL.jpg",
+          "sha256": "0f49cbf317e84b7e0f058fa692b13c97b66daa75a77b3215bc21772cc931514e"
+        },
+        {
+          "nombre": "Metal038_1K-JPG_Roughness.jpg",
+          "sha256": "d34b92bb2514c17cff0922371b63820cebfba749ecf309e6511f8c7060703a2f"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [96, 97, 98],
+        "rugosidad_media": 0.366,
+        "metalico_medio": 0.996
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-metal063",
+      "fuente": "ambientCG",
+      "id_fuente": "Metal063",
+      "rol": "acero_pavonado",
+      "descripcion": "Acero negro brillante envejecido (aproximación a pavonado)",
+      "url": "https://ambientcg.com/a/Metal063",
+      "url_descarga": "https://ambientcg.com/get?file=Metal063_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": [
+        "aged",
+        "black",
+        "brown",
+        "dark",
+        "fine",
+        "glossy",
+        "industrial",
+        "metal",
+        "oxidized",
+        "polished",
+        "rust",
+        "rusty",
+        "smooth",
+        "steel"
+      ],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Metal063",
+      "archivos": [
+        {
+          "nombre": "Metal063.png",
+          "sha256": "654a65a825f2cb442530daf0b819084f8794cf92c2d0b4f20c49b2e456dc2d18"
+        },
+        {
+          "nombre": "Metal063_1K-JPG_Color.jpg",
+          "sha256": "d4122954971c26b529614f39fb12310de00005d44ce103430c35132f61fca077"
+        },
+        {
+          "nombre": "Metal063_1K-JPG_Displacement.jpg",
+          "sha256": "81e1cb4c96d23890c7626d44b705656c54c095a44fd1c8d72242d5d2265ac817"
+        },
+        {
+          "nombre": "Metal063_1K-JPG_Metalness.jpg",
+          "sha256": "1bd888a9fa307197fd5eaaa883561cfd8350ae634fce0d378e83b8e05632daf8"
+        },
+        {
+          "nombre": "Metal063_1K-JPG_NormalDX.jpg",
+          "sha256": "f8047e9357a2a02be152f81e30dd5290e19f3ecc33b9dadfed9835d707a56c84"
+        },
+        {
+          "nombre": "Metal063_1K-JPG_NormalGL.jpg",
+          "sha256": "51e521e2fafd01387216b52fce315e2f094a1fa6efab77a92e2c79870bb2df01"
+        },
+        {
+          "nombre": "Metal063_1K-JPG_Roughness.jpg",
+          "sha256": "e83993283739d0a5d350ecd15cf82969aa59ec6e2293bcc6a14aea8a92ba283d"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [111, 110, 107],
+        "rugosidad_media": 0.134,
+        "metalico_medio": 0.964
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-metal050c",
+      "fuente": "ambientCG",
+      "id_fuente": "Metal050C",
+      "rol": "metal_con_desgaste",
+      "descripcion": "Aluminio rayado y rugoso (bordes desgastados)",
+      "url": "https://ambientcg.com/a/Metal050C",
+      "url_descarga": "https://ambientcg.com/get?file=Metal050C_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["aluminum", "metal", "rough", "scratched"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Metal050C",
+      "archivos": [
+        {
+          "nombre": "Metal050C.png",
+          "sha256": "79745500855a27f3555cb1f81839499c703f6d3c5c175170486791fa4dba6742"
+        },
+        {
+          "nombre": "Metal050C_1K-JPG_Color.jpg",
+          "sha256": "6f5bd1993f5d8f2183921f5775c64f6ef16f9aa728d235dc4f3fb99780d9cf77"
+        },
+        {
+          "nombre": "Metal050C_1K-JPG_Displacement.jpg",
+          "sha256": "5621f9672ace2e8b202d66193852d4600f0e9628563485e93e438fdadab143cf"
+        },
+        {
+          "nombre": "Metal050C_1K-JPG_Metalness.jpg",
+          "sha256": "3353fab55b2399725c2a9d7151cafdd049c399e5fcc1e82951de4c553dcdad9c"
+        },
+        {
+          "nombre": "Metal050C_1K-JPG_NormalDX.jpg",
+          "sha256": "70a4b3d708e7461d2991d8d59ac153359de9bfac4ff52cb589de1636860bedde"
+        },
+        {
+          "nombre": "Metal050C_1K-JPG_NormalGL.jpg",
+          "sha256": "7b104c449eb733382792dbd69fdad066e6a80e20c66c1d78b1407478d7cd35ed"
+        },
+        {
+          "nombre": "Metal050C_1K-JPG_Roughness.jpg",
+          "sha256": "aa8b5c3e650ba7f6a7350b2364c642ce6a41cc9090d6e4c7fd7acfd0f6537bb1"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [245, 246, 245],
+        "rugosidad_media": 0.24,
+        "metalico_medio": 1
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-plastic012a",
+      "fuente": "ambientCG",
+      "id_fuente": "Plastic012A",
+      "rol": "polimero_con_grano",
+      "descripcion": "Polímero negro con grano tipo piel (empuñaduras, cuerpos)",
+      "url": "https://ambientcg.com/a/Plastic012A",
+      "url_descarga": "https://ambientcg.com/get?file=Plastic012A_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["black", "plastic"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Plastic012A",
+      "archivos": [
+        {
+          "nombre": "Plastic012A.png",
+          "sha256": "f51b0b51520fc36ddb2d267a2073dabc7f03a749931ef2ca29317b1b26bbc370"
+        },
+        {
+          "nombre": "Plastic012A_1K-JPG_Color.jpg",
+          "sha256": "d7d0eeea69c5deb0bd0eb773622c0691fe07679597ef429e2a4249ab42203978"
+        },
+        {
+          "nombre": "Plastic012A_1K-JPG_Displacement.jpg",
+          "sha256": "014779ec52197a81450add5c77a7d423c5ab806ef360f45199415c172485053e"
+        },
+        {
+          "nombre": "Plastic012A_1K-JPG_NormalDX.jpg",
+          "sha256": "b1752033a36aeec5fcab35653c4615330d28b711ee68b2865fdb30f055a8c947"
+        },
+        {
+          "nombre": "Plastic012A_1K-JPG_NormalGL.jpg",
+          "sha256": "a1ed32b21ff9ff7c6edb0d79d6b789ff2df3e29728dca78bc5e7e1e2f91b23fa"
+        },
+        {
+          "nombre": "Plastic012A_1K-JPG_Roughness.jpg",
+          "sha256": "43aacffa8bdb331102b69d8e120d2c921dfca83939500f135a2d3c50bebe9f92"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [44, 43, 41],
+        "rugosidad_media": 0.395
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-rubber004",
+      "fuente": "ambientCG",
+      "id_fuente": "Rubber004",
+      "rol": "goma",
+      "descripcion": "Goma negra granulada (almohadillas, culatines, fundas)",
+      "url": "https://ambientcg.com/a/Rubber004",
+      "url_descarga": "https://ambientcg.com/get?file=Rubber004_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["black", "floor", "gym", "rubber"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Rubber004",
+      "archivos": [
+        {
+          "nombre": "Rubber004.png",
+          "sha256": "01d539e08d9d121a0c66694fb537e81ffe9697101016631f9778b6120b80cff7"
+        },
+        {
+          "nombre": "Rubber004_1K-JPG_Color.jpg",
+          "sha256": "95f9182e8564db9a8c6510cd0c9e0656beec0e5a0212cc177e2abf8eb03820b9"
+        },
+        {
+          "nombre": "Rubber004_1K-JPG_Displacement.jpg",
+          "sha256": "c8a1af10a95405387bd69c82d807967981f08d17103ce5eeb3cd947cc0578707"
+        },
+        {
+          "nombre": "Rubber004_1K-JPG_NormalDX.jpg",
+          "sha256": "948cb99a37b15b11bd05f014cc650eefbb30bfcacd61551adf0192c4094505ec"
+        },
+        {
+          "nombre": "Rubber004_1K-JPG_NormalGL.jpg",
+          "sha256": "a22ee35f51fa7bd971f703e8309b533420f965337c989f5e2cdfe1c822892d47"
+        },
+        {
+          "nombre": "Rubber004_1K-JPG_Roughness.jpg",
+          "sha256": "fd8171577db5a593e981ebd3fe487515aea9d20be28e1a6d2cd1e5475eb13e69"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [42, 43, 50],
+        "rugosidad_media": 0.591
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-wood051",
+      "fuente": "ambientCG",
+      "id_fuente": "Wood051",
+      "rol": "madera_con_veta",
+      "descripcion": "Madera oscura con veta (culatas y guardamanos clásicos)",
+      "url": "https://ambientcg.com/a/Wood051",
+      "url_descarga": "https://ambientcg.com/get?file=Wood051_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": [
+        "brown",
+        "dark",
+        "elegant",
+        "espresso",
+        "flooring",
+        "furniture",
+        "grain",
+        "hardwood",
+        "interior",
+        "modern",
+        "plain",
+        "polished",
+        "smooth",
+        "wood"
+      ],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Wood051",
+      "archivos": [
+        {
+          "nombre": "Wood051.png",
+          "sha256": "75b788b79fd763dc333713d0aa491f0ff2358222d096e579fc3ed9d512c5a77b"
+        },
+        {
+          "nombre": "Wood051_1K-JPG_Color.jpg",
+          "sha256": "f3c6c5456457e8d05c1fee4d2f186f41d0aea2b8a06859b69ce2934e11aa8798"
+        },
+        {
+          "nombre": "Wood051_1K-JPG_Displacement.jpg",
+          "sha256": "a852d76befbdb66cf17f1b4a18663f4b1fb2c0de03929a4c74752a688e23ff10"
+        },
+        {
+          "nombre": "Wood051_1K-JPG_NormalDX.jpg",
+          "sha256": "d7150fef4d516fecfb2e48eb956aa2c8e52dd40802910fb78c40674d8cd29f0e"
+        },
+        {
+          "nombre": "Wood051_1K-JPG_NormalGL.jpg",
+          "sha256": "9078dc50c43b55831ae322460fc96b62df68c7a148400bd7755ab2788fec1708"
+        },
+        {
+          "nombre": "Wood051_1K-JPG_Roughness.jpg",
+          "sha256": "b5736b940d721b49922cb14eebd52fd34f134b7ef99331ecf28565ce40358098"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [65, 52, 46],
+        "rugosidad_media": 0.543
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-paintedmetal004",
+      "fuente": "ambientCG",
+      "id_fuente": "PaintedMetal004",
+      "rol": "desgaste_pintura",
+      "descripcion": "Pintura roja con desconchones (patrón de desgaste; se usa su forma, no su color)",
+      "url": "https://ambientcg.com/a/PaintedMetal004",
+      "url_descarga": "https://ambientcg.com/get?file=PaintedMetal004_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["metal", "painted", "red"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/PaintedMetal004",
+      "archivos": [
+        {
+          "nombre": "PaintedMetal004.png",
+          "sha256": "c7794d9eab1024a9a3a0fbd46eda0d269b42be34822ba0bc99cab8a13d86ee13"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_Color.jpg",
+          "sha256": "bdaaee01e7fc92c7601c806fc697155d64e820cab561994f01032e3b2ab1ac0d"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_Displacement.jpg",
+          "sha256": "1cc1dd98d7c7372cf0a76a44b37b196e446819bae6a261f28c8411d1ac9ea94b"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_Metalness.jpg",
+          "sha256": "02efc2e1e62e8eb53c5f9dd1af16a025ff116971973a655605de3582665a1c0c"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_NormalDX.jpg",
+          "sha256": "b52ec7e08cbf0c0d7793ee784856349328fb0cbadaff0a0f8554719a11dce691"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_NormalGL.jpg",
+          "sha256": "08ccb34e02463f22f6c9198ae9a4ec665e60f846e19043200d530c7c34f55c19"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_Opacity.jpg",
+          "sha256": "118a53f8d846c8079a7384d2dc9ef06a8591238fbd086cffb13158294563e4cf"
+        },
+        {
+          "nombre": "PaintedMetal004_1K-JPG_Roughness.jpg",
+          "sha256": "80c674a95449452f132d78b6bb644de26f9925fd0bbb23411eca84b56b80507a"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [247, 61, 60],
+        "rugosidad_media": 0.154,
+        "metalico_medio": 0.093
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-fingerprints006",
+      "fuente": "ambientCG",
+      "id_fuente": "Fingerprints006",
+      "rol": "suciedad_huellas",
+      "descripcion": "Huellas sobre fondo negro (máscara de suciedad, p. ej. vidrio y lentes)",
+      "url": "https://ambientcg.com/a/Fingerprints006",
+      "url_descarga": "https://ambientcg.com/get?file=Fingerprints006_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["fingerprints", "smear"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/Fingerprints006",
+      "archivos": [
+        {
+          "nombre": "Fingerprints006.png",
+          "sha256": "77c47a15be1b9295d7e56472daf4577298a9fac0ca81c3d12a7149ea4e8e17ac"
+        },
+        {
+          "nombre": "Fingerprints006_1K-JPG_Color.jpg",
+          "sha256": "cbd92ad2c53f5f072ad73fa8f1969012f644afb3efd4aeafc4402cb741748ce8"
+        },
+        {
+          "nombre": "Fingerprints006_1K-JPG_Displacement.jpg",
+          "sha256": "d13a0489a323eb9d17038a88e50b85f874ecad7ff156ac3d29ed4436da065f0d"
+        },
+        {
+          "nombre": "Fingerprints006_1K-JPG_NormalDX.jpg",
+          "sha256": "c0503152c9baf2bf3b93f85f1a097a03217efe6fb1e9270dfa1db166a2eda1ec"
+        },
+        {
+          "nombre": "Fingerprints006_1K-JPG_NormalGL.jpg",
+          "sha256": "d5a530556f6055ba38533a6164fc29ff29e2ad4727e0e5b713d3b3156b5b424d"
+        },
+        {
+          "nombre": "Fingerprints006_1K-JPG_Opacity.jpg",
+          "sha256": "cb5c2fc695383f01d916a19ac560c35ded8e78b36b3ca9a7f7cebd058c4a56af"
+        },
+        {
+          "nombre": "Fingerprints006_1K-JPG_Roughness.jpg",
+          "sha256": "c56a83c0f9489b55f089f8f6da607f7e015756a87165053d2091dafcaa382aba"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [11, 10, 10],
+        "rugosidad_media": 0.007
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "acg-surfaceimperfections013",
+      "fuente": "ambientCG",
+      "id_fuente": "SurfaceImperfections013",
+      "rol": "suciedad_vidrio",
+      "descripcion": "Manchas y arañazos finos (máscara de rugosidad para vidrio y lentes)",
+      "url": "https://ambientcg.com/a/SurfaceImperfections013",
+      "url_descarga": "https://ambientcg.com/get?file=SurfaceImperfections013_1K-JPG.zip",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://docs.ambientcg.com/license/",
+      "etiquetas": ["imperfections", "smear", "smudge", "stains", "surface"],
+      "metodo_creacion": "Height field photogrammetry",
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/ambientcg/SurfaceImperfections013",
+      "archivos": [
+        {
+          "nombre": "SurfaceImperfections013.png",
+          "sha256": "0ee0b63adc82fdc9f246c7ea85ee21f00869d9a4ce375bfb419db92490e0f12a"
+        },
+        {
+          "nombre": "SurfaceImperfections013_1K-JPG_Color.jpg",
+          "sha256": "de45661fa528ac38aeaeca2c06d1d43875a80eb0e1df1782f86a75259bee5973"
+        },
+        {
+          "nombre": "SurfaceImperfections013_1K-JPG_NormalDX.jpg",
+          "sha256": "a997e6ae636df64808d484ea3978cf8031ac8e02cfeb4b257b387025f2afdb3f"
+        },
+        {
+          "nombre": "SurfaceImperfections013_1K-JPG_NormalGL.jpg",
+          "sha256": "07896db3fe98f926063b2c0016367e5a7683d06e00302af7fa156a64c73194ba"
+        },
+        {
+          "nombre": "SurfaceImperfections013_1K-JPG_Opacity.jpg",
+          "sha256": "de45661fa528ac38aeaeca2c06d1d43875a80eb0e1df1782f86a75259bee5973"
+        }
+      ],
+      "medidas": {
+        "albedo_medio_srgb": [29, 29, 28]
+      },
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "ph-walnut_veneer",
+      "fuente": "Poly Haven",
+      "id_fuente": "walnut_veneer",
+      "rol": "madera_con_veta",
+      "descripcion": "Nogal claro con veta fina (culatas y guardamanos de madera)",
+      "url": "https://polyhaven.com/a/walnut_veneer",
+      "url_descarga": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/walnut_veneer/",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://polyhaven.com/license",
+      "autores": {
+        "Jenelle van Heerden": "All"
+      },
+      "etiquetas": [
+        "smooth",
+        "grain",
+        "wood grain",
+        "raw",
+        "raw wood",
+        "veneer",
+        "veneer wood",
+        "walnut",
+        "timber",
+        "walnut wood"
+      ],
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/polyhaven/walnut_veneer",
+      "archivos": [
+        {
+          "nombre": "walnut_veneer_diff_1k.jpg",
+          "sha256": "d8c971e403b185b5c350d1e6fa75c3e7fcc36130781c7686263f6bcd23ac4db1",
+          "md5_verificado": "70e160b3d44d414728a2fb4194fde2a6"
+        },
+        {
+          "nombre": "walnut_veneer_rough_1k.jpg",
+          "sha256": "5cb9d78ec685155d2b66a1db01abc61049d00953d783d0c78d829512de9ab0b4",
+          "md5_verificado": "bc27156b65a17eb96f3aef9548584a66"
+        },
+        {
+          "nombre": "walnut_veneer_nor_gl_1k.jpg",
+          "sha256": "de823c2e9942ea77caeddab08add49688a9792b79aac496640fecaee9fbcb5c4",
+          "md5_verificado": "fc0df784c71c1cff9d80d4a6de0b2ab4"
+        }
+      ],
+      "medidas": {},
+      "fecha_consulta": "2026-11-17"
+    },
+    {
+      "id": "ph-dark_wood",
+      "fuente": "Poly Haven",
+      "id_fuente": "dark_wood",
+      "rol": "madera_con_veta",
+      "descripcion": "Madera oscura satinada con veta marcada (culatas clásicas)",
+      "url": "https://polyhaven.com/a/dark_wood",
+      "url_descarga": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/dark_wood/",
+      "licencia": "CC0 1.0 Universal",
+      "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "pagina_licencia": "https://polyhaven.com/license",
+      "autores": {
+        "Dario Barresi": "Baking",
+        "Dimitrios Savva": "Photography",
+        "Rico Cilliers": "Tiling"
+      },
+      "etiquetas": [
+        "brown",
+        "wood",
+        "wooden",
+        "cabinet",
+        "mahogany",
+        "dark cherry",
+        "cherry wood",
+        "grain",
+        "hardwood",
+        "satin finish",
+        "smooth"
+      ],
+      "resolucion": "1K",
+      "carpeta": "assets-src/materiales-cc0/polyhaven/dark_wood",
+      "archivos": [
+        {
+          "nombre": "dark_wood_diff_1k.jpg",
+          "sha256": "d68da31655bf47024af893156a6a01a6c95bb60f55d97e2dc9bdd47be320e5b5",
+          "md5_verificado": "47fa883f1bb33acc5711245f64b75975"
+        },
+        {
+          "nombre": "dark_wood_rough_1k.jpg",
+          "sha256": "47ea12dbf649109b02eaa164dde9732a74e839957f29ad0ec7f5266b575d1835",
+          "md5_verificado": "b1acb7bf90785d3945a85eca408dbc6c"
+        },
+        {
+          "nombre": "dark_wood_nor_gl_1k.jpg",
+          "sha256": "c42541f1bda0a14b39f120c24407eeba699af8ac85b371c7cef98ffd7d7b13bf",
+          "md5_verificado": "ca74ffa4c1b7ff5afe7316bbfa87f9a0"
+        }
+      ],
+      "medidas": {},
+      "fecha_consulta": "2026-11-17"
+    }
+  ]
+}
