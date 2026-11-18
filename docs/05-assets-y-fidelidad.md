@@ -115,6 +115,8 @@ Anodizado negro mate · anodizado FDE · Cerakote (FDE, OD, gris y negro) · pol
 
 Base: texturas CC0 (Poly Haven, ambientCG) ajustadas a mano y validadas con un render de referencia común.
 
+Materia prima CC0 ya descargada y registrada en `catalogo/materiales-cc0.json` (12 materiales a 1K, en `assets-src/materiales-cc0/`, ignorada por git). Reglas de aspecto medibles en `docs/catalogo/guia-aspecto-piezas.md`.
+
 ## 9. Herramientas (Trastienda → Estudio de assets)
 - Subida de referencias con licencia.
 - Lanzador de trabajos del pipeline.
