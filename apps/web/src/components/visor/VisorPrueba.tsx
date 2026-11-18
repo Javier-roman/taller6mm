@@ -29,9 +29,11 @@ import type { ConjuntoPresets } from './iluminacion.ts';
 import {
   BASE_VISOR,
   cargarIndice,
+  cargarMateriales,
   cargarPresetsExternos,
   formatearBytes,
   type IndiceVisor,
+  type MaterialesVisor,
   type MontajeIndice,
   type PiezaIndice,
 } from './modelos.ts';
@@ -48,6 +50,14 @@ const deValor = (v: string): Seleccion | null => {
   const [tipo, ...resto] = v.split(':');
   return (tipo === 'montaje' || tipo === 'pieza') && resto.length > 0 ? { tipo, id: resto.join(':') } : null;
 };
+
+/** Nombre del material de la biblioteca asignado a una pieza, o la razón por la que no se ve. */
+function nombreMaterial(doc: MaterialesVisor | null, clave: string): string {
+  const a = doc?.asignaciones[clave];
+  const m = a ? doc?.materiales[a.material] : undefined;
+  if (!a || !m) return doc ? 'sin material asignado' : 'cargando materiales…';
+  return a.cubierta ? m.nombre : `${m.nombre} (por defecto: sin regla en el catálogo)`;
+}
 
 const num = (n: number, dec = 0) =>
   n.toLocaleString('es-ES', { maximumFractionDigits: dec, minimumFractionDigits: dec });
@@ -78,18 +88,28 @@ type EstadoModelo =
   | { fase: 'inactivo' }
   | { fase: 'cargando' }
   | { fase: 'error'; mensaje: string }
-  | { fase: 'listo'; objeto: Object3D; caja: { largo: number; alto: number; ancho: number }; mallas: number };
+  | {
+      fase: 'listo';
+      objeto: Object3D;
+      caja: { largo: number; alto: number; ancho: number };
+      mallas: number;
+      /** Clave de asignación de materiales de cada pieza del modelo, fijada al cargarlo. */
+      claveDe: ClaveDe;
+    };
 
 type ModeloListo = Extract<EstadoModelo, { fase: 'listo' }>;
+type ClaveDe = (rol: string | null) => string | null;
 
 /**
  * Carga el GLB elegido. Devuelve también el último modelo listo: la escena sigue pintándolo mientras llega
  * el siguiente, así el lienzo (y su contexto WebGL) no se destruye en cada cambio. De liberar el modelo
  * que se sustituye se ocupa la escena.
  */
-function usarModelo(archivo: string | null): { estado: EstadoModelo; mostrado: ModeloListo | null } {
+function usarModelo(archivo: string | null, claveDe: ClaveDe): { estado: EstadoModelo; mostrado: ModeloListo | null } {
   const [estado, setEstado] = useState<EstadoModelo>({ fase: 'inactivo' });
   const [mostrado, setMostrado] = useState<ModeloListo | null>(null);
+  const claveRef = useRef(claveDe);
+  claveRef.current = claveDe;
   useEffect(() => {
     if (!archivo) return;
     let vigente = true;
@@ -98,7 +118,13 @@ function usarModelo(archivo: string | null): { estado: EstadoModelo; mostrado: M
       .then(async (m) => ({ m, r: await m.cargarGlb(`${BASE_VISOR}${archivo}`) }))
       .then(({ m, r }) => {
         if (!vigente) return m.liberarModelo(r.objeto);
-        const listo: ModeloListo = { fase: 'listo', objeto: r.objeto, caja: r.caja, mallas: r.mallas };
+        const listo: ModeloListo = {
+          fase: 'listo',
+          objeto: r.objeto,
+          caja: r.caja,
+          mallas: r.mallas,
+          claveDe: claveRef.current,
+        };
         setEstado(listo);
         setMostrado(listo);
       })
@@ -115,15 +141,18 @@ function usarModelo(archivo: string | null): { estado: EstadoModelo; mostrado: M
 export default function VisorPrueba() {
   const idSelector = useId();
   const idAyuda = useId();
+  const idBrillo = useId();
   const reducido = usarMovimientoReducido();
   const [webgl] = useState(() => (typeof document === 'undefined' ? true : hayWebGL()));
   const [indice, setIndice] = useState<IndiceVisor | null>(null);
   const [errorIndice, setErrorIndice] = useState<string | null>(null);
   const [conjunto, setConjunto] = useState<ConjuntoPresets>(PRESETS_MINIMOS);
-  const [origenPresets, setOrigenPresets] = useState<string>('mínimos del visor');
+  const [origenPresets, setOrigenPresets] = useState<string>('copia mínima del visor');
+  const [materiales, setMateriales] = useState<MaterialesVisor | null>(null);
+  const [errorMateriales, setErrorMateriales] = useState<string | null>(null);
   const [seleccion, setSeleccion] = useState<Seleccion | null>(null);
-  const [presetId, setPresetId] = useState<string>(PRESETS_MINIMOS.por_defecto);
-  const [masLuz, setMasLuz] = useState(false);
+  const [presetId, setPresetId] = useState<string>(PRESETS_MINIMOS.defecto);
+  const [brillo, setBrillo] = useState<number>(PRESETS_MINIMOS.brillo.global.defecto);
   const apiRef = useRef<ApiVista | null>(null);
 
   // Índice de modelos y, si existen, los presets del catálogo.
@@ -136,14 +165,18 @@ export default function VisorPrueba() {
         const url = new URLSearchParams(window.location.search).get('modelo');
         const inicial = url ? deValor(url) : null;
         setSeleccion(inicial ?? (ind.montajes[0] ? { tipo: 'montaje', id: ind.montajes[0].id } : null));
+        cargarMateriales(ac.signal).then(setMateriales, (e: unknown) => {
+          if (!ac.signal.aborted) setErrorMateriales(e instanceof Error ? e.message : 'error desconocido');
+        });
         if (ind.presets_externos) {
           const p = await cargarPresetsExternos(ind.presets_externos, ac.signal);
           if (p.valor) {
             setConjunto(p.valor);
-            setPresetId(p.valor.por_defecto);
+            setPresetId(p.valor.defecto);
+            setBrillo(p.valor.brillo.global.defecto);
             setOrigenPresets('catalogo/iluminacion-presets.json');
           } else {
-            setOrigenPresets(`mínimos del visor (el catálogo no vale: ${p.error})`);
+            setOrigenPresets(`copia mínima del visor (el catálogo no vale: ${p.error})`);
           }
         }
         const luz = new URLSearchParams(window.location.search).get('luz');
@@ -164,7 +197,16 @@ export default function VisorPrueba() {
     [indice, seleccion],
   );
   const preset = conjunto.presets.find((p) => p.id === presetId) ?? conjunto.presets[0];
-  const { estado: modelo, mostrado } = usarModelo(montaje?.archivo ?? pieza?.archivo ?? null);
+  // Clave de asignación de materiales por pieza: `pieza` suelta o `montaje/pieza` (la fija el exportador).
+  const claveDe = useMemo<ClaveDe>(() => {
+    if (montaje) {
+      const porRol = new Map(montaje.piezas.map((p) => [p.rol, `${montaje.id}/${p.id}`]));
+      return (rol) => (rol ? (porRol.get(rol) ?? null) : null);
+    }
+    const id = pieza?.id ?? null;
+    return () => id;
+  }, [montaje, pieza]);
+  const { estado: modelo, mostrado } = usarModelo(montaje?.archivo ?? pieza?.archivo ?? null, claveDe);
 
   const grupos = useMemo(() => {
     const m = new Map<string, PiezaIndice[]>();
@@ -233,7 +275,16 @@ export default function VisorPrueba() {
           >
             {webgl && mostrado && modelo.fase !== 'error' && preset ? (
               <Suspense fallback={null}>
-                <Escena objeto={mostrado.objeto} preset={preset} masLuz={masLuz} reducido={reducido} apiRef={apiRef} />
+                <Escena
+                  objeto={mostrado.objeto}
+                  preset={preset}
+                  control={conjunto.brillo}
+                  brillo={brillo}
+                  reducido={reducido}
+                  materiales={materiales}
+                  claveDe={mostrado.claveDe}
+                  apiRef={apiRef}
+                />
               </Suspense>
             ) : null}
             {modelo.fase === 'cargando' || modelo.fase === 'inactivo' ? (
@@ -244,6 +295,11 @@ export default function VisorPrueba() {
             {!webgl ? (
               <p className="t6-visor__estado t6-visor__estado--texto" role="status">
                 Este navegador no puede pintar 3D (WebGL). La ficha de la derecha tiene los mismos datos del modelo.
+              </p>
+            ) : null}
+            {errorMateriales ? (
+              <p className="t6-visor__estado t6-visor__estado--texto t6-visor__estado--arriba" role="status">
+                Sin materiales de la biblioteca ({errorMateriales}): se ve el material básico del GLB.
               </p>
             ) : null}
             {errorIndice ? (
@@ -345,14 +401,24 @@ export default function VisorPrueba() {
               </div>
             </fieldset>
             {preset ? <p className="t6-visor__descripcion">{preset.descripcion}</p> : null}
-            <Boton
-              variante={masLuz ? 'laton' : 'acero'}
-              aria-pressed={masLuz}
-              onClick={() => setMasLuz((v) => !v)}
-              className="t6-visor__mas-luz"
-            >
-              Más luz
-            </Boton>
+            <div className="t6-visor__campo">
+              <label htmlFor={idBrillo} className="t6-visor__etiqueta">
+                Brillo <output htmlFor={idBrillo}>{num(brillo, 2)}×</output>
+              </label>
+              <input
+                id={idBrillo}
+                className="t6-visor__rango"
+                type="range"
+                min={conjunto.brillo.global.min}
+                max={conjunto.brillo.global.max}
+                step={0.05}
+                value={brillo}
+                onChange={(e) => setBrillo(Number(e.target.value))}
+              />
+              <Boton variante="fantasma" onClick={() => setBrillo(conjunto.brillo.global.max)}>
+                Más luz
+              </Boton>
+            </div>
             <p className="t6-visor__nota">Presets de luz: {origenPresets}.</p>
           </Placa>
 
@@ -399,13 +465,20 @@ export default function VisorPrueba() {
                     <li key={p.id}>
                       <span className="t6-visor__rol">{p.rol.replaceAll('_', ' ')}</span>
                       <span className="t6-visor__familia">{p.familia}</span>
-                      {p.tiene_malla ? null : <span className="t6-visor__marca">marcador sin modelo ni cotas</span>}
+                      {p.tiene_malla ? (
+                        <span className="t6-visor__material">
+                          {nombreMaterial(materiales, `${montaje.id}/${p.id}`)}
+                        </span>
+                      ) : (
+                        <span className="t6-visor__marca">Pendiente: sin modelo ni cotas</span>
+                      )}
                     </li>
                   ))}
                 </ul>
                 {marcadores.length > 0 ? (
                   <p className="t6-visor__nota">
-                    Los marcadores van en naranja translúcido: son huecos del catálogo, no geometría real.
+                    Las piezas «pendiente» se dibujan como un fantasma rayado: son huecos del catálogo, no geometría
+                    real, y no cuentan en las medidas.
                   </p>
                 ) : null}
               </details>
@@ -414,6 +487,7 @@ export default function VisorPrueba() {
             {pieza ? (
               <>
                 <p className="t6-visor__nota">Familia: {pieza.familia ?? 'sin familia'}</p>
+                <p className="t6-visor__nota">Material: {nombreMaterial(materiales, pieza.id)}</p>
                 {pieza.cotas.length > 0 ? (
                   <details className="t6-visor__detalle">
                     <summary>Cotas y confianza ({pieza.cotas.length})</summary>

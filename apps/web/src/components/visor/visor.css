@@ -310,6 +310,26 @@
   color: var(--hueso);
 }
 
+.t6-visor__estado--arriba {
+  place-items: start center;
+}
+
+.t6-visor__rango {
+  inline-size: 100%;
+  min-block-size: var(--objetivo-tactil);
+  margin: 0;
+  accent-color: var(--laton);
+}
+
+.t6-visor__etiqueta output {
+  color: var(--hueso);
+  font-family: var(--fuente-datos);
+}
+
+.t6-visor__material {
+  color: var(--niebla);
+}
+
 /* Escritorio: lienzo a la izquierda y panel a la derecha, a la altura de la ventana. */
 @media (min-width: 52.125rem) {
   .t6-visor {

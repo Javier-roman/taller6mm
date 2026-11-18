@@ -21,6 +21,7 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { NodeIO } from '@gltf-transform/core';
@@ -128,6 +129,23 @@ function listarGlb(dir) {
     : [];
 }
 
+/** Claves de asignación: la pieza suelta por su id y la de un montaje como `<montaje>/<id de pieza>`. */
+function exportarMateriales(piezas, montajes) {
+  const lista = [
+    ...piezas.map((p) => ({ clave: p.id, id: p.id, familia: p.familia ?? 'desconocida' })),
+    ...montajes.flatMap((m) => m.piezas.map((p) => ({ clave: `${m.id}/${p.id}`, id: p.id, familia: p.familia }))),
+  ];
+  const tmp = path.join(os.tmpdir(), `taller6mm-visor-piezas-${process.pid}.json`);
+  writeFileSync(tmp, JSON.stringify(lista));
+  const r = spawnSync(
+    'uv',
+    ['run', 'python', '-m', 'taller6mm_pipeline.materiales.exportar_visor', '--piezas', tmp, '--salida', salidaDev],
+    { cwd: path.join(raiz, 'apps', 'pipeline'), stdio: 'inherit' },
+  );
+  rmSync(tmp, { force: true });
+  if (r.status !== 0) throw new Error('La exportación de materiales falló; revisa uv y apps/pipeline.');
+}
+
 async function main() {
   ensamblarSiFalta();
   rmSync(salidaDev, { recursive: true, force: true });
@@ -188,7 +206,13 @@ async function main() {
     });
   }
 
-  const presets = path.join(raiz, 'catalogo', 'iluminacion-presets.json');
+  // Materiales: la biblioteca del pipeline (una sola fuente para el render y la web) exporta los números de
+  // cada material, la asignación por pieza y los mapas de rugosidad y normal derivados de los CC0 internos.
+  exportarMateriales(piezas, montajes);
+
+  const presets = opcion('--presets')
+    ? path.resolve(opcion('--presets'))
+    : path.join(raiz, 'catalogo', 'iluminacion-presets.json');
   const hayPresets = existsSync(presets);
   if (hayPresets) copyFileSync(presets, path.join(salidaDev, 'iluminacion-presets.json'));
 
@@ -196,6 +220,7 @@ async function main() {
     esquema: 'visor-indice/v1',
     aviso: 'Prototipo interno: T0, es_demo y publicable_3d = false. No se publica.',
     presets_externos: hayPresets ? 'iluminacion-presets.json' : null,
+    materiales: 'materiales-visor.json',
     piezas,
     montajes,
   };

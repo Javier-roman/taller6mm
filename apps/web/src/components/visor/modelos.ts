@@ -96,3 +96,51 @@ export const formatearBytes = (bytes: number): string =>
   bytes >= 1024 * 1024
     ? `${(bytes / 1024 / 1024).toLocaleString('es-ES', { maximumFractionDigits: 1 })} MB`
     : `${Math.round(bytes / 1024).toLocaleString('es-ES')} KB`;
+
+// ───────────────────────────── Datos exportados por el pipeline ─────────────────────────────
+
+export interface TexturasMaterial {
+  id_cc0: string;
+  rugosidad: string;
+  rug_media: number;
+  rug_desviacion: number;
+  escala_m: number;
+  normal: string | null;
+}
+
+export interface MaterialVisor {
+  nombre: string;
+  tipo: string;
+  color: readonly [number, number, number];
+  metalico: number;
+  rugosidad: { media: number; variacion: number };
+  grano: { relieve: number };
+  desgaste: { color: readonly [number, number, number]; rugosidad: number; metalico: number; cantidad: number };
+  texturas: TexturasMaterial | null;
+}
+
+export interface AsignacionVisor {
+  material: string;
+  cubierta: boolean;
+  variacion: { color: number; rugosidad: number; desgaste: number };
+  semilla: number;
+}
+
+export interface MaterialesVisor {
+  esquema: 'materiales-visor/v1';
+  materiales: Record<string, MaterialVisor>;
+  asignaciones: Record<string, AsignacionVisor>;
+}
+
+/** El archivo lo escribe nuestro script en local; se comprueba lo justo antes de fiarse de él. */
+export function parsearMateriales(datos: unknown): MaterialesVisor {
+  if (!esObjeto(datos) || datos['esquema'] !== 'materiales-visor/v1') throw new Error('materiales con otro esquema');
+  if (!esObjeto(datos['materiales']) || !esObjeto(datos['asignaciones'])) throw new Error('materiales sin listas');
+  return datos as unknown as MaterialesVisor;
+}
+
+export async function cargarMateriales(signal: AbortSignal): Promise<MaterialesVisor> {
+  const r = await fetch(`${BASE_VISOR}materiales-visor.json`, { signal });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return parsearMateriales(await r.json());
+}
