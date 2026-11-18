@@ -468,7 +468,7 @@ def suelo(lo, color, rug, metal):
 
 
 def estudio(lo, hi, centro, diag):
-    """Fondo gris medio (guía §7) y cajas de luz: clave, relleno 3:1, dos tiras de contraluz y suelo semirreflectante."""
+    """Fondo gris medio (guía §7), clave, relleno 3:1, dos tiras de contraluz y suelo semirreflectante."""
     e = bpy.context.scene
     mundo = bpy.data.worlds.new("estudio")
     mundo.use_nodes = True
