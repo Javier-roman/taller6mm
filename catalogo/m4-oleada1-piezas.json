@@ -237,10 +237,10 @@
       "elemento": "gm-guardamanos-a2-de-dos-mitades-con-escudo-termico",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-97f9246b9e14",
+      "id_variante": "guardamanos.variantes@v2-97f9246b9e14",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-a2-mid.glb",
-      "sha256_glb": "a25bf8c0f4288df7b88a836536ab872c3450574e1ec9e002b73c1fe21582fc26",
-      "bytes": 28064,
+      "sha256_glb": "f14ecd2fd2eb1114e58963c1433c51bc6bd6ad3efad8332665b316b78626413f",
+      "bytes": 467528,
       "parametros": {
         "tipo": "mid",
         "longitud": 243.8,
@@ -356,10 +356,11 @@
       "sockets": ["socket.union-receptor"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": [],
-      "triangulos": 600,
+      "triangulos": 13128,
       "notas": [
         "El escudo térmico interior y la unión al receptor no se modelan; el aro es una simplificación.",
-        "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU."
+        "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU.",
+        "Estrías de agarre (12 canales de Ø 3 mm) y ranuras de ventilación (14 x 4 mm): detalle estimado."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
       "es_demo": true,
@@ -373,7 +374,7 @@
         "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
         "La malla no pasa la puerta: no es publicable como modelo 3D.",
         "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
-        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
         "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
       ],
       "license_status": "propio",
@@ -384,10 +385,10 @@
       "elemento": "gm-guardamanos-m4-car-de-dos-mitades-corto-con-escudo",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-9968706549ef",
+      "id_variante": "guardamanos.variantes@v2-9968706549ef",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-carabina.glb",
-      "sha256_glb": "10f59593d362aa9124ad560dc0cc445abb64e00fea1e699d4ab35a6e5e448834",
-      "bytes": 23324,
+      "sha256_glb": "e6ebeea3def110880eec075b5f2106c015c419706f293d386014143883a5dac5",
+      "bytes": 315952,
       "parametros": {
         "tipo": "carabina",
         "longitud": 170.2,
@@ -503,10 +504,11 @@
       "sockets": ["socket.union-receptor"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": [],
-      "triangulos": 468,
+      "triangulos": 8676,
       "notas": [
         "El escudo térmico interior y la unión al receptor no se modelan; el aro es una simplificación.",
-        "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU."
+        "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU.",
+        "Estrías de agarre (12 canales de Ø 3 mm) y ranuras de ventilación (14 x 4 mm): detalle estimado."
       ],
       "nota": "medidas de demostración (parámetros de barrido): sin ficha de SKU ni fuente verificada",
       "es_demo": true,
@@ -520,7 +522,7 @@
         "No hay vistas de referencia: no se puede medir el parecido con la realidad.",
         "La malla no pasa la puerta: no es publicable como modelo 3D.",
         "Tope T1 y no publicable: pieza de demostración (parámetros de barrido, sin ficha de SKU).",
-        "Tope T1 y no publicable: geometría simplificada (2 simplificación(es) declarada(s)).",
+        "Tope T1 y no publicable: geometría simplificada (3 simplificación(es) declarada(s)).",
         "Tope T1 y no publicable: cotas de confianza baja o sin confianza: diametro_exterior, grosor_pared, longitud, mlok.ancho_ranura, mlok.largo_ranura, mlok.radio_esquina, mlok.separacion_entre_ranuras, picatinny.altura_perfil_min, picatinny.ancho_max, picatinny.ancho_plano_superior_max."
       ],
       "license_status": "propio",
@@ -531,10 +533,10 @@
       "elemento": "gm-guardamanos-m4-ris-rail-interface-system",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-a6615ce8e9cd",
+      "id_variante": "guardamanos.variantes@v2-a6615ce8e9cd",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-ris-m4.glb",
-      "sha256_glb": "6b93c7f2767cde4204df4cae910bf4317badcd9f7c10ab40848dc98f787d8c3e",
-      "bytes": 93748,
+      "sha256_glb": "845121dfef1befb94609314a8c2e272d7c7a27de82a2d5fddf7dd22184caf899",
+      "bytes": 507304,
       "parametros": {
         "tipo": "ris",
         "longitud": 170.2,
@@ -650,7 +652,7 @@
       "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913"],
-      "triangulos": 1824,
+      "triangulos": 13078,
       "notas": [
         "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
         "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
@@ -678,10 +680,10 @@
       "elemento": "gm-guardamanos-de-mk18-ras-corto",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-b7ed40ac2b1f",
+      "id_variante": "guardamanos.variantes@v2-b7ed40ac2b1f",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-ris-mk18.glb",
-      "sha256_glb": "289212d151c694ca46805b58be26043cf4288576dbd4d2dd380f82753af8de44",
-      "bytes": 102956,
+      "sha256_glb": "e4468eee016b6a171bd9bb818d848220b09896ef3a7992cdfb56afdd611a5d31",
+      "bytes": 544928,
       "parametros": {
         "tipo": "ris",
         "longitud": 190.5,
@@ -797,7 +799,7 @@
       "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913"],
-      "triangulos": 2016,
+      "triangulos": 14038,
       "notas": [
         "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
         "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
@@ -825,10 +827,10 @@
       "elemento": "gm-guardamanos-quad-rail-de-7-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-d58a678137cd",
+      "id_variante": "guardamanos.variantes@v2-d58a678137cd",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-7.glb",
-      "sha256_glb": "5317ab949005e7d492afeca24ca59545e3feaad6a922fa145e82a13c3ab42af5",
-      "bytes": 98356,
+      "sha256_glb": "d1cf9d9774a7323c4b6a01a0845651402fc9222aa11ca1098320f6e8f23c6a80",
+      "bytes": 526116,
       "parametros": {
         "tipo": "ris",
         "longitud": 177.8,
@@ -944,7 +946,7 @@
       "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913"],
-      "triangulos": 1920,
+      "triangulos": 13558,
       "notas": [
         "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
         "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
@@ -972,10 +974,10 @@
       "elemento": "gm-guardamanos-quad-rail-de-9-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-42fcb2d22c57",
+      "id_variante": "guardamanos.variantes@v2-42fcb2d22c57",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-9.glb",
-      "sha256_glb": "23b38bf864f753dfe5ae4ee524749a850c6da4d7f4c03143da05b83e0e3baa3c",
-      "bytes": 121400,
+      "sha256_glb": "77ea063d59d3e5164cd240a6da8c55e0c4b62f37e8076229f40d85c6dc2f712f",
+      "bytes": 620200,
       "parametros": {
         "tipo": "ris",
         "longitud": 228.6,
@@ -1091,7 +1093,7 @@
       "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913"],
-      "triangulos": 2400,
+      "triangulos": 15958,
       "notas": [
         "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
         "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
@@ -1119,10 +1121,10 @@
       "elemento": "gm-guardamanos-quad-rail-de-10-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-9e335b500791",
+      "id_variante": "guardamanos.variantes@v2-9e335b500791",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-quad-10.glb",
-      "sha256_glb": "0c9a54d44b752eae93deefa33039fae21de3dfef3af67f3235e5989e6db74ddf",
-      "bytes": 130612,
+      "sha256_glb": "212b56354df9e489ae53f3f29f221c76dd2c60b60309d90099c28c0455275c48",
+      "bytes": 657828,
       "parametros": {
         "tipo": "ris",
         "longitud": 254.0,
@@ -1238,7 +1240,7 @@
       "sockets": ["socket.union-receptor", "socket.rail.top", "socket.rail.l", "socket.rail.bottom", "socket.rail.r"],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913"],
-      "triangulos": 2592,
+      "triangulos": 16918,
       "notas": [
         "Perfil simplificado y estimado: el cuello inventado tiene el ancho del plano superior, el canto es una arista viva y el bisel se dibuja a 45° (ancho total, plano superior, altura, cuello, canto y ángulo sin verificar).",
         "El tubo cuadrado con taladro redondo y la unión al receptor (tuerca de cañón) son simplificaciones."
@@ -1266,10 +1268,10 @@
       "elemento": "gm-guardamanos-m-lok-de-7-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-342c537bc1e7",
+      "id_variante": "guardamanos.variantes@v2-342c537bc1e7",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-7.glb",
-      "sha256_glb": "07aaeb2b3ba1f8b092dc6204e1596945367c9b52b9e49ec2d9b63cb5201cf722",
-      "bytes": 140172,
+      "sha256_glb": "86a526d49c6e2660e65df896bcf4c735cbd5e2ed8bd18b737825326a5f8d8fc4",
+      "bytes": 300544,
       "parametros": {
         "tipo": "mlok",
         "longitud": 177.8,
@@ -1400,7 +1402,7 @@
       ],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913", "mlok"],
-      "triangulos": 3344,
+      "triangulos": 7732,
       "notas": [
         "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
         "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
@@ -1429,10 +1431,10 @@
       "elemento": "gm-guardamanos-m-lok-de-9-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-551495f99447",
+      "id_variante": "guardamanos.variantes@v2-551495f99447",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-9.glb",
-      "sha256_glb": "533523937ff3aee21f815888ecf75f4383aa01a46a62d29d6bc47bba641bead3",
-      "bytes": 171624,
+      "sha256_glb": "febe32691ee01ed7558e11ef193743e1ce9e7dcdd65ba7db00c4e11615f1ca6e",
+      "bytes": 331996,
       "parametros": {
         "tipo": "mlok",
         "longitud": 228.6,
@@ -1566,7 +1568,7 @@
       ],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913", "mlok"],
-      "triangulos": 4124,
+      "triangulos": 8512,
       "notas": [
         "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
         "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
@@ -1595,10 +1597,10 @@
       "elemento": "gm-guardamanos-m-lok-de-10-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-66224ff9054c",
+      "id_variante": "guardamanos.variantes@v2-66224ff9054c",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-10.glb",
-      "sha256_glb": "6a97d3ca33d99d9666a530ce8aa3fbbd2e0c1107a04d79be9538fede9eaad22b",
-      "bytes": 199596,
+      "sha256_glb": "2ca1fb2fca7d4c144b4fc9a830aec9523cec93560bf24ff3e7a4c9f54eccaf7d",
+      "bytes": 359968,
       "parametros": {
         "tipo": "mlok",
         "longitud": 254.0,
@@ -1735,7 +1737,7 @@
       ],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913", "mlok"],
-      "triangulos": 4832,
+      "triangulos": 9220,
       "notas": [
         "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
         "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
@@ -1764,10 +1766,10 @@
       "elemento": "gm-guardamanos-m-lok-de-12-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-be1fd5b519b2",
+      "id_variante": "guardamanos.variantes@v2-be1fd5b519b2",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-12.glb",
-      "sha256_glb": "0caa7920bfe0274543bce09b33fbda4a47648331fc52506c0f54915ed4e1cacf",
-      "bytes": 231064,
+      "sha256_glb": "2dda0c56f45923e5cee7e07d31a1840f46f5e9ae11923efc2b04801155525423",
+      "bytes": 391436,
       "parametros": {
         "tipo": "mlok",
         "longitud": 304.8,
@@ -1907,7 +1909,7 @@
       ],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913", "mlok"],
-      "triangulos": 5612,
+      "triangulos": 10000,
       "notas": [
         "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
         "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
@@ -1936,10 +1938,10 @@
       "elemento": "gm-guardamanos-m-lok-de-13-5-pulgadas",
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-f7339a703311",
+      "id_variante": "guardamanos.variantes@v2-f7339a703311",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-13-5.glb",
-      "sha256_glb": "f12831332a2f4a18af5f30f8c6b5ffe4c6062bd23d27800e13a30352159dc6e2",
-      "bytes": 261404,
+      "sha256_glb": "97e85a5aee76b39442b15b43e0793f831ad83e95485ba2ddbb2c5dc65c0bb7aa",
+      "bytes": 421780,
       "parametros": {
         "tipo": "mlok",
         "longitud": 342.9,
@@ -2082,7 +2084,7 @@
       ],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913", "mlok"],
-      "triangulos": 6368,
+      "triangulos": 10756,
       "notas": [
         "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
         "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
@@ -2111,10 +2113,10 @@
       "elemento": null,
       "origen": "generador",
       "familia": "guardamanos.variantes",
-      "id_variante": "guardamanos.variantes@v1-ded51b44aecc",
+      "id_variante": "guardamanos.variantes@v2-ded51b44aecc",
       "glb": "apps/pipeline/salida/m4-oleada1/gm-mlok-15.glb",
-      "sha256_glb": "2f6210b146e911e35a6b4c5cd71d2d56153f0cb733d97a7bc8cb157a19f86941",
-      "bytes": 291652,
+      "sha256_glb": "429e97ca8d88f692d72cc0f32c7d9c78e1d01dd54b2ed6c91cc2aa03dbad315a",
+      "bytes": 452028,
       "parametros": {
         "tipo": "mlok",
         "longitud": 381.0,
@@ -2260,7 +2262,7 @@
       ],
       "requiere": ["tuerca-guardamanos-ar"],
       "ofrece": ["picatinny-mil-std-1913", "mlok"],
-      "triangulos": 7124,
+      "triangulos": 11512,
       "notas": [
         "La unión al receptor (tuerca de cañón) no se modela: depende del SKU.",
         "Las ranuras M-LOK son rectas, planas y de cota estimada: en una pared curva (tubo redondo u octogonal) la ranura real se adapta a la curvatura y la pared no queda plana en toda su longitud.",
@@ -2355,10 +2357,10 @@
       "elemento": "mira-buis-trasera-abatible-back-up-iron-sight",
       "origen": "generador",
       "familia": "mira.buis",
-      "id_variante": "mira.buis@v2-5610ed5e369c",
+      "id_variante": "mira.buis@v3-5610ed5e369c",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera.glb",
-      "sha256_glb": "0bc4ad02e39bb7aff4662a1f9dee71c44a6946e6c413190fee879ced12db47f4",
-      "bytes": 235924,
+      "sha256_glb": "7f76c3ba19b1a342849007d64abcab3a3cf7880424c4cdd4eab12f90776376be",
+      "bytes": 264964,
       "parametros": {
         "lado": "trasera",
         "posicion": "erguida",
@@ -2404,7 +2406,7 @@
       "sockets": ["socket.rail.base"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 7142,
+      "triangulos": 8032,
       "notas": [
         "Pinza al raíl, muelles y trinquete de la bisagra no se modelan; proporciones estimadas.",
         "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
@@ -2432,10 +2434,10 @@
       "elemento": "mira-buis-delantera-abatible",
       "origen": "generador",
       "familia": "mira.buis",
-      "id_variante": "mira.buis@v2-6c6286c81766",
+      "id_variante": "mira.buis@v3-6c6286c81766",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-delantera.glb",
-      "sha256_glb": "bb37fe58ab4049e0126e9a4e4d985b1476d10b10dfae51e74c4a490fd0af3558",
-      "bytes": 189728,
+      "sha256_glb": "e13ff80dd01ae32e250e64b55fca8632ed2c9328781456f91be1bc0338c9b033",
+      "bytes": 215072,
       "parametros": {
         "lado": "delantera",
         "posicion": "erguida",
@@ -2481,7 +2483,7 @@
       "sockets": ["socket.rail.base"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 6008,
+      "triangulos": 6728,
       "notas": [
         "Pinza al raíl, muelles y trinquete de la bisagra no se modelan; proporciones estimadas.",
         "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
@@ -2509,10 +2511,10 @@
       "elemento": null,
       "origen": "generador",
       "familia": "mira.buis",
-      "id_variante": "mira.buis@v2-aa91c71e16f0",
+      "id_variante": "mira.buis@v3-aa91c71e16f0",
       "glb": "apps/pipeline/salida/m4-oleada1/mira-buis-trasera-abatida.glb",
-      "sha256_glb": "c9444fc45797c0e6f4d3d7a8f0638f7a3593fad007116b198b58f84ee9829695",
-      "bytes": 237700,
+      "sha256_glb": "407abcd7759e20673d5fbc0aa32db9608cb5757f3619004a4335e379b4b94cf9",
+      "bytes": 263116,
       "parametros": {
         "lado": "trasera",
         "posicion": "abatida",
@@ -2558,7 +2560,7 @@
       "sockets": ["socket.rail.base"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 7206,
+      "triangulos": 7938,
       "notas": [
         "Pinza al raíl, muelles y trinquete de la bisagra no se modelan; proporciones estimadas.",
         "La mira abatida gira 90° sobre la bisagra hacia delante (+X)."
@@ -2586,10 +2588,10 @@
       "elemento": "acc-empunadura-vertical-foregrip-de-poste",
       "origen": "generador",
       "familia": "accesorio.empunadura_vertical",
-      "id_variante": "accesorio.empunadura_vertical@v2-7541790c2994",
+      "id_variante": "accesorio.empunadura_vertical@v3-7541790c2994",
       "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-poste.glb",
-      "sha256_glb": "89a4abf983fabd05ec29dad861d1d6bc370e77f2c88ea873c354d8f7bc6657bf",
-      "bytes": 196828,
+      "sha256_glb": "f480d2e6a36e9c6c6e02486e8709bc5c89065d581c03d8f6835b998a606f1a22",
+      "bytes": 206172,
       "parametros": {
         "longitud_total": 100.0,
         "diametro": 32.0,
@@ -2634,7 +2636,7 @@
       "sockets": ["socket.rail.agarre"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 6264,
+      "triangulos": 6454,
       "notas": [
         "Anillos, collar y base de proporciones estimadas; la pinza del raíl es solo la ranura superior.",
         "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja)."
@@ -2662,10 +2664,10 @@
       "elemento": "acc-empunadura-angular-angled-foregrip",
       "origen": "generador",
       "familia": "accesorio.empunadura_vertical",
-      "id_variante": "accesorio.empunadura_vertical@v2-bf0c03d46f8e",
+      "id_variante": "accesorio.empunadura_vertical@v3-bf0c03d46f8e",
       "glb": "apps/pipeline/salida/m4-oleada1/acc-vertical-angular.glb",
-      "sha256_glb": "fae069112383234cb72ea9b3b7904a39f03ec72636d3845dc09f818d35cc6347",
-      "bytes": 206840,
+      "sha256_glb": "3fb1bb08d71453b206aeb9a3f538271f996d5d549b752a42abd404f232dc45b3",
+      "bytes": 219516,
       "parametros": {
         "longitud_total": 100.0,
         "diametro": 32.0,
@@ -2710,7 +2712,7 @@
       "sockets": ["socket.rail.agarre"],
       "requiere": ["picatinny-mil-std-1913"],
       "ofrece": [],
-      "triangulos": 6676,
+      "triangulos": 6942,
       "notas": [
         "Anillos, collar y base de proporciones estimadas; la pinza del raíl es solo la ranura superior.",
         "El ancho de la base (21,2 + 8 mm) hereda la cota estimada del raíl Picatinny (confianza baja)."
