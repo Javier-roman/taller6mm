@@ -486,11 +486,11 @@ def estudio(lo, hi, centro, diag):
     e.world = mundo
     suelo(lo, (0.18, 0.18, 0.18, 1.0), 0.35, 0.0)
     d = diag
-    luz("clave", centro + Vector((0.5, -1.0, 1.1)) * d * 1.3, 190 * d**2, d * 1.6, centro)
-    luz("relleno", centro + Vector((1.3, 0.9, 0.4)) * d * 1.5, 63 * d**2, d * 1.6, centro, color=(0.85, 0.92, 1.0))
+    luz("clave", centro + Vector((0.5, -1.0, 1.1)) * d * 1.3, 120 * d**2, d * 1.6, centro)
+    luz("relleno", centro + Vector((1.3, 0.9, 0.4)) * d * 1.5, 40 * d**2, d * 1.6, centro, color=(0.85, 0.92, 1.0))
     luz("contra-a", centro + Vector((-1.3, 0.6, 0.7)) * d * 1.4, 220 * d**2, d * 0.35, centro, color=(1.0, 0.97, 0.9))
     luz("contra-b", centro + Vector((-1.0, -0.9, 0.5)) * d * 1.4, 150 * d**2, d * 0.3, centro, color=(0.9, 0.95, 1.0))
-    luz("sombrero", centro + Vector((0.0, 0.0, 1.6)) * d * 1.2, 60 * d**2, d * 1.2, centro)
+    luz("sombrero", centro + Vector((0.0, 0.0, 1.6)) * d * 1.2, 30 * d**2, d * 1.2, centro)
 
 
 def luz_basica(centro, diag):
