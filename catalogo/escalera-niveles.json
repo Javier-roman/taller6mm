@@ -1,8 +1,13 @@
 {
   "esquema": "escalera-niveles/v1",
-  "nota": "Escalera de calidad de las piezas (apps/pipeline/src/taller6mm_pipeline/calidad/escalera.py, docs/05 «Escalera de calidad»). Cada nivel puntúa 0-100 como media ponderada de la fracción que cumple cada criterio (lo sin dato es bandera). `umbral` = el nivel se supera; `techo` = hasta donde el agente escalador sigue elevando la pieza. N1 usa la puerta de catalogo/calidad-minimos.json. Un umbral que parezca injusto se cambia aquí con su motivo, nunca desactivando el criterio. Toda la apariencia es procedural y propia; no cambia el nivel de fidelidad (T0) ni publicable_3d (false).",
+  "nota": "Escalera de calidad de las piezas (apps/pipeline/src/taller6mm_pipeline/calidad/escalera.py, docs/05 «Escalera de calidad»). Cada nivel puntúa 0-100 como media ponderada de la fracción que cumple cada criterio (lo sin dato es bandera). `umbral` = el nivel se supera; `techo` = hasta donde el agente escalador sigue elevando la pieza. N1 usa la puerta de catalogo/calidad-minimos.json. Un umbral que parezca injusto se cambia aquí con su motivo, nunca desactivando el criterio. Toda la apariencia es procedural y propia; no cambia el nivel de fidelidad (T0) ni publicable_3d (false). Los umbrales de N3, N4 y N5 siguen docs/catalogo/guia-aspecto-piezas.md (etiquetas [medido]/[ficha]/[foto]/[convención]); los [convención] son hipótesis y se ajustan con la hoja de contacto.",
   "niveles": {
-    "1": { "nombre": "Forma", "umbral": 75, "techo": 95, "criterios": [] },
+    "1": {
+      "nombre": "Forma",
+      "umbral": 75,
+      "techo": 95,
+      "criterios": []
+    },
     "2": {
       "nombre": "Detalle geométrico fino",
       "umbral": 75,
@@ -67,49 +72,73 @@
           "id": "cobertura",
           "clave": "cobertura_materiales",
           "min": 1,
-          "peso": 20,
+          "peso": 15,
           "motivo": "La pieza no tiene regla de material en catalogo/materiales-piezas.json.",
-          "sugerencia": "Añade su familia o patrón de id al catálogo con el material de la biblioteca procedural que le corresponde."
+          "sugerencia": "Añade su familia o patrón de id al catálogo con el material de la biblioteca que le corresponde."
         },
         {
           "id": "var_rugosidad",
           "clave": "rug_std",
-          "min": 0.015,
-          "peso": 20,
-          "motivo": "La rugosidad es casi uniforme: parece plástico de juguete.",
-          "sugerencia": "Sube `rugosidad.variacion` o `grano` del material en la biblioteca."
+          "min": 0.02,
+          "peso": 15,
+          "motivo": "La rugosidad es casi uniforme (< 0,02): aspecto de plástico de juguete (guía §2.4).",
+          "sugerencia": "Sube `rugosidad.variacion` o `grano` del material; con la base CC0 en disco la variación viene del mapa."
+        },
+        {
+          "id": "var_rugosidad_aviso",
+          "clave": "rug_std",
+          "min": 0.04,
+          "peso": 5,
+          "motivo": "Desviación de rugosidad por debajo de 0,04 (aviso, guía §2.4 [convención]).",
+          "sugerencia": "Sube la variación de rugosidad hasta 0,04-0,12."
         },
         {
           "id": "var_rugosidad_max",
           "clave": "rug_std",
-          "max": 0.2,
+          "max": 0.12,
           "peso": 5,
-          "motivo": "La rugosidad varía demasiado: se ve ruido, no material.",
+          "motivo": "La rugosidad varía por encima de 0,12: se ve ruido, no material (guía §2.4 [convención]).",
           "sugerencia": "Baja `rugosidad.variacion`."
         },
         {
           "id": "var_albedo",
           "clave": "albedo_cv",
           "min": 0.05,
-          "peso": 15,
-          "motivo": "El albedo es plano: sin pátina ni variación de color.",
-          "sugerencia": "Añade variación de color (pátina) o veta al material."
+          "peso": 10,
+          "motivo": "El albedo es plano: sin pátina ni variación de luminancia.",
+          "sugerencia": "Añade variación de color (pátina) o modulación de la base CC0."
         },
         {
           "id": "fidelidad_receta",
           "clave": "rug_error",
           "max": 0.1,
           "peso": 20,
-          "motivo": "La rugosidad media se aparta de la receta del material.",
-          "sugerencia": "Revisa `rugosidad.media` frente a lo que se dibuja (rayas y grano la desplazan)."
+          "motivo": "La rugosidad media se aparta de la guía (±0,10 sobre el valor [medido], §2.3).",
+          "sugerencia": "Revisa `rugosidad.media` frente a la tabla de la guía §1."
         },
         {
           "id": "textura_fina",
           "clave": "rug_alta_frecuencia",
           "min": 0.006,
-          "peso": 20,
+          "peso": 10,
           "motivo": "Sin textura de alta frecuencia: faltan micro-rayas y grano.",
-          "sugerencia": "Sube `grano.escala`/`rayas.cantidad` del material."
+          "sugerencia": "Sube `grano.escala`/`rayas.cantidad` o carga la base CC0."
+        },
+        {
+          "id": "negro_no_es_cero",
+          "clave": "albedo_negro_srgb",
+          "min": 30,
+          "peso": 5,
+          "motivo": "Negro demasiado puro (sRGB < 30): la forma desaparece (guía §2.1 [convención]).",
+          "sugerencia": "Sube el color base del material negro hasta sRGB 30-55."
+        },
+        {
+          "id": "negro_no_es_gris",
+          "clave": "albedo_negro_srgb",
+          "max": 55,
+          "peso": 5,
+          "motivo": "Negro demasiado claro (sRGB > 55) (guía §2.1 [convención]).",
+          "sugerencia": "Baja el color base del material negro."
         }
       ]
     },
@@ -127,6 +156,14 @@
           "sugerencia": "Sube `desgaste.cantidad` o `desgaste.radio_mm` del material."
         },
         {
+          "id": "borde_cobertura_max",
+          "clave": "borde_cobertura",
+          "max": 0.06,
+          "peso": 5,
+          "motivo": "Roce en más del 6 % de la superficie: parece pieza muy usada (guía §5.2 [convención]: 2-6 %).",
+          "sugerencia": "Baja `desgaste.cantidad` o `desgaste.radio_mm`."
+        },
+        {
           "id": "borde_contraste",
           "clave": "borde_contraste",
           "min": 0.25,
@@ -140,7 +177,7 @@
           "min": 0.01,
           "peso": 15,
           "motivo": "Sin suciedad ni polvo en las cavidades (oclusión ambiental).",
-          "sugerencia": "Sube `suciedad.cantidad`/`distancia_mm` o aclara `suciedad.color`."
+          "sugerencia": "Sube `suciedad.cantidad`/`distancia_mm`; oscurece 15-30 % y sube la rugosidad 0,05-0,15 (guía §5.1 [convención])."
         },
         {
           "id": "no_uniformidad",
@@ -260,7 +297,13 @@
     "canon": {
       "familia": "canon.exterior",
       "representante": "canon-a2-pesado",
-      "umbrales": { "2": { "rasgos_pequenos": { "min": 6 } } }
+      "umbrales": {
+        "2": {
+          "rasgos_pequenos": {
+            "min": 6
+          }
+        }
+      }
     },
     "pistolete": {
       "familia": "empunadura.pistolete",
@@ -271,7 +314,16 @@
       "familia": "guardamanos.variantes",
       "id": "gm-mlok-*",
       "representante": "gm-mlok-9",
-      "umbrales": { "2": { "periodicidad": { "min": 0.15 }, "rasgos_pequenos": { "min": 12 } } }
+      "umbrales": {
+        "2": {
+          "periodicidad": {
+            "min": 0.15
+          },
+          "rasgos_pequenos": {
+            "min": 12
+          }
+        }
+      }
     }
   }
 }

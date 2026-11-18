@@ -5,7 +5,8 @@
 `lista.json`: [{"glb": "a.glb", "id": "gm-mlok-7", "salida": "carpeta", "pasos": ["n1","n2","n3","n4","n5","sondas"],
 "material": {...spec de la biblioteca...}, "variacion": {"color":1.0,"rugosidad":0.0,"desgaste":1.0}, "semilla": 123,
 "vista": "izq", "muestras": 48, "muestras_n5": 96, "res": [640, 480], "res_n5": [960, 720]}]
-y, para el conjunto de una familia, {"conjunto": [{"glb","material","variacion","semilla"}...], "id": "conjunto-x", ...}.
+y, para el conjunto de una familia, {"conjunto": [{"glb","material","variacion","semilla"}...], "id": "conjunto-x"}.
+`material["_cc0"]` (opcional) trae las rutas de la base CC0 de la guía de aspecto; sin él, receta procedural.
 
 Pasos (cada uno suma al anterior):
   n1 forma: arcilla gris con luz básica · n2 detalle: arcilla con oclusión de cavidades y realce de aristas ·
@@ -73,6 +74,37 @@ def _poner(enlaces, origen, destino):
         destino.default_value = origen
 
 
+def _por_color(nodos, enlaces, color, k):
+    """color * k (k flotante o socket) con un Mix multiplicativo."""
+    m = _n(nodos, "ShaderNodeMix", data_type="RGBA", blend_type="MULTIPLY")
+    m.inputs[0].default_value = 1.0
+    _poner(enlaces, color, m.inputs[6])
+    if hasattr(k, "node"):
+        c = _n(nodos, "ShaderNodeCombineColor")
+        for i in range(3):
+            enlaces.new(k, c.inputs[i])
+        enlaces.new(c.outputs[0], m.inputs[7])
+    else:
+        m.inputs[7].default_value = (k, k, k, 1.0)
+    return m.outputs[2]
+
+
+def _imagen(nodos, enlaces, coord, ruta, no_color, escala_m, off):
+    """Mapa CC0 proyectado en caja sobre coordenadas de objeto (sin UV); devuelve su luminancia (0-1)."""
+    mp = _n(nodos, "ShaderNodeMapping")
+    enlaces.new(coord, mp.inputs["Vector"])
+    mp.inputs["Scale"].default_value = (1.0 / escala_m,) * 3
+    mp.inputs["Location"].default_value = (off * 0.013, off * 0.007, off * 0.011)
+    im = bpy.data.images.load(ruta, check_existing=True)
+    im.colorspace_settings.name = "Non-Color" if no_color else "sRGB"
+    t = _n(nodos, "ShaderNodeTexImage", projection="BOX", projection_blend=0.25, interpolation="Smart")
+    t.image = im
+    enlaces.new(mp.outputs["Vector"], t.inputs["Vector"])
+    bw = _n(nodos, "ShaderNodeRGBToBW")
+    enlaces.new(t.outputs["Color"], bw.inputs["Color"])
+    return bw.outputs["Val"]
+
+
 def _mate(nodos, enlaces, tipo, a, b=None, **props):
     m = _n(nodos, "ShaderNodeMath", operation=tipo, **props)
     _poner(enlaces, a, m.inputs[0])
@@ -105,11 +137,12 @@ def _ruido(
     return r.outputs["Fac"]
 
 
-def construir_material(spec, modo, semilla, variacion, con_desgaste):
+def construir_material(spec, modo, semilla, variacion, con_desgaste, cc0=None):
     """Material procedural. `modo`: pbr, arcilla (igual que pbr con su spec), alb, rug, borde, sucio, mask, prof.
 
     Los modos que no son `pbr` emiten la magnitud medida (sin iluminación) para que el medidor lea números, no estética.
     """
+    cc0 = cc0 or spec.get("_cc0")  # mapas CC0 resueltos por Python (solo biblioteca interna del render)
     mat = bpy.data.materials.new(f"{modo}")
     mat.use_nodes = True
     nodos, enlaces = mat.node_tree.nodes, mat.node_tree.links
@@ -144,6 +177,16 @@ def construir_material(spec, modo, semilla, variacion, con_desgaste):
         w.inputs["Detail"].default_value = 3.0
         veta = w.outputs["Fac"]
 
+    # --- estructura de la base CC0 (solo luminancia, rugosidad y relieve; el color lo fija la receta) -----
+    tex_rug = tex_lum = tex_alt = None
+    if cc0 and not cc0.get("solo"):
+        m = cc0["mapas"]
+        tex_rug = _imagen(nodos, enlaces, obj, m["rugosidad"], True, cc0["escala_m"], off)
+        if "color" in m:
+            tex_lum = _imagen(nodos, enlaces, obj, m["color"], False, cc0["escala_m"], off)
+        if "altura" in m:
+            tex_alt = _imagen(nodos, enlaces, obj, m["altura"], True, cc0["escala_m"], off)
+
     # --- color base --------------------------------------------------------------------------------
     k = variacion["color"]
     c1 = [min(1.0, x * k) for x in spec["color"]] + [1.0]
@@ -175,6 +218,17 @@ def construir_material(spec, modo, semilla, variacion, con_desgaste):
         _mate(nodos, enlaces, "MULTIPLY", _mate(nodos, enlaces, "SUBTRACT", fina, 0.5), rug["grano"] * 2.0),
     )
     metalico = spec["metalico"]
+    if tex_rug is not None:
+        # La base aporta solo la variación: se resta su media y se suma a la rugosidad de la receta.
+        rugosidad = _mate(
+            nodos, enlaces, "ADD", rugosidad, _mate(nodos, enlaces, "SUBTRACT", tex_rug, cc0["rug_media_tex"] or 0.5)
+        )
+    if tex_lum is not None and cc0.get("albedo_media_srgb"):
+        lin = sum(
+            ((c / 255.0) ** 2.2) * w for c, w in zip(cc0["albedo_media_srgb"], (0.2126, 0.7152, 0.0722), strict=True)
+        )
+        ratio = _mapa(nodos, enlaces, _mate(nodos, enlaces, "DIVIDE", tex_lum, max(lin, 1e-4)), 0.4, 1.8, 0.55, 1.5)
+        color = _por_color(nodos, enlaces, color, ratio)
     if rayas != 0.0:
         color = _mezcla_color(
             nodos, enlaces, rayas, color, [min(1.0, x * (1 + ray["aclarado"] * 6)) for x in c1[:3]] + [1.0]
@@ -216,8 +270,10 @@ def construir_material(spec, modo, semilla, variacion, con_desgaste):
             suc["cantidad"],
         )
         # el desgaste gana donde hay roce; la suciedad, en el resto
-        color = _mezcla_color(nodos, enlaces, sucio, color, suc["color"] + [1.0])
-        rugosidad = _mezcla_flotante(nodos, enlaces, sucio, rugosidad, suc["rugosidad"])
+        color = _mezcla_color(nodos, enlaces, sucio, color, _por_color(nodos, enlaces, color, 1.0 - suc["oscurece"]))
+        rugosidad = _mate(
+            nodos, enlaces, "ADD", rugosidad, _mate(nodos, enlaces, "MULTIPLY", sucio, suc["rugosidad_extra"])
+        )
         color = _mezcla_color(nodos, enlaces, borde, color, des["color"] + [1.0])
         rugosidad = _mezcla_flotante(nodos, enlaces, borde, rugosidad, des["rugosidad"])
         metalico = _mezcla_flotante(nodos, enlaces, borde, metalico, des["metalico"])
@@ -262,12 +318,12 @@ def construir_material(spec, modo, semilla, variacion, con_desgaste):
             bp = _n(nodos, "ShaderNodeBump")
             bp.inputs["Strength"].default_value = gra["relieve"]
             bp.inputs["Distance"].default_value = 0.0004
-            enlaces.new(
-                _mate(
-                    nodos, enlaces, "ADD", fina, _mate(nodos, enlaces, "MULTIPLY", rayas, 0.8) if rayas != 0.0 else 0.0
-                ),
-                bp.inputs["Height"],
+            altura = _mate(
+                nodos, enlaces, "ADD", fina, _mate(nodos, enlaces, "MULTIPLY", rayas, 0.8) if rayas != 0.0 else 0.0
             )
+            if tex_alt is not None:
+                altura = _mate(nodos, enlaces, "ADD", altura, tex_alt)  # relieve real de la base CC0
+            enlaces.new(altura, bp.inputs["Height"])
             enlaces.new(bp.outputs["Normal"], p.inputs["Normal"])
         if "vidrio" in spec:
             p.inputs["Transmission Weight"].default_value = spec["vidrio"]["transmision"]
@@ -391,10 +447,10 @@ def fondo_simple(lo):
     mundo = bpy.data.worlds.new("mundo")
     mundo.use_nodes = True
     f = mundo.node_tree.nodes["Background"]
-    f.inputs["Color"].default_value = (0.52, 0.56, 0.62, 1.0)
-    f.inputs["Strength"].default_value = 0.42
+    f.inputs["Color"].default_value = (0.18, 0.18, 0.18, 1.0)
+    f.inputs["Strength"].default_value = 1.0
     e.world = mundo
-    suelo(lo, (0.62, 0.64, 0.67, 1.0), 0.8, 0.0)
+    suelo(lo, (0.18, 0.18, 0.18, 1.0), 0.8, 0.0)
 
 
 def suelo(lo, color, rug, metal):
@@ -412,7 +468,7 @@ def suelo(lo, color, rug, metal):
 
 
 def estudio(lo, hi, centro, diag):
-    """Mundo oscuro degradado + cajas de luz: clave grande, relleno suave y dos tiras de contraluz; suelo semirreflectante."""
+    """Fondo gris medio (guía §7) y cajas de luz: clave, relleno 3:1, dos tiras de contraluz y suelo semirreflectante."""
     e = bpy.context.scene
     mundo = bpy.data.worlds.new("estudio")
     mundo.use_nodes = True
@@ -422,16 +478,16 @@ def estudio(lo, hi, centro, diag):
     sep = _n(nodos, "ShaderNodeSeparateXYZ")
     enlaces.new(tc.outputs["Generated"], sep.inputs[0])
     rampa = _n(nodos, "ShaderNodeValToRGB")
-    rampa.color_ramp.elements[0].color = (0.012, 0.014, 0.02, 1.0)
-    rampa.color_ramp.elements[1].color = (0.11, 0.125, 0.15, 1.0)
+    rampa.color_ramp.elements[0].color = (0.11, 0.11, 0.115, 1.0)
+    rampa.color_ramp.elements[1].color = (0.26, 0.26, 0.27, 1.0)
     enlaces.new(sep.outputs["Z"], rampa.inputs["Fac"])
     enlaces.new(rampa.outputs["Color"], f.inputs["Color"])
     f.inputs["Strength"].default_value = 1.0
     e.world = mundo
-    suelo(lo, (0.035, 0.037, 0.042, 1.0), 0.28, 0.0)
+    suelo(lo, (0.18, 0.18, 0.18, 1.0), 0.35, 0.0)
     d = diag
     luz("clave", centro + Vector((0.5, -1.0, 1.1)) * d * 1.3, 190 * d**2, d * 1.6, centro)
-    luz("relleno", centro + Vector((1.3, 0.9, 0.4)) * d * 1.5, 28 * d**2, d * 1.6, centro, color=(0.85, 0.92, 1.0))
+    luz("relleno", centro + Vector((1.3, 0.9, 0.4)) * d * 1.5, 63 * d**2, d * 1.6, centro, color=(0.85, 0.92, 1.0))
     luz("contra-a", centro + Vector((-1.3, 0.6, 0.7)) * d * 1.4, 220 * d**2, d * 0.35, centro, color=(1.0, 0.97, 0.9))
     luz("contra-b", centro + Vector((-1.0, -0.9, 0.5)) * d * 1.4, 150 * d**2, d * 0.3, centro, color=(0.9, 0.95, 1.0))
     luz("sombrero", centro + Vector((0.0, 0.0, 1.6)) * d * 1.2, 60 * d**2, d * 1.2, centro)
@@ -491,7 +547,9 @@ def preparar(items, paso, res, muestras, vista, materiales, semillas, variacione
                 o.data.materials.append(cache[clave])
             elif paso in SONDAS:
                 o.data.materials.append(
-                    construir_material(mat_spec, paso.rstrip("34"), sem, var, paso.endswith("4") or paso in ("borde", "sucio"))
+                    construir_material(
+                        mat_spec, paso.rstrip("34"), sem, var, paso.endswith("4") or paso in ("borde", "sucio")
+                    )
                 )
             else:
                 o.data.materials.append(construir_material(mat_spec, "pbr", sem, var, paso in ("n4", "n5")))

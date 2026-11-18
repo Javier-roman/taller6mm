@@ -1,101 +1,117 @@
-"""Biblioteca de materiales PBR procedurales propios: solo números y reglas, ninguna foto ni textura de terceros.
+"""Biblioteca de materiales PBR: recetas propias sobre la estructura de las bases CC0 de `catalogo/materiales-cc0.json`.
 
-Cada material es un diccionario JSON-serializable que interpreta `blender/escalera_render.py` (nodos procedurales de
-Blender: ruido, Voronoi, onda, bisel y oclusión). Las claves de color son RGB lineal. La apariencia nunca cambia el
-nivel de fidelidad de la pieza (siguen siendo T0 y `publicable_3d=false`): es solo presentación interna.
-Sin logos ni marcajes: ningún material lleva texto ni grabados.
+Cada material es un diccionario JSON-serializable que interpreta `blender/escalera_render.py`. Los números salen de
+`docs/catalogo/guia-aspecto-piezas.md` (§1 y §2: albedo, rugosidad y metalicidad **[medido]** sobre los mapas 1K CC0;
+§5: desgaste y suciedad **[convención]**, hipótesis a calibrar con renders). Las claves de color son RGB lineal.
+
+Textura: de la base CC0 solo se toma la **estructura** (variación de rugosidad, relieve y modulación de luminancia);
+el color y el nivel de brillo los fija la receta propia. Si los mapas no están en disco (`assets-src/materiales-cc0/`,
+ignorada por git), el material cae a su receta procedural (ruido, rayas, Voronoi) y el informe lo dice. Las texturas
+CC0 son solo biblioteca interna del render: nunca se publican ni se proyectan fotos de terceros. Sin logos ni marcajes.
+La apariencia nunca cambia el nivel de fidelidad (T0, `publicable_3d=false`).
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-# Desgaste de uso (N4): roce metálico en aristas y suciedad en cavidades. Cada material lo ajusta a su naturaleza.
-_DESGASTE_METAL = {"color": [0.42, 0.43, 0.45], "rugosidad": 0.30, "metalico": 1.0, "radio_mm": 1.2, "cantidad": 0.85}
-_SUCIEDAD = {"color": [0.17, 0.145, 0.115], "rugosidad": 0.9, "distancia_mm": 4.0, "cantidad": 0.6}
+# Desgaste (N4): roce en aristas con el aluminio pelado de la guía (§1: albedo 0,91, rugosidad 0,24, metálico 1).
+_DESGASTE_METAL = {"color": [0.91, 0.91, 0.91], "rugosidad": 0.24, "metalico": 1.0, "radio_mm": 1.2, "cantidad": 0.85}
+# Suciedad en cavidades (§5.1): la oclusión oscurece el albedo un 15-30 % y sube la rugosidad +0,05-0,15.
+_SUCIEDAD = {"oscurece": 0.25, "rugosidad_extra": 0.1, "distancia_mm": 4.0, "cantidad": 0.6}
 _SIN_RAYAS = {"cantidad": 0.0, "escala": 200.0, "alargado": 6.0, "aclarado": 0.0, "rugosidad": 0.0}
 
 MATERIALES: dict[str, dict[str, Any]] = {
     "anodizado_negro": {
-        "nombre": "Anodizado negro con micro-rayas",
+        "nombre": "Anodizado negro mate con micro-rayas",
         "tipo": "metal",
-        "color": [0.034, 0.036, 0.04],
-        "metalico": 0.92,
-        "rugosidad": {"media": 0.34, "variacion": 0.10, "escala": 55.0, "grano": 0.05},
+        "negro": True,
+        "cc0": {"id": "acg-metal027", "escala_m": 0.2},
+        "color": [0.027, 0.026, 0.036],
+        "metalico": 1.0,
+        "rugosidad": {"media": 0.65, "variacion": 0.08, "escala": 55.0, "grano": 0.05},
         "grano": {"escala": 1800.0, "relieve": 0.05},
-        "rayas": {"cantidad": 0.55, "escala": 260.0, "alargado": 14.0, "aclarado": 0.5, "rugosidad": 0.22},
+        "rayas": {"cantidad": 0.5, "escala": 260.0, "alargado": 14.0, "aclarado": 0.9, "rugosidad": -0.2},
         "desgaste": {**_DESGASTE_METAL},
         "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.18, "rugosidad": 0.04},
     },
     "parkerizado": {
-        "nombre": "Parkerizado gris verdoso mate",
+        "nombre": "Parkerizado gris con microrrayado",
         "tipo": "metal",
-        "color": [0.075, 0.082, 0.07],
-        "metalico": 0.45,
-        "rugosidad": {"media": 0.68, "variacion": 0.12, "escala": 70.0, "grano": 0.07},
+        "cc0": {"id": "acg-metal038", "escala_m": 0.2},
+        "color": [0.117, 0.119, 0.122],
+        "metalico": 1.0,
+        "rugosidad": {"media": 0.37, "variacion": 0.09, "escala": 70.0, "grano": 0.07},
         "grano": {"escala": 2600.0, "relieve": 0.09},
         "rayas": {"cantidad": 0.2, "escala": 200.0, "alargado": 10.0, "aclarado": 0.35, "rugosidad": 0.15},
-        "desgaste": {**_DESGASTE_METAL, "color": [0.36, 0.37, 0.36], "rugosidad": 0.42},
+        "desgaste": {**_DESGASTE_METAL},
         "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.2, "rugosidad": 0.05},
     },
     "polimero_grano": {
         "nombre": "Polímero negro con grano",
         "tipo": "polimero",
-        "color": [0.026, 0.027, 0.03],
+        "negro": True,
+        "cc0": {"id": "acg-plastic012a", "escala_m": 0.15},
+        "color": [0.025, 0.024, 0.022],
         "metalico": 0.0,
-        "rugosidad": {"media": 0.56, "variacion": 0.11, "escala": 60.0, "grano": 0.09},
+        "rugosidad": {"media": 0.4, "variacion": 0.07, "escala": 60.0, "grano": 0.09},
         "grano": {"escala": 1500.0, "relieve": 0.16},
         "rayas": {**_SIN_RAYAS},
-        "desgaste": {"color": [0.1, 0.1, 0.105], "rugosidad": 0.4, "metalico": 0.0, "radio_mm": 1.4, "cantidad": 0.7},
-        "suciedad": {**_SUCIEDAD, "color": [0.2, 0.18, 0.15]},
+        "desgaste": {"color": [0.1, 0.1, 0.105], "rugosidad": 0.3, "metalico": 0.0, "radio_mm": 1.4, "cantidad": 0.7},
+        "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.22, "rugosidad": 0.05},
     },
     "madera_veta": {
         "nombre": "Madera con veta",
         "tipo": "madera",
-        "color": [0.2, 0.095, 0.035],
-        "color2": [0.075, 0.03, 0.012],
+        "cc0": {"id": "acg-wood051", "escala_m": 0.3},
+        "color": [0.053, 0.034, 0.027],
+        "color2": [0.02, 0.012, 0.009],
         "metalico": 0.0,
-        "rugosidad": {"media": 0.46, "variacion": 0.1, "escala": 90.0, "grano": 0.05},
+        "rugosidad": {"media": 0.54, "variacion": 0.08, "escala": 90.0, "grano": 0.05},
         "grano": {"escala": 900.0, "relieve": 0.05},
         "veta": {"escala": 160.0, "distorsion": 3.5},
         "rayas": {**_SIN_RAYAS},
-        "desgaste": {"color": [0.3, 0.16, 0.07], "rugosidad": 0.35, "metalico": 0.0, "radio_mm": 1.6, "cantidad": 0.6},
+        "desgaste": {"color": [0.3, 0.16, 0.07], "rugosidad": 0.4, "metalico": 0.0, "radio_mm": 1.6, "cantidad": 0.6},
         "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.25, "rugosidad": 0.05},
     },
     "acero_pavonado": {
-        "nombre": "Acero pavonado azul-negro",
+        "nombre": "Acero pavonado oscuro y brillante",
         "tipo": "metal",
-        "color": [0.016, 0.02, 0.03],
-        "metalico": 1.0,
-        "rugosidad": {"media": 0.24, "variacion": 0.08, "escala": 45.0, "grano": 0.04},
+        "cc0": {"id": "acg-metal063", "escala_m": 0.2},
+        "color": [0.156, 0.155, 0.149],
+        "metalico": 0.96,
+        "rugosidad": {"media": 0.13, "variacion": 0.06, "escala": 45.0, "grano": 0.04},
         "grano": {"escala": 1200.0, "relieve": 0.03},
         "rayas": {"cantidad": 0.45, "escala": 300.0, "alargado": 22.0, "aclarado": 0.55, "rugosidad": 0.18},
-        "desgaste": {**_DESGASTE_METAL, "color": [0.5, 0.5, 0.52], "rugosidad": 0.25},
+        "desgaste": {**_DESGASTE_METAL},
         "suciedad": {**_SUCIEDAD},
-        "variacion_pieza": {"color": 0.16, "rugosidad": 0.04},
+        "variacion_pieza": {"color": 0.16, "rugosidad": 0.03},
     },
     "goma": {
         "nombre": "Goma mate",
         "tipo": "polimero",
-        "color": [0.022, 0.022, 0.024],
+        "negro": True,
+        "cc0": {"id": "acg-rubber004", "escala_m": 0.15},
+        "color": [0.023, 0.024, 0.032],
         "metalico": 0.0,
-        "rugosidad": {"media": 0.86, "variacion": 0.07, "escala": 50.0, "grano": 0.05},
+        "rugosidad": {"media": 0.59, "variacion": 0.07, "escala": 50.0, "grano": 0.05},
         "grano": {"escala": 1000.0, "relieve": 0.2},
         "rayas": {**_SIN_RAYAS},
-        "desgaste": {"color": [0.07, 0.07, 0.075], "rugosidad": 0.7, "metalico": 0.0, "radio_mm": 1.4, "cantidad": 0.5},
-        "suciedad": {**_SUCIEDAD, "color": [0.2, 0.185, 0.16]},
+        "desgaste": {"color": [0.07, 0.07, 0.075], "rugosidad": 0.5, "metalico": 0.0, "radio_mm": 1.4, "cantidad": 0.5},
+        "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.2, "rugosidad": 0.04},
     },
     "vidrio_lente": {
         "nombre": "Vidrio de lente con reflejo",
         "tipo": "vidrio",
+        "cc0": {"id": "acg-surfaceimperfections013", "escala_m": 0.1, "solo": ["suciedad"]},
         "color": [0.82, 0.9, 0.88],
         "metalico": 0.0,
-        "rugosidad": {"media": 0.05, "variacion": 0.04, "escala": 40.0, "grano": 0.02},
+        "rugosidad": {"media": 0.04, "variacion": 0.02, "escala": 40.0, "grano": 0.02},
         "grano": {"escala": 600.0, "relieve": 0.0},
         "vidrio": {"ior": 1.52, "transmision": 1.0, "tinte_reflejo": [0.55, 0.2, 0.7]},
         "rayas": {**_SIN_RAYAS},
@@ -109,13 +125,13 @@ MATERIALES: dict[str, dict[str, Any]] = {
 ARCILLA: dict[str, Any] = {
     "nombre": "Arcilla gris (solo forma)",
     "tipo": "arcilla",
-    "color": [0.42, 0.42, 0.43],
+    "color": [0.3, 0.3, 0.32],
     "metalico": 0.0,
     "rugosidad": {"media": 0.62, "variacion": 0.0, "escala": 50.0, "grano": 0.0},
     "grano": {"escala": 1000.0, "relieve": 0.0},
     "rayas": {**_SIN_RAYAS},
-    "desgaste": {"color": [0.42, 0.42, 0.43], "rugosidad": 0.62, "metalico": 0.0, "radio_mm": 0.4, "cantidad": 0.0},
-    "suciedad": {"color": [0.42, 0.42, 0.43], "rugosidad": 0.62, "distancia_mm": 3.0, "cantidad": 0.0},
+    "desgaste": {"color": [0.3, 0.3, 0.32], "rugosidad": 0.62, "metalico": 0.0, "radio_mm": 0.4, "cantidad": 0.0},
+    "suciedad": {"oscurece": 0.0, "rugosidad_extra": 0.0, "distancia_mm": 3.0, "cantidad": 0.0},
     "variacion_pieza": {"color": 0.0, "rugosidad": 0.0},
 }
 
@@ -131,7 +147,7 @@ def _hojas(x: Any) -> list[Any]:
 
 
 def validar(material_id: str, mat: dict[str, Any]) -> list[str]:
-    """Errores de un material (vacío = válido): claves, rangos y que no referencie ninguna imagen."""
+    """Errores de un material (vacío = válido): claves, rangos y que no referencie ninguna imagen por ruta."""
     errores = [f"{material_id}: falta `{k}`" for k in CLAVES_OBLIGATORIAS if k not in mat]
     if errores:
         return errores
@@ -144,7 +160,7 @@ def validar(material_id: str, mat: dict[str, Any]) -> list[str]:
     if not 0.0 < r["media"] <= 1.0 or r["variacion"] < 0.0:
         errores.append(f"{material_id}: rugosidad fuera de rango")
     if any(isinstance(v, str) and v.lower().endswith((".png", ".jpg", ".jpeg", ".exr", ".tif")) for v in _hojas(mat)):
-        errores.append(f"{material_id}: referencia una imagen; solo se permite lo procedural")
+        errores.append(f"{material_id}: referencia una imagen por ruta; la base CC0 se declara por id del catálogo")
     return errores
 
 

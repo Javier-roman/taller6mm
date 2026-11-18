@@ -26,7 +26,7 @@ from typing import Any
 
 from taller6mm_pipeline.calidad import detalle_fino, entrada, hoja, imagen, puerta
 from taller6mm_pipeline.calidad.entrada import APP, RAIZ, PiezaCalidad
-from taller6mm_pipeline.materiales import asignador
+from taller6mm_pipeline.materiales import asignador, cc0
 
 RUTA_NIVELES = RAIZ / "catalogo" / "escalera-niveles.json"
 DIR_VISTAS = RAIZ / "assets-src" / "vistas"
@@ -177,6 +177,11 @@ def metricas_imagen(carpeta: Path, id_: str, asig: asignador.Asignacion) -> dict
     esperada = asig.spec()["rugosidad"]["media"] + asig.variacion["rugosidad"]
     n3 = imagen.medir_n3(alb3, rug3, mascara, esperada)
     n3["cobertura_materiales"] = 1.0 if asig.cubierta else 0.0
+    spec = asig.spec()
+    n3["textura_cc0"] = 1.0 if cc0.resolver(spec.get("cc0")) else 0.0  # informativo: 0 = receta procedural
+    if spec.get("negro") and "albedo_media" in n3:
+        # Guía de aspecto §2.1: un negro no es 0; el albedo medio de un material negro cae entre sRGB 30 y 55.
+        n3["albedo_negro_srgb"] = round(255.0 * float(n3["albedo_media"]) ** (1 / 2.2), 2)
     n4 = imagen.medir_n4(alb4, rug4, borde, sucio, mascara, n3)
     out = {3: n3, 4: n4}
     if final.exists():
@@ -206,11 +211,20 @@ def _std(x: list[float]) -> float:
 # ------------------------------------------------------------------------------------------------ render
 
 
+def spec_render(p: PiezaEscalera) -> dict[str, Any]:
+    """Receta del material más las rutas de la base CC0 si están en disco (biblioteca interna del render)."""
+    spec = dict(p.asignacion.spec())
+    base = cc0.resolver(spec.get("cc0"))
+    if base is not None:
+        spec["_cc0"] = base
+    return spec
+
+
 def clave_cache(p: PiezaEscalera, paso: str, params: dict[str, Any]) -> str:
     datos = {
         "glb": hashlib.sha256(p.pieza.glb).hexdigest(),
         "script": hashlib.sha256(SCRIPT_BLENDER.read_bytes()).hexdigest(),
-        "mat": p.asignacion.spec(),
+        "mat": spec_render(p),
         "var": p.asignacion.variacion,
         "paso": paso,
         "params": params,
@@ -258,7 +272,7 @@ def renderizar(piezas: list[PiezaEscalera], args: argparse.Namespace, representa
                     "id": p.id,
                     "salida": str(carpeta),
                     "pasos": pasos,
-                    "material": p.asignacion.spec(),
+                    "material": spec_render(p),
                     "variacion": p.asignacion.variacion,
                     "semilla": p.asignacion.semilla,
                     "vista": "izq",
@@ -282,7 +296,7 @@ def renderizar(piezas: list[PiezaEscalera], args: argparse.Namespace, representa
                     "conjunto": [
                         {
                             "glb": str(carpeta_de(grupo) / "glb" / f"{p.id}.glb"),
-                            "material": p.asignacion.spec(),
+                            "material": spec_render(p),
                             "variacion": p.asignacion.variacion,
                             "semilla": p.asignacion.semilla,
                         }
