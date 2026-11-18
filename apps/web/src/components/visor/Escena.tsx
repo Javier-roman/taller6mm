@@ -44,14 +44,15 @@ export function calcularEncuadre(objeto: Object3D): Encuadre {
   return { radio: Math.max(tam.length() / 2, 1e-3), mitadAlto: tam.y / 2, centro };
 }
 
-const MAS_LUZ = 1.8;
+const MAS_LUZ = 3;
 const ACIMUT_INICIAL = MathUtils.degToRad(28);
 const ELEVACION_INICIAL = MathUtils.degToRad(14);
 
 function distanciaDeEncuadre(camara: PerspectiveCamera, radio: number): number {
   const vfov = MathUtils.degToRad(camara.fov);
   const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camara.aspect);
-  return (radio / Math.sin(Math.min(vfov, hfov) / 2)) * 1.08;
+  // En vertical (móvil) la pieza larga ocupa todo el ancho: se deja aire; en horizontal se llena el lienzo.
+  return (radio / Math.sin(Math.min(vfov, hfov) / 2)) * (camara.aspect < 1 ? 1.12 : 0.88);
 }
 
 function Camara({

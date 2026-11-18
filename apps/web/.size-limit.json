@@ -1,8 +1,14 @@
 [
   {
-    "name": "JS de cliente (todas las islas)",
-    "path": "dist/client/_astro/*.js",
+    "name": "JS de cliente de las páginas públicas (islas y React; sin el visor 3D)",
+    "path": ["dist/client/_astro/*.js", "!dist/client/_astro/{Escena,cargarGlb,VisorPrueba,iluminacion}.*.js"],
     "limit": "120 kB",
+    "gzip": true
+  },
+  {
+    "name": "Visor de prueba (three, R3F y Meshopt, diferido y solo en /visor-prueba; docs/08 §4: Banco ≤ 400 KB con React)",
+    "path": "dist/client/_astro/{Escena,cargarGlb,VisorPrueba,iluminacion}.*.js",
+    "limit": "330 kB",
     "gzip": true
   },
   {

@@ -12,7 +12,7 @@ export const PRESETS_MINIMOS: ConjuntoPresets = {
       nombre: 'Mate',
       descripcion: 'Luz difusa y pareja, sin brillos duros: para ver la forma sin que los reflejos la disfracen.',
       fondo: 'carbon',
-      exposicion: 1.05,
+      exposicion: 1.35,
       entorno: 0.55,
       luces: [
         { tipo: 'hemisferio', color: 'hueso', color_suelo: 'niebla', intensidad: 1.2 },
@@ -51,7 +51,7 @@ export const PRESETS_MINIMOS: ConjuntoPresets = {
       luces: [
         { tipo: 'hemisferio', color: 'niebla', color_suelo: 'acero', intensidad: 0.5 },
         { tipo: 'direccional', color: 'hueso', intensidad: 2.2, posicion: [0.2, 3, 0.6], sombra: true, suavidad: 0.7 },
-        { tipo: 'foco', color: 'laton-claro', intensidad: 3.4, posicion: [2.2, 1.4, 1.4], sombra: true, suavidad: 0.6 },
+        { tipo: 'foco', color: 'laton-claro', intensidad: 4.6, posicion: [2.2, 1.4, 1.4], sombra: true, suavidad: 0.6 },
       ],
     },
     {
@@ -62,8 +62,8 @@ export const PRESETS_MINIMOS: ConjuntoPresets = {
       exposicion: 0.9,
       entorno: 0.12,
       luces: [
-        { tipo: 'hemisferio', color: 'niebla', color_suelo: 'acero', intensidad: 0.18 },
-        { tipo: 'direccional', color: 'hueso', intensidad: 1.3, posicion: [-0.6, 3, 0.4], sombra: true, suavidad: 0.8 },
+        { tipo: 'hemisferio', color: 'niebla', color_suelo: 'acero', intensidad: 0.3 },
+        { tipo: 'direccional', color: 'hueso', intensidad: 1.9, posicion: [-0.6, 3, 0.4], sombra: true, suavidad: 0.8 },
       ],
     },
     {

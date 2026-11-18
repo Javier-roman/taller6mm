@@ -9,6 +9,8 @@ import Base from '../layouts/Base.astro';
 
 export const prerender = true;
 
+// Al insertar un recurso, Astro sustituye el `script-src` por defecto: hay que repetir `'self'`.
+Astro.csp?.insertScriptResource("'self'");
 Astro.csp?.insertScriptResource("'wasm-unsafe-eval'");
 ---
 
