@@ -26,7 +26,7 @@ from typing import Any
 
 from taller6mm_pipeline.calidad import detalle_fino, entrada, hoja, imagen, puerta
 from taller6mm_pipeline.calidad.entrada import APP, RAIZ, PiezaCalidad
-from taller6mm_pipeline.materiales import asignador, cc0, iluminacion
+from taller6mm_pipeline.materiales import asignador, cc0, exportar_glb, iluminacion
 
 RUTA_NIVELES = RAIZ / "catalogo" / "escalera-niveles.json"
 DIR_VISTAS = RAIZ / "assets-src" / "vistas"
@@ -553,6 +553,11 @@ def parser() -> argparse.ArgumentParser:
         metavar="MATERIAL=F",
         help="brillo de un material (0,6-1,4), repetible; la rugosidad no sale de su banda medida",
     )
+    ap.add_argument(
+        "--exportar-glb-con-materiales",
+        action="store_true",
+        help="escribe GLB con materiales PBR horneados (WebP) en assets-src/vistas/glb-materiales/ y sale",
+    )
     ap.add_argument("--muestras", type=int, default=40)
     ap.add_argument("--muestras-n5", type=int, default=96)
     ap.add_argument("--estricto", action="store_true", help="código de salida 2 si hay regresión")
@@ -561,8 +566,42 @@ def parser() -> argparse.ArgumentParser:
     return ap
 
 
+def exportar_piezas(args: argparse.Namespace) -> int:
+    """GLB con materiales de las piezas elegidas (el material sale de catalogo/materiales-piezas.json)."""
+    blender = hoja.localizar_blender()
+    if blender is None:
+        print("Blender no encontrado (C:/tools/blender)", file=sys.stderr)
+        return 1
+    carpeta = exportar_glb.DIR_GLB
+    entradas: dict[str, dict[str, Any]] = {}
+    trabajos = []
+    for g, p in seleccionar(cargar_niveles(), args):
+        a = asignador.asignar(p.familia, p.id)
+        origen = carpeta / "origen" / f"{p.id}.glb"
+        origen.parent.mkdir(parents=True, exist_ok=True)
+        origen.write_bytes(p.glb)
+        destino = carpeta / f"{p.id}.glb"
+        trabajos.append(
+            exportar_glb.trabajo_pieza(
+                p.id, origen, a.material_id, a.semilla, a.variacion, destino, exportar_glb.RES_PIEZA
+            )
+        )
+        entradas[p.id] = {
+            "archivo": destino.name,
+            "tipo": "pieza",
+            "familia": p.familia,
+            "grupo": g,
+            "material": a.material_id,
+        }
+    exportar_glb.ejecutar(blender, trabajos)
+    print(exportar_glb.actualizar_indice(entradas))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    if args.exportar_glb_con_materiales:
+        return exportar_piezas(args)
     piezas, regs, avisos = correr(args)
     for a in avisos:
         print(f"AVISO {a}", file=sys.stderr)

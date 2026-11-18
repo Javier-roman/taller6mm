@@ -8,28 +8,108 @@
       "material": "polimero_grano",
       "motivo": "el guardamanos A2/carabina de dos mitades es de polímero"
     },
-    { "patron": "gm-carabina", "material": "polimero_grano", "motivo": "ídem" },
-    { "patron": "acc-vertical-*", "material": "polimero_grano", "motivo": "empuñadura vertical de polímero" },
-    { "patron": "canon-a2-*", "material": "acero_pavonado", "motivo": "cañón exterior A2 de acero pavonado" },
-    { "patron": "canon-largo-*", "material": "acero_pavonado", "motivo": "ídem" }
+    {
+      "patron": "gm-carabina",
+      "material": "polimero_grano",
+      "motivo": "ídem"
+    },
+    {
+      "patron": "acc-vertical-*",
+      "material": "polimero_grano",
+      "motivo": "empuñadura vertical de polímero"
+    },
+    {
+      "patron": "canon-a2-*",
+      "material": "acero_pavonado",
+      "motivo": "cañón exterior A2 de acero pavonado"
+    },
+    {
+      "patron": "canon-largo-*",
+      "material": "acero_pavonado",
+      "motivo": "ídem"
+    },
+    {
+      "patron": "*madera*",
+      "material": "madera_veta",
+      "motivo": "pieza de madera de la familia AK (guardamanos, culata)"
+    },
+    {
+      "patron": "*bakelita*",
+      "material": "madera_veta",
+      "motivo": "bakelita: marrón rojizo; se aproxima con la receta de madera hasta tener una propia"
+    },
+    {
+      "patron": "*polimero*",
+      "material": "polimero_grano",
+      "motivo": "pieza de polímero de la familia AK"
+    },
+    {
+      "patron": "cargador-acero",
+      "material": "parkerizado",
+      "motivo": "cargador de acero"
+    },
+    {
+      "patron": "cargador-corto-acero",
+      "material": "parkerizado",
+      "motivo": "cargador de acero"
+    },
+    {
+      "patron": "canon-ak*",
+      "material": "acero_pavonado",
+      "motivo": "cañón de acero pavonado"
+    },
+    {
+      "patron": "canon-corto-aks74u",
+      "material": "acero_pavonado",
+      "motivo": "cañón de acero pavonado"
+    },
+    {
+      "patron": "riel-lateral-*",
+      "material": "anodizado_negro",
+      "motivo": "riel lateral de aluminio"
+    }
   ],
   "familias": {
     "canon.exterior": {
       "material": "parkerizado",
       "motivo": "cañón exterior de acero parkerizado (el pavonado se asigna por id)"
     },
-    "canon.bloque_gas": { "material": "parkerizado", "motivo": "bloque de gas de acero parkerizado" },
-    "empunadura.pistolete": { "material": "polimero_grano", "motivo": "pistolete de polímero con grano" },
+    "canon.bloque_gas": {
+      "material": "parkerizado",
+      "motivo": "bloque de gas de acero parkerizado"
+    },
+    "empunadura.pistolete": {
+      "material": "polimero_grano",
+      "motivo": "pistolete de polímero con grano"
+    },
     "guardamanos.variantes": {
       "material": "anodizado_negro",
       "motivo": "guardamanos de aluminio anodizado (M-LOK, RIS, quad)"
     },
-    "accesorio.empunadura_vertical": { "material": "polimero_grano", "motivo": "empuñadura vertical de polímero" },
-    "mira.*": { "material": "anodizado_negro", "motivo": "miras y BUIS de aluminio anodizado" },
-    "receptor.*": { "material": "anodizado_negro", "motivo": "receptores de aluminio anodizado" },
-    "amortiguador.*": { "material": "anodizado_negro", "motivo": "tubo y bloqueo de aluminio anodizado" },
-    "montura.*": { "material": "anodizado_negro", "motivo": "monturas de óptica de aluminio anodizado" },
-    "sup.*": { "material": "anodizado_negro", "motivo": "palanca y asa de armado de aluminio anodizado" },
+    "accesorio.empunadura_vertical": {
+      "material": "polimero_grano",
+      "motivo": "empuñadura vertical de polímero"
+    },
+    "mira.*": {
+      "material": "anodizado_negro",
+      "motivo": "miras y BUIS de aluminio anodizado"
+    },
+    "receptor.*": {
+      "material": "anodizado_negro",
+      "motivo": "receptores de aluminio anodizado"
+    },
+    "amortiguador.*": {
+      "material": "anodizado_negro",
+      "motivo": "tubo y bloqueo de aluminio anodizado"
+    },
+    "montura.*": {
+      "material": "anodizado_negro",
+      "motivo": "monturas de óptica de aluminio anodizado"
+    },
+    "sup.*": {
+      "material": "anodizado_negro",
+      "motivo": "palanca y asa de armado de aluminio anodizado"
+    },
     "culata.*": {
       "material": "polimero_grano",
       "motivo": "culatas de polímero (las de madera de AK llevan `madera_veta` por id cuando se añadan)"
@@ -38,9 +118,62 @@
       "material": "anodizado_negro",
       "motivo": "cuerpo de la óptica anodizado; la lente usa `vidrio_lente` en su ranura propia"
     },
-    "goma.*": { "material": "goma", "motivo": "piezas de goma" }
+    "goma.*": {
+      "material": "goma",
+      "motivo": "piezas de goma"
+    },
+    "ak.receptor": {
+      "material": "parkerizado",
+      "motivo": "receptor estampado de acero con acabado mate"
+    },
+    "ak.tapa": {
+      "material": "parkerizado",
+      "motivo": "tapa de receptor estampada"
+    },
+    "ak.canon": {
+      "material": "acero_pavonado",
+      "motivo": "cañón de acero pavonado"
+    },
+    "ak.boca": {
+      "material": "parkerizado",
+      "motivo": "freno o apagallamas de acero"
+    },
+    "ak.mira_trasera": {
+      "material": "parkerizado",
+      "motivo": "mira de acero"
+    },
+    "ak.riel_lateral": {
+      "material": "anodizado_negro",
+      "motivo": "riel de aluminio"
+    },
+    "ak.cargador": {
+      "material": "polimero_grano",
+      "motivo": "cargador (el de acero se asigna por id)"
+    },
+    "ak.guardamanos_inferior": {
+      "material": "polimero_grano",
+      "motivo": "guardamanos de polímero (el de madera se asigna por id)"
+    },
+    "ak.cubremano": {
+      "material": "polimero_grano",
+      "motivo": "cubremanos de polímero"
+    },
+    "ak.culata_fija": {
+      "material": "polimero_grano",
+      "motivo": "culata fija de polímero (la de madera se asigna por id)"
+    },
+    "ak.culata_plegable": {
+      "material": "parkerizado",
+      "motivo": "culata plegable de acero estampado"
+    },
+    "ak.pistolete": {
+      "material": "polimero_grano",
+      "motivo": "pistolete de polímero (la bakelita se asigna por id)"
+    }
   },
   "ranuras_secundarias": {
-    "optica.*": { "lente": "vidrio_lente" }
+    "optica.*": {
+      "lente": "vidrio_lente"
+    }
   }
 }

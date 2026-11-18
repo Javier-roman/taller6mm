@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw
 
 from taller6mm_pipeline.calidad import hoja
 from taller6mm_pipeline.ensamblador.ensamblar import ensamblar
-from taller6mm_pipeline.materiales import asignador, cc0, iluminacion
+from taller6mm_pipeline.materiales import asignador, cc0, exportar_glb, iluminacion
 
 RAIZ = cc0.RAIZ
 APP = RAIZ / "apps" / "pipeline"
@@ -100,6 +100,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--brillo", type=float, help="brillo global 0,5-1,5")
     ap.add_argument("--brillo-material", action="append", metavar="MATERIAL=F")
+    ap.add_argument(
+        "--exportar-glb-con-materiales",
+        action="store_true",
+        help="escribe el build como GLB con materiales PBR horneados en assets-src/vistas/glb-materiales/ y no dibuja",
+    )
     ap.add_argument("--salida", type=Path, default=DIR_PORTADA)
     args = ap.parse_args(argv)
     doc = json.loads(args.manifiesto.read_text(encoding="utf-8"))
@@ -108,6 +113,23 @@ def main(argv: list[str] | None = None) -> int:
     if blender is None:
         print("Blender no encontrado (C:/tools/blender)", file=sys.stderr)
         return 1
+    if args.exportar_glb_con_materiales:
+        trabajos, entradas = [], {}
+        for b in builds:
+            res = ensamblar(b, cache=APP / "salida" / "ensamblador" / "cache", kit=APP / "salida")
+            origen = exportar_glb.DIR_GLB / "origen" / f"{res.id}.glb"
+            origen.parent.mkdir(parents=True, exist_ok=True)
+            origen.write_bytes(res.glb)
+            destino = exportar_glb.DIR_GLB / f"{res.id}.glb"
+            trabajos.append(
+                exportar_glb.trabajo_ensamblaje(
+                    res.id, origen, piezas_del_build(res), destino, exportar_glb.RES_ENSAMBLAJE
+                )
+            )
+            entradas[res.id] = {"archivo": destino.name, "tipo": "build", "familia": "ensamblaje.m4"}
+        exportar_glb.ejecutar(blender, trabajos)
+        print(exportar_glb.actualizar_indice(entradas))
+        return 0
     presets = args.iluminacion or iluminacion.nombres()
     por_material = iluminacion.parsear_brillo_material(args.brillo_material)
     args.salida.mkdir(parents=True, exist_ok=True)
