@@ -2,7 +2,7 @@
 
 Fotos de réplicas de airsoft con licencia abierta (dominio público, CC0 o CC-BY) obtenidas de **Wikimedia Commons** mediante su API oficial (`action=query`, `imageinfo` con `extmetadata`), con User-Agent identificado, una petición por segundo y sin credenciales. Sirven **solo como referencia interna de modelado**: no se publican ni se proyectan como textura (ver `.claude/rules/assets.md`). Los archivos viven en `assets-src/raw/referencias-cc/` (ignorada por git); en el repo solo está el manifiesto `catalogo/referencias-cc.json`, validado por `catalogo/referencias-cc.test.mjs`.
 
-Total: **30** fotos. Consulta de la API: 2026-11-13.
+Total: **30** fotos (36 con la ampliación del 17-11, al final). Consulta de la API: 2026-11-13.
 
 ## Cuántas hay por plataforma
 
@@ -99,3 +99,22 @@ La mayoría de las fotos buenas de la categoría están bajo CC BY-SA, que no se
 - **Systema ptw.jpg, Systema ptw01.jpg, Mc 1.jpg, WA SCW V3, P 90 rozebrana, Siggbbairsoft, Kwa boys commando, M4s-system3**: Dominio público, pero menos de 1200 px de lado largo (o muy bajos); no sirven para modelar con detalle.
 - **9mmMP Airsoft Gun 20101202 (01-04), Airsoft Speed Loader**: Las 9mmMP son de 1000 px (<1200); el speed loader no es una réplica.
 - **USP Compact on flecktarn.JPG**: CC BY 2.5 pero sin autor verificable en extmetadata (autoría "asumida"): no se puede atribuir con fiabilidad.
+
+## Ampliación del 2026-11-17: accesorios y acabados
+
+Seis fotos más (total **36**), buscadas con la API de Commons (consultas puntuales, una cada 3 s, User-Agent identificado) y con la licencia **reverificada** por título en una segunda consulta (el `sha1` de cada archivo coincide con el de Commons). Cada entrada nueva lleva `pieza` y `observaciones` (acabado, agarre, partición, tornillería, marcaje, contraste) para la guía `docs/catalogo/guia-aspecto-piezas.md`.
+
+| Pieza | Licencia | Autor | Resolución | Página de Commons |
+|---|---|---|---|---|
+| Óptica punto rojo tipo Aimpoint CompM4 | Public domain | Photo Courtesy of PEO Soldier | 3872x2592 | [PEO Aimpoint CompM4 Rear.jpg](https://commons.wikimedia.org/wiki/File:PEO_Aimpoint_CompM4_Rear.jpg) |
+| Óptica de aumentos tipo ACOG | Public domain | Photo Courtesy of PEO Soldier | 2507x1446 | [PEO Trijicon M150 RCO.jpg](https://commons.wikimedia.org/wiki/File:PEO_Trijicon_M150_RCO.jpg) |
+| Cargador de polímero (acabado), tierra | CC BY 2.0 | Joe Cereghino | 5616x3744 | [Magpul PMAG.jpg](https://commons.wikimedia.org/wiki/File:Magpul_PMAG.jpg) |
+| Cargadores de polímero (acabado), negros | CC BY 2.0 | Tony Webster from Minneapolis, Minnesota, United States | 5533x3534 | [Magpul AR-15 PMAG 30-round Rifle Magazines (45777799584).jpg](https://commons.wikimedia.org/wiki/File:Magpul_AR-15_PMAG_30-round_Rifle_Magazines_(45777799584).jpg) |
+| Pistola de aire Umarex Walther CP99 Compact | CC0 | Cmpz862 | 2504x2156 | [Umarex Walther CP99 Compact.jpg](https://commons.wikimedia.org/wiki/File:Umarex_Walther_CP99_Compact.jpg) |
+| Pistola de aire Umarex tipo H&K USP desmontada | CC0 | Gumgumboy12032004 | 4284x5712 | [Umarex Production H&K USP Disassembled.jpg](https://commons.wikimedia.org/wiki/File:Umarex_Production_H%26K_USP_Disassembled.jpg) |
+
+Límites a la vista:
+- Los dos cargadores PMAG son piezas de arma real: se guardan **solo** como referencia de grano, paneles de agarre y marcaje en bajorrelieve; no se modelan como pieza del catálogo.
+- Las dos Umarex son pistolas de aire comprimido, no airsoft de 6 mm; valen para acabados y particiones externas.
+- Búsquedas sin resultado útil con licencia admitida: guardamanos, empuñaduras de réplica AEG, bípodes y fundas de mira de airsoft. Los resultados de esas consultas eran fotos de soldados o de armas reales y se descartaron.
+- Fuera: `USP Compact on flecktarn.JPG` y `Tokyo Marui MP5-SD5 AEG.jpg` siguen descartadas por no tener autor verificable en los metadatos.

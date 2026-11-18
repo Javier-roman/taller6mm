@@ -51,6 +51,10 @@ blender --background --factory-startup --python blender/previsualizar.py -- --li
 
 `uv run python -m taller6mm_pipeline.calidad.bucle [--familia …] [--hoja]` mide todas las piezas con la puerta de `catalogo/calidad-minimos.json`, escribe `assets-src/calidad/cola.json` (peor primero, con fallo y sugerencia) y un historial con alerta de regresión; con `--hoja` dibuja la hoja de contacto en `salida/calidad/`. Detalle y umbrales en `docs/05` §12; skill `/mejorar-piezas` y subagente `mejorador-piezas`.
 
+## Escalera de calidad (`calidad/escalera.py`, `materiales/`)
+
+`uv run python -m taller6mm_pipeline.calidad.escalera [--nivel N] [--familia canon|pistolete|mlok] [--hasta N] [--hoja]` sube cada pieza por cinco peldaños (N1 forma, N2 detalle fino, N3 materiales, N4 desgaste, N5 imagen viva) con métricas objetivas por nivel, cola del siguiente peldaño e historial con alerta de regresión. Los renders (Blender portátil, semilla fija) van a `assets-src/vistas/` (ignorada por git). Detalle en `docs/05` §13; skill `/escalar-piezas` y subagente `escalador-calidad`.
+
 ## Importador de modelos CC (`src/taller6mm_pipeline/importador/`)
 
 Busca modelos ya hechos con licencia abierta (CC0 / CC BY) para una pieza de `catalogo/ar-m4.json`, sin gastar tokens: lo repetitivo lo hace el script. Los términos por pieza están en `catalogo/importador-terminos.json`.
