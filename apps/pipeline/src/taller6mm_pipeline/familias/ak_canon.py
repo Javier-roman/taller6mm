@@ -225,7 +225,7 @@ class FrenoBocaAK(Familia):
         cuerpo = cuerpo - cilindro_x(rr, -1, largo * 0.4)  # alojamiento de la rosca
         cuerpo = suavizar(cuerpo, (0.35, 0.25, 0.15))  # cantos de lumbreras y cortes redondeados
         # Rosca interior M14 x 1 en el alojamiento (hilo helicoidal en V, perfil estimado).
-        cuerpo = con_rosca_interna_x(cuerpo, rr, largo * 0.4 - 1.0, e.ROSCA_14_PASO.valor_mm, 1.0, 0.7)
+        cuerpo = con_rosca_interna_x(cuerpo, rr, largo * 0.28, e.ROSCA_14_PASO.valor_mm, 1.0, 0.7)
         cuerpo = cuerpo - cilindro_x(salida, largo * 0.3, largo + 1)  # paso del proyectil
         vaciados += 2
         sockets = (
