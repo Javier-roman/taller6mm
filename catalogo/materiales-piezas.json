@@ -1,0 +1,46 @@
+{
+  "esquema": "materiales-piezas/v1",
+  "nota": "Material de la biblioteca procedural propia (apps/pipeline/src/taller6mm_pipeline/materiales) por pieza. Se resuelve por patrón de id, luego por familia exacta, por patrón con `*` y por el prefijo anterior al primer punto; si nada casa, `defecto` y la pieza cuenta como NO cubierta en N3. Es apariencia interna: no cambia el nivel de fidelidad (T0) ni publicable_3d (false). Sin logos ni marcajes.",
+  "defecto": "anodizado_negro",
+  "por_id": [
+    {
+      "patron": "gm-a2-*",
+      "material": "polimero_grano",
+      "motivo": "el guardamanos A2/carabina de dos mitades es de polímero"
+    },
+    { "patron": "gm-carabina", "material": "polimero_grano", "motivo": "ídem" },
+    { "patron": "acc-vertical-*", "material": "polimero_grano", "motivo": "empuñadura vertical de polímero" },
+    { "patron": "canon-a2-*", "material": "acero_pavonado", "motivo": "cañón exterior A2 de acero pavonado" },
+    { "patron": "canon-largo-*", "material": "acero_pavonado", "motivo": "ídem" }
+  ],
+  "familias": {
+    "canon.exterior": {
+      "material": "parkerizado",
+      "motivo": "cañón exterior de acero parkerizado (el pavonado se asigna por id)"
+    },
+    "canon.bloque_gas": { "material": "parkerizado", "motivo": "bloque de gas de acero parkerizado" },
+    "empunadura.pistolete": { "material": "polimero_grano", "motivo": "pistolete de polímero con grano" },
+    "guardamanos.variantes": {
+      "material": "anodizado_negro",
+      "motivo": "guardamanos de aluminio anodizado (M-LOK, RIS, quad)"
+    },
+    "accesorio.empunadura_vertical": { "material": "polimero_grano", "motivo": "empuñadura vertical de polímero" },
+    "mira.*": { "material": "anodizado_negro", "motivo": "miras y BUIS de aluminio anodizado" },
+    "receptor.*": { "material": "anodizado_negro", "motivo": "receptores de aluminio anodizado" },
+    "amortiguador.*": { "material": "anodizado_negro", "motivo": "tubo y bloqueo de aluminio anodizado" },
+    "montura.*": { "material": "anodizado_negro", "motivo": "monturas de óptica de aluminio anodizado" },
+    "sup.*": { "material": "anodizado_negro", "motivo": "palanca y asa de armado de aluminio anodizado" },
+    "culata.*": {
+      "material": "polimero_grano",
+      "motivo": "culatas de polímero (las de madera de AK llevan `madera_veta` por id cuando se añadan)"
+    },
+    "optica.*": {
+      "material": "anodizado_negro",
+      "motivo": "cuerpo de la óptica anodizado; la lente usa `vidrio_lente` en su ranura propia"
+    },
+    "goma.*": { "material": "goma", "motivo": "piezas de goma" }
+  },
+  "ranuras_secundarias": {
+    "optica.*": { "lente": "vidrio_lente" }
+  }
+}
