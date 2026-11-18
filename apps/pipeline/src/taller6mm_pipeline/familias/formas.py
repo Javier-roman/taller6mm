@@ -201,7 +201,9 @@ def con_rosca_interna_x(
     después. Si la unión no es válida devuelve el sólido sin tocar (nunca una pieza rota).
     """
     base = (Align.CENTER, Align.CENTER, Align.MIN)
-    manguito = Cylinder(radio_taladro + 0.5, largo, align=base) - Cylinder(radio_taladro - profundidad, largo, align=base)
+    manguito = Cylinder(radio_taladro + 0.5, largo, align=base) - Cylinder(
+        radio_taladro - profundidad, largo, align=base
+    )
     surco = Pos(0, 0, 1.0) * rosca_helicoidal(radio_taladro - 0.05, profundidad, paso, largo - 2.0)
     rosca = Pos(inicio, 0, 0) * Rot(0, 90, 0) * (manguito - surco)
     unido = solido + rosca

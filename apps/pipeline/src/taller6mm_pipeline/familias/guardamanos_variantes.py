@@ -10,14 +10,13 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import replace
-from typing import Any
 
-from build123d import Align, Axis, Circle, Cylinder, Plane, Pos, Rectangle, RectangleRounded, Rot, extrude
+from build123d import Axis, Circle, Cylinder, Plane, Pos, Rectangle, RectangleRounded, Rot, extrude
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.comun_oleada1 import mm
-from taller6mm_pipeline.familias.formas import filetear, rosca_helicoidal
+from taller6mm_pipeline.familias.formas import con_rosca_interna_x, filetear
 from taller6mm_pipeline.familias.guardamanos_mlok import MARGEN_EXTREMO_MM, GuardamanosMlok, ranuras_rail_que_caben
 from taller6mm_pipeline.familias.rail_picatinny import NOTA_PERFIL, longitud_rail_mm, solido_rail
 
@@ -32,29 +31,10 @@ _CARAS_RIS = {
 }
 
 
-PASO_ROSCA_TUERCA_MM = 1.5  # estimado: el paso de la tuerca de cañón depende del SKU (confianza baja)
+PASO_ROSCA_TUERCA_MM = 1.5  # RIS; el M-LOK usa 1,0 en un tramo corto
+PASO_ROSCA_MLOK_MM = 1.0  #  # estimado: el paso de la tuerca de cañón depende del SKU (confianza baja)
 LARGO_ROSCA_TUERCA_MM = 20.0
 INICIO_ROSCA_TUERCA_MM = 8.0
-
-
-def _con_rosca_interna(solido: Any, radio_taladro: float) -> Any:
-    """Rosca interior del extremo trasero (donde el guardamanos se atornilla a la tuerca de cañón).
-
-    Un manguito de 1 mm de espesor sobre la pared del taladro con un surco helicoidal en V de paso estimado. Se
-    construye aparte (un corte helicoidal directo sobre el guardamanos completo no se puede teselar en OCCT) y se
-    une después a la pared.
-    """
-    base = (Align.CENTER, Align.CENTER, Align.MIN)
-    manguito = Cylinder(radio_taladro + 0.5, LARGO_ROSCA_TUERCA_MM, align=base) - Cylinder(
-        radio_taladro - 1.0, LARGO_ROSCA_TUERCA_MM, align=base
-    )
-    surco = Pos(0, 0, 1.0) * rosca_helicoidal(
-        radio_taladro - 0.05, 1.0, PASO_ROSCA_TUERCA_MM, LARGO_ROSCA_TUERCA_MM - 2.0
-    )
-    # Empieza a 8 mm del extremo trasero: los primeros 7 mm los ocupa la nariz de la tuerca del receptor.
-    rosca = Pos(INICIO_ROSCA_TUERCA_MM, 0, 0) * Rot(0, 90, 0) * (manguito - surco)
-    unido = solido + rosca
-    return unido if unido.is_valid and unido.volume > solido.volume else solido
 
 
 def _mlok_que_caben(longitud_mm: float) -> int:
@@ -112,10 +92,22 @@ class GuardamanosVariantes(Familia):
             }
             g = GuardamanosMlok()
             geo = g.construir(g.validar(base))
-            geo = replace(geo, solido=_con_rosca_interna(geo.solido, d / 2 - pared))
+            geo = replace(
+                geo, solido=con_rosca_interna_x(geo.solido, d / 2 - pared, 12.0, PASO_ROSCA_MLOK_MM, 0.5, 1.0)
+            )
         elif tipo == "ris":
             geo = self._ris(largo, d, pared)
-            geo = replace(geo, solido=_con_rosca_interna(geo.solido, d / 2 - pared))
+            geo = replace(
+                geo,
+                solido=con_rosca_interna_x(
+                    geo.solido,
+                    d / 2 - pared,
+                    LARGO_ROSCA_TUERCA_MM,
+                    PASO_ROSCA_TUERCA_MM,
+                    INICIO_ROSCA_TUERCA_MM,
+                    1.0,
+                ),
+            )
         else:
             geo = self._dos_mitades(tipo, largo, d, pared)
 

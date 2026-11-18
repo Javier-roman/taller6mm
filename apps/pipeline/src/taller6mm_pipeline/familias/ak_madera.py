@@ -99,7 +99,6 @@ class GuardamanosInferiorAK(Familia):
         # Escotadura trasera para la cuna delantera del receptor y rebaje delantero.
         cuerpo = cuerpo - caja_redonda(-1, 12, -6, 6, -hw + 4, hw - 4, 2.5, ejes="y")
         vaciados += 1
-        cuerpo = suavizar(cuerpo, (0.5, 0.35, 0.25, 0.15))  # cantos de surcos, estrías y escotaduras redondeados
         sockets = (
             Socket(
                 "receiver",

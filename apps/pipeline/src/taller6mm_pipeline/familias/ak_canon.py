@@ -94,8 +94,10 @@ class CanonAK(Familia):
         cuerpo = _rev_x(perfil)
         vaciados = 0
         # Rosca de la boca: hilo helicoidal en V al paso M14 x 1 (cresta en rr + 0,8 como antes, 0,6 de profundidad).
-        hilo = Pos(largo - lr + 0.5, 0, 0) * Rot(0, 90, 0) * rosca_helicoidal(
-            rr + 0.8, 0.6, e.ROSCA_14_PASO.valor_mm, lr - 1.5
+        hilo = (
+            Pos(largo - lr + 0.5, 0, 0)
+            * Rot(0, 90, 0)
+            * rosca_helicoidal(rr + 0.8, 0.6, e.ROSCA_14_PASO.valor_mm, lr - 1.5)
         )
         cuerpo = cuerpo + hilo
         # Bloque de gas con su alojamiento superior y el tubo de gas hasta el receptor.
