@@ -71,3 +71,6 @@ apps/pipeline/salida/
 
 # Cola e historial del bucle de calidad (apps/pipeline/calidad): estado local de trabajo
 assets-src/calidad/
+
+# Vistas de la escalera de calidad (apps/pipeline): renders de revision interna, nunca se publican
+assets-src/vistas/
