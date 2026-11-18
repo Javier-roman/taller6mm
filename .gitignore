@@ -36,6 +36,8 @@ __pycache__/
 assets-src/**/*.blend
 assets-src/**/*.blend1
 assets-src/raw/
+# Biblioteca de materiales CC0 descargada (en git solo catalogo/materiales-cc0.json con hashes)
+assets-src/materiales-cc0/
 
 # Capturas de referencia de terceros: uso interno, no publicar
 docs/referencias/*.png
@@ -69,3 +71,6 @@ apps/pipeline/salida/
 
 # Cola e historial del bucle de calidad (apps/pipeline/calidad): estado local de trabajo
 assets-src/calidad/
+
+# Vistas de la escalera de calidad (apps/pipeline): renders de revision interna, nunca se publican
+assets-src/vistas/

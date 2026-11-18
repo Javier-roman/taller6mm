@@ -1,0 +1,329 @@
+{
+  "esquema": "escalera-niveles/v1",
+  "nota": "Escalera de calidad de las piezas (apps/pipeline/src/taller6mm_pipeline/calidad/escalera.py, docs/05 «Escalera de calidad»). Cada nivel puntúa 0-100 como media ponderada de la fracción que cumple cada criterio (lo sin dato es bandera). `umbral` = el nivel se supera; `techo` = hasta donde el agente escalador sigue elevando la pieza. N1 usa la puerta de catalogo/calidad-minimos.json. Un umbral que parezca injusto se cambia aquí con su motivo, nunca desactivando el criterio. Toda la apariencia es procedural y propia; no cambia el nivel de fidelidad (T0) ni publicable_3d (false). Los umbrales de N3, N4 y N5 siguen docs/catalogo/guia-aspecto-piezas.md (etiquetas [medido]/[ficha]/[foto]/[convención]); los [convención] son hipótesis y se ajustan con la hoja de contacto.",
+  "niveles": {
+    "1": {
+      "nombre": "Forma",
+      "umbral": 75,
+      "techo": 95,
+      "criterios": []
+    },
+    "2": {
+      "nombre": "Detalle geométrico fino",
+      "umbral": 75,
+      "techo": 92,
+      "criterios": [
+        {
+          "id": "relieve_fino",
+          "clave": "area_fina_frac",
+          "min": 0.02,
+          "peso": 15,
+          "motivo": "Poca superficie en triángulos de ≤ 1,5 mm: faltan filetes y relieves de radio real.",
+          "sugerencia": "Añade chaflanes y filetes de radio 0,3-1 mm en aristas y bordes de ranuras (build123d fillet/chamfer) y relieve de agarre."
+        },
+        {
+          "id": "chaflanes",
+          "clave": "transiciones_finas_cm2",
+          "min": 6,
+          "peso": 15,
+          "motivo": "Pocas transiciones suaves finas por cm²: las aristas no tienen radio real.",
+          "sugerencia": "Redondea las aristas con radios reales de 0,3-1 mm en vez de dejarlas vivas."
+        },
+        {
+          "id": "aristas_vivas",
+          "clave": "viva_frac",
+          "max": 0.25,
+          "peso": 10,
+          "motivo": "Demasiada arista viva (diedro > 60°): faltan chaflanes.",
+          "sugerencia": "Chaflana o filetea las aristas vivas largas."
+        },
+        {
+          "id": "periodicidad",
+          "clave": "periodicidad",
+          "min": 0.25,
+          "peso": 20,
+          "motivo": "Sin repetición axial reconocible: faltan roscas, estrías o relieve de agarre.",
+          "sugerencia": "Modela la rosca (14 mm CCW en la boca), estrías o ranuras repetidas de agarre con paso real."
+        },
+        {
+          "id": "particiones",
+          "clave": "escalones_100mm",
+          "min": 12,
+          "peso": 10,
+          "motivo": "Perfil axial sin escalones: faltan líneas de partición, resaltes y ranuras.",
+          "sugerencia": "Añade líneas de partición (ranura de 0,3-0,5 mm), resaltes y escalones de diámetro."
+        },
+        {
+          "id": "rasgos_pequenos",
+          "clave": "rasgos_pequenos",
+          "min": 8,
+          "peso": 30,
+          "motivo": "Pocos rasgos pequeños (tornillos, rebajes, agujeros de 1,5-15 mm).",
+          "sugerencia": "Añade cabezas de tornillo, rebajes de bloqueo, agujeros de pasador y bordes de ranura con chaflán."
+        }
+      ]
+    },
+    "3": {
+      "nombre": "Materiales por pieza",
+      "umbral": 80,
+      "techo": 95,
+      "criterios": [
+        {
+          "id": "cobertura",
+          "clave": "cobertura_materiales",
+          "min": 1,
+          "peso": 15,
+          "motivo": "La pieza no tiene regla de material en catalogo/materiales-piezas.json.",
+          "sugerencia": "Añade su familia o patrón de id al catálogo con el material de la biblioteca que le corresponde."
+        },
+        {
+          "id": "var_rugosidad",
+          "clave": "rug_std",
+          "min": 0.02,
+          "peso": 15,
+          "motivo": "La rugosidad es casi uniforme (< 0,02): aspecto de plástico de juguete (guía §2.4).",
+          "sugerencia": "Sube `rugosidad.variacion` o `grano` del material; con la base CC0 en disco la variación viene del mapa."
+        },
+        {
+          "id": "var_rugosidad_aviso",
+          "clave": "rug_std",
+          "min": 0.04,
+          "peso": 5,
+          "motivo": "Desviación de rugosidad por debajo de 0,04 (aviso, guía §2.4 [convención]).",
+          "sugerencia": "Sube la variación de rugosidad hasta 0,04-0,12."
+        },
+        {
+          "id": "var_rugosidad_max",
+          "clave": "rug_std",
+          "max": 0.12,
+          "peso": 5,
+          "motivo": "La rugosidad varía por encima de 0,12: se ve ruido, no material (guía §2.4 [convención]).",
+          "sugerencia": "Baja `rugosidad.variacion`."
+        },
+        {
+          "id": "var_albedo",
+          "clave": "albedo_cv",
+          "min": 0.05,
+          "peso": 10,
+          "motivo": "El albedo es plano: sin pátina ni variación de luminancia.",
+          "sugerencia": "Añade variación de color (pátina) o modulación de la base CC0."
+        },
+        {
+          "id": "fidelidad_receta",
+          "clave": "rug_error",
+          "max": 0.1,
+          "peso": 20,
+          "motivo": "La rugosidad media se aparta de la guía (±0,10 sobre el valor [medido], §2.3).",
+          "sugerencia": "Revisa `rugosidad.media` frente a la tabla de la guía §1."
+        },
+        {
+          "id": "textura_fina",
+          "clave": "rug_alta_frecuencia",
+          "min": 0.006,
+          "peso": 10,
+          "motivo": "Sin textura de alta frecuencia: faltan micro-rayas y grano.",
+          "sugerencia": "Sube `grano.escala`/`rayas.cantidad` o carga la base CC0."
+        },
+        {
+          "id": "negro_no_es_cero",
+          "clave": "albedo_negro_srgb",
+          "min": 30,
+          "peso": 5,
+          "motivo": "Negro demasiado puro (sRGB < 30): la forma desaparece (guía §2.1 [convención]).",
+          "sugerencia": "Sube el color base del material negro hasta sRGB 30-55."
+        },
+        {
+          "id": "negro_no_es_gris",
+          "clave": "albedo_negro_srgb",
+          "max": 55,
+          "peso": 5,
+          "motivo": "Negro demasiado claro (sRGB > 55) (guía §2.1 [convención]).",
+          "sugerencia": "Baja el color base del material negro."
+        }
+      ]
+    },
+    "4": {
+      "nombre": "Desgaste y contraste",
+      "umbral": 75,
+      "techo": 92,
+      "criterios": [
+        {
+          "id": "borde_cobertura",
+          "clave": "borde_cobertura",
+          "min": 0.004,
+          "peso": 15,
+          "motivo": "Casi no hay roce en aristas.",
+          "sugerencia": "Sube `desgaste.cantidad` o `desgaste.radio_mm` del material."
+        },
+        {
+          "id": "borde_cobertura_max",
+          "clave": "borde_cobertura",
+          "max": 0.06,
+          "peso": 5,
+          "motivo": "Roce en más del 6 % de la superficie: parece pieza muy usada (guía §5.2 [convención]: 2-6 %).",
+          "sugerencia": "Baja `desgaste.cantidad` o `desgaste.radio_mm`."
+        },
+        {
+          "id": "borde_contraste",
+          "clave": "borde_contraste",
+          "min": 0.25,
+          "peso": 20,
+          "motivo": "El roce no contrasta con el resto de la pieza.",
+          "sugerencia": "Aclara `desgaste.color` (metal pelado) o sube su `metalico`."
+        },
+        {
+          "id": "suciedad",
+          "clave": "suciedad_cobertura",
+          "min": 0.01,
+          "peso": 15,
+          "motivo": "Sin suciedad ni polvo en las cavidades (oclusión ambiental).",
+          "sugerencia": "Sube `suciedad.cantidad`/`distancia_mm`; oscurece 15-30 % y sube la rugosidad 0,05-0,15 (guía §5.1 [convención])."
+        },
+        {
+          "id": "no_uniformidad",
+          "clave": "no_uniformidad",
+          "min": 0.015,
+          "peso": 15,
+          "motivo": "El desgaste y la suciedad son parejos: parece un filtro.",
+          "sugerencia": "Sube la variación del ruido de desgaste; las marcas de uso son irregulares."
+        },
+        {
+          "id": "aumento_rug",
+          "clave": "aumento_rug_std",
+          "min": 1.02,
+          "peso": 20,
+          "motivo": "El desgaste no añade variación de rugosidad frente a N3.",
+          "sugerencia": "Diferencia `desgaste.rugosidad` y `suciedad.rugosidad` de la rugosidad base."
+        },
+        {
+          "id": "variacion_conjunto",
+          "clave": "variacion_conjunto",
+          "min": 0.003,
+          "peso": 10,
+          "motivo": "Las piezas del mismo conjunto son idénticas entre sí.",
+          "sugerencia": "Sube `variacion_pieza` del material (color y rugosidad)."
+        },
+        {
+          "id": "variacion_conjunto_max",
+          "clave": "variacion_conjunto",
+          "max": 0.08,
+          "peso": 5,
+          "motivo": "Las piezas del conjunto difieren demasiado: no parecen del mismo juego.",
+          "sugerencia": "Baja `variacion_pieza`."
+        }
+      ]
+    },
+    "5": {
+      "nombre": "Imagen viva",
+      "umbral": 80,
+      "techo": 95,
+      "criterios": [
+        {
+          "id": "contraste",
+          "clave": "contraste",
+          "min": 0.35,
+          "peso": 20,
+          "motivo": "Poco contraste entre luces y sombras de la pieza.",
+          "sugerencia": "Sube la luz clave o baja el relleno en `estudio()` de escalera_render.py."
+        },
+        {
+          "id": "reflejos",
+          "clave": "reflejos",
+          "min": 0.002,
+          "peso": 15,
+          "motivo": "Sin reflejos especulares visibles.",
+          "sugerencia": "Baja la rugosidad del material o añade una caja de luz que se refleje."
+        },
+        {
+          "id": "contraluz",
+          "clave": "contraluz",
+          "min": 1.4,
+          "peso": 20,
+          "motivo": "El contorno no se separa del fondo: falta contraluz.",
+          "sugerencia": "Sube la energía de las luces `contra-a`/`contra-b`."
+        },
+        {
+          "id": "dof_presente",
+          "clave": "coc_max_px",
+          "min": 3,
+          "peso": 10,
+          "motivo": "Sin profundidad de campo apreciable.",
+          "sugerencia": "Baja el número f (más apertura)."
+        },
+        {
+          "id": "dof_legible",
+          "clave": "coc_max_px",
+          "max": 14,
+          "peso": 5,
+          "motivo": "Desenfoque excesivo: la pieza se vuelve ilegible.",
+          "sugerencia": "Sube el número f."
+        },
+        {
+          "id": "foco",
+          "clave": "foco_nitido",
+          "min": 0.15,
+          "peso": 10,
+          "motivo": "Muy poca superficie enfocada.",
+          "sugerencia": "Sube el número f o centra el foco."
+        },
+        {
+          "id": "ruido",
+          "clave": "ruido",
+          "max": 0.01,
+          "peso": 10,
+          "motivo": "Ruido residual alto tras el denoiser.",
+          "sugerencia": "Sube las muestras de Cycles."
+        },
+        {
+          "id": "denoiser",
+          "clave": "denoise",
+          "min": 1,
+          "peso": 5,
+          "motivo": "El render no usa denoiser.",
+          "sugerencia": "Activa OpenImageDenoise."
+        },
+        {
+          "id": "muestras",
+          "clave": "muestras",
+          "min": 64,
+          "peso": 5,
+          "motivo": "Muestras de Cycles insuficientes.",
+          "sugerencia": "Usa 64 o más."
+        }
+      ]
+    }
+  },
+  "foco": {
+    "canon": {
+      "familia": "canon.exterior",
+      "representante": "canon-a2-pesado",
+      "umbrales": {
+        "2": {
+          "rasgos_pequenos": {
+            "min": 6
+          }
+        }
+      }
+    },
+    "pistolete": {
+      "familia": "empunadura.pistolete",
+      "representante": "pist-moe",
+      "umbrales": {}
+    },
+    "mlok": {
+      "familia": "guardamanos.variantes",
+      "id": "gm-mlok-*",
+      "representante": "gm-mlok-9",
+      "umbrales": {
+        "2": {
+          "periodicidad": {
+            "min": 0.15
+          },
+          "rasgos_pequenos": {
+            "min": 12
+          }
+        }
+      }
+    }
+  }
+}
