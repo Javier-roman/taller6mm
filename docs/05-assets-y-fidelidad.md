@@ -308,6 +308,24 @@ uv run python -m taller6mm_pipeline.ensamblador.portada --iluminacion mate_suave
 
 Es apariencia interna: no cambia el nivel de fidelidad (T0) ni `publicable_3d`.
 
+### 13.2 GLB con materiales (lo que muestra la web)
+
+Lo que ve el jugador es el resultado final, no solo la forma. El pipeline exporta cada pieza y cada build como **GLB con materiales PBR horneados**, de modo que el visor web y los renders de Blender comparten fuente (la receta de `biblioteca.py` asignada por `catalogo/materiales-piezas.json`, con el desgaste y la suciedad de N3-N5):
+
+```bash
+cd apps/pipeline
+uv run python -m taller6mm_pipeline.calidad.escalera --exportar-glb-con-materiales --familia todas          # piezas (M4 y AK)
+uv run python -m taller6mm_pipeline.ensamblador.portada --exportar-glb-con-materiales --build m4a1-carabina  # build entero
+```
+
+- **Dónde**: `assets-src/vistas/glb-materiales/<id>.glb` (ignorada por git; nada se publica) y el índice `assets-src/vistas/glb-materiales/indice.json` (`glb-materiales/v1`: por id, `archivo`, `tipo` pieza o build, `familia`, `material`, `bytes`, `sha256`, `nivel_fidelidad` T0, `publicable_3d` false). El visor lee el índice y no necesita saber nada del pipeline.
+- **Material glTF estándar** (`pbrMetallicRoughness`): `baseColorTexture` (sRGB: albedo con el roce metálico en aristas y la suciedad de cavidades ya horneados), `metallicRoughnessTexture` (G rugosidad, B metalicidad; R sin usar) y `normalTexture` (tangente; relieve del grano y de las rayas). Sin extensiones propias. Las imágenes van en **WebP** (`EXT_texture_webp`, declarada como requerida: `GLTFLoader` de three.js la soporta). KTX2 se deja para cuando el visor lo pida: son los mismos mapas.
+- **UV**: los generadores no traen UV; el exportador desenvuelve cada malla (proyección inteligente en islas, margen 1,2 %) y hornea sobre ellas. Tamaño por malla: potencia de 2 según su diagonal (0,5 mm por texel), mínimo 128 y máximo 512 en piezas y 256 en builds. Una malla, un material, tres imágenes; no hay atlas.
+- **La luz no va dentro**: el brillo y la iluminación los pone el visor con `catalogo/iluminacion-presets.json` (§13.1). El material no lleva reflejos horneados.
+- **Extras conservados**: `extras` de cada nodo (`familia`, `id_variante`, `rol`, cotas, sockets `socket.<ranura>` y `montaje.*`), de modo que el visor sigue pudiendo acoplar y avisar.
+- **Marcadores**: las piezas sin malla de un build (culata, cargador, mira de punto rojo) conservan su marcador naranja translúcido (`alphaMode` BLEND): nunca se disfrazan de geometría real.
+- **Origen de las texturas**: solo recetas procedurales y la estructura de las bases CC0 de `catalogo/materiales-cc0.json` (no su color); ninguna foto de terceros, sin logos ni marcajes. Es T0 y `publicable_3d=false`.
+
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
 - [ ] T0 generado para todo el catálogo semilla.
