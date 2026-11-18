@@ -22,6 +22,7 @@ from taller6mm_pipeline.familias.ak_formas import (
     cilindro_z,
     estimada,
     loft_x,
+    remache,
 )
 from taller6mm_pipeline.familias.base import (
     Familia,
@@ -176,11 +177,15 @@ class CubremanoAK(Familia):
         largo, ancho, alto = float(p["longitud"]), float(p["ancho"]), float(p["alto"])
         hw = ancho / 2
         y_sup = 1.0 + alto
+        # Cubremano de perfil acampanado: más alto y ancho junto al aro trasero, estrechándose y bajando hacia la boca,
+        # con la base levantada hacia delante donde apoya la tapa del tubo de gas.
         nudos = [
-            (0.0, y_sup - 1.0, 1.0, hw),
-            (largo * 0.2, y_sup, 1.0, hw),
-            (largo * 0.8, y_sup - 0.8, 1.0, hw - 0.8),
-            (largo, y_sup - 2.2, 1.0, hw - 2.0),
+            (0.0, y_sup - 4.0, 1.0, hw - 1.5),
+            (largo * 0.08, y_sup - 0.5, 1.0, hw),
+            (largo * 0.3, y_sup, 2.0, hw + 0.4),
+            (largo * 0.6, y_sup - 1.8, 3.5, hw - 1.6),
+            (largo * 0.85, y_sup - 4.5, 5.5, hw - 4.0),
+            (largo, y_sup - 7.5, 7.0, max(hw - 6.5, 12.0)),
         ]
         cuerpo = loft_x(0, largo, nudos, radio=11.0)
         r_canal = 10.2
@@ -192,6 +197,13 @@ class CubremanoAK(Familia):
             z0, z1 = (hw - 1.0, hw + 2) if lado > 0 else (-hw - 2, -hw + 1.0)
             for y in (y_sup * 0.32, y_sup * 0.62):
                 cuerpo = cuerpo - caja_redonda(largo * 0.1, largo * 0.9, y - 1.0, y + 1.0, z0, z1, 0.9)
+                vaciados += 1
+        # Remaches de la grapa de retención a cada lado, en el nudo exacto de cada sección.
+        for lado in (1, -1):
+            for f in (0.1, 0.9):
+                x = largo * f
+                z_cara = interpolar([n[0] for n in nudos], [n[3] for n in nudos], x)
+                cuerpo = cuerpo + remache(x, y_sup * 0.47, lado * (z_cara - 0.3), lado, 2.2)
                 vaciados += 1
         if p["ventilacion"] == "ranuras":
             paso = 17.0
@@ -290,20 +302,21 @@ class CulataFijaAK(Familia):
         for k in range(13):
             f = k / 12
             arriba, abajo = _perfil_culata(f, alto_c)
-            cintura = 1.0 - 0.10 * (1 - abs(2 * f - 0.9)) if f < 0.9 else 1.0
-            nudos.append((-cuerpo_largo * f, arriba, abajo, hw * cintura * (1.0 + 0.05 * f)))
+            cintura = 1.0 - 0.24 * (1 - abs(2 * f - 0.9)) if f < 0.9 else 1.0
+            nudos.append((-cuerpo_largo * f, arriba, abajo, hw * cintura * (1.0 + 0.22 * f**2)))
         nudos.sort(key=lambda q: q[0])
-        cuerpo = loft_x(-cuerpo_largo, 0, nudos, radio=8.0)
+        cuerpo = loft_x(-cuerpo_largo, 0, nudos, radio=14.0)
         a_t, a_b = _perfil_culata(1.0, alto_c)
         placa = loft_x(
             -largo,
             -cuerpo_largo,
             [
-                (-largo, a_t + 1.2, a_b - 1.2, hw * 1.05 + 1.2),
-                (-cuerpo_largo, a_t + 1.2, a_b - 1.2, hw * 1.05 + 1.2),
+                (-largo, a_t + 1.2, a_b - 1.2, hw * 1.22 + 0.6),
+                (-cuerpo_largo, a_t + 1.2, a_b - 1.2, hw * 1.22 + 0.6),
             ],
-            radio=6.0,
+            radio=13.0,
         )
+        placa = filetear(placa, 1.6, [e for e in placa.edges() if e.center().X < -largo + 0.5])
         cuerpo = cuerpo + placa
         vaciados = 0
         # Dos tornillos de la plancha con su ranura.

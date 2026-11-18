@@ -310,11 +310,30 @@ class RielLateralAK(Familia):
 
     def construir(self, p: Mapping[str, Valor]) -> Geometria:
         largo, alto, n = float(p["longitud"]), float(p["alto"]), int(p["ranuras"])
-        placa = caja_redonda(0, largo, 0, alto, 0, 4.0, 5.0, ejes="z")
+        # Placa con el contorno de la ventana del receptor: esquinas biseladas y escalón delantero.
+        contorno = [
+            (0.0, alto * 0.12),
+            (9.0, 0.0),
+            (largo - 12.0, 0.0),
+            (largo, alto * 0.2),
+            (largo, alto * 0.8),
+            (largo - 6.0, alto * 0.88),
+            (largo - 24.0, alto),
+            (16.0, alto),
+            (0.0, alto * 0.74),
+        ]
+        placa = extrude(Plane.XY * Polygon(*contorno, align=None), 4.0)
+        placa = filetear(placa, 1.2, [e for e in placa.edges() if abs(e.length - 4.0) < 0.01])
+        # Vaciado trasero: la cara que apoya en el receptor queda con un reborde de 3 mm y dos nervios.
+        bolsillo = caja_redonda(6.0, largo - 6.0, 6.0, alto - 6.0, -1.0, 2.2, 3.0, ejes="z")
+        for xn in (largo * 0.33, largo * 0.66):
+            bolsillo = bolsillo - Pos(xn, alto / 2, 0.5) * Box(3.0, alto, 4.0)
+        placa = placa - bolsillo
         # Cola de milano: más ancha arriba que abajo, a lo largo de la placa.
         a, b = alto * 0.22, alto * 0.78
         perfil = Plane.YZ * Polygon((a, 4.0), (b, 4.0), (b + 2.4, 11.5), (a - 2.4, 11.5), align=None)
         riel = extrude(perfil, largo - 20.0)
+        riel = filetear(riel, 0.6, [e for e in riel.edges() if e.length > largo - 21.0])
         cuerpo = placa + Pos(10.0, 0, 0) * riel
         vaciados = 1
         paso = (largo - 40.0) / max(n, 1)
@@ -325,7 +344,7 @@ class RielLateralAK(Familia):
         for x, y in ((6.0, alto * 0.5), (largo - 6.0, alto * 0.5), (largo / 2, alto - 5.0)):
             cuerpo = cuerpo + cilindro_z(2.6, 1.8, x, y, 4.8)
             vaciados += 1
-        cuerpo = filetear(cuerpo, 0.5)
+        cuerpo = filetear(cuerpo, 0.4, [e for e in cuerpo.edges() if e.length > 2.5 and e.center().Z > 4.5])
         sockets = (
             Socket(
                 "receiver_side", (largo / 2, alto / 2, 0.0), INT_RIEL_LATERAL, (0.0, 0.0, -1.0), (1.0, 0.0, 0.0), {}

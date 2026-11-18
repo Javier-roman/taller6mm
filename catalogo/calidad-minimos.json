@@ -131,6 +131,11 @@
       "eje_largo": "y",
       "sockets_requeridos": []
     },
+    "ak.guardamanos_inferior": {
+      "eje_largo": "x",
+      "simetria_ejes": ["z"],
+      "sockets_requeridos": ["receiver", "upper"]
+    },
     "boca.*": {
       "eje_largo": "x",
       "simetria_ejes": ["y", "z"]
