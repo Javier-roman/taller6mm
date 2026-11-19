@@ -86,10 +86,11 @@ def leer_carpeta(carpeta: Path, origen: str) -> list[PiezaCalidad]:
 
 def generar_piezas() -> list[PiezaCalidad]:
     """Genera en proceso las variantes de la oleada 1 y de los cuerpos: la puerta ve siempre el código actual."""
-    from taller6mm_pipeline.familias import oleada1, oleada1_cuerpos
+    from taller6mm_pipeline.familias import ak_piezas, oleada1, oleada1_cuerpos
 
     salida = [desde_glb(oleada1.generar(v).glb(), v.id, "oleada1") for v in oleada1.VARIANTES]
     salida += [desde_glb(oleada1_cuerpos.generar_variante(v).glb(), v.id, "cuerpos") for v in oleada1_cuerpos.TANDA]
+    salida += [desde_glb(ak_piezas.generar_variante(v).glb(), v.id, "ak") for v in ak_piezas.TANDA]
     return salida
 
 
