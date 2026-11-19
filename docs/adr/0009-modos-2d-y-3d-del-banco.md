@@ -5,7 +5,7 @@
 - **Decisores**: Javi (+ Claude Code)
 
 ## Contexto
-- El 3D del pipeline (piezas paramétricas, materiales, luz) avanza despacio: hoy hay cientos de piezas T0 con medidas de demostración, ninguna con nivel T2, y llevarlas todas a una calidad publicable es trabajo de meses. Javi quiere que el proyecto dure un año con calma (memoria `ritmo-un-ano-calma`).
+- El 3D del pipeline (piezas paramétricas, materiales, luz) avanza despacio: hoy hay cientos de piezas T0 con medidas de demostración, ninguna con nivel T2, y llevarlas todas a una calidad publicable es trabajo de meses. Javi prefiere avanzar con calma y paciencia: el proyecto lleva tiempo, sin un plazo fijo (memoria `ritmo-un-ano-calma`).
 - Javi no quiere abandonar el 3D, pero quiere un MVP que se pueda ver antes: alternar entre una **vista 2D con perspectivas y profundidad** y la **vista 3D**, e ir sumando 3D poco a poco.
 - Mezclar piezas 2D y 3D en una misma escena «se nota mucho» (Javi, 19-11-2026): la luz, los materiales y la perspectiva no coinciden.
 - `docs/03 §8` permitía mezclar niveles de fidelidad en un build. Esta decisión lo limita a la mezcla **dentro de un mismo modo**.
@@ -24,7 +24,7 @@
 ## Alternativas consideradas
 | Opción | Pros | Contras | Por qué no |
 |---|---|---|---|
-| Todo 3D desde el MVP | Una sola tecnología, máximo «wow» | Depende de tener todas las piezas pulidas; meses de espera; pesado en móvil | Retrasa el MVP un año |
+| Todo 3D desde el MVP | Una sola tecnología, máximo «wow» | Depende de tener todas las piezas pulidas; meses de espera; pesado en móvil | Retrasa mucho el MVP |
 | 2D con fotos de terceros | Aspecto fotográfico inmediato | Copyright; sin canal legal encontrado | Incumple el principio 5 |
 | Mezclar 2D y 3D en la escena | Cada pieza usa lo que tiene | Luz, materiales y perspectiva no encajan: se ve un collage | Decisión de Javi |
 | 2D solo, sin 3D | Simple, ligero | Pierde el diferencial y el trabajo hecho | Javi quiere seguir con el 3D |
