@@ -128,12 +128,17 @@ def evaluar_criterios(cfg: dict[str, Any], nivel: int, grupo: str, metricas: dic
                 "peso": c["peso"],
                 "fraccion": round(f, 4),
                 "estado": "ok" if f >= 1.0 else "fallo",
+                "duro": bool(c.get("duro")),
                 "motivo": c["motivo"],
                 "sugerencia": c["sugerencia"],
             }
         )
     punt = round(100.0 * total / pesos, 2) if pesos else 0.0
-    return NivelResultado(nivel, punt, punt >= nv["umbral"] and bool(pesos), nv["techo"], criterios, metricas)
+    # un criterio duro que falla impide superar el nivel aunque la media ponderada llegue al umbral
+    duros = any(c.get("duro") and c["estado"] == "fallo" for c in criterios)
+    return NivelResultado(
+        nivel, punt, punt >= nv["umbral"] and bool(pesos) and not duros, nv["techo"], criterios, metricas
+    )
 
 
 def evaluar_n1(p: PiezaCalidad, cfg_min: dict[str, Any], techo: float) -> NivelResultado:

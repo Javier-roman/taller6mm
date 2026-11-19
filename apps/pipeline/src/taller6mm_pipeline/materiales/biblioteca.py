@@ -16,9 +16,9 @@ from __future__ import annotations
 from typing import Any
 
 # Desgaste (N4): roce en aristas con el aluminio pelado de la guía (§1: albedo 0,91, rugosidad 0,24, metálico 1).
-_DESGASTE_METAL = {"color": [0.91, 0.91, 0.91], "rugosidad": 0.24, "metalico": 1.0, "radio_mm": 1.2, "cantidad": 0.85}
+_DESGASTE_METAL = {"color": [0.91, 0.91, 0.91], "rugosidad": 0.24, "metalico": 1.0, "radio_mm": 0.8, "cantidad": 0.55}
 # Suciedad en cavidades (§5.1): la oclusión oscurece el albedo un 15-30 % y sube la rugosidad +0,05-0,15.
-_SUCIEDAD = {"oscurece": 0.25, "rugosidad_extra": 0.1, "distancia_mm": 4.0, "cantidad": 0.6}
+_SUCIEDAD = {"oscurece": 0.25, "rugosidad_extra": 0.12, "distancia_mm": 4.0, "cantidad": 0.5}
 _SIN_RAYAS = {"cantidad": 0.0, "escala": 200.0, "alargado": 6.0, "aclarado": 0.0, "rugosidad": 0.0}
 
 MATERIALES: dict[str, dict[str, Any]] = {
@@ -42,7 +42,8 @@ MATERIALES: dict[str, dict[str, Any]] = {
         "cc0": {"id": "acg-metal038", "escala_m": 0.2},
         "color": [0.117, 0.119, 0.122],
         "metalico": 1.0,
-        "rugosidad": {"media": 0.37, "variacion": 0.09, "escala": 70.0, "grano": 0.07},
+        "rugosidad": {"media": 0.37, "variacion": 0.15, "escala": 70.0, "grano": 0.1},
+        "patina": 0.2,
         "grano": {"escala": 2600.0, "relieve": 0.09},
         "rayas": {"cantidad": 0.2, "escala": 200.0, "alargado": 10.0, "aclarado": 0.35, "rugosidad": 0.15},
         "desgaste": {**_DESGASTE_METAL},
@@ -56,10 +57,11 @@ MATERIALES: dict[str, dict[str, Any]] = {
         "cc0": {"id": "acg-plastic012a", "escala_m": 0.15},
         "color": [0.025, 0.024, 0.022],
         "metalico": 0.0,
-        "rugosidad": {"media": 0.4, "variacion": 0.16, "escala": 60.0, "grano": 0.1},
+        "rugosidad": {"media": 0.4, "variacion": 0.26, "escala": 60.0, "grano": 0.13},
+        "patina": 0.24,
         "grano": {"escala": 1500.0, "relieve": 0.16},
         "rayas": {**_SIN_RAYAS},
-        "desgaste": {"color": [0.1, 0.1, 0.105], "rugosidad": 0.3, "metalico": 0.0, "radio_mm": 1.4, "cantidad": 0.7},
+        "desgaste": {"color": [0.24, 0.24, 0.25], "rugosidad": 0.2, "metalico": 0.0, "radio_mm": 1.0, "cantidad": 0.55},
         "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.22, "rugosidad": 0.05},
     },

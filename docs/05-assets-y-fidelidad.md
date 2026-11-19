@@ -326,6 +326,17 @@ uv run python -m taller6mm_pipeline.ensamblador.portada --exportar-glb-con-mater
 - **Marcadores**: las piezas sin malla de un build (culata, cargador, mira de punto rojo) conservan su marcador naranja translúcido (`alphaMode` BLEND): nunca se disfrazan de geometría real.
 - **Origen de las texturas**: solo recetas procedurales y la estructura de las bases CC0 de `catalogo/materiales-cc0.json` (no su color); ninguna foto de terceros, sin logos ni marcajes. Es T0 y `publicable_3d=false`.
 
+### 13.3 Umbrales de N3-N5 (endurecidos el 19-11-2026)
+
+Antes casi todo daba 93-100 en N3-N5. Cada criterio lleva ahora su `justificacion` en `catalogo/escalera-niveles.json` y el bloque `calibracion` dice con qué población se midió. Resumen de lo que cambió y por qué:
+
+- **Origen de cada cifra**: la guía de aspecto (§2.3, §2.4, §5, §6), las medidas de `catalogo/materiales-cc0.json` y, solo donde no hay referencia externa, el percentil 10 de la población medida (marcado `[convención]`).
+- **N3** (umbral 80 a 85): `rug_std` min 0,03; `albedo_cv` min 0,08 (90 % del mínimo real de los mapas CC0: 0,088); `rug_error` max 0,03 (el ±0,10 de la guía compara con el mapa real; aquí el render contra su receta mide 0,001-0,035); `rug_alta_frecuencia` min 0,009.
+- **N4** (75 a 82): roce 2-6 % de la superficie con el máximo pesando 15 (antes 5; la mediana era 0,069); contraste del roce min 0,5 (guía §5.2: +40 sRGB); suciedad min 0,03; no uniformidad min 0,03; aumento de la rugosidad min 1,10; variación entre piezas max 0,05.
+- **N5** (80 a 85): nuevo `reflejos_max` 0,12 (la escalera salía reluciente) y `contraluz_max` 2,6 (contraluz tenue); ruido max 0,006; muestras min 96.
+- **Umbral injusto, dicho aquí**: la guía §2.4 pide una desviación de rugosidad de 0,04-0,12 `[convención]`, pero los mapas CC0 reales del anodizado (0,018), el parkerizado (0,015) y el polímero (0,021) no llegan ni a 0,03. El criterio sigue activo con mínimo 0,03 y el aviso de 0,04 pesa menos.
+- Las recetas de `biblioteca.py` se ajustaron para cumplirlos (polímero y parkerizado con más variación de rugosidad y pátina; roce metálico más contenido), nunca desactivando un criterio.
+
 ### 13.4 Portada: montaje completo con materiales y los tres presets
 
 ```bash

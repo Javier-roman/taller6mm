@@ -1,6 +1,6 @@
 {
   "esquema": "escalera-niveles/v1",
-  "nota": "Escalera de calidad de las piezas (apps/pipeline/src/taller6mm_pipeline/calidad/escalera.py, docs/05 «Escalera de calidad»). Cada nivel puntúa 0-100 como media ponderada de la fracción que cumple cada criterio (lo sin dato es bandera). `umbral` = el nivel se supera; `techo` = hasta donde el agente escalador sigue elevando la pieza. N1 usa la puerta de catalogo/calidad-minimos.json. Un umbral que parezca injusto se cambia aquí con su motivo, nunca desactivando el criterio. Toda la apariencia es procedural y propia; no cambia el nivel de fidelidad (T0) ni publicable_3d (false). Los umbrales de N3, N4 y N5 siguen docs/catalogo/guia-aspecto-piezas.md (etiquetas [medido]/[ficha]/[foto]/[convención]); los [convención] son hipótesis y se ajustan con la hoja de contacto.",
+  "nota": "Escalera de calidad de las piezas (apps/pipeline/src/taller6mm_pipeline/calidad/escalera.py, docs/05 «Escalera de calidad»). Cada nivel puntúa 0-100 como media ponderada de la fracción que cumple cada criterio (lo sin dato es bandera). `umbral` = el nivel se supera; `techo` = hasta donde el agente escalador sigue elevando la pieza. N1 usa la puerta de catalogo/calidad-minimos.json. Un umbral que parezca injusto se cambia aquí con su motivo, nunca desactivando el criterio. Toda la apariencia es procedural y propia; no cambia el nivel de fidelidad (T0) ni publicable_3d (false). Los umbrales de N3, N4 y N5 siguen docs/catalogo/guia-aspecto-piezas.md (etiquetas [medido]/[ficha]/[foto]/[convención]); los [convención] son hipótesis y se ajustan con la hoja de contacto. Un criterio con `duro: true` que falla impide superar el nivel aunque la media ponderada llegue al umbral (la media promedia y dejaba pasar piezas con reflejos quemados o negros puros).",
   "niveles": {
     "1": {
       "nombre": "Forma",
@@ -65,7 +65,7 @@
     },
     "3": {
       "nombre": "Materiales por pieza",
-      "umbral": 80,
+      "umbral": 85,
       "techo": 95,
       "criterios": [
         {
@@ -74,23 +74,27 @@
           "min": 1,
           "peso": 15,
           "motivo": "La pieza no tiene regla de material en catalogo/materiales-piezas.json.",
-          "sugerencia": "Añade su familia o patrón de id al catálogo con el material de la biblioteca que le corresponde."
+          "sugerencia": "Añade su familia o patrón de id al catálogo con el material de la biblioteca que le corresponde.",
+          "justificacion": "Sin regla de material la pieza se vería con el material por defecto: el visor muestra el resultado final, así que toda pieza debe tener su regla explícita (sin cambio)."
         },
         {
           "id": "var_rugosidad",
           "clave": "rug_std",
-          "min": 0.02,
+          "min": 0.03,
           "peso": 15,
           "motivo": "La rugosidad es casi uniforme (< 0,02): aspecto de plástico de juguete (guía §2.4).",
-          "sugerencia": "Sube `rugosidad.variacion` o `grano` del material; con la base CC0 en disco la variación viene del mapa."
+          "sugerencia": "Sube `rugosidad.variacion` o `grano` del material; con la base CC0 en disco la variación viene del mapa.",
+          "justificacion": "Guía §2.4: fallo bajo 0,02. Los mapas CC0 reales miden 0,015-0,051 (anodizado 0,018, parkerizado 0,015, polímero 0,021, pavonado 0,047, goma y madera 0,051), así que la banda 0,04-0,12 de la guía [convención] es injusta para los tres primeros. Se endurece a 0,03 (1,5 veces el mínimo real) para que un material con la rugosidad casi plana siga cayendo.",
+          "duro": true
         },
         {
           "id": "var_rugosidad_aviso",
           "clave": "rug_std",
           "min": 0.04,
-          "peso": 5,
+          "peso": 10,
           "motivo": "Desviación de rugosidad por debajo de 0,04 (aviso, guía §2.4 [convención]).",
-          "sugerencia": "Sube la variación de rugosidad hasta 0,04-0,12."
+          "sugerencia": "Sube la variación de rugosidad hasta 0,04-0,12.",
+          "justificacion": "Guía §2.4 [convención]: aviso bajo 0,04. Se mantiene el valor y se duplica el peso: separa los materiales con grano visible (goma, madera, pavonado: 0,047-0,051 medidos) de los lisos. Es aviso, no fallo duro."
         },
         {
           "id": "var_rugosidad_max",
@@ -98,31 +102,35 @@
           "max": 0.12,
           "peso": 5,
           "motivo": "La rugosidad varía por encima de 0,12: se ve ruido, no material (guía §2.4 [convención]).",
-          "sugerencia": "Baja `rugosidad.variacion`."
+          "sugerencia": "Baja `rugosidad.variacion`.",
+          "justificacion": "Guía §2.4 [convención]: por encima de 0,12 se ve ruido y no material. Medido máximo 0,063. Sin cambio."
         },
         {
           "id": "var_albedo",
           "clave": "albedo_cv",
-          "min": 0.05,
+          "min": 0.08,
           "peso": 10,
           "motivo": "El albedo es plano: sin pátina ni variación de luminancia.",
-          "sugerencia": "Añade variación de color (pátina) o modulación de la base CC0."
+          "sugerencia": "Añade variación de color (pátina) o modulación de la base CC0.",
+          "justificacion": "CV de la luminancia lineal de los mapas de color CC0 medidos: 0,088 (polímero), 0,095 (parkerizado), 0,134 (pavonado), 0,187 (anodizado), 0,29 (madera), 0,36 (goma). Se exige el 90 % del mínimo real (0,088): menos es un color plano sin la pátina de su base."
         },
         {
           "id": "fidelidad_receta",
           "clave": "rug_error",
-          "max": 0.1,
+          "max": 0.03,
           "peso": 20,
           "motivo": "La rugosidad media se aparta de la guía (±0,10 sobre el valor [medido], §2.3).",
-          "sugerencia": "Revisa `rugosidad.media` frente a la tabla de la guía §1."
+          "sugerencia": "Revisa `rugosidad.media` frente a la tabla de la guía §1.",
+          "justificacion": "El ±0,10 de la guía §2.3 compara la receta con el mapa real. Aquí se compara el render con su propia receta: sobre 58 piezas el error mide 0,001-0,035 (p90 0,021). Se baja a 0,03 para detectar una receta cambiada sin actualizar la medida o una base CC0 mal escalada."
         },
         {
           "id": "textura_fina",
           "clave": "rug_alta_frecuencia",
-          "min": 0.006,
+          "min": 0.009,
           "peso": 10,
           "motivo": "Sin textura de alta frecuencia: faltan micro-rayas y grano.",
-          "sugerencia": "Sube `grano.escala`/`rayas.cantidad` o carga la base CC0."
+          "sugerencia": "Sube `grano.escala`/`rayas.cantidad` o carga la base CC0.",
+          "justificacion": "Energía de alta frecuencia de la rugosidad (residuo frente a la media de 5x5 px). Sin referencia externa: calibrado con la población actual (mín. 0,0068, p10 0,0089). Se fija en el p10 para que el 10 % más liso no pase como grano; es [convención] y se revisa con la hoja de contacto."
         },
         {
           "id": "negro_no_es_cero",
@@ -130,7 +138,9 @@
           "min": 30,
           "peso": 5,
           "motivo": "Negro demasiado puro (sRGB < 30): la forma desaparece (guía §2.1 [convención]).",
-          "sugerencia": "Sube el color base del material negro hasta sRGB 30-55."
+          "sugerencia": "Sube el color base del material negro hasta sRGB 30-55.",
+          "justificacion": "Guía §2.1: un negro no es 0, el albedo de un material negro cae entre sRGB 30 y 55. Medido hoy: 43,7-57,5. Sin cambio; es fallo duro porque un negro puro hace desaparecer la forma.",
+          "duro": true
         },
         {
           "id": "negro_no_es_gris",
@@ -138,62 +148,71 @@
           "max": 55,
           "peso": 5,
           "motivo": "Negro demasiado claro (sRGB > 55) (guía §2.1 [convención]).",
-          "sugerencia": "Baja el color base del material negro."
+          "sugerencia": "Baja el color base del material negro.",
+          "justificacion": "Guía §2.1: tope sRGB 55. Medido: máximo 57,5 en el parkerizado de la escalera, que no es un material «negro». Sin cambio; solo se aplica a materiales marcados como negros."
         }
-      ]
+      ],
+      "justificacion_umbral": "umbral 80 -> 85: con los criterios endurecidos, 85 exige que casi todos se cumplan; antes pasaba todo con 93-100."
     },
     "4": {
       "nombre": "Desgaste y contraste",
-      "umbral": 75,
+      "umbral": 82,
       "techo": 92,
       "criterios": [
         {
           "id": "borde_cobertura",
           "clave": "borde_cobertura",
-          "min": 0.004,
+          "min": 0.02,
           "peso": 15,
           "motivo": "Casi no hay roce en aristas.",
-          "sugerencia": "Sube `desgaste.cantidad` o `desgaste.radio_mm` del material."
+          "sugerencia": "Sube `desgaste.cantidad` o `desgaste.radio_mm` del material.",
+          "justificacion": "Guía §5.2: pieza usada con roce en el 2-6 % de la superficie; 0 % en pieza nueva. El mínimo pasa de 0,004 a 0,02 (límite inferior de la guía)."
         },
         {
           "id": "borde_cobertura_max",
           "clave": "borde_cobertura",
           "max": 0.06,
-          "peso": 5,
+          "peso": 15,
           "motivo": "Roce en más del 6 % de la superficie: parece pieza muy usada (guía §5.2 [convención]: 2-6 %).",
-          "sugerencia": "Baja `desgaste.cantidad` o `desgaste.radio_mm`."
+          "sugerencia": "Baja `desgaste.cantidad` o `desgaste.radio_mm`.",
+          "justificacion": "Guía §5.2: tope del 6 %. Antes pesaba 5 y casi nadie lo notaba: la mediana medida era 0,069 y el máximo 0,199 (pieza machacada). Con peso 15 el exceso pesa lo mismo que la falta.",
+          "duro": true
         },
         {
           "id": "borde_contraste",
           "clave": "borde_contraste",
-          "min": 0.25,
+          "min": 0.5,
           "peso": 20,
           "motivo": "El roce no contrasta con el resto de la pieza.",
-          "sugerencia": "Aclara `desgaste.color` (metal pelado) o sube su `metalico`."
+          "sugerencia": "Aclara `desgaste.color` (metal pelado) o sube su `metalico`.",
+          "justificacion": "Guía §5.2: el roce es ≥ +40 sRGB más claro que la cara. Sobre un negro de 45 sRGB (lineal 0,026) eso es 85 sRGB (0,09): contraste (a-c)/(a+c) = 0,55. Se fija en 0,5 (hoy mínimo 0,317, polímero)."
         },
         {
           "id": "suciedad",
           "clave": "suciedad_cobertura",
-          "min": 0.01,
+          "min": 0.03,
           "peso": 15,
           "motivo": "Sin suciedad ni polvo en las cavidades (oclusión ambiental).",
-          "sugerencia": "Sube `suciedad.cantidad`/`distancia_mm`; oscurece 15-30 % y sube la rugosidad 0,05-0,15 (guía §5.1 [convención])."
+          "sugerencia": "Sube `suciedad.cantidad`/`distancia_mm`; oscurece 15-30 % y sube la rugosidad 0,05-0,15 (guía §5.1 [convención]).",
+          "justificacion": "Guía §5.1 [convención]: la oclusión oscurece el 15-30 % en cavidades. Sin cifra de cobertura en la guía: calibrado con la población (p10 0,0044, mediana 0,087). Se sube a 0,03 para exigir suciedad visible."
         },
         {
           "id": "no_uniformidad",
           "clave": "no_uniformidad",
-          "min": 0.015,
+          "min": 0.03,
           "peso": 15,
           "motivo": "El desgaste y la suciedad son parejos: parece un filtro.",
-          "sugerencia": "Sube la variación del ruido de desgaste; las marcas de uso son irregulares."
+          "sugerencia": "Sube la variación del ruido de desgaste; las marcas de uso son irregulares.",
+          "justificacion": "Desviación por bloques de 16 px del desgaste y la suciedad: un filtro uniforme da ≈ 0. Población: mín. 0,017, p10 0,027, mediana 0,115. Se fija en el p10 (0,03). [convención]."
         },
         {
           "id": "aumento_rug",
           "clave": "aumento_rug_std",
-          "min": 1.02,
+          "min": 1.1,
           "peso": 20,
           "motivo": "El desgaste no añade variación de rugosidad frente a N3.",
-          "sugerencia": "Diferencia `desgaste.rugosidad` y `suciedad.rugosidad` de la rugosidad base."
+          "sugerencia": "Diferencia `desgaste.rugosidad` y `suciedad.rugosidad` de la rugosidad base.",
+          "justificacion": "Guía §5.1: la suciedad sube la rugosidad +0,05-0,15 y el roce la baja: la desviación debe crecer al menos un 10 % frente a N3 (hoy mínimo 0,999: algunas piezas no ganan nada)."
         },
         {
           "id": "variacion_conjunto",
@@ -201,21 +220,24 @@
           "min": 0.003,
           "peso": 10,
           "motivo": "Las piezas del mismo conjunto son idénticas entre sí.",
-          "sugerencia": "Sube `variacion_pieza` del material (color y rugosidad)."
+          "sugerencia": "Sube `variacion_pieza` del material (color y rugosidad).",
+          "justificacion": "Las piezas del mismo material no deben ser clónicas (guía §6, ΔE00 entre 2 y 6 según el caso). Medido 0,017-0,027; el mínimo 0,003 se mantiene porque el valor sale del CRC32 del id y es estable."
         },
         {
           "id": "variacion_conjunto_max",
           "clave": "variacion_conjunto",
-          "max": 0.08,
+          "max": 0.05,
           "peso": 5,
           "motivo": "Las piezas del conjunto difieren demasiado: no parecen del mismo juego.",
-          "sugerencia": "Baja `variacion_pieza`."
+          "sugerencia": "Baja `variacion_pieza`.",
+          "justificacion": "Guía §6: piezas del mismo material y color, mismo juego. Medido 0,017-0,027 de desviación de rugosidad media entre piezas; 0,05 deja 2 veces de margen y detecta una variación de receta desbocada."
         }
-      ]
+      ],
+      "justificacion_umbral": "umbral 75 -> 82: ídem; el roce y la suciedad deben ser visibles y no excesivos."
     },
     "5": {
       "nombre": "Imagen viva",
-      "umbral": 80,
+      "umbral": 85,
       "techo": 95,
       "criterios": [
         {
@@ -224,7 +246,8 @@
           "min": 0.35,
           "peso": 20,
           "motivo": "Poco contraste entre luces y sombras de la pieza.",
-          "sugerencia": "Sube la luz clave o baja el relleno en `estudio()` de escalera_render.py."
+          "sugerencia": "Sube la luz clave o baja el relleno en `estudio()` de escalera_render.py.",
+          "justificacion": "Sin cambio (0,35): el preset mate_suave baja el contraste a propósito (relación clave/relleno casi 2:1). Hoy mínimo 0,236, p10 0,39."
         },
         {
           "id": "reflejos",
@@ -232,7 +255,8 @@
           "min": 0.002,
           "peso": 15,
           "motivo": "Sin reflejos especulares visibles.",
-          "sugerencia": "Baja la rugosidad del material o añade una caja de luz que se refleje."
+          "sugerencia": "Baja la rugosidad del material o añade una caja de luz que se refleje.",
+          "justificacion": "Sin cambio en el mínimo (0,002). El máximo está en `reflejos_max`."
         },
         {
           "id": "contraluz",
@@ -240,7 +264,8 @@
           "min": 1.4,
           "peso": 20,
           "motivo": "El contorno no se separa del fondo: falta contraluz.",
-          "sugerencia": "Sube la energía de las luces `contra-a`/`contra-b`."
+          "sugerencia": "Sube la energía de las luces `contra-a`/`contra-b`.",
+          "justificacion": "Sin cambio (1,4): contorno al menos un 40 % más claro que el interior. El máximo está en `contraluz_max`."
         },
         {
           "id": "dof_presente",
@@ -248,7 +273,8 @@
           "min": 3,
           "peso": 10,
           "motivo": "Sin profundidad de campo apreciable.",
-          "sugerencia": "Baja el número f (más apertura)."
+          "sugerencia": "Baja el número f (más apertura).",
+          "justificacion": "Con f/5,6 y la lente de 70 mm el círculo de confusión máximo mide 2,7-74 px según la profundidad de la pieza. Mínimo 3 px sin cambio: sin desenfoque no hay sensación de objeto físico."
         },
         {
           "id": "dof_legible",
@@ -256,7 +282,8 @@
           "max": 14,
           "peso": 5,
           "motivo": "Desenfoque excesivo: la pieza se vuelve ilegible.",
-          "sugerencia": "Sube el número f."
+          "sugerencia": "Sube el número f.",
+          "justificacion": "Tope 14 px sin cambio: los cañones largos y los conjuntos superan el tope por su profundidad (p90 22 px). Es una limitación de la lente fija del render, no de la pieza; se avisa aquí en vez de relajar el umbral."
         },
         {
           "id": "foco",
@@ -264,15 +291,17 @@
           "min": 0.15,
           "peso": 10,
           "motivo": "Muy poca superficie enfocada.",
-          "sugerencia": "Sube el número f o centra el foco."
+          "sugerencia": "Sube el número f o centra el foco.",
+          "justificacion": "Fracción enfocada mínima 0,15 sin cambio (mediana medida 0,151: la mitad de las piezas largas quedan justas)."
         },
         {
           "id": "ruido",
           "clave": "ruido",
-          "max": 0.01,
+          "max": 0.006,
           "peso": 10,
           "motivo": "Ruido residual alto tras el denoiser.",
-          "sugerencia": "Sube las muestras de Cycles."
+          "sugerencia": "Sube las muestras de Cycles.",
+          "justificacion": "MAD del residuo frente a la mediana 3x3 tras OIDN con 96 muestras: mediana 0,0032, p90 0,0103 (el pavonado llegaba a 0,018 por destellos). 0,006 exige un render limpio sin pedir más muestras al resto."
         },
         {
           "id": "denoiser",
@@ -280,17 +309,39 @@
           "min": 1,
           "peso": 5,
           "motivo": "El render no usa denoiser.",
-          "sugerencia": "Activa OpenImageDenoise."
+          "sugerencia": "Activa OpenImageDenoise.",
+          "justificacion": "El denoiser OIDN es parte del contrato del render de imagen (sin cambio)."
         },
         {
           "id": "muestras",
           "clave": "muestras",
-          "min": 64,
+          "min": 96,
           "peso": 5,
           "motivo": "Muestras de Cycles insuficientes.",
-          "sugerencia": "Usa 64 o más."
+          "sugerencia": "Usa 64 o más.",
+          "justificacion": "Es el valor por defecto del render de imagen; el mínimo impide bajar las muestras en silencio."
+        },
+        {
+          "id": "reflejos_max",
+          "clave": "reflejos",
+          "max": 0.12,
+          "peso": 15,
+          "motivo": "Demasiada superficie con brillo alto (> 0,6 de luminancia): la pieza reluce, el anodizado real no es un espejo.",
+          "sugerencia": "Sube la rugosidad del material (hasta su banda ±0,10 de la guía §2.3) o baja el brillo del preset de luz.",
+          "justificacion": "Pedido de Javi: la escalera salía demasiado reluciente. Medido: mediana 0,035, p90 0,14, pavonado 0,25-0,31. 0,12 deja pasar el 80 % de las piezas sin brillo quemado; el pavonado se corrige con el brillo por material del preset.",
+          "duro": true
+        },
+        {
+          "id": "contraluz_max",
+          "clave": "contraluz",
+          "max": 2.6,
+          "peso": 10,
+          "motivo": "El contraluz quema el contorno (más de 2,6 veces el interior): ya no es «tenue».",
+          "sugerencia": "Baja la energía de `contra-a` y `contra-b` en el preset.",
+          "justificacion": "mate_suave pide contraluz tenue. Medido: mediana 1,94, p90 2,94, máximo 3,29. 2,6 es un contorno claramente más claro que el cuerpo sin llegar a borde blanco."
         }
-      ]
+      ],
+      "justificacion_umbral": "umbral 80 -> 85: la imagen final debe ser limpia, sin reflejos quemados y con contraluz medido."
     }
   },
   "foco": {
@@ -325,5 +376,10 @@
         }
       }
     }
+  },
+  "calibracion": {
+    "fecha": "2026-11-19",
+    "poblacion": "58 piezas del M4 (oleada 1 y cuerpos) renderizadas con el preset mate_suave; las piezas AK se miden aparte en el informe",
+    "nota": "Cada criterio de N3-N5 lleva `justificacion`: la guía de aspecto, las medidas CC0 de catalogo/materiales-cc0.json o, cuando no hay referencia externa, el percentil de la población (marcado [convención]). Los umbrales de la guía §2.4 (0,04-0,12) son injustos para anodizado, parkerizado y polímero: sus mapas CC0 miden 0,015-0,021."
   }
 }
