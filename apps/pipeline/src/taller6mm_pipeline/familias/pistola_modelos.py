@@ -15,8 +15,8 @@ guarda, los mandos y el texturizado se añaden encima. Todo en el origen común 
 - **Cargador de gas** (`cargador.gas_pistola`): cuerpo recto de perfil extruido, labios de alimentación, depósito más
   grueso, muesca de retenida, ventanas y base con válvula de carga.
 
-Solo formas exteriores. Las proporciones son de barrido (`es_demo`): ninguna es la medida de un SKU, salvo el largo total
-de la Hi-Capa 5.1 de Tokyo Marui (222 mm, ficha oficial en `docs/catalogo/cotas-publicas.md`), que se anota como
+Solo formas exteriores. Las proporciones son de barrido (`es_demo`): ninguna es la medida de un SKU, salvo el largo
+total de la Hi-Capa 5.1 de Tokyo Marui (222 mm, ficha oficial en `docs/catalogo/cotas-publicas.md`), que se anota como
 referencia de la cota global y no se aplica a ninguna pieza suelta.
 """
 
@@ -44,6 +44,8 @@ POZO_GLOCK = "pozo-glock-gbb"  # catalogo/interfaces.json
 POZO_HICAPA = "pozo-hi-capa"  # catalogo/interfaces.json
 RIEL_UNIVERSAL = "rail-pistola-glock-universal"
 ESTILOS = ("glock", "hicapa")
+RIEL_Z = 7.6  # posición lateral de los raíles de la corredera: caben en el canal de la corredera (19,2 mm)
+POZO_H = 70.0  # profundidad del pozo del cargador (mm) y altura útil del cargador dentro del agarre
 FUENTE_TM_HICAPA = "https://www.tokyo-marui.co.jp/products/gas/blowback/55 (ficha oficial Hi-Capa 5.1 Government)"
 DESCARTADAS: list[str] = []
 
@@ -57,7 +59,12 @@ def cara(puntos: Sequence[tuple[float, float, float]]) -> Face:
     for x, y, r in puntos:
         if r > 0:
             v = min(f.vertices(), key=lambda q: (q.X - x) ** 2 + (q.Y - y) ** 2)
-            f = f.fillet_2d(r, [v])
+            for rr in (r, r * 0.6, r * 0.35):
+                try:
+                    f = f.fillet_2d(rr, [v])
+                    break
+                except ValueError:
+                    continue
     return f
 
 
@@ -224,18 +231,6 @@ def _glock(p: Mapping[str, Valor]) -> Geometria:
     # 2. Agarre: perfil redondeado, más ancho que el chasis, con los cantos laterales redondeados.
     agarre = prisma(perfil_agarre(a, y_dc + 3.0, 5.0), ancho)
     agarre = filetear(agarre, 3.4, [e for e in agarre.edges() if abs(abs(e.center().Z) - ancho / 2) < 0.02])
-    # Cuello del abombamiento dorsal: refuerzo curvo entre la cola de castor y la espalda.
-    espalda = prisma(
-        [
-            (-4.0, Y0 - 5.5, 5.0),
-            (a.r0[0] - 1.5, Y0 - 18.0, 5.0),
-            (a.r0[0] + 6.0, y_dc - 6.0, 4.0),
-            (a.x_f - 4.0, y_dc, 0.0),
-            (6.0, Y0 - 4.0, 0.0),
-        ],
-        ancho * 0.86,
-    )
-    espalda = filetear(espalda, 3.0, [e for e in espalda.edges() if abs(abs(e.center().Z) - ancho * 0.43) < 0.02])
     # 3. Guarda cuadrada y gatillo.
     xg = a.x_f + 37.0
     ext = [
@@ -277,13 +272,13 @@ def _glock(p: Mapping[str, Valor]) -> Geometria:
         2.6,
         z=0.0,
     )
-    cuerpo = aplicar(chasis, [agarre, espalda, guarda, gat, seguro_gat], "fuse", "glock")
+    cuerpo = aplicar(chasis, [agarre, guarda, gat, seguro_gat], "fuse", "glock")
     # 4. Raíles de la corredera, bloque de cierre y mandos.
     piezas: list[Any] = []
-    for z in (-cw / 2 + 2.0, cw / 2 - 2.0):
+    for z in (-RIEL_Z, RIEL_Z):
         for x0, x1 in ((20.0, 92.0), (118.0, largo - 12.0)):
-            piezas.append(Pos((x0 + x1) / 2, Y0 + 1.8, z) * Box(x1 - x0, 3.6, 2.2))
-    piezas.append(Pos(104.0, Y0 + 1.0, 0) * Box(20.0, 2.0, cw - 4.0))
+            piezas.append(Pos((x0 + x1) / 2, Y0 + 1.5, z) * Box(x1 - x0, 3.6, 2.2))
+    piezas.append(Pos(104.0, Y0 + 1.0, 0) * Box(20.0, 2.0, 2 * RIEL_Z))
     # palanca de retenida de corredera (izquierda), botón del cargador, palanca de desmontaje y pasadores
     palanca = prisma(
         [
@@ -313,13 +308,13 @@ def _glock(p: Mapping[str, Valor]) -> Geometria:
         cortes.append(
             Pos(cx + 3.7, cy, 0) * Rot(0, 0, -inc) * Pos(0, 0, 0) * cilindro_en("z", 5.2, ancho * 0.84, (0, 0, 0))
         )
-    pozo = a.sitio() * Pos(prof / 2, -alto + 32.0, 0) * Box(prof - 8.0, 66.0, 24.0)
-    cortes.append(filetear(pozo, 2.2, [e for e in pozo.edges() if abs(e.length - 66.0) < 0.01]))
+    pozo = a.sitio() * Pos(-prof / 2, -alto + POZO_H / 2 - 1.0, 0) * Box(prof - 8.0, POZO_H + 2.0, 24.0)
+    cortes.append(filetear(pozo, 2.2, [e for e in pozo.edges() if abs(e.length - POZO_H - 2.0) < 0.01]))
     if p["textura"] == "punteado":
         pts = []
         for xs_, ys_ in rejilla(7.0, prof - 7.0, 12.0, alto * 0.86, 4.3):
             for lado in (1, -1):
-                pts.append((xs_, -ys_, lado * (ancho / 2 + 0.55)))
+                pts.append((-xs_, -ys_, lado * (ancho / 2 + 0.55)))
         cortes.append(punteado(sitio, pts, 1.1))
     # Marcas horizontales de la espalda (en el dorso, de arriba abajo).
     for k in range(6):
@@ -332,7 +327,7 @@ def _glock(p: Mapping[str, Valor]) -> Geometria:
         Socket("corredera", (0.0, Y0, 0.0), INTERFAZ_RIEL_CORREDERA, (0.0, 1.0, 0.0), (1.0, 0.0, 0.0), {}),
         Socket(
             "cargador",
-            _centro_pozo(a),
+            _centro_pozo(a, alto),
             POZO_GLOCK,
             (a.u[0], a.u[1], 0.0),
             (-a.u[1], a.u[0], 0.0),
@@ -350,9 +345,9 @@ def _glock(p: Mapping[str, Valor]) -> Geometria:
     return Geometria(cuerpo, sockets, cotas, notas, (caja.size.X, caja.size.Y, caja.size.Z), vaciados=vaciados)
 
 
-def _centro_pozo(a: _Agarre) -> tuple[float, float, float]:
-    """Centro de la boca del pozo: a media profundidad del agarre y 8 mm por debajo del frente superior."""
-    x, y = a.punto(0.04, a.prof / 2)
+def _centro_pozo(a: _Agarre, alto: float) -> tuple[float, float, float]:
+    """Centro de la boca superior del pozo (donde queda la cara superior del cargador)."""
+    x, y = a.punto((alto - POZO_H) / alto, a.prof / 2)
     return (x, y, 0.0)
 
 
@@ -366,6 +361,7 @@ def _hicapa(p: Mapping[str, Valor]) -> Geometria:
     marco = prisma(
         [
             (-3.0, Y0 - 2.0, 3.0),
+            (4.0, Y0, 0.0),
             (largo, Y0, 1.4),
             (largo, y_dc + 3.0, 1.4),
             (largo - 6.0, y_dc, 2.5),
@@ -409,14 +405,6 @@ def _hicapa(p: Mapping[str, Valor]) -> Geometria:
     )
     for k in range(3):
         gat = gat - cilindro_en("z", 1.5, 10.0, (a.x_f + 11.0 + k * 3.0, y_dc - 6.0 - k * 4.2, 0.0))
-    espalda_resorte = prisma(
-        [
-            (a.r0[0] - 3.0, a.r0[1] - 40.0, 5.0),
-            (a.r0[0] + 2.0, a.r0[1] - 12.0, 5.0),
-            (a.r0[0] + 2.0, a.r0[1] - 86.0, 5.0),
-        ],
-        nucleo * 0.9,
-    )
     # 3. Mandos: martillo de anilla, seguro de empuñadura con cola de castor, seguro manual, retenida y botón.
     martillo = cilindro_en("z", 6.2, 7.0, (-4.2, Y0 - 5.0, 0.0)) - cilindro_en("z", 3.6, 9.0, (-4.2, Y0 - 5.0, 0.0))
     martillo = martillo + Pos(-1.6, Y0 - 8.0, 0) * Box(3.6, 6.0, 5.0)
@@ -467,17 +455,17 @@ def _hicapa(p: Mapping[str, Valor]) -> Geometria:
             casquillos.append(cilindro_en("z", 2.5, 2.2, (cx, cy, lado * (nucleo / 2 + 0.9))))
     # Marco: raíles de la corredera sobre el cubrecañón, bloque de cierre y ranura de tornillo de mira.
     rieles = []
-    for z in (-nucleo / 2 + 1.2, nucleo / 2 - 1.2):
-        for x0, x1 in ((22.0, 96.0), (120.0, largo - 10.0)):
-            rieles.append(Pos((x0 + x1) / 2, Y0 + 1.6, z) * Box(x1 - x0, 3.2, 2.0))
+    for z in (-RIEL_Z, RIEL_Z):
+        for x0, x1 in ((22.0, 90.0), (100.0, largo - 8.0)):
+            rieles.append(Pos((x0 + x1) / 2, Y0 + 1.4, z) * Box(x1 - x0, 3.2, 2.0))
     cuerpo = aplicar(
         marco,
-        [guarda, gat, espalda_resorte, martillo, cola, seguro, seguro_der, retenida, boton, *casquillos, *rieles],
+        [guarda, gat, martillo, cola, seguro, seguro_der, retenida, boton, *casquillos, *rieles],
         "fuse",
         "hicapa-piezas",
     )
-    pozo = a.sitio() * Pos(prof / 2, -alto + 31.0, 0) * Box(prof - 6.0, 66.0, nucleo - 3.0)
-    pozo = filetear(pozo, 2.0, [e for e in pozo.edges() if abs(e.length - 66.0) < 0.01])
+    pozo = a.sitio() * Pos(-prof / 2, -alto + POZO_H / 2 - 1.0, 0) * Box(prof - 6.0, POZO_H + 2.0, nucleo - 3.0)
+    pozo = filetear(pozo, 2.0, [e for e in pozo.edges() if abs(e.length - POZO_H - 2.0) < 0.01])
     cortes = [pozo]
     # Muesca de la cara delantera (rebaje del dedo) y marcas del cubrecañón.
     for i in range(2):
@@ -487,7 +475,7 @@ def _hicapa(p: Mapping[str, Valor]) -> Geometria:
         Socket("corredera", (0.0, Y0, 0.0), INTERFAZ_RIEL_CORREDERA, (0.0, 1.0, 0.0), (1.0, 0.0, 0.0), {}),
         Socket(
             "cargador",
-            _centro_pozo(a),
+            _centro_pozo(a, alto),
             POZO_HICAPA,
             (a.u[0], a.u[1], 0.0),
             (-a.u[1], a.u[0], 0.0),
@@ -578,11 +566,11 @@ class CachaHiCapa(Familia):
             for giro in (45.0, -45.0):
                 ranuras.append(
                     sitio
-                    * Pos(prof / 2 + k * 3.6, -alto * 0.5, lado * (nucleo / 2 + grueso - 0.35))
+                    * Pos(-prof / 2 + k * 3.6, -alto * 0.5, lado * (nucleo / 2 + grueso - 0.35))
                     * Rot(0, 0, giro)
                     * Box(0.7, alto * 1.4, 0.9)
                 )
-        zona = sitio * Pos(prof / 2, -alto * 0.52, z) * Box(prof - 12.0, alto * 0.70, grueso + 4.0)
+        zona = sitio * Pos(-prof / 2, -alto * 0.52, z) * Box(prof - 12.0, alto * 0.70, grueso + 4.0)
         corte = Compound(ranuras) & zona
         agujeros = [
             cilindro_en("z", 2.2, 2.0, (*a.punto(t, s), lado * (nucleo / 2 + grueso - 0.5)))

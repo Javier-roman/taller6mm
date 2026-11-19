@@ -28,7 +28,7 @@ from taller6mm_pipeline.familias.pistola_comun import (
 
 ESTILOS = ("polimero", "clasico")
 Y_SUP_ESTILO = {"polimero": 18.5, "clasico": 17.0}  # cara superior de la corredera sobre el eje del cañón
-MURO = 4.2  # espesor de las paredes laterales de la corredera
+MURO = 3.4  # espesor de las paredes laterales de la corredera
 
 
 def _hueco_x(x0: float, x1: float, y0: float, y1: float, semi: float, radio: float = 2.0) -> Any:
@@ -42,7 +42,7 @@ def _hueco_x(x0: float, x1: float, y0: float, y1: float, semi: float, radio: flo
 def _v_vertical(x: float, ancho: float, fondo: float, y0: float, y1: float, z_cara: float, lado: int) -> Any:
     """Surco en V vertical en una cara lateral (z_cara) de la corredera: sirve de serrado."""
     pts = [(x - ancho / 2, z_cara + lado * 0.3), (x, z_cara - lado * fondo), (x + ancho / 2, z_cara + lado * 0.3)]
-    return Pos(0, y0, 0) * extrude(Plane.XZ * Polygon(*pts, align=None), amount=-(y1 - y0))
+    return Pos(0, y1, 0) * extrude(Plane.XZ * Polygon(*pts, align=None), amount=y1 - y0)
 
 
 class Corredera(Familia):
@@ -141,7 +141,7 @@ class Corredera(Familia):
             cuerpo = cuerpo - ranura
             surcos += 1
         # Boca: alojamiento del cañón y, debajo, el del muelle guía.
-        cuerpo = cuerpo - cilindro_en("x", 6.4, 16.0, (largo - 7.5, 0.0, 0.0))
+        cuerpo = cuerpo - cilindro_en("x", 7.4, 16.0, (largo - 7.5, 0.0, 0.0))
         cuerpo = cuerpo - cilindro_en("x", 3.2, 12.0, (largo - 5.5, -9.0, 0.0))
         surcos += 2
         y_trasera = y_sup - 0.5
