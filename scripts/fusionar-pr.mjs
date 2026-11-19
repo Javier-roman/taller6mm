@@ -61,9 +61,25 @@ async function principal() {
   const sinFusionar = args.includes('--sin-fusionar');
   const limite = Date.now() + esperaMin * 60_000;
   let actualizaciones = 0;
+  let fallosRed = 0;
 
   while (Date.now() < limite) {
-    const { accion, motivo } = decidir(leer(numero));
+    let estadoPr;
+    try {
+      estadoPr = leer(numero);
+    } catch {
+      // Corte de red puntual con GitHub: se reintenta, no se aborta.
+      fallosRed += 1;
+      if (fallosRed >= 6) {
+        console.error(`#${numero}: parado — GitHub no responde (${fallosRed} intentos)`);
+        process.exit(1);
+      }
+      console.error(`#${numero}: sin respuesta de GitHub, reintento (${fallosRed}/6)`);
+      await dormir(20_000);
+      continue;
+    }
+    fallosRed = 0;
+    const { accion, motivo } = decidir(estadoPr);
     if (accion === 'hecho') return console.log(`#${numero}: ${motivo}`);
     if (accion === 'parar') {
       console.error(`#${numero}: parado — ${motivo}`);
