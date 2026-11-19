@@ -4,8 +4,16 @@
   "defecto": "mate_suave",
   "brillo": {
     "nota": "Control de brillo. `global` multiplica la exposición (EV = EV del preset + log2(factor)) y desplaza la rugosidad de todos los materiales en (1 - factor) x `rug_por_factor`: más brillo = algo más de reflejo. Por material, el factor es un multiplicador propio (misma fórmula). La rugosidad resultante nunca sale de la banda medida de su base CC0 (materiales-cc0.json, `rugosidad_media`) más/menos `banda_rugosidad` (guía de aspecto §2.3: ±0,10): el anodizado real no es un espejo y el pavonado no es mate.",
-    "global": { "min": 0.5, "max": 1.5, "defecto": 1.0 },
-    "por_material": { "min": 0.6, "max": 1.4, "defecto": 1.0 },
+    "global": {
+      "min": 0.5,
+      "max": 1.5,
+      "defecto": 1.0
+    },
+    "por_material": {
+      "min": 0.6,
+      "max": 1.4,
+      "defecto": 1.0
+    },
     "rug_por_factor": 0.12,
     "banda_rugosidad": 0.1,
     "rugosidad_minima_absoluta": 0.02
@@ -15,10 +23,21 @@
       "descripcion": "Por defecto. Luz de estudio amplia y difusa: softboxes grandes, reflejos contenidos y contraluz tenue. Para juzgar forma y material sin brillos que quemen.",
       "exposicion_ev": -0.35,
       "tono": "AgX",
-      "mundo": { "abajo": [0.16, 0.16, 0.165], "arriba": [0.3, 0.3, 0.31], "intensidad": 1.0 },
-      "suelo": { "color": [0.18, 0.18, 0.18], "rugosidad": 0.75, "metalico": 0.0 },
+      "mundo": {
+        "abajo": [0.16, 0.16, 0.165],
+        "arriba": [0.3, 0.3, 0.31],
+        "intensidad": 1.0
+      },
+      "suelo": {
+        "color": [0.18, 0.18, 0.18],
+        "rugosidad": 0.75,
+        "metalico": 0.0
+      },
       "rugosidad_delta": 0.06,
-      "brillo_material": { "acero_pavonado": 0.6, "parkerizado": 0.85 },
+      "brillo_material": {
+        "acero_pavonado": 0.6,
+        "parkerizado": 0.85
+      },
       "luces": [
         {
           "id": "clave",
@@ -64,10 +83,18 @@
     },
     "estudio_contraste": {
       "descripcion": "Estudio de producto con más contraste: luces más pequeñas y duras, contraluz marcado. Es el estudio antiguo de la escalera, ya con el brillo acotado.",
-      "exposicion_ev": -0.15,
+      "exposicion_ev": -0.55,
       "tono": "AgX",
-      "mundo": { "abajo": [0.11, 0.11, 0.115], "arriba": [0.26, 0.26, 0.27], "intensidad": 1.0 },
-      "suelo": { "color": [0.18, 0.18, 0.18], "rugosidad": 0.45, "metalico": 0.0 },
+      "mundo": {
+        "abajo": [0.11, 0.11, 0.115],
+        "arriba": [0.26, 0.26, 0.27],
+        "intensidad": 1.0
+      },
+      "suelo": {
+        "color": [0.12, 0.12, 0.12],
+        "rugosidad": 0.45,
+        "metalico": 0.0
+      },
       "rugosidad_delta": 0.0,
       "luces": [
         {
@@ -114,10 +141,18 @@
     },
     "dramatica_penumbra": {
       "descripcion": "Penumbra dramática: fondo oscuro, una clave lateral y un contraluz que dibuja la silueta. Para la portada y la Armería; no sirve para medir sombras.",
-      "exposicion_ev": -0.6,
+      "exposicion_ev": -0.2,
       "tono": "AgX",
-      "mundo": { "abajo": [0.03, 0.03, 0.035], "arriba": [0.09, 0.09, 0.1], "intensidad": 1.0 },
-      "suelo": { "color": [0.06, 0.06, 0.065], "rugosidad": 0.55, "metalico": 0.0 },
+      "mundo": {
+        "abajo": [0.004, 0.004, 0.005],
+        "arriba": [0.02, 0.02, 0.025],
+        "intensidad": 1.0
+      },
+      "suelo": {
+        "color": [0.015, 0.015, 0.017],
+        "rugosidad": 0.4,
+        "metalico": 0.0
+      },
       "rugosidad_delta": 0.03,
       "luces": [
         {
@@ -132,7 +167,7 @@
           "id": "relleno",
           "dir": [-0.6, 1.0, 0.3],
           "dist": 1.6,
-          "energia_d2": 6,
+          "energia_d2": 3,
           "tam_d": 2.0,
           "color": [0.7, 0.8, 1.0]
         },
