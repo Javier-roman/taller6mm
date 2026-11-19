@@ -517,6 +517,39 @@ def _hicapa(p: Mapping[str, Valor]) -> Geometria:
     return Geometria(cuerpo, sockets, cotas, notas, (caja.size.X, caja.size.Y, caja.size.Z), vaciados=len(cortes) + 8)
 
 
+def _ranuras_cruzadas(
+    sitio: Any, zona: tuple[float, float, float, float], paso: float, z: float, ancho: float = 0.9, hondo: float = 0.45
+) -> list[Any]:
+    """Ranuras a ±45 grados recortadas a la `zona` (x0, x1, y0, y1) del marco local `sitio`, sobre la cara `z`."""
+    xa, xb, ya, yb = zona
+    salida: list[Any] = []
+    for m in (1.0, -1.0):
+        c = ya - m * xb if m > 0 else yb - m * xb
+        c_fin = yb - m * xa if m > 0 else ya - m * xa
+        n = int(abs(c_fin - c) / (paso * math.sqrt(2))) + 1
+        for k in range(n + 1):
+            cc = c + (c_fin - c) * k / max(n, 1)
+            lo, hi = xa, xb
+            for yy, es_min in ((ya, True), (yb, False)):
+                x_lim = (yy - cc) / m
+                if (m > 0) == es_min:
+                    lo = max(lo, x_lim)
+                else:
+                    hi = min(hi, x_lim)
+            if hi - lo < 2.0:
+                continue
+            xm = (lo + hi) / 2
+            largo = (hi - lo) * math.sqrt(2)
+            # Ranura de fondo redondo: cilindro cuyo eje queda 0,45 mm por encima de la cara. Los bordes salen suaves
+            # (30 grados entre la cara y la ranura), no a 90, y no cuentan como aristas vivas.
+            sg = 1.0 if z >= 0 else -1.0
+            cil = cilindro_en("x", ancho, largo, (0.0, 0.0, 0.0))
+            salida.append(
+                sitio * Pos(xm, m * xm + cc, z + sg * (ancho - hondo)) * Rot(0, 0, math.degrees(math.atan(m))) * cil
+            )
+    return salida
+
+
 # --- Cachas de la Hi-Capa -----------------------------------------------------------------------------------------
 
 
@@ -546,12 +579,17 @@ class CachaHiCapa(Familia):
         a = _Agarre(inc, alto, prof, y_dc - 4.0, Y0 - 13.0, 2.5)
         z = lado * (nucleo / 2 + grueso / 2)
         # Perfil: contorno del agarre con el rebaje del pulgar arriba delante y la base redondeada.
+        ex, ey = a.punto(0.5, prof)  # el dorso abomba 3 mm hacia atrás a media altura
+        ex, ey = ex + a.atras[0] * 3.0, ey + a.atras[1] * 3.0
         placa = prisma(
             [
                 (a.r0[0] + 1.0, Y0 - 17.0, 6.0),
+                (0.36 * a.x_f, Y0 - 17.0, 0.0),
+                (0.54 * a.x_f, Y0 - 26.0, 9.0),  # rebaje del pulgar y del seguro manual
                 (a.x_f + 2.0, a.y_f - 4.0, 5.0),
                 (a.f1[0], a.f1[1], 4.0),
-                (a.r1[0], a.r1[1], 4.0),
+                (a.r1[0] - 2.0, a.r1[1], 4.0),
+                (ex, ey, 22.0),
             ],
             grueso,
             z=z,
@@ -559,24 +597,20 @@ class CachaHiCapa(Familia):
         placa = filetear(
             placa, 1.2, [e for e in placa.edges() if abs(abs(e.center().Z) - (nucleo / 2 + grueso)) < 0.02]
         )
-        # Rejilla de agarre: ranuras en V cruzadas a ±45 grados en la cara exterior.
+        # Rejilla de agarre: ranuras cruzadas a ±45 grados en la cara exterior, recortadas al rectángulo de agarre.
         sitio = a.sitio()
-        ranuras = []
-        for k in range(-12, 13):
-            for giro in (45.0, -45.0):
-                ranuras.append(
-                    sitio
-                    * Pos(-prof / 2 + k * 3.6, -alto * 0.5, lado * (nucleo / 2 + grueso - 0.35))
-                    * Rot(0, 0, giro)
-                    * Box(0.7, alto * 1.4, 0.9)
-                )
-        zona = sitio * Pos(-prof / 2, -alto * 0.52, z) * Box(prof - 12.0, alto * 0.70, grueso + 4.0)
-        corte = Compound(ranuras) & zona
+        ranuras = _ranuras_cruzadas(
+            sitio, (-prof + 7.0, -7.0, -alto * 0.9, -alto * 0.22), 3.4, lado * (nucleo / 2 + grueso)
+        )
         agujeros = [
             cilindro_en("z", 2.2, 2.0, (*a.punto(t, s), lado * (nucleo / 2 + grueso - 0.5)))
             for t, s in ((0.12, 8.0), (0.12, prof - 9.0), (0.62, 8.0), (0.62, prof - 9.0))
         ]
-        cuerpo = aplicar(placa, [corte, *agujeros], "cut", "cacha")
+        rejilla_unica = aplicar(placa, [Compound(ranuras)], "cut", "cacha-rejilla")
+        if "cacha-rejilla:cut#0" in DESCARTADAS:  # si la booleana de golpe falla, ranura a ranura
+            DESCARTADAS.remove("cacha-rejilla:cut#0")
+            rejilla_unica = aplicar(placa, ranuras, "cut", "cacha")
+        cuerpo = aplicar(rejilla_unica, agujeros, "cut", "cacha")
         sockets = (
             Socket(
                 "armazon",
@@ -650,12 +684,16 @@ class CargadorGasPistola(Familia):
                 if abs(abs(e.center().Z) - hz) < 0.02 and abs(e.center().Y) > 1.5 and abs(e.center().Y + H) > 1.5
             ][:24],
         )
+        # Interior hueco abierto por la boca (paredes de 1,6 mm): se ven los labios y el tubo de alimentación. El
+        # muelle, el seguidor y el depósito de gas no se modelan.
+        hueco_h = H - 9.0 + 0.3
+        cuerpo = cuerpo.cut(Pos(0.0, 0.3 - hueco_h / 2, 0.0) * Box(2 * hx - 3.2, hueco_h, 2 * hz - 3.4))
         piezas: list[Any] = []
         cortes: list[Any] = []
         # Labios de alimentación: dos orejas que suben sobre la boca y se cierran en la mitad.
         for lado in (1, -1):
             piezas.append(filetear(Pos(-0.05 * hx, 1.6, lado * (hz - 1.0)) * Box(1.7 * hx, 4.0, 2.0), 0.6))
-        piezas.append(filetear(Pos(0.45 * hx, 2.2, 0) * Box(0.7 * hx, 3.0, 2 * hz - 4.0), 0.8))  # tubo de alimentación
+        piezas.append(filetear(cilindro_en("y", 3.8, 12.0, (hx - 5.0, -3.0, 0.0)), 0.5))  # tubo de alimentación
         # Base: placa ancha con reborde, pestaña delantera y válvula de carga de gas.
         base_k = 1.07 if estilo == "hicapa" else 1.04
         base = prisma(
@@ -681,6 +719,10 @@ class CargadorGasPistola(Familia):
                 cortes.append(Pos(-hx + 0.3, -0.65 * H - k * 6.0, 0) * Box(1.0, 1.6, 2 * hz * 0.6))
         else:
             cortes.append(Pos(0.0, -0.25 * H, hz) * Box(hx * 0.9, 6.0, 1.6))
+            for lado in (1, -1):  # rebaje plano de cada costado y nervaduras de agarre en la cola
+                cortes.append(Pos(0.0, -0.52 * H, lado * hz) * Box(1.5 * hx, 0.5 * H, 1.8))
+            for k in range(4):
+                cortes.append(Pos(-hx + 0.3, -0.45 * H - k * 7.0, 0) * Box(1.0, 2.0, 2 * hz * 0.7))
             cortes.append(
                 Pos(0.0, -0.5 * H, 0.0) * Box(2.2, 0.55 * H, 2 * hz + 2.0)
             )  # ranura de visión del depósito (pasante)
@@ -696,7 +738,7 @@ class CargadorGasPistola(Familia):
             ),
         )
         notas = (
-            "Cuerpo macizo: el depósito de gas, el muelle y la válvula interna no se modelan.",
+            "Cuerpo hueco abierto por la boca: depósito de gas, muelle, seguidor y válvula interna no se modelan.",
             "Labios, muesca de la retenida, ventanas y base estimados, sin cota de ningún SKU.",
             "La capacidad en bolas no se convierte en medidas.",
         )

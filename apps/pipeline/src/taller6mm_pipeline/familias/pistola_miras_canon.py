@@ -2,7 +2,7 @@
 
 Miras: origen en el centro de la cola de milano, a ras de la cara superior de la corredera; el cuerpo sube por +Y y la
 cola baja por -Y. Cañón: coordenadas absolutas de pistola (ver `pistola_comun`), con el eje en Y = 0; el cañón de
-pistola arranca en la cámara (`X_RECAMARA`) y el de revólver en la cara delantera del armazón (`X_FRENTE_REVOLVER`).
+pistola arranca en la cámara (`X_RECAMARA`).
 El tramo roscado de boca (14 mm CCW, estándar de `estandares.py`) se dibuja con anillos: la hélice no se modela.
 """
 
@@ -19,13 +19,11 @@ from taller6mm_pipeline.familias.comun_oleada1 import mm
 from taller6mm_pipeline.familias.formas import cilindro_en, filetear, revolucion
 from taller6mm_pipeline.familias.pistola_comun import (
     INTERFAZ_CANON_PISTOLA,
-    INTERFAZ_CANON_REVOLVER,
     INTERFAZ_MIRA_PISTOLA,
     estimada,
 )
 
 X_RECAMARA = 34.0  # cara de la recámara respecto a la cara trasera de la corredera
-X_FRENTE_REVOLVER = 62.0  # cara delantera del armazón del revólver (ver `revolver.py`)
 PROFUNDIDAD_COLA = 2.4
 
 
@@ -147,7 +145,7 @@ class MiraPistola(Familia):
 class CanonPistola(Familia):
     id = "canon.pistola"
     version = 1
-    nombre = "Cañón exterior de pistola o revólver"
+    nombre = "Cañón exterior de pistola"
     requiere = ()
     ofrece = (e.ROSCAS_BOCA["14mm_ccw"],)
     material = "mat.acero_negro"
@@ -155,9 +153,9 @@ class CanonPistola(Familia):
     parametros = (
         Parametro(
             "tipo",
-            "De pistola (con capó de recámara) o de revólver",
+            "Cañón de pistola (con capó de recámara); el revólver queda fuera del alcance",
             str,
-            opciones=("semi", "revolver"),
+            opciones=("semi",),
             por_defecto="semi",
         ),
         Parametro("rosca", "Rosca de boca", str, opciones=tuple(e.ROSCAS_BOCA), por_defecto="14mm_ccw"),
@@ -170,7 +168,7 @@ class CanonPistola(Familia):
         return (e.ROSCAS_BOCA[str(p["rosca"])],)
 
     def requiere_de(self, p: Mapping[str, Valor]) -> tuple[str, ...]:
-        return (INTERFAZ_CANON_REVOLVER if p["tipo"] == "revolver" else INTERFAZ_CANON_PISTOLA,)
+        return (INTERFAZ_CANON_PISTOLA,)
 
     def describir(self, p: Mapping[str, Valor]) -> str:
         return f"Cañón de {p['tipo']} de {mm(p, 'longitud')} con rosca {p['rosca'].replace('_', ' ')}"
@@ -186,14 +184,18 @@ class CanonPistola(Familia):
         largo, d = float(p["longitud"]), float(p["diametro"])
         lr = 12.0 if p["longitud_rosca"] is None else float(p["longitud_rosca"])
         r, rr = d / 2, e.ROSCA_14_DIAMETRO.valor_mm / 2
-        revolver = p["tipo"] == "revolver"
-        x0 = X_FRENTE_REVOLVER if revolver else X_RECAMARA
+        x0 = X_RECAMARA
         paso = e.ROSCA_14_PASO.valor_mm
         # Perfil (radio, distancia desde x0). Cuerpo, hombro de la rosca y anillos con paso de 1 mm.
         hombro = largo - lr
         perfil: list[tuple[float, float]] = [(0.0, 0.0), (r + 0.6, 0.0), (r + 0.6, 6.0), (r, 7.0)]
-        if revolver:
-            perfil = [(0.0, 0.0), (r - 0.8, 0.0), (r - 0.8, 6.0), (r, 7.0)]
+        for dx in (46.0, 36.0):
+            perfil += [
+                (r, hombro - dx),
+                (r + 1.3, hombro - dx),
+                (r + 1.3, hombro - dx + 3.0),
+                (r, hombro - dx + 3.0),
+            ]
         perfil += [(r, hombro - 1.2), (rr + 0.2, hombro - 0.2), (rr + 0.2, hombro)]
         for i in range(int(lr // paso) - 1):  # anillos: V de 0,5 mm de fondo
             y = hombro + i * paso
@@ -207,39 +209,20 @@ class CanonPistola(Familia):
             "Solo forma exterior: el cañón interior de precisión (hop-up, Ø6,03) no se modela.",
             "La rosca de boca son anillos de 1 mm de paso (la hélice no se modela).",
         ]
-        if not revolver:
-            # Capó de la recámara con la cara superior plana, la rampa de alimentación y el tetón de cierre.
-            capo = Pos(x0 + 15.0, 0.4, 0) * Box(30.0, 2 * r + 0.8, 2 * r - 0.6)
-            capo = filetear(capo, 2.2, [a for a in capo.edges() if a.length == 30.0])
-            tapon = Pos(x0 + 23.0, r + 2.4, 0) * Box(12.0, 2.6, 8.0)
-            tapon = filetear(tapon, 0.8, [a for a in tapon.edges() if a.length == 12.0])
-            rampa = extrude(
-                Plane.XY * Polygon((x0, -r), (x0 + 16.0, -r), (x0 + 3.0, -r - 5.4), (x0, -r - 5.4), align=None),
-                amount=4.2,
-                both=True,
-            )
-            cuerpo = cuerpo + capo + tapon + rampa
-            cuerpo = cuerpo - Pos(x0 + 14.0, r + 1.4, 0) * Box(2.0, 2.4, 9.0)  # ranura del cierre
-            vaciados += 1
-            notas.append("Capó, tetón de cierre y rampa de alimentación simplificados.")
-        else:
-            # Rampa de la mira delantera del revólver y nervio superior.
-            rampa = extrude(
-                Plane.XY
-                * Polygon(
-                    (x0 + largo - 18.0, r - 0.4),
-                    (x0 + largo - 4.0, r - 0.4),
-                    (x0 + largo - 4.0, r + 4.4),
-                    (x0 + largo - 12.0, r + 3.2),
-                    align=None,
-                ),
-                amount=2.2,
-                both=True,
-            )
-            nervio = Pos(x0 + (largo - lr) / 2 + 4.0, r + 0.4, 0) * Box(largo - lr - 12.0, 1.8, 5.0)
-            nervio = filetear(nervio, 0.7, [a for a in nervio.edges() if a.length > 5])
-            cuerpo = cuerpo + rampa + nervio
-            notas.append("Mira delantera integral (rampa) y nervio superior simplificados.")
+        # Capó de la recámara con la cara superior plana, la rampa de alimentación y el tetón de cierre.
+        capo = Pos(x0 + 15.0, 0.4, 0) * Box(30.0, 2 * r + 0.8, 2 * r - 0.6)
+        capo = filetear(capo, 2.2, [a for a in capo.edges() if a.length == 30.0])
+        tapon = Pos(x0 + 23.0, r + 2.4, 0) * Box(12.0, 2.6, 8.0)
+        tapon = filetear(tapon, 0.8, [a for a in tapon.edges() if a.length == 12.0])
+        rampa = extrude(
+            Plane.XY * Polygon((x0, -r), (x0 + 16.0, -r), (x0 + 3.0, -r - 5.4), (x0, -r - 5.4), align=None),
+            amount=4.2,
+            both=True,
+        )
+        cuerpo = cuerpo + capo + tapon + rampa
+        cuerpo = cuerpo - Pos(x0 + 14.0, r + 1.4, 0) * Box(2.0, 2.4, 9.0)  # ranura del cierre
+        vaciados += 1
+        notas.append("Capó, tetón de cierre y rampa de alimentación simplificados.")
         sockets = (
             Socket(
                 "muzzle",
@@ -252,7 +235,7 @@ class CanonPistola(Familia):
             Socket(
                 "recamara",
                 (x0, 0.0, 0.0),
-                INTERFAZ_CANON_REVOLVER if revolver else INTERFAZ_CANON_PISTOLA,
+                INTERFAZ_CANON_PISTOLA,
                 (-1.0, 0.0, 0.0),
                 (0.0, 1.0, 0.0),
                 {},

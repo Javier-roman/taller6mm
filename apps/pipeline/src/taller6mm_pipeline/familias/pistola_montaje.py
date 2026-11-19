@@ -1,12 +1,14 @@
 """Montaje completo de una pistola (Hi-Capa o Glock) a partir de sus piezas, por sockets.
 
-Todas las piezas de pistola comparten el origen de `pistola_comun` (cara trasera de la corredera, eje del cañón), así que
+Todas las piezas de pistola comparten el origen de `pistola_comun` (cara trasera de la corredera, eje del
+cañón), así que
 el armazón, la corredera, el cañón y las cachas entran por identidad: lo que se comprueba es que cada pieza pida una
 interfaz que otra ofrece. Los casos que no son identidad son dos:
 
 - la **mira**: su origen está en el centro de la cola de milano, a ras de la cara superior de la corredera; se traslada
   al socket `mira_trasera` / `mira_delantera` de la corredera;
-- el **cargador**: se dibuja recto con el origen en el centro de su cara superior; se gira hacia atrás la inclinación del
+- el **cargador**: se dibuja recto con el origen en el centro de su cara superior; se gira hacia atrás la
+  inclinación del
   agarre (la declara el socket `cargador` del armazón) y se traslada a ese socket.
 
 Salida: un GLB del conjunto (una malla por pieza, ya colocada, en metros) y un informe con las transformaciones, las
@@ -34,7 +36,8 @@ FAMILIAS_PISTOLA: dict[str, Familia] = {
     **{f.id: f for f in (Corredera(), MiraPistola(), CanonPistola())},
 }
 AVISO = (
-    "Todo es T0 y no publicable en 3D: piezas de barrido (es_demo) sin vistas licenciadas. El montaje comprueba el encaje "
+    "Todo es T0 y no publicable en 3D: piezas de barrido (es_demo) sin vistas licenciadas. El montaje comprueba "
+    "el encaje "
     "por interfaces y la colocación; no certifica fidelidad (principios 1 y 2)."
 )
 

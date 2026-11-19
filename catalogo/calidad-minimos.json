@@ -131,6 +131,36 @@
       "eje_largo": "y",
       "sockets_requeridos": []
     },
+    "cargador.gas_pistola": {
+      "eje_largo": "y",
+      "silueta_no_rectangular_min": 0.08,
+      "sockets_requeridos": ["pozo"]
+    },
+    "cacha.hicapa": {
+      "silueta_no_rectangular_min": 0.1,
+      "sockets_requeridos": ["armazon"]
+    },
+    "corredera.pistola": {
+      "eje_largo": "x",
+      "silueta_no_rectangular_min": 0.08,
+      "orientaciones_min": 120,
+      "sockets_requeridos": ["armazon", "canon", "mira_trasera", "mira_delantera"]
+    },
+    "canon.pistola": {
+      "eje_largo": "x",
+      "orientaciones_min": 250,
+      "sockets_requeridos": ["muzzle", "recamara"]
+    },
+    "mira.pistola": {
+      "triangulos_min": 350,
+      "orientaciones_min": 50,
+      "relleno_max": 0.75,
+      "silueta_no_rectangular_min": 0.12,
+      "viva_frac_max": 0.6
+    },
+    "armazon.pistola": {
+      "sockets_requeridos": ["corredera", "cargador"]
+    },
     "boca.*": {
       "eje_largo": "x",
       "simetria_ejes": ["y", "z"]

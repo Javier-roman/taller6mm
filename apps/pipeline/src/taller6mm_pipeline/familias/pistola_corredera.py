@@ -1,4 +1,4 @@
-"""Corredera, miras y cañón exterior de las pistolas de airsoft (GBB y AEP): origen común de pistola (ver `pistola_comun`).
+"""Corredera de las pistolas de airsoft (GBB y AEP): origen común de pistola (ver `pistola_comun`).
 
 La corredera es un loft de secciones redondeadas a lo largo de X (con el chaflán delantero y el rebaje trasero), con
 el canal inferior hueco por donde entra el armazón, la ventana de eyección con el frente inclinado, el serrado en V
@@ -25,6 +25,7 @@ from taller6mm_pipeline.familias.pistola_comun import (
     PLANO_CORREDERA_Y,
     estimada,
 )
+from taller6mm_pipeline.familias.pistola_modelos import cara
 
 ESTILOS = ("polimero", "clasico")
 Y_SUP_ESTILO = {"polimero": 18.5, "clasico": 17.0}  # cara superior de la corredera sobre el eje del cañón
@@ -40,15 +41,21 @@ def _hueco_x(x0: float, x1: float, y0: float, y1: float, semi: float, radio: flo
 
 
 def _v_vertical(x: float, ancho: float, fondo: float, y0: float, y1: float, z_cara: float, lado: int) -> Any:
-    """Surco en V vertical en una cara lateral (z_cara) de la corredera: sirve de serrado."""
-    pts = [(x - ancho / 2, z_cara + lado * 0.3), (x, z_cara - lado * fondo), (x + ancho / 2, z_cara + lado * 0.3)]
-    return Pos(0, y1, 0) * extrude(Plane.XZ * Polygon(*pts, align=None), amount=y1 - y0)
+    """Surco vertical de fondo redondo en una cara lateral (z_cara) de la corredera: sirve de serrado.
+
+    Cilindro vertical de radio `ancho / 2` con el eje `ancho / 2 - fondo` mm hacia fuera de la cara: entra `fondo` mm.
+    Los bordes salen suaves (no a 90 grados) y la malla no los cuenta como aristas vivas.
+    """
+    r = ancho / 2 + 0.2
+    return cilindro_en("y", r, y1 - y0, (x, (y0 + y1) / 2, z_cara + lado * (r - fondo)))
 
 
 class Corredera(Familia):
     id = "corredera.pistola"
     version = 1
     nombre = "Corredera de pistola"
+    tolerancia_mm = 0.03  # malla más fina: las ranuras y los filetes de una corredera son pequeños
+    tolerancia_angular = 0.25
     requiere = (INTERFAZ_RIEL_CORREDERA,)
     ofrece = (INTERFAZ_MIRA_PISTOLA, e.ROSCAS_BOCA["14mm_ccw"])
     material = "mat.acero_negro"
@@ -75,38 +82,76 @@ class Corredera(Familia):
         y_sup = alto + PLANO_CORREDERA_Y  # la cara inferior apoya en PLANO_CORREDERA_Y
         y_inf = PLANO_CORREDERA_Y
         # La corredera es la intersección del perfil lateral (XY, extruido en Z) con la vista en planta (XZ, extruida
-        # en Y), con los filetes de las aristas largas: caras planas limpias y esquinas redondeadas como en una pieza real.
+        # en Y), con los filetes de las aristas largas: caras planas limpias y esquinas redondeadas.
         if estilo == "polimero":
             lado = [
                 (0, y_inf),
                 (0, y_sup - 3.0),
                 (3.0, y_sup),
-                (largo - 17.0, y_sup),
-                (largo - 1.0, y_sup - 7.0),
-                (largo, y_sup - 8.2),
+                (largo - 24.0, y_sup),
+                (largo - 2.0, y_sup - 8.5),
+                (largo, y_sup - 10.0),
                 (largo, y_inf),
             ]
-            planta = [(0, semi - 1.8), (2.0, semi), (largo - 16.0, semi), (largo, semi - 3.2)]
+            planta = [
+                (0, semi - 2.2),
+                (2.5, semi),
+                (largo - 30.0, semi),
+                (largo - 6.0, semi - 2.6),
+                (largo, semi - 4.4),
+            ]
+            # Frontal: el costado se estrecha hacia la cara superior (bisel de la corredera moderna).
+            frontal = [
+                (-semi, y_inf, 0.0),
+                (semi, y_inf, 0.0),
+                (semi, y_sup - 9.0, 3.5),
+                (semi - 3.0, y_sup, 2.0),
+                (-semi + 3.0, y_sup, 2.0),
+                (-semi, y_sup - 9.0, 3.5),
+            ]
             r_sup, x_delantera, x_trasera = 3.2, largo - 22.0, 12.5
         else:
             lado = [
                 (0, y_inf),
                 (0, y_sup - 5.0),
-                (6.0, y_sup),
-                (largo - 2.0, y_sup),
-                (largo, y_sup - 2.0),
+                (9.0, y_sup),
+                (largo - 8.0, y_sup),
+                (largo - 1.0, y_sup - 3.5),
+                (largo, y_sup - 5.5),
                 (largo, y_inf),
             ]
-            planta = [(0, semi - 1.4), (2.0, semi), (largo - 3.0, semi), (largo, semi - 1.6)]
+            planta = [(0, semi - 3.2), (3.0, semi - 0.4), (7.0, semi), (largo - 14.0, semi), (largo, semi - 3.6)]
+            # Frontal: lomo redondeado en la cara superior, como una corredera clásica de acero.
+            frontal = [
+                (-semi, y_inf, 0.0),
+                (semi, y_inf, 0.0),
+                (semi, y_sup, 5.8),
+                (-semi, y_sup, 5.8),
+            ]
             r_sup, x_delantera, x_trasera = 1.8, largo - 14.0, 12.5
         pl = [(x, z) for x, z in planta] + [(x, -z) for x, z in reversed(planta)]
         cuerpo = extrude(Plane.XY * Polygon(*lado, align=None), amount=semi + 2, both=True) & (
             Rot(90, 0, 0) * extrude(Plane.XY * Polygon(*pl, align=None), amount=40, both=True)
         )
+        cuerpo = cuerpo & (
+            Pos(-2.0, 0, 0) * extrude(Plane.YZ * cara([(y, z, r) for z, y, r in frontal]), amount=-(largo + 4))
+        )
         largas = [a for a in cuerpo.edges() if a.length > largo * 0.4]
-        cuerpo = filetear(cuerpo, r_sup, [a for a in largas if a.center().Y > y_sup - 2.0])
-        cuerpo = filetear(cuerpo, 1.2, [a for a in cuerpo.edges() if a.length > largo * 0.4 and a.center().Y < y_inf + 1])
-        cuerpo = filetear(cuerpo, 1.0, [a for a in cuerpo.edges() if a.length < 40 and abs(a.center().X) < 4 or a.center().X > largo - 1.5])
+        for r in (r_sup, 1.4, 0.8):  # el filete grande falla contra el bisel de la cara superior: se prueba más pequeño
+            redondeado = filetear(cuerpo, r, [a for a in largas if y_sup - 2.0 < a.center().Y])
+            if redondeado is not cuerpo:
+                cuerpo = redondeado
+                break
+        largas = [a for a in cuerpo.edges() if a.length > largo * 0.4 and abs(a.center().Z) > semi - 0.1]
+        cuerpo = filetear(cuerpo, 1.6, [a for a in largas if y_sup - 12.0 < a.center().Y < y_sup - 4.0])
+        cuerpo = filetear(
+            cuerpo, 1.2, [a for a in cuerpo.edges() if a.length > largo * 0.4 and y_inf + 1 > a.center().Y]
+        )
+        cuerpo = filetear(
+            cuerpo,
+            1.8,
+            [a for a in cuerpo.edges() if (a.length < 40 and abs(a.center().X) < 4) or largo - 1.5 < a.center().X],
+        )
         # Canal inferior: por ahí entra el armazón y bajan los raíles. Termina en el cierre de la boca.
         y_canal = y_sup - 8.0
         canal = Pos(largo / 2 - 4, (y_inf + y_canal) / 2 - 0.5, 0) * Box(
@@ -127,13 +172,15 @@ class Corredera(Familia):
         )
         cuerpo = cuerpo - corte
         # Serrado en V, a ambos lados, en trasero y frontal.
+        x_serr = 6.5 if estilo == "polimero" else 13.0
+        x_serr_f = largo - (44.0 if estilo == "polimero" else 36.0)
         surcos = 0
         for z_cara, lado in ((semi, 1), (-semi, -1)):
             for i in range(int(p["serrado_trasero"])):
-                cuerpo = cuerpo - _v_vertical(6.5 + i * 3.4, 2.0, 1.3, y_inf + 4.0, y_sup - 2.5, z_cara, lado)
+                cuerpo = cuerpo - _v_vertical(x_serr + i * 3.4, 2.0, 1.3, y_inf + 4.0, y_sup - 2.5, z_cara, lado)
                 surcos += 1
             for i in range(int(p["serrado_frontal"])):
-                cuerpo = cuerpo - _v_vertical(largo - 30.0 + i * 3.4, 2.0, 1.3, y_inf + 4.0, y_sup - 4.0, z_cara, lado)
+                cuerpo = cuerpo - _v_vertical(x_serr_f + i * 3.4, 2.0, 1.3, y_inf + 4.0, y_sup - 4.0, z_cara, lado)
                 surcos += 1
         # Colas de milano: ranura trasera (para la mira trasera) y delantera (zócalo para la mira delantera).
         for x_c in (x_delantera, x_trasera):
@@ -142,6 +189,7 @@ class Corredera(Familia):
             surcos += 1
         # Boca: alojamiento del cañón y, debajo, el del muelle guía.
         cuerpo = cuerpo - cilindro_en("x", 7.4, 16.0, (largo - 7.5, 0.0, 0.0))
+        cuerpo = cuerpo - cilindro_en("x", 2.1, 6.0, (2.5, 3.0, 0.0))  # alojamiento del percutor en la cara trasera
         cuerpo = cuerpo - cilindro_en("x", 3.2, 12.0, (largo - 5.5, -9.0, 0.0))
         surcos += 2
         y_trasera = y_sup - 0.5

@@ -1,4 +1,4 @@
-"""Utilidades compartidas por las familias de pistolas y revólveres de airsoft (GBB, AEP y gas/CO2).
+"""Utilidades compartidas por las familias de pistolas de airsoft (GBB, AEP y gas/CO2).
 
 Ejes comunes de toda pistola (los de las demás familias): +X boca, +Y arriba, +Z izquierda del tirador. Origen
 común del conjunto: el eje del cañón (Y = 0) en la cara trasera de la corredera (X = 0). Así el armazón, la corredera,
@@ -31,19 +31,13 @@ INTERFAZ_RIEL_CORREDERA = "riel-corredera-pistola"  # propuesta: aún no está e
 INTERFAZ_MIRA_PISTOLA = "cola-milano-mira-pistola"  # propuesta
 INTERFAZ_CAJA_EMPUNADURA = "montaje-empunadura-lateral-1911"  # propuesta
 INTERFAZ_SEGURO_EMPUNADURA = "montaje-seguro-empunadura-1911"  # propuesta
-INTERFAZ_TAMBOR = "eje-tambor-revolver"  # propuesta
-INTERFAZ_MARTILLO = "pivote-martillo-revolver"  # propuesta
 INTERFAZ_CANON_PISTOLA = "alojamiento-canon-pistola"  # propuesta
-INTERFAZ_CANON_REVOLVER = "alojamiento-canon-revolver"  # propuesta
 INTERFACES_PROPUESTAS = (
     INTERFAZ_RIEL_CORREDERA,
     INTERFAZ_MIRA_PISTOLA,
     INTERFAZ_CAJA_EMPUNADURA,
     INTERFAZ_SEGURO_EMPUNADURA,
-    INTERFAZ_TAMBOR,
-    INTERFAZ_MARTILLO,
     INTERFAZ_CANON_PISTOLA,
-    INTERFAZ_CANON_REVOLVER,
 )
 
 
@@ -174,5 +168,6 @@ def filas_suaves(
     for i in range(pasos + 1):  # extremo delantero: del cuerpo a x = largo
         t = i / pasos
         d = t**2
-        filas.append((largo - zd + zd * t, y_sup - dela[0] * d, y_inf + dela[1] * d, semi - dela[2] * d, n_cuerpo - 1.6 * d))
+        fila = (largo - zd + zd * t, y_sup - dela[0] * d, y_inf + dela[1] * d, semi - dela[2] * d, n_cuerpo - 1.6 * d)
+        filas.append(fila)
     return filas
