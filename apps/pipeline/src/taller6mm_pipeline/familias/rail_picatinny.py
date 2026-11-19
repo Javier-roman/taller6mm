@@ -8,7 +8,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Align, Box, Plane, Polygon, Pos, extrude
+from build123d import Align, Box, Plane, Polygon, Pos, extrude, fillet
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, Socket, Valor
@@ -51,14 +51,19 @@ def perfil_picatinny(altura_mm: float | None = None) -> Any:
     return Plane.YZ * Polygon(*puntos, align=None)
 
 
-def solido_rail(ranuras: int, altura_mm: float | None = None, longitud_mm: float | None = None) -> Any:
+def solido_rail(
+    ranuras: int, altura_mm: float | None = None, longitud_mm: float | None = None, radio_perfil: float = 0.0
+) -> Any:
     """Raíl de N ranuras con el origen en su extremo trasero y la base en Y=0.
 
     Con `longitud_mm`, el perfil llega hasta esa longitud (el tramo que sobra tras la última ranura queda
     como un diente más largo), para que el raíl de un guardamanos acabe a ras de su extremo.
     """
     alto = e.PICATINNY_ALTURA.valor_mm if altura_mm is None else altura_mm
-    cuerpo = extrude(perfil_picatinny(alto), longitud_rail_mm(ranuras) if longitud_mm is None else longitud_mm)
+    perfil = perfil_picatinny(alto)
+    if radio_perfil > 0:  # esquinas del perfil redondeadas (cantos largos sin arista viva)
+        perfil = fillet(perfil.vertices(), radius=radio_perfil)
+    cuerpo = extrude(perfil, longitud_rail_mm(ranuras) if longitud_mm is None else longitud_mm)
     ancho_r, prof = e.PICATINNY_ANCHO_RANURA.valor_mm, e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm
     corte = Box(ancho_r, prof + 1, e.PICATINNY_ANCHO.valor_mm + 2, align=(Align.CENTER, Align.MIN, Align.CENTER))
     return cuerpo - [Pos(x, alto - prof, 0) * corte for x in centros_ranuras_mm(ranuras)]

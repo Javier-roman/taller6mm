@@ -12,13 +12,24 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from build123d import Axis, Box, Cylinder, Pos, Rot
+from build123d import Axis, Box, Cylinder, Plane, Polygon, Pos, Rot, revolve
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.detalle import estimada, nominales_de
+from taller6mm_pipeline.familias.formas import filetear, rosca_helicoidal
 
-NOTA_ROSCA = "La hélice de la rosca no se modela: es un cilindro liso del diámetro de rosca."
+NOTA_ROSCA = (
+    "La rosca del tubo es una hélice en V de paso estimado (1,5875 mm, 16 hilos por pulgada de la práctica común del "
+    "AR-15): el catálogo no trae el paso del SKU, confianza baja."
+)
+PASO_ROSCA_MM = 1.5875
+PROFUNDIDAD_ROSCA_MM = 1.0
+
+
+def _revolucion_x(puntos: list[tuple[float, float]]) -> Any:
+    """Sólido de revolución alrededor de X a partir de un perfil (x, radio)."""
+    return revolve(Plane.XY * Polygon(*puntos, align=None), axis=Axis.X)
 
 
 def _cil_x(radio: float, x0: float, x1: float) -> Any:
@@ -27,6 +38,7 @@ def _cil_x(radio: float, x0: float, x1: float) -> Any:
 
 class TuboAmortiguador(Familia):
     id = "amortiguador.tubo"
+    version = 2
     nombre = "Tubo de amortiguador"
     material = "mat.anodizado_negro"
     parametros = (
@@ -105,8 +117,12 @@ class TuboAmortiguador(Familia):
         rr = r + 1.2 if p["diametro_rosca"] is None else float(p["diametro_rosca"]) / 2
         lr = 22.0 if p["longitud_rosca"] is None else float(p["longitud_rosca"])
         pared = 2.2 if p["pared"] is None else float(p["pared"])
-        cuerpo = _cil_x(rr, -lr, 0) + _cil_x(r, -largo, -lr)
-        cuerpo = cuerpo + _cil_x(r + 1.0, -largo, -largo + 6.0)  # anillo trasero
+        # Tramo roscado: núcleo y hilo helicoidal de cresta en `rr` (antes, un cilindro liso).
+        # El hilo termina 1,5 mm antes de la cara delantera: ahí apoya el receptor y no debe morder su cara.
+        hilo = Pos(-lr, 0, 0) * Rot(0, 90, 0) * rosca_helicoidal(rr, PROFUNDIDAD_ROSCA_MM, PASO_ROSCA_MM, lr - 1.5)
+        cuerpo = _cil_x(rr - PROFUNDIDAD_ROSCA_MM, -lr, 0) + hilo + _cil_x(r, -largo, -lr)
+        anillo = filetear(_cil_x(r + 1.0, -largo, -largo + 6.0), 0.8)  # anillo trasero con los cantos redondeados
+        cuerpo = cuerpo + anillo
         notas = [NOTA_ROSCA, "Solo forma exterior: sin muelle ni tope; el interior es un taladro liso."]
         notas.append("Garganta, anillo trasero y quilla simplificados y estimados (confianza baja).")
         # Garganta de descarga de la rosca y ranuras de agarre del extremo trasero.
@@ -152,7 +168,7 @@ class TuboAmortiguador(Familia):
         return Geometria(
             cuerpo,
             sockets,
-            (estimada("amortiguador.anillo_trasero", 1.0),),
+            (estimada("amortiguador.anillo_trasero", 1.0), estimada("amortiguador.paso_rosca", PASO_ROSCA_MM)),
             tuple(notas),
             nominales_de(cuerpo),
             vaciados,
@@ -161,6 +177,7 @@ class TuboAmortiguador(Familia):
 
 class BloqueoTubo(Familia):
     id = "amortiguador.bloqueo"
+    version = 2
     nombre = "Bloqueo del tubo (tuerca de castillo y placa)"
     material = "mat.anodizado_negro"
     requiere = ()
@@ -184,14 +201,26 @@ class BloqueoTubo(Familia):
         h = 8.0 if p["altura_tuerca"] is None else float(p["altura_tuerca"])
         n = int(p["almenas"])
         placa_t = 3.0
-        placa = _cil_x(rr + 7.0, -placa_t, 0)
-        orejeta = Pos(-placa_t / 2, -(rr + 7.0), 0) * Box(placa_t, 9.0, 12.0)
+        # Placa con el canto redondeado y la orejeta de la hembrilla (con su taladro avellanado y la cara trasera
+        # redondeada); la tuerca de castillo con filete exterior, almenas y avellanado.
+        placa = filetear(_cil_x(rr + 7.0, -placa_t, 0), 0.9)
+        orejeta = filetear(Pos(-placa_t / 2, -(rr + 7.0), 0) * Box(placa_t, 9.0, 12.0), 1.0)
         orejeta = orejeta - Pos(-placa_t / 2, -(rr + 10.0), 0) * Cylinder(2.2, 4.0).rotate(Axis.Y, 90)
-        tuerca = _cil_x(rr + 5.0, -placa_t - h, -placa_t)
+        tuerca = filetear(_cil_x(rr + 5.0, -placa_t - h, -placa_t), 0.9)
         for i in range(n):  # almenas: muescas en la cara trasera
-            tuerca = tuerca - Rot(i * 360.0 / n, 0, 0) * Pos(-placa_t - h + 1.4, rr + 4.0, 0) * Box(3.0, 4.0, 5.0)
-        # Cara exterior con un chaflán que se ve en el borde.
-        conjunto = placa + orejeta + tuerca - _cil_x(rr, -placa_t - h - 1, 1)
+            muesca = Pos(-placa_t - h + 1.4, rr + 4.0, 0) * Box(3.0, 4.0, 5.0)
+            tuerca = tuerca - Rot(i * 360.0 / n, 0, 0) * muesca
+        # Avellanado de la boca trasera de la tuerca y de la cara delantera de la placa (conos reales).
+        avellanado_t = _revolucion_x(
+            [
+                (-placa_t - h - 0.01, 0.0),
+                (-placa_t - h - 0.01, rr + 1.2),
+                (-placa_t - h + 1.2, rr),
+                (-placa_t - h + 1.2, 0.0),
+            ]
+        )
+        avellanado_p = _revolucion_x([(0.01, 0.0), (0.01, rr + 1.2), (-1.2, rr), (-1.2, 0.0)])
+        conjunto = placa + orejeta + tuerca - _cil_x(rr, -placa_t - h - 1, 1) - avellanado_t - avellanado_p
         sockets = (
             Socket(
                 "receiver",

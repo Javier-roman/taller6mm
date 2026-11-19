@@ -127,6 +127,10 @@
       "sockets_requeridos": ["montaje-asa-carga"],
       "cotas_ejes": [{ "clave": "ancho_total", "eje": "z" }, { "clave": "alto", "eje": "y" }]
     },
+    "ak.guardamanos_inferior": {
+      "eje_largo": "x",
+      "sockets_requeridos": ["receiver", "upper"]
+    },
     "cargador": {
       "eje_largo": "y",
       "sockets_requeridos": []
