@@ -18,6 +18,7 @@
       "mundo": { "abajo": [0.16, 0.16, 0.165], "arriba": [0.3, 0.3, 0.31], "intensidad": 1.0 },
       "suelo": { "color": [0.18, 0.18, 0.18], "rugosidad": 0.75, "metalico": 0.0 },
       "rugosidad_delta": 0.06,
+      "brillo_material": { "acero_pavonado": 0.6, "parkerizado": 0.85 },
       "luces": [
         {
           "id": "clave",

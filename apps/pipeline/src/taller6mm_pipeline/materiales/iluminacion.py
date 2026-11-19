@@ -69,8 +69,10 @@ def resolver(
         raise ValueError(f"preset de iluminación desconocido: {nombre} (hay {', '.join(cfg['presets'])})")
     g, pm = cfg["brillo"]["global"], cfg["brillo"]["por_material"]
     factor = _acotar(g["defecto"] if brillo is None else brillo, g["min"], g["max"])
-    por_material = {k: _acotar(v, pm["min"], pm["max"]) for k, v in (brillo_material or {}).items()}
     p = copy.deepcopy(cfg["presets"][nombre])
+    # el preset puede bajar el brillo de materiales que, a su rugosidad medida, relucen demasiado (p. ej. el pavonado)
+    pedido = {**p.get("brillo_material", {}), **(brillo_material or {})}
+    por_material = {k: _acotar(v, pm["min"], pm["max"]) for k, v in pedido.items()}
     clave = next(luz for luz in p["luces"] if luz["id"] == "clave")
     for luz in p["luces"]:
         luz["relativa"] = round(luz["energia_d2"] / clave["energia_d2"], 4)

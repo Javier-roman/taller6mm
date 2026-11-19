@@ -195,7 +195,8 @@ def construir_material(spec, modo, semilla, variacion, con_desgaste, cc0=None):
         c2 = [min(1.0, x * k) for x in spec["color2"]] + [1.0]
         color = _mezcla_color(nodos, enlaces, veta, c1, c2)
     else:
-        sutil = _mapa(nodos, enlaces, baja, 0.3, 0.7, 0.88, 1.12)  # patina: ±12 % de valor
+        pt = spec.get("patina", 0.12)  # patina: ± de valor del albedo (receta)
+        sutil = _mapa(nodos, enlaces, baja, 0.3, 0.7, 1.0 - pt, 1.0 + pt)
         color = _mezcla_color(
             nodos,
             enlaces,
