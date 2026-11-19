@@ -294,14 +294,14 @@ La escalera salía demasiado brillante y reluciente: el estudio antiguo tenía l
 
 ```bash
 uv run python -m taller6mm_pipeline.calidad.escalera --iluminacion estudio_contraste --brillo 0.9 --brillo-material acero_pavonado=0.7
-uv run python -m taller6mm_pipeline.ensamblador.portada --iluminacion mate_suave   # ver §13.3
+uv run python -m taller6mm_pipeline.ensamblador.portada --iluminacion mate_suave   # ver §13.4
 ```
 
 **Control de brillo.** `--brillo` (global, 0,5-1,5) mueve la exposición (EV del preset + log2 del factor) y desplaza la rugosidad de todos los materiales en `(1 - factor) x 0,12`. `--brillo-material id=f` (0,6-1,4) hace lo mismo para un material. La rugosidad media final de cada material **no sale nunca de la banda `rugosidad_media` de su base CC0 (`catalogo/materiales-cc0.json`) +/- 0,10** (guía de aspecto §2.3): un anodizado no puede ser espejo, ni un pavonado quedar mate. Solo el render de imagen (N3-N5 visual) usa esa rugosidad; las **sondas** de medida siguen leyendo la receta, para que las métricas de N3 y N4 no dependan de la luz. La clave de caché incluye el preset y el brillo.
 
 **Formato para el visor web.** El visor lee el mismo JSON y no tiene que reimplementar nada del pipeline:
 
-- `defecto`: nombre del preset por defecto. `presets.<nombre>`: `exposicion_ev`, `tono` (`AgX`, que three.js tiene como `AgXToneMapping`), `mundo` (`abajo` y `arriba`: degradado vertical del fondo y del entorno, RGB lineal, y `intensidad`), `suelo` (color, rugosidad, metálico), `rugosidad_delta` y `luces`.
+- `defecto`: nombre del preset por defecto. `presets.<nombre>`: `exposicion_ev`, `tono` (`AgX`, que three.js tiene como `AgXToneMapping`), `mundo` (`abajo` y `arriba`: degradado vertical del fondo y del entorno, RGB lineal, y `intensidad`), `suelo` (color, rugosidad, metálico), `rugosidad_delta`, `brillo_material` (brillo por material que el propio preset aplica por defecto: en `mate_suave` el pavonado a 0,6, que a su rugosidad medida relucía demasiado) y `luces`.
 - Cada luz: `id`, `dir` (dirección desde el centro de la pieza hacia la luz, sin normalizar), `dist` y `tam_d` en múltiplos de `d` (diagonal de la caja de la pieza, en metros), `color` y `energia_d2`. **El visor usa solo la razón `energia_d2 / energia_d2 de la clave`** como intensidad relativa de un `RectAreaLight` de lado `tam_d x d`, y fija la intensidad absoluta de la clave por exposición (Blender trabaja en vatios, three.js en cd/m2: no son comparables). Posición = centro + `dir` normalizada x `dist` x `d`, mirando al centro.
 - Brillo: la misma fórmula que arriba (`exposicion_ev + log2(brillo)`; rugosidad de cada material = media de la receta + `rugosidad_delta` + `(1 - factor) x rug_por_factor`, acotada a `banda_rugosidad` alrededor de la medida CC0). Los límites del control (`brillo.global`, `brillo.por_material`) son los del JSON: el control del visor debe respetarlos.
 - `materiales/iluminacion.py` (`resolver`, `aplicar`) es la implementación de referencia; devuelve el «plan de luz» (`iluminacion-plan/v1`) ya resuelto, con `relativa` en cada luz.
@@ -325,6 +325,25 @@ uv run python -m taller6mm_pipeline.ensamblador.portada --exportar-glb-con-mater
 - **Extras conservados**: `extras` de cada nodo (`familia`, `id_variante`, `rol`, cotas, sockets `socket.<ranura>` y `montaje.*`), de modo que el visor sigue pudiendo acoplar y avisar.
 - **Marcadores**: las piezas sin malla de un build (culata, cargador, mira de punto rojo) conservan su marcador naranja translúcido (`alphaMode` BLEND): nunca se disfrazan de geometría real.
 - **Origen de las texturas**: solo recetas procedurales y la estructura de las bases CC0 de `catalogo/materiales-cc0.json` (no su color); ninguna foto de terceros, sin logos ni marcajes. Es T0 y `publicable_3d=false`.
+
+### 13.3 Umbrales de N3-N5 (endurecidos el 19-11-2026)
+
+Antes casi todo daba 93-100 en N3-N5. Cada criterio lleva ahora su `justificacion` en `catalogo/escalera-niveles.json` y el bloque `calibracion` dice con qué población se midió. Resumen de lo que cambió y por qué:
+
+- **Origen de cada cifra**: la guía de aspecto (§2.3, §2.4, §5, §6), las medidas de `catalogo/materiales-cc0.json` y, solo donde no hay referencia externa, el percentil 10 de la población medida (marcado `[convención]`).
+- **N3** (umbral 80 a 85): `rug_std` min 0,03; `albedo_cv` min 0,08 (90 % del mínimo real de los mapas CC0: 0,088); `rug_error` max 0,03 (el ±0,10 de la guía compara con el mapa real; aquí el render contra su receta mide 0,001-0,035); `rug_alta_frecuencia` min 0,009.
+- **N4** (75 a 82): roce 2-6 % de la superficie con el máximo pesando 15 (antes 5; la mediana era 0,069); contraste del roce min 0,5 (guía §5.2: +40 sRGB); suciedad min 0,03; no uniformidad min 0,03; aumento de la rugosidad min 1,10; variación entre piezas max 0,05.
+- **N5** (80 a 85): nuevo `reflejos_max` 0,12 (la escalera salía reluciente) y `contraluz_max` 2,6 (contraluz tenue); ruido max 0,006; muestras min 96.
+- **Umbral injusto, dicho aquí**: la guía §2.4 pide una desviación de rugosidad de 0,04-0,12 `[convención]`, pero los mapas CC0 reales del anodizado (0,018), el parkerizado (0,015) y el polímero (0,021) no llegan ni a 0,03. El criterio sigue activo con mínimo 0,03 y el aviso de 0,04 pesa menos.
+- Las recetas de `biblioteca.py` se ajustaron para cumplirlos (polímero y parkerizado con más variación de rugosidad y pátina; roce metálico más contenido), nunca desactivando un criterio.
+
+### 13.4 Portada: montaje completo con materiales y los tres presets
+
+```bash
+uv run python -m taller6mm_pipeline.ensamblador.portada [--build m4a1-carabina] [--iluminacion mate_suave] [--brillo 1]
+```
+
+Ensambla el build de `catalogo/m4-builds.json`, asigna a cada pieza su material (`materiales-piezas.json` y la semilla de variación por id) y lo dibuja en Blender con cada preset. Por defecto dibuja los tres y escribe `assets-src/vistas/portada/hoja-portada-<build>.png` con ellos lado a lado. Las piezas sin malla (culata, cargador, mira de punto rojo) salen como marcador naranja translúcido, nunca disfrazadas. La portada del AK y de las pistolas espera a que exista su manifiesto de montaje (`catalogo/<plataforma>-builds.json`): el módulo lee el manifiesto con `--manifiesto`.
 
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
