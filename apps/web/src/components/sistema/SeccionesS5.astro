@@ -1,0 +1,270 @@
+---
+// Secciones 11 en adelante de /sistema (rebanada S5): controles, datos y superposiciones.
+// Prerenderizadas; solo las islas de Demos.tsx llevan JS de cliente. Datos de ejemplo con fechas fijas:
+// un «hace 3 h» calculado al compilar mentiría al día siguiente.
+import {
+  Avatar,
+  Aviso,
+  Boton,
+  Campo,
+  Chip,
+  ESTADOS_STOCK,
+  type EstadoStock,
+  EtiquetaPrecio,
+  FichaPieza,
+  InsigniaCompatibilidad,
+  Placa,
+  PuntoStock,
+  Rotulo,
+  Selector,
+  Tabla,
+  TIPOS_AVISO,
+  type TipoAviso,
+  TONOS_CHIP,
+  type TonoChip,
+  Valoracion,
+  VEREDICTOS,
+  type Veredicto,
+} from '@taller6mm/ui/componentes';
+import { createElement } from 'react';
+import { DemoMaletin, DemoPestanas, DemoTooltip, DemoTostadas } from './Demos.tsx';
+import Estado from './Estado.astro';
+
+const AHORA = '2026-10-31T18:00:00Z';
+const COMPROBADO = '2026-10-31T15:12:00Z';
+const stocks = Object.keys(ESTADOS_STOCK) as EstadoStock[];
+const veredictos = Object.keys(VEREDICTOS) as Veredicto[];
+const nombreTono: Record<TonoChip, string> = {
+  neutro: 'Plataforma M4',
+  laton: 'Recomendada',
+  ok: 'Compatible',
+  aviso: 'Con adaptador',
+  error: 'Incompatible',
+  desconocido: 'Sin datos',
+};
+const tituloAviso: Record<TipoAviso, string> = {
+  info: 'Información',
+  provisional: 'Provisional',
+  aviso: 'Aviso',
+  error: 'Error',
+  ok: 'Hecho',
+};
+const textoAviso: Record<TipoAviso, string> = {
+  info: 'Las medidas son las del fabricante, en milímetros.',
+  provisional: 'Esta pieza aún no tiene modelo verificado: se muestra como plano técnico (T0) hasta que se compruebe a calibre.',
+  aviso: 'Dos tiendas no han publicado stock en las últimas 24 horas.',
+  error: 'No se ha podido calcular la compatibilidad. Inténtalo de nuevo en unos minutos.',
+  ok: 'La build se ha guardado en este dispositivo.',
+};
+const fuente = { nombre: 'Ficha del fabricante (ejemplo)' };
+const filasTabla = [
+  { id: 'a', celdas: { pieza: 'Cañón interno 6,03', longitud: '363 mm', peso: '92 g' } },
+  { id: 'b', celdas: { pieza: 'Cañón interno 6,01', longitud: '455 mm', peso: '118 g' } },
+  { id: 'c', celdas: { pieza: 'Cañón interno 6,05', longitud: '300 mm', peso: '81 g' } },
+];
+const columnasTabla = [
+  { id: 'pieza', titulo: 'Pieza' },
+  { id: 'longitud', titulo: 'Longitud', numerica: true },
+  { id: 'peso', titulo: 'Peso', numerica: true },
+];
+const compatBase = {
+  motivo: 'La rosca de la bocacha es CW y la de tu réplica es CCW.',
+  fuente,
+  confianza: 'alta',
+} as const;
+// Las props de un componente React necesitan elementos de React, no plantillas de Astro.
+const reintentar = createElement(Boton, { variante: 'peligro', children: 'Reintentar' });
+const cab = 'font-grabado text-3xl text-hueso';
+---
+
+<!-- 11 · Campo y selector -->
+<section id="campo" aria-labelledby="t-campo" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">11</Rotulo>
+    <h2 id="t-campo" class={cab}>Campo y selector</h2>
+    <p class="max-w-lectura text-niebla">
+      Etiqueta siempre visible (un placeholder no es una etiqueta), ayuda y error enlazados al control con <code class="text-hueso">aria-describedby</code>, 44&nbsp;px de alto. El selector es el
+      nativo con el aspecto del sistema:
+      teclado, lectores de pantalla y móvil sin código propio. Cargando avisa sin quitar el foco.
+    </p>
+  </div>
+  <div class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-3">
+    <Estado nombre="Normal"><Campo etiqueta="Nombre de la build" ayuda="Aparece en tu lista de builds." placeholder="M4 de ejemplo" /></Estado>
+    <Estado nombre="Foco"><Campo etiqueta="Nombre de la build" demo="foco" value="M4 de ejemplo" readOnly /></Estado>
+    <Estado nombre="Deshabilitado"><Campo etiqueta="Código de build" disabled value="T6M-0000" /></Estado>
+    <Estado nombre="Error"><Campo etiqueta="Calibre del cañón (mm)" error="Introduce un número con coma, por ejemplo 6,03." value="seis" required /></Estado>
+    <Estado nombre="Carga"><Campo etiqueta="Código de build" cargando value="T6M-4F2A" /></Estado>
+    <Estado nombre="Multilínea"><Campo etiqueta="Notas" multilinea placeholder="Qué has cambiado respecto a la versión de fábrica" /></Estado>
+    <Estado nombre="Selector">
+      <Selector
+        etiqueta="Plataforma"
+        marcador="Elige una plataforma"
+        opciones={[
+          { valor: 'm4', texto: 'M4 / AR-15' },
+          { valor: 'ak', texto: 'AK' },
+          { valor: 'hicapa', texto: 'Hi-Capa', deshabilitada: true },
+        ]}
+      />
+    </Estado>
+    <Estado nombre="Selector con error">
+      <Selector etiqueta="Plataforma" marcador="Elige una plataforma" error="Elige una plataforma para ver qué encaja." opciones={[{ valor: 'm4', texto: 'M4 / AR-15' }]} />
+    </Estado>
+    <Estado nombre="Selector deshabilitado"><Selector etiqueta="Plataforma" disabled opciones={[{ valor: 'm4', texto: 'M4 / AR-15' }]} /></Estado>
+  </div>
+</section>
+
+<!-- 12 · Chip, stock, avatar y valoración -->
+<section id="chip" aria-labelledby="t-chip" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">12</Rotulo>
+    <h2 id="t-chip" class={cab}>Chip, stock, avatar y valoración</h2>
+    <p class="max-w-lectura text-niebla">
+      El color nunca es el único portador de significado: cada estado lleva icono y texto. El punto de stock dice
+      «Stock desconocido» cuando no hay dato, en vez de callarlo. Avatar es la única forma redonda del sistema. La
+      valoración sin opiniones no enseña un cero inventado.
+    </p>
+  </div>
+  <div class="flex flex-col gap-6">
+    <ul class="flex flex-wrap gap-3" aria-label="Tonos de chip">
+      {TONOS_CHIP.map((t) => <li><Chip tono={t}>{nombreTono[t]}</Chip></li>)}
+    </ul>
+    <ul class="flex flex-wrap gap-6" aria-label="Estados de stock">
+      {stocks.map((s) => <li><PuntoStock estado={s} /></li>)}
+    </ul>
+    <div class="flex flex-wrap items-center gap-6">
+      <Avatar nombre="Javi Ejemplo" tamano="s" />
+      <Avatar nombre="Javi Ejemplo" />
+      <Avatar nombre="Javi Ejemplo" tamano="l" />
+      <Valoracion nota={4.5} opiniones={12} />
+      <Valoracion nota={null} opiniones={0} />
+    </div>
+  </div>
+</section>
+
+<!-- 13 · Etiqueta de precio -->
+<section id="precio" aria-labelledby="t-precio" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">13</Rotulo>
+    <h2 id="t-precio" class={cab}>Etiqueta de precio</h2>
+    <p class="max-w-lectura text-niebla">
+      Precio, tienda, stock y «comprobado hace X». El tipo no compila sin la fecha (puede ser <code class="text-hueso">null</code>:
+      se muestra «Sin fecha de comprobación», nunca se inventa). Dinero en céntimos enteros.
+    </p>
+    <p class="max-w-lectura text-s text-estado-aviso">Precios y tiendas de ejemplo: no son datos del mercado.</p>
+  </div>
+  <div class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-3">
+    <Estado nombre="Con stock"><EtiquetaPrecio centimos={8995} tienda="Tienda de ejemplo" comprobado={COMPROBADO} ahora={AHORA} stock="en-stock" href="https://example.com/" /></Estado>
+    <Estado nombre="Desde, pocas unidades"><EtiquetaPrecio desde centimos={1295} tienda="Otra tienda de ejemplo" comprobado={COMPROBADO} ahora={AHORA} stock="pocas" /></Estado>
+    <Estado nombre="Agotado"><EtiquetaPrecio centimos={24900} tienda="Tienda de ejemplo" comprobado={COMPROBADO} ahora={AHORA} stock="agotado" /></Estado>
+    <Estado nombre="Sin precio ni fecha"><EtiquetaPrecio centimos={null} tienda="Tienda de ejemplo" comprobado={null} stock="desconocido" /></Estado>
+    <Estado nombre="Compacta"><EtiquetaPrecio compacta desde centimos={1295} tienda="" comprobado={COMPROBADO} ahora={AHORA} stock="en-stock" /></Estado>
+    <Estado nombre="Carga"><EtiquetaPrecio cargando centimos={null} tienda="" comprobado={null} stock="desconocido" /></Estado>
+  </div>
+</section>
+
+<!-- 14 · Aviso -->
+<section id="aviso" aria-labelledby="t-aviso" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">14</Rotulo>
+    <h2 id="t-aviso" class={cab}>Aviso y «provisional»</h2>
+    <p class="max-w-lectura text-niebla">
+      Mensaje en bloque. «Provisional» marca lo que aún no está verificado: se dice, no se disimula. Estático por
+      defecto; con <code class="text-hueso">viva</code> se anuncia a los lectores de pantalla (alert en errores).
+    </p>
+  </div>
+  <div class="grid gap-4 escritorio:grid-cols-2">
+    {TIPOS_AVISO.map((t) => <Aviso tipo={t} titulo={tituloAviso[t]}>{textoAviso[t]}</Aviso>)}
+    <Aviso tipo="error" titulo="No se ha guardado" accion={reintentar}>
+      Se ha perdido la conexión. Tu build sigue en este dispositivo.
+    </Aviso>
+  </div>
+</section>
+
+<!-- 15 · Compatibilidad -->
+<section id="compatibilidad" aria-labelledby="t-compatibilidad" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">15</Rotulo>
+    <h2 id="t-compatibilidad" class={cab}>Insignia de compatibilidad</h2>
+    <p class="max-w-lectura text-niebla">
+      Cada veredicto lleva motivo, fuente y confianza; el tipo no compila sin ellos. La versión compacta, para listas y
+      fichas, deja el motivo y la fuente para lectores de pantalla.
+    </p>
+    <p class="max-w-lectura text-s text-estado-aviso">Veredictos de ejemplo: no son resultados del motor de compatibilidad.</p>
+  </div>
+  <div class="grid gap-4 tablet:grid-cols-2">
+    {veredictos.map((v) => <InsigniaCompatibilidad veredicto={v} {...compatBase} confianza={v === 'desconocido' ? 'baja' : v === 'adaptador' ? 'media' : 'alta'} />)}
+  </div>
+  <div class="flex flex-wrap gap-4">
+    {veredictos.map((v) => <InsigniaCompatibilidad compacta veredicto={v} {...compatBase} />)}
+  </div>
+</section>
+
+<!-- 16 · Ficha de pieza -->
+<section id="ficha" aria-labelledby="t-ficha" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">16</Rotulo>
+    <h2 id="t-ficha" class={cab}>Ficha de pieza</h2>
+    <p class="max-w-lectura text-niebla">
+      Miniatura con su nivel de fidelidad, nombre, «desde X €» con su fecha, nº de tiendas y compatibilidad. Toda la
+      ficha se puede pulsar, pero el foco es uno solo. Sin imagen propia, un marcador a plantilla: nunca fotos de terceros.
+    </p>
+    <p class="max-w-lectura text-s text-estado-aviso">Piezas, marcas y precios de ejemplo.</p>
+  </div>
+  <ul class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-4">
+    <li><FichaPieza nombre="Cargador de 120 bolas" marca="Marca de ejemplo" href="#ficha" nivel="T1" precio={{ centimos: 1295, comprobado: COMPROBADO, ahora: AHORA }} tiendas={3} compatibilidad={{ veredicto: 'compatible', motivo: 'Mismo estándar de cargador.', fuente, confianza: 'alta' }} /></li>
+    <li><FichaPieza nombre="Bocacha 14 mm CW" marca="Marca de ejemplo" href="#ficha" demo="hover" nivel="T0" precio={{ centimos: 895, comprobado: COMPROBADO, ahora: AHORA }} tiendas={1} compatibilidad={{ veredicto: 'adaptador', ...compatBase, confianza: 'media' }} /></li>
+    <li><FichaPieza nombre="Mira de punto rojo" marca="Marca de ejemplo" href="#ficha" demo="foco" nivel={null} precio={null} tiendas={null} /></li>
+    <li><FichaPieza nombre="Empuñadura" marca="Marca de ejemplo" nivel="T2" precio={null} tiendas={0} estado="deshabilitada" mensaje="Disponible cuando haya modelo verificado." /></li>
+    <li><FichaPieza nombre="" marca="" nivel="T0" precio={null} tiendas={null} estado="carga" /></li>
+    <li><FichaPieza nombre="Culata" marca="Marca de ejemplo" nivel="T0" precio={null} tiendas={null} estado="error" /></li>
+  </ul>
+</section>
+
+<!-- 17 · Tabla -->
+<section id="tabla" aria-labelledby="t-tabla" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">17</Rotulo>
+    <h2 id="t-tabla" class={cab}>Tabla</h2>
+    <p class="max-w-lectura text-niebla">
+      Tabla real con título, cabeceras con ámbito y la primera columna como cabecera de fila. Los números van a la
+      derecha en la fuente de datos. Si desborda, la región se recorre con el teclado.
+    </p>
+  </div>
+  <div class="grid gap-6 escritorio:grid-cols-2">
+    <Tabla titulo="Cañones internos (ejemplo)" columnas={columnasTabla} filas={filasTabla} />
+    <Tabla titulo="Carga" columnas={columnasTabla} filas={[]} estado="carga" />
+    <Tabla titulo="Vacía" columnas={columnasTabla} filas={[]} mensaje="Todavía no hay piezas de esta familia." />
+    <Tabla titulo="Error" columnas={columnasTabla} filas={[]} estado="error" />
+  </div>
+</section>
+
+<!-- 18 · Pestañas -->
+<section id="pestanas" aria-labelledby="t-pestanas" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">18</Rotulo>
+    <h2 id="t-pestanas" class={cab}>Pestañas</h2>
+    <p class="max-w-lectura text-niebla">
+      Patrón WAI-ARIA con activación automática: flechas, Inicio y Fin; solo la pestaña activa entra en el orden de
+      tabulación y las desactivadas se saltan. Es una isla (<code class="text-hueso">client:visible</code>).
+    </p>
+  </div>
+  <DemoPestanas client:visible />
+</section>
+
+<!-- 19 · Maletín, tostadas y tooltip -->
+<section id="capas" aria-labelledby="t-capas" class="flex flex-col gap-8">
+  <div class="flex flex-col gap-2">
+    <Rotulo tinta="fde" tamano="s">19</Rotulo>
+    <h2 id="t-capas" class={cab}>Maletín, tostadas y tooltip</h2>
+    <p class="max-w-lectura text-niebla">
+      El maletín es un <code class="text-hueso">&lt;dialog&gt;</code> modal nativo: trampa de foco, Escape y fondo inerte; al
+      cerrar, el foco vuelve al botón. Las tostadas viven en una región viva y los errores no desaparecen solos (WCAG
+      2.2.1). El tooltip aparece con hover y con foco, se cierra con Escape y el puntero puede pasar sobre él (1.4.13).
+    </p>
+  </div>
+  <div class="grid gap-6 escritorio:grid-cols-3">
+    <Placa titulo="Maletín" lisa as="div"><DemoMaletin client:visible /></Placa>
+    <Placa titulo="Tostadas" lisa as="div"><DemoTostadas client:visible /></Placa>
+    <Placa titulo="Tooltip (pasa el puntero o enfoca)" lisa as="div"><div class="pt-16"><DemoTooltip client:visible /></div></Placa>
+  </div>
+</section>

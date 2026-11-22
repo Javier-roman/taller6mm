@@ -117,6 +117,10 @@
     font-size: var(--texto-xs);
   }
 
+  .t6-precio > .t6-esqueleto {
+    flex-basis: 100%;
+  }
+
   .t6-precio--compacta .t6-precio__fecha {
     flex-basis: auto;
   }

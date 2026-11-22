@@ -18,6 +18,7 @@ import {
 import { COLOR_PAIRS, checkPair } from '@taller6mm/ui/contraste';
 import { COLOR_TOKENS, type ColorToken, DURATIONS, EASINGS, REDUCED_DURATIONS } from '@taller6mm/ui/tokens';
 import { createElement } from 'react';
+import SeccionesS5 from '../components/sistema/SeccionesS5.astro';
 import Base from '../layouts/Base.astro';
 import {
   ESCALA_ESPACIO,
@@ -70,7 +71,7 @@ const flecha = createElement(IconoFlecha);
 
 <Base
   title="Sistema de diseño"
-  description="Tokens y componentes base de Taller6mm: color, tipografía, espacio, movimiento, botones, placas, rótulos, insignias de fidelidad y barras de dato."
+  description="Tokens y componentes base de Taller6mm: color, tipografía, espacio, movimiento, botones, placas, rótulos, insignias de fidelidad, barras de dato, campos, fichas de pieza, compatibilidad, tablas, pestañas y diálogos."
 >
   <!-- Cabecera con la luz de la sala: cenital fría de los tubos y cálida del flexo, sobre grano. -->
   <header
@@ -711,6 +712,8 @@ const flecha = createElement(IconoFlecha);
         </Placa>
       </div>
     </section>
+
+    <SeccionesS5 />
   </main>
 
   <footer class="border-t border-acero bg-carbon">

@@ -93,4 +93,13 @@ export const SECCIONES = [
   { id: 'fidelidad', titulo: 'Fidelidad' },
   { id: 'dato', titulo: 'Barra de dato' },
   { id: 'cargador', titulo: 'Cargador' },
+  { id: 'campo', titulo: 'Campo' },
+  { id: 'chip', titulo: 'Chip y stock' },
+  { id: 'precio', titulo: 'Precio' },
+  { id: 'aviso', titulo: 'Aviso' },
+  { id: 'compatibilidad', titulo: 'Compatibilidad' },
+  { id: 'ficha', titulo: 'Ficha' },
+  { id: 'tabla', titulo: 'Tabla' },
+  { id: 'pestanas', titulo: 'Pestañas' },
+  { id: 'capas', titulo: 'Maletín y tostadas' },
 ] as const;
