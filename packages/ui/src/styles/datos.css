@@ -1,0 +1,502 @@
+/*
+ * Componentes de datos (docs/02 §4.5): chip, stock, precio, aviso, compatibilidad, ficha de pieza,
+ * tabla, avatar y valoración. Solo tokens: un test rechaza valores sueltos.
+ */
+@layer components {
+  /* ── Chip ────────────────────────────────────────────────────────────────── */
+  .t6-chip {
+    --_tono: var(--niebla);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+    padding: var(--espacio-1) var(--espacio-2);
+    border: var(--trazo-fino) solid color-mix(in oklab, var(--_tono) 55%, transparent);
+    border-radius: var(--radio-s);
+    background-color: color-mix(in oklab, var(--_tono) 12%, var(--carbon));
+    color: var(--_tono);
+    font-size: var(--texto-xs);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    line-height: var(--interlineado-compacto);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .t6-chip--laton {
+    --_tono: var(--laton-claro);
+  }
+
+  .t6-chip--ok {
+    --_tono: var(--estado-ok);
+  }
+
+  .t6-chip--aviso {
+    --_tono: var(--estado-aviso);
+  }
+
+  .t6-chip--error {
+    --_tono: var(--estado-error);
+  }
+
+  .t6-chip--desconocido {
+    --_tono: var(--estado-desconocido);
+    border-style: dashed;
+  }
+
+  /* ── Punto de stock ──────────────────────────────────────────────────────── */
+  .t6-stock {
+    --_tono: var(--estado-desconocido);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+    color: var(--_tono);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-medio);
+  }
+
+  .t6-stock--en-stock {
+    --_tono: var(--estado-ok);
+  }
+
+  .t6-stock--pocas {
+    --_tono: var(--estado-aviso);
+  }
+
+  .t6-stock--agotado {
+    --_tono: var(--estado-error);
+  }
+
+  /* ── Etiqueta de precio ──────────────────────────────────────────────────── */
+  .t6-precio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--espacio-1) var(--espacio-3);
+  }
+
+  .t6-precio__importe {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+    color: var(--laton-claro);
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-l);
+    font-variant-numeric: tabular-nums slashed-zero;
+    font-weight: var(--peso-negrita);
+  }
+
+  .t6-precio__importe--sin {
+    color: var(--estado-desconocido);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-medio);
+  }
+
+  .t6-precio__desde {
+    color: var(--niebla);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-regular);
+    white-space: pre;
+  }
+
+  .t6-precio__tienda {
+    color: var(--hueso);
+    font-size: var(--texto-s);
+  }
+
+  .t6-precio__fecha {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-1);
+    flex-basis: 100%;
+    color: var(--niebla);
+    font-size: var(--texto-xs);
+  }
+
+  .t6-precio--compacta .t6-precio__fecha {
+    flex-basis: auto;
+  }
+
+  /* ── Aviso ───────────────────────────────────────────────────────────────── */
+  .t6-aviso {
+    --_tono: var(--laton-claro);
+
+    display: flex;
+    gap: var(--espacio-3);
+    padding: var(--espacio-4);
+    border: var(--trazo-fino) solid color-mix(in oklab, var(--_tono) 45%, transparent);
+    border-inline-start: var(--espacio-1) solid var(--_tono);
+    border-radius: var(--radio-m);
+    background-color: color-mix(in oklab, var(--_tono) 8%, var(--carbon));
+    color: var(--hueso);
+  }
+
+  .t6-aviso--provisional {
+    --_tono: var(--fde);
+    border-style: dashed;
+    border-inline-style: solid;
+  }
+
+  .t6-aviso--aviso {
+    --_tono: var(--estado-aviso);
+  }
+
+  .t6-aviso--error {
+    --_tono: var(--estado-error);
+  }
+
+  .t6-aviso--ok {
+    --_tono: var(--estado-ok);
+  }
+
+  .t6-aviso__icono {
+    color: var(--_tono);
+  }
+
+  .t6-aviso__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-1);
+  }
+
+  .t6-aviso__titulo {
+    margin: 0;
+    font-size: var(--texto-s);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+  }
+
+  .t6-aviso__texto {
+    color: var(--niebla);
+    font-size: var(--texto-s);
+  }
+
+  .t6-aviso__accion {
+    margin-block-start: var(--espacio-2);
+  }
+
+  /* ── Insignia de compatibilidad ──────────────────────────────────────────── */
+  .t6-compat {
+    --_tono: var(--estado-desconocido);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    padding: var(--espacio-3) var(--espacio-4);
+    border: var(--trazo-fino) solid color-mix(in oklab, var(--_tono) 50%, transparent);
+    border-radius: var(--radio-m);
+    background-color: color-mix(in oklab, var(--_tono) 8%, var(--carbon));
+  }
+
+  .t6-compat--compatible {
+    --_tono: var(--estado-ok);
+  }
+
+  .t6-compat--adaptador {
+    --_tono: var(--estado-aviso);
+  }
+
+  .t6-compat--incompatible {
+    --_tono: var(--estado-error);
+  }
+
+  .t6-compat--desconocido {
+    border-style: dashed;
+  }
+
+  .t6-compat--compacta {
+    padding: var(--espacio-1) var(--espacio-2);
+    align-self: flex-start;
+  }
+
+  .t6-compat__veredicto {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0;
+    color: var(--_tono);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+  }
+
+  .t6-compat__motivo {
+    margin: 0;
+    color: var(--hueso);
+    font-size: var(--texto-s);
+  }
+
+  .t6-compat__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-1) var(--espacio-6);
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-xs);
+  }
+
+  .t6-compat__meta > div {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-2);
+  }
+
+  .t6-compat__meta dt {
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+  }
+
+  .t6-compat__meta dd {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    margin: 0;
+    color: var(--hueso);
+  }
+
+  /* Tres rayas: cuántas están llenas dice la confianza (y el texto la repite). */
+  .t6-compat__nivel {
+    display: inline-flex;
+    gap: var(--espacio-1);
+  }
+
+  .t6-compat__nivel i {
+    inline-size: var(--espacio-3);
+    block-size: var(--espacio-1);
+    border-radius: var(--radio-s);
+    background-color: var(--acero);
+  }
+
+  dd[data-confianza="alta"] .t6-compat__nivel i,
+  dd[data-confianza="media"] .t6-compat__nivel i:nth-child(-n + 2),
+  dd[data-confianza="baja"] .t6-compat__nivel i:first-child {
+    background-color: var(--laton-claro);
+  }
+
+  /* ── Ficha de pieza ──────────────────────────────────────────────────────── */
+  .t6-ficha {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-l);
+    background-color: var(--grafito);
+    background-image: var(--brillo-placa), var(--textura-ruido);
+    box-shadow: var(--sombra-placa);
+    color: var(--hueso);
+    overflow: hidden;
+    transition:
+      border-color var(--duracion-componente) var(--curva-mecanica),
+      box-shadow var(--duracion-componente) var(--curva-mecanica);
+  }
+
+  .t6-ficha--enlace:is(:hover, [data-demo="hover"], [data-demo="activo"]) {
+    border-color: var(--laton);
+    box-shadow: var(--sombra-elevada);
+  }
+
+  .t6-ficha[data-demo="activo"] {
+    box-shadow: var(--sombra-hundida);
+  }
+
+  .t6-ficha[data-demo="foco"] {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+  }
+
+  .t6-ficha[data-estado="deshabilitada"] {
+    border-style: dashed;
+    color: var(--niebla);
+  }
+
+  .t6-ficha[data-estado="error"] {
+    border-color: var(--estado-error);
+  }
+
+  .t6-ficha__imagen {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 8 / 5;
+    background-color: var(--carbon);
+    border-block-end: var(--trazo-fino) solid var(--acero);
+  }
+
+  .t6-ficha__imagen img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+  }
+
+  .t6-ficha__vacio {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    color: var(--niebla);
+    font-size: var(--texto-s);
+  }
+
+  .t6-ficha__nivel {
+    position: absolute;
+    inset-block-start: var(--espacio-2);
+    inset-inline-start: var(--espacio-2);
+  }
+
+  .t6-ficha__cuerpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    padding: var(--espacio-4);
+  }
+
+  .t6-ficha__marca {
+    margin: 0;
+    color: var(--fde);
+    font-family: var(--fuente-rotulo);
+    font-size: var(--texto-s);
+    letter-spacing: var(--interletra-rotulo);
+    text-transform: uppercase;
+  }
+
+  .t6-ficha__nombre {
+    margin: 0;
+    font-size: var(--texto-m);
+    font-weight: var(--peso-semi);
+  }
+
+  .t6-ficha__enlace {
+    color: var(--hueso);
+    text-decoration: none;
+  }
+
+  /* Toda la ficha es pulsable, pero el foco es solo el del nombre. */
+  .t6-ficha__enlace::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .t6-ficha__tiendas {
+    margin: 0;
+    color: var(--niebla);
+    font-size: var(--texto-xs);
+  }
+
+  /* ── Tabla ───────────────────────────────────────────────────────────────── */
+  .t6-tabla {
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-l);
+    background-color: var(--grafito);
+    overflow-x: auto;
+  }
+
+  .t6-tabla table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: var(--texto-s);
+  }
+
+  .t6-tabla caption {
+    padding: var(--espacio-3) var(--espacio-4);
+    color: var(--hueso);
+    font-weight: var(--peso-semi);
+    text-align: start;
+  }
+
+  .t6-tabla :is(th, td) {
+    padding: var(--espacio-3) var(--espacio-4);
+    border-block-start: var(--trazo-fino) solid var(--acero);
+    text-align: start;
+    vertical-align: middle;
+  }
+
+  .t6-tabla thead th {
+    color: var(--niebla);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+  }
+
+  .t6-tabla tbody th {
+    color: var(--hueso);
+    font-weight: var(--peso-semi);
+  }
+
+  .t6-tabla tbody tr:hover {
+    background-color: color-mix(in oklab, var(--laton) 7%, transparent);
+  }
+
+  .t6-tabla .t6-tabla__num {
+    font-family: var(--fuente-datos);
+    font-variant-numeric: tabular-nums slashed-zero;
+    text-align: end;
+  }
+
+  .t6-tabla[data-estado="error"] {
+    border-color: var(--estado-error);
+  }
+
+  /* ── Avatar ──────────────────────────────────────────────────────────────── */
+  .t6-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--objetivo-tactil);
+    block-size: var(--objetivo-tactil);
+    border: var(--trazo-fino) solid var(--laton);
+    border-radius: var(--radio-avatar);
+    background-color: var(--acero);
+    color: var(--hueso);
+    font-family: var(--fuente-rotulo);
+    font-size: var(--texto-m);
+    letter-spacing: var(--interletra-rotulo);
+    overflow: hidden;
+  }
+
+  .t6-avatar--s {
+    inline-size: var(--espacio-8);
+    block-size: var(--espacio-8);
+    font-size: var(--texto-xs);
+  }
+
+  .t6-avatar--l {
+    inline-size: var(--espacio-16);
+    block-size: var(--espacio-16);
+    font-size: var(--texto-xl);
+  }
+
+  .t6-avatar img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* ── Valoración ──────────────────────────────────────────────────────────── */
+  .t6-valoracion {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    color: var(--hueso);
+    font-size: var(--texto-s);
+  }
+
+  .t6-valoracion__estrellas {
+    display: inline-flex;
+    color: var(--laton-claro);
+  }
+
+  .t6-valoracion--sin {
+    color: var(--estado-desconocido);
+  }
+}

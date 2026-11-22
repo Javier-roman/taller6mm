@@ -111,14 +111,17 @@ describe('CSS generado (styles/tokens.css y styles/theme.css)', () => {
 });
 
 describe('estilos escritos a mano: solo tokens (.claude/rules/ui.md)', () => {
-  test.each(['componentes.css', 'base.css'])('%s no tiene colores, medidas ni duraciones sueltas', (file) => {
-    const css = styles(file).replace(/\/\*[\s\S]*?\*\//g, '');
-    expect(css, 'color hexadecimal').not.toMatch(/#[0-9a-f]{3,8}\b/i);
-    expect(css, 'rgb()/hsl() literal').not.toMatch(/\b(?:rgba?|hsla?|oklch|oklab)\(/i);
-    expect(css, 'medida en px o rem').not.toMatch(/(?<![\w-])\d*\.?\d+(?:px|rem)\b/);
-    expect(css, 'duración en ms o s').not.toMatch(/(?<![\w-])\d*\.?\d+m?s\b/);
-    expect(css, 'curva propia').not.toMatch(/cubic-bezier|steps\(/);
-  });
+  test.each(['componentes.css', 'controles.css', 'datos.css', 'base.css'])(
+    '%s no tiene colores, medidas ni duraciones sueltas',
+    (file) => {
+      const css = styles(file).replace(/\/\*[\s\S]*?\*\//g, '');
+      expect(css, 'color hexadecimal').not.toMatch(/#[0-9a-f]{3,8}\b/i);
+      expect(css, 'rgb()/hsl() literal').not.toMatch(/\b(?:rgba?|hsla?|oklch|oklab)\(/i);
+      expect(css, 'medida en px o rem').not.toMatch(/(?<![\w-])\d*\.?\d+(?:px|rem)\b/);
+      expect(css, 'duración en ms o s').not.toMatch(/(?<![\w-])\d*\.?\d+m?s\b/);
+      expect(css, 'curva propia').not.toMatch(/cubic-bezier|steps\(/);
+    },
+  );
 
   test('las fuentes son las cuatro de docs/02 §4.2, autoalojadas', () => {
     const css = styles('fuentes.css');

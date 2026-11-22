@@ -1,0 +1,352 @@
+/*
+ * Controles interactivos (docs/02 §4.5): campo, selector, pestañas, maletín, tostadas y tooltip.
+ * Solo tokens: un test rechaza colores, duraciones o medidas sueltas. `data-demo` fuerza el foco
+ * en estático para /sistema.
+ */
+@layer components {
+  /* ── Campo y selector ────────────────────────────────────────────────────── */
+  .t6-campo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    max-inline-size: var(--ancho-lectura);
+  }
+
+  .t6-campo__etiqueta {
+    color: var(--hueso);
+    font-size: var(--texto-s);
+    font-weight: var(--peso-semi);
+  }
+
+  .t6-campo__obligatorio {
+    color: var(--niebla);
+    font-weight: var(--peso-regular);
+  }
+
+  .t6-campo__control {
+    inline-size: 100%;
+    min-block-size: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-3);
+    border: var(--trazo-fino) solid color-mix(in oklab, var(--acero), var(--hueso) 22%);
+    border-radius: var(--radio-m);
+    background-color: var(--carbon);
+    box-shadow: var(--sombra-hundida);
+    color: var(--hueso);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-m);
+    line-height: var(--interlineado-compacto);
+    transition:
+      border-color var(--duracion-micro) var(--curva-mecanica),
+      background-color var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-campo__control::placeholder {
+    color: var(--niebla);
+  }
+
+  .t6-campo__control:hover:not(:disabled) {
+    border-color: var(--laton);
+  }
+
+  .t6-campo__control:focus-visible,
+  .t6-campo[data-demo="foco"] .t6-campo__control {
+    outline: var(--trazo-foco) solid var(--naranja-senal);
+    outline-offset: var(--trazo-foco);
+    border-color: var(--naranja-senal);
+  }
+
+  .t6-campo__control:disabled {
+    border-style: dashed;
+    border-color: var(--estado-desconocido);
+    background-color: color-mix(in oklab, var(--acero) 45%, var(--carbon));
+    box-shadow: none;
+    color: var(--estado-desconocido);
+    cursor: not-allowed;
+  }
+
+  .t6-campo[data-estado="error"] .t6-campo__control {
+    border-color: var(--estado-error);
+  }
+
+  .t6-campo[data-estado="carga"] .t6-campo__control {
+    cursor: progress;
+  }
+
+  textarea.t6-campo__control {
+    resize: vertical;
+  }
+
+  .t6-campo__control--selector {
+    appearance: none;
+    padding-inline-end: var(--espacio-8);
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--niebla) 50%),
+      linear-gradient(135deg, var(--niebla) 50%, transparent 50%);
+    background-position:
+      calc(100% - var(--espacio-4) - var(--espacio-1)) 50%,
+      calc(100% - var(--espacio-4)) 50%;
+    background-size: var(--espacio-1) var(--espacio-1);
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+
+  /* ── Pestañas ────────────────────────────────────────────────────────────── */
+  .t6-pestanas__lista {
+    display: flex;
+    gap: var(--espacio-1);
+    border-block-end: var(--trazo-fino) solid var(--acero);
+  }
+
+  .t6-pestanas__pestana {
+    min-block-size: var(--objetivo-tactil);
+    padding: var(--espacio-2) var(--espacio-4);
+    margin-block-end: calc(-1 * var(--trazo-fino));
+    border: var(--trazo-fino) solid transparent;
+    border-block-end: var(--trazo-foco) solid transparent;
+    border-radius: var(--radio-m) var(--radio-m) 0 0;
+    background: transparent;
+    color: var(--niebla);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--texto-s);
+    font-stretch: var(--anchura-semicondensada);
+    font-weight: var(--peso-semi);
+    letter-spacing: var(--interletra-versalitas);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      color var(--duracion-micro) var(--curva-mecanica),
+      background-color var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-pestanas__pestana:hover:not(:disabled) {
+    color: var(--hueso);
+    background-color: color-mix(in oklab, var(--laton) 10%, transparent);
+  }
+
+  .t6-pestanas__pestana[aria-selected="true"] {
+    border-block-end-color: var(--laton);
+    background-color: var(--grafito);
+    color: var(--laton-claro);
+  }
+
+  .t6-pestanas__pestana:disabled {
+    color: var(--estado-desconocido);
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .t6-pestanas__panel {
+    padding-block: var(--espacio-4);
+  }
+
+  /* ── Maletín (diálogo modal) ─────────────────────────────────────────────── */
+  .t6-maletin {
+    inline-size: min(var(--ancho-lectura), calc(100% - var(--espacio-8)));
+    max-block-size: calc(100dvh - var(--espacio-8));
+    padding: 0;
+    margin: auto;
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-l);
+    background-color: var(--grafito);
+    background-image: var(--brillo-placa), var(--textura-ruido);
+    box-shadow: var(--sombra-elevada);
+    color: var(--hueso);
+    overflow: auto;
+  }
+
+  .t6-maletin[open] {
+    animation: t6-maletin-entra var(--duracion-panel) var(--curva-mecanica);
+  }
+
+  .t6-maletin::backdrop {
+    background-color: color-mix(in oklab, var(--negro-pavonado) 78%, transparent);
+  }
+
+  @keyframes t6-maletin-entra {
+    from {
+      opacity: 0;
+      translate: 0 var(--espacio-4);
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* Con movimiento reducido: solo fundido, sin desplazamiento. */
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes t6-maletin-entra {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+
+  .t6-maletin__marco {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-4);
+    padding: var(--espacio-6);
+  }
+
+  .t6-maletin__cabecera {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--espacio-4);
+  }
+
+  .t6-maletin__titulo {
+    margin: 0;
+    font-family: var(--fuente-grabado);
+    font-size: var(--texto-xl);
+    letter-spacing: var(--interletra-grabado);
+  }
+
+  .t6-maletin__cerrar,
+  .t6-tostada__cerrar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    min-inline-size: var(--objetivo-tactil);
+    min-block-size: var(--objetivo-tactil);
+    border: var(--trazo-fino) solid transparent;
+    border-radius: var(--radio-m);
+    background: transparent;
+    color: var(--niebla);
+    cursor: pointer;
+  }
+
+  .t6-maletin__cerrar:hover,
+  .t6-tostada__cerrar:hover {
+    border-color: var(--acero);
+    color: var(--hueso);
+  }
+
+  .t6-maletin__pie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--espacio-3);
+  }
+
+  /* ── Tostadas ────────────────────────────────────────────────────────────── */
+  .t6-tostadas ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .t6-tostada {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-3);
+    max-inline-size: var(--ancho-lectura);
+    padding: var(--espacio-2) var(--espacio-2) var(--espacio-2) var(--espacio-4);
+    border: var(--trazo-fino) solid var(--acero);
+    border-inline-start: var(--espacio-1) solid var(--_tono, var(--niebla));
+    border-radius: var(--radio-m);
+    background-color: var(--grafito);
+    box-shadow: var(--sombra-elevada);
+    color: var(--hueso);
+    font-size: var(--texto-s);
+    animation: t6-tostada-entra var(--duracion-componente) var(--curva-mecanica);
+  }
+
+  .t6-tostada > .t6-icono {
+    color: var(--_tono, var(--niebla));
+  }
+
+  .t6-tostada p {
+    flex: 1;
+    margin: 0;
+  }
+
+  .t6-tostada--ok {
+    --_tono: var(--estado-ok);
+  }
+
+  .t6-tostada--aviso {
+    --_tono: var(--estado-aviso);
+  }
+
+  .t6-tostada--error {
+    --_tono: var(--estado-error);
+  }
+
+  .t6-tostada--info {
+    --_tono: var(--laton);
+  }
+
+  @keyframes t6-tostada-entra {
+    from {
+      opacity: 0;
+      translate: 0 var(--espacio-2);
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes t6-tostada-entra {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* ── Tooltip ─────────────────────────────────────────────────────────────── */
+  .t6-tooltip {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .t6-tooltip__texto {
+    position: absolute;
+    z-index: 20;
+    inset-block-end: calc(100% + var(--espacio-2));
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    inline-size: max-content;
+    max-inline-size: var(--ancho-lectura);
+    padding: var(--espacio-2) var(--espacio-3);
+    border: var(--trazo-fino) solid var(--acero);
+    border-radius: var(--radio-m);
+    background-color: var(--negro-pavonado);
+    box-shadow: var(--sombra-elevada);
+    color: var(--hueso);
+    font-size: var(--texto-s);
+    line-height: var(--interlineado-compacto);
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity var(--duracion-micro) var(--curva-mecanica),
+      visibility var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  /* Un puente invisible entre el disparador y el texto: el puntero puede pasar sin que se cierre. */
+  .t6-tooltip__texto::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 100%;
+    block-size: var(--espacio-2);
+  }
+
+  .t6-tooltip:is(:hover, :focus-within, [data-demo]):not([data-descartado]) .t6-tooltip__texto {
+    visibility: visible;
+    opacity: 1;
+  }
+}
