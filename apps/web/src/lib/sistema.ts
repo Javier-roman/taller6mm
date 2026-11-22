@@ -18,6 +18,12 @@ export const FONDO: Record<ColorToken, string> = {
   'estado-aviso': 'bg-estado-aviso',
   'estado-error': 'bg-estado-error',
   'estado-desconocido': 'bg-estado-desconocido',
+  'trazo-fuerte': 'bg-trazo-fuerte',
+  papel: 'bg-papel',
+  'tinta-papel': 'bg-tinta-papel',
+  cota: 'bg-cota',
+  'sobre-laton': 'bg-sobre-laton',
+  kraft: 'bg-kraft',
 };
 
 export const TEXTO: Record<ColorToken, string> = {
@@ -36,6 +42,12 @@ export const TEXTO: Record<ColorToken, string> = {
   'estado-aviso': 'text-estado-aviso',
   'estado-error': 'text-estado-error',
   'estado-desconocido': 'text-estado-desconocido',
+  'trazo-fuerte': 'text-trazo-fuerte',
+  papel: 'text-papel',
+  'tinta-papel': 'text-tinta-papel',
+  cota: 'text-cota',
+  'sobre-laton': 'text-sobre-laton',
+  kraft: 'text-kraft',
 };
 
 export const GRUPOS_COLOR = [

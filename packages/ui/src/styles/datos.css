@@ -77,11 +77,20 @@
     gap: var(--espacio-1) var(--espacio-3);
   }
 
+  /* Portaetiquetas de kraft (ADR-0010): el precio va en una etiqueta con su ojal. */
   .t6-precio__importe {
     display: inline-flex;
     align-items: center;
     gap: var(--espacio-1);
-    color: var(--laton-claro);
+    padding: var(--espacio-1) var(--espacio-2) var(--espacio-1) var(--espacio-4);
+    background-color: var(--kraft);
+    background-image: radial-gradient(
+      circle at var(--espacio-2) 50%,
+      var(--negro-pavonado) 0 var(--espacio-1),
+      transparent calc(var(--espacio-1) + var(--trazo-fino))
+    );
+    clip-path: polygon(var(--espacio-2) 0, 100% 0, 100% 100%, var(--espacio-2) 100%, 0 50%);
+    color: var(--tinta-papel);
     font-family: var(--fuente-datos);
     font-size: var(--texto-l);
     font-variant-numeric: tabular-nums slashed-zero;
@@ -89,6 +98,9 @@
   }
 
   .t6-precio__importe--sin {
+    padding: 0;
+    background: none;
+    clip-path: none;
     color: var(--estado-desconocido);
     font-family: var(--fuente-interfaz);
     font-size: var(--texto-s);
@@ -96,7 +108,7 @@
   }
 
   .t6-precio__desde {
-    color: var(--niebla);
+    color: var(--tinta-papel);
     font-family: var(--fuente-interfaz);
     font-size: var(--texto-s);
     font-weight: var(--peso-regular);
@@ -292,8 +304,8 @@
     block-size: 100%;
     border: var(--trazo-fino) solid var(--acero);
     border-radius: var(--radio-l);
-    background-color: var(--grafito);
-    background-image: var(--brillo-placa), var(--textura-ruido);
+    background-color: var(--carbon);
+    background-image: var(--brillo-placa);
     box-shadow: var(--sombra-placa);
     color: var(--hueso);
     overflow: hidden;
@@ -331,14 +343,27 @@
     align-items: center;
     justify-content: center;
     aspect-ratio: 8 / 5;
-    background-color: var(--carbon);
+    background-color: var(--papel);
+    color: var(--tinta-papel);
     border-block-end: var(--trazo-fino) solid var(--acero);
   }
 
-  .t6-ficha__imagen img {
+  .t6-ficha__imagen img,
+  .t6-ficha__imagen .t6-plano {
     inline-size: 100%;
     block-size: 100%;
     object-fit: contain;
+  }
+
+  /* Plano T0 sobre papel: trazo de tinta y cifras de cota en la fuente de datos. */
+  .t6-plano {
+    color: var(--tinta-papel);
+  }
+
+  .t6-plano__texto {
+    fill: currentColor;
+    font-family: var(--fuente-datos);
+    font-size: var(--texto-s);
   }
 
   .t6-ficha__vacio {

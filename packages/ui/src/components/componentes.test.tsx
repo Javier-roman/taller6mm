@@ -130,7 +130,7 @@ describe('Insignia de fidelidad', () => {
   test.each(Object.entries(NIVELES_FIDELIDAD))('%s: código, nombre y prefijo para lectores', (nivel, { nombre }) => {
     const root = doc(<InsigniaFidelidad nivel={nivel as keyof typeof NIVELES_FIDELIDAD} />);
     expect(root.textContent).toBe(`Fidelidad: ${nivel}${nombre}`);
-    expect(root.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
+    expect(root.querySelector('.t6-insignia__nivel')?.getAttribute('aria-hidden')).toBe('true');
   });
 
   test('compacta: el nombre solo para lectores de pantalla', () => {

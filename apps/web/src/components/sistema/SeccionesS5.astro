@@ -206,17 +206,17 @@ const cab = 'font-grabado text-3xl text-hueso';
     <h2 id="t-ficha" class={cab}>Ficha de pieza</h2>
     <p class="max-w-lectura text-niebla">
       Miniatura con su nivel de fidelidad, nombre, «desde X €» con su fecha, nº de tiendas y compatibilidad. Toda la
-      ficha se puede pulsar, pero el foco es uno solo. Sin imagen propia, un marcador a plantilla: nunca fotos de terceros.
+      ficha se puede pulsar, pero el foco es uno solo. Sin render propio, un plano T0 sobre papel con las cotas reales (solo en vista ortogonal); sin medidas, la lámina lo dice. Nunca fotos de terceros.
     </p>
     <p class="max-w-lectura text-s text-estado-aviso">Piezas, marcas y precios de ejemplo.</p>
   </div>
   <ul class="grid gap-6 tablet:grid-cols-2 escritorio:grid-cols-4">
-    <li><FichaPieza nombre="Cargador de 120 bolas" marca="Marca de ejemplo" href="#ficha" nivel="T1" precio={{ centimos: 1295, comprobado: COMPROBADO, ahora: AHORA }} tiendas={3} compatibilidad={{ veredicto: 'compatible', motivo: 'Mismo estándar de cargador.', fuente, confianza: 'alta' }} /></li>
-    <li><FichaPieza nombre="Bocacha 14 mm CW" marca="Marca de ejemplo" href="#ficha" demo="hover" nivel="T0" precio={{ centimos: 895, comprobado: COMPROBADO, ahora: AHORA }} tiendas={1} compatibilidad={{ veredicto: 'adaptador', ...compatBase, confianza: 'media' }} /></li>
-    <li><FichaPieza nombre="Mira de punto rojo" marca="Marca de ejemplo" href="#ficha" demo="foco" nivel={null} precio={null} tiendas={null} /></li>
-    <li><FichaPieza nombre="Empuñadura" marca="Marca de ejemplo" nivel="T2" precio={null} tiendas={0} estado="deshabilitada" mensaje="Disponible cuando haya modelo verificado." /></li>
+    <li><FichaPieza nombre="Cargador de 120 bolas" marca="Marca de ejemplo" href="#ficha" medidas={{ largoMm: 120, diametroMm: 42 }} nivel="T1" precio={{ centimos: 1295, comprobado: COMPROBADO, ahora: AHORA }} tiendas={3} compatibilidad={{ veredicto: 'compatible', motivo: 'Mismo estándar de cargador.', fuente, confianza: 'alta' }} /></li>
+    <li><FichaPieza nombre="Bocacha 14 mm CW" marca="Marca de ejemplo" href="#ficha" demo="hover" medidas={{ largoMm: 60, diametroMm: 24 }} nivel="T0" precio={{ centimos: 895, comprobado: COMPROBADO, ahora: AHORA }} tiendas={1} compatibilidad={{ veredicto: 'adaptador', ...compatBase, confianza: 'media' }} /></li>
+    <li><FichaPieza nombre="Mira de punto rojo" marca="Marca de ejemplo" href="#ficha" demo="foco" medidas={{ largoMm: 38.5, diametroMm: null }} nivel={null} precio={null} tiendas={null} /></li>
+    <li><FichaPieza nombre="Empuñadura" marca="Marca de ejemplo" medidas={{ largoMm: 112, diametroMm: 34 }} nivel="T2" precio={null} tiendas={0} estado="deshabilitada" mensaje="Disponible cuando haya modelo verificado." /></li>
     <li><FichaPieza nombre="" marca="" nivel="T0" precio={null} tiendas={null} estado="carga" /></li>
-    <li><FichaPieza nombre="Culata" marca="Marca de ejemplo" nivel="T0" precio={null} tiendas={null} estado="error" /></li>
+    <li><FichaPieza nombre="Culata" marca="Marca de ejemplo" medidas={{ largoMm: null, diametroMm: null }} nivel="T0" precio={null} tiendas={null} estado="error" /></li>
   </ul>
 </section>
 

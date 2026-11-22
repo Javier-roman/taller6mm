@@ -27,9 +27,9 @@
     inline-size: 100%;
     min-block-size: var(--objetivo-tactil);
     padding: var(--espacio-2) var(--espacio-3);
-    border: var(--trazo-fino) solid color-mix(in oklab, var(--acero), var(--hueso) 22%);
+    border: var(--trazo-fino) solid var(--trazo-fuerte);
     border-radius: var(--radio-m);
-    background-color: var(--carbon);
+    background-color: var(--negro-pavonado);
     box-shadow: var(--sombra-hundida);
     color: var(--hueso);
     font-family: var(--fuente-interfaz);
@@ -45,7 +45,7 @@
   }
 
   .t6-campo__control:hover:not(:disabled) {
-    border-color: var(--laton);
+    border-color: var(--cota);
   }
 
   .t6-campo__control:focus-visible,
@@ -57,8 +57,8 @@
 
   .t6-campo__control:disabled {
     border-style: dashed;
-    border-color: var(--estado-desconocido);
-    background-color: color-mix(in oklab, var(--acero) 45%, var(--carbon));
+    border-color: var(--trazo-fuerte);
+    background-color: var(--carbon);
     box-shadow: none;
     color: var(--estado-desconocido);
     cursor: not-allowed;

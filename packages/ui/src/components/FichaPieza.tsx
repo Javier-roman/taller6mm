@@ -5,15 +5,18 @@ import type { ReactNode } from 'react';
 import { EtiquetaPrecio, type EtiquetaPrecioProps } from './EtiquetaPrecio.tsx';
 import { InsigniaCompatibilidad, type InsigniaCompatibilidadProps } from './InsigniaCompatibilidad.tsx';
 import { InsigniaFidelidad, type NivelFidelidad } from './InsigniaFidelidad.tsx';
-import { IconoAlerta, IconoFoto } from './iconos.tsx';
+import { IconoAlerta } from './iconos.tsx';
+import { PlanoPieza } from './PlanoPieza.tsx';
 import { cx, type EstadoDemo } from './util.ts';
 
 export interface FichaPiezaProps {
   nombre: string;
   marca: string;
   href?: string;
-  /** Imagen propia o cedida (docs/05): nunca fotos de terceros. Sin ella, marcador a plantilla. */
+  /** Render propio (docs/05): nunca fotos de terceros. Sin él, plano T0 con las cotas de `medidas`. */
   miniatura?: { src: string; alt: string };
+  /** Medidas reales en mm para el plano T0; `null` si se desconocen (la lámina lo dice). */
+  medidas?: { largoMm: number | null; diametroMm: number | null };
   /** Nivel de la imagen mostrada; `null` si no se ha verificado. */
   nivel: NivelFidelidad | null;
   /** Mejor precio. `null`: ninguna tienda lo publica. */
@@ -33,6 +36,7 @@ export function FichaPieza({
   marca,
   href,
   miniatura,
+  medidas,
   nivel,
   precio,
   tiendas,
@@ -69,10 +73,7 @@ export function FichaPieza({
         {miniatura ? (
           <img src={miniatura.src} alt={miniatura.alt} width="320" height="200" loading="lazy" decoding="async" />
         ) : (
-          <span className="t6-ficha__vacio">
-            <IconoFoto />
-            Sin imagen
-          </span>
+          <PlanoPieza nombre={nombre} largoMm={medidas?.largoMm ?? null} diametroMm={medidas?.diametroMm ?? null} />
         )}
         <InsigniaFidelidad nivel={nivel} compacta className="t6-ficha__nivel" />
       </div>

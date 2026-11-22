@@ -31,6 +31,7 @@ export const COLOR_TOKENS = {
   niebla: { hex: '#AFBCC3', group: 'texto', use: 'Texto secundario' },
   'tinta-papel': { hex: '#1B2226', group: 'texto', use: 'Trazo y texto sobre papel' },
   cota: { hex: '#9CC3D0', group: 'acento', use: 'Líneas y textos de cota, registro y etiquetas técnicas' },
+  kraft: { hex: '#C9AE84', group: 'acento', use: 'Portaetiquetas de kraft: etiquetas de precio' },
   laton: { hex: '#C29A5B', group: 'acento', use: 'Acento principal: acción y precio' },
   'laton-claro': { hex: '#DDBB82', group: 'acento', use: 'Hover y realce del acento' },
   'sobre-laton': { hex: '#15110B', group: 'texto', use: 'Texto sobre latón' },

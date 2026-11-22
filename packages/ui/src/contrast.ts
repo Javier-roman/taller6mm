@@ -60,6 +60,7 @@ export const COLOR_PAIRS: readonly ColorPair[] = [
   { fg: 'sobre-laton', bg: 'laton', kind: 'texto', use: 'Botón latón' },
   { fg: 'sobre-laton', bg: 'laton-claro', kind: 'texto', use: 'Botón latón en hover' },
   { fg: 'tinta-papel', bg: 'papel', kind: 'texto', use: 'Rótulos y cotas sobre papel' },
+  { fg: 'tinta-papel', bg: 'kraft', kind: 'texto', use: 'Etiqueta de precio sobre kraft' },
   { fg: 'negro-pavonado', bg: 'laton', kind: 'texto', use: 'Texto seleccionado' },
   { fg: 'negro-pavonado', bg: 'laton-claro', kind: 'texto', use: 'Botón latón en hover' },
   { fg: 'negro-pavonado', bg: 'estado-error', kind: 'texto', use: 'Botón peligro en hover' },
