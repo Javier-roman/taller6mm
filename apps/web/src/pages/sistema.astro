@@ -59,7 +59,6 @@ const accionEnCurso = {
 const nombreDuracion = { micro: 'Micro', componente: 'Componentes', panel: 'Paneles', escena: 'Cámara y escena' } as const;
 const nombreCurva = { mecanica: 'Mecánica', pesada: 'Pesada (raíles y cajones)' } as const;
 // Los textos salen de los datos para que nunca contradigan la tabla de la propia página.
-const corregidos = colores.filter(([, spec]) => 'previous' in spec).length;
 const paresSinAA = pares.filter((p) => !p.passes).length;
 // Datos de ejemplo de la Barra de dato. Fechas fijas: la página está prerenderizada y un «hace 3 h»
 // calculado al compilar mentiría al día siguiente. En la web real, `ahora` es la hora de la petición.
@@ -145,8 +144,9 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">01</Rotulo>
         <h2 id="t-color" class="font-grabado text-3xl text-hueso">Color</h2>
         <p class="max-w-lectura text-niebla">
-          Nombres de acabado. El color nunca va solo: cada estado lleva también icono y texto. {corregidos} de los
-          valores iniciales no llegaban a AA y se han corregido con la misma tinta y algo más de luz.
+          Plano de cotas: tinta y lámina azul pizarra, trazo marcado, cota celeste, latón para la acción y señal naranja
+          solo para lo activo. Los nombres de acabado se conservan por compatibilidad (ADR-0010). El color nunca va solo:
+          cada estado lleva también icono y texto.
         </p>
       </div>
 

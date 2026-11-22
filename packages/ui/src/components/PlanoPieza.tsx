@@ -17,7 +17,7 @@ export interface PlanoPiezaProps {
 
 const ANCHO = 400;
 const ALTO = 300;
-const AREA = { ancho: 240, alto: 110 } as const;
+const AREA = { ancho: 220, alto: 110 } as const;
 
 /** 229 → «229,0»: un decimal, como las fichas de fabricante. */
 const cota = (valor: number) =>
@@ -50,7 +50,8 @@ export function PlanoPieza({ nombre, largoMm, diametroMm, className }: PlanoPiez
   const escala = conDiametro ? Math.min(AREA.ancho / largoMm, AREA.alto / diametroMm) : AREA.ancho / largoMm;
   const w = largoMm * escala;
   const h = conDiametro ? diametroMm * escala : 0;
-  const x0 = (ANCHO - w) / 2;
+  // Descentrado a la izquierda: a la derecha caben la cota del diámetro y su cifra dentro de la lámina.
+  const x0 = (ANCHO - w - 70) / 2 + 10;
   const yc = 130;
   const y0 = yc - h / 2;
   const yBajo = yc + Math.max(h / 2, 4);

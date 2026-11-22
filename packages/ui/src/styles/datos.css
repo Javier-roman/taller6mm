@@ -348,6 +348,11 @@
     border-block-end: var(--trazo-fino) solid var(--acero);
   }
 
+  /* Plano T0 sobre papel: trazo de tinta y cifras de cota en la fuente de datos. */
+  .t6-plano {
+    color: var(--tinta-papel);
+  }
+
   .t6-ficha__imagen img,
   .t6-ficha__imagen .t6-plano {
     inline-size: 100%;
@@ -355,15 +360,10 @@
     object-fit: contain;
   }
 
-  /* Plano T0 sobre papel: trazo de tinta y cifras de cota en la fuente de datos. */
-  .t6-plano {
-    color: var(--tinta-papel);
-  }
-
   .t6-plano__texto {
     fill: currentColor;
     font-family: var(--fuente-datos);
-    font-size: var(--texto-s);
+    font-size: var(--texto-l);
   }
 
   .t6-ficha__vacio {
