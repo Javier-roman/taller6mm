@@ -12,6 +12,7 @@
     "e2e": "playwright test",
     "size": "size-limit",
     "lh": "node scripts/lighthouse.mjs",
+    "zonas:css": "node scripts/armeria/zonas-poster.mjs",
     "vistas:manifiesto": "node scripts/armeria/vistas.mjs manifiesto",
     "vistas:local": "node scripts/armeria/vistas.mjs local",
     "vistas:r2": "node scripts/armeria/vistas.mjs r2"

@@ -1,0 +1,56 @@
+/* GENERADO por scripts/armeria/zonas-poster.mjs: no editar a mano (lo comprueba un test). */
+.armeria-poster__zona[data-zona="replicas"] {
+  left: 6.610%;
+  top: 27.378%;
+  width: 27.896%;
+  height: 27.076%;
+}
+
+.armeria-poster__zona[data-zona="accesorios"] {
+  left: 7.288%;
+  top: 54.454%;
+  width: 27.411%;
+  height: 21.203%;
+}
+
+.armeria-poster__zona[data-zona="comunidad"] {
+  left: 36.175%;
+  top: 27.378%;
+  width: 27.650%;
+  height: 27.076%;
+}
+
+.armeria-poster__zona[data-zona="banco"] {
+  left: 30.944%;
+  top: 60.920%;
+  width: 38.112%;
+  height: 39.629%;
+}
+
+.armeria-poster__zona[data-zona="mercado"] {
+  left: 65.232%;
+  top: 27.378%;
+  width: 14.067%;
+  height: 27.076%;
+}
+
+.armeria-poster__zona[data-zona="tiendas"] {
+  left: 79.364%;
+  top: 27.378%;
+  width: 14.291%;
+  height: 27.076%;
+}
+
+.armeria-poster__zona[data-zona="guias"] {
+  left: 65.043%;
+  top: 54.454%;
+  width: 13.798%;
+  height: 21.203%;
+}
+
+.armeria-poster__zona[data-zona="taquilla"] {
+  left: 79.000%;
+  top: 54.454%;
+  width: 13.974%;
+  height: 21.203%;
+}

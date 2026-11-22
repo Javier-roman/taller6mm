@@ -5,6 +5,14 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 
 ## [Sin publicar]
 
+### Fase 1 · S1.1 de La Armería: esqueleto y póster (2026-11-22)
+- `/` es ahora La Armería, prerenderizada: póster WebP como `<img>` en el HTML inicial (con `fetchpriority`, tamaño y
+  texto alternativo), ocho zonas clicables encima, navegación HTML con roving tabindex (← → ↑ ↓ Inicio Fin), hoja de
+  zona con Esc, «Más luz» siempre visible (se recuerda en `localStorage`, con alternativa si falta) y marcas de
+  datos de demostración y siluetas provisionales. Isla React `client:idle`. Solo escritorio: el móvil queda aparcado.
+- Lógica pura con tests (encuadre, CSS de zonas generado, preferencias, manifiesto) y e2e a 1440 px con axe.
+- «Más luz» sobre el póster usa un filtro de exposición provisional hasta el póster horneado del nivel B.
+
 ### Fase 1 · S1 de La Armería: vistas horneadas en R2 (2026-11-22)
 - Binding R2 `VISTAS` de solo lectura (`taller6mm-assets-preview` en preview) y ruta
   `/assets/armeria/<hash>/<archivo>.webp` en el Worker, con `Cache-Control` inmutable y ETag (`src/lib/vistas.ts`).
