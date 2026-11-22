@@ -54,3 +54,115 @@
   width: 13.974%;
   height: 21.203%;
 }
+
+.armeria-poster__socket[data-socket="armero-01"] {
+  left: 8.064%;
+  top: 33.385%;
+  width: 2.426%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-02"] {
+  left: 10.237%;
+  top: 33.385%;
+  width: 2.401%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-03"] {
+  left: 12.411%;
+  top: 33.385%;
+  width: 2.375%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-04"] {
+  left: 14.584%;
+  top: 33.385%;
+  width: 2.349%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-05"] {
+  left: 16.758%;
+  top: 33.385%;
+  width: 2.324%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-06"] {
+  left: 18.931%;
+  top: 33.385%;
+  width: 2.298%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-07"] {
+  left: 21.105%;
+  top: 33.385%;
+  width: 2.273%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-08"] {
+  left: 23.278%;
+  top: 33.385%;
+  width: 2.247%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-09"] {
+  left: 25.452%;
+  top: 33.385%;
+  width: 2.222%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-10"] {
+  left: 27.626%;
+  top: 33.385%;
+  width: 2.196%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-11"] {
+  left: 29.799%;
+  top: 33.385%;
+  width: 2.171%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="armero-12"] {
+  left: 31.973%;
+  top: 33.385%;
+  width: 2.145%;
+  height: 20.300%;
+}
+
+.armeria-poster__socket[data-socket="vitrina-1"] {
+  left: 37.671%;
+  top: 45.439%;
+  width: 8.504%;
+  height: 4.042%;
+}
+
+.armeria-poster__socket[data-socket="vitrina-2"] {
+  left: 45.750%;
+  top: 44.333%;
+  width: 8.501%;
+  height: 4.047%;
+}
+
+.armeria-poster__socket[data-socket="vitrina-3"] {
+  left: 53.829%;
+  top: 43.226%;
+  width: 8.515%;
+  height: 4.052%;
+}
+
+.armeria-poster__socket[data-socket="banco-1"] {
+  left: 38.974%;
+  top: 67.603%;
+  width: 15.751%;
+  height: 3.860%;
+}

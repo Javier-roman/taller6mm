@@ -79,10 +79,15 @@ export function proyectar(p: V3, encuadre: Encuadre, aspecto: number): [number, 
   return [(nx + 1) / 2, (1 - ny) / 2];
 }
 
-/** Rectángulo en pantalla (0–1) de la cara frontal de la caja de una zona. */
-export function rectZona(zona: Zona, encuadre: Encuadre, aspecto: number): Rect {
-  const [cx, cy, cz] = zona.caja.centro;
-  const [w, h, f] = zona.caja.tamano;
+/** Rectángulo en pantalla (0–1) de la cara frontal de una caja (centro y tamaño en metros). */
+export function rectCaja(
+  centro: V3,
+  tamano: V3,
+  encuadre: Encuadre = ENCUADRE_POSTER,
+  aspecto: number = ASPECTO_POSTER,
+): Rect {
+  const [cx, cy, cz] = centro;
+  const [w, h, f] = tamano;
   const esquinas: V3[] = [-1, 1].flatMap((sx) =>
     [-1, 1].map((sy) => [cx + (sx * w) / 2, cy + (sy * h) / 2, cz + f / 2] as V3),
   );
@@ -92,6 +97,11 @@ export function rectZona(zona: Zona, encuadre: Encuadre, aspecto: number): Rect 
   const x = Math.min(...xs);
   const y = Math.min(...ys);
   return { x, y, ancho: Math.max(...xs) - x, alto: Math.max(...ys) - y };
+}
+
+/** Rectángulo en pantalla (0–1) de la cara frontal de la caja de una zona. */
+export function rectZona(zona: Zona, encuadre: Encuadre, aspecto: number): Rect {
+  return rectCaja(zona.caja.centro, zona.caja.tamano, encuadre, aspecto);
 }
 
 /** Tubo de una estantería (centro en `x`) proyectado sobre el póster: [x0, y0, x1, y1] en uv, para su resplandor. */

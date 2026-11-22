@@ -11,7 +11,12 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
   zona con Esc, «Más luz» siempre visible (se recuerda en `localStorage`, con alternativa si falta) y marcas de
   datos de demostración y siluetas provisionales. Isla React `client:idle`. Solo escritorio: el móvil queda aparcado.
 - Lógica pura con tests (encuadre, CSS de zonas generado, preferencias, manifiesto) y e2e a 1440 px con axe.
-- «Más luz» sobre el póster usa un filtro de exposición provisional hasta el póster horneado del nivel B.
+- **Sin siluetas de réplicas** (Javi, 22-11-2026): la sala 3D (`escena/Sala.tsx`) se reescribe sin ellas, con ranuras,
+  ganchos de sujeción, peanas con soportes y tapete vacíos, y los huecos pasan a ser **sockets** (`sockets.ts`, `replicaId: null`)
+  con su rectángulo sobre el póster (CSS generado) y un marcador `socket.<id>` en la escena. Póster y pases re-horneados.
+- Horno de vistas: sala 3D → glTF → Blender/Cycles (`scripts/armeria/hornear-cycles.mjs`), pases de datos con three.js
+  (`hornear-datos.mjs`) y póster compuesto con el compositor del nivel B (`poster.mjs`, penumbra y «Más luz»).
+- Dependencias de cliente aprobadas por Javi: `three` y `@react-three/fiber` (solo en el nivel A, con `import()`); `vite` solo para el horno.
 
 ### Fase 1 · S1 de La Armería: vistas horneadas en R2 (2026-11-22)
 - Binding R2 `VISTAS` de solo lectura (`taller6mm-assets-preview` en preview) y ruta

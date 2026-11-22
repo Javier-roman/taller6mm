@@ -4,11 +4,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { hashConjunto } from '../../lib/vistas.ts';
-import { ASPECTO_POSTER, ENCUADRE_POSTER, encuadreSala, proyectar, rectZona } from './camara.ts';
+import { ASPECTO_POSTER, ENCUADRE_POSTER, encuadreSala, proyectar, rectCaja, rectZona } from './camara.ts';
 import { type Almacen, CLAVES, ESTADO_INICIAL, esLuz, guardar, leer, luzInicial, zonaActiva } from './estado.ts';
 import { VARIANTES_LUZ } from './luz.ts';
+import { ARMERO, alturaPeana, SOCKETS, socketsDe, VITRINA } from './sockets.ts';
 import manifiesto from './vistas.json';
-import { urlVista } from './vistas.ts';
+import { posterDe, urlVista } from './vistas.ts';
 import { ESTANTERIAS, MUEBLE, ORDEN_ESTANTERIAS, ZONAS, zonaPorId, zonasDe } from './zonas.ts';
 
 const aqui = path.dirname(fileURLToPath(import.meta.url));
@@ -65,6 +66,54 @@ describe('encuadre del póster', () => {
       expect(css).toContain(
         `[data-zona="${zona.id}"] {\n  left: ${(r.x * 100).toFixed(3)}%;\n  top: ${(r.y * 100).toFixed(3)}%;\n  width: ${(r.ancho * 100).toFixed(3)}%;\n  height: ${(r.alto * 100).toFixed(3)}%;\n}`,
       );
+    }
+  });
+});
+
+describe('sockets de réplica (sin siluetas de relleno)', () => {
+  it('hay uno por ranura del armero, por peana de la vitrina y uno en el banco, todos vacíos', () => {
+    expect(socketsDe('replicas')).toHaveLength(ARMERO.huecos);
+    expect(socketsDe('comunidad')).toHaveLength(VITRINA.xs.length);
+    expect(socketsDe('banco')).toHaveLength(1);
+    expect(SOCKETS).toHaveLength(ARMERO.huecos + VITRINA.xs.length + 1);
+    for (const s of SOCKETS) expect(s.replicaId).toBeNull();
+    expect(new Set(SOCKETS.map((s) => s.id)).size).toBe(SOCKETS.length);
+  });
+
+  it('cada socket cae dentro de la caja de su zona, así que su imagen nunca sale de ella', () => {
+    for (const s of SOCKETS) {
+      const zona = zonaPorId(s.zona);
+      if (!zona) throw new Error(`falta la zona ${s.zona}`);
+      const r = rectCaja(s.caja.centro, s.caja.tamano);
+      const z = rectZona(zona, ENCUADRE_POSTER, ASPECTO_POSTER);
+      const margen = 0.01;
+      expect(r.x).toBeGreaterThanOrEqual(z.x - margen);
+      expect(r.x + r.ancho).toBeLessThanOrEqual(z.x + z.ancho + margen);
+      expect(r.y).toBeGreaterThanOrEqual(z.y - margen);
+      expect(r.y + r.alto).toBeLessThanOrEqual(z.y + z.alto + margen);
+    }
+  });
+
+  it('las ranuras del armero no se solapan entre sí', () => {
+    const rects = socketsDe('replicas').map((s) => rectCaja(s.caja.centro, s.caja.tamano));
+    rects.forEach((r, i) => {
+      const siguiente = rects[i + 1];
+      if (siguiente) expect(r.x + r.ancho).toBeLessThanOrEqual(siguiente.x + 1e-9);
+    });
+  });
+
+  it('las peanas suben de una en una y el socket queda justo encima de la suya', () => {
+    expect(alturaPeana(1)).toBeGreaterThan(alturaPeana(0));
+    socketsDe('comunidad').forEach((s, i) => {
+      expect(s.caja.centro[1] - s.caja.tamano[1] / 2).toBeCloseTo(alturaPeana(i), 5);
+    });
+  });
+
+  it('zonas-poster.css lleva el rectángulo de cada hueco', () => {
+    const css = readFileSync(path.join(aqui, 'zonas-poster.css'), 'utf8');
+    for (const s of SOCKETS) {
+      const r = rectCaja(s.caja.centro, s.caja.tamano);
+      expect(css).toContain(`[data-socket="${s.id}"] {\n  left: ${(r.x * 100).toFixed(3)}%;`);
     }
   });
 });
@@ -131,6 +180,23 @@ describe('zona activa', () => {
     expect(zonaActiva({ ...ESTADO_INICIAL, enfocada: 'tiendas' })).toBe('tiendas');
     expect(zonaActiva({ ...ESTADO_INICIAL, enfocada: 'tiendas', apuntada: 'guias' })).toBe('guias');
     expect(zonaActiva({ ...ESTADO_INICIAL, enfocada: 'tiendas', apuntada: 'guias', abierta: 'banco' })).toBe('banco');
+  });
+});
+
+describe('póster por luz', () => {
+  it('«Más luz» tiene su propio póster horneado, no un filtro, y cada URL existe en el manifiesto', () => {
+    const a = posterDe('penumbra');
+    const b = posterDe('mas-luz');
+    expect(a.src).not.toBe(b.src);
+    for (const url of [
+      a.src,
+      b.src,
+      ...a.srcSet.split(', ').map((x) => x.split(' ')[0]),
+      ...b.srcSet.split(', ').map((x) => x.split(' ')[0]),
+    ]) {
+      const nombre = url?.split('/').pop() ?? '';
+      expect(Object.keys(manifiesto.archivos)).toContain(nombre);
+    }
   });
 });
 

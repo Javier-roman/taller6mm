@@ -4,10 +4,12 @@ import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import Armeria from './Armeria.tsx';
 import { TEXTO_ALTERNATIVO } from './Poster.tsx';
-import { POSTER } from './vistas.ts';
+import { SOCKETS } from './sockets.ts';
+import { posterDe } from './vistas.ts';
 import { ZONAS } from './zonas.ts';
 
 const html = renderToString(<Armeria />);
+const POSTER = posterDe('penumbra');
 
 describe('La Armería en el HTML inicial', () => {
   it('lleva el póster como <img> con alt, tamaño y prioridad alta (LCP sin saltos)', () => {
@@ -30,6 +32,15 @@ describe('La Armería en el HTML inicial', () => {
     const zonas = html.match(/<a href="[^"]+" class="armeria-poster__zona"[^>]*>/g) ?? [];
     expect(zonas).toHaveLength(ZONAS.length);
     for (const zona of zonas) expect(zona).toContain('tabindex="-1"');
+  });
+
+  it('los huecos de réplica están ahí pero vacíos: ni siluetas ni imágenes de relleno', () => {
+    const huecos = html.match(/class="armeria-poster__socket"[^>]*>/g) ?? [];
+    expect(huecos).toHaveLength(SOCKETS.length);
+    for (const hueco of huecos) expect(hueco).toContain('data-vacio="true"');
+    expect(html).toContain('class="armeria-poster__sockets" aria-hidden="true"');
+    // Una sola imagen en todo el HTML: el póster.
+    expect(html.match(/<img /g)).toHaveLength(1);
   });
 
   it('«Más luz» siempre visible, sin pulsar por defecto, y la penumbra es el estado inicial', () => {

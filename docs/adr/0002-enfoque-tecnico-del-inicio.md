@@ -32,6 +32,8 @@ Los pases horneados y el póster se sirven desde **R2 con `Cache-Control` inmuta
 web** (`VISTAS`, solo lectura, sin bucket público), en rutas con el hash del contenido (`/assets/armeria/<hash>/…`).
 En local se sirven desde `public/assets/armeria/` (`pnpm --filter @taller6mm/web vistas:local`). Alcance: **solo escritorio**
 por ahora; el móvil se aparca y B pasa a ser el respaldo de A en escritorio.
+También (22-11-2026): **sin siluetas de réplicas** en la escena hasta que haya réplicas reales; los huecos son sockets
+(`sockets.ts`) listos para recibir sus imágenes.
 
 ## Alternativas consideradas
 | Opción | Pros | Contras | Por qué no |

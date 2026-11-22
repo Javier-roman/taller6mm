@@ -55,14 +55,6 @@
   background: var(--carbon);
 }
 
-/*
- * «Más luz» sobre el póster, mientras no haya póster horneado con más luz: sube la exposición de la imagen
- * (misma temperatura de luz). Valor provisional; lo sustituye el póster de «Más luz» del nivel B.
- */
-.armeria[data-luz="mas-luz"] .armeria-poster__imagen {
-  filter: brightness(1.3) contrast(0.92);
-}
-
 .armeria-poster__zonas {
   position: absolute;
   inset: 0;
@@ -72,6 +64,17 @@
 .armeria-poster__zona {
   position: absolute;
   border-radius: var(--radio-m);
+}
+
+/* Huecos de réplica: sin pintar y sin puntero hasta que lleven una imagen real. */
+.armeria-poster__sockets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.armeria-poster__socket {
+  position: absolute;
 }
 
 .armeria-poster__zona-nombre {

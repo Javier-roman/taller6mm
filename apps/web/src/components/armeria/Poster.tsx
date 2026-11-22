@@ -1,7 +1,10 @@
 // Póster de La Armería: la composición en reposo de la sala (Cycles) como <img> en el HTML inicial, con las
 // zonas clicables encima. Es el primer pintado (LCP), la vista ligera y la caída de los niveles B y A.
+
+import type { Luz } from './estado.ts';
+import { SOCKETS } from './sockets.ts';
 import type { Acciones } from './useArmeria.ts';
-import { POSTER } from './vistas.ts';
+import { posterDe } from './vistas.ts';
 import { ZONAS } from './zonas.ts';
 
 export const TEXTO_ALTERNATIVO =
@@ -9,21 +12,24 @@ export const TEXTO_ALTERNATIVO =
 
 export interface PosterProps {
   acciones: Pick<Acciones, 'apuntar' | 'abrir'>;
+  /** Penumbra (por defecto) o «Más luz»: cada una tiene su póster horneado. */
+  luz?: Luz;
   /** Una escena (B o A) ya pinta por encima: el póster se oculta. */
   oculto?: boolean;
 }
 
-export function Poster({ acciones, oculto = false }: PosterProps) {
+export function Poster({ acciones, luz = 'penumbra', oculto = false }: PosterProps) {
+  const poster = posterDe(luz);
   return (
     <div className="armeria-poster" data-oculto={oculto}>
       <div className="armeria-poster__lienzo">
         <img
           className="armeria-poster__imagen"
-          src={POSTER.src}
-          srcSet={POSTER.srcSet}
+          src={poster.src}
+          srcSet={poster.srcSet}
           sizes="100vw"
-          width={POSTER.ancho}
-          height={POSTER.alto}
+          width={poster.ancho}
+          height={poster.alto}
           alt={TEXTO_ALTERNATIVO}
           fetchPriority="high"
           decoding="async"
@@ -47,6 +53,17 @@ export function Poster({ acciones, oculto = false }: PosterProps) {
             >
               <span className="armeria-poster__zona-nombre">{zona.nombre}</span>
             </a>
+          ))}
+        </div>
+        {/* Huecos de las réplicas: vacíos hasta que haya imágenes reales (sockets.ts). Sin siluetas de relleno. */}
+        <div className="armeria-poster__sockets" aria-hidden="true">
+          {SOCKETS.map((socket) => (
+            <span
+              key={socket.id}
+              className="armeria-poster__socket"
+              data-socket={socket.id}
+              data-vacio={socket.replicaId === null}
+            />
           ))}
         </div>
       </div>

@@ -9,7 +9,7 @@ export default function Armeria() {
   const { estado, acciones } = useArmeria();
   return (
     <InterfazArmeria estado={estado} acciones={acciones}>
-      <Poster acciones={acciones} />
+      <Poster acciones={acciones} luz={estado.luz} />
     </InterfazArmeria>
   );
 }

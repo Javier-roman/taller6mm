@@ -59,3 +59,28 @@ Cada rebanada se entrega en PR pequeño y pasa por:
 
 - Pulido del móvil: encuadre del Banco y tubo del armero en el nivel B móvil. Medición en móvil real.
 - Telemetría del selector de nivel. Si se hace, será anónima y conforme al RGPD.
+
+## 6. Decisiones de Javi del 22-11-2026 (actualizan este plan)
+
+- **Se reescribe limpio** en `apps/web` a partir del prototipo (`spike/armeria-f1` sigue sin fusionarse) y se **aprueban las
+  dependencias de cliente** de la sección 3 (three.js y R3F; el nivel B no importa three.js).
+- **Los pases horneados y el póster viven en R2**, servidos por un binding de solo lectura del Worker de la web (`VISTAS`) en
+  `/assets/armeria/<hash>/…` con `Cache-Control` inmutable, sin bucket público. En local, desde `public/assets/armeria/`
+  (`pnpm --filter @taller6mm/web vistas:local`). Los binarios están en `assets-src/vistas/armeria/` (fuera de git).
+- **Solo escritorio por ahora.** El móvil se aparca (sin recortes por módulo, sin carrusel, sin medir en móvil). Niveles:
+  póster → B → A, con caída automática; B es el respaldo de A en escritorio.
+- **Sin siluetas de réplicas en la escena.** Javi: «quedan terriblemente mal». Hasta que haya réplicas reales (otro trabajo en cola)
+  la sala se hornea y se pinta con baldas, ranuras, ganchos y peanas **vacías pero resueltas**. Los huecos son **sockets**
+  (`src/components/armeria/sockets.ts`): 12 ranuras del armero, 3 peanas de la vitrina y el tapete del banco, cada uno con su
+  caja en metros y `replicaId: null`. De ahí salen el rectángulo del hueco sobre el póster y el nivel B (CSS generado) y un
+  marcador `socket.<id>` (convención de docs/05) en la escena 3D. Colocar una réplica real = poner su `replicaId` y pintar su imagen dentro de ese
+  rectángulo, sin volver a hornear.
+- **El póster sale de la sala sin siluetas**, compuesto con el mismo compositor que el nivel B (`nivel-b/compositor.ts`), y
+  «Más luz» tiene su propio póster horneado (`poster-mas-luz-*.webp`), no un filtro.
+
+### Orden real de los sub-pasos (cambia respecto a la sección 2 por lo anterior)
+1. **S1.0** (PR aparte, #65): binding R2, ruta del Worker, validador de Previews y `/estado`.
+2. **S1.1** esqueleto y póster: incluye la sala 3D sin siluetas, el horno (three.js → glTF → Blender/Cycles), el compositor del
+   póster y los sockets, porque el póster depende de ellos. Isla `client:idle` con póster y navegación HTML.
+3. **S1.2** nivel B (2,5D) sobre ese compositor; **S1.3** nivel A (3D) cargado con `import()`; **S1.4** selector con caída
+   automática, «Más luz» y movimiento reducido; **S1.5** CSP solo en `/` para WASM y KTX2.
