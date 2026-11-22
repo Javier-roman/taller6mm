@@ -5,6 +5,7 @@
 // Los estáticos no pasan por aquí: llevan las mismas cabeceras por `public/_headers`.
 import { handle } from '@astrojs/cloudflare/handler';
 import { applySecurityHeaders } from './lib/security-headers';
+import { servirVista } from './lib/vistas';
 
 const internalError = () =>
   new Response('Error interno. Inténtalo de nuevo en unos minutos.', {
@@ -16,7 +17,8 @@ export default {
   async fetch(request, env, ctx) {
     let response: Response;
     try {
-      response = await handle(request, env, ctx);
+      // Pases horneados de La Armería: desde R2 con caché inmutable; si no están, sigue la cadena normal.
+      response = (await servirVista(request, env.VISTAS)) ?? (await handle(request, env, ctx));
     } catch (error) {
       // Sin detalles en la respuesta ni datos personales en el log (docs/08 §6.3).
       console.error('web: excepción no controlada', error instanceof Error ? error.name : typeof error);

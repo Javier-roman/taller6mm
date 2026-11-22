@@ -8,7 +8,9 @@
   // - production: configurado pero cerrado (sin workers.dev ni URLs de versión) hasta el lanzamiento.
   // El entorno se elige AL COMPILAR: `CLOUDFLARE_ENV=preview pnpm --filter @taller6mm/web build`
   // genera dist/server/wrangler.json ya resuelto y `wrangler deploy`/`wrangler preview` lo usan.
-  // Bindings mínimos: solo las bases D1. R2 y la cola se añaden con el código que los use (F3–F5).
+  // Bindings mínimos: las bases D1 y VISTAS (R2, solo lectura: los pases de luz horneados de La Armería,
+  // que el Worker sirve en /assets/armeria/<hash>/* con Cache-Control inmutable, sin bucket público; ADR-0002).
+  // La cola se añade con el código que la use (F3–F5).
   // Ids de preview: los de `wrangler d1 create` (03-11-2026). Los PENDIENTE_* de producción, en el lanzamiento.
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "taller6mm-web",
@@ -42,6 +44,8 @@
       "migrations_dir": "../../packages/db/migrations/busqueda"
     }
   ],
+  // Local: miniflare lo simula vacío; sin objeto, el Worker deja pasar al estático de public/assets/armeria/.
+  "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets-local" }],
   "env": {
     "preview": {
       "name": "taller6mm-web-preview",
@@ -70,6 +74,7 @@
           "migrations_dir": "../../packages/db/migrations/busqueda"
         }
       ],
+      "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets-preview" }],
       // Cada Preview de PR comparte estos recursos de preview (con datos de demo, nunca de producción).
       // Las Previews no heredan nada del Worker: sin este bloque se crearían sin bases ni buckets.
       "previews": {
@@ -94,7 +99,8 @@
             "database_id": "34608602-ded8-47a6-bcb5-0fee56b21518",
             "migrations_dir": "../../packages/db/migrations/busqueda"
           }
-        ]
+        ],
+        "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets-preview" }]
       }
     },
     "production": {
@@ -124,7 +130,8 @@
           "database_id": "PENDIENTE_ID_D1_BUSQUEDA",
           "migrations_dir": "../../packages/db/migrations/busqueda"
         }
-      ]
+      ],
+      "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets" }]
     }
   }
 }

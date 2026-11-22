@@ -1,0 +1,13 @@
+{
+  "hash": "4451ca4b0874",
+  "archivos": {
+    "poster-1920.webp": {
+      "sha256": "994aaecfe77e0ae8341fb22f9df46265be41e4fbfdd8fc8cea7b298e69d90d9e",
+      "bytes": 65052
+    },
+    "poster-960.webp": {
+      "sha256": "3c4bbf071349ab33b63faf61924c010ee8728811b457e977c05bb2beda31aad5",
+      "bytes": 29092
+    }
+  }
+}
