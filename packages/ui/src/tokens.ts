@@ -14,33 +14,37 @@ interface ColorSpec {
   readonly previous?: `#${string}`;
 }
 
-/** Colores con nombre de acabado (docs/02 §4.1). */
+/**
+ * Colores (docs/02 §4.1), dirección de arte A «Plano de cotas» (ADR-0010, 22-11-2026). Los NOMBRES
+ * se conservan de la dirección anterior (acabados de armero) para no romper clases ni código que ya
+ * los usa; el papel que cumple cada uno ahora está en `use`. Ajustes de Javi sobre el prototipo:
+ * más diferencia entre tinta y lámina, bordes más marcados y más contraste general, sin saturar.
+ */
 export const COLOR_TOKENS = {
-  'negro-pavonado': { hex: '#0B0C0E', group: 'superficie', use: 'Fondo base' },
-  carbon: { hex: '#121417', group: 'superficie', use: 'Superficies' },
-  grafito: { hex: '#1C1F23', group: 'superficie', use: 'Paneles elevados' },
-  acero: { hex: '#2A2F35', group: 'superficie', use: 'Bordes y divisores' },
-  hueso: { hex: '#E8E4DC', group: 'texto', use: 'Texto principal' },
-  niebla: { hex: '#9AA3AD', group: 'texto', use: 'Texto secundario' },
-  laton: { hex: '#B8925A', group: 'acento', use: 'Acento principal (premium, clásico)' },
-  'laton-claro': { hex: '#D9B77E', group: 'acento', use: 'Hover y realce del acento' },
-  fde: { hex: '#A08A6A', group: 'acento', use: 'Acento secundario (Flat Dark Earth)' },
+  'negro-pavonado': { hex: '#080C0F', group: 'superficie', use: 'Tinta: fondo de la mesa de dibujo' },
+  carbon: { hex: '#15212A', group: 'superficie', use: 'Lámina: superficie de paneles' },
+  grafito: { hex: '#1F303B', group: 'superficie', use: 'Lámina alta: paneles elevados y hover' },
+  acero: { hex: '#3D525E', group: 'superficie', use: 'Trazo: bordes y divisores' },
+  'trazo-fuerte': { hex: '#7F96A0', group: 'superficie', use: 'Borde de control, cotas secundarias y regla' },
+  papel: { hex: '#D7D4CC', group: 'superficie', use: 'Papel: lámina impresa donde viven los renders y planos' },
+  hueso: { hex: '#EFEBE1', group: 'texto', use: 'Texto principal' },
+  niebla: { hex: '#AFBCC3', group: 'texto', use: 'Texto secundario' },
+  'tinta-papel': { hex: '#1B2226', group: 'texto', use: 'Trazo y texto sobre papel' },
+  cota: { hex: '#9CC3D0', group: 'acento', use: 'Líneas y textos de cota, registro y etiquetas técnicas' },
+  laton: { hex: '#C29A5B', group: 'acento', use: 'Acento principal: acción y precio' },
+  'laton-claro': { hex: '#DDBB82', group: 'acento', use: 'Hover y realce del acento' },
+  'sobre-laton': { hex: '#15110B', group: 'texto', use: 'Texto sobre latón' },
+  fde: { hex: '#B09A7A', group: 'acento', use: 'Acento secundario (Flat Dark Earth): marcas y referencias' },
   'verde-ranger': { hex: '#4B5A3F', group: 'acento', use: 'Acento terciario (fondos y chapas)' },
-  // #E4572E daba 4,49:1 sobre grafito (por debajo de AA para texto). Misma tinta, algo más de luz:
-  // 4,65:1 en la peor superficie, así que ya puede ser texto en las tres (decisión de Javi, 31-10-2026).
   'naranja-senal': {
-    hex: '#E75A31',
+    hex: '#F27346',
     group: 'acento',
-    use: 'Interacción activa, ranura seleccionada y anillo de foco',
-    previous: '#E4572E',
+    use: 'Señal: foco, ranura seleccionada y luz de tubo en lo activo',
   },
-  'estado-ok': { hex: '#3FA66B', group: 'estado', use: 'En stock / compatible' },
-  'estado-aviso': { hex: '#E0A526', group: 'estado', use: 'Pocas unidades / con adaptador' },
-  // #D2453F daba 4,35:1 sobre negro pavonado y 3,67:1 sobre grafito. Misma tinta y croma en OKLCH,
-  // solo más luz: 4,63:1 en la peor superficie.
-  'estado-error': { hex: '#E65850', group: 'estado', use: 'Agotado / incompatible', previous: '#D2453F' },
-  // #6B7480 daba 4,13:1 sobre negro pavonado y 3,49:1 sobre grafito. Mismo criterio: 4,61:1.
-  'estado-desconocido': { hex: '#7F8894', group: 'estado', use: 'Sin datos', previous: '#6B7480' },
+  'estado-ok': { hex: '#4DB27B', group: 'estado', use: 'En stock / compatible' },
+  'estado-aviso': { hex: '#E2A82B', group: 'estado', use: 'Pocas unidades / con adaptador' },
+  'estado-error': { hex: '#F0736B', group: 'estado', use: 'Agotado / incompatible' },
+  'estado-desconocido': { hex: '#8C96A1', group: 'estado', use: 'Sin datos' },
 } as const satisfies Record<string, ColorSpec>;
 
 export type ColorToken = keyof typeof COLOR_TOKENS;
@@ -52,14 +56,14 @@ export const colors = Object.fromEntries(Object.entries(COLOR_TOKENS).map(([name
 
 /** Familias (docs/02 §4.2), con alternativas del sistema mientras carga la fuente. */
 export const FONT_FAMILIES = {
-  /** Marca y nombres de zona en grande: capitales de inscripción. */
-  grabado: "'Cinzel', 'Trajan Pro', Georgia, 'Times New Roman', serif",
-  /** Etiquetas de zona, chips y rótulos: plantilla industrial. */
-  rotulo: "'Big Shoulders Stencil', 'Arial Narrow', 'Roboto Condensed', sans-serif-condensed, sans-serif",
-  /** Interfaz: variable con eje de anchura. */
-  interfaz: "'Archivo Variable', 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
-  /** Medidas, precios y códigos, con cifras tabulares. */
-  datos: "'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
+  /** Titulares y marca: la misma Plex condensada, en semibold. */
+  grabado: "'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+  /** Etiquetas de zona, chips y rótulos: Plex condensada en versalitas. */
+  rotulo: "'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+  /** Interfaz y lectura: condensada, para datos densos. */
+  interfaz: "'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+  /** Medidas, precios, códigos y cotas, con cifras tabulares. */
+  datos: "'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace",
 } as const;
 
 /** Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px) en rem, para respetar el tamaño elegido. */
@@ -82,7 +86,7 @@ export const FONT_STRETCH = { condensada: '75%', semicondensada: '87.5%', normal
 
 export const LINE_HEIGHTS = { cuerpo: '1.5', titular: '1.1', compacto: '1.25' } as const;
 
-export const LETTER_SPACING = { grabado: '0.08em', rotulo: '0.06em', versalitas: '0.04em' } as const;
+export const LETTER_SPACING = { grabado: '0.01em', rotulo: '0.1em', versalitas: '0.08em' } as const;
 
 /** Rejilla de 4 px: 4/8/12/16/24/32/48/64/96 (la clave es el múltiplo de 4 px). */
 export const SPACING = {
@@ -106,8 +110,8 @@ export const TOUCH_TARGET = '2.75rem';
  */
 export const WIDTHS = { lectura: '34rem', entradilla: '42rem', pagina: '80rem' } as const;
 
-/** Radios pequeños: industrial y preciso. Sin pastillas salvo avatares. */
-export const RADII = { s: '2px', m: '3px', l: '4px', avatar: '9999px' } as const;
+/** Plano de cotas: radio 0 en paneles (l) y marcas (s), 2 px en controles (m). Sin pastillas salvo avatares. */
+export const RADII = { s: '0px', m: '2px', l: '0px', avatar: '9999px' } as const;
 
 /** Grosor de trazos: bordes de 1 px y anillo de foco de 2 px. */
 export const STROKES = { fino: '1px', foco: '2px' } as const;
@@ -117,10 +121,12 @@ export const STROKES = { fino: '1px', foco: '2px' } as const;
  * que recibe la luz de los tubos del techo). Al 6 % no se percibía: 11 % en placa y 14 % en elevada.
  */
 export const SHADOWS = {
-  placa: 'inset 0 1px 0 0 rgb(232 228 220 / 0.11), 0 1px 2px 0 rgb(0 0 0 / 0.45), 0 16px 40px -16px rgb(0 0 0 / 0.7)',
-  elevada: 'inset 0 1px 0 0 rgb(232 228 220 / 0.14), 0 2px 4px 0 rgb(0 0 0 / 0.45), 0 28px 64px -20px rgb(0 0 0 / 0.8)',
-  boton: 'inset 0 1px 0 0 rgb(255 255 255 / 0.16), 0 1px 2px 0 rgb(0 0 0 / 0.5)',
-  hundida: 'inset 0 1px 2px 0 rgb(0 0 0 / 0.55)',
+  placa:
+    'inset 0 1px 0 0 rgb(156 195 208 / 0.1), inset 0 0 1.25rem 0 rgb(0 0 0 / 0.45), 0 1px 0 0 rgb(0 0 0 / 0.7), 0 1rem 2rem -1rem rgb(0 0 0 / 0.75)',
+  elevada:
+    'inset 0 1px 0 0 rgb(156 195 208 / 0.14), inset 0 0 1.25rem 0 rgb(0 0 0 / 0.4), 0 2px 0 0 rgb(0 0 0 / 0.7), 0 1.75rem 3rem -1.25rem rgb(0 0 0 / 0.85)',
+  boton: 'inset 0 -2px 0 0 rgb(0 0 0 / 0.28)',
+  hundida: 'inset 0 2px 0 0 rgb(0 0 0 / 0.3)',
 } as const;
 
 /** Resplandor del rótulo iluminado (tubo LED encendido). */
@@ -144,7 +150,7 @@ export const BREAKPOINTS = { tablet: '52.125rem', escritorio: '80rem', ancho: '9
  * como la de los tubos LED sobre una chapa. Va con el filo de 1 px de `SHADOWS.placa`.
  */
 export const SHEENS = {
-  placa: 'linear-gradient(180deg, rgb(232 228 220 / 0.055) 0%, rgb(232 228 220 / 0.018) 22%, rgb(232 228 220 / 0) 48%)',
+  placa: 'linear-gradient(180deg, rgb(156 195 208 / 0.05) 0%, rgb(156 195 208 / 0.015) 22%, rgb(156 195 208 / 0) 48%)',
 } as const;
 
 /**
@@ -168,3 +174,10 @@ export const NOISE_TEXTURE =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='r' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncG type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncB type='linear' slope='2.2' intercept='-0.6'/%3E%3CfeFuncA type='table' tableValues='1 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='" +
   NOISE_OPACITY +
   '\'/%3E%3C/svg%3E")';
+
+/**
+ * Retícula de la mesa de dibujo (ADR-0010): líneas de 1 px cada 16 px (menor) y cada 80 px (mayor),
+ * en la tinta de cota y muy tenues. Se pinta con `background-size` de 5 × espacio-4 y espacio-4.
+ */
+export const RETICULA =
+  'linear-gradient(rgb(156 195 208 / 0.1) 1px, transparent 1px), linear-gradient(90deg, rgb(156 195 208 / 0.1) 1px, transparent 1px), linear-gradient(rgb(156 195 208 / 0.05) 1px, transparent 1px), linear-gradient(90deg, rgb(156 195 208 / 0.05) 1px, transparent 1px)';

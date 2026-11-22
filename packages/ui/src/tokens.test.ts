@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 import { themeCss, tokensCss } from './css.ts';
 import {
-  AA,
   BRAND,
   COLOR_PAIRS,
   COLOR_TOKENS,
@@ -72,18 +71,12 @@ describe('contraste AA (WCAG 2.2: 1.4.3 y 1.4.11)', () => {
     },
   );
 
-  test('los dos colores corregidos pasan donde antes fallaban, sin cambiar de familia', () => {
-    for (const name of ['estado-error', 'estado-desconocido'] as const) {
-      const { hex, previous } = COLOR_TOKENS[name];
-      expect(contrastRatio(previous, colors.grafito)).toBeLessThan(AA.texto);
-      expect(contrastRatio(hex, colors.grafito)).toBeGreaterThanOrEqual(AA.texto);
-      expect(contrastRatio(hex, colors['negro-pavonado'])).toBeGreaterThanOrEqual(AA.texto);
-    }
-  });
-
   test('todo color de texto o de estado tiene sus pares declarados sobre las tres superficies', () => {
     const textColors = Object.entries(COLOR_TOKENS)
-      .filter(([, spec]) => spec.group === 'texto' || spec.group === 'estado')
+      .filter(
+        ([name, spec]) =>
+          (spec.group === 'texto' || spec.group === 'estado') && name !== 'tinta-papel' && name !== 'sobre-laton',
+      )
       .map(([name]) => name);
     for (const fg of textColors) {
       for (const bg of ['negro-pavonado', 'carbon', 'grafito']) {
@@ -123,14 +116,9 @@ describe('estilos escritos a mano: solo tokens (.claude/rules/ui.md)', () => {
     },
   );
 
-  test('las fuentes son las cuatro de docs/02 §4.2, autoalojadas', () => {
+  test('las fuentes son las de docs/02 §4.2, autoalojadas', () => {
     const css = styles('fuentes.css');
-    for (const pkg of [
-      '@fontsource-variable/archivo',
-      '@fontsource/cinzel',
-      '@fontsource/big-shoulders-stencil',
-      '@fontsource/jetbrains-mono',
-    ]) {
+    for (const pkg of ['@fontsource/ibm-plex-sans-condensed', '@fontsource/ibm-plex-mono']) {
       expect(css).toContain(pkg);
     }
     expect(css).not.toMatch(/fonts\.(googleapis|gstatic)\.com/);

@@ -4,10 +4,15 @@
   --color-carbon: var(--carbon);
   --color-grafito: var(--grafito);
   --color-acero: var(--acero);
+  --color-trazo-fuerte: var(--trazo-fuerte);
+  --color-papel: var(--papel);
   --color-hueso: var(--hueso);
   --color-niebla: var(--niebla);
+  --color-tinta-papel: var(--tinta-papel);
+  --color-cota: var(--cota);
   --color-laton: var(--laton);
   --color-laton-claro: var(--laton-claro);
+  --color-sobre-laton: var(--sobre-laton);
   --color-fde: var(--fde);
   --color-verde-ranger: var(--verde-ranger);
   --color-naranja-senal: var(--naranja-senal);
