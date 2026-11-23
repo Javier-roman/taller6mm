@@ -1,6 +1,6 @@
 # ADR-0010 — Dirección de arte «Plano de cotas»
 
-- **Estado**: Propuesta (pendiente del OK visual de Javi sobre el PR de la rebanada S5)
+- **Estado**: Aceptada (23-11-2026). Javi dio su OK visual a las capturas del PR de la rebanada S5 («está genial»).
 - **Fecha**: 2026-11-22
 - **Decisores**: Javi (+ Claude Code, con el prototipo de `critico-diseno`)
 
