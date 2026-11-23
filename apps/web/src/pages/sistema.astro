@@ -18,6 +18,7 @@ import {
 import { COLOR_PAIRS, checkPair } from '@taller6mm/ui/contraste';
 import { COLOR_TOKENS, type ColorToken, DURATIONS, EASINGS, REDUCED_DURATIONS } from '@taller6mm/ui/tokens';
 import { createElement } from 'react';
+import SeccionesS5 from '../components/sistema/SeccionesS5.astro';
 import Base from '../layouts/Base.astro';
 import {
   ESCALA_ESPACIO,
@@ -58,7 +59,6 @@ const accionEnCurso = {
 const nombreDuracion = { micro: 'Micro', componente: 'Componentes', panel: 'Paneles', escena: 'Cámara y escena' } as const;
 const nombreCurva = { mecanica: 'Mecánica', pesada: 'Pesada (raíles y cajones)' } as const;
 // Los textos salen de los datos para que nunca contradigan la tabla de la propia página.
-const corregidos = colores.filter(([, spec]) => 'previous' in spec).length;
 const paresSinAA = pares.filter((p) => !p.passes).length;
 // Datos de ejemplo de la Barra de dato. Fechas fijas: la página está prerenderizada y un «hace 3 h»
 // calculado al compilar mentiría al día siguiente. En la web real, `ahora` es la hora de la petición.
@@ -70,20 +70,20 @@ const flecha = createElement(IconoFlecha);
 
 <Base
   title="Sistema de diseño"
-  description="Tokens y componentes base de Taller6mm: color, tipografía, espacio, movimiento, botones, placas, rótulos, insignias de fidelidad y barras de dato."
+  description="Tokens y componentes base de Taller6mm: color, tipografía, espacio, movimiento, botones, placas, rótulos, insignias de fidelidad, barras de dato, campos, fichas de pieza, compatibilidad, tablas, pestañas y diálogos."
 >
   <!-- Cabecera con la luz de la sala: cenital fría de los tubos y cálida del flexo, sobre grano. -->
   <header
-    class="border-b border-acero bg-carbon bg-[image:var(--luz-cenital),var(--luz-flexo),var(--textura-ruido)]"
+    class="border-b border-acero bg-carbon"
   >
     <div
       class="mx-auto grid max-w-pagina items-center gap-12 px-4 py-12 tablet:px-8 escritorio:grid-cols-[minmax(0,1fr)_minmax(0,var(--ancho-lectura))] escritorio:py-16"
     >
       <div class="flex flex-col gap-4">
-        <Rotulo tinta="laton" tamano="s">Sistema de diseño · Fase 0</Rotulo>
+        <Rotulo tinta="laton" tamano="s">Sistema de diseño · Plano de cotas</Rotulo>
         <h1 class="font-grabado text-4xl tracking-grabado text-hueso tablet:text-5xl">{BRAND.name}</h1>
         <p class="max-w-entradilla text-l text-niebla">
-          Herencia de armero, precisión táctica. Esta página es la referencia viva de los tokens y componentes
+          Todo se mide, nada se inventa. Esta página es la referencia viva de los tokens y componentes
           de <code class="text-hueso">@taller6mm/ui</code>: lo que ves aquí es exactamente lo que usa la web.
         </p>
       </div>
@@ -144,8 +144,9 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">01</Rotulo>
         <h2 id="t-color" class="font-grabado text-3xl text-hueso">Color</h2>
         <p class="max-w-lectura text-niebla">
-          Nombres de acabado. El color nunca va solo: cada estado lleva también icono y texto. {corregidos} de los
-          valores iniciales no llegaban a AA y se han corregido con la misma tinta y algo más de luz.
+          Plano de cotas: tinta y lámina azul pizarra, trazo marcado, cota celeste, latón para la acción y señal naranja
+          solo para lo activo. Los nombres de acabado se conservan por compatibilidad (ADR-0010). El color nunca va solo:
+          cada estado lleva también icono y texto.
         </p>
       </div>
 
@@ -178,8 +179,8 @@ const flecha = createElement(IconoFlecha);
       <div class="flex flex-col gap-4">
         <h3 class="text-l font-semi text-hueso">Rampa de profundidad</h3>
         <p class="max-w-lectura text-s text-niebla">
-          Cada superficie se apoya en la anterior: el fondo pavonado, las superficies de carbón y los paneles de grafito
-          con borde de acero y su sombra.
+          Cada superficie se apoya en la anterior: la tinta del fondo (con retícula), la lámina de los paneles y la lámina
+          alta de los elevados, con borde de trazo y sombra interior.
         </p>
         <div class="rounded-l border border-acero bg-negro-pavonado p-6" aria-hidden="true">
           <code class="text-xs text-niebla">--negro-pavonado · fondo base</code>
@@ -244,28 +245,25 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">02</Rotulo>
         <h2 id="t-tipografia" class="font-grabado text-3xl text-hueso">Tipografía</h2>
         <p class="max-w-lectura text-niebla">
-          Cuatro familias con licencia OFL, autoalojadas: ninguna se carga desde servidores de terceros. Solo se precargan
-          Archivo y Cinzel.
+          Dos familias con licencia OFL, autoalojadas: ninguna se carga desde servidores de terceros. IBM Plex Sans
+          Condensed para interfaz, titulares y rótulos; IBM Plex Mono para medidas, precios y cotas. Solo se precargan los
+          pesos 400 y 600.
         </p>
       </div>
       <div class="grid gap-6 escritorio:grid-cols-2">
-        <Placa titulo="Grabado · Cinzel" codigo="--fuente-grabado" lisa>
-          <p class="font-grabado text-3xl tracking-grabado text-hueso">Armería</p>
-          <p>Marca y nombres de zona en grande: capitales de inscripción, como el grabado de un armero.</p>
+        <Placa titulo="Titular · Plex Sans Condensed 600" codigo="--fuente-grabado" lisa>
+          <p class="font-grabado text-3xl tracking-grabado text-hueso">Todo se mide. Nada se inventa.</p>
+          <p>Marca, titulares y nombres de zona: condensada, semibold y sin adornos, como el rótulo de un plano.</p>
         </Placa>
-        <Placa titulo="Rótulo · Big Shoulders Stencil" codigo="--fuente-rotulo" lisa>
+        <Placa titulo="Rótulo · Plex Sans Condensed en versalitas" codigo="--fuente-rotulo" lisa>
           <Rotulo tamano="l">Almacén de accesorios</Rotulo>
-          <p>Etiquetas de zona, chips y rótulos de estantería, pintados a plantilla.</p>
+          <p>Etiquetas de zona, chips y rótulos: versalitas con tracking abierto.</p>
         </Placa>
-        <Placa titulo="Interfaz · Archivo" codigo="--fuente-interfaz" lisa>
+        <Placa titulo="Interfaz · Plex Sans Condensed" codigo="--fuente-interfaz" lisa>
           <p class="text-l text-hueso">Guardamanos M-LOK de 10″ con raíl superior continuo</p>
-          <ul class="flex flex-col gap-1">
-            <li class="font-stretch-condensed text-hueso">Condensada (75 %): tablas y datos densos</li>
-            <li class="font-stretch-semi-condensed text-hueso">Semicondensada (87,5 %): botones y etiquetas</li>
-            <li class="font-stretch-normal text-hueso">Normal (100 %): lectura</li>
-          </ul>
+          <p>La familia ya es condensada: sirve igual para tablas densas y para lectura.</p>
         </Placa>
-        <Placa titulo="Datos · JetBrains Mono" codigo="--fuente-datos" lisa>
+        <Placa titulo="Datos · Plex Mono" codigo="--fuente-datos" lisa>
           <p class="font-datos text-xl text-hueso">412,35 € · 845 mm · 3120 g</p>
           <p>Medidas, precios y códigos con cifras tabulares: <code class="text-hueso">T6M-7KQ2-9XWD</code>.</p>
         </Placa>
@@ -293,8 +291,8 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">03</Rotulo>
         <h2 id="t-espacio" class="font-grabado text-3xl text-hueso">Espacio y forma</h2>
         <p class="max-w-lectura text-niebla">
-          Rejilla de 4&nbsp;px. Radios pequeños, industriales y precisos. Paneles de grafito con ruido de un 3&nbsp;%,
-          borde de acero, brillo interior superior y sombras largas y suaves. Objetivos táctiles de 44&nbsp;px como mínimo.
+          Rejilla de 4&nbsp;px sobre una retícula de 16 y 80&nbsp;px. Radio 0 en paneles y 2&nbsp;px en controles. Paneles de
+          lámina con borde de trazo, sombra interior sutil y marcas de registro. Objetivos táctiles de 44&nbsp;px como mínimo.
         </p>
       </div>
       <div class="grid gap-6 escritorio:grid-cols-3">
@@ -482,7 +480,7 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">06</Rotulo>
         <h2 id="t-placa" class="font-grabado text-3xl text-hueso">Placa</h2>
         <p class="max-w-lectura text-niebla">
-          El panel base: grafito con ruido sutil, borde de acero, brillo interior superior y tornillos en las esquinas.
+          El panel base: lámina azul pizarra con borde de trazo marcado, sombra interior sutil y marcas de registro en dos esquinas, como una hoja de plano.
           Si lleva enlace, toda la placa se puede pulsar, pero el foco es uno solo: el del título.
         </p>
       </div>
@@ -541,7 +539,7 @@ const flecha = createElement(IconoFlecha);
         <Rotulo tinta="fde" tamano="s">07</Rotulo>
         <h2 id="t-rotulo" class="font-grabado text-3xl text-hueso">Rótulo plantilla</h2>
         <p class="max-w-lectura text-niebla">
-          Pintado a plantilla, como los rótulos de las estanterías. Iluminado es el tubo LED encendido de La Armería: se
+          Rótulo en versalitas con tracking abierto, como el de un cajetín de plano. Iluminado es el tubo LED encendido de La Armería: se
           enciende con un parpadeo corto al pasar por encima o al enfocar su enlace (con movimiento reducido, sin
           parpadeo).
         </p>
@@ -711,12 +709,14 @@ const flecha = createElement(IconoFlecha);
         </Placa>
       </div>
     </section>
+
+    <SeccionesS5 />
   </main>
 
   <footer class="border-t border-acero bg-carbon">
     <div class="mx-auto flex max-w-pagina flex-col gap-2 px-4 py-8 text-s text-niebla tablet:px-8">
       <p>
-        Fuentes OFL autoalojadas: Cinzel, Big Shoulders Stencil, Archivo y JetBrains Mono. Iconos propios a plantilla.
+        Fuentes OFL autoalojadas: IBM Plex Sans Condensed e IBM Plex Mono. Iconos propios a trazo de plano.
       </p>
       <p>{BRAND.name} · {BRAND.tagline}</p>
     </div>

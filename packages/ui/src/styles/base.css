@@ -17,8 +17,17 @@
     text-size-adjust: 100%;
   }
 
+  /* Mesa de dibujo (ADR-0010): retícula de 16 px y de 80 px sobre la tinta. */
   body {
     min-height: 100dvh;
+    background-color: var(--negro-pavonado);
+    background-image: var(--reticula);
+    background-position: calc(-1 * var(--trazo-fino)) calc(-1 * var(--trazo-fino));
+    background-size:
+      calc(var(--espacio-4) * 5) calc(var(--espacio-4) * 5),
+      calc(var(--espacio-4) * 5) calc(var(--espacio-4) * 5),
+      var(--espacio-4) var(--espacio-4),
+      var(--espacio-4) var(--espacio-4);
     font-size: var(--texto-m);
     font-kerning: normal;
     font-optical-sizing: auto;
@@ -28,6 +37,7 @@
   h2,
   h3,
   h4 {
+    font-weight: var(--peso-semi);
     line-height: var(--interlineado-titular);
     text-wrap: balance;
   }

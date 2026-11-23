@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano de cotas · propuesta de /sistema</title>
+<style>
+/* Propuesta A · «Plano de cotas». Prototipo estático: los tokens viven aquí y, si Javi la elige, pasan a packages/ui. */
+@font-face{font-family:"Plex Cond";src:url(../fuentes/ibm-plex-sans-condensed-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Plex Cond";src:url(../fuentes/ibm-plex-sans-condensed-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Plex Cond";src:url(../fuentes/ibm-plex-sans-condensed-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Plex Cond";src:url(../fuentes/ibm-plex-sans-condensed-latin-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Plex Mono";src:url(../fuentes/ibm-plex-mono-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Plex Mono";src:url(../fuentes/ibm-plex-mono-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Plex Mono";src:url(../fuentes/ibm-plex-mono-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+
+:root{
+  /* Color: tinta de plano (cianotipia apagada) + papel vegetal + latón para la acción */
+  --tinta:#0C1114;        /* fondo: mesa de dibujo */
+  --lamina:#121A1E;       /* superficie */
+  --lamina-alta:#18232A;  /* panel elevado */
+  --trazo:#2B3A41;        /* bordes, divisores */
+  --trazo-fuerte:#62777F; /* cotas secundarias, bordes activos */
+  --reticula:rgb(141 179 192 / .055);
+  --reticula-mayor:rgb(141 179 192 / .1);
+  --cota:#8DB3C0;         /* líneas y textos de cota */
+  --texto:#E7E3D9;
+  --texto-2:#9DABB2;
+  --papel:#D7D4CC;        /* lámina impresa donde viven los renders */
+  --tinta-papel:#1B2226;  /* trazo sobre papel */
+  --laton:#C29A5B;
+  --laton-claro:#DDBB82;
+  --sobre-laton:#15110B;
+  --senal:#EE6A40;        /* foco y ranura activa */
+  --ok:#4DB27B; --aviso:#E2A82B; --error:#EA675F; --desconocido:#8C96A1;
+  /* Tipografía */
+  --f-ui:"Plex Cond","Arial Narrow",system-ui,sans-serif;
+  --f-datos:"Plex Mono",ui-monospace,Consolas,monospace;
+  --t-12:.75rem;--t-14:.875rem;--t-16:1rem;--t-20:1.25rem;--t-25:1.5625rem;--t-31:1.9375rem;--t-39:2.4375rem;--t-49:3.0625rem;--t-61:3.8125rem;
+  /* Espacio (rejilla de 4 px) y forma */
+  --e-1:4px;--e-2:8px;--e-3:12px;--e-4:16px;--e-6:24px;--e-8:32px;--e-12:48px;--e-16:64px;--e-24:96px;
+  --radio:0px; --radio-control:2px;
+  --linea:1px;
+  /* Movimiento */
+  --d-micro:120ms;--d-comp:200ms;--d-panel:320ms;
+  --mecanica:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{background:var(--tinta)}
+body{margin:0;color:var(--texto);font:400 var(--t-16)/1.5 var(--f-ui);
+  background-color:var(--tinta);
+  background-image:
+    linear-gradient(var(--reticula-mayor) 1px,transparent 1px),
+    linear-gradient(90deg,var(--reticula-mayor) 1px,transparent 1px),
+    linear-gradient(var(--reticula) 1px,transparent 1px),
+    linear-gradient(90deg,var(--reticula) 1px,transparent 1px);
+  background-size:80px 80px,80px 80px,16px 16px,16px 16px;
+  background-position:-1px -1px;
+  -webkit-font-smoothing:antialiased}
+.salto{position:absolute;left:-999px}
+.salto:focus{left:16px;top:16px;background:var(--laton);color:var(--sobre-laton);padding:8px 12px;z-index:9}
+.num{font-family:var(--f-datos);font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--senal);outline-offset:2px}
+
+/* ---------- Encabezado ---------- */
+.cabecera{display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;border-bottom:var(--linea) solid var(--trazo);background:rgb(12 17 20 / .92)}
+.marca{display:flex;align-items:center;gap:var(--e-3);padding:0 var(--e-8);border-right:var(--linea) solid var(--trazo);font-weight:700;letter-spacing:.14em;font-size:var(--t-16)}
+.marca svg{width:28px;height:28px}
+.nav{display:flex}
+.nav a{display:flex;align-items:center;min-height:56px;padding:0 var(--e-6);color:var(--texto-2);text-decoration:none;font-size:var(--t-14);font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-right:var(--linea) solid var(--trazo);position:relative;transition:color var(--d-micro) var(--mecanica)}
+.nav a:hover{color:var(--texto)}
+.nav a[aria-current]{color:var(--texto)}
+.nav a[aria-current]::after{content:"";position:absolute;left:var(--e-6);right:var(--e-6);bottom:-1px;height:2px;background:var(--laton)}
+.hoja{display:flex;align-items:center;gap:var(--e-6);padding:0 var(--e-8);font-family:var(--f-datos);font-size:var(--t-12);color:var(--texto-2);border-left:var(--linea) solid var(--trazo)}
+.hoja b{color:var(--texto);font-weight:500}
+
+.aviso-demo{margin:0;padding:var(--e-2) var(--e-8);font-family:var(--f-datos);font-size:var(--t-12);color:var(--aviso);border-bottom:var(--linea) solid var(--trazo);background:rgb(226 168 43 / .06)}
+
+main{max-width:1312px;margin:0 auto;padding:0 var(--e-8) var(--e-24)}
+
+/* ---------- Héroe: la hoja principal ---------- */
+.heroe{display:grid;grid-template-columns:352px 1fr;gap:0;margin-top:var(--e-12);border:var(--linea) solid var(--trazo);background:var(--lamina);position:relative}
+.heroe::before,.heroe::after{content:"";position:absolute;width:16px;height:16px;border-color:var(--cota);border-style:solid;pointer-events:none}
+.heroe::before{top:-9px;left:-9px;border-width:1px 0 0 1px}
+.heroe::after{bottom:-9px;right:-9px;border-width:0 1px 1px 0}
+.heroe-texto{padding:var(--e-12) var(--e-8) var(--e-8);border-right:var(--linea) solid var(--trazo);display:flex;flex-direction:column}
+.eti{font-family:var(--f-datos);font-size:var(--t-12);letter-spacing:.06em;color:var(--cota);text-transform:uppercase;margin:0}
+h1{font-size:var(--t-49);line-height:1.05;font-weight:600;letter-spacing:-.01em;margin:var(--e-3) 0 var(--e-4)}
+.entradilla{color:var(--texto-2);font-size:var(--t-16);max-width:34ch;margin:0 0 var(--e-8)}
+.cajetin{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;border:var(--linea) solid var(--trazo);font-size:var(--t-12)}
+.cajetin div{padding:var(--e-2) var(--e-3);border-top:var(--linea) solid var(--trazo)}
+.cajetin div:nth-child(-n+2){border-top:0}
+.cajetin div:nth-child(odd){border-right:var(--linea) solid var(--trazo)}
+.cajetin dt{color:var(--texto-2);font-family:var(--f-datos);text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.cajetin dd{margin:0;font-family:var(--f-datos);color:var(--texto)}
+.lamina-replica{position:relative;overflow:hidden;background:#0A0E10}
+.lamina-replica img{display:block;width:100%;height:auto;opacity:.92;
+  -webkit-mask-image:radial-gradient(120% 95% at 55% 50%,#000 55%,transparent 100%);mask-image:radial-gradient(120% 95% at 55% 50%,#000 55%,transparent 100%)}
+.lamina-replica svg.capa{position:absolute;inset:0;width:100%;height:100%}
+.nodo{cursor:pointer}
+.nodo rect.caja{fill:var(--tinta);stroke:var(--cota);stroke-width:1.5}
+.nodo .mas{stroke:var(--texto);stroke-width:2}
+.nodo text{paint-order:stroke;stroke:var(--tinta);stroke-width:5px;stroke-linejoin:round;font:600 22px var(--f-ui);fill:var(--texto);letter-spacing:.04em}
+.nodo text.sub{font:400 18px var(--f-datos);fill:var(--texto-2)}
+.nodo line,.nodo polyline{stroke:var(--cota);stroke-width:1.2;fill:none}
+.nodo.activo rect.caja{stroke:var(--senal);fill:var(--senal)}
+.nodo.activo .mas{stroke:var(--tinta)}
+.nodo.activo line,.nodo.activo polyline{stroke:var(--senal)}
+.nodo circle{fill:var(--cota)}
+.nodo.activo circle{fill:var(--senal)}
+.pie-lamina{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;padding:var(--e-3) var(--e-6);font-family:var(--f-datos);font-size:var(--t-12);color:var(--texto-2);background:linear-gradient(transparent,rgb(10 14 16 / .9) 40%)}
+.pie-lamina b{color:var(--texto);font-weight:500}
+
+/* ---------- Secciones ---------- */
+.seccion{margin-top:var(--e-16)}
+.seccion-cab{display:flex;align-items:baseline;gap:var(--e-4);border-bottom:var(--linea) solid var(--trazo);padding-bottom:var(--e-3);margin-bottom:var(--e-6)}
+.detalle{display:inline-grid;place-items:center;width:32px;height:32px;border:1px solid var(--cota);border-radius:50%;font:600 var(--t-14) var(--f-datos);color:var(--cota);flex:none;align-self:center}
+h2{font-size:var(--t-25);font-weight:600;margin:0;letter-spacing:.01em}
+.seccion-cab p{margin:0 0 0 auto;font-family:var(--f-datos);font-size:var(--t-12);color:var(--texto-2)}
+.rejilla{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--e-6)}
+.c4{grid-column:span 4}.c5{grid-column:span 5}.c7{grid-column:span 7}.c8{grid-column:span 8}.c3{grid-column:span 3}.c12{grid-column:span 12}
+.panel{background:var(--lamina);border:var(--linea) solid var(--trazo);padding:var(--e-6);position:relative}
+.panel>.eti{margin-bottom:var(--e-4)}
+
+/* ---------- Botones ---------- */
+.estados{display:grid;grid-template-columns:repeat(5,auto);gap:var(--e-4) var(--e-3);align-items:end;justify-content:start}
+.estados figcaption,.estado-nombre{font-family:var(--f-datos);font-size:11px;color:var(--texto-2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--e-2)}
+.boton{display:inline-flex;align-items:center;gap:var(--e-2);min-height:44px;padding:0 var(--e-4);border:1px solid transparent;border-radius:var(--radio-control);font:600 var(--t-14)/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:background-color var(--d-micro) var(--mecanica),border-color var(--d-micro) var(--mecanica),transform var(--d-micro) var(--mecanica);position:relative}
+.boton svg{width:16px;height:16px}
+.b-laton{background:var(--laton);color:var(--sobre-laton);box-shadow:inset 0 -2px 0 rgb(0 0 0 / .25)}
+.b-laton:hover,.b-laton.is-hover{background:var(--laton-claro)}
+.b-laton:active,.b-laton.is-activo{transform:translateY(1px);box-shadow:inset 0 2px 0 rgb(0 0 0 / .25)}
+.b-linea{background:transparent;color:var(--texto);border-color:var(--trazo-fuerte)}
+.b-linea:hover,.b-linea.is-hover{border-color:var(--cota);color:var(--texto)}
+.boton.is-foco{outline:2px solid var(--senal);outline-offset:2px}
+.boton:disabled{background:transparent;color:var(--desconocido);border:1px dashed var(--trazo-fuerte);cursor:not-allowed;box-shadow:none}
+/* Esquinas de registro que aparecen al pasar: la marca de «pieza seleccionada» del plano */
+.b-linea::before,.b-linea::after{content:"";position:absolute;width:6px;height:6px;border:0 solid var(--cota);opacity:0;transition:opacity var(--d-micro) var(--mecanica),inset var(--d-comp) var(--mecanica)}
+.b-linea::before{top:-5px;left:-5px;border-width:1px 0 0 1px}
+.b-linea::after{bottom:-5px;right:-5px;border-width:0 1px 1px 0}
+.b-linea:hover::before,.b-linea:hover::after,.b-linea.is-hover::before,.b-linea.is-hover::after{opacity:1}
+
+/* ---------- Campo ---------- */
+.campo{display:grid;gap:var(--e-2);margin-bottom:var(--e-6)}
+.campo label{font-weight:600;font-size:var(--t-14);letter-spacing:.02em}
+.control{display:flex;align-items:stretch;border:1px solid var(--trazo-fuerte);border-radius:var(--radio-control);background:var(--tinta);min-height:44px;transition:border-color var(--d-micro) var(--mecanica)}
+.control input{flex:1;min-width:0;background:transparent;border:0;color:var(--texto);font:400 var(--t-16) var(--f-datos);padding:0 var(--e-3)}
+.control input:focus{outline:none}
+.control:focus-within,.control.is-foco{border-color:var(--senal);box-shadow:0 0 0 1px var(--senal)}
+.control .unidad{display:grid;place-items:center;padding:0 var(--e-3);border-left:1px solid var(--trazo-fuerte);font:500 var(--t-14) var(--f-datos);color:var(--texto-2)}
+.ayuda{font-size:var(--t-14);color:var(--texto-2);margin:0}
+.campo.error .control{border-color:var(--error)}
+.campo.error .ayuda{color:var(--error);display:flex;gap:var(--e-2);align-items:center}
+.ayuda svg{width:16px;height:16px;flex:none}
+
+/* ---------- Placa de dato ---------- */
+.dato-cab{display:flex;justify-content:space-between;align-items:baseline;gap:var(--e-4)}
+.dato-nombre{font-weight:600;font-size:var(--t-14);letter-spacing:.06em;text-transform:uppercase;color:var(--texto-2)}
+.dato-valor{font:500 var(--t-39)/1 var(--f-datos);color:var(--texto);letter-spacing:-.02em}
+.dato-valor small{font-size:var(--t-16);color:var(--texto-2);margin-left:4px}
+.regla{position:relative;height:40px;margin:var(--e-6) 0 var(--e-2)}
+.regla .base{position:absolute;left:0;right:0;top:16px;height:1px;background:var(--trazo-fuerte)}
+.regla .ticks{position:absolute;left:0;right:0;top:8px;height:16px;
+  background:repeating-linear-gradient(90deg,var(--trazo-fuerte) 0 1px,transparent 1px 10%),
+             repeating-linear-gradient(90deg,var(--trazo) 0 1px,transparent 1px 2%);
+  background-size:100% 16px,100% 8px;background-repeat:no-repeat;background-position:0 0,0 8px}
+.regla .relleno{position:absolute;left:0;top:14px;height:5px;background:var(--laton);width:40%;transform-origin:left;animation:llenar var(--d-panel) var(--mecanica) both}
+.regla .mediana{position:absolute;top:0;width:1px;height:32px;background:var(--cota)}
+.regla .mediana span{position:absolute;top:30px;right:6px;white-space:nowrap;font:400 11px var(--f-datos);color:var(--cota)}
+@keyframes llenar{from{transform:scaleX(0)}}
+.regla-escala{display:flex;justify-content:space-between;font:400 var(--t-12) var(--f-datos);color:var(--texto-2);margin-top:var(--e-6)}
+.comprobado{display:flex;align-items:center;gap:var(--e-2);margin-top:var(--e-4);padding-top:var(--e-3);border-top:1px dashed var(--trazo);font-size:var(--t-14);color:var(--texto-2)}
+.comprobado svg{width:16px;height:16px;color:var(--cota);flex:none}
+.comprobado time{font-family:var(--f-datos);color:var(--texto);font-size:var(--t-12)}
+.fila-datos{display:grid;grid-template-columns:1fr 1fr;gap:var(--e-6);margin-top:var(--e-6)}
+.mini .dato-valor{font-size:var(--t-25)}
+
+/* ---------- Ficha de pieza ---------- */
+.ficha{display:flex;flex-direction:column;background:var(--lamina);border:1px solid var(--trazo);color:inherit;text-decoration:none;position:relative;transition:border-color var(--d-comp) var(--mecanica)}
+.ficha:hover,.ficha.is-hover{border-color:var(--cota)}
+.ficha .vista{position:relative;aspect-ratio:4/3;background:var(--papel);overflow:hidden;border-bottom:1px solid var(--trazo)}
+.ficha .vista img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;filter:brightness(1.22) contrast(1.06);transition:transform var(--d-panel) var(--mecanica)}
+.ficha:hover .vista img,.ficha.is-hover .vista img{transform:scale(1.03)}
+.ficha .vista svg.dibujo{position:absolute;inset:0;width:100%;height:100%}
+.vista .rotulo-vista{position:absolute;right:var(--e-2);bottom:var(--e-2);font:500 11px var(--f-datos);color:var(--tinta-papel);background:rgb(215 212 204 / .9);padding:2px 6px;letter-spacing:.04em}
+.ficha .cuerpo{padding:var(--e-4) var(--e-4) var(--e-4);display:grid;gap:var(--e-2)}
+.ref{font:400 var(--t-12) var(--f-datos);color:var(--texto-2);letter-spacing:.04em}
+.ficha h3{margin:0;font-size:var(--t-20);font-weight:600;line-height:1.2}
+.ficha h3 a{color:inherit;text-decoration:none}
+.ficha h3 a::after{content:"";position:absolute;inset:0}
+.medidas{display:flex;gap:var(--e-4);font:400 var(--t-12) var(--f-datos);color:var(--texto-2)}
+.medidas b{color:var(--texto);font-weight:500}
+.precio{display:flex;align-items:baseline;gap:var(--e-2);margin-top:var(--e-2);padding-top:var(--e-3);border-top:1px solid var(--trazo)}
+.precio .desde{font-size:var(--t-14);color:var(--texto-2)}
+.precio .importe{font:500 var(--t-25)/1 var(--f-datos);color:var(--laton-claro)}
+.precio .tiendas{margin-left:auto;font:400 var(--t-12) var(--f-datos);color:var(--texto-2)}
+.ficha .comprobado{margin-top:0;padding-top:0;border:0;font-size:var(--t-12)}
+.estado{display:inline-flex;align-items:center;gap:6px;font-size:var(--t-14);font-weight:500}
+.estado svg{width:16px;height:16px}
+.estado.ok{color:var(--ok)}.estado.aviso{color:var(--aviso)}.estado.desc{color:var(--desconocido)}
+
+/* Insignia de fidelidad: el relleno crece con el nivel (no solo el color) */
+.tier{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px 0 4px;background:var(--tinta);border:1px solid var(--trazo-fuerte);font:600 var(--t-12) var(--f-datos);color:var(--texto);letter-spacing:.04em}
+.tier i{width:14px;height:14px;border:1px solid currentColor;display:inline-block}
+.tier.t0 i{border-style:dashed}
+.tier.t1 i{background:linear-gradient(currentColor,currentColor) 0 100%/100% 34% no-repeat}
+.tier.t2 i{background:linear-gradient(currentColor,currentColor) 0 100%/100% 67% no-repeat}
+.tier.t3 i{background:currentColor}
+.tier.t3{color:var(--laton-claro);border-color:var(--laton)}
+.ficha .tier{position:absolute;top:var(--e-2);left:var(--e-2);z-index:1}
+.tiers{display:grid;gap:var(--e-3)}
+.tiers li{display:grid;grid-template-columns:96px 1fr;gap:var(--e-3);align-items:start;padding-bottom:var(--e-3);border-bottom:1px solid var(--trazo)}
+.tiers li:last-child{border:0;padding-bottom:0}
+.tiers p{margin:0;font-size:var(--t-14);color:var(--texto-2)}
+.tiers p b{color:var(--texto);font-weight:600;display:block}
+ul{list-style:none;margin:0;padding:0}
+
+/* ---------- Tabla ---------- */
+table{width:100%;border-collapse:collapse;font-size:var(--t-14)}
+caption{text-align:left;font-weight:600;font-size:var(--t-16);padding-bottom:var(--e-3)}
+caption span{font:400 var(--t-12) var(--f-datos);color:var(--texto-2);margin-left:var(--e-3)}
+thead th{font:500 11px var(--f-datos);color:var(--texto-2);text-transform:uppercase;letter-spacing:.06em;text-align:left;padding:var(--e-2) var(--e-3);border-top:1px solid var(--trazo-fuerte);border-bottom:1px solid var(--trazo-fuerte)}
+th.n,td.n{text-align:right}
+tbody th{text-align:left;font-weight:600;padding:0 var(--e-3)}
+tbody td{padding:0 var(--e-3);height:44px;border-bottom:1px solid var(--trazo)}
+tbody th{border-bottom:1px solid var(--trazo);height:44px}
+tbody tr{transition:background-color var(--d-micro) var(--mecanica)}
+tbody tr:hover{background:var(--lamina-alta)}
+tbody tr:hover th{box-shadow:inset 2px 0 0 var(--senal)}
+td.num{font-size:var(--t-14)}
+td .tol{color:var(--texto-2);font-size:var(--t-12)}
+.sin-dato{color:var(--desconocido);font-family:var(--f-ui);display:inline-flex;align-items:center;gap:4px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms!important;transition-duration:1ms!important}
+  .ficha:hover .vista img{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="marca">
+    <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12.5" fill="none" stroke="#8DB3C0"/><circle cx="14" cy="14" r="3" fill="#C29A5B"/><path d="M14 0v8M14 20v8M0 14h8M20 14h8" stroke="#8DB3C0"/></svg>
+    TALLER6MM
+  </div>
+  <nav class="nav" aria-label="Secciones">
+    <a href="#">Banco</a><a href="#">Réplicas</a><a href="#">Accesorios</a><a href="#">Mercado</a><a href="#" aria-current="page">Sistema</a>
+  </nav>
+  <div class="hoja"><span>HOJA <b>01/17</b></span><span>REV. <b>0.2</b></span><span>ESC. <b>1:1</b></span></div>
+</header>
+<p class="aviso-demo">Prototipo de dirección de arte · Precios, tiendas y medidas de ejemplo (is_demo) · Renders internos de piezas paramétricas: nivel T0, no publicables</p>
+
+<main id="contenido">
+  <section class="heroe" aria-labelledby="t-heroe">
+    <div class="heroe-texto">
+      <p class="eti">Sistema de diseño · Plano de cotas</p>
+      <h1 id="t-heroe">Todo se mide.<br>Nada se inventa.</h1>
+      <p class="entradilla">Cada pieza del taller se dibuja como en un plano: con sus cotas en milímetros, su nivel de fidelidad y la fecha del último dato.</p>
+      <dl class="cajetin">
+        <div><dt>Réplica</dt><dd>M4A1 carabina</dd></div>
+        <div><dt>Nivel</dt><dd>T0 · sin validar</dd></div>
+        <div><dt>Longitud</dt><dd class="num">838 mm (nom.)</dd></div>
+        <div><dt>Ranuras</dt><dd class="num">4 de 9 montadas</dd></div>
+      </dl>
+    </div>
+    <figure class="lamina-replica" style="margin:0">
+      <img src="../img/m4a1-penumbra.jpg" alt="Carabina M4A1 en vista de tres cuartos. Culata y cargador aparecen como volúmenes naranjas translúcidos porque aún no tienen modelo." width="1280" height="720">
+      <svg class="capa" viewBox="0 0 1280 720" role="group" aria-label="Ranuras de la réplica">
+        <g class="nodo"><line x1="330" y1="200" x2="330" y2="92"/><circle cx="330" cy="200" r="5"/><rect class="caja" x="308" y="70" width="44" height="44"/><path class="mas" d="M330 82v20M320 92h20"/><text x="364" y="89" text-anchor="start">Culata</text><text class="sub" x="364" y="111" text-anchor="start">T0 · volumen</text></g>
+        <g class="nodo"><line x1="590" y1="242" x2="590" y2="132"/><circle cx="590" cy="242" r="5"/><rect class="caja" x="568" y="110" width="44" height="44"/><path class="mas" d="M590 122v20M580 132h20"/><text x="624" y="129" text-anchor="start">Óptica</text><text class="sub" x="624" y="151" text-anchor="start">vacía</text></g>
+        <g class="nodo activo"><line x1="800" y1="344" x2="922" y2="228"/><circle cx="800" cy="344" r="5"/><rect class="caja" x="900" y="206" width="44" height="44"/><path class="mas" d="M922 218v20M912 228h20"/><text x="956" y="225" text-anchor="start">Guardamanos</text><text class="sub" x="956" y="247" text-anchor="start">RIS 7″ · montado</text></g>
+        <g class="nodo"><line x1="615" y1="460" x2="615" y2="582"/><circle cx="615" cy="460" r="5"/><rect class="caja" x="593" y="560" width="44" height="44"/><path class="mas" d="M615 572v20M605 582h20"/><text x="649" y="579" text-anchor="start">Cargador</text><text class="sub" x="649" y="601" text-anchor="start">T0 · volumen</text></g>
+        <g class="nodo"><line x1="1100" y1="466" x2="1100" y2="582"/><circle cx="1100" cy="466" r="5"/><rect class="caja" x="1078" y="560" width="44" height="44"/><path class="mas" d="M1100 572v20M1090 582h20"/><text x="1066" y="579" text-anchor="end">Bocacha</text><text class="sub" x="1066" y="601" text-anchor="end">vacía</text></g>
+      </svg>
+      <figcaption class="pie-lamina"><span>Vista <b>¾</b> · render propio N5 · <b>sin cotas</b>: solo se acotan vistas ortogonales</span><span>Comprobado <b><time datetime="2026-11-22T08:40:00Z">22-11-2026 08:40 UTC</time></b></span></figcaption>
+    </figure>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-control">
+    <div class="seccion-cab"><span class="detalle" aria-hidden="true">A</span><h2 id="t-control">Acciones y campos</h2><p>Botón · Campo</p></div>
+    <div class="rejilla">
+      <div class="panel c7">
+        <p class="eti">Botón · estados</p>
+        <div class="estados">
+          <div><div class="estado-nombre">Reposo</div><button class="boton b-laton" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Montar</button></div>
+          <div><div class="estado-nombre">Hover</div><button class="boton b-laton is-hover" type="button">Montar</button></div>
+          <div><div class="estado-nombre">Foco</div><button class="boton b-laton is-foco" type="button">Montar</button></div>
+          <div><div class="estado-nombre">Pulsado</div><button class="boton b-laton is-activo" type="button">Montar</button></div>
+          <div><div class="estado-nombre">Deshab.</div><button class="boton b-laton" type="button" disabled>Montar</button></div>
+          <div><button class="boton b-linea" type="button">Comparar</button></div>
+          <div><button class="boton b-linea is-hover" type="button">Comparar</button></div>
+          <div><button class="boton b-linea is-foco" type="button">Comparar</button></div>
+          <div><button class="boton b-linea is-activo" type="button">Comparar</button></div>
+          <div><button class="boton b-linea" type="button" disabled>Comparar</button></div>
+        </div>
+      </div>
+      <div class="panel c5">
+        <p class="eti">Campo</p>
+        <div class="campo">
+          <label for="lc">Longitud del cañón interno</label>
+          <div class="control is-foco"><input id="lc" value="363,0" inputmode="decimal" aria-describedby="lc-a"><span class="unidad">mm</span></div>
+          <p class="ayuda" id="lc-a">Entre 200,0 y 550,0 mm.</p>
+        </div>
+        <div class="campo error">
+          <label for="ci">Calibre interior</label>
+          <div class="control"><input id="ci" value="seis" aria-invalid="true" aria-describedby="ci-e"><span class="unidad">mm</span></div>
+          <p class="ayuda" id="ci-e"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l7 13H1z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 6v4M8 11.5v1.5" stroke="currentColor" stroke-width="1.4"/></svg>Escribe un número con coma: 6,03.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-fichas">
+    <div class="seccion-cab"><span class="detalle" aria-hidden="true">B</span><h2 id="t-fichas">Ficha de pieza</h2><p>Render propio sobre lámina · plano T0 cuando no hay render</p></div>
+    <div class="rejilla">
+      <article class="ficha c3 is-hover">
+        <span class="tier t0"><i></i>T0</span>
+        <div class="vista"><img src="../img/mlok-9.jpg" alt="Guardamanos M-LOK de 9 pulgadas, vista de tres cuartos" width="800" height="600"><span class="rotulo-vista">VISTA ¾ · N5</span></div>
+        <div class="cuerpo">
+          <span class="ref">GM-MLOK-9 · Guardamanos</span>
+          <h3><a href="#">Guardamanos M-LOK 9″</a></h3>
+          <div class="medidas"><span>L <b class="num">228,6</b> mm</span><span>Ø <b class="num">38,0</b> mm</span></div>
+          <div class="precio"><span class="desde">desde</span><span class="importe">54,90 €</span><span class="tiendas">4 tiendas</span></div>
+          <p class="comprobado"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 4v4l3 2" fill="none" stroke="currentColor"/></svg>Comprobado hace 2 h</p>
+          <span class="estado ok"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Compatible con tu M4</span>
+        </div>
+      </article>
+      <article class="ficha c3">
+        <span class="tier t0"><i></i>T0</span>
+        <div class="vista"><img src="../img/montura-30.jpg" alt="Montura de anillas de 30 mm, vista de tres cuartos" width="800" height="600"><span class="rotulo-vista">VISTA ¾ · N5</span></div>
+        <div class="cuerpo">
+          <span class="ref">MT-ANI-30 · Montura</span>
+          <h3><a href="#">Montura de anillas 30 mm</a></h3>
+          <div class="medidas"><span>Ø <b class="num">30,0</b> mm</span><span>Raíl <b>Picatinny</b></span></div>
+          <div class="precio"><span class="desde">desde</span><span class="importe">22,50 €</span><span class="tiendas">2 tiendas</span></div>
+          <p class="comprobado"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 4v4l3 2" fill="none" stroke="currentColor"/></svg>Comprobado hace 5 h</p>
+          <span class="estado aviso"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l7 13H1z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 6v4M8 11.5v1.5" stroke="currentColor" stroke-width="1.4"/></svg>Pocas unidades</span>
+        </div>
+      </article>
+      <article class="ficha c3">
+        <span class="tier t0"><i></i>T0</span>
+        <div class="vista">
+          <svg class="dibujo" viewBox="0 0 400 300" role="img" aria-label="Plano lateral de la bocacha: 60,0 mm de largo y 24,0 mm de diámetro">
+            <defs><marker id="fl" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 1.5L10 5 0 8.5" fill="none" stroke="#1B2226" stroke-width="1.2"/></marker></defs>
+            <g fill="none" stroke="#1B2226" stroke-width="1.6">
+              <!-- 60 x 24 mm a 3,5 px/mm -->
+              <rect x="95" y="108" width="210" height="84"/>
+              <rect x="75" y="126" width="20" height="48"/>
+              <path d="M130 108v84M270 108v84" stroke-width=".8"/>
+              <rect x="150" y="122" width="100" height="12" rx="6"/><rect x="150" y="144" width="100" height="12" rx="6"/><rect x="150" y="166" width="100" height="12" rx="6"/>
+            </g>
+            <path d="M60 150h280" stroke="#1B2226" stroke-width=".6" stroke-dasharray="14 4 2 4"/>
+            <g stroke="#1B2226" stroke-width=".8" fill="none"><path d="M75 174v62M305 192v44"/><path d="M78 226h224" marker-start="url(#fl)" marker-end="url(#fl)"/><path d="M305 108h44M305 192h44"/><path d="M340 111v78" marker-start="url(#fl)" marker-end="url(#fl)"/></g>
+            <g font-family="Plex Mono,monospace" font-size="13" fill="#1B2226"><text x="190" y="252" text-anchor="middle">60,0</text><text x="356" y="154">Ø24,0</text><text x="16" y="286" font-size="11">ROSCA M14 × 1 CCW</text></g>
+          </svg>
+          <span class="rotulo-vista">PLANO LATERAL · 1:1</span>
+        </div>
+        <div class="cuerpo">
+          <span class="ref">BC-14CCW · Bocacha</span>
+          <h3><a href="#">Bocacha 14 mm CCW</a></h3>
+          <div class="medidas"><span>L <b class="num">60,0</b> mm</span><span>Ø <b class="num">24,0</b> mm</span></div>
+          <div class="precio"><span class="desde">desde</span><span class="importe">8,95 €</span><span class="tiendas">3 tiendas</span></div>
+          <p class="comprobado"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 4v4l3 2" fill="none" stroke="currentColor"/></svg>Comprobado hace 1 día</p>
+          <span class="estado aviso"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l7 13H1z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 6v4M8 11.5v1.5" stroke="currentColor" stroke-width="1.4"/></svg>Necesita adaptador CW→CCW</span>
+        </div>
+      </article>
+      <div class="panel c3">
+        <p class="eti">Insignias de fidelidad</p>
+        <ul class="tiers">
+          <li><span class="tier t0"><i></i>T0</span><p><b>Plano técnico</b>Silueta a escala con cotas de ficha.</p></li>
+          <li><span class="tier t1"><i></i>T1</span><p><b>Foto licenciada</b>Recorte calibrado, error ≤ 1 %.</p></li>
+          <li><span class="tier t2"><i></i>T2</span><p><b>Modelo fiel</b>3D propio, cotas ≤ 2 mm.</p></li>
+          <li><span class="tier t3"><i></i>T3</span><p><b>Verificado</b>Escaneo o CAD, ≤ 0,5 mm.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-tabla">
+    <div class="seccion-cab"><span class="detalle" aria-hidden="true">C</span><h2 id="t-tabla">Datos</h2><p>Placa de dato con fecha · tabla con cifras tabulares</p></div>
+    <div class="rejilla">
+      <div class="panel c4">
+        <p class="eti">Placa de dato · con fecha</p>
+        <div class="dato-cab"><span class="dato-nombre">Peso de la build</span><span class="dato-valor">3120<small>g</small></span></div>
+        <div class="regla" role="img" aria-label="3120 gramos en una escala de 2400 a 4200 gramos; la mediana de 128 builds M4 es 3400 gramos">
+          <div class="ticks"></div><div class="base"></div><div class="relleno"></div>
+          <div class="mediana" style="left:55.5%"><span>mediana 3400 g · 128 builds</span></div>
+        </div>
+        <div class="regla-escala"><span>2400 g</span><span>4200 g</span></div>
+        <div class="fila-datos mini">
+          <div><div class="dato-nombre">Precio</div><div class="dato-valor">412,35<small>€</small></div></div>
+          <div><div class="dato-nombre">Tiendas</div><div class="dato-valor">3<small>de 11</small></div></div>
+        </div>
+        <p class="comprobado"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 4v4l3 2" fill="none" stroke="currentColor"/></svg>Comprobado hace 2 h · <time datetime="2026-11-22T08:40:00Z">22-11-2026 08:40 UTC</time></p>
+      </div>
+    <div class="panel c8">
+      <table>
+        <caption>Cañones internos de 6,0x mm <span>datos de ejemplo</span></caption>
+        <thead><tr><th scope="col">Pieza</th><th scope="col" class="n">Longitud</th><th scope="col" class="n">Ø interior</th><th scope="col" class="n">Peso</th><th scope="col" class="n">Desde</th><th scope="col">Nivel</th><th scope="col">Comprobado</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Cañón interno 6,03 · CQB</th><td class="n num">229,0 mm</td><td class="n num">6,03 <span class="tol">±0,005</span></td><td class="n num">58 g</td><td class="n num">34,90 €</td><td><span class="tier t1"><i></i>T1</span></td><td class="num"><time datetime="2026-11-22T08:40:00Z">hace 2 h</time></td></tr>
+          <tr><th scope="row">Cañón interno 6,01 · carabina</th><td class="n num">363,0 mm</td><td class="n num">6,01 <span class="tol">±0,005</span></td><td class="n num">92 g</td><td class="n num">49,95 €</td><td><span class="tier t2"><i></i>T2</span></td><td class="num"><time datetime="2026-11-21T19:05:00Z">hace 15 h</time></td></tr>
+          <tr><th scope="row">Cañón interno 6,05 · fusil</th><td class="n num">455,0 mm</td><td class="n num">6,05 <span class="tol">±0,01</span></td><td class="n num"><span class="sin-dato">Sin dato</span></td><td class="n num"><span class="sin-dato">Sin precio</span></td><td><span class="tier t0"><i></i>T0</span></td><td><span class="sin-dato">Sin fecha</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

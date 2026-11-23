@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compactus · propuesta de /sistema</title>
+<style>
+/* Propuesta B · «Compactus». Prototipo estático: los tokens viven aquí y, si Javi la elige, pasan a packages/ui. */
+@font-face{font-family:"Big Shoulders";src:url(../fuentes/big-shoulders-latin-standard-normal.woff2) format("woff2-variations");font-weight:100 900;font-display:swap}
+@font-face{font-family:"BS Stencil";src:url(../fuentes/big-shoulders-stencil-latin-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
+@font-face{font-family:"BS Stencil";src:url(../fuentes/big-shoulders-stencil-latin-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Barlow SC";src:url(../fuentes/barlow-semi-condensed-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Barlow SC";src:url(../fuentes/barlow-semi-condensed-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Barlow SC";src:url(../fuentes/barlow-semi-condensed-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Barlow SC";src:url(../fuentes/barlow-semi-condensed-latin-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Red Hat Mono";src:url(../fuentes/red-hat-mono-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Red Hat Mono";src:url(../fuentes/red-hat-mono-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Red Hat Mono";src:url(../fuentes/red-hat-mono-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+
+:root{
+  /* Color: chapa verde de compactus (ref-08), hormigón, kraft de etiqueta y luz fría de tubo */
+  --hormigon:#0D0E0D;
+  --chapa:#1C231D;        /* pintura en polvo, verde oliva muy oscuro */
+  --chapa-alta:#242D25;
+  --canto:#3A463B;        /* cantos y divisores */
+  --canto-claro:#5B695E;  /* filo que recibe la luz */
+  --hueco:#090B0A;        /* interior del hueco */
+  --texto:#ECE8DE;
+  --texto-2:#A9B1A5;
+  --kraft:#C9A978; --tinta-kraft:#21180D; --kraft-2:#46331C;
+  --laton:#BF9658; --laton-claro:#DAB67C; --sobre-laton:#17110A;
+  --tubo:#E6F0F3;
+  --senal:#EE6A40;
+  --ok:#53B47F; --aviso:#E2A82B; --error:#F2746B; --desconocido:#8E978F;
+  --f-rotulo:"BS Stencil","Arial Narrow",sans-serif;
+  --f-display:"Big Shoulders","Arial Narrow",sans-serif;
+  --f-ui:"Barlow SC","Arial Narrow",system-ui,sans-serif;
+  --f-datos:"Red Hat Mono",ui-monospace,Consolas,monospace;
+  --t-12:.75rem;--t-14:.875rem;--t-16:1rem;--t-20:1.25rem;--t-25:1.5625rem;--t-31:1.9375rem;--t-39:2.4375rem;--t-49:3.0625rem;--t-61:3.8125rem;
+  --e-1:4px;--e-2:8px;--e-3:12px;--e-4:16px;--e-6:24px;--e-8:32px;--e-12:48px;--e-16:64px;--e-24:96px;
+  --radio:3px;
+  --d-micro:120ms;--d-comp:200ms;--d-panel:320ms;
+  --mecanica:cubic-bezier(.2,.8,.2,1);--pesada:cubic-bezier(.7,0,.2,1);
+  /* Materiales */
+  --polvo:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+  --perforado:radial-gradient(circle at 50% 50%,#050605 2.4px,rgb(255 255 255 / .05) 3px,transparent 3.6px);
+  --filo:inset 0 1px 0 rgb(255 255 255 / .09),inset 0 -1px 0 rgb(0 0 0 / .5);
+  --sombra:0 2px 0 rgb(0 0 0 / .5),0 18px 40px -18px rgb(0 0 0 / .8);
+  --cono:linear-gradient(180deg,rgb(214 232 238 / .14),rgb(214 232 238 / .03) 45%,transparent 70%);
+}
+*{box-sizing:border-box}
+html{background:var(--hormigon)}
+body{margin:0;color:var(--texto);font:400 var(--t-16)/1.5 var(--f-ui);background:var(--hormigon);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--senal);outline-offset:2px}
+.num{font-family:var(--f-datos);font-variant-numeric:tabular-nums}
+ul{list-style:none;margin:0;padding:0}
+.salto{position:absolute;left:-999px}
+
+/* Tubo de luz: el elemento que «enciende» lo activo */
+.tubo{height:6px;border-radius:3px;background:linear-gradient(180deg,#fff,var(--tubo));box-shadow:0 0 14px 2px rgb(210 232 240 / .35),0 0 40px 8px rgb(210 232 240 / .12)}
+.tubo.apagado{background:#2B3330;box-shadow:none}
+
+/* ---------- Encabezado: dintel del compactus ---------- */
+.dintel{background:var(--chapa) var(--polvo);border-bottom:4px solid #070807;box-shadow:var(--filo)}
+.dintel-in{max-width:1312px;margin:0 auto;padding:0 var(--e-8);display:flex;align-items:stretch;gap:var(--e-8)}
+.marca{display:flex;align-items:center;font:800 var(--t-31)/1 var(--f-rotulo);letter-spacing:.06em;color:var(--texto);padding:var(--e-4) 0}
+.marca span{color:var(--laton)}
+.modulos{display:flex;gap:var(--e-2);margin-left:auto}
+.modulos a{position:relative;display:flex;align-items:center;gap:var(--e-2);min-height:72px;padding:0 var(--e-4);color:var(--texto-2);text-decoration:none;font:600 var(--t-14) var(--f-ui);text-transform:uppercase;letter-spacing:.08em;border-left:1px solid var(--canto)}
+.modulos a b{font:800 var(--t-20) var(--f-rotulo);color:var(--canto-claro);letter-spacing:.02em}
+.modulos a::before{content:"";position:absolute;left:var(--e-3);right:var(--e-3);top:6px;height:4px;border-radius:2px;background:#2B3330;transition:background var(--d-micro),box-shadow var(--d-micro)}
+.modulos a:hover{color:var(--texto)}
+.modulos a:hover::before,.modulos a[aria-current]::before{background:linear-gradient(#fff,var(--tubo));box-shadow:0 0 12px 2px rgb(210 232 240 / .4)}
+.modulos a[aria-current]{color:var(--texto);background:var(--cono)}
+.modulos a[aria-current] b{color:var(--laton)}
+.aviso-demo{margin:0;background:var(--kraft);color:var(--tinta-kraft);font:600 var(--t-12) var(--f-datos);padding:6px var(--e-8);text-align:center;letter-spacing:.02em}
+
+main{max-width:1312px;margin:0 auto;padding:var(--e-12) var(--e-8) var(--e-24)}
+
+/* ---------- Módulo (frente de estantería) ---------- */
+.modulo{background:var(--chapa) var(--polvo);border:1px solid var(--canto);border-radius:var(--radio);box-shadow:var(--filo),var(--sombra);position:relative}
+.remache{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#7C8A80,#2A322C 70%);box-shadow:0 1px 0 rgb(0 0 0 / .6)}
+.r1{top:10px;left:10px}.r2{top:10px;right:10px}.r3{bottom:10px;left:10px}.r4{bottom:10px;right:10px}
+
+.heroe{display:grid;grid-template-columns:400px 1fr;overflow:hidden}
+.heroe-texto{padding:var(--e-12) var(--e-8);border-right:6px solid #070807;display:flex;flex-direction:column;gap:var(--e-4);position:relative}
+.numero-modulo{font:800 160px/0.8 var(--f-rotulo);color:transparent;-webkit-text-stroke:1.5px var(--canto-claro);letter-spacing:-.02em;margin:0 0 var(--e-4)}
+.eti{font:700 var(--t-14) var(--f-rotulo);letter-spacing:.12em;text-transform:uppercase;color:var(--laton);margin:0}
+h1{font:800 var(--t-61)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.01em;margin:0}
+.entradilla{color:var(--texto-2);margin:0;max-width:34ch}
+.panel-perforado{position:relative;background:var(--perforado) 0 0/20px 20px,linear-gradient(180deg,#1A201B,#121713);min-height:520px}
+.panel-perforado .tubo{position:absolute;top:14px;left:12%;right:12%}
+.panel-perforado::after{content:"";position:absolute;inset:0;background:var(--cono);pointer-events:none}
+.panel-perforado img{position:absolute;inset:40px 0 30px 0;width:100%;height:calc(100% - 70px);object-fit:contain;
+  -webkit-mask-image:radial-gradient(60% 58% at 52% 50%,#000 40%,transparent 82%);mask-image:radial-gradient(60% 58% at 52% 50%,#000 40%,transparent 82%);filter:brightness(.92)}
+.capa{position:absolute;inset:40px 0 30px 0;width:100%;height:calc(100% - 70px)}
+.nodo line{stroke:var(--kraft);stroke-width:1.5;stroke-dasharray:4 4}
+.nodo rect.caja{fill:var(--chapa-alta);stroke:var(--canto-claro);stroke-width:2}
+.nodo .mas{stroke:var(--texto);stroke-width:3}
+.nodo rect.etiq{fill:var(--kraft)}
+.nodo text{font:700 20px var(--f-ui);fill:var(--tinta-kraft);letter-spacing:.04em;text-transform:uppercase}
+.nodo.activo rect.caja{fill:var(--senal);stroke:var(--senal)}
+.nodo.activo .mas{stroke:var(--hueco)}
+.nodo circle{fill:var(--kraft)}
+.pie{position:absolute;left:var(--e-6);right:var(--e-6);bottom:var(--e-3);display:flex;justify-content:space-between;font:500 var(--t-12) var(--f-datos);color:var(--texto-2)}
+.pie b{color:var(--texto);font-weight:500}
+
+/* ---------- Estante (sección) ---------- */
+.estante{margin-top:var(--e-16)}
+.estante-cab{display:flex;align-items:center;gap:var(--e-4);margin-bottom:var(--e-4)}
+.portaetiqueta{display:inline-flex;align-items:center;gap:var(--e-3);padding:4px;border:1px solid var(--canto-claro);border-radius:2px;background:#11150F;box-shadow:inset 0 1px 2px rgb(0 0 0 / .6)}
+.portaetiqueta span{background:var(--kraft);color:var(--tinta-kraft);font:700 var(--t-14) var(--f-datos);padding:2px var(--e-2);letter-spacing:.04em}
+h2{font:800 var(--t-31)/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em;margin:0}
+.estante-cab p{margin:0 0 0 auto;color:var(--texto-2);font-size:var(--t-14)}
+.balda{height:10px;margin-top:var(--e-4);border-radius:2px;background:linear-gradient(180deg,var(--canto-claro) 0 1px,#2C362E 1px 60%,#141915);box-shadow:0 8px 18px -6px rgb(0 0 0 / .8)}
+.rejilla{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--e-6)}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c7{grid-column:span 7}.c8{grid-column:span 8}
+.panel{padding:var(--e-8) var(--e-6) var(--e-6)}
+.sub-eti{font:600 var(--t-12) var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--texto-2);margin:0 0 var(--e-2)}
+
+/* ---------- Botones ---------- */
+.estados{display:grid;grid-template-columns:repeat(5,auto);gap:var(--e-3);justify-content:start;align-items:end}
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:var(--e-2);min-height:44px;padding:0 var(--e-4);border-radius:var(--radio);font:700 var(--t-14)/1 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:1px solid transparent;transition:transform var(--d-comp) var(--pesada),box-shadow var(--d-comp) var(--pesada),background-color var(--d-micro)}
+.b-laton{background:linear-gradient(180deg,var(--laton-claro),var(--laton) 55%,#A07B45);color:var(--sobre-laton);border-color:#7E6034;box-shadow:inset 0 1px 0 rgb(255 255 255 / .35),0 3px 0 #5E4724}
+.b-laton:hover,.b-laton.is-hover{background:linear-gradient(180deg,#EBCB93,var(--laton-claro) 55%,#B48C52)}
+.b-laton:active,.b-laton.is-activo{transform:translateY(3px);box-shadow:inset 0 1px 0 rgb(255 255 255 / .25),0 0 0 #5E4724}
+.b-chapa{background:linear-gradient(180deg,#2E392F,#222A23);color:var(--texto);border-color:var(--canto-claro);box-shadow:inset 0 1px 0 rgb(255 255 255 / .1),0 3px 0 #070807}
+.b-chapa:hover,.b-chapa.is-hover{background:linear-gradient(180deg,#36433A,#29332B)}
+.b-chapa:active,.b-chapa.is-activo{transform:translateY(3px);box-shadow:inset 0 1px 0 rgb(255 255 255 / .06),0 0 0 #070807}
+.boton.is-foco{outline:2px solid var(--senal);outline-offset:3px}
+.boton:disabled{background:transparent;color:var(--desconocido);border:1px dashed var(--canto-claro);box-shadow:none;cursor:not-allowed}
+
+/* ---------- Campo ---------- */
+.campo{display:grid;gap:var(--e-2);margin-bottom:var(--e-4)}
+.campo label{font:600 var(--t-14) var(--f-ui);letter-spacing:.06em;text-transform:uppercase}
+.control{display:flex;min-height:48px;background:var(--hueco);border:1px solid #738276;border-radius:var(--radio);box-shadow:inset 0 2px 4px rgb(0 0 0 / .7),0 1px 0 rgb(255 255 255 / .06)}
+.control input{flex:1;min-width:0;background:transparent;border:0;color:var(--texto);font:500 var(--t-16) var(--f-datos);padding:0 var(--e-3)}
+.control input:focus{outline:none}
+.control:focus-within,.control.is-foco{border-color:var(--senal);box-shadow:inset 0 2px 4px rgb(0 0 0 / .7),0 0 0 1px var(--senal)}
+.control .unidad{display:grid;place-items:center;padding:0 var(--e-3);font:700 var(--t-14) var(--f-rotulo);color:var(--kraft);letter-spacing:.08em;border-left:1px solid var(--canto)}
+.ayuda{margin:0;color:var(--texto-2);font-size:var(--t-14)}
+.campo.error .control{border-color:var(--error)}
+.campo.error .ayuda{color:var(--error);display:flex;align-items:center;gap:var(--e-2)}
+.ayuda svg{width:16px;height:16px;flex:none}
+
+/* ---------- Hueco: ficha de pieza ---------- */
+.hueco{display:flex;flex-direction:column;background:var(--chapa) var(--polvo);border:1px solid var(--canto);border-radius:var(--radio);box-shadow:var(--filo),var(--sombra);position:relative;color:inherit;text-decoration:none}
+.hueco-cab{display:flex;align-items:center;justify-content:space-between;padding:var(--e-2) var(--e-3);font:800 var(--t-16) var(--f-rotulo);letter-spacing:.08em;color:var(--texto-2)}
+.hueco-int{position:relative;margin:0 var(--e-3);aspect-ratio:4/3;background:var(--hueco);border-radius:2px;box-shadow:inset 0 4px 12px rgb(0 0 0 / .8);overflow:hidden}
+.hueco-int .tubo{position:absolute;top:6px;left:14%;right:14%;height:4px;transition:background var(--d-micro),box-shadow var(--d-micro)}
+.hueco-int::after{content:"";position:absolute;inset:0;background:var(--cono);pointer-events:none}
+.hueco-int img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:radial-gradient(62% 60% at 50% 55%,#000 45%,transparent 85%);mask-image:radial-gradient(62% 60% at 50% 55%,#000 45%,transparent 85%);opacity:.82;transition:opacity var(--d-comp) var(--mecanica)}
+.hueco:hover .hueco-int img,.hueco.is-hover .hueco-int img{opacity:1}
+.hueco:hover .hueco-int .tubo,.hueco.is-hover .hueco-int .tubo{animation:arranque 360ms steps(1,end)}
+@keyframes arranque{0%{opacity:.25}35%{opacity:1}50%{opacity:.4}65%{opacity:1}}
+.hueco-int svg{position:absolute;inset:0;width:100%;height:100%}
+.etiqueta{margin:var(--e-3);padding:5px;border:1px solid var(--canto-claro);border-radius:2px;background:#11150F;box-shadow:inset 0 1px 2px rgb(0 0 0 / .6)}
+.etiqueta .kraft{background:var(--kraft);color:var(--tinta-kraft);padding:var(--e-2) var(--e-3);display:grid;gap:2px}
+.kraft .ref{font:500 var(--t-12) var(--f-datos);letter-spacing:.04em;color:var(--kraft-2)}
+.hueco h3{margin:0;font:700 var(--t-20)/1.15 var(--f-ui)}
+.hueco h3 a{color:inherit;text-decoration:none}
+.hueco h3 a::after{content:"";position:absolute;inset:0}
+.kraft .precio{display:flex;align-items:baseline;gap:6px;margin-top:4px;font-size:var(--t-14)}
+.kraft .precio b{font:600 var(--t-20) var(--f-datos)}
+.hueco-pie{padding:0 var(--e-3) var(--e-3);display:grid;gap:6px;font-size:var(--t-14);color:var(--texto-2)}
+.hueco-pie .linea{display:flex;justify-content:space-between;gap:var(--e-2)}
+.hueco-pie time,.hueco-pie .num{color:var(--texto);font-family:var(--f-datos);font-size:var(--t-12)}
+.estado{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.estado svg{width:16px;height:16px}
+.ok{color:var(--ok)}.aviso{color:var(--aviso)}.desc{color:var(--desconocido)}
+
+/* Insignia de fidelidad: placa con muescas (como el visor de un cargador) */
+.tier{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 6px;background:#0E120F;border:1px solid var(--canto-claro);border-radius:2px;font:800 var(--t-14)/1 var(--f-rotulo);letter-spacing:.08em;color:var(--texto)}
+.tier i{display:flex;gap:2px}
+.tier i::before,.tier i::after,.tier i b{content:"";width:5px;height:12px;border:1px solid var(--canto-claro)}
+.t1 i::before,.t2 i::before,.t2 i b,.t3 i::before,.t3 i b,.t3 i::after{background:var(--laton);border-color:var(--laton)}
+.t0{border-style:dashed}
+.tiers li{display:grid;grid-template-columns:84px 1fr;gap:var(--e-3);padding:var(--e-3) 0;border-bottom:1px solid var(--canto)}
+.tiers li:first-child{padding-top:0}
+.tiers li:last-child{border:0}
+.tiers p{margin:0;font-size:var(--t-14);color:var(--texto-2);line-height:1.35}
+.tiers p b{display:block;color:var(--texto);font-weight:600}
+
+/* ---------- Placa de dato: raíl con muescas ---------- */
+.lectura{display:flex;align-items:baseline;justify-content:space-between}
+.lectura .valor{font:600 var(--t-49)/1 var(--f-datos);letter-spacing:-.03em}
+.lectura .valor small{font-size:var(--t-16);color:var(--texto-2);margin-left:4px}
+.rail{display:grid;grid-template-columns:repeat(18,1fr);gap:4px;margin:var(--e-4) 0 var(--e-2);padding:6px;background:var(--hueco);border-radius:2px;box-shadow:inset 0 2px 4px rgb(0 0 0 / .7);position:relative}
+.rail i{height:18px;background:#26302A;border-radius:1px}
+.rail i.lleno{background:linear-gradient(180deg,var(--laton-claro),var(--laton))}
+.rail .mediana{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--tubo);box-shadow:0 0 6px rgb(210 232 240 / .6)}
+.escala{display:flex;justify-content:space-between;font:500 var(--t-12) var(--f-datos);color:var(--texto-2)}
+.nota{font-size:var(--t-14);color:var(--texto-2);margin:var(--e-2) 0 0}
+.nota b{color:var(--texto);font-weight:600}
+.sello{display:flex;align-items:center;gap:var(--e-2);margin-top:var(--e-4);padding:var(--e-2) var(--e-3);background:var(--kraft);color:var(--tinta-kraft);font-size:var(--t-14);border-radius:1px}
+.sello time{font:600 var(--t-12) var(--f-datos)}
+.sello svg{width:16px;height:16px}
+
+/* ---------- Tabla: hoja de inventario ---------- */
+table{width:100%;border-collapse:collapse;font-size:var(--t-14)}
+caption{text-align:left;padding-bottom:var(--e-3);font:700 var(--t-20) var(--f-ui)}
+thead th{font:800 var(--t-14) var(--f-rotulo);letter-spacing:.1em;color:var(--kraft);text-transform:uppercase;text-align:left;padding:var(--e-2) var(--e-3);border-bottom:2px solid #070807;box-shadow:0 1px 0 var(--canto)}
+th.n,td.n{text-align:right}
+tbody th,tbody td{height:48px;padding:0 var(--e-3);border-bottom:1px solid var(--canto)}
+tbody th{text-align:left;font-weight:600}
+tbody td.hueco-n{font:800 var(--t-16) var(--f-rotulo);color:var(--texto-2);letter-spacing:.06em}
+tbody tr:hover{background:var(--cono),var(--chapa-alta)}
+.sin-dato{color:var(--desconocido);font-family:var(--f-ui)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
+}
+</style>
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="dintel">
+  <div class="dintel-in">
+    <div class="marca">TALLER<span>6</span>MM</div>
+    <nav class="modulos" aria-label="Secciones">
+      <a href="#"><b>01</b>Banco</a><a href="#"><b>02</b>Réplicas</a><a href="#"><b>03</b>Accesorios</a><a href="#"><b>05</b>Mercado</a><a href="#" aria-current="page"><b>09</b>Sistema</a>
+    </nav>
+  </div>
+</header>
+<p class="aviso-demo">PROTOTIPO · Precios, tiendas y medidas de ejemplo (is_demo) · Renders internos de piezas paramétricas en T0, no publicables</p>
+
+<main id="contenido">
+  <section class="modulo heroe" aria-labelledby="t-heroe">
+    <div class="heroe-texto">
+      <span class="remache r1"></span><span class="remache r3"></span>
+      <p class="numero-modulo" aria-hidden="true">09</p>
+      <p class="eti">Módulo 09 · Sistema de diseño</p>
+      <h1 id="t-heroe">Cada cosa<br>en su hueco</h1>
+      <p class="entradilla">Chapa pintada, etiquetas de kraft y la luz fría del tubo. La interfaz se ordena como la armería: numerada, rotulada y a la vista.</p>
+    </div>
+    <figure class="panel-perforado" style="margin:0">
+      <div class="tubo"></div>
+      <img src="../img/m4a1-penumbra.jpg" alt="Carabina M4A1 colgada en el panel perforado, vista de tres cuartos. Culata y cargador aparecen como volúmenes naranjas translúcidos porque aún no tienen modelo." width="1280" height="720">
+      <svg class="capa" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Ranuras de la réplica">
+        <g class="nodo"><line x1="330" y1="200" x2="330" y2="120"/><circle cx="330" cy="200" r="5"/><rect class="caja" x="308" y="76" width="44" height="44" rx="3"/><path class="mas" d="M330 86v24M318 98h24"/><rect class="etiq" x="360" y="82" width="104" height="32"/><text x="370" y="105">Culata</text></g>
+        <g class="nodo"><line x1="590" y1="242" x2="590" y2="150"/><circle cx="590" cy="242" r="5"/><rect class="caja" x="568" y="106" width="44" height="44" rx="3"/><path class="mas" d="M590 116v24M578 128h24"/><rect class="etiq" x="620" y="112" width="100" height="32"/><text x="630" y="135">Óptica</text></g>
+        <g class="nodo activo"><line x1="800" y1="344" x2="922" y2="250"/><circle cx="800" cy="344" r="5"/><rect class="caja" x="900" y="206" width="44" height="44" rx="3"/><path class="mas" d="M922 216v24M910 228h24"/><rect class="etiq" x="952" y="212" width="170" height="32"/><text x="962" y="235">Guardamanos</text></g>
+        <g class="nodo"><line x1="615" y1="460" x2="615" y2="560"/><circle cx="615" cy="460" r="5"/><rect class="caja" x="593" y="560" width="44" height="44" rx="3"/><path class="mas" d="M615 570v24M603 582h24"/><rect class="etiq" x="645" y="566" width="122" height="32"/><text x="655" y="589">Cargador</text></g>
+        <g class="nodo"><line x1="1100" y1="466" x2="1100" y2="560"/><circle cx="1100" cy="466" r="5"/><rect class="caja" x="1078" y="560" width="44" height="44" rx="3"/><path class="mas" d="M1100 570v24M1088 582h24"/><rect class="etiq" x="958" y="566" width="112" height="32"/><text x="968" y="589">Bocacha</text></g>
+      </svg>
+      <figcaption class="pie"><span>M4A1 carabina · <b>T0 sin validar</b> · 4 de 9 ranuras</span><span>Comprobado <b><time datetime="2026-11-22T08:40:00Z">22-11-2026 08:40 UTC</time></b></span></figcaption>
+    </figure>
+  </section>
+
+  <section class="estante" aria-labelledby="t-a">
+    <div class="estante-cab"><span class="portaetiqueta"><span>A-01</span></span><h2 id="t-a">Acciones y campos</h2><p>Botón · Campo</p></div>
+    <div class="rejilla">
+      <div class="modulo panel c7"><span class="remache r1"></span><span class="remache r2"></span>
+        <p class="sub-eti">Botón · reposo, hover, foco, pulsado, deshabilitado</p>
+        <div class="estados">
+          <button class="boton b-laton" type="button">Montar</button>
+          <button class="boton b-laton is-hover" type="button">Montar</button>
+          <button class="boton b-laton is-foco" type="button">Montar</button>
+          <button class="boton b-laton is-activo" type="button">Montar</button>
+          <button class="boton b-laton" type="button" disabled>Montar</button>
+          <button class="boton b-chapa" type="button">Comparar</button>
+          <button class="boton b-chapa is-hover" type="button">Comparar</button>
+          <button class="boton b-chapa is-foco" type="button">Comparar</button>
+          <button class="boton b-chapa is-activo" type="button">Comparar</button>
+          <button class="boton b-chapa" type="button" disabled>Comparar</button>
+        </div>
+      </div>
+      <div class="modulo panel c5"><span class="remache r1"></span><span class="remache r2"></span>
+        <div class="campo">
+          <label for="lc">Longitud del cañón interno</label>
+          <div class="control is-foco"><input id="lc" value="363,0" inputmode="decimal" aria-describedby="lc-a"><span class="unidad">MM</span></div>
+          <p class="ayuda" id="lc-a">Entre 200,0 y 550,0 mm.</p>
+        </div>
+        <div class="campo error">
+          <label for="ci">Calibre interior</label>
+          <div class="control"><input id="ci" value="seis" aria-invalid="true" aria-describedby="ci-e"><span class="unidad">MM</span></div>
+          <p class="ayuda" id="ci-e"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l7 13H1z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 6v4M8 11.5v1.5" stroke="currentColor" stroke-width="1.4"/></svg>Escribe un número con coma: 6,03.</p>
+        </div>
+      </div>
+    </div>
+    <div class="balda"></div>
+  </section>
+
+  <section class="estante" aria-labelledby="t-b">
+    <div class="estante-cab"><span class="portaetiqueta"><span>B-02</span></span><h2 id="t-b">Ficha de pieza</h2><p>Cada pieza en su hueco, con su etiqueta</p></div>
+    <div class="rejilla">
+      <article class="hueco c3 is-hover">
+        <div class="hueco-cab"><span>HUECO 14</span><span class="tier t0"><i><b></b></i>T0</span></div>
+        <div class="hueco-int"><div class="tubo"></div><img src="../img/mlok-9.jpg" alt="Guardamanos M-LOK de 9 pulgadas, vista de tres cuartos" width="800" height="600"></div>
+        <div class="etiqueta"><div class="kraft"><span class="ref">GM-MLOK-9 · 228,6 mm</span><h3><a href="#">Guardamanos M-LOK 9″</a></h3><span class="precio">desde <b>54,90 €</b></span></div></div>
+        <div class="hueco-pie"><div class="linea"><span>4 tiendas</span><time datetime="2026-11-22T08:40:00Z">comprobado hace 2 h</time></div><span class="estado ok"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Compatible con tu M4</span></div>
+      </article>
+      <article class="hueco c3">
+        <div class="hueco-cab"><span>HUECO 15</span><span class="tier t0"><i><b></b></i>T0</span></div>
+        <div class="hueco-int"><div class="tubo apagado"></div><img src="../img/ris-m4.jpg" alt="Guardamanos RIS de cuatro raíles para M4, vista de tres cuartos" width="800" height="600"></div>
+        <div class="etiqueta"><div class="kraft"><span class="ref">GM-RIS-M4 · 7″</span><h3><a href="#">Guardamanos RIS M4</a></h3><span class="precio">desde <b>39,00 €</b></span></div></div>
+        <div class="hueco-pie"><div class="linea"><span>2 tiendas</span><time datetime="2026-11-22T05:10:00Z">comprobado hace 5 h</time></div><span class="estado aviso"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l7 13H1z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 6v4M8 11.5v1.5" stroke="currentColor" stroke-width="1.4"/></svg>Pocas unidades</span></div>
+      </article>
+      <article class="hueco c3">
+        <div class="hueco-cab"><span>HUECO 16</span><span class="tier t0"><i><b></b></i>T0</span></div>
+        <div class="hueco-int"><div class="tubo apagado"></div>
+          <svg viewBox="0 0 400 300" role="img" aria-label="Plantilla lateral de la bocacha: 60,0 mm de largo y 24,0 mm de diámetro">
+            <g fill="none" stroke="#C9A978" stroke-width="2"><rect x="95" y="108" width="210" height="84"/><rect x="75" y="126" width="20" height="48"/><rect x="150" y="122" width="100" height="12" rx="6"/><rect x="150" y="144" width="100" height="12" rx="6"/><rect x="150" y="166" width="100" height="12" rx="6"/></g>
+            <g stroke="#A9B1A5" stroke-width="1"><path d="M75 180v50M305 196v34M80 222h220M310 108h40M310 192h40M342 112v76"/></g>
+            <g font-family="Red Hat Mono,monospace" font-size="15" fill="#ECE8DE"><text x="190" y="250" text-anchor="middle">60,0 mm</text><text x="320" y="96">Ø 24,0</text></g>
+          </svg>
+        </div>
+        <div class="etiqueta"><div class="kraft"><span class="ref">BC-14CCW · 60,0 mm</span><h3><a href="#">Bocacha 14 mm CCW</a></h3><span class="precio">desde <b>8,95 €</b></span></div></div>
+        <div class="hueco-pie"><div class="linea"><span>3 tiendas</span><time datetime="2026-11-21T10:00:00Z">comprobado hace 1 día</time></div><span class="estado aviso"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l7 13H1z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 6v4M8 11.5v1.5" stroke="currentColor" stroke-width="1.4"/></svg>Necesita adaptador CW→CCW</span></div>
+      </article>
+      <div class="modulo panel c3"><span class="remache r1"></span><span class="remache r2"></span>
+        <p class="sub-eti">Insignias de fidelidad</p>
+        <ul class="tiers">
+          <li><span class="tier t0"><i><b></b></i>T0</span><p><b>Plano técnico</b>Silueta a escala con cotas.</p></li>
+          <li><span class="tier t1"><i><b></b></i>T1</span><p><b>Foto licenciada</b>Calibrada, error ≤ 1 %.</p></li>
+          <li><span class="tier t2"><i><b></b></i>T2</span><p><b>Modelo fiel</b>3D propio, ≤ 2 mm.</p></li>
+          <li><span class="tier t3"><i><b></b></i>T3</span><p><b>Verificado</b>Escaneo o CAD, ≤ 0,5 mm.</p></li>
+        </ul>
+      </div>
+    </div>
+    <div class="balda"></div>
+  </section>
+
+  <section class="estante" aria-labelledby="t-c">
+    <div class="estante-cab"><span class="portaetiqueta"><span>C-03</span></span><h2 id="t-c">Datos</h2><p>Placa de dato con fecha · hoja de inventario</p></div>
+    <div class="rejilla">
+      <div class="modulo panel c4"><span class="remache r1"></span><span class="remache r2"></span><span class="remache r3"></span><span class="remache r4"></span>
+        <p class="sub-eti">Peso de la build</p>
+        <div class="lectura"><span class="valor">3120<small>g</small></span></div>
+        <div class="rail" role="img" aria-label="3120 gramos en una escala de 2400 a 4200 gramos; la mediana de 128 builds M4 es 3400 gramos">
+          <i class="lleno"></i><i class="lleno"></i><i class="lleno"></i><i class="lleno"></i><i class="lleno"></i><i class="lleno"></i><i class="lleno"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          <span class="mediana" style="left:55.5%"></span>
+        </div>
+        <div class="escala"><span>2400 g</span><span>4200 g</span></div>
+        <p class="nota">Línea de luz: <b>mediana de 128 builds M4</b> (3400 g).</p>
+        <p class="sello"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor"/><path d="M8 4v4l3 2" fill="none" stroke="currentColor"/></svg>Comprobado <time datetime="2026-11-22T08:40:00Z">22-11-2026 08:40 UTC</time></p>
+      </div>
+      <div class="modulo panel c8"><span class="remache r1"></span><span class="remache r2"></span>
+        <table>
+          <caption>Cañones internos de 6,0x mm</caption>
+          <thead><tr><th scope="col">Hueco</th><th scope="col">Pieza</th><th scope="col" class="n">Longitud</th><th scope="col" class="n">Ø int.</th><th scope="col" class="n">Desde</th><th scope="col">Nivel</th><th scope="col">Comprobado</th></tr></thead>
+          <tbody>
+            <tr><td class="hueco-n">C-21</td><th scope="row">Cañón interno 6,03 · CQB</th><td class="n num">229,0 mm</td><td class="n num">6,03</td><td class="n num">34,90 €</td><td><span class="tier t1"><i><b></b></i>T1</span></td><td class="num"><time datetime="2026-11-22T08:40:00Z">hace 2 h</time></td></tr>
+            <tr><td class="hueco-n">C-22</td><th scope="row">Cañón interno 6,01 · carabina</th><td class="n num">363,0 mm</td><td class="n num">6,01</td><td class="n num">49,95 €</td><td><span class="tier t2"><i><b></b></i>T2</span></td><td class="num"><time datetime="2026-11-21T19:05:00Z">hace 15 h</time></td></tr>
+            <tr><td class="hueco-n">C-23</td><th scope="row">Cañón interno 6,05 · fusil</th><td class="n num">455,0 mm</td><td class="n num">6,05</td><td class="n"><span class="sin-dato">Sin precio</span></td><td><span class="tier t0"><i><b></b></i>T0</span></td><td><span class="sin-dato">Sin fecha</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="balda"></div>
+  </section>
+</main>
+</body>
+</html>
