@@ -182,16 +182,10 @@ catalogs:
     '@cloudflare/vitest-pool-workers':
       specifier: 0.22.0
       version: 0.22.0
-    '@fontsource-variable/archivo':
+    '@fontsource/ibm-plex-mono':
       specifier: 5.3.0
       version: 5.3.0
-    '@fontsource/big-shoulders-stencil':
-      specifier: 5.3.0
-      version: 5.3.0
-    '@fontsource/cinzel':
-      specifier: 5.3.0
-      version: 5.3.0
-    '@fontsource/jetbrains-mono':
+    '@fontsource/ibm-plex-sans-condensed':
       specifier: 5.3.0
       version: 5.3.0
     '@playwright/mcp':
@@ -530,16 +524,10 @@ importers:
 
   packages/ui:
     dependencies:
-      '@fontsource-variable/archivo':
+      '@fontsource/ibm-plex-mono':
         specifier: 'catalog:'
         version: 5.3.0
-      '@fontsource/big-shoulders-stencil':
-        specifier: 'catalog:'
-        version: 5.3.0
-      '@fontsource/cinzel':
-        specifier: 'catalog:'
-        version: 5.3.0
-      '@fontsource/jetbrains-mono':
+      '@fontsource/ibm-plex-sans-condensed':
         specifier: 'catalog:'
         version: 5.3.0
       react:
@@ -1532,17 +1520,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@fontsource-variable/archivo@5.3.0':
-    resolution: {integrity: sha512-HogK8FJelrD1o7TlZlkIVtHgc20bO5PZRWE7mUeUTdMN055alznQV6/00J00IBeu8FQAH4s3zW9UJNvKExXf+g==}
+  '@fontsource/ibm-plex-mono@5.3.0':
+    resolution: {integrity: sha512-eTgnZjZEGk1QtD3ZstF+Vclo2HLAni8YMy34/DxllwZvyz1lR/1RF/xTiAquOBO7MvqBx8D2Ig2WCPMVfdZu7Q==}
 
-  '@fontsource/big-shoulders-stencil@5.3.0':
-    resolution: {integrity: sha512-ruy9fT5PFzr1jplPV2OGM7D/RU6uOWTfTPuGdrqlyfXHsPrdErO/CeioPNXvf/wZNiE9fvzJYQ/Ol9ztgXWp1A==}
-
-  '@fontsource/cinzel@5.3.0':
-    resolution: {integrity: sha512-KEOYTsrRppW0uRIPWBDPrQgunCS6f8u4nzZxYRBfo9SCknKojLYjK7B0ZoVmJhyVLefz271ZQRF9EOpHZlfhRw==}
-
-  '@fontsource/jetbrains-mono@5.3.0':
-    resolution: {integrity: sha512-fqDfB5I9f1p1TV486aUgB9t8zP84P0O1FtQR5Ol9vjwPy+S+EIGlVYm1cvj2W5shcZMTg2nZFdVMoH5wFu8a1A==}
+  '@fontsource/ibm-plex-sans-condensed@5.3.0':
+    resolution: {integrity: sha512-fQyBpwbkguP4azjq7Cw8h/J3C/d8MFAzXOiSoFxyKCUK4x0XKrWEh3tGdTxhDM0HctVRQilQo1zGoyxDHLm5jQ==}
 
   '@formatjs/ecma402-abstract@2.3.6':
     resolution: {integrity: sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==}
@@ -4974,13 +4956,9 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@fontsource-variable/archivo@5.3.0': {}
+  '@fontsource/ibm-plex-mono@5.3.0': {}
 
-  '@fontsource/big-shoulders-stencil@5.3.0': {}
-
-  '@fontsource/cinzel@5.3.0': {}
-
-  '@fontsource/jetbrains-mono@5.3.0': {}
+  '@fontsource/ibm-plex-sans-condensed@5.3.0': {}
 
   '@formatjs/ecma402-abstract@2.3.6':
     dependencies:

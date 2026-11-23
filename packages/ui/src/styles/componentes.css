@@ -46,16 +46,16 @@
 
   /* ── Botón: latón, acero, fantasma y peligro ─────────────────────────────── */
   .t6-boton {
-    --_fondo: var(--acero);
-    --_fondo-hover: color-mix(in oklab, var(--acero), var(--hueso) 10%);
-    --_fondo-activo: color-mix(in oklab, var(--acero), var(--negro-pavonado) 22%);
-    --_fondo-deshabilitado: color-mix(in oklab, var(--acero) 45%, var(--carbon));
+    --_fondo: transparent;
+    --_fondo-hover: color-mix(in oklab, var(--cota) 12%, transparent);
+    --_fondo-activo: color-mix(in oklab, var(--cota) 22%, transparent);
+    --_fondo-deshabilitado: transparent;
     --_texto: var(--hueso);
     --_texto-hover: var(--hueso);
     --_texto-activo: var(--hueso);
-    --_borde: color-mix(in oklab, var(--acero), var(--hueso) 14%);
-    --_borde-hover: var(--laton);
-    --_borde-deshabilitado: var(--estado-desconocido);
+    --_borde: var(--trazo-fuerte);
+    --_borde-hover: var(--cota);
+    --_borde-deshabilitado: var(--trazo-fuerte);
 
     position: relative;
     display: inline-flex;
@@ -89,13 +89,49 @@
   .t6-boton--laton {
     --_fondo: var(--laton);
     --_fondo-hover: var(--laton-claro);
-    --_fondo-activo: color-mix(in oklab, var(--laton), var(--negro-pavonado) 14%);
+    --_fondo-activo: color-mix(in oklab, var(--laton), var(--sobre-laton) 14%);
     --_fondo-deshabilitado: color-mix(in oklab, var(--laton) 20%, var(--carbon));
-    --_texto: var(--negro-pavonado);
-    --_texto-hover: var(--negro-pavonado);
-    --_texto-activo: var(--negro-pavonado);
+    --_texto: var(--sobre-laton);
+    --_texto-hover: var(--sobre-laton);
+    --_texto-activo: var(--sobre-laton);
     --_borde: var(--laton);
     --_borde-hover: var(--laton-claro);
+  }
+
+  /* Acero = botón de línea del plano: sin relleno, borde de control marcado y, al pasar, las
+     esquinas de registro que marcan «pieza seleccionada». */
+  .t6-boton--acero {
+    box-shadow: none;
+  }
+
+  .t6-boton--acero::before,
+  .t6-boton--acero::after {
+    position: absolute;
+    inline-size: var(--espacio-2);
+    block-size: var(--espacio-2);
+    border: 0 solid var(--cota);
+    content: "";
+    opacity: 0;
+    transition: opacity var(--duracion-micro) var(--curva-mecanica);
+  }
+
+  .t6-boton--acero::before {
+    inset-block-start: calc(-1 * var(--espacio-1) - var(--trazo-fino));
+    inset-inline-start: calc(-1 * var(--espacio-1) - var(--trazo-fino));
+    border-block-start-width: var(--trazo-foco);
+    border-inline-start-width: var(--trazo-foco);
+  }
+
+  .t6-boton--acero::after {
+    inset-block-end: calc(-1 * var(--espacio-1) - var(--trazo-fino));
+    inset-inline-end: calc(-1 * var(--espacio-1) - var(--trazo-fino));
+    border-block-end-width: var(--trazo-foco);
+    border-inline-end-width: var(--trazo-foco);
+  }
+
+  .t6-boton--acero:is(:hover, [data-demo="hover"], [data-demo="activo"]):not(:disabled, [aria-disabled="true"])::before,
+  .t6-boton--acero:is(:hover, [data-demo="hover"], [data-demo="activo"]):not(:disabled, [aria-disabled="true"])::after {
+    opacity: 1;
   }
 
   .t6-boton--fantasma {
@@ -334,14 +370,10 @@
     }
   }
 
-  /* ── Placa: panel atornillado de grafito con ruido sutil ─────────────────── */
+  /* ── Placa: lámina de plano con marcas de registro (ADR-0010) ───────────────
+     Radio 0, borde de trazo marcado, sombra interior sutil y dos esquinas de registro (arriba a la
+     izquierda y abajo a la derecha) que sobresalen del marco, como en una hoja de plano. */
   .t6-placa {
-    --_tornillo: radial-gradient(
-      circle,
-      color-mix(in oklab, var(--acero), var(--hueso) 18%) 0 30%,
-      var(--acero) 34% 46%,
-      transparent 52%
-    );
     --_borde: var(--acero);
 
     position: relative;
@@ -353,25 +385,8 @@
     padding: var(--espacio-6);
     border: var(--trazo-fino) solid var(--_borde);
     border-radius: var(--radio-l);
-    background-color: var(--grafito);
-    /* Capas, de arriba abajo: cuatro tornillos, luz cenital (brillo interior) y ruido del metal. */
-    background-image:
-      var(--_tornillo), var(--_tornillo), var(--_tornillo), var(--_tornillo), var(--brillo-placa), var(--textura-ruido);
-    background-position:
-      left var(--espacio-2) top var(--espacio-2),
-      right var(--espacio-2) top var(--espacio-2),
-      left var(--espacio-2) bottom var(--espacio-2),
-      right var(--espacio-2) bottom var(--espacio-2),
-      0 0,
-      0 0;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
-    background-size:
-      var(--espacio-2) var(--espacio-2),
-      var(--espacio-2) var(--espacio-2),
-      var(--espacio-2) var(--espacio-2),
-      var(--espacio-2) var(--espacio-2),
-      100% 100%,
-      auto;
+    background-color: var(--carbon);
+    background-image: var(--brillo-placa);
     box-shadow: var(--sombra-placa);
     color: var(--hueso);
     transition:
@@ -380,15 +395,34 @@
       translate var(--duracion-micro) var(--curva-mecanica);
   }
 
-  .t6-placa--lisa {
-    background-image: var(--brillo-placa), var(--textura-ruido);
-    background-position:
-      0 0,
-      0 0;
-    background-repeat: no-repeat, repeat;
-    background-size:
-      100% 100%,
-      auto;
+  .t6-placa::before,
+  .t6-placa::after {
+    position: absolute;
+    inline-size: var(--espacio-4);
+    block-size: var(--espacio-4);
+    border: 0 solid var(--cota);
+    content: "";
+    pointer-events: none;
+  }
+
+  .t6-placa::before {
+    inset-block-start: calc(-1 * var(--espacio-2) - var(--trazo-fino));
+    inset-inline-start: calc(-1 * var(--espacio-2) - var(--trazo-fino));
+    border-block-start-width: var(--trazo-foco);
+    border-inline-start-width: var(--trazo-foco);
+  }
+
+  .t6-placa::after {
+    inset-block-end: calc(-1 * var(--espacio-2) - var(--trazo-fino));
+    inset-inline-end: calc(-1 * var(--espacio-2) - var(--trazo-fino));
+    border-block-end-width: var(--trazo-foco);
+    border-inline-end-width: var(--trazo-foco);
+  }
+
+  /* Lisa: panel anidado o pequeño, sin esquinas de registro. */
+  .t6-placa--lisa::before,
+  .t6-placa--lisa::after {
+    display: none;
   }
 
   .t6-placa__cabecera {
@@ -587,54 +621,68 @@
     }
   }
 
-  /* ── Insignia de fidelidad T0–T3 (docs/05 §2) ────────────────────────────── */
+  /* ── Insignia de fidelidad T0–T3 (docs/05 §2): un cuadrito que se va llenando ─
+     T0 vacío y discontinuo, T1 un tercio, T2 dos tercios y T3 lleno: el nivel se lee por la forma
+     y por el texto, nunca solo por el color. */
   .t6-insignia {
-    --_tinta: var(--niebla);
-    --_fondo: transparent;
-    --_borde: currentColor;
+    --_tinta: var(--hueso);
+    --_borde: var(--trazo-fuerte);
+    --_llenado: 0%;
 
     display: inline-flex;
     align-items: center;
     gap: var(--espacio-2);
-    padding: var(--espacio-1) var(--espacio-2);
+    padding: var(--espacio-1) var(--espacio-2) var(--espacio-1) var(--espacio-1);
     border: var(--trazo-fino) solid var(--_borde);
     border-radius: var(--radio-s);
-    background-color: var(--_fondo);
+    background-color: var(--negro-pavonado);
     color: var(--_tinta);
+    font-family: var(--fuente-datos);
     font-size: var(--texto-xs);
-    font-stretch: var(--anchura-semicondensada);
     font-weight: var(--peso-semi);
     line-height: var(--interlineado-compacto);
     white-space: nowrap;
   }
 
+  .t6-insignia__nivel {
+    display: inline-block;
+    flex: none;
+    inline-size: var(--espacio-3);
+    block-size: var(--espacio-3);
+    border: var(--trazo-fino) solid currentColor;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% var(--_llenado);
+  }
+
   .t6-insignia__codigo {
-    font-family: var(--fuente-datos);
     letter-spacing: var(--interletra-versalitas);
   }
 
   .t6-insignia__nombre {
+    font-family: var(--fuente-interfaz);
+    font-weight: var(--peso-medio);
     text-transform: uppercase;
     letter-spacing: var(--interletra-versalitas);
   }
 
-  /* T0 es un nivel real (plano técnico): borde continuo. El discontinuo es solo para lo desconocido. */
-  .t6-insignia--t0 {
-    border-style: solid;
+  .t6-insignia--t0 .t6-insignia__nivel {
+    border-style: dashed;
   }
 
   .t6-insignia--t1 {
-    --_tinta: var(--fde);
+    --_llenado: 34%;
   }
 
   .t6-insignia--t2 {
-    --_tinta: var(--laton);
+    --_llenado: 67%;
   }
 
   .t6-insignia--t3 {
-    --_tinta: var(--negro-pavonado);
-    --_fondo: var(--laton-claro);
-    --_borde: var(--laton-claro);
+    --_tinta: var(--laton-claro);
+    --_borde: var(--laton);
+    --_llenado: 100%;
   }
 
   .t6-insignia--sin-nivel {
@@ -691,8 +739,9 @@
     position: relative;
     height: var(--espacio-2);
     overflow: hidden;
+    border: var(--trazo-fino) solid var(--acero);
     border-radius: var(--radio-s);
-    background-color: var(--carbon);
+    background-color: var(--negro-pavonado);
     box-shadow: var(--sombra-hundida);
   }
 
@@ -703,7 +752,7 @@
     background-image: repeating-linear-gradient(
       90deg,
       transparent 0 calc(10% - var(--trazo-fino)),
-      var(--negro-pavonado) calc(10% - var(--trazo-fino)) 10%
+      var(--trazo-fuerte) calc(10% - var(--trazo-fino)) 10%
     );
     content: "";
     pointer-events: none;

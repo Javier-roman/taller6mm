@@ -74,3 +74,57 @@ export const IconoFlecha = () => (
     <path d="M4 12h15M14 7l5 5-5 5" />
   </Icono>
 );
+
+/** Correcto / compatible: marca de verificación. */
+export const IconoCheck = () => (
+  <Icono>
+    <path d="m5 12.5 4.5 4.5L19 7.5" />
+  </Icono>
+);
+
+/** Agotado / incompatible / cerrar: aspa. */
+export const IconoCruz = () => (
+  <Icono>
+    <path d="m6 6 12 12M18 6 6 18" />
+  </Icono>
+);
+
+/** Información: «i» dentro de un círculo. */
+export const IconoInfo = () => (
+  <Icono>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v6M12 7.5v.5" />
+  </Icono>
+);
+
+/** Con adaptador: dos piezas unidas por una intermedia. */
+export const IconoAdaptador = () => (
+  <Icono>
+    <path d="M3 9h5v6H3zM16 9h5v6h-5z" />
+    <path d="M8 12h8M11 9v6M13 9v6" />
+  </Icono>
+);
+
+/** Reloj: dato provisional o pendiente de comprobar. */
+export const IconoReloj = () => (
+  <Icono>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </Icono>
+);
+
+/** Estrella de valoración (el relleno lo decide `llena`). */
+export const IconoEstrella = ({ llena }: { llena: boolean }) => (
+  <svg
+    className="t6-icono"
+    viewBox="0 0 24 24"
+    fill={llena ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinejoin="miter"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m12 3 2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 16.8 6.4 20l1.3-6.2L3 9.5l6.3-.7z" />
+  </svg>
+);

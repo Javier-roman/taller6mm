@@ -1,6 +1,8 @@
 # 02 · Experiencia y diseño
 
 ## 1. Concepto: "herencia de armero, precisión táctica"
+> **Dirección de arte vigente (22-11-2026, ADR-0010, pendiente del OK visual): «Plano de cotas», «Todo se mide, nada se inventa».** La interfaz se dibuja como un plano técnico: tinta y lámina azul pizarra, retícula, cotas en milímetros, marcas de registro, papel para los renders y latón solo para la acción. Del concepto original (armería, nogal, flexo) quedan La Armería (inicio 3D), la luz de tubo en lo activo y el kraft de las etiquetas de precio. §4 describe el sistema vigente.
+
 Clásico y moderno a la vez:
 - **Clásico**: madera de nogal, latón, grabados finos, cuero, rótulos pintados a plantilla, la luz cálida de un flexo sobre el banco.
 - **Moderno**: aluminio anodizado, tipografía técnica, datos precisos, HUD discreto, luz fría de tubo LED.
@@ -73,51 +75,46 @@ Assets de la escena: geometría propia o procedimental (estanterías, maletines 
 - 60 FPS en escritorio medio; ≥ 30 FPS en móvil medio, o se cae al póster.
 
 ## 4. Sistema de diseño
-### 4.1 Color (tokens con nombre de acabado)
+### 4.1 Color (tokens; los nombres de acabado se conservan, ADR-0010)
 | Token | Hex | Uso |
 |---|---|---|
-| `--negro-pavonado` | #0B0C0E | Fondo base |
-| `--carbon` | #121417 | Superficies |
-| `--grafito` | #1C1F23 | Paneles elevados |
-| `--acero` | #2A2F35 | Bordes y divisores |
-| `--niebla` | #9AA3AD | Texto secundario |
-| `--hueso` | #E8E4DC | Texto principal |
-| `--laton` | #B8925A | Acento principal (premium, clásico) |
-| `--laton-claro` | #D9B77E | Hover y realce del acento |
-| `--fde` | #A08A6A | Acento secundario (Flat Dark Earth) |
-| `--verde-ranger` | #4B5A3F | Acento terciario |
-| `--naranja-senal` | #E75A31 | Interacción activa, ranura seleccionada y anillo de foco (antes #E4572E) |
-| `--estado-ok` | #3FA66B | En stock / compatible |
-| `--estado-aviso` | #E0A526 | Pocas unidades / con adaptador |
-| `--estado-error` | #E65850 | Agotado / incompatible (antes #D2453F) |
-| `--estado-desconocido` | #7F8894 | Sin datos (antes #6B7480) |
+| `--negro-pavonado` | #080C0F | Tinta: fondo de la mesa de dibujo (con retícula) |
+| `--carbon` | #15212A | Lámina: superficie de paneles |
+| `--grafito` | #1F303B | Lámina alta: paneles elevados y hover |
+| `--acero` | #3D525E | Trazo: bordes y divisores |
+| `--trazo-fuerte` | #8CA3AD | Borde de control, regla y cotas secundarias |
+| `--papel` / `--tinta-papel` | #D7D4CC / #1B2226 | Lámina de papel (renders, planos) y su trazo |
+| `--hueso` | #EFEBE1 | Texto principal |
+| `--niebla` | #AFBCC3 | Texto secundario |
+| `--cota` | #9CC3D0 | Líneas y textos de cota, marcas de registro |
+| `--laton` / `--laton-claro` | #C29A5B / #DDBB82 | Acción y precio; hover. Texto sobre latón: `--sobre-laton` #15110B |
+| `--kraft` | #C9AE84 | Portaetiquetas de precio |
+| `--fde` | #B09A7A | Acento secundario: marcas y referencias |
+| `--verde-ranger` | #4B5A3F | Acento terciario (chapas) |
+| `--naranja-senal` | #F27346 | Señal: foco, ranura seleccionada y luz de tubo en lo activo |
+| `--estado-ok` / `-aviso` / `-error` / `-desconocido` | #4DB27B / #E2A82B / #F0736B / #8C96A1 | En stock·compatible / pocas·con adaptador / agotado·incompatible / sin datos |
 
 Reglas:
 - Contraste mínimo AA (4,5:1 en texto normal).
 - El color nunca es el único portador de significado: cada estado lleva icono y texto.
 - Son valores iniciales: `critico-diseno` los valida con capturas y se ajustan en la Fase 1.
-- Tres valores se corrigieron en la Fase 0 porque no llegaban a AA como texto. Se mantuvo la misma tinta en OKLCH y se subió solo la luz:
-  - `--estado-error`: de 4,35:1 a 4,63:1 en la peor superficie;
-  - `--estado-desconocido`: de 4,13:1 a 4,61:1;
-  - `--naranja-senal`: de 4,49:1 a 4,65:1 sobre grafito.
+- Ajustes de Javi sobre el prototipo A: más diferencia entre tinta y lámina, bordes más marcados y más contraste, sin saturar (nada de neón ni brillos).
 - La fuente única es `packages/ui/src/tokens.ts`. Un test comprueba AA en cada par texto/fondo declarado (`contrast.ts`).
 
 ### 4.2 Tipografía
-Todas con licencia OFL y **autoalojadas** con Fontsource; nada de cargarlas desde servidores de Google, por RGPD.
-- **Grabado** (marca, nombres de zona en grande): Cinzel, capitales de inscripción que evocan el grabado de armero.
-- **Rótulo** (etiquetas de zona, chips, rótulos de estantería): Big Shoulders Stencil, plantilla industrial.
-- **Interfaz**: Archivo, variable con eje de anchura (condensada para datos densos, normal para lectura).
-- **Datos** (medidas, precios, códigos): JetBrains Mono con cifras tabulares.
+Dos familias OFL, **autoalojadas** con Fontsource (nada de servidores de Google, por RGPD), solo woff2 latinos.
+- **IBM Plex Sans Condensed** (400/500/600/700): interfaz, titulares, marca y rótulos en versalitas. Ya es condensada: vale para tablas densas y para lectura.
+- **IBM Plex Mono** (400/500/600): medidas, precios, códigos y cotas, con cifras tabulares.
 
-Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo y 1,1 en titulares. Subconjunto latino extendido; precarga solo Archivo y la fuente del titular del inicio. Si el resultado no convence, evaluar alternativas con la skill de diseño de interfaces.
+Los tokens `--fuente-grabado`, `--fuente-rotulo` y `--fuente-interfaz` apuntan a Plex Sans Condensed y `--fuente-datos` a Plex Mono. Escala modular 1,25 (12/14/16/20/25/31/39/49/61 px). Interlineado 1,5 en cuerpo y 1,1 en titulares. Se precargan solo los pesos 400 y 600.
 
 ### 4.3 Espacio, forma y profundidad
 - Rejilla de 4 px; espaciados 4/8/12/16/24/32/48/64/96.
-- Radios pequeños (2–4 px): industrial y preciso. Sin "pastillas" redondas salvo avatares.
-- Paneles: fondo `--grafito` con ruido sutil (≤ 3 % de opacidad), borde de 1 px `--acero`, brillo interior superior de 1 px y sombras largas y suaves. En `packages/ui`:
-  - el ruido (`--textura-ruido`) es grano gris de contraste completo en una capa al 3 %;
-  - el brillo es el filo de 1 px (`--sombra-placa`) más una luz cenital muy suave en el tercio superior (`--brillo-placa`), como la de los tubos del techo sobre una chapa;
-  - el primer ajuste, grano solo blanco al 1,5 % de media y filo al 6 %, no se percibía en pantalla.
+- Radio 0 en paneles y marcas y 2 px en controles: preciso, sin "pastillas" redondas salvo avatares.
+- Fondo: retícula de 16 px y 80 px (`--reticula`) sobre la tinta.
+- Paneles (placas y fichas): lámina `--carbon`, borde de trazo `--acero` de 1 px, sombra interior sutil, luz cenital muy tenue y **marcas de registro** (esquinas en `--cota`) arriba a la izquierda y abajo a la derecha. Sin tornillos ni ruido.
+- Imágenes: los renders propios van sobre una lámina de `--papel`. Sin render, **plano T0 en SVG con las cotas reales** (solo vista ortogonal; sin medidas, «Sin medidas verificadas»).
+- Insignia de fidelidad: un cuadrito que se llena con el nivel (T0 vacío y discontinuo, T1 un tercio, T2 dos tercios, T3 lleno).
 - Luces de la sala como tokens:
   - `--luz-cenital`: fría, la de los tubos;
   - `--luz-flexo`: cálida, la del banco.
