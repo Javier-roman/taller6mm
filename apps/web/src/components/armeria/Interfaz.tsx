@@ -20,9 +20,6 @@ function Demo({ plural = false }: { plural?: boolean }) {
   );
 }
 
-/** «186 accesorios · 8 tiendas»: si el dato parte en dos líneas, el «·» se queda al final de la primera. */
-const sinSeparadorHuerfano = (dato: string) => dato.replaceAll(' · ', ' · ');
-
 /** Bombilla: «Más luz». */
 function IconoLuz() {
   return (
@@ -166,7 +163,11 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
                     >
                       <span className="armeria__zona-nombre">{z.rotulo}</span>
                       <span className="armeria__zona-dato">
-                        <span>{sinSeparadorHuerfano(z.dato)}</span>
+                        {z.dato.split(' · ').map((linea) => (
+                          <span key={linea} className="armeria__dato-linea">
+                            {linea}
+                          </span>
+                        ))}
                         <Demo />
                       </span>
                     </a>
@@ -181,6 +182,7 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
       {abierta ? (
         <div
           className="armeria__panel"
+          data-lado={abierta.estanteria === 'derecha' ? 'izquierda' : 'derecha'}
           role="dialog"
           aria-modal="false"
           aria-label={abierta.nombre}
@@ -192,13 +194,10 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
             <p className="armeria__panel-dato">
               {abierta.dato} <Demo />
             </p>
-            <p className="armeria__panel-nota">
-              Esta sección llega en la Fase {abierta.fase}. En la versión final, la cámara entra en el pasillo y un
-              fundido lleva a <code>{abierta.ruta}</code>.
-            </p>
+            <p className="armeria__panel-nota">Esta sección aún no está abierta.</p>
             <div className="armeria__panel-acciones">
-              <Boton variante="laton" aria-disabled="true" title={`Llega en la Fase ${abierta.fase}`}>
-                Entrar · Fase {abierta.fase}
+              <Boton variante="laton" aria-disabled="true" title="Esta sección aún no está abierta">
+                Próximamente
               </Boton>
               <Boton variante="fantasma" onClick={cerrar}>
                 Volver a la sala

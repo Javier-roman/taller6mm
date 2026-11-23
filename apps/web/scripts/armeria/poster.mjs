@@ -7,12 +7,12 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { argumentos, carpetaVistas, navegador, servidorHorno } from './comun.mjs';
 
-const args = argumentos({ calidad: '0.82' });
+const args = argumentos({ calidad: '0.9' });
 mkdirSync(carpetaVistas, { recursive: true });
 const { base, parar } = await servidorHorno();
 const browser = await navegador();
 try {
-  const context = await browser.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+  const context = await browser.newContext({ viewport: { width: 2560, height: 1440 }, deviceScaleFactor: 1 });
   const page = await context.newPage();
   const errores = [];
   page.on('console', (m) => {

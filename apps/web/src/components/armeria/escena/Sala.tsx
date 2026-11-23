@@ -5,7 +5,6 @@
 // La sala no decide nada: pinta lo que diga `ControlSala`. El nivel A (3D) la alimenta con el director
 // (intro, hover, linterna) y el horneado (horno/) fija cada grupo de luz por separado para el póster y el B.
 import { type ThreeEvent, useFrame, useThree } from '@react-three/fiber';
-import { BRAND } from '@taller6mm/ui/brand';
 import { colors } from '@taller6mm/ui/tokens';
 import { type ReactNode, type RefObject, useLayoutEffect, useMemo, useRef } from 'react';
 import {
@@ -27,6 +26,8 @@ import { ARMERO, SOCKETS, VITRINA } from '../sockets.ts';
 import { BANCO, ESTANTERIAS, type Estanteria, MUEBLE, ORDEN_ESTANTERIAS, ZONAS, type Zona } from '../zonas.ts';
 import {
   Alicate,
+  Bateria,
+  Bombona,
   Bote,
   CajaCarton,
   CajaHerramientas,
@@ -39,11 +40,13 @@ import {
   Diana,
   Etiqueta,
   Gafas,
+  HojaPlano,
   Linterna,
   LlavesAllen,
   Maletin,
   PlanoEnmarcado,
   Regla,
+  SoporteCasco,
   TINTAS_CARPETA,
 } from './atrezo.tsx';
 import { ajustarReflejo, crearReflejoFalso } from './efectos.ts';
@@ -81,12 +84,15 @@ export const crearControl = (luz: Iluminacion = crearIluminacion(1)): ControlSal
 /** Intensidades de referencia (candelas: luces físicas de three r155+), ajustadas con capturas. */
 export const LUZ = {
   tubo: 85,
+  /** Foco rasante sobre el ladrillo: un tercio del tubo, para ver la textura sin perder la penumbra. */
+  paredLavado: 28,
   tuboEmisivo: 3.4,
   // El flexo es la mancha más brillante de la sala: el banco es el protagonista (critico-diseno).
-  flexo: 40,
+  // El flexo es la mancha más brillante de la sala: el banco manda (critico-diseno, 23-11-2026).
+  flexo: 110,
   bombilla: 8,
-  vitrina: 5,
-  led: 3.2,
+  vitrina: 3.4,
+  led: 1.8,
   ambiente: 0.06,
   hemisferio: 0.1,
   acento: 34,
@@ -364,17 +370,19 @@ function Mostrador({ mat }: { mat: Materiales }) {
   return (
     <group position={[MUEBLE.ancho / 4, 0, 0]}>
       <Caja p={[0, yBalda, zBalda]} t={[1.15, 0.05, 0.42]} m={mat.contrachapado} />
-      <group position={[-0.32, yBalda + 0.025, zBalda]}>
-        <Casco mat={mat} tela="tela" />
-      </group>
-      <group position={[0.02, yBalda + 0.025, zBalda]} rotation={[0, 0.5, 0]}>
-        <Casco mat={mat} tela="telaFde" />
-      </group>
-      <group position={[0.36, yBalda + 0.025, zBalda + 0.05]}>
-        <Bote mat={mat} codigo="6 mm" linea2="0,20 g" />
-      </group>
-      <group position={[0.36, yBalda + 0.025, zBalda - 0.08]}>
+      {[-0.3, 0.04].map((x, k) => (
+        <group key={`casco-${x}`} position={[x, yBalda + 0.025, zBalda]} rotation={[0, k ? 0.5 : -0.2, 0]}>
+          <SoporteCasco mat={mat} />
+          <group position={[0, 0.115, 0]} scale={1.35}>
+            <Casco mat={mat} tela={k ? 'telaFde' : 'tela'} />
+          </group>
+        </group>
+      ))}
+      <group position={[0.37, yBalda + 0.025, zBalda + 0.08]}>
         <Bote mat={mat} codigo="6 mm" linea2="0,25 g" />
+      </group>
+      <group position={[0.34, yBalda + 0.025, zBalda - 0.09]}>
+        <Bombona mat={mat} />
       </group>
       {/* Etiquetas de kraft (portaetiquetas de precio) en el canto de la balda */}
       {[-0.4, -0.08, 0.24].map((x, i) => (
@@ -461,7 +469,7 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
   return (
     <group ref={g} position={[x, 0, z]}>
       <primitive object={objetivo} position={[-0.15, alto, 0]} />
-      <Caja p={[0, alto - 0.03, 0]} t={[ancho, 0.06, fondo]} m={mat.contrachapado} />
+      <Caja p={[0, alto - 0.03, 0]} t={[ancho, 0.06, fondo]} m={mat.tablero} />
       {[-1, 1].map((lado) => (
         <group key={`pata-${lado}`}>
           <Caja
@@ -478,7 +486,7 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
       ))}
       <Caja p={[0, 0.2, 0]} t={[ancho - 0.2, 0.04, fondo - 0.1]} m={mat.acero} />
       {/* Balda baja: caja de herramientas y una caja de cartón */}
-      <group position={[-0.6, 0.22, -0.02]}>
+      <group position={[-0.93, alto, 0.02]} rotation={[0, 0.12, 0]} scale={1.25}>
         <CajaHerramientas mat={mat} />
       </group>
       <group position={[0.5, 0.22, 0]}>
@@ -492,14 +500,20 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
       {/* Hueco de la réplica a medio montar, sobre el tapete (socket banco-1): sin réplica de relleno */}
       <group name="socket.banco-1" position={[-0.2, alto + 0.07, 0.04]} userData={{ socket: 'banco-1' }} />
       {/* Atrezo sobre el tablero, fuera de la franja central del socket */}
-      <group position={[0.78, yTapete, 0.12]}>
+      <group position={[0.8, yTapete, 0.14]} scale={1.5}>
         <Linterna mat={mat} />
       </group>
-      <group position={[0.55, yTapete, 0.2]} rotation={[0, 0.5, 0]}>
+      <group position={[0.66, yTapete, 0.22]} rotation={[0, 0.5, 0]} scale={1.5}>
         <Calibre mat={mat} />
       </group>
-      <group position={[-0.74, yTapete, -0.24]} rotation={[0, 0.3, 0]}>
-        <Gafas mat={mat} />
+      <group position={[-0.66, yTapete, -0.27]} rotation={[0, 0.35, 0]} scale={1.5}>
+        <Bateria mat={mat} />
+      </group>
+      <group position={[-0.5, yTapete, -0.28]} scale={1.3}>
+        <Bombona mat={mat} />
+      </group>
+      <group position={[0.5, yTapete + 0.002, -0.02]} rotation={[0, 0.18, 0]}>
+        <HojaPlano mm={[BANCO.ancho * 1000, BANCO.alto * 1000]} titulo="Banco de trabajo" />
       </group>
       <group position={[0.38, yTapete, -0.26]}>
         <Bote mat={mat} codigo="6 mm" linea2="0,20 g" />
@@ -510,10 +524,9 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
           <Cilindro key={`tornillo-${dx}`} p={[dx, 0.016, 0]} rad={0.007} h={0.01} m={mat.aceroClaro} seg={10} />
         ))}
       </group>
-      <group position={[0.2, yTapete + 0.004, 0.27]} rotation={[0, 0, Math.PI / 2]}>
+      <group position={[0.2, yTapete + 0.004, 0.27]} rotation={[0, 0, Math.PI / 2]} scale={1.4}>
         <Destornillador mat={mat} mango="destornilladorNaranja" />
       </group>
-      <Caja p={[-0.92, alto + 0.03, 0.16]} t={[0.12, 0.06, 0.08]} m={mat.kraft} />
       {/* Flexo: base, brazos, cabeza y bombilla */}
       <group position={[0.78, alto, -0.25]}>
         <mesh material={mat.acero}>
@@ -522,10 +535,10 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
         <Caja p={[-0.05, 0.28, 0.06]} t={[0.025, 0.56, 0.025]} r={[0.25, 0, 0.2]} m={mat.acero} />
         <Caja p={[-0.25, 0.56, 0.2]} t={[0.025, 0.45, 0.025]} r={[1.05, 0, 0.6]} m={mat.acero} />
         <mesh position={[-0.42, 0.56, 0.32]} rotation={[0.6, 0, 0.5]} material={mat.chapa}>
-          <coneGeometry args={[0.09, 0.14, 20, 1, true]} />
+          <coneGeometry args={[0.12, 0.19, 24, 1, true]} />
         </mesh>
-        <mesh position={[-0.44, 0.52, 0.34]} material={mat.bombilla}>
-          <sphereGeometry args={[0.03, 12, 12]} />
+        <mesh position={[-0.435, 0.545, 0.335]} material={mat.bombilla}>
+          <sphereGeometry args={[0.022, 12, 12]} />
         </mesh>
         <spotLight
           name="luz:calidas"
@@ -550,7 +563,7 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
 /** Panel perforado de herramientas tras el banco: destornilladores, alicates, llaves y cinta métrica colgados. */
 function PanelHerramientas({ mat }: { mat: Materiales }) {
   const zPanel = zFondo - MUEBLE.fondo / 2 + 0.03;
-  const yColgado = 1.24;
+  const yColgado = 1.17;
   return (
     <group>
       <Caja p={[0, 0.72, zPanel]} t={[2.5, 1.12, 0.02]} m={mat.perforado} />
@@ -558,7 +571,7 @@ function PanelHerramientas({ mat }: { mat: Materiales }) {
       <Caja p={[0, MUEBLE.baldaMedia - 0.045, MUEBLE.frente - 0.1]} t={[2.4, 0.016, 0.03]} m={mat.led} />
       <Caja p={[0, 1.285, zPanel + 0.012]} t={[2.5, 0.025, 0.03]} m={mat.acero} />
       {[-0.95, -0.82, -0.69, -0.56].map((x, i) => (
-        <group key={`destornillador-${x}`} position={[x, yColgado, zPanel + 0.045]}>
+        <group key={`destornillador-${x}`} position={[x, yColgado, zPanel + 0.045]} scale={1.3}>
           <Destornillador mat={mat} mango={i % 2 ? 'destornilladorOlivo' : 'destornilladorNaranja'} />
         </group>
       ))}
@@ -605,7 +618,7 @@ const materialRotulo = ({ mapa, emision }: { mapa: Texture; emision: Texture }) 
     name: 'emisivo:rotulos',
     map: mapa,
     // La lámina debe quedar oscura bajo el foco del tubo: el color se atenúa y solo luce lo grabado (emisión).
-    color: '#4a4a4a',
+    color: '#9c6c61',
     emissiveMap: emision,
     emissive: '#ffffff',
     emissiveIntensity: 0,
@@ -645,6 +658,12 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
     centro: useRef<SpotLight>(null),
     derecha: useRef<SpotLight>(null),
   } satisfies Record<Estanteria, RefObject<SpotLight | null>>;
+  // Focos rasantes que bañan el ladrillo desde cada tubo (el muro de ref-08 no puede desaparecer).
+  const lavado = {
+    izquierda: useRef<SpotLight>(null),
+    centro: useRef<SpotLight>(null),
+    derecha: useRef<SpotLight>(null),
+  } satisfies Record<Estanteria, RefObject<SpotLight | null>>;
   const flexo = useRef<SpotLight>(null);
   const vitrina = useRef<PointLight>(null);
   const acento = useRef<SpotLight>(null);
@@ -673,15 +692,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
   const rotulos = useMemo(
     () =>
       Object.fromEntries(
-        ZONAS.map((z) => [
-          z.id,
-          materialRotulo(
-            texturaRotulo(z.rotulo, {
-              alto: z.id === 'banco' ? 160 : 256,
-              cota: `${milimetros(z.caja.tamano[0])} mm`,
-            }),
-          ),
-        ]),
+        ZONAS.map((z) => [z.id, materialRotulo(texturaRotulo(z.rotulo, { alto: z.id === 'banco' ? 160 : 256 }))]),
       ) as Record<string, MeshStandardMaterial>,
     [],
   );
@@ -691,10 +702,11 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         ORDEN_ESTANTERIAS.map((e) => [
           e,
           materialRotulo(
-            texturaRotulo(e === 'centro' ? BRAND.name : ESTANTERIAS[e].titulo, {
-              alto: 160,
+            texturaRotulo(ESTANTERIAS[e].titulo, {
+              ancho: 2048,
+              alto: 206,
               cota: `${milimetros(MUEBLE.ancho)} mm`,
-              escala: 1.08,
+              escala: 1.1,
             }),
           ),
         ]),
@@ -718,6 +730,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
   const objetivos = useMemo(
     () => ({
       tubos: Object.fromEntries(ORDEN_ESTANTERIAS.map((e) => [e, new Object3D()])) as Record<Estanteria, Object3D>,
+      pared: Object.fromEntries(ORDEN_ESTANTERIAS.map((e) => [e, new Object3D()])) as Record<Estanteria, Object3D>,
       acento: new Object3D(),
       linterna: new Object3D(),
     }),
@@ -745,6 +758,11 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       if (foco) {
         foco.intensity = LUZ.tubo * nivel;
         foco.color.copy(control.colorTubo);
+      }
+      const lavar = lavado[e].current;
+      if (lavar) {
+        lavar.intensity = LUZ.paredLavado * nivel;
+        lavar.color.copy(control.colorTubo);
       }
       tubosMat[e].emissiveIntensity = LUZ.tuboEmisivo * Math.min(1.2, nivel * 1.6);
       ajustarReflejo(reflejos.tubos[e], LUZ.reflejo * Math.min(1.2, nivel), control.colorTubo);
@@ -844,6 +862,22 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       {ORDEN_ESTANTERIAS.map((e) => (
         <group key={`tubo-${e}`} position={[xDe(e), 3.42, -1.05]}>
           <Caja p={[0, 0.05, 0]} t={[2.3, 0.05, 0.16]} m={mat.acero} />
+          <Caja p={[0, 0.075, 0]} t={[2.34, 0.03, 0.1]} m={mat.aceroClaro} />
+          {[-0.95, 0.95].map((dx) => (
+            <Cilindro key={`cable-${dx}`} p={[dx, 0.46, 0]} rad={0.004} h={0.8} m={mat.caucho} seg={6} />
+          ))}
+          <primitive object={objetivos.pared[e]} position={[0, -0.95, -1.34]} />
+          <spotLight
+            name={`luz:tubo-${e}`}
+            ref={lavado[e]}
+            position={[0, 0, -0.04]}
+            target={objetivos.pared[e]}
+            intensity={0}
+            angle={0.62}
+            penumbra={0.95}
+            distance={5}
+            decay={2}
+          />
           <mesh rotation={[0, 0, Math.PI / 2]} material={tubosMat[e]}>
             <cylinderGeometry args={[0.024, 0.024, 2.2, 10]} />
           </mesh>
@@ -894,7 +928,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
           <PlacaRotulo
             material={cabeceras[e]}
             posicion={[0, MUEBLE.alto + 0.17, MUEBLE.frente - 0.012]}
-            tamano={[1.6, 0.25]}
+            tamano={[MUEBLE.ancho, 0.27]}
           />
           <mesh position={[MUEBLE.ancho / 2 - 0.2, MUEBLE.zocalo / 2, MUEBLE.frente + 0.025]}>
             <planeGeometry args={[0.16, 0.1]} />

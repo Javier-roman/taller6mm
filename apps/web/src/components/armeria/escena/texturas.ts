@@ -356,8 +356,8 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
 }
 
 /**
- * Pantalla del tablón: bajadas de precio de ejemplo, cada una con su hora de comprobación (principio 2:
- * nunca un precio sin fecha). Bajada en verde de estado con ▼; el naranja-señal es solo de interacción.
+ * Pantalla del tablón: solo la maqueta de la interfaz (cabecera y filas vacías). Sin cifras: un precio horneado en
+ * una imagen no tendría fecha de comprobación ni se actualizaría (principio 2); el dato vivo va en HTML.
  */
 export function texturaPantalla() {
   const { canvas, ctx } = lienzo(640, 400);
@@ -367,28 +367,19 @@ export function texturaPantalla() {
   ctx.lineWidth = 3;
   ctx.strokeRect(8, 8, 624, 384);
   ctx.fillStyle = colors.cota;
-  ctx.font = `500 26px ${FONT_FAMILIES.datos}`;
+  ctx.font = `500 28px ${FONT_FAMILIES.datos}`;
   ctx.textAlign = 'left';
-  ctx.fillText('BAJADAS · DEMO', 28, 50);
-  const filas = [
-    ['Bocacha 14 mm CCW', '▼ 12 %', 'comprobado hace 2 h'],
-    ['Óptica 1-4×24', '▼ 8 %', 'comprobado hace 3 h'],
-    ['Cargador mid-cap', '▼ 15 %', 'comprobado hace 5 h'],
-  ];
-  filas.forEach(([pieza, bajada, comprobado], i) => {
-    const y = 118 + i * 90;
-    ctx.textAlign = 'left';
-    ctx.fillStyle = colors.hueso;
-    ctx.font = `500 32px ${FONT_FAMILIES.datos}`;
-    ctx.fillText(pieza ?? '', 28, y);
-    ctx.fillStyle = colors.niebla;
-    ctx.font = `400 22px ${FONT_FAMILIES.datos}`;
-    ctx.fillText(comprobado ?? '', 28, y + 32);
-    ctx.fillStyle = colors['estado-ok'];
-    ctx.font = `600 36px ${FONT_FAMILIES.datos}`;
-    ctx.textAlign = 'right';
-    ctx.fillText(bajada ?? '', 612, y);
-  });
+  ctx.fillText('BAJADAS', 28, 52);
+  ctx.fillRect(28, 66, 120, 3);
+  for (let i = 0; i < 3; i++) {
+    const y = 110 + i * 88;
+    ctx.fillStyle = colors.acero;
+    ctx.fillRect(28, y, 330 - i * 40, 16);
+    ctx.fillStyle = colors['trazo-fuerte'];
+    ctx.fillRect(28, y + 30, 190 - i * 20, 9);
+    ctx.fillStyle = colors.acero;
+    ctx.fillRect(470, y, 140, 16);
+  }
   return textura(canvas);
 }
 
@@ -403,7 +394,7 @@ export function texturaDiana(semilla = 5) {
   const cx = 256;
   const cy = 300;
   for (let r = 40; r <= 220; r += 36) {
-    ctx.lineWidth = r === 40 ? 4 : 2.2;
+    ctx.lineWidth = r === 40 ? 9 : 6;
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.stroke();
@@ -411,7 +402,7 @@ export function texturaDiana(semilla = 5) {
   ctx.beginPath();
   ctx.arc(cx, cy, 20, 0, Math.PI * 2);
   ctx.fill();
-  ctx.lineWidth = 1.6;
+  ctx.lineWidth = 4;
   ctx.beginPath();
   ctx.moveTo(cx - 236, cy);
   ctx.lineTo(cx + 236, cy);
@@ -424,7 +415,7 @@ export function texturaDiana(semilla = 5) {
     const d = Math.abs(rnd() + rnd() - 1) * 190;
     ctx.fillStyle = 'rgb(20 24 28 / 0.88)';
     ctx.beginPath();
-    ctx.arc(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d, 5.2, 0, Math.PI * 2);
+    ctx.arc(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d, 9, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.fillStyle = colors['tinta-papel'];
@@ -447,10 +438,10 @@ export function texturaPlano(ancho_mm: number, alto_mm: number, titulo: string) 
   ctx.strokeStyle = tinta;
   ctx.fillStyle = tinta;
   // Cajetín.
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 6;
   ctx.strokeRect(20, 20, 728, 536);
   ctx.strokeRect(20, 486, 728, 70);
-  ctx.font = `700 30px ${FONT_FAMILIES.rotulo}`;
+  ctx.font = `700 38px ${FONT_FAMILIES.rotulo}`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
   ctx.fillText(titulo.toUpperCase(), 40, 514);
@@ -462,9 +453,9 @@ export function texturaPlano(ancho_mm: number, alto_mm: number, titulo: string) 
   const h = alto_mm * k;
   const x0 = (768 - w) / 2;
   const y0 = 50 + (420 - h) / 2;
-  ctx.lineWidth = 3.4;
+  ctx.lineWidth = 7;
   ctx.strokeRect(x0, y0, w, h);
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 4.5;
   // Balda media y zócalo, a su altura real.
   for (const frac of [0.047, 0.529]) {
     ctx.beginPath();
@@ -473,8 +464,8 @@ export function texturaPlano(ancho_mm: number, alto_mm: number, titulo: string) 
     ctx.stroke();
   }
   // Cotas.
-  ctx.lineWidth = 1.6;
-  ctx.font = `500 19px ${FONT_FAMILIES.datos}`;
+  ctx.lineWidth = 3.4;
+  ctx.font = `600 26px ${FONT_FAMILIES.datos}`;
   ctx.textAlign = 'center';
   const yc = y0 + h + 22;
   ctx.beginPath();
@@ -616,5 +607,38 @@ export function texturaRegla(alto_mm: number) {
     if (mm % 100 === 0 && mm > 0 && mm < alto_mm - 20) ctx.fillText(String(mm / 10), 6, y);
   }
   grano(ctx, ancho, alto_mm, 9, azar(alto_mm));
+  return textura(canvas);
+}
+
+/** Tablero de banco: nogal oscuro con veta marcada y juntas de tablas (se ve el material, no un color liso). */
+export function texturaTablero() {
+  const rnd = azar(113);
+  const { canvas, ctx } = lienzo(1024, 512);
+  const tablas = 5;
+  for (let t = 0; t < tablas; t++) {
+    const y0 = (t * 512) / tablas;
+    const tono = 0.82 + rnd() * 0.3;
+    ctx.fillStyle = `rgb(${Math.round(98 * tono)} ${Math.round(64 * tono)} ${Math.round(38 * tono)})`;
+    ctx.fillRect(0, y0, 1024, 512 / tablas);
+    for (let k = 0; k < 46; k++) {
+      const y = y0 + rnd() * (512 / tablas);
+      ctx.strokeStyle = `rgb(${24 + rnd() * 30} ${14 + rnd() * 18} ${8 + rnd() * 10} / ${0.3 + rnd() * 0.4})`;
+      ctx.lineWidth = 0.8 + rnd() * 2.6;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      for (let x = 0; x <= 1024; x += 40) ctx.lineTo(x, y + Math.sin(x / (70 + rnd() * 90)) * 4 + (rnd() - 0.5) * 2.4);
+      ctx.stroke();
+    }
+    ctx.fillStyle = 'rgb(8 5 3 / 0.85)';
+    ctx.fillRect(0, y0, 1024, 3);
+  }
+  // Marcas de uso: algún golpe y mancha clara.
+  for (let k = 0; k < 24; k++) {
+    ctx.fillStyle = `rgb(${140 + rnd() * 50} ${110 + rnd() * 40} ${80 + rnd() * 30} / ${0.07 + rnd() * 0.12})`;
+    ctx.beginPath();
+    ctx.ellipse(rnd() * 1024, rnd() * 512, 6 + rnd() * 26, 3 + rnd() * 9, rnd() * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  grano(ctx, 1024, 512, 18, rnd);
   return textura(canvas);
 }

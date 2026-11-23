@@ -42,14 +42,21 @@ cargar().then(() => {
   window.__poster = {
     listo: true,
     async componer(luz, calidad) {
+      // Se compone una sola vez a 2560 × 1440 y se reduce a 1920 y 960 (escritorio con escala del 125–150 %
+      // necesita más de 1920 px físicos; el 960 es para anchos pequeños).
       gl.viewport(0, 0, lienzo.width, lienzo.height);
       compositor.pintar(parametrosReposo(luz, [lienzo.width, lienzo.height]));
-      const salidas = [{ ancho: 1920, base64: aWebp(lienzo, calidad) }];
-      const pequeno = document.createElement('canvas');
-      pequeno.width = 960;
-      pequeno.height = 540;
-      pequeno.getContext('2d')?.drawImage(lienzo, 0, 0, 960, 540);
-      salidas.push({ ancho: 960, base64: aWebp(pequeno, calidad) });
+      const salidas = [{ ancho: 2560, base64: aWebp(lienzo, calidad) }];
+      for (const ancho of [1920, 960]) {
+        const reducido = document.createElement('canvas');
+        reducido.width = ancho;
+        reducido.height = Math.round((ancho * 9) / 16);
+        const ctx = reducido.getContext('2d');
+        if (!ctx) throw new Error('Canvas 2D no disponible');
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(lienzo, 0, 0, reducido.width, reducido.height);
+        salidas.push({ ancho, base64: aWebp(reducido, calidad) });
+      }
       return salidas;
     },
   };

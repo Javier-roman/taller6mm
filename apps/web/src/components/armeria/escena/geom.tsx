@@ -1,16 +1,31 @@
-// Piezas geométricas comunes de la sala: caja, cilindro, sombras y alias de vectores. Sin lógica de La Armería.
-import { type RefObject, useLayoutEffect } from 'react';
-import type { Group, Material, Mesh } from 'three';
+// Piezas geométricas comunes de la sala: caja biselada, cilindro, sombras y alias de vectores. Sin lógica de La Armería.
+import { type RefObject, useLayoutEffect, useMemo } from 'react';
+import type { BufferGeometry, Group, Material, Mesh } from 'three';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
 export type V3 = readonly [number, number, number];
 
+const biselados = new Map<string, BufferGeometry>();
+
+/**
+ * Caja con aristas biseladas (4 mm como mucho): las aristas recogen la luz de los tubos y dejan de parecer de
+ * cuchilla (critico-diseno, 23-11-2026: lo que más delata una escena de plantilla). Cada medida se crea una vez.
+ */
+function cajaBiselada([ancho, alto, fondo]: V3): BufferGeometry {
+  const radio = Math.min(0.004, Math.min(ancho, alto, fondo) * 0.42);
+  const clave = `${ancho.toFixed(4)}|${alto.toFixed(4)}|${fondo.toFixed(4)}`;
+  let g = biselados.get(clave);
+  if (!g) {
+    g = new RoundedBoxGeometry(ancho, alto, fondo, 2, radio);
+    biselados.set(clave, g);
+  }
+  return g;
+}
+
 /** Caja de `t` (ancho, alto, fondo) en `p`, con rotación `r` (rad). */
 export function Caja({ p, t, m, r = [0, 0, 0] }: { p: V3; t: V3; m: Material; r?: V3 }) {
-  return (
-    <mesh position={[...p]} rotation={[...r]} material={m}>
-      <boxGeometry args={[...t]} />
-    </mesh>
-  );
+  const geometria = useMemo(() => cajaBiselada(t), [t]);
+  return <mesh position={[...p]} rotation={[...r]} material={m} geometry={geometria} />;
 }
 
 /** Cilindro de radio `rad` y altura `h`, de pie por defecto; `r` lo gira (p. ej. tumbado sobre su eje z). */

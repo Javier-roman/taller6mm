@@ -17,6 +17,6 @@ export function posterDe(luz: Luz) {
     ancho: 1920,
     alto: 1080,
     src: urlVista(`${nombre}-1920.webp`),
-    srcSet: `${urlVista(`${nombre}-960.webp`)} 960w, ${urlVista(`${nombre}-1920.webp`)} 1920w`,
+    srcSet: `${urlVista(`${nombre}-960.webp`)} 960w, ${urlVista(`${nombre}-1920.webp`)} 1920w, ${urlVista(`${nombre}-2560.webp`)} 2560w`,
   } as const;
 }

@@ -54,7 +54,8 @@ const arriba = { y: (MUEBLE.baldaMedia + MUEBLE.alto) / 2, alto: MUEBLE.alto - M
 const abajo = { y: (MUEBLE.zocalo + MUEBLE.baldaMedia) / 2, alto: MUEBLE.baldaMedia - MUEBLE.zocalo };
 // Los rótulos cuelgan de lo alto de su compartimento, como las tiras numeradas de ref-08.
 const yRotuloArriba = MUEBLE.alto - 0.16;
-const yRotuloAbajo = MUEBLE.baldaMedia - 0.16;
+// Más abajo que la de arriba: la placa no debe pisar la tira numerada del frente de la balda.
+const yRotuloAbajo = MUEBLE.baldaMedia - 0.23;
 
 const izq = ESTANTERIAS.izquierda.x;
 const der = ESTANTERIAS.derecha.x;
@@ -65,7 +66,7 @@ export const ZONAS: readonly Zona[] = [
     id: 'replicas',
     nombre: 'Armero de réplicas',
     rotulo: 'Armero',
-    dato: '24 réplicas',
+    dato: '0 réplicas publicadas',
     descripcion: 'Ranuras numeradas con cada réplica del catálogo, en vertical y a escala.',
     ruta: '/replicas',
     estanteria: 'izquierda',

@@ -182,7 +182,7 @@ export function PlanoEnmarcado({
 }) {
   const alto = ancho * 0.75;
   const material = useMemo(
-    () => usarMapa({ map: texturaPlano(mm[0], mm[1], titulo), color: '#8f8c85', roughness: 0.95 }),
+    () => usarMapa({ map: texturaPlano(mm[0], mm[1], titulo), color: '#797771', roughness: 0.95 }),
     [mm, titulo],
   );
   return (
@@ -373,5 +373,70 @@ export function Regla({ mm }: { mm: number }) {
     <mesh material={material}>
       <planeGeometry args={[0.096, mm / 1000]} />
     </mesh>
+  );
+}
+
+/** Batería LiPo: funda azul con etiqueta y el cable con conector. */
+export function Bateria({ mat }: { mat: Materiales }) {
+  return (
+    <group>
+      <Caja p={[0, 0.0105, 0]} t={[0.13, 0.021, 0.04]} m={mat.bateria} />
+      <Etiqueta p={[0, 0.0222, 0]} t={[0.06, 0.026]} codigo="11,1 V" linea2="LiPo 1300" />
+      <Caja p={[0.075, 0.009, 0]} t={[0.03, 0.01, 0.016]} m={mat.polimeroNegro} />
+      <Cilindro
+        p={[0.095, 0.009, 0.012]}
+        rad={0.003}
+        h={0.05}
+        m={mat.destornilladorNaranja}
+        r={[0, 0, Math.PI / 2]}
+        seg={8}
+      />
+    </group>
+  );
+}
+
+/** Bombona de green gas: cuerpo verde con tapa metálica y etiqueta. */
+export function Bombona({ mat }: { mat: Materiales }) {
+  return (
+    <group>
+      <Cilindro p={[0, 0.09, 0]} rad={0.032} h={0.18} m={mat.bombona} seg={24} />
+      <Cilindro p={[0, 0.19, 0]} rad={0.014} h={0.02} m={mat.aceroClaro} seg={16} />
+      <Cilindro p={[0, 0.205, 0]} rad={0.008} h={0.012} m={mat.aceroClaro} seg={12} />
+      <Etiqueta p={[0, 0.09, 0.0322]} t={[0.05, 0.07]} codigo="GAS" linea2="green" />
+    </group>
+  );
+}
+
+/** Hoja de plano sobre el tablero: papel con alzado y cotas, tumbada. */
+export function HojaPlano({
+  ancho = 0.32,
+  mm,
+  titulo,
+}: {
+  ancho?: number;
+  mm: readonly [number, number];
+  titulo: string;
+}) {
+  const material = useMemo(
+    () => usarMapa({ map: texturaPlano(mm[0], mm[1], titulo), color: '#a7a49c', roughness: 0.9 }),
+    [mm, titulo],
+  );
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} material={material}>
+      <planeGeometry args={[ancho, ancho * 0.75]} />
+    </mesh>
+  );
+}
+
+/** Soporte de casco: pie, columna y cabeza redondeada donde descansa. */
+export function SoporteCasco({ mat }: { mat: Materiales }) {
+  return (
+    <group>
+      <Cilindro p={[0, 0.008, 0]} rad={0.07} h={0.016} m={mat.acero} seg={24} />
+      <Cilindro p={[0, 0.07, 0]} rad={0.012} h={0.12} m={mat.acero} seg={12} />
+      <mesh position={[0, 0.138, 0]} material={mat.acero} scale={[1, 0.6, 1.2]}>
+        <sphereGeometry args={[0.07, 20, 12]} />
+      </mesh>
+    </group>
   );
 }
