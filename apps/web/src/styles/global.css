@@ -9,4 +9,6 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "@taller6mm/ui/estilos/base.css";
 @import "@taller6mm/ui/estilos/componentes.css";
+@import "@taller6mm/ui/estilos/controles.css";
+@import "@taller6mm/ui/estilos/datos.css";
 @import "tailwindcss/utilities.css" layer(utilities);

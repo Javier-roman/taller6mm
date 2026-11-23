@@ -91,14 +91,18 @@ test.describe('/sistema', () => {
     }
   });
 
-  test('las placas llevan luz cenital y ruido (docs/02 §4.3)', async ({ page }) => {
+  test('las placas llevan luz cenital y marcas de registro (docs/02 §4.3)', async ({ page }) => {
     await page.goto('/sistema#placa');
     const fondo = await page
       .locator('.t6-placa')
       .first()
       .evaluate((el) => getComputedStyle(el).backgroundImage);
     expect(fondo).toContain('linear-gradient');
-    expect(fondo).toContain('data:image/svg+xml');
+    const marca = await page
+      .locator('.t6-placa:not(.t6-placa--lisa)')
+      .first()
+      .evaluate((el) => getComputedStyle(el, '::before').borderTopWidth);
+    expect(Number.parseFloat(marca)).toBeGreaterThan(0);
   });
 
   test('con movimiento reducido, nada dura más de 120 ms', async ({ page }) => {
@@ -111,5 +115,62 @@ test.describe('/sistema', () => {
       );
     });
     for (const ms of duraciones) expect(ms).toBeLessThanOrEqual(120);
+  });
+});
+
+// Rebanada S5: componentes interactivos. Las islas se hidratan con client:visible, así que se
+// desplaza la sección a la vista antes de usarlas.
+test.describe('/sistema · componentes interactivos', () => {
+  test('pestañas: flechas, Fin e Inicio; las desactivadas se saltan', async ({ page }) => {
+    await page.goto('/sistema#pestanas');
+    const lista = page.getByRole('tablist', { name: 'Datos de la réplica de ejemplo' });
+    const primera = lista.getByRole('tab', { name: 'Medidas' });
+    await primera.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(lista.getByRole('tab', { name: 'Compatibilidad' })).toBeFocused();
+    await expect(lista.getByRole('tab', { name: 'Compatibilidad' })).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('End');
+    await expect(lista.getByRole('tab', { name: 'Mercado' })).toBeFocused();
+    await page.keyboard.press('Home');
+    await expect(primera).toBeFocused();
+  });
+
+  test('maletín: abre con el foco dentro, Escape lo cierra y devuelve el foco', async ({ page }) => {
+    await page.goto('/sistema#capas');
+    const abrir = page.getByRole('button', { name: 'Abrir maletín' });
+    await abrir.scrollIntoViewIfNeeded();
+    const dialogo = page.getByRole('dialog', { name: 'Borrar build' });
+    // La isla se hidrata al verse (client:visible): se reintenta el clic hasta que responde.
+    await expect(async () => {
+      await abrir.click();
+      await expect(dialogo).toBeVisible({ timeout: 1000 });
+    }).toPass();
+    await page.keyboard.press('Escape');
+    await expect(dialogo).toBeHidden();
+    await expect(abrir).toBeFocused();
+  });
+
+  test('tostadas: el error es un alert y no desaparece solo', async ({ page }) => {
+    await page.goto('/sistema#capas');
+    const boton = page.getByRole('button', { name: 'Tostada de error' });
+    await boton.scrollIntoViewIfNeeded();
+    await boton.click();
+    const alerta = page.getByRole('alert').filter({ hasText: 'No se ha guardado' });
+    await expect(alerta).toBeVisible();
+    await page.waitForTimeout(1500);
+    await expect(alerta).toBeVisible();
+    await alerta.getByRole('button', { name: 'Cerrar aviso' }).click();
+    await expect(alerta).toHaveCount(0);
+  });
+
+  test('tooltip: aparece con el foco y Escape lo descarta', async ({ page }) => {
+    await page.goto('/sistema#capas');
+    const boton = page.getByRole('button', { name: 'Rosca CCW' });
+    await boton.scrollIntoViewIfNeeded();
+    await boton.focus();
+    const tip = page.getByRole('tooltip');
+    await expect(tip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tip).toBeHidden();
   });
 });
