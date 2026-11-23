@@ -93,11 +93,15 @@
   /* ── Pestañas ────────────────────────────────────────────────────────────── */
   .t6-pestanas__lista {
     display: flex;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
     gap: var(--espacio-1);
     border-block-end: var(--trazo-fino) solid var(--acero);
   }
 
   .t6-pestanas__pestana {
+    flex: none;
     min-block-size: var(--objetivo-tactil);
     padding: var(--espacio-2) var(--espacio-4);
     margin-block-end: calc(-1 * var(--trazo-fino));
