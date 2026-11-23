@@ -1,0 +1,1364 @@
+{
+  "esquema": "pistolas-piezas/v1",
+  "generado": "2026-11-19",
+  "nota": "Familia de pistolas de airsoft (Hi-Capa y Glock) por generador paramétrico: formas exteriores, sin internos. Los GLB viven en apps/pipeline/salida/ (ignorada por git). Todo es es_demo: parámetros de barrido y proporciones estimadas (confianza baja). Nada es publicable ni pasa de T1 sin vistas licenciadas. El revólver queda fuera del alcance.",
+  "piezas": [
+    {
+      "id": "armazon-glock",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "armazon.pistola",
+      "id_variante": "armazon.pistola@v1-63f935df6788",
+      "glb": "apps/pipeline/salida/pistolas/armazon-glock.glb",
+      "sha256_glb": "c092ef5de95481d173ff0b0d8b4151a704e36984f55bab7aa17b3fafc49ef912",
+      "bytes": 2232132,
+      "triangulos": 79316,
+      "aristas_abiertas": 0,
+      "dim_mm": [202.3683, 104.5468, 30.0],
+      "parametros": {
+        "estilo": "glock",
+        "largo": 176.0,
+        "alto_empunadura": 92.0,
+        "profundidad": 40.0,
+        "ancho": 30.0,
+        "inclinacion": 22.0,
+        "textura": "punteado"
+      },
+      "cotas": [
+        {
+          "clave": "largo",
+          "valor_mm": 176.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_empunadura",
+          "valor_mm": 92.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 40.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 30.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "armazon.ancho_cubrecanon",
+          "valor_mm": 24.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "armazon.inclinacion_agarre",
+          "valor_mm": 22.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.corredera", "socket.cargador", "socket.riel_accesorios"],
+      "requiere": [],
+      "ofrece": ["riel-corredera-pistola", "pozo-glock-gbb", "rail-pistola-glock-universal"],
+      "calidad": "aceptable",
+      "nota": "Polímero con punteado, riel y guarda.",
+      "notas_geometria": [
+        "Solo forma exterior: el chasis metálico interior, el seguro del gatillo y la mecánica no se modelan.",
+        "Silueta, ranuras de los dedos, punteado y mandos estimados; el riel de accesorios no es un Picatinny.",
+        "El pozo del cargador es un hueco liso de medida estimada, sin los rebajes de la retenida."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["glock-17"]
+    },
+    {
+      "id": "armazon-hicapa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "armazon.pistola",
+      "id_variante": "armazon.pistola@v1-a657348620e2",
+      "glb": "apps/pipeline/salida/pistolas/armazon-hicapa.glb",
+      "sha256_glb": "33c1b34056cfd7ed3c152f5038403ff0b4c95c3104f55752cbaa2d32aacb4612",
+      "bytes": 151080,
+      "triangulos": 3948,
+      "aristas_abiertas": 0,
+      "dim_mm": [150.0019, 111.8254, 27.8],
+      "parametros": {
+        "estilo": "hicapa",
+        "largo": 128.0,
+        "alto_empunadura": 95.0,
+        "profundidad": 48.0,
+        "ancho": 33.0,
+        "inclinacion": 17.0,
+        "textura": "liso"
+      },
+      "cotas": [
+        {
+          "clave": "largo",
+          "valor_mm": 128.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto_empunadura",
+          "valor_mm": 95.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 48.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 33.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 17.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "armazon.grosor_marco",
+          "valor_mm": 23.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "armazon.largo_total_referencia",
+          "valor_mm": 222.0,
+          "fuente": "https://www.tokyo-marui.co.jp/products/gas/blowback/55 (ficha oficial Hi-Capa 5.1 Government); largo total del arma, no del armazón",
+          "confianza": "alta",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.corredera", "socket.cargador", "socket.cacha_izq", "socket.cacha_der"],
+      "requiere": [],
+      "ofrece": ["riel-corredera-pistola", "pozo-hi-capa", "montaje-empunadura-lateral-1911"],
+      "calidad": "aceptable",
+      "nota": "Marco metálico de doble columna.",
+      "notas_geometria": [
+        "Solo forma exterior: la mecánica (disparador, muelle, seguro interno) no se modela.",
+        "Silueta, guarda, mandos y casquillos estimados; las cachas van aparte (`cacha.hicapa`).",
+        "El largo total de 222 mm es el de la ficha del fabricante para el arma completa y no se aplica al armazón."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "cacha-hicapa-izq",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "cacha.hicapa",
+      "id_variante": "cacha.hicapa@v1-6d80950aac4e",
+      "glb": "apps/pipeline/salida/pistolas/cacha-hicapa-izq.glb",
+      "sha256_glb": "0f6bd0b4500f0cf3d7c1f2c98aa6c9a1fb78d347d5599d181ab705e99c46738a",
+      "bytes": 558012,
+      "triangulos": 14658,
+      "aristas_abiertas": 0,
+      "dim_mm": [74.4378, 91.9297, 5.0],
+      "parametros": {
+        "lado": "izq",
+        "alto_empunadura": 95.0,
+        "profundidad": 48.0,
+        "ancho": 33.0,
+        "inclinacion": 17.0
+      },
+      "cotas": [
+        {
+          "clave": "alto_empunadura",
+          "valor_mm": 95.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 48.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 33.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 17.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cacha.grosor",
+          "valor_mm": 5.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.armazon"],
+      "requiere": ["montaje-empunadura-lateral-1911"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Rejilla de agarre.",
+      "notas_geometria": ["Rejilla en V y casquillos estimados; sin marcajes ni logotipos."],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "cacha-hicapa-der",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "cacha.hicapa",
+      "id_variante": "cacha.hicapa@v1-512c35e43beb",
+      "glb": "apps/pipeline/salida/pistolas/cacha-hicapa-der.glb",
+      "sha256_glb": "6bb1e4aa2737ac67742d71e0961d6dd97e3c7b7bf77bbd0ca5af9e618ce7d7c8",
+      "bytes": 558228,
+      "triangulos": 14664,
+      "aristas_abiertas": 0,
+      "dim_mm": [74.4378, 91.9297, 5.0],
+      "parametros": {
+        "lado": "der",
+        "alto_empunadura": 95.0,
+        "profundidad": 48.0,
+        "ancho": 33.0,
+        "inclinacion": 17.0
+      },
+      "cotas": [
+        {
+          "clave": "alto_empunadura",
+          "valor_mm": 95.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 48.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 33.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "inclinacion",
+          "valor_mm": 17.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cacha.grosor",
+          "valor_mm": 5.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.armazon"],
+      "requiere": ["montaje-empunadura-lateral-1911"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Rejilla de agarre.",
+      "notas_geometria": ["Rejilla en V y casquillos estimados; sin marcajes ni logotipos."],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "corredera-glock",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "corredera.pistola",
+      "id_variante": "corredera.pistola@v1-d7d4eaa2b1d8",
+      "glb": "apps/pipeline/salida/pistolas/corredera-glock.glb",
+      "sha256_glb": "7ec01765f4dcb2bd4e8f75602032d1cca2e255f21cb7714d7708b31535c36cb1",
+      "bytes": 127164,
+      "triangulos": 3248,
+      "aristas_abiertas": 0,
+      "dim_mm": [186.0, 30.0, 26.0],
+      "parametros": {
+        "largo": 186.0,
+        "ancho": 26.0,
+        "alto": 30.0,
+        "largo_ventana": 36.0,
+        "estilo": "polimero",
+        "serrado_trasero": 5,
+        "serrado_frontal": 3
+      },
+      "cotas": [
+        {
+          "clave": "largo",
+          "valor_mm": 186.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 30.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "largo_ventana",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "corredera.pared_lateral",
+          "valor_mm": 3.4,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "corredera.altura_cara_superior_sobre_eje",
+          "valor_mm": 19.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.armazon", "socket.mira_trasera", "socket.mira_delantera", "socket.canon"],
+      "requiere": ["riel-corredera-pistola"],
+      "ofrece": ["cola-milano-mira-pistola", "rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Serrados, ventana y bisel.",
+      "notas_geometria": [
+        "Solo forma exterior: el interior (extractor, percutor, muelle) no se modela.",
+        "Proporciones de silueta, ventana, serrado y colas de milano estimadas, sin cota de ningún SKU."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["glock-17"]
+    },
+    {
+      "id": "corredera-hicapa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "corredera.pistola",
+      "id_variante": "corredera.pistola@v1-984a45015041",
+      "glb": "apps/pipeline/salida/pistolas/corredera-hicapa.glb",
+      "sha256_glb": "6791448a9cd1f8e9b68addaff125a31d3e4b060914906682f65494770446527e",
+      "bytes": 129252,
+      "triangulos": 3302,
+      "aristas_abiertas": 0,
+      "dim_mm": [207.0, 29.0, 26.0],
+      "parametros": {
+        "largo": 207.0,
+        "ancho": 26.0,
+        "alto": 29.0,
+        "largo_ventana": 36.0,
+        "estilo": "clasico",
+        "serrado_trasero": 6,
+        "serrado_frontal": 3
+      },
+      "cotas": [
+        {
+          "clave": "largo",
+          "valor_mm": 207.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 26.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "alto",
+          "valor_mm": 29.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "largo_ventana",
+          "valor_mm": 36.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "corredera.pared_lateral",
+          "valor_mm": 3.4,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "corredera.altura_cara_superior_sobre_eje",
+          "valor_mm": 18.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.armazon", "socket.mira_trasera", "socket.mira_delantera", "socket.canon"],
+      "requiere": ["riel-corredera-pistola"],
+      "ofrece": ["cola-milano-mira-pistola", "rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Silueta clásica con serrado.",
+      "notas_geometria": [
+        "Solo forma exterior: el interior (extractor, percutor, muelle) no se modela.",
+        "Proporciones de silueta, ventana, serrado y colas de milano estimadas, sin cota de ningún SKU."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "canon-glock",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "canon.pistola",
+      "id_variante": "canon.pistola@v1-b61efdb0e976",
+      "glb": "apps/pipeline/salida/pistolas/canon-glock.glb",
+      "sha256_glb": "d7de0d9d93d92f7026ed7c3e691eef1c3767baa40bbfbf206401f248f48a18c5",
+      "bytes": 118240,
+      "triangulos": 3066,
+      "aristas_abiertas": 0,
+      "dim_mm": [166.0, 21.1, 14.6],
+      "parametros": {
+        "tipo": "semi",
+        "rosca": "14mm_ccw",
+        "longitud": 166.0,
+        "diametro": 12.0,
+        "longitud_rosca": 12.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 166.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.largo_hombro_rosca",
+          "valor_mm": 154.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.recamara"],
+      "requiere": ["alojamiento-canon-pistola"],
+      "ofrece": ["rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Rosca de boca de 14 mm a izquierdas.",
+      "notas_geometria": [
+        "Solo forma exterior: el cañón interior de precisión (hop-up, Ø6,03) no se modela.",
+        "La rosca de boca son anillos de 1 mm de paso (la hélice no se modela).",
+        "Capó, tetón de cierre y rampa de alimentación simplificados."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["glock-17"]
+    },
+    {
+      "id": "canon-hicapa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "canon.pistola",
+      "id_variante": "canon.pistola@v1-0166f360f7c0",
+      "glb": "apps/pipeline/salida/pistolas/canon-hicapa.glb",
+      "sha256_glb": "8b1f04f4e521a2d775148dfa35588e5cf08c670fd3aba1237661d5829285111e",
+      "bytes": 118244,
+      "triangulos": 3066,
+      "aristas_abiertas": 0,
+      "dim_mm": [187.0, 21.1, 14.6],
+      "parametros": {
+        "tipo": "semi",
+        "rosca": "14mm_ccw",
+        "longitud": 187.0,
+        "diametro": 12.0,
+        "longitud_rosca": 12.0
+      },
+      "cotas": [
+        {
+          "clave": "rosca_boca.diametro_nominal",
+          "valor_mm": 14.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "rosca_boca.paso",
+          "valor_mm": 1.0,
+          "fuente": "https://en.wikipedia.org/wiki/Barrel_threads (M14x1 por designación ISO: diámetro nominal 14 mm, paso 1 mm; uso en airsoft «14 mm CCW = M14x1 LH» según tiendas)",
+          "confianza": "media",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud",
+          "valor_mm": 187.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "diametro",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "longitud_rosca",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "canon.largo_hombro_rosca",
+          "valor_mm": 175.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.muzzle", "socket.recamara"],
+      "requiere": ["alojamiento-canon-pistola"],
+      "ofrece": ["rosca-m14x1-ccw"],
+      "calidad": "aceptable",
+      "nota": "Rosca de boca de 14 mm a izquierdas.",
+      "notas_geometria": [
+        "Solo forma exterior: el cañón interior de precisión (hop-up, Ø6,03) no se modela.",
+        "La rosca de boca son anillos de 1 mm de paso (la hélice no se modela).",
+        "Capó, tetón de cierre y rampa de alimentación simplificados."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "mira-trasera-glock",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "mira.pistola",
+      "id_variante": "mira.pistola@v1-31ea5acd2ac2",
+      "glb": "apps/pipeline/salida/pistolas/mira-trasera-glock.glb",
+      "sha256_glb": "60a7c2b6b68e72b456db87dd6fdb8139d31937ebaeffc697ee3f56cb696c017a",
+      "bytes": 21044,
+      "triangulos": 410,
+      "aristas_abiertas": 0,
+      "dim_mm": [7.0, 8.4, 13.4],
+      "parametros": {
+        "lado": "trasera",
+        "tipo": "fija",
+        "alto": 6.0,
+        "ancho": 10.0
+      },
+      "cotas": [
+        {
+          "clave": "alto",
+          "valor_mm": 6.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 10.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.largo_base",
+          "valor_mm": 7.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.profundidad_cola_milano",
+          "valor_mm": 2.4,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.corredera"],
+      "requiere": ["cola-milano-mira-pistola"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Ventana en U.",
+      "notas_geometria": [
+        "Solo forma exterior: los muelles y el tornillo no se modelan por dentro.",
+        "Proporciones y cola de milano estimadas, sin cota de ningún SKU ni norma."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["glock-17"]
+    },
+    {
+      "id": "mira-delantera-glock",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "mira.pistola",
+      "id_variante": "mira.pistola@v1-d58dcac45aa4",
+      "glb": "apps/pipeline/salida/pistolas/mira-delantera-glock.glb",
+      "sha256_glb": "b1a1c4cf309b7e2ef4787b36e01835c01661e0feded757534ad58b813b7f833d",
+      "bytes": 18672,
+      "triangulos": 392,
+      "aristas_abiertas": 0,
+      "dim_mm": [7.0, 7.4, 10.2],
+      "parametros": {
+        "lado": "delantera",
+        "tipo": "fija",
+        "alto": 5.0,
+        "ancho": 3.5
+      },
+      "cotas": [
+        {
+          "clave": "alto",
+          "valor_mm": 5.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 3.5,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.largo_base",
+          "valor_mm": 7.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.profundidad_cola_milano",
+          "valor_mm": 2.4,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.corredera"],
+      "requiere": ["cola-milano-mira-pistola"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Poste con rampa.",
+      "notas_geometria": [
+        "Solo forma exterior: los muelles y el tornillo no se modelan por dentro.",
+        "Proporciones y cola de milano estimadas, sin cota de ningún SKU ni norma."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["glock-17"]
+    },
+    {
+      "id": "mira-trasera-hicapa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "mira.pistola",
+      "id_variante": "mira.pistola@v1-9d10b2a16daf",
+      "glb": "apps/pipeline/salida/pistolas/mira-trasera-hicapa.glb",
+      "sha256_glb": "5c41befecff296f21aee585a77ddd9cb0d876af3577b7440ef5294a330b0a0b1",
+      "bytes": 30736,
+      "triangulos": 680,
+      "aristas_abiertas": 0,
+      "dim_mm": [11.0, 8.4, 14.6],
+      "parametros": {
+        "lado": "trasera",
+        "tipo": "regulable",
+        "alto": 6.0,
+        "ancho": 12.0
+      },
+      "cotas": [
+        {
+          "clave": "alto",
+          "valor_mm": 6.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 12.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.largo_base",
+          "valor_mm": 11.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.profundidad_cola_milano",
+          "valor_mm": 2.4,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.corredera"],
+      "requiere": ["cola-milano-mira-pistola"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Regulable con tornillo de deriva.",
+      "notas_geometria": [
+        "Solo forma exterior: los muelles y el tornillo no se modelan por dentro.",
+        "Tornillo de deriva y su muelle: solo cabezas exteriores.",
+        "Proporciones y cola de milano estimadas, sin cota de ningún SKU ni norma."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "mira-delantera-hicapa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "mira.pistola",
+      "id_variante": "mira.pistola@v1-d58dcac45aa4",
+      "glb": "apps/pipeline/salida/pistolas/mira-delantera-hicapa.glb",
+      "sha256_glb": "b1a1c4cf309b7e2ef4787b36e01835c01661e0feded757534ad58b813b7f833d",
+      "bytes": 18672,
+      "triangulos": 392,
+      "aristas_abiertas": 0,
+      "dim_mm": [7.0, 7.4, 10.2],
+      "parametros": {
+        "lado": "delantera",
+        "tipo": "fija",
+        "alto": 5.0,
+        "ancho": 3.5
+      },
+      "cotas": [
+        {
+          "clave": "alto",
+          "valor_mm": 5.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 3.5,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.largo_base",
+          "valor_mm": 7.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "mira.profundidad_cola_milano",
+          "valor_mm": 2.4,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.corredera"],
+      "requiere": ["cola-milano-mira-pistola"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Poste con rampa.",
+      "notas_geometria": [
+        "Solo forma exterior: los muelles y el tornillo no se modelan por dentro.",
+        "Proporciones y cola de milano estimadas, sin cota de ningún SKU ni norma."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    },
+    {
+      "id": "cargador-glock",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "cargador.gas_pistola",
+      "id_variante": "cargador.gas_pistola@v1-b7a633b0254f",
+      "glb": "apps/pipeline/salida/pistolas/cargador-glock.glb",
+      "sha256_glb": "8d6b5fe8073e0b8e388f4ae82840c028c7d164b46705e9510965c6a042e10c99",
+      "bytes": 296408,
+      "triangulos": 9826,
+      "aristas_abiertas": 0,
+      "dim_mm": [37.14, 93.1, 22.88],
+      "parametros": {
+        "estilo": "glock",
+        "capacidad": 22,
+        "altura": 80.0,
+        "profundidad": 31.0,
+        "ancho": 22.0
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 80.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 31.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 22.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.profundidad",
+          "valor_mm": 31.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.ancho",
+          "valor_mm": 22.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.pozo"],
+      "requiere": ["pozo-glock-gbb"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Cargador de gas con tope de base y válvula.",
+      "notas_geometria": [
+        "Cuerpo hueco abierto por la boca: depósito de gas, muelle, seguidor y válvula interna no se modelan.",
+        "Labios, muesca de la retenida, ventanas y base estimados, sin cota de ningún SKU.",
+        "La capacidad en bolas no se convierte en medidas."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["glock-17"]
+    },
+    {
+      "id": "cargador-hicapa",
+      "elemento": null,
+      "origen": "generador",
+      "familia": "cargador.gas_pistola",
+      "id_variante": "cargador.gas_pistola@v1-c8fcdf288526",
+      "glb": "apps/pipeline/salida/pistolas/cargador-hicapa.glb",
+      "sha256_glb": "36553f5313b8be8dec8683d04eb3fb3cfaf191196478aea478a98c067df11c33",
+      "bytes": 235688,
+      "triangulos": 7878,
+      "aristas_abiertas": 0,
+      "dim_mm": [43.87, 93.1, 21.4],
+      "parametros": {
+        "estilo": "hicapa",
+        "capacidad": 31,
+        "altura": 80.0,
+        "profundidad": 41.0,
+        "ancho": 20.0
+      },
+      "cotas": [
+        {
+          "clave": "altura",
+          "valor_mm": 80.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "profundidad",
+          "valor_mm": 41.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "ancho",
+          "valor_mm": 20.0,
+          "fuente": "parámetro de entrada de un barrido paramétrico (no es el dato de ningún SKU)",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.profundidad",
+          "valor_mm": 41.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        },
+        {
+          "clave": "cargador.ancho",
+          "valor_mm": 20.0,
+          "fuente": "estimado a ojo de las proporciones generales de una pistola de airsoft de tamaño completo o compacto; sin fuente ni calibre (15-11-2026). Se sustituye por la ficha de un SKU o por medición con calibre.",
+          "confianza": "baja",
+          "desconocido": false
+        }
+      ],
+      "pendientes": [],
+      "sockets": ["socket.pozo"],
+      "requiere": ["pozo-hi-capa"],
+      "ofrece": [],
+      "calidad": "aceptable",
+      "nota": "Cargador de gas de doble columna con válvula.",
+      "notas_geometria": [
+        "Cuerpo hueco abierto por la boca: depósito de gas, muelle, seguidor y válvula interna no se modelan.",
+        "Labios, muesca de la retenida, ventanas y base estimados, sin cota de ningún SKU.",
+        "La capacidad en bolas no se convierte en medidas."
+      ],
+      "nivel": null,
+      "nivel_puerta": "T0",
+      "candidata": true,
+      "publicable_3d": false,
+      "publicable": false,
+      "nivel_nota": "Parámetros de barrido (es_demo), sin vistas licenciadas: candidata, nunca por encima de T1.",
+      "es_demo": true,
+      "license_status": "propio",
+      "licencia_texto": "propia (generador paramétrico)",
+      "plataformas": ["hi-capa"]
+    }
+  ],
+  "montajes": [
+    {
+      "id": "hicapa-5-1",
+      "nombre": "Hi-Capa 5.1 (armazón doble columna con cachas)",
+      "aviso": "Todo es T0 y no publicable en 3D: piezas de barrido (es_demo) sin vistas licenciadas. El montaje comprueba el encaje por interfaces y la colocación; no certifica fidelidad (principios 1 y 2).",
+      "piezas": [
+        {
+          "id": "armazon",
+          "familia": "armazon.pistola",
+          "id_variante": "armazon.pistola@v1-a657348620e2",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 3948,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "corredera",
+          "familia": "corredera.pistola",
+          "id_variante": "corredera.pistola@v1-984a45015041",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 3302,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "canon",
+          "familia": "canon.pistola",
+          "id_variante": "canon.pistola@v1-0166f360f7c0",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 3066,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "cacha_izq",
+          "familia": "cacha.hicapa",
+          "id_variante": "cacha.hicapa@v1-6d80950aac4e",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 14658,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "cacha_der",
+          "familia": "cacha.hicapa",
+          "id_variante": "cacha.hicapa@v1-512c35e43beb",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 14664,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "mira_trasera",
+          "familia": "mira.pistola",
+          "id_variante": "mira.pistola@v1-9d10b2a16daf",
+          "matriz_mm": [[1.0, 0.0, 0.0, 12.5], [0.0, 1.0, 0.0, 17.5], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 680,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "mira_delantera",
+          "familia": "mira.pistola",
+          "id_variante": "mira.pistola@v1-d58dcac45aa4",
+          "matriz_mm": [[1.0, 0.0, 0.0, 193.0], [0.0, 1.0, 0.0, 17.5], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 392,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "cargador",
+          "familia": "cargador.gas_pistola",
+          "id_variante": "cargador.gas_pistola@v1-c8fcdf288526",
+          "matriz_mm": [
+            [0.9563, 0.2924, 0.0, 20.5982],
+            [-0.2924, 0.9563, 0.0, -46.8907],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0]
+          ],
+          "triangulos": 7878,
+          "aristas_abiertas": 0
+        }
+      ],
+      "comprobaciones": [
+        {
+          "hijo": "corredera",
+          "padre": "armazon",
+          "socket": "corredera",
+          "interfaz": "riel-corredera-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "cargador",
+          "padre": "armazon",
+          "socket": "cargador",
+          "interfaz": "pozo-hi-capa",
+          "encaja": true
+        },
+        {
+          "hijo": "mira_trasera",
+          "padre": "corredera",
+          "socket": "mira_trasera",
+          "interfaz": "cola-milano-mira-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "mira_delantera",
+          "padre": "corredera",
+          "socket": "mira_delantera",
+          "interfaz": "cola-milano-mira-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "canon",
+          "padre": "corredera",
+          "socket": "canon",
+          "interfaz": "alojamiento-canon-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "cacha_izq",
+          "padre": "armazon",
+          "socket": "cacha_izq",
+          "interfaz": "montaje-empunadura-lateral-1911",
+          "encaja": true
+        },
+        {
+          "hijo": "cacha_der",
+          "padre": "armazon",
+          "socket": "cacha_der",
+          "interfaz": "montaje-empunadura-lateral-1911",
+          "encaja": true
+        }
+      ],
+      "todo_encaja": true,
+      "caja_mm": {
+        "min": [-24.48, -135.505, -16.5],
+        "max": [221.0, 23.5, 16.5],
+        "dimensiones": [245.48, 159.005, 33.0]
+      },
+      "sha256_glb": "0aaa969bc34be371b8fb308577bf0ed1493af2b38902385f772112a56472f490",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "glb": "apps/pipeline/salida/pistolas/montajes/hicapa-5-1.glb"
+    },
+    {
+      "id": "glock-17-gbb",
+      "nombre": "Glock 17 GBB (armazón de polímero)",
+      "aviso": "Todo es T0 y no publicable en 3D: piezas de barrido (es_demo) sin vistas licenciadas. El montaje comprueba el encaje por interfaces y la colocación; no certifica fidelidad (principios 1 y 2).",
+      "piezas": [
+        {
+          "id": "armazon",
+          "familia": "armazon.pistola",
+          "id_variante": "armazon.pistola@v1-63f935df6788",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 79316,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "corredera",
+          "familia": "corredera.pistola",
+          "id_variante": "corredera.pistola@v1-d7d4eaa2b1d8",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 3248,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "canon",
+          "familia": "canon.pistola",
+          "id_variante": "canon.pistola@v1-b61efdb0e976",
+          "matriz_mm": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 3066,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "mira_trasera",
+          "familia": "mira.pistola",
+          "id_variante": "mira.pistola@v1-31ea5acd2ac2",
+          "matriz_mm": [[1.0, 0.0, 0.0, 12.5], [0.0, 1.0, 0.0, 18.5], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 410,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "mira_delantera",
+          "familia": "mira.pistola",
+          "id_variante": "mira.pistola@v1-d58dcac45aa4",
+          "matriz_mm": [[1.0, 0.0, 0.0, 164.0], [0.0, 1.0, 0.0, 18.5], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
+          "triangulos": 392,
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "cargador",
+          "familia": "cargador.gas_pistola",
+          "id_variante": "cargador.gas_pistola@v1-b7a633b0254f",
+          "matriz_mm": [
+            [0.9272, 0.3746, 0.0, 17.1342],
+            [-0.3746, 0.9272, 0.0, -41.4059],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0]
+          ],
+          "triangulos": 9826,
+          "aristas_abiertas": 0
+        }
+      ],
+      "comprobaciones": [
+        {
+          "hijo": "corredera",
+          "padre": "armazon",
+          "socket": "corredera",
+          "interfaz": "riel-corredera-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "cargador",
+          "padre": "armazon",
+          "socket": "cargador",
+          "interfaz": "pozo-glock-gbb",
+          "encaja": true
+        },
+        {
+          "hijo": "mira_trasera",
+          "padre": "corredera",
+          "socket": "mira_trasera",
+          "interfaz": "cola-milano-mira-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "mira_delantera",
+          "padre": "corredera",
+          "socket": "mira_delantera",
+          "interfaz": "cola-milano-mira-pistola",
+          "encaja": true
+        },
+        {
+          "hijo": "canon",
+          "padre": "corredera",
+          "socket": "canon",
+          "interfaz": "alojamiento-canon-pistola",
+          "encaja": true
+        }
+      ],
+      "todo_encaja": true,
+      "caja_mm": {
+        "min": [-28.746, -127.618, -15.0],
+        "max": [200.0, 24.5, 15.0],
+        "dimensiones": [228.746, 152.118, 30.0]
+      },
+      "sha256_glb": "cff14a99b2442fec33d2ecc8bd00c91fdb1736bd469587c38904a472a002189f",
+      "nivel": "T0",
+      "publicable_3d": false,
+      "glb": "apps/pipeline/salida/pistolas/montajes/glock-17-gbb.glb"
+    }
+  ]
+}

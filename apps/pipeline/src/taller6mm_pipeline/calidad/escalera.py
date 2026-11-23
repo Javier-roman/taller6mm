@@ -26,7 +26,7 @@ from typing import Any
 
 from taller6mm_pipeline.calidad import detalle_fino, entrada, hoja, imagen, puerta
 from taller6mm_pipeline.calidad.entrada import APP, RAIZ, PiezaCalidad
-from taller6mm_pipeline.materiales import asignador, cc0
+from taller6mm_pipeline.materiales import asignador, cc0, iluminacion
 
 RUTA_NIVELES = RAIZ / "catalogo" / "escalera-niveles.json"
 DIR_VISTAS = RAIZ / "assets-src" / "vistas"
@@ -220,11 +220,17 @@ def spec_render(p: PiezaEscalera) -> dict[str, Any]:
     return spec
 
 
+def spec_luz(p: PiezaEscalera, plan: dict[str, Any]) -> dict[str, Any]:
+    """`spec_render` con la rugosidad del preset de iluminación y el brillo (acotada a la banda CC0)."""
+    return iluminacion.aplicar(p.asignacion.material_id, spec_render(p), plan)
+
+
 def clave_cache(p: PiezaEscalera, paso: str, params: dict[str, Any]) -> str:
     datos = {
         "glb": hashlib.sha256(p.pieza.glb).hexdigest(),
         "script": hashlib.sha256(SCRIPT_BLENDER.read_bytes()).hexdigest(),
         "mat": spec_render(p),
+        "luz": params.get("iluminacion"),
         "var": p.asignacion.variacion,
         "paso": paso,
         "params": params,
@@ -236,12 +242,27 @@ def carpeta_de(grupo: str) -> Path:
     return DIR_VISTAS / grupo
 
 
+def plan_de(args: argparse.Namespace) -> dict[str, Any]:
+    return iluminacion.resolver(
+        getattr(args, "iluminacion", None),
+        getattr(args, "brillo", None),
+        iluminacion.parsear_brillo_material(getattr(args, "brillo_material", None)),
+    )
+
+
 def renderizar(piezas: list[PiezaEscalera], args: argparse.Namespace, representantes: set[str]) -> list[str]:
     """Dibuja lo que falte (Blender portátil, determinista). Devuelve avisos; sin Blender no inventa nada."""
     blender = hoja.localizar_blender()
     if blender is None:
         return ["Blender no encontrado (C:/tools/blender): N3-N5 sin evaluar"]
-    params = {"muestras": args.muestras, "muestras_n5": args.muestras_n5, "res": [640, 480], "res_n5": [960, 720]}
+    plan = plan_de(args)
+    params = {
+        "muestras": args.muestras,
+        "muestras_n5": args.muestras_n5,
+        "res": [640, 480],
+        "res_n5": [960, 720],
+        "iluminacion": plan,
+    }
     cache_ruta = DIR_VISTAS / "cache.json"
     cache: dict[str, str] = json.loads(cache_ruta.read_text(encoding="utf-8")) if cache_ruta.exists() else {}
     lista: list[dict[str, Any]] = []
@@ -273,6 +294,7 @@ def renderizar(piezas: list[PiezaEscalera], args: argparse.Namespace, representa
                     "salida": str(carpeta),
                     "pasos": pasos,
                     "material": spec_render(p),
+                    "material_luz": spec_luz(p, plan),
                     "variacion": p.asignacion.variacion,
                     "semilla": p.asignacion.semilla,
                     "vista": "izq",
@@ -297,6 +319,7 @@ def renderizar(piezas: list[PiezaEscalera], args: argparse.Namespace, representa
                         {
                             "glb": str(carpeta_de(grupo) / "glb" / f"{p.id}.glb"),
                             "material": spec_render(p),
+                            "material_luz": spec_luz(p, plan),
                             "variacion": p.asignacion.variacion,
                             "semilla": p.asignacion.semilla,
                         }
@@ -518,6 +541,18 @@ def parser() -> argparse.ArgumentParser:
         "--imagenes", action="store_true", help="dibuja también n1-n4 de todas las piezas, no solo del representante"
     )
     ap.add_argument("--hoja", action="store_true", help="escribe el informe y la hoja antes/después")
+    ap.add_argument(
+        "--iluminacion",
+        choices=iluminacion.nombres(),
+        help="preset de catalogo/iluminacion-presets.json (por defecto, `mate_suave`)",
+    )
+    ap.add_argument("--brillo", type=float, help="brillo global 0,5-1,5 (1 = el del preset); acotado por la guía")
+    ap.add_argument(
+        "--brillo-material",
+        action="append",
+        metavar="MATERIAL=F",
+        help="brillo de un material (0,6-1,4), repetible; la rugosidad no sale de su banda medida",
+    )
     ap.add_argument("--muestras", type=int, default=40)
     ap.add_argument("--muestras-n5", type=int, default=96)
     ap.add_argument("--estricto", action="store_true", help="código de salida 2 si hay regresión")
