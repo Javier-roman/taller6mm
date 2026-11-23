@@ -13,8 +13,6 @@ import {
   Color,
   type Group,
   type HemisphereLight,
-  type Mesh,
-  MeshPhysicalMaterial,
   MeshStandardMaterial,
   Object3D,
   PMREMGenerator,
@@ -24,21 +22,34 @@ import {
   Vector3,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { crearIluminacion, type Iluminacion } from '../director.ts';
 import { ARMERO, SOCKETS, VITRINA } from '../sockets.ts';
 import { BANCO, ESTANTERIAS, type Estanteria, MUEBLE, ORDEN_ESTANTERIAS, ZONAS, type Zona } from '../zonas.ts';
-import { ajustarReflejo, crearReflejoFalso } from './efectos.ts';
 import {
-  texturaCorcho,
-  texturaHormigon,
-  texturaLadrillo,
-  texturaNogal,
-  texturaPantalla,
-  texturaRotulo,
-  texturaTapete,
-  texturaTiraNumerada,
-} from './texturas.ts';
+  Alicate,
+  Bote,
+  CajaCarton,
+  CajaHerramientas,
+  Calibre,
+  Carpeta,
+  Casco,
+  Chaleco,
+  CintaMetrica,
+  Destornillador,
+  Diana,
+  Etiqueta,
+  Gafas,
+  Linterna,
+  LlavesAllen,
+  Maletin,
+  PlanoEnmarcado,
+  Regla,
+  TINTAS_CARPETA,
+} from './atrezo.tsx';
+import { ajustarReflejo, crearReflejoFalso } from './efectos.ts';
+import { Caja, Cilindro, useSombras, type V3 } from './geom.tsx';
+import { CALIDO, crearMateriales, type Materiales } from './materiales.ts';
+import { texturaRotulo, texturaSenalOjos, texturaTiraNumerada } from './texturas.ts';
 
 export interface ControlSala {
   luz: Iluminacion;
@@ -75,17 +86,18 @@ export const LUZ = {
   flexo: 40,
   bombilla: 8,
   vitrina: 5,
-  led: 1.6,
+  led: 3.2,
   ambiente: 0.06,
   hemisferio: 0.1,
   acento: 34,
   linterna: 120,
-  rotuloBase: 0.16,
+  // El rótulo solo emite lo grabado (texto, cota y marcas): se puede subir sin lavar la lámina.
+  rotuloBase: 0.34,
   // Al pasar por un módulo se enciende su rótulo (y no hay tooltip): 1,6 veces la emisión activa anterior.
   rotuloActivo: 0.32 * 1.6,
   // El rótulo del banco cuelga del faldón, a la sombra del tablero: sin más emisión no se lee (critico-diseno).
   rotuloBanco: 2,
-  marca: 0.9,
+  marca: 1.5,
   pantalla: 0.9,
   /** Reflejos del entorno (IBL): sin ellos el metal se ve negro. */
   entorno: 0.08,
@@ -95,99 +107,8 @@ export const LUZ = {
   reflejo: 3.5,
 } as const;
 
-const CALIDO = new Color('#ffb46a');
 const xDe = (e: Estanteria) => ESTANTERIAS[e].x;
 const zFondo = MUEBLE.frente - MUEBLE.fondo / 2;
-
-function useMateriales() {
-  return useMemo(() => {
-    const m = (p: ConstructorParameters<typeof MeshStandardMaterial>[0]) => new MeshStandardMaterial(p);
-    // Chapa de compactus: verde oliva tan oscuro que casi es negro (ref-08).
-    const verde = new Color(colors['verde-ranger']).multiplyScalar(0.42);
-    const ladrillo = texturaLadrillo([7, 3]);
-    const hormigon = texturaHormigon([8, 6]);
-    const pantalla = texturaPantalla();
-    return {
-      ladrillo: m({ map: ladrillo.mapa, normalMap: ladrillo.normal, roughness: 0.92 }),
-      hormigon: m({ map: hormigon.mapa, normalMap: hormigon.normal, roughness: 0.42, metalness: 0.08 }),
-      chapa: m({ color: verde, roughness: 0.32, metalness: 0.55 }),
-      chapaOscura: m({ color: verde.clone().multiplyScalar(0.45), roughness: 0.7, metalness: 0.3 }),
-      techo: m({ color: '#121315', roughness: 1 }),
-      acero: m({ color: '#2b2f34', roughness: 0.2, metalness: 0.9 }),
-      rail: m({ color: '#8a9097', roughness: 0.14, metalness: 0.95 }),
-      polimeroNegro: m({ color: '#17191c', roughness: 0.46 }),
-      polimeroFde: m({ color: colors.fde, roughness: 0.7 }),
-      polimeroOd: m({ color: colors['verde-ranger'], roughness: 0.7 }),
-      maletin: m({ color: '#1b1d20', roughness: 0.28, metalness: 0.15 }),
-      kraft: m({ color: '#a8854f', roughness: 0.9 }),
-      // Nogal barnizado: capa de barniz con brillo propio sobre la madera.
-      nogal: new MeshPhysicalMaterial({
-        map: texturaNogal(),
-        roughness: 0.42,
-        clearcoat: 0.9,
-        clearcoatRoughness: 0.12,
-      }),
-      tapete: m({ map: texturaTapete(), roughness: 0.92 }),
-      corcho: m({ map: texturaCorcho(), roughness: 0.95 }),
-      papel: m({ color: colors.hueso, roughness: 0.85 }),
-      laton: m({ color: colors.laton, roughness: 0.2, metalness: 0.95 }),
-      vidrio: m({
-        color: '#d8e4ea',
-        roughness: 0.08,
-        metalness: 0,
-        transparent: true,
-        opacity: 0.05,
-        depthWrite: false,
-      }),
-      taquilla: m({ color: '#3b434b', roughness: 0.3, metalness: 0.7 }),
-      pantalla: m({
-        name: 'emisivo:base',
-        map: pantalla,
-        emissiveMap: pantalla,
-        emissive: '#ffffff',
-        emissiveIntensity: LUZ.pantalla,
-      }),
-      led: m({
-        name: 'emisivo:calidas',
-        color: '#fff3e2',
-        emissive: CALIDO,
-        emissiveIntensity: LUZ.led,
-        roughness: 0.3,
-      }),
-      bombilla: m({
-        name: 'emisivo:calidas',
-        color: '#fff3e2',
-        emissive: CALIDO,
-        emissiveIntensity: LUZ.bombilla,
-        roughness: 0.3,
-      }),
-    };
-  }, []);
-}
-
-type Materiales = ReturnType<typeof useMateriales>;
-
-/** Sombras para todo lo que cuelga del grupo. */
-function useSombras(grupo: RefObject<Group | null>) {
-  useLayoutEffect(() => {
-    grupo.current?.traverse((o) => {
-      if ((o as Mesh).isMesh) {
-        o.castShadow = true;
-        o.receiveShadow = true;
-      }
-    });
-  }, [grupo]);
-}
-
-type V3 = readonly [number, number, number];
-
-function Caja({ p, t, m, r = [0, 0, 0] }: { p: V3; t: V3; m: MeshStandardMaterial; r?: V3 }) {
-  return (
-    <mesh position={[...p]} rotation={[...r]} material={m}>
-      <boxGeometry args={[...t]} />
-    </mesh>
-  );
-}
 
 /** Estructura de un cuerpo de compactus: fondo, laterales, techo, zócalo, balda y volante. */
 function Mueble({ mat, children }: { mat: Materiales; children?: ReactNode }) {
@@ -227,11 +148,12 @@ function Socket({ id, estanteria }: { id: string; estanteria: Estanteria }) {
   return <group name={`socket.${id}`} position={[x - xDe(estanteria), y, z]} userData={{ socket: id }} />;
 }
 
-/** Armero: ranuras numeradas con separadores bajos, apoyo en la balda y gancho de sujeción por ranura, sin réplicas. */
+/** Armero: ranuras numeradas (vacías, con su apoyo y su gancho) y, sobre ellas, una barra con gafas colgadas. */
 function Armero({ mat }: { mat: Materiales }) {
   const { huecos, util } = ARMERO;
   const paso = util / huecos;
   const tira = useMemo(() => texturaTiraNumerada(1, huecos), [huecos]);
+  const yBarra = 2.64;
   return (
     <group>
       {Array.from({ length: huecos + 1 }, (_, i) => (
@@ -267,42 +189,85 @@ function Armero({ mat }: { mat: Materiales }) {
         <planeGeometry args={[util, 0.05]} />
         <meshStandardMaterial map={tira} roughness={0.7} />
       </mesh>
-    </group>
-  );
-}
-
-function Almacen({ mat }: { mat: Materiales }) {
-  const maletin = useMemo(() => new RoundedBoxGeometry(1.18, 0.15, 0.44, 3, 0.03), []);
-  return (
-    <group>
-      {[0, 1, 2, 3].map((fila) =>
-        [-0.63, 0.63].map((x) => (
-          <group key={`m-${fila}-${x}`} position={[x, MUEBLE.zocalo + 0.085 + fila * 0.165, zFondo + 0.03]}>
-            <mesh geometry={maletin} material={mat.maletin} />
-            <Caja p={[-0.32, 0, 0.225]} t={[0.07, 0.045, 0.02]} m={mat.acero} />
-            <Caja p={[0.32, 0, 0.225]} t={[0.07, 0.045, 0.02]} m={mat.acero} />
-            <Caja p={[0, 0.0, 0.232]} t={[0.2, 0.026, 0.03]} m={mat.polimeroNegro} />
-            <Caja p={[0.46, 0.02, 0.222]} t={[0.1, 0.05, 0.002]} m={mat.papel} />
-          </group>
-        )),
-      )}
-      {[-0.95, -0.35, 0.3, 0.92].map((x, i) => (
-        <Caja
-          key={`k-${x}`}
-          p={[x, 0.93 + (i % 2) * 0.02, zFondo + 0.04]}
-          t={[0.42, 0.2 + (i % 2) * 0.05, 0.36]}
-          m={mat.kraft}
+      {/* Regla de papel en milímetros en el lateral izquierdo (1:1) y un número de ranura en el fondo de cada hueco */}
+      <group
+        position={[-MUEBLE.ancho / 2 + 0.028, MUEBLE.baldaMedia + 0.03 + ARMERO.alto / 2, zFondo + 0.15]}
+        rotation={[0, Math.PI / 2, 0]}
+      >
+        <Regla mm={ARMERO.alto * 1000} />
+      </group>
+      {Array.from({ length: huecos }, (_, i) => (
+        <Etiqueta
+          key={`num-${i}`}
+          p={[-util / 2 + (i + 0.5) * paso, MUEBLE.baldaMedia + 1.0, zFondo - MUEBLE.fondo / 2 + 0.03]}
+          t={[0.12, 0.06]}
+          codigo={String(i + 1).padStart(2, '0')}
+          linea2={`${Math.round(paso * 1000)} mm`}
         />
+      ))}
+      {/* Tira LED fría bajo la cabecera: ilumina la barra de gafas (sigue a los tubos de la izquierda) */}
+      <Caja p={[0, MUEBLE.alto - 0.05, MUEBLE.frente - 0.06]} t={[2.4, 0.018, 0.03]} m={mat.ledIzquierda} />
+      {/* Barra superior con gafas de protección: el armero también guarda lo que se lleva puesto */}
+      <Cilindro p={[0, yBarra, zFondo - 0.1]} rad={0.009} h={util + 0.1} m={mat.aceroClaro} r={[0, 0, Math.PI / 2]} />
+      {[-1, 1].map((lado) => (
+        <Caja
+          key={`soporte-${lado}`}
+          p={[lado * (util / 2 + 0.03), yBarra, zFondo - 0.2]}
+          t={[0.02, 0.04, 0.2]}
+          m={mat.acero}
+        />
+      ))}
+      {Array.from({ length: 9 }, (_, i) => (
+        <group key={`gafas-${i}`} position={[-1.02 + i * 0.255, yBarra - 0.185, zFondo - 0.1]}>
+          <Gafas mat={mat} giro={((i % 3) - 1) * 0.16} />
+        </group>
       ))}
     </group>
   );
 }
 
-function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | null> }) {
-  const y0 = VITRINA.y0;
+/** Almacén: maletines rígidos etiquetados y, encima, cajas de cartón y botes de bolas. */
+function Almacen({ mat }: { mat: Materiales }) {
+  const yTapa = MUEBLE.zocalo + 0.085 + 3 * 0.165 + 0.075;
   return (
     <group>
-      <Caja p={[0, y0 + 0.05, zFondo + 0.02]} t={[2.4, 0.1, 0.5]} m={mat.nogal} />
+      {[0, 1, 2, 3].map((fila) =>
+        [-0.63, 0.63].map((x, j) => (
+          <group key={`m-${fila}-${x}`} position={[x, MUEBLE.zocalo + 0.085 + fila * 0.165, zFondo + 0.03]}>
+            <Maletin mat={mat} codigo={`A-${fila * 2 + j + 1}`} linea2="1 180 × 440" />
+          </group>
+        )),
+      )}
+      {/* Cartón: dos cajas apiladas a la izquierda y una a la derecha */}
+      <group position={[-0.95, yTapa, zFondo + 0.04]}>
+        <CajaCarton mat={mat} t={[0.44, 0.2, 0.36]} codigo="BB-01" linea2="caja 10 uds" />
+        <group position={[0, 0.2, 0]}>
+          <CajaCarton mat={mat} t={[0.4, 0.17, 0.34]} codigo="BB-02" linea2="caja 10 uds" />
+        </group>
+      </group>
+      <group position={[0.92, yTapa, zFondo + 0.04]}>
+        <CajaCarton mat={mat} t={[0.42, 0.24, 0.36]} codigo="GF-03" linea2="gafas" />
+      </group>
+      {/* Botes de bolas en dos filas */}
+      {[0, 1, 2, 3].map((i) =>
+        [0, 1].map((fila) => (
+          <group key={`bote-${i}-${fila}`} position={[-0.36 + i * 0.14, yTapa, zFondo - 0.03 + fila * 0.14]}>
+            <Bote mat={mat} codigo={i % 2 ? '6 mm' : '8 mm'} linea2={i % 2 ? '0,25 g' : '0,20 g'} />
+          </group>
+        )),
+      )}
+    </group>
+  );
+}
+
+/** Vitrina: peanas con soportes (vacías), planos enmarcados al fondo y luz cálida. */
+function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | null> }) {
+  const y0 = VITRINA.y0;
+  const yPlano = 2.2;
+  const zPlano = zFondo - MUEBLE.fondo / 2 + 0.04;
+  return (
+    <group>
+      <Caja p={[0, y0 + 0.05, zFondo + 0.02]} t={[2.4, 0.1, 0.5]} m={mat.contrachapado} />
       {VITRINA.xs.map((x, i) => (
         <group key={`pedestal-${x}`} position={[x, y0 + 0.1, zFondo + 0.04]}>
           <Caja p={[0, 0.07 + i * 0.03, 0]} t={[0.5, 0.14 + i * 0.06, 0.3]} m={mat.polimeroNegro} />
@@ -321,6 +286,20 @@ function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | nu
       {VITRINA.xs.map((x, i) => (
         <Socket key={`socket-${x}`} id={`vitrina-${i + 1}`} estanteria="centro" />
       ))}
+      {/* Planos enmarcados del propio mobiliario, a escala y con sus cotas reales */}
+      <group position={[-0.78, yPlano, zPlano]}>
+        <PlanoEnmarcado mat={mat} mm={[MUEBLE.ancho * 1000, MUEBLE.alto * 1000]} titulo="Alzado compactus" />
+      </group>
+      <group position={[0, yPlano, zPlano]}>
+        <PlanoEnmarcado mat={mat} mm={[BANCO.ancho * 1000, BANCO.alto * 1000]} titulo="Banco de trabajo" />
+      </group>
+      <group position={[0.78, yPlano, zPlano]}>
+        <PlanoEnmarcado
+          mat={mat}
+          mm={[(ARMERO.util / ARMERO.huecos) * 1000, ARMERO.alto * 1000]}
+          titulo="Ranura de armero"
+        />
+      </group>
       {/* Tira LED cálida bajo el techo de la vitrina */}
       <Caja p={[0, MUEBLE.alto - 0.05, MUEBLE.frente - 0.06]} t={[2.4, 0.018, 0.03]} m={mat.led} />
       <pointLight
@@ -332,25 +311,40 @@ function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | nu
         distance={2.6}
         decay={2}
       />
-      {[-0.9, -0.3, 0.35, 0.95].map((x) => (
-        <Caja key={`b-${x}`} p={[x, 0.32, zFondo + 0.04]} t={[0.5, 0.36, 0.4]} m={x > 0 ? mat.kraft : mat.maletin} />
-      ))}
     </group>
   );
 }
 
+/** Tablón: corcho con dianas de papel y etiquetas de kraft clavadas, y el monitor de bajadas. */
 function Tablon({ mat }: { mat: Materiales }) {
-  const notas: [number, number, number][] = [
-    [-0.4, 2.3, 0.08],
-    [-0.14, 2.36, -0.06],
-    [-0.36, 2.04, -0.1],
-    [-0.08, 2.1, 0.05],
+  const zCorcho = zFondo - 0.25;
+  const dianas: readonly [number, number, number, number][] = [
+    [-0.4, 2.14, 0.05, 3],
+    [-0.12, 2.24, -0.06, 7],
+    [-0.36, 1.78, -0.04, 11],
+    [-0.02, 1.84, 0.04, 17],
+  ];
+  const etiquetas: readonly [number, number, string][] = [
+    [0.38, 2.34, 'T-014'],
+    [0.38, 2.2, 'T-015'],
   ];
   return (
     <group position={[-MUEBLE.ancho / 4, 0, 0]}>
-      <Caja p={[0, 2.02, zFondo - 0.25]} t={[1.2, 1.15, 0.03]} m={mat.corcho} />
-      {notas.map(([x, y, r]) => (
-        <Caja key={`n-${x}-${y}`} p={[x, y, zFondo - 0.23]} t={[0.2, 0.15, 0.004]} r={[0, 0, r]} m={mat.papel} />
+      <Caja p={[0, 2.02, zCorcho]} t={[1.2, 1.15, 0.03]} m={mat.corcho} />
+      <Caja p={[0, 2.02, zCorcho - 0.001]} t={[1.24, 1.19, 0.02]} m={mat.acero} />
+      {/* Tira LED fría bajo la cabecera, sobre el corcho */}
+      <Caja p={[0, MUEBLE.alto - 0.05, MUEBLE.frente - 0.06]} t={[1.2, 0.018, 0.03]} m={mat.ledDerecha} />
+      {dianas.map(([x, y, r, semilla]) => (
+        <group key={`diana-${semilla}`} position={[x, y, zCorcho + 0.0165]} rotation={[0, 0, r]}>
+          <Diana semilla={semilla} />
+          <Cilindro p={[0, 0.115, 0.004]} rad={0.007} h={0.006} m={mat.laton} r={[Math.PI / 2, 0, 0]} seg={10} />
+        </group>
+      ))}
+      {etiquetas.map(([x, y, codigo]) => (
+        <group key={codigo} position={[x, y, zCorcho + 0.0165]}>
+          <Etiqueta p={[0, 0, 0]} t={[0.16, 0.08]} codigo={codigo} linea2="comprob." papel={colors.kraft} />
+          <Cilindro p={[0, 0.036, 0.004]} rad={0.006} h={0.006} m={mat.laton} r={[Math.PI / 2, 0, 0]} seg={10} />
+        </group>
       ))}
       <group position={[0.27, 1.5, zFondo + 0.05]} rotation={[0, -0.12, 0]}>
         <Caja p={[0, 0.2, 0]} t={[0.5, 0.33, 0.04]} m={mat.polimeroNegro} />
@@ -363,55 +357,76 @@ function Tablon({ mat }: { mat: Materiales }) {
   );
 }
 
-const TINTAS_TIENDA = [colors.laton, colors['estado-ok'], colors.fde, colors['naranja-senal'], colors.niebla];
-
+/** Mostrador: cascos sobre la balda, etiquetas de kraft al borde y un chaleco colgado al fondo. */
 function Mostrador({ mat }: { mat: Materiales }) {
-  const fichas = useMemo(() => TINTAS_TIENDA.map((t) => new MeshStandardMaterial({ color: t, roughness: 0.7 })), []);
+  const yBalda = 1.55;
+  const zBalda = zFondo + 0.05;
   return (
     <group position={[MUEBLE.ancho / 4, 0, 0]}>
-      <Caja p={[0, 1.55, zFondo + 0.05]} t={[1.15, 0.05, 0.42]} m={mat.nogal} />
-      {fichas.map((f, i) => (
-        <group key={`f-${TINTAS_TIENDA[i]}`} position={[-0.4 + i * 0.2, 1.68, zFondo + 0.06]} rotation={[-0.25, 0, 0]}>
-          <mesh material={f}>
-            <boxGeometry args={[0.15, 0.21, 0.008]} />
-          </mesh>
-          <Caja p={[0, -0.03, 0.006]} t={[0.1, 0.06, 0.002]} m={mat.papel} />
-        </group>
+      <Caja p={[0, yBalda, zBalda]} t={[1.15, 0.05, 0.42]} m={mat.contrachapado} />
+      <group position={[-0.32, yBalda + 0.025, zBalda]}>
+        <Casco mat={mat} tela="tela" />
+      </group>
+      <group position={[0.02, yBalda + 0.025, zBalda]} rotation={[0, 0.5, 0]}>
+        <Casco mat={mat} tela="telaFde" />
+      </group>
+      <group position={[0.36, yBalda + 0.025, zBalda + 0.05]}>
+        <Bote mat={mat} codigo="6 mm" linea2="0,20 g" />
+      </group>
+      <group position={[0.36, yBalda + 0.025, zBalda - 0.08]}>
+        <Bote mat={mat} codigo="6 mm" linea2="0,25 g" />
+      </group>
+      {/* Etiquetas de kraft (portaetiquetas de precio) en el canto de la balda */}
+      {[-0.4, -0.08, 0.24].map((x, i) => (
+        <Etiqueta
+          key={`precio-${x}`}
+          p={[x, yBalda - 0.005, zBalda + 0.2125]}
+          t={[0.16, 0.04]}
+          codigo={`P-0${i + 1}`}
+          linea2="— · —"
+          papel={colors.kraft}
+        />
       ))}
-      <Caja p={[0, 2.2, zFondo - 0.2]} t={[1.1, 0.5, 0.02]} m={mat.chapaOscura} />
+      <Caja p={[0, MUEBLE.alto - 0.05, MUEBLE.frente - 0.06]} t={[1.2, 0.018, 0.03]} m={mat.ledDerecha} />
+      {/* Chaleco colgado de la pared del fondo */}
+      <Cilindro p={[0, 2.38, zFondo - 0.24]} rad={0.007} h={0.06} m={mat.aceroClaro} r={[Math.PI / 2, 0, 0]} />
+      <group position={[0, 2.355, zFondo - 0.21]}>
+        <Chaleco mat={mat} tela="telaFde" />
+      </group>
     </group>
   );
 }
 
-const TAPAS = ['#5a1f1f', '#1f2a3a', colors['verde-ranger'], '#2a2a2a', '#7a5a2a'];
-
+/** Biblioteca: carpetas con etiqueta en el lomo y cajas de archivo sobre su balda. */
 function Biblioteca({ mat }: { mat: Materiales }) {
-  const tapas = useMemo(() => TAPAS.map((c) => new MeshStandardMaterial({ color: c, roughness: 0.75 })), []);
+  const tintas = useMemo(() => TINTAS_CARPETA.map((c) => new MeshStandardMaterial({ color: c, roughness: 0.75 })), []);
+  const yBalda = 0.66;
   return (
     <group position={[-MUEBLE.ancho / 4, 0, 0]}>
-      {Array.from({ length: 14 }, (_, i) => {
+      {Array.from({ length: 12 }, (_, i) => {
         const alto = 0.3 + ((i * 37) % 11) / 100;
+        const material = tintas[i % tintas.length] ?? mat.papel;
         return (
           <group
             key={`l-${i}`}
-            position={[-0.55 + i * 0.08, MUEBLE.zocalo + alto / 2, zFondo + 0.02]}
-            rotation={[0, 0, i === 9 ? 0.18 : 0]}
+            position={[-0.5 + i * 0.085, MUEBLE.zocalo, zFondo + 0.02]}
+            rotation={[0, 0, i === 8 ? 0.18 : 0]}
           >
-            <mesh material={tapas[i % tapas.length] ?? mat.papel}>
-              <boxGeometry args={[0.065, alto, 0.3]} />
-            </mesh>
-            <Caja p={[0, alto * 0.18, 0.152]} t={[0.04, 0.06, 0.002]} m={mat.papel} />
+            <Carpeta
+              mat={mat}
+              alto={alto}
+              color={material}
+              codigo={`G-${String(i + 1).padStart(2, '0')}`}
+              linea2="guía"
+            />
           </group>
         );
       })}
-      {Array.from({ length: 6 }, (_, i) => (
-        <Caja
-          key={`c-${i}`}
-          p={[-0.45 + i * 0.17, 0.72, zFondo + 0.02]}
-          t={[0.05, 0.08, 0.32]}
-          r={[0, 0, Math.PI / 2]}
-          m={mat.kraft}
-        />
+      <Caja p={[0, yBalda, zFondo + 0.02]} t={[1.2, 0.03, 0.4]} m={mat.contrachapado} />
+      {[-0.4, -0.13, 0.14, 0.41].map((x, i) => (
+        <group key={`archivo-${x}`} position={[x, yBalda + 0.015, zFondo + 0.02]}>
+          <CajaCarton mat={mat} t={[0.25, 0.12, 0.3]} codigo={`AR-${i + 1}`} linea2="archivo" />
+        </group>
       ))}
     </group>
   );
@@ -426,6 +441,8 @@ function Taquilla({ mat, apodo }: { mat: Materiales; apodo: Texture }) {
         <Caja key={`v-${i}`} p={[0, 0.98 - i * 0.04, z]} t={[0.5, 0.012, 0.012]} m={mat.polimeroNegro} />
       ))}
       <Caja p={[0.46, 0.66, z + 0.01]} t={[0.04, 0.18, 0.03]} m={mat.acero} />
+      {/* Candado */}
+      <Caja p={[0.46, 0.5, z + 0.02]} t={[0.045, 0.06, 0.02]} m={mat.laton} />
       <mesh position={[0, 0.42, z + 0.001]}>
         <planeGeometry args={[0.8, 0.2]} />
         <meshStandardMaterial map={apodo} roughness={0.6} />
@@ -434,15 +451,17 @@ function Taquilla({ mat, apodo }: { mat: Materiales; apodo: Texture }) {
   );
 }
 
+/** Banco de trabajo: tablero de contrachapado, tapete con regla, atrezo de taller y el flexo. */
 function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | null> }) {
   const g = useRef<Group>(null);
   useSombras(g);
   const objetivo = useMemo(() => new Object3D(), []);
   const { x, z, ancho, fondo, alto } = BANCO;
+  const yTapete = alto + 0.003;
   return (
     <group ref={g} position={[x, 0, z]}>
       <primitive object={objetivo} position={[-0.15, alto, 0]} />
-      <Caja p={[0, alto - 0.03, 0]} t={[ancho, 0.06, fondo]} m={mat.nogal} />
+      <Caja p={[0, alto - 0.03, 0]} t={[ancho, 0.06, fondo]} m={mat.contrachapado} />
       {[-1, 1].map((lado) => (
         <group key={`pata-${lado}`}>
           <Caja
@@ -458,18 +477,42 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
         </group>
       ))}
       <Caja p={[0, 0.2, 0]} t={[ancho - 0.2, 0.04, fondo - 0.1]} m={mat.acero} />
+      {/* Balda baja: caja de herramientas y una caja de cartón */}
+      <group position={[-0.6, 0.22, -0.02]}>
+        <CajaHerramientas mat={mat} />
+      </group>
+      <group position={[0.5, 0.22, 0]}>
+        <CajaCarton mat={mat} t={[0.5, 0.24, 0.36]} codigo="HT-05" linea2="recambios" />
+      </group>
       {/* Faldón delantero, donde va el rótulo del banco */}
       <Caja p={[0, alto - 0.12, fondo / 2 + 0.01]} t={[ancho, 0.14, 0.02]} m={mat.acero} />
-      <mesh position={[-0.15, alto + 0.003, 0]} rotation={[-Math.PI / 2, 0, 0]} material={mat.tapete}>
+      <mesh position={[-0.15, yTapete, 0]} rotation={[-Math.PI / 2, 0, 0]} material={mat.tapete}>
         <planeGeometry args={[1.5, 0.66]} />
       </mesh>
       {/* Hueco de la réplica a medio montar, sobre el tapete (socket banco-1): sin réplica de relleno */}
       <group name="socket.banco-1" position={[-0.2, alto + 0.07, 0.04]} userData={{ socket: 'banco-1' }} />
-      {/* Herramientas */}
-      <Caja p={[0.5, alto + 0.02, 0.22]} t={[0.18, 0.02, 0.03]} r={[0, 0.5, 0]} m={mat.acero} />
-      <mesh position={[0.35, alto + 0.03, 0.18]} rotation={[0, 0, Math.PI / 2]} material={mat.laton}>
-        <cylinderGeometry args={[0.012, 0.012, 0.16, 10]} />
-      </mesh>
+      {/* Atrezo sobre el tablero, fuera de la franja central del socket */}
+      <group position={[0.78, yTapete, 0.12]}>
+        <Linterna mat={mat} />
+      </group>
+      <group position={[0.55, yTapete, 0.2]} rotation={[0, 0.5, 0]}>
+        <Calibre mat={mat} />
+      </group>
+      <group position={[-0.74, yTapete, -0.24]} rotation={[0, 0.3, 0]}>
+        <Gafas mat={mat} />
+      </group>
+      <group position={[0.38, yTapete, -0.26]}>
+        <Bote mat={mat} codigo="6 mm" linea2="0,20 g" />
+      </group>
+      <group position={[-0.5, yTapete, 0.26]} rotation={[0, 0.2, 0]}>
+        <Caja p={[0, 0.006, 0]} t={[0.2, 0.012, 0.1]} m={mat.polimeroNegro} />
+        {[-0.07, -0.02, 0.03, 0.075].map((dx) => (
+          <Cilindro key={`tornillo-${dx}`} p={[dx, 0.016, 0]} rad={0.007} h={0.01} m={mat.aceroClaro} seg={10} />
+        ))}
+      </group>
+      <group position={[0.2, yTapete + 0.004, 0.27]} rotation={[0, 0, Math.PI / 2]}>
+        <Destornillador mat={mat} mango="destornilladorNaranja" />
+      </group>
       <Caja p={[-0.92, alto + 0.03, 0.16]} t={[0.12, 0.06, 0.08]} m={mat.kraft} />
       {/* Flexo: base, brazos, cabeza y bombilla */}
       <group position={[0.78, alto, -0.25]}>
@@ -504,6 +547,40 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
   );
 }
 
+/** Panel perforado de herramientas tras el banco: destornilladores, alicates, llaves y cinta métrica colgados. */
+function PanelHerramientas({ mat }: { mat: Materiales }) {
+  const zPanel = zFondo - MUEBLE.fondo / 2 + 0.03;
+  const yColgado = 1.24;
+  return (
+    <group>
+      <Caja p={[0, 0.72, zPanel]} t={[2.5, 1.12, 0.02]} m={mat.perforado} />
+      {/* Tira LED cálida bajo la balda de la vitrina: ilumina el panel de herramientas */}
+      <Caja p={[0, MUEBLE.baldaMedia - 0.045, MUEBLE.frente - 0.1]} t={[2.4, 0.016, 0.03]} m={mat.led} />
+      <Caja p={[0, 1.285, zPanel + 0.012]} t={[2.5, 0.025, 0.03]} m={mat.acero} />
+      {[-0.95, -0.82, -0.69, -0.56].map((x, i) => (
+        <group key={`destornillador-${x}`} position={[x, yColgado, zPanel + 0.045]}>
+          <Destornillador mat={mat} mango={i % 2 ? 'destornilladorOlivo' : 'destornilladorNaranja'} />
+        </group>
+      ))}
+      <group position={[-0.36, yColgado, zPanel + 0.045]}>
+        <Alicate mat={mat} />
+      </group>
+      <group position={[-0.16, yColgado, zPanel + 0.045]}>
+        <Alicate mat={mat} />
+      </group>
+      <group position={[0.06, yColgado, zPanel + 0.045]}>
+        <LlavesAllen mat={mat} />
+      </group>
+      <group position={[0.3, yColgado, zPanel + 0.045]}>
+        <CintaMetrica mat={mat} />
+      </group>
+      <group position={[0.52, yColgado - 0.03, zPanel + 0.045]} rotation={[0, 0, Math.PI]}>
+        <Linterna mat={mat} />
+      </group>
+    </group>
+  );
+}
+
 function PlacaRotulo({
   material,
   posicion,
@@ -520,14 +597,19 @@ function PlacaRotulo({
   );
 }
 
-const materialRotulo = (map: Texture) =>
+/** 2,7 m → «2 700»: milímetros con separador de miles de espacio, como en una cota. */
+const milimetros = (m: number) => String(Math.round(m * 1000)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const materialRotulo = ({ mapa, emision }: { mapa: Texture; emision: Texture }) =>
   new MeshStandardMaterial({
     name: 'emisivo:rotulos',
-    map,
-    emissiveMap: map,
+    map: mapa,
+    // La lámina debe quedar oscura bajo el foco del tubo: el color se atenúa y solo luce lo grabado (emisión).
+    color: '#4a4a4a',
+    emissiveMap: emision,
     emissive: '#ffffff',
     emissiveIntensity: 0,
-    roughness: 0.55,
+    roughness: 0.88,
   });
 
 export interface SalaProps {
@@ -538,7 +620,7 @@ export interface SalaProps {
 }
 
 export function Sala({ control, onApuntar, onElegir }: SalaProps) {
-  const mat = useMateriales();
+  const mat = useMemo(() => crearMateriales(), []);
   const { gl, scene } = useThree();
   useLayoutEffect(() => {
     const pmrem = new PMREMGenerator(gl);
@@ -586,14 +668,18 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       ) as Record<Estanteria, MeshStandardMaterial>,
     [],
   );
+  // Rótulos en «Plano de cotas»: lámina, marco de trazo, marcas de registro, título en Plex condensada y una
+  // línea de cota con la medida real de la zona (mm). El rótulo del banco es más apaisado: su textura también.
   const rotulos = useMemo(
     () =>
       Object.fromEntries(
         ZONAS.map((z) => [
           z.id,
-          // El rótulo del banco es más apaisado (0,84 × 0,13 m): su textura también, para no estirarlo.
           materialRotulo(
-            texturaRotulo(z.rotulo, { dato: z.dato, demo: true, ...(z.id === 'banco' ? { alto: 80 } : {}) }),
+            texturaRotulo(z.rotulo, {
+              alto: z.id === 'banco' ? 160 : 256,
+              cota: `${milimetros(z.caja.tamano[0])} mm`,
+            }),
           ),
         ]),
       ) as Record<string, MeshStandardMaterial>,
@@ -606,11 +692,9 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
           e,
           materialRotulo(
             texturaRotulo(e === 'centro' ? BRAND.name : ESTANTERIAS[e].titulo, {
-              ancho: 512,
-              alto: 80,
-              // La marca, grabada en Cinzel como en el resto del sistema (docs/02 §4.2).
-              familia: e === 'centro' ? 'grabado' : 'rotulo',
-              tinta: e === 'centro' ? colors['laton-claro'] : colors.hueso,
+              alto: 160,
+              cota: `${milimetros(MUEBLE.ancho)} mm`,
+              escala: 1.08,
             }),
           ),
         ]),
@@ -622,12 +706,13 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       Object.fromEntries(
         ORDEN_ESTANTERIAS.map((e) => [
           e,
-          texturaRotulo(ESTANTERIAS[e].numero, { ancho: 128, alto: 80, tinta: colors.hueso }),
+          texturaRotulo(ESTANTERIAS[e].numero, { ancho: 256, alto: 160, escala: 1.5 }).mapa,
         ]),
       ) as unknown as Record<Estanteria, Texture>,
     [],
   );
-  const apodo = useMemo(() => texturaRotulo('Invitado', { alto: 128, fondo: '#3b434b', tinta: colors.hueso }), []);
+  const apodo = useMemo(() => texturaRotulo('Invitado', { ancho: 1024, alto: 256 }).mapa, []);
+  const senalOjos = useMemo(() => texturaSenalOjos(), []);
 
   // Objetivos de los focos (deben estar en la escena para que se actualice su matriz).
   const objetivos = useMemo(
@@ -726,6 +811,20 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       <mesh position={[0, 2.6, MUEBLE.frente - MUEBLE.fondo - 0.04]} material={mat.ladrillo} receiveShadow>
         <planeGeometry args={[24, 5.2]} />
       </mesh>
+      {/* Pared: señal de protección ocular obligatoria y el alzado del compactus, a escala, con sus cotas */}
+      <mesh position={[-4.87, 1.75, MUEBLE.frente - MUEBLE.fondo - 0.036]}>
+        <planeGeometry args={[0.42, 0.42]} />
+        <meshStandardMaterial map={senalOjos} roughness={0.6} />
+      </mesh>
+      <group position={[4.87, 1.75, MUEBLE.frente - MUEBLE.fondo - 0.02]}>
+        <PlanoEnmarcado
+          mat={mat}
+          ancho={0.46}
+          mm={[MUEBLE.ancho * 1000, MUEBLE.alto * 1000]}
+          titulo="Alzado compactus"
+        />
+      </group>
+
       {ORDEN_ESTANTERIAS.map((e) => (
         <primitive key={`reflejo-${e}`} object={reflejos.tubos[e]} position={[xDe(e), 0.004, MUEBLE.frente + 1.8]} />
       ))}
@@ -776,7 +875,12 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
                 <Almacen mat={mat} />
               </>
             ) : null}
-            {e === 'centro' ? <Vitrina mat={mat} luz={vitrina} /> : null}
+            {e === 'centro' ? (
+              <>
+                <PanelHerramientas mat={mat} />
+                <Vitrina mat={mat} luz={vitrina} />
+              </>
+            ) : null}
             {e === 'derecha' ? (
               <>
                 <Caja p={[0, MUEBLE.alto / 2, zFondo]} t={[0.03, MUEBLE.alto - 0.1, MUEBLE.fondo]} m={mat.chapa} />
@@ -801,7 +905,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
               key={`rot-${z.id}`}
               material={rotulos[z.id] as MeshStandardMaterial}
               posicion={[z.anclaRotulo[0] - xDe(e), z.anclaRotulo[1], z.anclaRotulo[2]]}
-              tamano={z.caja.tamano[0] > 2 ? [0.96, 0.24] : [0.84, 0.21]}
+              tamano={z.caja.tamano[0] > 2 ? [1.0, 0.25] : [0.88, 0.22]}
             />
           ))}
           {ZONAS.filter((z) => z.estanteria === e && z.id !== 'banco').map((z) => (
@@ -819,11 +923,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       <Banco mat={mat} flexo={flexo} />
       {ZONAS.filter((z) => z.id === 'banco').map((z) => (
         <group key="banco-rotulo">
-          <PlacaRotulo
-            material={rotulos[z.id] as MeshStandardMaterial}
-            posicion={z.anclaRotulo}
-            tamano={[0.84, 0.13]}
-          />
+          <PlacaRotulo material={rotulos[z.id] as MeshStandardMaterial} posicion={z.anclaRotulo} tamano={[0.9, 0.14]} />
           <CajaZona zona={z} dx={0} onZona={zonaDe(z.id)} onSalir={() => onApuntar?.(null)} />
         </group>
       ))}

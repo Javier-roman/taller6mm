@@ -76,6 +76,26 @@ def main():
     escena.cycles.samples = o["muestras"]
     escena.cycles.use_denoising = True
     escena.cycles.denoiser = "OPENIMAGEDENOISE"
+    # Sin manchas ni ruido en zonas vacías (critico-diseno, 23-11-2026): el denoiser lee albedo y normal como guía
+    # (así no emborrona los bordes de cada objeto), el muestreo es adaptativo y se recortan las luciérnagas de la
+    # luz indirecta. Con pocas muestras el denoiser sin guías dejaba manchas desenfocadas en paredes y baldas.
+    for ajuste, valor in (
+        ("denoising_input_passes", "RGB_ALBEDO_NORMAL"),
+        ("denoising_prefilter", "ACCURATE"),
+        ("use_adaptive_sampling", True),
+        ("adaptive_threshold", 0.003),
+        ("adaptive_min_samples", 64),
+        ("sample_clamp_indirect", 6.0),
+        ("sample_clamp_direct", 0.0),
+    ):
+        try:
+            setattr(escena.cycles, ajuste, valor)
+        except (AttributeError, TypeError) as error:
+            print(f"HORNO aviso: {ajuste} no disponible ({error})")
+    try:
+        bpy.context.view_layer.cycles.denoising_store_passes = True
+    except AttributeError as error:
+        print(f"HORNO aviso: denoising_store_passes no disponible ({error})")
     escena.cycles.max_bounces = 6
     escena.render.resolution_x = o["ancho"]
     escena.render.resolution_y = o["alto"]
@@ -92,6 +112,37 @@ def main():
     for luz in luces:
         luz.data.energy *= 4 * math.pi
         luz.data.shadow_soft_size = 0.05
+
+    # Los rótulos son placas finas pegadas al mueble: no proyectan sombra, o dejarían un rectángulo oscuro
+    # desenfocado en el fondo de cada módulo (critico-diseno, 23-11-2026).
+    for ob in escena.objects:
+        if ob.type == "MESH" and any(
+            ranura.material and ranura.material.name.startswith("emisivo:rotulos")
+            for ranura in ob.material_slots
+        ):
+            ob.visible_shadow = False
+
+    # Las placas de rótulo son lámina mate: sin brillo especular (con él reflejaban el tubo y la tira LED de encima
+    # y la lámina salía gris pálido en vez de oscura).
+    for mat in bpy.data.materials:
+        if mat.name.startswith("emisivo:rotulos") and mat.use_nodes:
+            for nodo in mat.node_tree.nodes:
+                if nodo.type == "BSDF_PRINCIPLED":
+                    for clave in ("Specular IOR Level", "Specular"):
+                        if clave in nodo.inputs:
+                            nodo.inputs[clave].default_value = 0.0
+                    nodo.inputs["Roughness"].default_value = 1.0
+
+    # Los materiales no metálicos pierden la mitad del brillo especular: el que trae el glTF por defecto hacía
+    # que papel, cartón y lámina reflejaran los tubos y las tiras LED como espejos pálidos.
+    for mat in bpy.data.materials:
+        if not mat.use_nodes or mat.name.startswith("emisivo:rotulos"):
+            continue
+        for nodo in mat.node_tree.nodes:
+            if nodo.type == "BSDF_PRINCIPLED" and nodo.inputs["Metallic"].default_value < 0.3:
+                for clave in ("Specular IOR Level", "Specular"):
+                    if clave in nodo.inputs:
+                        nodo.inputs[clave].default_value *= 0.5
 
     # Emisivos por grupo (material «emisivo:<grupo>»), con su fuerza original.
     emisivos = []

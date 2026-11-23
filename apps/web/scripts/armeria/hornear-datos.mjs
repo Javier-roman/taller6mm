@@ -30,7 +30,7 @@ try {
   await page.waitForFunction(() => window.__horno?.listo === true, null, { timeout: 90_000 });
   // Sin las fuentes de los rótulos, el horneado sale con una sans genérica: mejor fallar.
   const fuentes = await page.evaluate(() =>
-    ['700 64px "Big Shoulders Stencil"', '600 64px "Cinzel"', '400 32px "JetBrains Mono"'].map((f) => [
+    ['700 64px "IBM Plex Sans Condensed"', '500 32px "IBM Plex Mono"', '600 32px "IBM Plex Mono"'].map((f) => [
       f,
       document.fonts.check(f),
     ]),

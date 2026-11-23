@@ -11,7 +11,10 @@ const aqui = path.dirname(fileURLToPath(import.meta.url));
 export const webDir = path.resolve(aqui, '..', '..');
 export const raiz = path.resolve(webDir, '..', '..');
 /** Carpeta de los binarios de las vistas (fuera de git; en git solo el manifiesto). */
-export const carpetaVistas = path.join(raiz, 'assets-src', 'vistas', 'armeria');
+// ARMERIA_VISTAS cambia la carpeta (p. ej. una prueba de baja calidad) sin tocar los binarios en uso.
+export const carpetaVistas = process.env.ARMERIA_VISTAS
+  ? path.resolve(process.env.ARMERIA_VISTAS)
+  : path.join(raiz, 'assets-src', 'vistas', 'armeria');
 
 /** `--clave valor` y `--bandera` a un objeto, sobre unos valores por defecto. */
 export function argumentos(defectos = {}) {

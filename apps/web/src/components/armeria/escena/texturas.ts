@@ -6,7 +6,7 @@ import { colors, FONT_FAMILIES } from '@taller6mm/ui/tokens';
 import { CanvasTexture, NoColorSpace, RepeatWrapping, SRGBColorSpace } from 'three';
 
 /** PRNG con semilla (mulberry32): mismas texturas en cada carga y en cada horneado. */
-function azar(semilla: number) {
+export function azar(semilla: number) {
   let s = semilla >>> 0;
   return () => {
     s = (s + 0x6d2b79f5) >>> 0;
@@ -17,7 +17,7 @@ function azar(semilla: number) {
   };
 }
 
-function lienzo(ancho: number, alto: number) {
+export function lienzo(ancho: number, alto: number) {
   const canvas = document.createElement('canvas');
   canvas.width = ancho;
   canvas.height = alto;
@@ -26,7 +26,7 @@ function lienzo(ancho: number, alto: number) {
   return { canvas, ctx };
 }
 
-function textura(canvas: HTMLCanvasElement, repetir?: readonly [number, number], datos = false) {
+export function textura(canvas: HTMLCanvasElement, repetir?: readonly [number, number], datos = false) {
   const t = new CanvasTexture(canvas);
   t.colorSpace = datos ? NoColorSpace : SRGBColorSpace;
   t.anisotropy = 4;
@@ -39,7 +39,7 @@ function textura(canvas: HTMLCanvasElement, repetir?: readonly [number, number],
 }
 
 /** Grano fino por píxel, para que nada parezca plástico liso. */
-function grano(ctx: CanvasRenderingContext2D, ancho: number, alto: number, fuerza: number, rnd: () => number) {
+export function grano(ctx: CanvasRenderingContext2D, ancho: number, alto: number, fuerza: number, rnd: () => number) {
   const img = ctx.getImageData(0, 0, ancho, alto);
   for (let i = 0; i < img.data.length; i += 4) {
     const n = (rnd() - 0.5) * fuerza;
@@ -164,21 +164,30 @@ export function texturaHormigon(repetir: readonly [number, number]): TexturaConR
   };
 }
 
-export function texturaNogal() {
+/** Contrachapado de abedul claro: tablero de banco y baldas de exposición (sustituye al nogal barnizado). */
+export function texturaContrachapado() {
   const rnd = azar(37);
-  const { canvas, ctx } = lienzo(1024, 256);
-  ctx.fillStyle = '#4a2f1e';
-  ctx.fillRect(0, 0, 1024, 256);
-  for (let k = 0; k < 90; k++) {
-    const y = rnd() * 256;
-    ctx.strokeStyle = `rgb(${30 + rnd() * 30} ${18 + rnd() * 16} ${10 + rnd() * 10} / ${0.25 + rnd() * 0.35})`;
-    ctx.lineWidth = 1 + rnd() * 3;
+  const { canvas, ctx } = lienzo(1024, 512);
+  ctx.fillStyle = '#b99a6c';
+  ctx.fillRect(0, 0, 1024, 512);
+  for (let k = 0; k < 160; k++) {
+    const y = rnd() * 512;
+    const t = 150 + rnd() * 40;
+    ctx.strokeStyle = `rgb(${t} ${t * 0.8} ${t * 0.55} / ${0.12 + rnd() * 0.22})`;
+    ctx.lineWidth = 0.6 + rnd() * 2.2;
     ctx.beginPath();
     ctx.moveTo(0, y);
-    for (let x = 0; x <= 1024; x += 64) ctx.lineTo(x, y + Math.sin(x / (80 + rnd() * 60)) * 6 + (rnd() - 0.5) * 3);
+    for (let x = 0; x <= 1024; x += 48) ctx.lineTo(x, y + Math.sin(x / (110 + rnd() * 80)) * 5 + (rnd() - 0.5) * 2);
     ctx.stroke();
   }
-  grano(ctx, 1024, 256, 14, rnd);
+  // Un par de nudos claros y alguna veta oscura: el abedul de un taller no es una lámina lisa.
+  for (let k = 0; k < 5; k++) {
+    ctx.fillStyle = 'rgb(120 84 48 / 0.18)';
+    ctx.beginPath();
+    ctx.ellipse(rnd() * 1024, rnd() * 512, 12 + rnd() * 18, 4 + rnd() * 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  grano(ctx, 1024, 512, 16, rnd);
   return textura(canvas);
 }
 
@@ -195,111 +204,155 @@ export function texturaCorcho() {
   return textura(canvas, [2, 2]);
 }
 
+/**
+ * Tapete de corte del banco: lámina azul pizarra con retícula de 10 mm y regla en milímetros en el borde
+ * (docs/03 §3.3: el banco mide de verdad). Los colores son los tokens del plano de cotas.
+ */
 export function texturaTapete() {
-  const { canvas, ctx } = lienzo(1024, 512);
-  ctx.fillStyle = '#1d3328';
-  ctx.fillRect(0, 0, 1024, 512);
-  ctx.strokeStyle = 'rgb(232 228 220 / 0.18)';
-  ctx.lineWidth = 1;
-  for (let x = 0; x <= 1024; x += 32) {
+  const { canvas, ctx } = lienzo(1536, 672);
+  ctx.fillStyle = colors.carbon;
+  ctx.fillRect(0, 0, 1536, 672);
+  // 1536 px = 1,5 m: 1 px ≈ 1 mm. Retícula fina cada 10 mm y gruesa cada 50 mm.
+  for (let x = 0; x <= 1536; x += 10) {
+    ctx.strokeStyle = x % 50 === 0 ? 'rgb(156 195 208 / 0.34)' : 'rgb(156 195 208 / 0.13)';
+    ctx.lineWidth = x % 50 === 0 ? 1.6 : 1;
     ctx.beginPath();
     ctx.moveTo(x, 0);
-    ctx.lineTo(x, 512);
+    ctx.lineTo(x, 672);
     ctx.stroke();
   }
-  for (let y = 0; y <= 512; y += 32) {
+  for (let y = 0; y <= 672; y += 10) {
+    ctx.strokeStyle = y % 50 === 0 ? 'rgb(156 195 208 / 0.34)' : 'rgb(156 195 208 / 0.13)';
+    ctx.lineWidth = y % 50 === 0 ? 1.6 : 1;
     ctx.beginPath();
     ctx.moveTo(0, y);
-    ctx.lineTo(1024, y);
+    ctx.lineTo(1536, y);
     ctx.stroke();
   }
-  // Regla en mm a lo largo del borde: el banco mide de verdad (docs/03 §3.3).
-  ctx.fillStyle = 'rgb(232 228 220 / 0.55)';
-  for (let x = 0; x <= 1024; x += 8) ctx.fillRect(x, 0, 1, x % 64 === 0 ? 18 : 8);
-  grano(ctx, 1024, 512, 12, azar(53));
+  // Regla en el borde superior, con cifras cada 100 mm.
+  ctx.fillStyle = colors.cota;
+  ctx.font = `500 15px ${FONT_FAMILIES.datos}`;
+  ctx.textAlign = 'left';
+  for (let x = 0; x <= 1536; x += 10) ctx.fillRect(x, 0, 1.4, x % 100 === 0 ? 24 : x % 50 === 0 ? 15 : 8);
+  for (let x = 100; x < 1500; x += 100) ctx.fillText(String(x / 10), x + 4, 40);
+  // Marcas de registro en las esquinas.
+  ctx.strokeStyle = colors.cota;
+  ctx.lineWidth = 3;
+  for (const [x, y, dx, dy] of [
+    [16, 64, 1, 1],
+    [1520, 656, -1, -1],
+  ] as const) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + dy * 36);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x + dx * 36, y);
+    ctx.stroke();
+  }
+  grano(ctx, 1536, 672, 9, azar(53));
   return textura(canvas);
 }
 
-/** Tira de ranuras numeradas del armero, como las etiquetas de ref-08. */
+/** Tira de ranuras numeradas del armero, como las etiquetas de ref-08 pero en papel de plano. */
 export function texturaTiraNumerada(desde: number, cuantos: number) {
-  const { canvas, ctx } = lienzo(1024, 64);
-  ctx.fillStyle = '#d9d6cf';
-  ctx.fillRect(0, 0, 1024, 64);
-  ctx.fillStyle = '#16181b';
-  ctx.font = `700 34px ${FONT_FAMILIES.datos}`;
+  const { canvas, ctx } = lienzo(1536, 96);
+  ctx.fillStyle = colors.papel;
+  ctx.fillRect(0, 0, 1536, 96);
+  ctx.fillStyle = colors['tinta-papel'];
+  ctx.font = `600 46px ${FONT_FAMILIES.datos}`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  const paso = 1024 / cuantos;
+  const paso = 1536 / cuantos;
   for (let i = 0; i < cuantos; i++) {
-    ctx.fillText(String(desde + i).padStart(2, '0'), paso * (i + 0.5), 34);
-    ctx.fillRect(paso * i, 0, 2, 64);
+    ctx.fillText(String(desde + i).padStart(2, '0'), paso * (i + 0.5), 52);
+    ctx.fillRect(paso * i, 0, 3, 96);
+    // Marcas de cota en el borde superior de cada ranura.
+    for (let t = 1; t < 5; t++) ctx.fillRect(paso * i + (paso * t) / 5, 0, 2, t === 2 ? 16 : 9);
   }
-  grano(ctx, 1024, 64, 14, azar(61));
+  grano(ctx, 1536, 96, 12, azar(61));
   return textura(canvas);
 }
 
 export interface OpcionesRotulo {
   readonly ancho?: number;
   readonly alto?: number;
-  /** Texto pequeño bajo el título (el dato vivo). */
-  readonly dato?: string;
-  /** Marca «DEMO» en la esquina: los datos son de ejemplo. */
-  readonly demo?: boolean;
-  readonly tinta?: string;
-  readonly fondo?: string;
-  /** `rotulo` (Big Shoulders Stencil, por defecto) o `grabado` (Cinzel, solo la marca). */
-  readonly familia?: 'rotulo' | 'grabado';
+  /** Cota bajo el título (p. ej. «2 700 mm»): una línea de cota con sus topes y la medida en el centro. */
+  readonly cota?: string;
+  /** Tamaño relativo del título (1 = el de las placas de zona). */
+  readonly escala?: number;
+}
+
+/** Marca de registro: una L de esquina, como las de las placas del sistema (ADR-0010). */
+function marcaRegistro(ctx: CanvasRenderingContext2D, x: number, y: number, dx: 1 | -1, dy: 1 | -1, largo: number) {
+  ctx.beginPath();
+  ctx.moveTo(x, y + dy * largo);
+  ctx.lineTo(x, y);
+  ctx.lineTo(x + dx * largo, y);
+  ctx.stroke();
 }
 
 /**
- * Rótulo a plantilla sobre una chapa (docs/02 §4.5): título en Big Shoulders Stencil y dato en
- * JetBrains Mono. Sirve de mapa de color y de emisión: al encender el tubo, el rótulo se ilumina.
+ * Rótulo de la sala en «Plano de cotas» (ADR-0010): lámina azul pizarra, marco de trazo, marcas de registro
+ * arriba a la izquierda y abajo a la derecha, título en Plex Sans Condensed y una línea de cota con su medida en
+ * Plex Mono. Devuelve el mapa de color (la chapa entera) y un mapa de emisión aparte: al encender el tubo solo
+ * luce lo grabado (título, cota y marcas) y la lámina sigue oscura, como un rótulo retroiluminado de verdad.
  */
 export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
-  // 512 × 128 basta: en pantalla la placa no pasa de unos 400 px ni con la cámara dentro (auditor-rendimiento).
-  const ancho = opciones.ancho ?? 512;
-  const alto = opciones.alto ?? 128;
-  const borde = Math.round(alto * 0.07);
-  const { canvas, ctx } = lienzo(ancho, alto);
-  ctx.fillStyle = opciones.fondo ?? '#15171a';
-  ctx.fillRect(0, 0, ancho, alto);
-  // Remaches de la chapa.
-  ctx.fillStyle = 'rgb(232 228 220 / 0.22)';
-  for (const [x, y] of [
-    [borde, borde],
-    [ancho - borde, borde],
-    [borde, alto - borde],
-    [ancho - borde, alto - borde],
-  ] as const) {
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(2, alto * 0.024), 0, Math.PI * 2);
-    ctx.fill();
-  }
-  const tinta = opciones.tinta ?? colors['laton-claro'];
-  ctx.fillStyle = tinta;
-  ctx.textBaseline = 'middle';
-  ctx.textAlign = 'center';
-  const tamTitulo = Math.round(alto * (opciones.dato ? 0.46 : 0.62));
-  const grabado = opciones.familia === 'grabado';
-  ctx.font = grabado
-    ? `600 ${Math.round(tamTitulo * 0.82)}px ${FONT_FAMILIES.grabado}`
-    : `700 ${tamTitulo}px ${FONT_FAMILIES.rotulo}`;
-  ctx.letterSpacing = `${Math.round(tamTitulo * (grabado ? 0.08 : 0.06))}px`;
-  ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.dato ? alto * 0.38 : alto / 2, ancho - borde * 3);
-  if (opciones.dato) {
-    ctx.letterSpacing = '0px';
+  const ancho = opciones.ancho ?? 1024;
+  const alto = opciones.alto ?? 256;
+  const dibujar = (emision: boolean) => {
+    const { canvas, ctx } = lienzo(ancho, alto);
+    ctx.fillStyle = emision ? '#000000' : colors.carbon;
+    ctx.fillRect(0, 0, ancho, alto);
+    const m = Math.round(alto * 0.06);
+    if (!emision) {
+      ctx.strokeStyle = colors.acero;
+      ctx.lineWidth = Math.max(3, alto * 0.018);
+      ctx.strokeRect(m, m, ancho - 2 * m, alto - 2 * m);
+    }
+    ctx.strokeStyle = colors.cota;
+    ctx.lineWidth = Math.max(4, alto * 0.026);
+    marcaRegistro(ctx, m * 1.7, m * 1.7, 1, 1, alto * 0.14);
+    marcaRegistro(ctx, ancho - m * 1.7, alto - m * 1.7, -1, -1, alto * 0.14);
+    const escala = opciones.escala ?? 1;
+    const tam = Math.round(alto * (opciones.cota ? 0.44 : 0.52) * escala);
     ctx.fillStyle = colors.hueso;
-    ctx.font = `400 ${Math.round(alto * 0.17)}px ${FONT_FAMILIES.datos}`;
-    ctx.fillText(opciones.dato, ancho / 2, alto * 0.78, ancho - borde * 3);
-  }
-  if (opciones.demo) {
-    ctx.textAlign = 'right';
-    ctx.fillStyle = colors['estado-aviso'];
-    ctx.font = `700 ${Math.round(alto * 0.11)}px ${FONT_FAMILIES.datos}`;
-    ctx.fillText('DEMO', ancho - borde * 2, alto * 0.16);
-  }
-  grano(ctx, ancho, alto, 10, azar(texto.length * 97));
-  return textura(canvas);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `700 ${tam}px ${FONT_FAMILIES.rotulo}`;
+    ctx.letterSpacing = `${Math.round(tam * 0.05)}px`;
+    ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.cota ? alto * 0.42 : alto / 2, ancho - m * 6);
+    ctx.letterSpacing = '0px';
+    if (opciones.cota) {
+      const y = alto * 0.8;
+      const x0 = m * 3.4;
+      const x1 = ancho - m * 3.4;
+      ctx.strokeStyle = colors.cota;
+      ctx.lineWidth = Math.max(2.5, alto * 0.016);
+      ctx.font = `500 ${Math.round(alto * 0.17)}px ${FONT_FAMILIES.datos}`;
+      const medida = ctx.measureText(opciones.cota).width;
+      const mitad = medida / 2 + alto * 0.07;
+      for (const [a, b] of [
+        [x0, ancho / 2 - mitad],
+        [ancho / 2 + mitad, x1],
+      ] as const) {
+        ctx.beginPath();
+        ctx.moveTo(a, y);
+        ctx.lineTo(b, y);
+        ctx.stroke();
+      }
+      for (const x of [x0, x1]) {
+        ctx.beginPath();
+        ctx.moveTo(x, y - alto * 0.07);
+        ctx.lineTo(x, y + alto * 0.07);
+        ctx.stroke();
+      }
+      ctx.fillStyle = colors.cota;
+      ctx.fillText(opciones.cota, ancho / 2, y + 2);
+    }
+    if (!emision) grano(ctx, ancho, alto, 7, azar(texto.length * 97));
+    return textura(canvas);
+  };
+  return { mapa: dibujar(false), emision: dibujar(true) };
 }
 
 /**
@@ -307,30 +360,261 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
  * nunca un precio sin fecha). Bajada en verde de estado con ▼; el naranja-señal es solo de interacción.
  */
 export function texturaPantalla() {
-  const { canvas, ctx } = lienzo(512, 320);
-  ctx.fillStyle = '#07090b';
-  ctx.fillRect(0, 0, 512, 320);
-  ctx.fillStyle = colors.niebla;
-  ctx.font = `400 24px ${FONT_FAMILIES.datos}`;
-  ctx.fillText('BAJADAS · DEMO', 24, 40);
+  const { canvas, ctx } = lienzo(640, 400);
+  ctx.fillStyle = colors['negro-pavonado'];
+  ctx.fillRect(0, 0, 640, 400);
+  ctx.strokeStyle = colors.acero;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(8, 8, 624, 384);
+  ctx.fillStyle = colors.cota;
+  ctx.font = `500 26px ${FONT_FAMILIES.datos}`;
+  ctx.textAlign = 'left';
+  ctx.fillText('BAJADAS · DEMO', 28, 50);
   const filas = [
     ['Bocacha 14 mm CCW', '▼ 12 %', 'comprobado hace 2 h'],
     ['Óptica 1-4×24', '▼ 8 %', 'comprobado hace 3 h'],
     ['Cargador mid-cap', '▼ 15 %', 'comprobado hace 5 h'],
   ];
   filas.forEach(([pieza, bajada, comprobado], i) => {
-    const y = 96 + i * 76;
+    const y = 118 + i * 90;
     ctx.textAlign = 'left';
     ctx.fillStyle = colors.hueso;
-    ctx.font = `400 26px ${FONT_FAMILIES.datos}`;
-    ctx.fillText(pieza ?? '', 24, y);
+    ctx.font = `500 32px ${FONT_FAMILIES.datos}`;
+    ctx.fillText(pieza ?? '', 28, y);
     ctx.fillStyle = colors.niebla;
-    ctx.font = `400 18px ${FONT_FAMILIES.datos}`;
-    ctx.fillText(comprobado ?? '', 24, y + 28);
+    ctx.font = `400 22px ${FONT_FAMILIES.datos}`;
+    ctx.fillText(comprobado ?? '', 28, y + 32);
     ctx.fillStyle = colors['estado-ok'];
-    ctx.font = `700 30px ${FONT_FAMILIES.datos}`;
+    ctx.font = `600 36px ${FONT_FAMILIES.datos}`;
     ctx.textAlign = 'right';
-    ctx.fillText(bajada ?? '', 488, y);
+    ctx.fillText(bajada ?? '', 612, y);
   });
+  return textura(canvas);
+}
+
+/** Diana de papel: hoja blanca con círculos concéntricos y varios impactos de bola (agujeros suaves). */
+export function texturaDiana(semilla = 5) {
+  const rnd = azar(semilla);
+  const { canvas, ctx } = lienzo(512, 640);
+  ctx.fillStyle = colors.papel;
+  ctx.fillRect(0, 0, 512, 640);
+  ctx.strokeStyle = colors['tinta-papel'];
+  ctx.fillStyle = colors['tinta-papel'];
+  const cx = 256;
+  const cy = 300;
+  for (let r = 40; r <= 220; r += 36) {
+    ctx.lineWidth = r === 40 ? 4 : 2.2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(cx - 236, cy);
+  ctx.lineTo(cx + 236, cy);
+  ctx.moveTo(cx, cy - 236);
+  ctx.lineTo(cx, cy + 236);
+  ctx.stroke();
+  // Impactos: más agrupados cerca del centro.
+  for (let k = 0; k < 13; k++) {
+    const ang = rnd() * Math.PI * 2;
+    const d = Math.abs(rnd() + rnd() - 1) * 190;
+    ctx.fillStyle = 'rgb(20 24 28 / 0.88)';
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d, 5.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = colors['tinta-papel'];
+  ctx.font = `500 22px ${FONT_FAMILIES.datos}`;
+  ctx.textAlign = 'center';
+  ctx.fillText('DIANA · 10 m', 256, 590);
+  grano(ctx, 512, 640, 10, rnd);
+  return textura(canvas);
+}
+
+/**
+ * Plano enmarcado: la elevación del compactus (2 700 × 2 720 mm, de MUEBLE) con sus divisiones y cotas en
+ * milímetros, sobre papel. Es un plano de verdad de la estantería de la sala, no un dibujo de relleno.
+ */
+export function texturaPlano(ancho_mm: number, alto_mm: number, titulo: string) {
+  const { canvas, ctx } = lienzo(768, 576);
+  ctx.fillStyle = colors.papel;
+  ctx.fillRect(0, 0, 768, 576);
+  const tinta = colors['tinta-papel'];
+  ctx.strokeStyle = tinta;
+  ctx.fillStyle = tinta;
+  // Cajetín.
+  ctx.lineWidth = 3;
+  ctx.strokeRect(20, 20, 728, 536);
+  ctx.strokeRect(20, 486, 728, 70);
+  ctx.font = `700 30px ${FONT_FAMILIES.rotulo}`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(titulo.toUpperCase(), 40, 514);
+  ctx.font = `500 20px ${FONT_FAMILIES.datos}`;
+  ctx.fillText('ESC. 1:20 · MEDIDAS EN mm', 40, 540);
+  // Alzado a escala (1:20 → cabe en 520 × 400 px).
+  const k = Math.min(520 / ancho_mm, 400 / alto_mm);
+  const w = ancho_mm * k;
+  const h = alto_mm * k;
+  const x0 = (768 - w) / 2;
+  const y0 = 50 + (420 - h) / 2;
+  ctx.lineWidth = 3.4;
+  ctx.strokeRect(x0, y0, w, h);
+  ctx.lineWidth = 2;
+  // Balda media y zócalo, a su altura real.
+  for (const frac of [0.047, 0.529]) {
+    ctx.beginPath();
+    ctx.moveTo(x0, y0 + h * (1 - frac));
+    ctx.lineTo(x0 + w, y0 + h * (1 - frac));
+    ctx.stroke();
+  }
+  // Cotas.
+  ctx.lineWidth = 1.6;
+  ctx.font = `500 19px ${FONT_FAMILIES.datos}`;
+  ctx.textAlign = 'center';
+  const yc = y0 + h + 22;
+  ctx.beginPath();
+  ctx.moveTo(x0, yc);
+  ctx.lineTo(x0 + w, yc);
+  for (const x of [x0, x0 + w]) {
+    ctx.moveTo(x, y0 + h + 4);
+    ctx.lineTo(x, yc + 8);
+  }
+  ctx.stroke();
+  ctx.fillStyle = colors.papel;
+  ctx.fillRect(768 / 2 - 52, yc - 12, 104, 24);
+  ctx.fillStyle = tinta;
+  ctx.fillText(`${ancho_mm.toLocaleString('es-ES')} mm`.replace('.', ' '), 768 / 2, yc);
+  ctx.save();
+  ctx.translate(x0 - 24, y0 + h / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.beginPath();
+  ctx.moveTo(-h / 2, 0);
+  ctx.lineTo(h / 2, 0);
+  ctx.moveTo(-h / 2, -8);
+  ctx.lineTo(-h / 2, 8);
+  ctx.moveTo(h / 2, -8);
+  ctx.lineTo(h / 2, 8);
+  ctx.stroke();
+  ctx.fillStyle = colors.papel;
+  ctx.fillRect(-52, -12, 104, 24);
+  ctx.fillStyle = tinta;
+  ctx.fillText(`${alto_mm.toLocaleString('es-ES')} mm`.replace('.', ' '), 0, 0);
+  ctx.restore();
+  grano(ctx, 768, 576, 9, azar(ancho_mm));
+  return textura(canvas);
+}
+
+/** Etiqueta de caja o maletín: papel con código y medida en Plex Mono, como las de un almacén ordenado. */
+export function texturaEtiqueta(codigo: string, linea2: string, papelHex: string = colors.papel) {
+  const { canvas, ctx } = lienzo(512, 256);
+  ctx.fillStyle = papelHex;
+  ctx.fillRect(0, 0, 512, 256);
+  ctx.strokeStyle = colors['tinta-papel'];
+  ctx.lineWidth = 5;
+  ctx.strokeRect(10, 10, 492, 236);
+  ctx.fillStyle = colors['tinta-papel'];
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.font = `700 78px ${FONT_FAMILIES.datos}`;
+  ctx.fillText(codigo, 34, 96);
+  ctx.font = `500 40px ${FONT_FAMILIES.datos}`;
+  ctx.fillText(linea2, 34, 184);
+  // Código de barras sencillo, sin significado.
+  const rnd = azar(codigo.length * 31 + linea2.length);
+  for (let x = 330; x < 484; x += 6) ctx.fillRect(x, 150, 2 + Math.floor(rnd() * 3), 70);
+  grano(ctx, 512, 256, 8, rnd);
+  return textura(canvas);
+}
+
+/** Panel perforado de herramientas (ref-05): chapa oscura con retícula de agujeros. */
+export function texturaPerforado() {
+  const rnd = azar(71);
+  const { canvas, ctx } = lienzo(512, 512);
+  ctx.fillStyle = '#44606f';
+  ctx.fillRect(0, 0, 512, 512);
+  for (let y = 16; y < 512; y += 32) {
+    for (let x = 16; x < 512; x += 32) {
+      ctx.fillStyle = '#05080a';
+      ctx.beginPath();
+      ctx.arc(x, y, 5.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgb(156 195 208 / 0.14)';
+      ctx.beginPath();
+      ctx.arc(x - 1.2, y - 1.4, 5.8, Math.PI * 0.95, Math.PI * 1.7);
+      ctx.fill();
+    }
+  }
+  grano(ctx, 512, 512, 12, rnd);
+  return textura(canvas, [3, 2]);
+}
+
+/** Tela técnica (chaleco, funda): tejido con trama fina y pequeñas irregularidades; el color lo da el material. */
+export function texturaTela(base: string) {
+  const rnd = azar(83);
+  const { canvas, ctx } = lienzo(256, 256);
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, 256, 256);
+  for (let y = 0; y < 256; y += 3) {
+    ctx.fillStyle = `rgb(0 0 0 / ${0.1 + rnd() * 0.08})`;
+    ctx.fillRect(0, y, 256, 1);
+  }
+  for (let x = 0; x < 256; x += 3) {
+    ctx.fillStyle = `rgb(255 255 255 / ${0.03 + rnd() * 0.04})`;
+    ctx.fillRect(x, 0, 1, 256);
+  }
+  grano(ctx, 256, 256, 22, rnd);
+  return textura(canvas, [2, 2]);
+}
+
+/** Señal de protección ocular obligatoria (ISO 7010 M004): círculo azul con unas gafas, sobre la pared. */
+export function texturaSenalOjos() {
+  const { canvas, ctx } = lienzo(512, 512);
+  ctx.fillStyle = '#e9e6de';
+  ctx.fillRect(0, 0, 512, 512);
+  ctx.fillStyle = '#1f5fa8';
+  ctx.beginPath();
+  ctx.arc(256, 256, 220, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#f4f2ec';
+  // Montura: dos lentes y puente, con patillas.
+  for (const x of [196, 316]) {
+    ctx.beginPath();
+    ctx.ellipse(x, 256, 62, 44, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#1f5fa8';
+    ctx.beginPath();
+    ctx.ellipse(x, 256, 46, 30, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#f4f2ec';
+  }
+  ctx.fillRect(244, 246, 24, 14);
+  ctx.fillRect(96, 244, 44, 14);
+  ctx.fillRect(372, 244, 44, 14);
+  grano(ctx, 512, 512, 12, azar(91));
+  return textura(canvas);
+}
+
+/** Regla vertical de papel con marcas cada 10 mm y cifras cada 100 mm (1 px ≈ 1 mm). Plano de cotas en la propia sala. */
+export function texturaRegla(alto_mm: number) {
+  const ancho = 96;
+  const { canvas, ctx } = lienzo(ancho, alto_mm);
+  ctx.fillStyle = colors.papel;
+  ctx.fillRect(0, 0, ancho, alto_mm);
+  ctx.fillStyle = colors['tinta-papel'];
+  ctx.font = `600 22px ${FONT_FAMILIES.datos}`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  for (let mm = 0; mm <= alto_mm; mm += 10) {
+    const y = alto_mm - mm;
+    const largo = mm % 100 === 0 ? 46 : mm % 50 === 0 ? 32 : 18;
+    ctx.fillRect(ancho - largo, y - 1, largo, 2.4);
+    if (mm % 100 === 0 && mm > 0 && mm < alto_mm - 20) ctx.fillText(String(mm / 10), 6, y);
+  }
+  grano(ctx, ancho, alto_mm, 9, azar(alto_mm));
   return textura(canvas);
 }
