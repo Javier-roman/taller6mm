@@ -91,14 +91,18 @@ test.describe('/sistema', () => {
     }
   });
 
-  test('las placas llevan luz cenital y ruido (docs/02 §4.3)', async ({ page }) => {
+  test('las placas llevan luz cenital y marcas de registro (docs/02 §4.3)', async ({ page }) => {
     await page.goto('/sistema#placa');
     const fondo = await page
       .locator('.t6-placa')
       .first()
       .evaluate((el) => getComputedStyle(el).backgroundImage);
     expect(fondo).toContain('linear-gradient');
-    expect(fondo).toContain('data:image/svg+xml');
+    const marca = await page
+      .locator('.t6-placa:not(.t6-placa--lisa)')
+      .first()
+      .evaluate((el) => getComputedStyle(el, '::before').borderTopWidth);
+    expect(Number.parseFloat(marca)).toBeGreaterThan(0);
   });
 
   test('con movimiento reducido, nada dura más de 120 ms', async ({ page }) => {
@@ -135,9 +139,12 @@ test.describe('/sistema · componentes interactivos', () => {
     await page.goto('/sistema#capas');
     const abrir = page.getByRole('button', { name: 'Abrir maletín' });
     await abrir.scrollIntoViewIfNeeded();
-    await abrir.click();
     const dialogo = page.getByRole('dialog', { name: 'Borrar build' });
-    await expect(dialogo).toBeVisible();
+    // La isla se hidrata al verse (client:visible): se reintenta el clic hasta que responde.
+    await expect(async () => {
+      await abrir.click();
+      await expect(dialogo).toBeVisible({ timeout: 1000 });
+    }).toPass();
     await page.keyboard.press('Escape');
     await expect(dialogo).toBeHidden();
     await expect(abrir).toBeFocused();

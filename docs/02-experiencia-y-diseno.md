@@ -82,7 +82,7 @@ Assets de la escena: geometría propia o procedimental (estanterías, maletines 
 | `--carbon` | #15212A | Lámina: superficie de paneles |
 | `--grafito` | #1F303B | Lámina alta: paneles elevados y hover |
 | `--acero` | #3D525E | Trazo: bordes y divisores |
-| `--trazo-fuerte` | #7F96A0 | Borde de control, regla y cotas secundarias |
+| `--trazo-fuerte` | #8CA3AD | Borde de control, regla y cotas secundarias |
 | `--papel` / `--tinta-papel` | #D7D4CC / #1B2226 | Lámina de papel (renders, planos) y su trazo |
 | `--hueso` | #EFEBE1 | Texto principal |
 | `--niebla` | #AFBCC3 | Texto secundario |

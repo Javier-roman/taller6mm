@@ -49,6 +49,7 @@ export const COLOR_PAIRS: readonly ColorPair[] = [
   ...onSurfaces('cota', 'Cotas y etiquetas técnicas'),
   ...onSurfaces('cota', 'Línea de cota y marca de registro', 'componente'),
   ...onSurfaces('trazo-fuerte', 'Borde de control, regla y cotas secundarias', 'componente'),
+  ...onSurfaces('trazo-fuerte', 'Texto de cota secundaria'),
   ...onSurfaces('estado-ok', 'Estado: en stock / compatible'),
   ...onSurfaces('estado-aviso', 'Estado: pocas unidades / con adaptador'),
   ...onSurfaces('estado-error', 'Estado: agotado / incompatible'),

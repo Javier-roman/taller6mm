@@ -18,7 +18,7 @@
 ## Decisión
 Adoptar la dirección **A «Plano de cotas» — «Todo se mide, nada se inventa»**:
 - **Color**: tinta `#080C0F` (fondo), lámina `#15212A` y lámina alta `#1F303B`, trazo `#3D525E`, borde de control
-  `#7F96A0`, cota `#9CC3D0`, texto `#EFEBE1` / `#AFBCC3`, latón `#C29A5B` / `#DDBB82` con texto `#15110B`, señal
+  `#8CA3AD`, cota `#9CC3D0`, texto `#EFEBE1` / `#AFBCC3`, latón `#C29A5B` / `#DDBB82` con texto `#15110B`, señal
   `#F27346`, papel `#D7D4CC` con tinta `#1B2226` (para renders y planos) y kraft `#C9AE84` (portaetiquetas de
   precio). Estados: `#4DB27B`, `#E2A82B`, `#F0736B`, `#8C96A1`. Respecto al prototipo, tinta, lámina y trazos se
   separaron más (ajustes 1 y 2) y el texto subió de luz (ajuste 3). Cada par texto/fondo y cada borde de componente

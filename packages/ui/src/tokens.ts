@@ -25,7 +25,7 @@ export const COLOR_TOKENS = {
   carbon: { hex: '#15212A', group: 'superficie', use: 'Lámina: superficie de paneles' },
   grafito: { hex: '#1F303B', group: 'superficie', use: 'Lámina alta: paneles elevados y hover' },
   acero: { hex: '#3D525E', group: 'superficie', use: 'Trazo: bordes y divisores' },
-  'trazo-fuerte': { hex: '#7F96A0', group: 'superficie', use: 'Borde de control, cotas secundarias y regla' },
+  'trazo-fuerte': { hex: '#8CA3AD', group: 'superficie', use: 'Borde de control, cotas secundarias y regla' },
   papel: { hex: '#D7D4CC', group: 'superficie', use: 'Papel: lámina impresa donde viven los renders y planos' },
   hueso: { hex: '#EFEBE1', group: 'texto', use: 'Texto principal' },
   niebla: { hex: '#AFBCC3', group: 'texto', use: 'Texto secundario' },
