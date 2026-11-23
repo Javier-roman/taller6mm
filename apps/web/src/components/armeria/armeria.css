@@ -274,9 +274,9 @@
 }
 
 .armeria__zona-nombre {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  /* Plex condensada en versalitas es más ancha que la fuente anterior: el nombre pasa a otra línea, nunca se corta. */
+  text-wrap: balance;
+  overflow-wrap: anywhere;
   font-family: var(--fuente-rotulo);
   font-weight: var(--peso-negrita);
   font-size: var(--texto-m);

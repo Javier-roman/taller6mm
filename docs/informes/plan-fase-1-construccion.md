@@ -84,3 +84,13 @@ Cada rebanada se entrega en PR pequeño y pasa por:
    póster y los sockets, porque el póster depende de ellos. Isla `client:idle` con póster y navegación HTML.
 3. **S1.2** nivel B (2,5D) sobre ese compositor; **S1.3** nivel A (3D) cargado con `import()`; **S1.4** selector con caída
    automática, «Más luz» y movimiento reducido; **S1.5** CSP solo en `/` para WASM y KTX2.
+
+### Rehecho del póster (23-11-2026, tras el rechazo de Javi del primer póster)
+- **La sala ya no está desnuda**: se viste con atrezo de airsoft **sin réplicas ni armas** (`escena/atrezo.tsx`): gafas colgadas de
+  una barra, cascos, chaleco, botes de bolas, cajas de cartón y maletines etiquetados, dianas de papel y etiquetas de kraft en el
+  corcho, planos enmarcados con las cotas reales del mobiliario, panel perforado de herramientas, caja de herramientas,
+  calibre, linterna y cinta métrica en el banco, regla de papel en milímetros en el armero y señal de protección ocular en la pared.
+- **Rótulos en «Plano de cotas» (ADR-0010)**: lámina oscura, marco de trazo, marcas de registro y línea de cota con la medida real
+  de la zona; retroiluminados (la emisión es un mapa aparte, solo luce lo grabado). Fuentes y colores de `packages/ui`.
+- **Horneado sin ruido**: Cycles con 384 muestras, muestreo adaptativo, denoiser con guías de albedo y normal, recorte de luz indirecta,
+  rótulos sin sombra proyectada y sin brillo especular (eran la causa de los rectángulos desenfocados y de las placas pálidas).

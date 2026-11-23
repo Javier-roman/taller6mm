@@ -4,9 +4,9 @@
 /** Los pases de luz se guardan con esta exposición: el B los divide para recuperar hasta 2,0 lineal. */
 export const EXPOSICION_HORNO = 0.5;
 /**
- * El pase «base» (relleno ambiente) se hornea ya con el ambiente de Blender a 0,2, el valor con el que Javi aprobó
- * el aspecto (11-11-2026), y entra al compositor tal cual. Si se hornea con otro valor, esta ganancia lo iguala
- * (la luz es lineal): ganancia = ambiente_con_el_que_se_aprobó / ambiente_horneado.
+ * El pase «base» (relleno ambiente) se hornea con el ambiente de Blender a 0,3 (subido desde el 0,2 de las
+ * pruebas para que se lea el ladrillo y el fondo de los módulos) y entra al compositor tal cual. Si se hornea con
+ * otro valor, esta ganancia lo iguala (la luz es lineal): ganancia = ambiente deseado / ambiente horneado.
  */
 export const GANANCIA_BASE = 1;
 /** Profundidad codificada en 8 bits entre estas distancias (m) a la cámara. */
