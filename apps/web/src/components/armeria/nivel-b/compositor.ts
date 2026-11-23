@@ -5,7 +5,7 @@
 // EscenaB (la escena interactiva) y el script del póster, que componen exactamente lo mismo.
 import { ANCHO_MINIMO_VISIBLE, ASPECTO_POSTER, ENCUADRE_POSTER, segmentoTubo } from '../camara.ts';
 import { compilar, GLSL_COMUN } from '../glsl.ts';
-import { PASES_DATOS, PASES_LUZ, type Pase, PROFUNDIDAD } from '../pases.ts';
+import { GANANCIA_BASE, PASES_DATOS, PASES_LUZ, type Pase, PROFUNDIDAD } from '../pases.ts';
 import { ESTANTERIAS, ORDEN_ESTANTERIAS } from '../zonas.ts';
 
 export type V2 = readonly [number, number];
@@ -53,6 +53,7 @@ uniform vec4 uSegmentos[3];
 
 const float CERCA = ${PROFUNDIDAD.cerca.toFixed(4)};
 const float LEJOS = ${PROFUNDIDAD.lejos.toFixed(4)};
+const float GANANCIA_BASE = ${GANANCIA_BASE.toFixed(4)};
 ${GLSL_COMUN}
 vec3 posVista(vec2 uv, float d) {
   vec2 ndc = vec2(uv.x * 2.0 - 1.0, 1.0 - uv.y * 2.0);
@@ -67,7 +68,7 @@ void main() {
   vec3 tC = texture(uTuboC, uv).rgb;
   vec3 tD = texture(uTuboD, uv).rgb;
   vec3 rot = texture(uRotulos, uv).rgb;
-  vec3 c = texture(uBase, uv).rgb * uAmbiente
+  vec3 c = texture(uBase, uv).rgb * uAmbiente * GANANCIA_BASE
     + (tI * uTubos.x + tC * uTubos.y + tD * uTubos.z) * uTinte
     + texture(uCalidas, uv).rgb * uCalidasN
     + rot * uRotulosN;

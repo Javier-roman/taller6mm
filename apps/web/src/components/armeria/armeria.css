@@ -151,7 +151,7 @@
   text-transform: uppercase;
 }
 
-/* Las siluetas de réplicas son de atrezo hasta que el frente de fidelidad entregue modelos a escala. */
+/* Sin réplicas todavía: el aviso se retira cuando el frente de fidelidad entregue modelos a escala. */
 .armeria__provisional {
   display: block;
   color: var(--estado-aviso);

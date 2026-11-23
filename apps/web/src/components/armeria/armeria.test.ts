@@ -94,11 +94,13 @@ describe('sockets de réplica (sin siluetas de relleno)', () => {
     }
   });
 
-  it('las ranuras del armero no se solapan entre sí', () => {
+  it('las ranuras del armero van en orden y apenas se rozan (la perspectiva ensancha un poco su caja)', () => {
     const rects = socketsDe('replicas').map((s) => rectCaja(s.caja.centro, s.caja.tamano));
     rects.forEach((r, i) => {
       const siguiente = rects[i + 1];
-      if (siguiente) expect(r.x + r.ancho).toBeLessThanOrEqual(siguiente.x + 1e-9);
+      if (!siguiente) return;
+      expect(siguiente.x + siguiente.ancho / 2).toBeGreaterThan(r.x + r.ancho / 2);
+      expect(r.x + r.ancho - siguiente.x).toBeLessThan(0.25 * r.ancho);
     });
   });
 

@@ -48,8 +48,8 @@ describe('La Armería en el HTML inicial', () => {
     expect(html).toContain('data-luz="penumbra"');
   });
 
-  it('avisa de que los datos y las siluetas son provisionales', () => {
-    expect(html).toContain('Siluetas provisionales');
+  it('avisa de que los datos son de demostración y de que aún no hay réplicas reales', () => {
+    expect(html).toContain('Réplicas reales: próximamente');
     expect(html).toContain('Datos de demostración');
     expect(html.match(/\(dato de ejemplo\)/g)).toHaveLength(ZONAS.length);
   });

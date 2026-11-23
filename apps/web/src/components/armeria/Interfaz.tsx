@@ -109,7 +109,7 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
           {/* Hasta tener réplicas modeladas a escala real (frente de fidelidad), las siluetas son de atrezo. */}
           <p className="armeria__nota">
             Datos de demostración
-            <span className="armeria__provisional">Siluetas provisionales</span>
+            <span className="armeria__provisional">Réplicas reales: próximamente</span>
           </p>
           {/* Acción principal: el banco (configurador) es el protagonista de la web. */}
           <Boton variante="laton" className="armeria__accion" onClick={() => abrir('banco')}>

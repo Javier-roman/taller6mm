@@ -1,13 +1,57 @@
 {
-  "hash": "4451ca4b0874",
+  "hash": "6907b5f0517d",
   "archivos": {
+    "albedo.webp": {
+      "sha256": "2340cfd7d2f4a9b8e84539850f7afca6de99962a01004a2e9153e754a030b2fc",
+      "bytes": 296856
+    },
+    "base.webp": {
+      "sha256": "a3fe0582fcadd93cd6b6420235b052bcd4f05f86131c0a8e799d1b2399f7b5ec",
+      "bytes": 17944
+    },
+    "calidas.webp": {
+      "sha256": "f619fd1f80393638fa74c97c04965a52ea789599001aaac88d5d69924857d637",
+      "bytes": 26112
+    },
+    "normal.webp": {
+      "sha256": "85a8f6e431cfb1fb0db43eb3647c17f88cc2996eb42cf8024f20cb28db8003e0",
+      "bytes": 325538
+    },
     "poster-1920.webp": {
-      "sha256": "994aaecfe77e0ae8341fb22f9df46265be41e4fbfdd8fc8cea7b298e69d90d9e",
-      "bytes": 65052
+      "sha256": "549be8d194145a1ff479ccde392b1849c578d4628447f72ba1b0d8fb2cabe131",
+      "bytes": 57370
     },
     "poster-960.webp": {
-      "sha256": "3c4bbf071349ab33b63faf61924c010ee8728811b457e977c05bb2beda31aad5",
-      "bytes": 29092
+      "sha256": "6afef02138ca98eb66d95e85322ae86977f4312330f4e5267ae581c76930f5c0",
+      "bytes": 24950
+    },
+    "poster-mas-luz-1920.webp": {
+      "sha256": "3d10552f407a6676f73eafc38ce5c1e62744823cdd96303545521a493177e0a5",
+      "bytes": 65714
+    },
+    "poster-mas-luz-960.webp": {
+      "sha256": "bbdbe7a5991ab5dff0fadd1b1615d91efda77fdcb39e0a9abd6e7becf031f4b8",
+      "bytes": 29262
+    },
+    "profundidad.webp": {
+      "sha256": "80b2d09d5c6366cf3ad00744451e35d2b33246ce93bf166e03baf7e8f0536c94",
+      "bytes": 19604
+    },
+    "rotulos.webp": {
+      "sha256": "d69f5bcaaa85da9142931c6d956881dde67f552d6b19c8ef193c5e1247267153",
+      "bytes": 24316
+    },
+    "tubo-centro.webp": {
+      "sha256": "eae9d2d441c2113c1fa58715c2f02c94b3e8a9a2385ebe63dbe27d2d1a30a0f3",
+      "bytes": 51500
+    },
+    "tubo-derecha.webp": {
+      "sha256": "e4cb353b216ffa383751e4d7c5b8d058d82409eb45e81749ec0faaaae2dc54ee",
+      "bytes": 65914
+    },
+    "tubo-izquierda.webp": {
+      "sha256": "37a6f2d74bc88a5717f0653a3e81c04e8ea59586b09cc31031c37b86457fe9e4",
+      "bytes": 56272
     }
   }
 }
