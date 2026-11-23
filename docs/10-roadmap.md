@@ -65,7 +65,7 @@ Ninguna fase empieza sin cerrar la anterior, salvo prototipos acordados. Las dur
 - Lighthouse ≥ 90.
 
 ## Fase 3 · El Banco v1
-Entregables y aceptación: docs/03, criterios v1.
+Entregables y aceptación: docs/03, criterios v1. Incluye el **interruptor de modos 2D con profundidad / 3D** (ADR-0009): 2D renderizada desde el 3D por ángulos, 3D solo si todas las piezas lo tienen, nunca mezclados.
 
 ## Fase 4 · Mercado
 Entregables y aceptación: docs/04, empezando por las tiendas de `docs/fuentes/candidatas.md`.
@@ -80,7 +80,7 @@ Entregables y aceptación: docs/06, más la autenticación completa (docs/08 §6
 - Radar de novedades alimentado por los listados nuevos.
 
 ## Fase 7 · Assets y fidelidad
-Entregables y aceptación: docs/05.
+Entregables y aceptación: docs/05. El 3D **no es una fase aparte al final**: es una línea de trabajo permanente desde ya (familias, calidad, materiales y luz) que va habilitando el modo 3D pieza a pieza (ADR-0009). Las fotos reales entran solo con derechos (fotos propias de Javi, CC0/CC-BY o permisos).
 
 ## Fase 8 · Comprar mejor
 **Entregables**:

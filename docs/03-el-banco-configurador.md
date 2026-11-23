@@ -139,12 +139,19 @@ Un solo motor (R3F) con varios tipos de asset y un sistema de anclajes común en
 - T2 y T3 son modelos glTF.
 
 Detalles:
-- **Mezcla de niveles**: se permite en un mismo build, y cada pieza muestra su insignia de fidelidad.
+- **Mezcla de niveles**: se permite en un mismo build **dentro de un mismo modo de vista** (ADR-0009), y cada pieza muestra su insignia de fidelidad. **Nunca se mezclan piezas 2D y 3D en una escena.**
 - **Presets de luz**: Banco de trabajo (cálida), Campo de día y Nocturno (haces de linterna y láser visibles).
 - **Vista despiece** (ref-02): las piezas se separan a lo largo de sus ejes de montaje, con etiquetas.
 - **Modo foto**: ángulo, luz y fondo; exporta PNG con marca de agua discreta y código de build; genera la previsualización Open Graph.
 - **Inspección** (ref-06): primeros planos de cada pieza con su ficha.
 - **Rendimiento**: `frameloop="demand"`, LODs, instancing, KTX2 y sombras horneadas o de contacto; presupuestos de assets en docs/05.
+
+### 8.1 Modos de vista: 2D con profundidad y 3D (ADR-0009)
+- **2D con profundidad** (por defecto): imágenes renderizadas desde nuestros modelos, por pieza y por ángulo (frontal, 3/4, lateral, cenital), con máscara y mapa de profundidad, compuestas en pantalla y ancladas por los `socket.*`; paralaje al mover el cursor.
+- **3D**: modelo glTF con materiales y luz finales; solo disponible si **todas** las piezas del build tienen modelo 3D. Si falta alguna, el interruptor se desactiva y lista cuáles faltan.
+- **Interruptor** siempre visible: cambia el build entero de modo, con el mismo montaje, la misma luz y las mismas insignias de nivel.
+- **Una sola fuente**: las vistas 2D salen del pipeline 3D, así que cada mejora del 3D mejora las dos vistas.
+- **Fotos reales**: solo con derechos (propias de Javi con cesión, CC0/CC-BY o permiso). Mientras tanto, la 2D la dan los renders propios.
 
 ## 9. Internos (fase posterior)
 Gearbox, hop-up, cañón interno, muelle, MOSFET, motor y batería, con compatibilidad por versión de gearbox y plataforma. Las orientaciones técnicas (por ejemplo, la relación entre cilindro y cañón) se marcan siempre como orientativas.
