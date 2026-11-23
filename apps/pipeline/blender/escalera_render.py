@@ -4,7 +4,8 @@
 
 `lista.json`: [{"glb": "a.glb", "id": "gm-mlok-7", "salida": "carpeta", "pasos": ["n1","n2","n3","n4","n5","sondas"],
 "material": {...spec de la biblioteca...}, "variacion": {"color":1.0,"rugosidad":0.0,"desgaste":1.0}, "semilla": 123,
-"vista": "izq", "muestras": 48, "muestras_n5": 96, "res": [640, 480], "res_n5": [960, 720]}]
+"vista": "izq", "muestras": 48, "muestras_n5": 96, "res": [640, 480], "res_n5": [960, 720],
+"iluminacion": {...plan de luz...}, "material_luz": {...spec con la rugosidad del preset...}}]
 y, para el conjunto de una familia, {"conjunto": [{"glb","material","variacion","semilla"}...], "id": "conjunto-x"}.
 `material["_cc0"]` (opcional) trae las rutas de la base CC0 de la guía de aspecto; sin él, receta procedural.
 
@@ -467,8 +468,11 @@ def suelo(lo, color, rug, metal):
     return s
 
 
-def estudio(lo, hi, centro, diag):
-    """Fondo gris medio (guía §7), clave, relleno 3:1, dos tiras de contraluz y suelo semirreflectante."""
+def estudio(lo, hi, centro, diag, plan):
+    """Estudio del preset de `catalogo/iluminacion-presets.json` (resuelto por Python en `plan`).
+
+    Fondo en degradado, suelo, luces de área en múltiplos de la diagonal y exposición = EV del preset + log2(brillo).
+    """
     e = bpy.context.scene
     mundo = bpy.data.worlds.new("estudio")
     mundo.use_nodes = True
@@ -478,19 +482,26 @@ def estudio(lo, hi, centro, diag):
     sep = _n(nodos, "ShaderNodeSeparateXYZ")
     enlaces.new(tc.outputs["Generated"], sep.inputs[0])
     rampa = _n(nodos, "ShaderNodeValToRGB")
-    rampa.color_ramp.elements[0].color = (0.11, 0.11, 0.115, 1.0)
-    rampa.color_ramp.elements[1].color = (0.26, 0.26, 0.27, 1.0)
+    rampa.color_ramp.elements[0].color = (*plan["mundo"]["abajo"], 1.0)
+    rampa.color_ramp.elements[1].color = (*plan["mundo"]["arriba"], 1.0)
     enlaces.new(sep.outputs["Z"], rampa.inputs["Fac"])
     enlaces.new(rampa.outputs["Color"], f.inputs["Color"])
-    f.inputs["Strength"].default_value = 1.0
+    f.inputs["Strength"].default_value = plan["mundo"]["intensidad"]
     e.world = mundo
-    suelo(lo, (0.18, 0.18, 0.18, 1.0), 0.35, 0.0)
+    s = plan["suelo"]
+    suelo(lo, (*s["color"], 1.0), s["rugosidad"], s["metalico"])
+    e.view_settings.view_transform = plan.get("tono", "AgX")
+    e.view_settings.exposure = plan["exposicion_ev"]
     d = diag
-    luz("clave", centro + Vector((0.5, -1.0, 1.1)) * d * 1.3, 120 * d**2, d * 1.6, centro)
-    luz("relleno", centro + Vector((1.3, 0.9, 0.4)) * d * 1.5, 40 * d**2, d * 1.6, centro, color=(0.85, 0.92, 1.0))
-    luz("contra-a", centro + Vector((-1.3, 0.6, 0.7)) * d * 1.4, 220 * d**2, d * 0.35, centro, color=(1.0, 0.97, 0.9))
-    luz("contra-b", centro + Vector((-1.0, -0.9, 0.5)) * d * 1.4, 150 * d**2, d * 0.3, centro, color=(0.9, 0.95, 1.0))
-    luz("sombrero", centro + Vector((0.0, 0.0, 1.6)) * d * 1.2, 30 * d**2, d * 1.2, centro)
+    for lz in plan["luces"]:
+        luz(
+            lz["id"],
+            centro + Vector(lz["dir"]) * d * lz["dist"],
+            lz["energia_d2"] * d**2,
+            d * lz["tam_d"],
+            centro,
+            color=tuple(lz["color"]),
+        )
 
 
 def luz_basica(centro, diag):
@@ -532,13 +543,27 @@ def meta_de(cam, centro, res, muestras, denoise, fstop):
     }
 
 
-def preparar(items, paso, res, muestras, vista, materiales, semillas, variaciones, denoise, encuadre=0.8):
+def preparar(
+    items,
+    paso,
+    res,
+    muestras,
+    vista,
+    materiales,
+    semillas,
+    variaciones,
+    denoise,
+    encuadre=0.8,
+    plan=None,
+    materiales_luz=None,
+):
     PROF_DIV.clear()
     bpy.ops.wm.read_factory_settings(use_empty=True)
     por_item = importar(items)
     todas = [m for ms in por_item for m in ms]
     cache = {}
-    for ms, mat_spec, sem, var in zip(por_item, materiales, semillas, variaciones, strict=True):
+    luz_specs = materiales_luz or materiales
+    for ms, mat_spec, spec_luz, sem, var in zip(por_item, materiales, luz_specs, semillas, variaciones, strict=True):
         for o in ms:
             o.data.materials.clear()
             if paso in ("n1", "n2"):
@@ -552,7 +577,7 @@ def preparar(items, paso, res, muestras, vista, materiales, semillas, variacione
                     )
                 )
             else:
-                o.data.materials.append(construir_material(mat_spec, "pbr", sem, var, paso in ("n4", "n5")))
+                o.data.materials.append(construir_material(spec_luz, "pbr", sem, var, paso in ("n4", "n5")))
             bpy.context.view_layer.objects.active = o
             o.select_set(True)
             bpy.ops.object.shade_smooth_by_angle(angle=0.6)
@@ -572,7 +597,7 @@ def preparar(items, paso, res, muestras, vista, materiales, semillas, variacione
         s.cycles.use_denoising = False
         return meta_de(camara(centro, v, lo, hi, diag, encuadre), centro, res, muestras, denoise, FSTOP)
     if paso == "n5":
-        estudio(lo, hi, centro, diag)
+        estudio(lo, hi, centro, diag, plan)
         return meta_de(camara(centro, v, lo, hi, diag, encuadre, dof=FSTOP), centro, res, muestras, denoise, FSTOP)
     else:
         fondo_simple(lo)
@@ -585,11 +610,62 @@ def pasos_de(it):
     return it.get("pasos", ["n1", "n2", "n3", "n4", "n5", "sondas"])
 
 
+def material_marcador():
+    """Marcador visual de una pieza sin malla real: naranja translúcido, para que nadie lo confunda con geometría."""
+    m = bpy.data.materials.new("marcador")
+    m.use_nodes = True
+    b = m.node_tree.nodes["Principled BSDF"]
+    b.inputs["Base Color"].default_value = (0.95, 0.45, 0.1, 1.0)
+    b.inputs["Alpha"].default_value = 0.35
+    b.inputs["Roughness"].default_value = 0.8
+    return m
+
+
+def renderizar_ensamblaje(it):
+    """Un build completo (GLB del ensamblador) con el material de cada pieza bajo el preset de luz de `it`.
+
+    `it["piezas"]` = {nombre del nodo: {"material", "material_luz", "semilla", "variacion"}}; los nodos `marcador.*`
+    entran como marcador translúcido. Una imagen por preset: `<id>.<preset>.png`.
+    """
+    salida = Path(it["salida"])
+    salida.mkdir(parents=True, exist_ok=True)
+    plan = it["iluminacion"]
+    PROF_DIV.clear()
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    (mallas,) = importar([{"glb": it["glb"]}])
+    cache = {}
+    for o in mallas:
+        o.data.materials.clear()
+        info = it["piezas"].get(o.name.split(".001")[0])
+        if info is None or o.name.startswith("marcador."):
+            cache.setdefault("marcador", material_marcador())
+            o.data.materials.append(cache["marcador"])
+        else:
+            o.data.materials.append(
+                construir_material(info["material_luz"], "pbr", int(info["semilla"]), info["variacion"], True)
+            )
+        bpy.context.view_layer.objects.active = o
+        o.select_set(True)
+        bpy.ops.object.shade_smooth_by_angle(angle=0.6)
+    lo, hi = caja(mallas)
+    centro, diag = (lo + hi) / 2, max((hi - lo).length, 1e-4)
+    res = tuple(it.get("res", (1280, 720)))
+    configurar_motor(int(it.get("muestras", 96)), res, True)
+    estudio(lo, hi, centro, diag, plan)
+    camara(centro, Vector(VISTAS[it.get("vista", "lado")]).normalized(), lo, hi, diag, float(it.get("encuadre", 0.86)))
+    bpy.context.scene.render.filepath = str(salida / f"{it['id']}.{plan['preset']}.png")
+    bpy.ops.render.render(write_still=True)
+
+
 def renderizar(it):
+    if it.get("ensamblaje"):
+        return renderizar_ensamblaje(it)
     salida = Path(it["salida"])
     salida.mkdir(parents=True, exist_ok=True)
     elementos = it.get("conjunto") or [it]
     mats = [e["material"] for e in elementos]
+    mats_luz = [e.get("material_luz", e["material"]) for e in elementos]
+    plan = it.get("iluminacion")
     sems = [int(e.get("semilla", 0)) for e in elementos]
     vars_ = [e.get("variacion", {"color": 1.0, "rugosidad": 0.0, "desgaste": 1.0}) for e in elementos]
     vista = it.get("vista", "izq")
@@ -609,7 +685,7 @@ def renderizar(it):
                 bpy.ops.render.render(write_still=True)
             continue
         r, m, den = (res5, muestras5, True) if paso == "n5" else (res, muestras, True)
-        preparar(elementos, paso, r, m, vista, mats, sems, vars_, den)
+        preparar(elementos, paso, r, m, vista, mats, sems, vars_, den, plan=plan, materiales_luz=mats_luz)
         bpy.context.scene.render.filepath = str(salida / f"{nombre}.{paso}.png")
         bpy.ops.render.render(write_still=True)
 
