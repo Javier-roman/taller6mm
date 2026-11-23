@@ -276,11 +276,45 @@ Cada nivel puntúa 0-100 con la media ponderada de la fracción que cumple cada 
 
 **Materiales** (`apps/pipeline/src/taller6mm_pipeline/materiales/biblioteca.py`): anodizado negro mate con micro-rayas, parkerizado, polímero con grano, madera con veta, acero pavonado, goma y vidrio de lente. Los números (albedo, rugosidad media, metalicidad) salen de `docs/catalogo/guia-aspecto-piezas.md` §1-§2, medidos sobre los mapas 1K CC0 de `catalogo/materiales-cc0.json` (ambientCG Metal027, Metal038, Metal063, Plastic012A, Rubber004, Wood051); el desgaste y la suciedad siguen la §5 y son hipótesis `[convención]`. **De la base CC0 solo se toma la estructura** (variación de rugosidad, relieve y modulación de luminancia, proyectados en caja sobre coordenadas de objeto, sin UV); el color y el brillo medio los fija la receta propia. `materiales/cc0.py` resuelve los mapas de `assets-src/materiales-cc0/` (también desde el repo principal si se trabaja en un worktree, o con la variable `TALLER6MM_CC0`); si no están en disco, el material cae a su receta procedural (ruido, Voronoi, onda) y N3 lo anota (`textura_cc0 = 0`). Las texturas CC0 son solo biblioteca interna del render: nunca se publican ni se proyectan fotos de terceros, y `biblioteca.validar` rechaza cualquier ruta de imagen. El **asignador** (`materiales/asignador.py`, catálogo `catalogo/materiales-piezas.json`) resuelve por patrón de id, familia exacta, familia con `*` y prefijo; lo que cae al defecto cuenta como no cubierto. La variación entre piezas del mismo conjunto sale del CRC32 del id, así que es reproducible.
 
-**Render** (`apps/pipeline/blender/escalera_render.py`, Blender portátil de `C:\tools\blender`): N1 arcilla gris; N2 arcilla con oclusión y realce de aristas para ver el detalle; N3 PBR; N4 con desgaste y suciedad; N5 con estudio (guía §7: fondo gris medio, clave, relleno 3:1, dos tiras de contraluz, suelo semirreflectante, f/5,6) y Cycles con denoiser. Cada familia tiene además un render de conjunto N5 con todas sus piezas bajo la misma luz. Las vistas se cachean por hash del GLB, de la receta, de los mapas CC0 y del script.
+**Render** (`apps/pipeline/blender/escalera_render.py`, Blender portátil de `C:\tools\blender`): N1 arcilla gris; N2 arcilla con oclusión y realce de aristas para ver el detalle; N3 PBR; N4 con desgaste y suciedad; N5 con el estudio del preset de iluminación activo (§13.1; por defecto `mate_suave`: softboxes grandes, fondo gris medio, contraluz tenue, suelo rugoso, f/5,6) y Cycles con denoiser. Cada familia tiene además un render de conjunto N5 con todas sus piezas bajo la misma luz. Las vistas se cachean por hash del GLB, de la receta, de los mapas CC0 y del script.
 
 **Reglas**: la apariencia no cambia el nivel de fidelidad (todo sigue en T0 y `publicable_3d=false`, §1); las fotos de terceros nunca son textura; un umbral injusto se cambia en el JSON con su motivo, nunca desactivando el criterio. El subagente `mejorador-escalador` (Sonnet) y la skill `/escalar-piezas` toman la cola del siguiente peldaño y la elevan sin parar hasta el techo: en N1 y N2 editan el generador de la familia; en N3-N5, solo la biblioteca, el catálogo y el script de render.
 
 **Huecos conocidos**: el ensamblaje de un build entero (N5 «piezas coherentes») se mide hoy por la variación entre piezas de un mismo material y por el render de conjunto de cada familia; el build completo espera a que el kit M4 esté disponible en local. Faltan el HDRI de estudio CC0 de la guía §7 (se usa un entorno procedural con cajas de luz), el contraste entre materiales adyacentes (§3, solo hay piezas de un material) y la luz rasante de control (§7.4). N2 mide si el detalle fino existe, no si es el correcto (eso es el `revisor-fidelidad`).
+
+### 13.1 Iluminación y brillo (`catalogo/iluminacion-presets.json`)
+
+La escalera salía demasiado brillante y reluciente: el estudio antiguo tenía luces pequeñas y duras y un suelo casi espejo. Ahora la luz es un catálogo con tres presets, una sola fuente de verdad que leen Blender y el visor web:
+
+| Preset | Para qué | Rasgos |
+|---|---|---|
+| `mate_suave` (por defecto) | Juzgar forma y material; imagen de la escalera y de los ensamblajes | Softboxes grandes (2,6-2,8 d), clave y relleno casi 2:1, contraluz tenue (0,4-0,65 de la clave), suelo rugoso (0,75), exposición -0,35 EV, +0,06 de rugosidad |
+| `estudio_contraste` | Producto con más contraste | Luces pequeñas y duras, contraluz marcado (hasta 1,4 de la clave), suelo 0,45 |
+| `dramatica_penumbra` | Portada, La Armería | Fondo oscuro, clave lateral y contraluz que dibuja la silueta, -0,6 EV |
+
+```bash
+uv run python -m taller6mm_pipeline.calidad.escalera --iluminacion estudio_contraste --brillo 0.9 --brillo-material acero_pavonado=0.7
+uv run python -m taller6mm_pipeline.ensamblador.portada --iluminacion mate_suave   # ver §13.2
+```
+
+**Control de brillo.** `--brillo` (global, 0,5-1,5) mueve la exposición (EV del preset + log2 del factor) y desplaza la rugosidad de todos los materiales en `(1 - factor) x 0,12`. `--brillo-material id=f` (0,6-1,4) hace lo mismo para un material. La rugosidad media final de cada material **no sale nunca de la banda `rugosidad_media` de su base CC0 (`catalogo/materiales-cc0.json`) +/- 0,10** (guía de aspecto §2.3): un anodizado no puede ser espejo, ni un pavonado quedar mate. Solo el render de imagen (N3-N5 visual) usa esa rugosidad; las **sondas** de medida siguen leyendo la receta, para que las métricas de N3 y N4 no dependan de la luz. La clave de caché incluye el preset y el brillo.
+
+**Formato para el visor web.** El visor lee el mismo JSON y no tiene que reimplementar nada del pipeline:
+
+- `defecto`: nombre del preset por defecto. `presets.<nombre>`: `exposicion_ev`, `tono` (`AgX`, que three.js tiene como `AgXToneMapping`), `mundo` (`abajo` y `arriba`: degradado vertical del fondo y del entorno, RGB lineal, y `intensidad`), `suelo` (color, rugosidad, metálico), `rugosidad_delta`, `brillo_material` (brillo por material que el propio preset aplica por defecto: en `mate_suave` el pavonado a 0,6, que a su rugosidad medida relucía demasiado) y `luces`.
+- Cada luz: `id`, `dir` (dirección desde el centro de la pieza hacia la luz, sin normalizar), `dist` y `tam_d` en múltiplos de `d` (diagonal de la caja de la pieza, en metros), `color` y `energia_d2`. **El visor usa solo la razón `energia_d2 / energia_d2 de la clave`** como intensidad relativa de un `RectAreaLight` de lado `tam_d x d`, y fija la intensidad absoluta de la clave por exposición (Blender trabaja en vatios, three.js en cd/m2: no son comparables). Posición = centro + `dir` normalizada x `dist` x `d`, mirando al centro.
+- Brillo: la misma fórmula que arriba (`exposicion_ev + log2(brillo)`; rugosidad de cada material = media de la receta + `rugosidad_delta` + `(1 - factor) x rug_por_factor`, acotada a `banda_rugosidad` alrededor de la medida CC0). Los límites del control (`brillo.global`, `brillo.por_material`) son los del JSON: el control del visor debe respetarlos.
+- `materiales/iluminacion.py` (`resolver`, `aplicar`) es la implementación de referencia; devuelve el «plan de luz» (`iluminacion-plan/v1`) ya resuelto, con `relativa` en cada luz.
+
+Es apariencia interna: no cambia el nivel de fidelidad (T0) ni `publicable_3d`.
+
+### 13.2 Portada: montaje completo con materiales y los tres presets
+
+```bash
+uv run python -m taller6mm_pipeline.ensamblador.portada [--build m4a1-carabina] [--iluminacion mate_suave] [--brillo 1]
+```
+
+Ensambla el build de `catalogo/m4-builds.json`, asigna a cada pieza su material (`materiales-piezas.json` y la semilla de variación por id) y lo dibuja en Blender con cada preset. Por defecto dibuja los tres y escribe `assets-src/vistas/portada/hoja-portada-<build>.png` con ellos lado a lado. Las piezas sin malla (culata, cargador, mira de punto rojo) salen como marcador naranja translúcido, nunca disfrazadas. La portada del AK y de las pistolas espera a que exista su manifiesto de montaje (`catalogo/<plataforma>-builds.json`): el módulo lee el manifiesto con `--manifiesto`.
 
 ## Criterios de aceptación (Fase 7)
 - [ ] Puerta de licencias implementada: no se puede publicar un asset sin licencia publicable.
