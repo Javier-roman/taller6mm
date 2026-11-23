@@ -1,0 +1,37 @@
+# Cuaderno de lecciones del pipeline
+
+Memoria compartida entre agentes: **qué falló, por qué y qué hacer**. Léelo antes de empezar. Al cerrar una tanda, añade una entrada nueva arriba (fecha, qué pasó, qué hacer). Sin relleno: una lección, un párrafo.
+
+## Modelado y mallas
+- **Aristas abiertas por contactos tangentes (nov-2026).** Un solape casi nulo entre dos sólidos (placa que sobresale un 2 %, letras que se tocan por una esquina, ranura tangente al taladro) deja la malla abierta, y puede pasar en Linux y no en Windows (coma flotante). *Qué hacer:* solape claro (varios mm; en grabado, ≥0,04 mm de solape entre celdas) y cortes que **entren** en el sólido. No relajes el test.
+- **`filetear` falla en silencio.** Si OCCT no puede, devuelve el sólido sin tocar. *Qué hacer:* comprueba que el filete se ha aplicado (volumen o aristas) cuando el detalle importa.
+- **Sombreado ondulado en lofts.** Causa probable (hipótesis, sin confirmar): secciones que cambian demasiado de forma o de topología. *Qué hacer:* misma topología y mismo `k` en todas las secciones; cambia los parámetros con `interpolar` (PCHIP); menos secciones y filete final.
+- **Cubitos.** Teselar una cara plana no cuenta. Mínimos de la puerta: relleno de caja ≤ 0,65, ≥ 1500 triángulos (3000 en cañón y receptores), ≥ 300 orientaciones de cara. *Qué hacer:* geometría real (curvatura, filetes, cortes).
+- **Piezas casi idénticas.** Varios cargadores (30/120/300/GBBR/AK) salieron iguales porque solo cambiaba la escala. *Qué hacer:* que cada tipo cambie perfil, ancho, base y nervaduras; comprueba lado a lado.
+- **Medidas no inventadas.** Sin cota con fuente: `null` + bandera + `es_demo`. Las cotas públicas verificadas están en `cotas-publicas.md`.
+
+## Materiales, luz y web
+- **El GLB sin materiales se ve gris en la web.** El anodizado, el polímero y el desgaste solo existían en el render de Blender. *Qué hacer:* exportar los materiales PBR dentro del GLB y enseñar siempre el resultado final (ver memoria «la web muestra el resultado final»).
+- **Luz demasiado reluciente.** Reflejos de espejo en metal anodizado. *Qué hacer:* preset `mate_suave` por defecto y rugosidad no menor que la medida en `materiales-cc0.json`.
+- **Umbrales N3-N5 blandos.** Casi todo daba 93-100 porque se calibraron con las propias recetas. *Qué hacer:* calibrar contra medidas reales; justificar cada umbral.
+- **Texturas CC0.** Solo como estructura interna (rugosidad/relieve), nunca fotos de terceros como textura, y nada se publica.
+
+## Fuentes y modelos
+- **Sketchfab/Objaverse.** Buscar «culata» o «guardamanos» devuelve fusiles completos. Reverificar la licencia en la API en vivo; solo CC0/CC-BY. Separar partes por nombre de malla/nodo.
+- **IA imagen→3D.** TRELLIS no cabe en la GPU gratuita de Kaggle y Hunyuan3D 2.1 excluye la UE: descartado salvo decisión nueva y presupuesto.
+
+## Trabajo con agentes y Git
+- **Guardar el progreso.** Commit WIP cada pocos pasos con los hooks activos; los cortes por el límite de 5 h son frecuentes. **Nunca** desactives los hooks (el clasificador lo deniega).
+- **Ramas WIP viejas retroceden main.** Una rama antigua puede traer versiones antiguas de archivos. *Qué hacer:* `git merge origin/main` y revisar `git diff origin/main --stat` antes del PR.
+- **No pisarse.** Antes de editar un generador: `git log -3 -- <archivo>` y `git status`. Un agente por zona.
+- **`gh pr merge --delete-branch`** puede fallar al borrar la rama local si `main` está en otro worktree; la fusión sí ocurre.
+- **Squash y «update-branch».** Tras cada fusión el resto de PR quedan «BEHIND»; actualiza la rama y repite el CI (≈11 min en `verify`).
+- **Escapes en `sed`.** Para cambios con caracteres especiales usa Edit, no sed.
+- **`curl … | python`** lo bloquea el hook; usa `WebFetch` o guarda a archivo y revísalo.
+- **Blender se mata por memoria.** Renderiza de uno en uno y reintenta solo el lote que falló.
+- **Semgrep.** No uses `shell=True` ni `urllib` sin esquema fijo; usa `shlex.split`.
+- **Vulnerabilidades de dependencias.** Hasta el deploy, OSV y pnpm audit avisan sin bloquear (issue #52). No pares a preguntar.
+
+## Pendiente de aprender
+- Medir cuánto se parece una pieza a una réplica real con fotos ortogonales y regla (T2). Hoy todo es T0.
+- Cuánto cuesta en tokens una tanda completa, para dimensionar cuántos agentes caben por franja de 5 h.

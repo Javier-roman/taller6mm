@@ -143,3 +143,11 @@ uv run python -m taller6mm_pipeline.familias.oleada1_cuerpos --registro ../../ca
 ```bash
 uv run python -m taller6mm_pipeline.familias.ak_piezas --registro ../../catalogo/ak-piezas.json
 ```
+
+## Familia de pistolas (Hi-Capa y Glock)
+
+`familias/pistola_modelos.py` (armazones Glock de polímero y Hi-Capa metálica, cachas de la Hi-Capa y cargador de gas), `pistola_corredera.py`, `pistola_miras_canon.py` (miras y cañón con rosca de 14 mm CCW) y `pistola_comun.py` tienen su registro propio `FAMILIAS_PISTOLA` (en `pistola_montaje.py`). `pistolas_piezas.py` escribe los 14 GLB en `salida/pistolas/`, los dos montajes completos (`pistola_montaje.montar`) en `salida/pistolas/montajes/` y el registro `catalogo/pistolas-piezas.json`. Todo es `es_demo`, T0 y no publicable; el revólver queda fuera del alcance. Cobertura en `docs/catalogo/familia-pistolas.md`. Para pasar la puerta de calidad con ellas: `uv run python -m taller6mm_pipeline.calidad.bucle --sin-ensamblajes --glb salida/pistolas --id "armazon-*" --id "cacha-*" --id "corredera-*" --id "canon-*" --id "mira-*" --id "cargador-*"`.
+
+```bash
+uv run python -m taller6mm_pipeline.familias.pistolas_piezas --registro ../../catalogo/pistolas-piezas.json
+```
