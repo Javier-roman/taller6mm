@@ -135,6 +135,15 @@ class CanonAK(Familia):
             Socket(
                 "gas_block", (x_gas + 13, r + 3.4, 0.0), "montaje-bloque-gas-ak", (0.0, 1.0, 0.0), (1.0, 0.0, 0.0), {}
             ),
+            # Mira trasera: se apoya sobre el tubo de gas, justo delante del receptor (antes no tenía padre).
+            Socket(
+                "rear_sight",
+                (28.0 + 0.12 * largo, Y_TUBO_GAS + 6.8, 0.0),
+                INT_MIRA_TRASERA,
+                (0.0, 1.0, 0.0),
+                (1.0, 0.0, 0.0),
+                {},
+            ),
             Socket(
                 "front_sight",
                 (x_mira + 11, 40.0, 0.0),

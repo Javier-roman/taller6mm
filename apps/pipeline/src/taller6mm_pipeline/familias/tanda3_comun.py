@@ -76,17 +76,12 @@ def mordazas(x0: float, x1: float, profundidad: float = 8.0, grueso: float = 3.5
     """
     largo = x1 - x0
     piezas = []
-    # El raíl es una cola de milano: ancho máximo (SEMI_RAIL) a `bisel` bajo el plano superior y vuelve al ancho del
-    # plano a `2 * bisel`. La cara interior de la mordaza lo sigue con 0,4 mm de holgura (el sondeo del ensamblador es de 0,5 mm; antes se hundía 0,9 mm en
-    # el raíl y el ensamblador lo marcaba como colisión).
-    semi_plano = e.PICATINNY_ANCHO_PLANO.valor_mm / 2
-    bisel = SEMI_RAIL - semi_plano
+    # Las mordazas abrazan el raíl por fuera de su ancho máximo (SEMI_RAIL) con 0,6 mm de holgura: antes seguían la
+    # cola de milano con un perfil que se hundía 0,9 mm en el raíl y el ensamblador lo marcaba como colisión.
     for lado in (1, -1):
         pts = [
-            (0.0, lado * (SEMI_RAIL + 0.4)),
-            (-bisel, lado * (SEMI_RAIL + 0.4)),
-            (-2 * bisel, lado * (semi_plano + 0.4)),
-            (-profundidad, lado * (semi_plano + 0.4)),
+            (0.0, lado * (SEMI_RAIL + 0.6)),
+            (-profundidad, lado * (SEMI_RAIL + 0.6)),
             (-profundidad, lado * (SEMI_RAIL + grueso)),
             (0.0, lado * (SEMI_RAIL + grueso)),
         ]

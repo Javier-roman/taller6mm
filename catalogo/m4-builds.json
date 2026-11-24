@@ -264,7 +264,9 @@
           "socket_hijo": "rail",
           "socket_padre": "rail.top",
           "modo": "opuestos",
-          "ranura_riel": 9
+          "ranura_riel": 9,
+          "insertar_mm": -0.3,
+          "nota": "La base apoya 0,3 mm sobre el raíl (holgura de montaje)."
         }
       ]
     },
@@ -319,7 +321,7 @@
             "tipo": "bajo_perfil",
             "diametro_canon": 18.0,
             "pared": 4.0,
-            "altura_mira": null
+            "altura_mira": 22.0
           }
         },
         {
@@ -336,16 +338,14 @@
         {
           "id": "apagallamas",
           "rol": "bocacha",
-          "familia": "boca.bocacha",
+          "familia": "boca.compensador_camaras",
           "params": {
-            "longitud": 60.0,
-            "diametro": 22.0,
-            "diametro_paso": 9.0,
+            "diametro_paso": 8.0,
             "profundidad_rosca": 12.0,
-            "rosca": "14mm_ccw",
-            "ancho_ranura": 3.0,
-            "longitud_ranura": 30.0,
-            "ranuras": 6
+            "longitud": 55.0,
+            "diametro": 22.0,
+            "camaras": 2,
+            "ancho_ventana": 9.0
           }
         },
         {
@@ -498,11 +498,9 @@
         {
           "hijo": "apagallamas",
           "padre": "canon",
-          "socket_hijo": null,
+          "socket_hijo": "muzzle",
           "socket_padre": "muzzle",
-          "modo": "coaxial",
-          "eje": "x",
-          "nota": "La bocacha no define socket: va con su origen en el extremo del cañón."
+          "modo": "opuestos"
         },
         {
           "hijo": "tubo",
@@ -567,7 +565,9 @@
           "socket_hijo": "rail.agarre",
           "socket_padre": "rail.bottom",
           "modo": "opuestos",
-          "posicion_riel_mm": 70.0
+          "posicion_riel_mm": 70.0,
+          "insertar_mm": 2.6,
+          "nota": "El raíl entra 2,6 mm en la ranura de la base hasta apoyar en su fondo."
         },
         {
           "hijo": "optica",
@@ -575,7 +575,9 @@
           "socket_hijo": "rail",
           "socket_padre": "rail.top",
           "modo": "opuestos",
-          "ranura_riel": 10
+          "ranura_riel": 10,
+          "insertar_mm": -0.3,
+          "nota": "La base apoya 0,3 mm sobre el raíl (holgura de montaje)."
         }
       ]
     },

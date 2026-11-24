@@ -90,7 +90,7 @@ class EmpunaduraVertical(Familia):
                 Line((lb, -2.6), (-lb, -2.6)),
                 Line((-lb, -2.6), (-lb, 0.8)),
             ],
-            e.PICATINNY_ANCHO.valor_mm,
+            e.PICATINNY_ANCHO.valor_mm + 0.8,  # 0,4 mm de holgura por lado: la cola de milano no roza la ranura
         )
         base = base - ranura
         # Tornillo de apriete: cabeza estriada rehundida en el lateral izquierdo.

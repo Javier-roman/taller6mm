@@ -168,9 +168,11 @@ class HolograficaAbierta(Familia):
                 cuerpo = cuerpo + filetear(cilindro_en("z", 2.8, 2.6, (dx * L, 0.12 * H, lado * zl)), 0.5)
         tapa = filetear(cilindro_en("z", 6.0, 2.8, (0.76 * L, 0.14 * H, zl)), 0.5)
         cuerpo = cuerpo + (tapa - Pos(0.76 * L, 0.14 * H, zl + 1.2) * Box(9.0, 1.0, 1.2))
-        leva = filetear(cilindro_en("z", 3.0, 0.62 * W, (0.30 * L, -2.0, 0.0)), 0.5)
+        # Leva de desmontaje: dos muñones a los lados de las mordazas (antes era una barra de lado a lado que
+        # atravesaba el raíl) y la palanca en el lado izquierdo.
+        muñones = [filetear(cilindro_en("z", 3.0, 4.0, (0.30 * L, -2.0, lado * 13.0)), 0.5) for lado in (1, -1)]
         palanca = Pos(0.30 * L, -2.0, 0.31 * W + 2.0) * Cylinder(5.0, 4.0)
-        cuerpo = cuerpo + leva + filetear(palanca, 0.6)
+        cuerpo = cuerpo + muñones[0] + muñones[1] + filetear(palanca, 0.6)
         cuerpo = cuerpo + base_sobre_rail(0.12 * L, 0.88 * L, 0.10 * H, 0.60 * W)
         notas = (
             "Marco, capota del emisor, botones y tapa de la pila estimados, sin cota de SKU; el interior no se modela.",

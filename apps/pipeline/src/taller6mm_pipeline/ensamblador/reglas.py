@@ -118,7 +118,50 @@ def _especificas(padre: PiezaEnsamblable, hijo: PiezaEnsamblable) -> list[Compro
                 "diametro_rosca", _num(padre, "diametro_rosca"), _num(hijo, "diametro_rosca"), "tuerca frente a rosca"
             )
         ]
+    if par == ("ak.canon", "ak.boca"):
+        return [_boca_ak(padre, hijo)]
+    if par == ("ak.receptor", "ak.tapa"):
+        return [
+            _diametro(
+                "ancho_tapa_receptor",
+                _num(padre, "ancho"),
+                _num(hijo, "ancho"),
+                "ancho de la tapa frente al del receptor",
+            )
+        ]
+    if par == ("ak.guardamanos_inferior", "ak.cubremano"):
+        return [_cubremano_ak(padre, hijo)]
     return []
+
+
+def _boca_ak(canon: PiezaEnsamblable, boca: PiezaEnsamblable) -> Comprobacion:
+    """Freno de boca AK: su diámetro exterior debe rodear la rosca de M14 del cañón (solo se compara con datos)."""
+    rosca = next((s.extras.get("diametro_rosca_mm") for s in canon.sockets if s.slot_key == "muzzle"), None)
+    d = _num(boca, "diametro")
+    if rosca is None or d is None:
+        return Comprobacion("boca_ak_rosca", SIN_DATOS, "falta el diámetro de la rosca o el de la boca (sin dato)")
+    ok = d > float(rosca)
+    return Comprobacion(
+        "boca_ak_rosca",
+        COMPATIBLE if ok else INCOMPATIBLE,
+        f"boca de Ø{d:g} mm frente a la rosca de Ø{float(rosca):g} mm del cañón",
+        {"boca_mm": d, "rosca_mm": float(rosca)},
+    )
+
+
+def _cubremano_ak(guardamanos: PiezaEnsamblable, cubremano: PiezaEnsamblable) -> Comprobacion:
+    """El cubremano superior debe caber sobre el guardamanos inferior: no más largo ni más ancho."""
+    lg, lc = _num(guardamanos, "longitud"), _num(cubremano, "longitud")
+    ag, ac = _num(guardamanos, "ancho"), _num(cubremano, "ancho")
+    if lg is None or lc is None or ag is None or ac is None:
+        return Comprobacion("cubremano_ak", SIN_DATOS, "falta una cota del guardamanos o del cubremano (sin dato)")
+    ok = lc <= lg + 1e-6 and ac <= ag + 1e-6
+    return Comprobacion(
+        "cubremano_ak",
+        COMPATIBLE if ok else INCOMPATIBLE,
+        f"cubremano de {lc:g} x {ac:g} mm sobre un guardamanos de {lg:g} x {ag:g} mm (largo x ancho)",
+        {"cubremano_mm": [lc, ac], "guardamanos_mm": [lg, ag]},
+    )
 
 
 def _riel(r: Riel | None) -> list[Comprobacion]:
