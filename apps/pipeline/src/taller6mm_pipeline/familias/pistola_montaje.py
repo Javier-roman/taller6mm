@@ -77,8 +77,17 @@ def _socket(pieza: Pieza, clave: str) -> Socket:
     raise KeyError(f"{pieza.familia_id} no tiene el socket {clave!r}")
 
 
-def montar(build: Mapping[str, Any]) -> tuple[bytes, dict[str, Any]]:
-    """Monta un build `{id, nombre, piezas: {rol: {familia, params}}}` y devuelve (GLB, informe)."""
+def montar(build: Mapping[str, Any], prefijo_nodo: str = "") -> tuple[bytes, dict[str, Any]]:
+    """Monta un build `{id, nombre, piezas: {rol: {familia, params}}}` y devuelve (GLB, informe).
+
+    `prefijo_nodo` se antepone al nombre de cada malla del GLB (el resto del pipeline usa `pieza.<id>`).
+    """
+    piezas, colocadas, comprobaciones = colocar(build)
+    return _escribir(build, colocadas, comprobaciones, prefijo_nodo)
+
+
+def colocar(build: Mapping[str, Any]) -> tuple[dict[str, Pieza], list[PiezaColocada], list[dict[str, Any]]]:
+    """Genera las piezas del build, comprueba las interfaces y las coloca (matrices en mm)."""
     piezas: dict[str, Pieza] = {}
     for rol, d in build["piezas"].items():
         piezas[rol] = FAMILIAS_PISTOLA[d["familia"]].generar(d["params"])
@@ -114,12 +123,21 @@ def montar(build: Mapping[str, Any]) -> tuple[bytes, dict[str, Any]]:
     inc = float(sc.extras["inclinacion_grados"])
     colocadas.append(PiezaColocada("cargador", "cargador", piezas["cargador"], _giro_z(-inc, sc.posicion_mm)))
 
+    return piezas, colocadas, comprobaciones
+
+
+def _escribir(
+    build: Mapping[str, Any],
+    colocadas: list[PiezaColocada],
+    comprobaciones: list[dict[str, Any]],
+    prefijo_nodo: str,
+) -> tuple[bytes, dict[str, Any]]:
     nodos = []
     for c in colocadas:
         assert c.pieza.malla is not None  # noqa: S101
         nodos.append(
             NodoPieza(
-                c.id,
+                f"{prefijo_nodo}{c.id}",
                 c.vertices(),
                 c.pieza.malla.triangulos,
                 c.pieza.material,

@@ -28,7 +28,7 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 
-VISTAS = {"izq": (0.85, -1.0, 0.62), "der": (0.85, 1.0, 0.62), "lado": (0.0, -1.0, 0.03), "arriba": (0.3, -0.2, 1.6)}
+VISTAS = {"lateral": (0.0, -1.0, 0.0), "tres_cuartos": (0.62, -1.0, 0.36), "izq": (0.85, -1.0, 0.62), "der": (0.85, 1.0, 0.62), "lado": (0.0, -1.0, 0.03), "arriba": (0.3, -0.2, 1.6)}
 SEMILLA_CYCLES = 20261117
 FSTOP = 5.6
 PROF_DIV = []
@@ -297,6 +297,8 @@ def construir_material(spec, modo, semilla, variacion, con_desgaste, cc0=None):
         emitir(color, True)
     elif modo == "rug":
         emitir(rugosidad, False)
+    elif modo == "met":
+        emitir(metalico, False)
     elif modo == "borde":
         emitir(borde if borde != 0.0 else 0.0, False)
     elif modo == "sucio":
@@ -468,7 +470,7 @@ def suelo(lo, color, rug, metal):
     return s
 
 
-def estudio(lo, hi, centro, diag, plan):
+def estudio(lo, hi, centro, diag, plan, transparente=False):
     """Estudio del preset de `catalogo/iluminacion-presets.json` (resuelto por Python en `plan`).
 
     Fondo en degradado, suelo, luces de área en múltiplos de la diagonal y exposición = EV del preset + log2(brillo).
@@ -489,7 +491,9 @@ def estudio(lo, hi, centro, diag, plan):
     f.inputs["Strength"].default_value = plan["mundo"]["intensidad"]
     e.world = mundo
     s = plan["suelo"]
-    suelo(lo, (*s["color"], 1.0), s["rugosidad"], s["metalico"])
+    sl = suelo(lo, (*s["color"], 1.0), s["rugosidad"], s["metalico"])
+    if transparente:
+        sl.visible_camera = False  # el suelo sigue rebotando luz y reflejos, pero el fondo del PNG queda transparente
     e.view_settings.view_transform = plan.get("tono", "AgX")
     e.view_settings.exposure = plan["exposicion_ev"]
     d = diag
@@ -525,6 +529,26 @@ def camara(centro, direccion, lo, hi, diag, encuadre, dof=None):
         cam.data.dof.use_dof = True
         cam.data.dof.focus_distance = (cam.location - centro).length
         cam.data.dof.aperture_fstop = dof
+    return cam
+
+
+def camara_ortografica(centro, direccion, lo, hi, diag, res, objetivo):
+    """Cámara ortogonal: la pieza ocupa `objetivo` (0,8 = 80 %) del lado mayor del cuadro, centrada en el cuadro."""
+    cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
+    cam.data.type = "ORTHO"
+    cam.data.clip_start, cam.data.clip_end = diag * 0.01, diag * 60
+    cam.location = centro + direccion * diag * 3.0
+    giro = (centro - cam.location).to_track_quat("-Z", "Y")
+    cam.rotation_euler = giro.to_euler()
+    derecha, arriba = giro @ Vector((1, 0, 0)), giro @ Vector((0, 1, 0))
+    esquinas = [Vector((x, y, z)) for x in (lo.x, hi.x) for y in (lo.y, hi.y) for z in (lo.z, hi.z)]
+    xs = [(c - centro).dot(derecha) for c in esquinas]
+    ys = [(c - centro).dot(arriba) for c in esquinas]
+    ancho, alto = max(xs) - min(xs), max(ys) - min(ys)
+    cam.location += derecha * (max(xs) + min(xs)) / 2 + arriba * (max(ys) + min(ys)) / 2
+    cam.data.ortho_scale = max(ancho / objetivo, alto / objetivo * res[0] / res[1])
+    bpy.context.scene.collection.objects.link(cam)
+    bpy.context.scene.camera = cam
     return cam
 
 
@@ -650,14 +674,159 @@ def renderizar_ensamblaje(it):
     lo, hi = caja(mallas)
     centro, diag = (lo + hi) / 2, max((hi - lo).length, 1e-4)
     res = tuple(it.get("res", (1280, 720)))
+    transparente = bool(it.get("transparente", False))
     configurar_motor(int(it.get("muestras", 96)), res, True)
-    estudio(lo, hi, centro, diag, plan)
-    camara(centro, Vector(VISTAS[it.get("vista", "lado")]).normalized(), lo, hi, diag, float(it.get("encuadre", 0.86)))
-    bpy.context.scene.render.filepath = str(salida / f"{it['id']}.{plan['preset']}.png")
-    bpy.ops.render.render(write_still=True)
+    estudio(lo, hi, centro, diag, plan, transparente)
+    if transparente:
+        bpy.context.scene.render.film_transparent = True
+    vistas = it.get("vistas")
+    if not vistas:
+        camara(
+            centro, Vector(VISTAS[it.get("vista", "lado")]).normalized(), lo, hi, diag, float(it.get("encuadre", 0.86))
+        )
+        bpy.context.scene.render.filepath = str(salida / f"{it['id']}.{plan['preset']}.png")
+        bpy.ops.render.render(write_still=True)
+        return
+    for v in vistas:
+        d = Vector(VISTAS[v["vista"]]).normalized()
+        if v.get("ortografica"):
+            camara_ortografica(centro, d, lo, hi, diag, res, float(it.get("encuadre", 0.8)))
+        else:
+            camara(centro, d, lo, hi, diag, float(it.get("encuadre", 0.8)))
+        bpy.context.scene.render.filepath = str(salida / f"{v['nombre']}.png")
+        bpy.ops.render.render(write_still=True)
+        bpy.data.objects.remove(bpy.context.scene.camera, do_unlink=True)
+
+
+def _pow2_cerca(x, lo, hi):
+    n = lo
+    while n < hi and n < x:
+        n *= 2
+    return n
+
+
+def preparar_uv(o):
+    """UV propias de la pieza (los generadores no las traen): proyección inteligente en islas, sin solapes."""
+    for capa in list(o.data.uv_layers):
+        o.data.uv_layers.remove(capa)
+    o.data.uv_layers.new(name="UVMap")
+    bpy.ops.object.select_all(action="DESELECT")
+    o.select_set(True)
+    bpy.context.view_layer.objects.active = o
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.select_all(action="SELECT")
+    bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.012)
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+
+def hornear(o, material, tipo, res, nombre, color):
+    """Hornea `material` sobre las UV de `o` y devuelve la imagen. `color`: sRGB (albedo) o datos sin color."""
+    img = bpy.data.images.new(nombre, res, res, alpha=False)
+    img.colorspace_settings.name = "sRGB" if color else "Non-Color"
+    o.data.materials.clear()
+    o.data.materials.append(material)
+    nt = material.node_tree
+    tex = nt.nodes.new("ShaderNodeTexImage")
+    tex.image = img
+    nt.nodes.active = tex
+    bpy.context.view_layer.objects.active = o
+    bpy.ops.object.bake(type=tipo, margin=6, use_clear=True, normal_space="TANGENT")
+    return img
+
+
+def material_exportable(nombre, albedo, mr, normal):
+    """Material glTF PBR estándar: baseColor, metalicidad y rugosidad empaquetadas (G y B) y mapa de normales."""
+    m = bpy.data.materials.new(nombre)
+    m.use_nodes = True
+    nodos, enlaces = m.node_tree.nodes, m.node_tree.links
+    nodos.clear()
+    salida = _n(nodos, "ShaderNodeOutputMaterial")
+    p = _n(nodos, "ShaderNodeBsdfPrincipled")
+    t_alb = _n(nodos, "ShaderNodeTexImage", image=albedo)
+    t_mr = _n(nodos, "ShaderNodeTexImage", image=mr)
+    t_nor = _n(nodos, "ShaderNodeTexImage", image=normal)
+    sep = _n(nodos, "ShaderNodeSeparateColor")
+    nm = _n(nodos, "ShaderNodeNormalMap")
+    enlaces.new(t_alb.outputs["Color"], p.inputs["Base Color"])
+    enlaces.new(t_mr.outputs["Color"], sep.inputs["Color"])
+    enlaces.new(sep.outputs["Green"], p.inputs["Roughness"])
+    enlaces.new(sep.outputs["Blue"], p.inputs["Metallic"])
+    enlaces.new(t_nor.outputs["Color"], nm.inputs["Color"])
+    enlaces.new(nm.outputs["Normal"], p.inputs["Normal"])
+    enlaces.new(p.outputs["BSDF"], salida.inputs["Surface"])
+    return m
+
+
+def empaquetar_mr(rug, met, res, nombre):
+    import numpy as np
+
+    a = np.zeros((res, res, 4), dtype=np.float32)
+    r = np.empty(res * res * 4, dtype=np.float32)
+    rug.pixels.foreach_get(r)
+    m = np.empty(res * res * 4, dtype=np.float32)
+    met.pixels.foreach_get(m)
+    a[..., 0] = 1.0  # oclusión sin hornear (el AO está en el albedo como suciedad)
+    a[..., 1] = r.reshape(res, res, 4)[..., 0]
+    a[..., 2] = m.reshape(res, res, 4)[..., 0]
+    a[..., 3] = 1.0
+    img = bpy.data.images.new(nombre, res, res, alpha=False)
+    img.colorspace_settings.name = "Non-Color"
+    img.pixels.foreach_set(a.ravel())
+    return img
+
+
+def exportar_glb_con_materiales(it):
+    """GLB con materiales PBR horneados (baseColor, metal/rugosidad, normal en WebP) con desgaste y suciedad (N4).
+
+    `it`: glb de entrada, `salida_glb`, `res` máximo de textura y, o bien `material` (una receta para todas),
+    o bien `piezas` {nodo: {material, semilla, variacion}} (ensamblajes; `marcador.*` queda como marcador translúcido).
+    Las texturas salen de las recetas y de la base CC0 interna (ninguna foto de terceros); sin logos ni marcajes.
+    """
+    PROF_DIV.clear()
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    (mallas,) = importar([{"glb": it["glb"]}])
+    e = bpy.context.scene
+    configurar_motor(8, (64, 64), False)
+    e.cycles.use_denoising = False
+    res_max = int(it.get("res", 512))
+    informe = []
+    cache_marcador = None
+    for o in mallas:
+        info = it["piezas"].get(o.name) if it.get("piezas") else {"material": it["material"], **it}
+        if info is None or o.name.startswith("marcador."):
+            cache_marcador = cache_marcador or material_marcador()
+            o.data.materials.clear()
+            o.data.materials.append(cache_marcador)
+            continue
+        spec, sem = info["material"], int(info.get("semilla", 0))
+        var = info.get("variacion", {"color": 1.0, "rugosidad": 0.0, "desgaste": 1.0})
+        lo, hi = caja([o])
+        res = _pow2_cerca((hi - lo).length / 0.0005, 128, res_max)
+        preparar_uv(o)
+        alb = hornear(o, construir_material(spec, "alb", sem, var, True), "EMIT", res, f"{o.name}.alb", True)
+        rug = hornear(o, construir_material(spec, "rug", sem, var, True), "EMIT", res, f"{o.name}.rug", False)
+        met = hornear(o, construir_material(spec, "met", sem, var, True), "EMIT", res, f"{o.name}.met", False)
+        nor = hornear(o, construir_material(spec, "pbr", sem, var, True), "NORMAL", res, f"{o.name}.nor", False)
+        mr = empaquetar_mr(rug, met, res, f"{o.name}.mr")
+        for im in (alb, mr, nor):
+            im.pack()
+        o.data.materials.clear()
+        o.data.materials.append(material_exportable(f"mat.{o.name}", alb, mr, nor))
+        informe.append({"malla": o.name, "res": res})
+    Path(it["salida_glb"]).parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.export_scene.gltf(
+        filepath=it["salida_glb"],
+        export_format="GLB",
+        export_image_format="WEBP",
+        export_extras=True,
+        export_apply=False,
+    )
+    Path(it["salida_glb"]).with_suffix(".texturas.json").write_text(json.dumps(informe), encoding="utf-8")
 
 
 def renderizar(it):
+    if it.get("exportar"):
+        return exportar_glb_con_materiales(it)
     if it.get("ensamblaje"):
         return renderizar_ensamblaje(it)
     salida = Path(it["salida"])

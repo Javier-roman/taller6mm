@@ -19,7 +19,7 @@
           }
         },
         {
-          "id": "canon",
+          "id": "canon-akm",
           "rol": "canon",
           "familia": "ak.canon",
           "params": {
@@ -52,7 +52,7 @@
           }
         },
         {
-          "id": "guardamanos",
+          "id": "guardamanos-madera",
           "rol": "guardamanos",
           "familia": "ak.guardamanos_inferior",
           "params": {
@@ -63,7 +63,7 @@
           }
         },
         {
-          "id": "cubremano",
+          "id": "cubremano-madera",
           "rol": "cubremano",
           "familia": "ak.cubremano",
           "params": {
@@ -74,7 +74,7 @@
           }
         },
         {
-          "id": "pistolete",
+          "id": "pistolete-bakelita",
           "rol": "pistolete",
           "familia": "ak.pistolete",
           "params": {
@@ -86,7 +86,7 @@
           }
         },
         {
-          "id": "cargador",
+          "id": "cargador-acero",
           "rol": "cargador",
           "familia": "ak.cargador",
           "params": {
@@ -98,7 +98,7 @@
           }
         },
         {
-          "id": "culata",
+          "id": "culata-madera",
           "rol": "culata",
           "familia": "ak.culata_fija",
           "params": {
@@ -121,7 +121,7 @@
       ],
       "montajes": [
         {
-          "hijo": "canon",
+          "hijo": "canon-akm",
           "padre": "receptor",
           "socket_hijo": "receiver",
           "socket_padre": "barrel",
@@ -129,7 +129,7 @@
         },
         {
           "hijo": "boca",
-          "padre": "canon",
+          "padre": "canon-akm",
           "socket_hijo": "muzzle_mount",
           "socket_padre": "muzzle",
           "modo": "opuestos"
@@ -145,7 +145,7 @@
           "nota": "La tapa llega hasta el frente y apoya sobre la cuna delantera (2 mm más alta que el cuerpo)."
         },
         {
-          "hijo": "guardamanos",
+          "hijo": "guardamanos-madera",
           "padre": "receptor",
           "socket_hijo": "receiver",
           "socket_padre": "handguard",
@@ -155,8 +155,8 @@
           "nota": "El guardamanos comparte el eje del cañón (y = 0) y arranca en la cara delantera del receptor."
         },
         {
-          "hijo": "cubremano",
-          "padre": "guardamanos",
+          "hijo": "cubremano-madera",
+          "padre": "guardamanos-madera",
           "socket_hijo": "lower",
           "socket_padre": "upper",
           "modo": "coaxial",
@@ -167,14 +167,14 @@
           "nota": "El cubremano comparte el eje del cañón y arranca detrás de la base de la mira trasera."
         },
         {
-          "hijo": "pistolete",
+          "hijo": "pistolete-bakelita",
           "padre": "receptor",
           "socket_hijo": "grip",
           "socket_padre": "grip",
           "modo": "opuestos"
         },
         {
-          "hijo": "cargador",
+          "hijo": "cargador-acero",
           "padre": "receptor",
           "socket_hijo": "mag_well",
           "socket_padre": "mag_well",
@@ -183,7 +183,7 @@
           "desplazar_mm": [-2.2, 0.0, 0.0]
         },
         {
-          "hijo": "culata",
+          "hijo": "culata-madera",
           "padre": "receptor",
           "socket_hijo": "receiver",
           "socket_padre": "stock",
@@ -191,7 +191,7 @@
         },
         {
           "hijo": "mira-trasera",
-          "padre": "canon",
+          "padre": "canon-akm",
           "socket_hijo": "base",
           "socket_padre": "rear_sight",
           "modo": "opuestos"
@@ -214,7 +214,7 @@
           }
         },
         {
-          "id": "canon",
+          "id": "canon-ak74",
           "rol": "canon",
           "familia": "ak.canon",
           "params": {
@@ -247,7 +247,7 @@
           }
         },
         {
-          "id": "guardamanos",
+          "id": "guardamanos-polimero",
           "rol": "guardamanos",
           "familia": "ak.guardamanos_inferior",
           "params": {
@@ -258,7 +258,7 @@
           }
         },
         {
-          "id": "cubremano",
+          "id": "cubremano-polimero",
           "rol": "cubremano",
           "familia": "ak.cubremano",
           "params": {
@@ -269,7 +269,7 @@
           }
         },
         {
-          "id": "pistolete",
+          "id": "pistolete-polimero",
           "rol": "pistolete",
           "familia": "ak.pistolete",
           "params": {
@@ -281,7 +281,7 @@
           }
         },
         {
-          "id": "cargador",
+          "id": "cargador-polimero",
           "rol": "cargador",
           "familia": "ak.cargador",
           "params": {
@@ -293,7 +293,7 @@
           }
         },
         {
-          "id": "culata",
+          "id": "culata-polimero",
           "rol": "culata",
           "familia": "ak.culata_fija",
           "params": {
@@ -316,7 +316,7 @@
       ],
       "montajes": [
         {
-          "hijo": "canon",
+          "hijo": "canon-ak74",
           "padre": "receptor",
           "socket_hijo": "receiver",
           "socket_padre": "barrel",
@@ -324,7 +324,7 @@
         },
         {
           "hijo": "boca",
-          "padre": "canon",
+          "padre": "canon-ak74",
           "socket_hijo": "muzzle_mount",
           "socket_padre": "muzzle",
           "modo": "opuestos"
@@ -340,7 +340,7 @@
           "nota": "La tapa llega hasta el frente y apoya sobre la cuna delantera (2 mm más alta que el cuerpo)."
         },
         {
-          "hijo": "guardamanos",
+          "hijo": "guardamanos-polimero",
           "padre": "receptor",
           "socket_hijo": "receiver",
           "socket_padre": "handguard",
@@ -350,8 +350,8 @@
           "nota": "El guardamanos comparte el eje del cañón (y = 0) y arranca en la cara delantera del receptor."
         },
         {
-          "hijo": "cubremano",
-          "padre": "guardamanos",
+          "hijo": "cubremano-polimero",
+          "padre": "guardamanos-polimero",
           "socket_hijo": "lower",
           "socket_padre": "upper",
           "modo": "coaxial",
@@ -362,14 +362,14 @@
           "nota": "El cubremano comparte el eje del cañón y arranca detrás de la base de la mira trasera."
         },
         {
-          "hijo": "pistolete",
+          "hijo": "pistolete-polimero",
           "padre": "receptor",
           "socket_hijo": "grip",
           "socket_padre": "grip",
           "modo": "opuestos"
         },
         {
-          "hijo": "cargador",
+          "hijo": "cargador-polimero",
           "padre": "receptor",
           "socket_hijo": "mag_well",
           "socket_padre": "mag_well",
@@ -378,7 +378,7 @@
           "desplazar_mm": [-2.2, 0.0, 0.0]
         },
         {
-          "hijo": "culata",
+          "hijo": "culata-polimero",
           "padre": "receptor",
           "socket_hijo": "receiver",
           "socket_padre": "stock",
@@ -386,7 +386,7 @@
         },
         {
           "hijo": "mira-trasera",
-          "padre": "canon",
+          "padre": "canon-ak74",
           "socket_hijo": "base",
           "socket_padre": "rear_sight",
           "modo": "opuestos"
