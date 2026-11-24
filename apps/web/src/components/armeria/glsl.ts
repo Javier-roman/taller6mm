@@ -44,7 +44,7 @@ float segmento(vec2 p, vec2 a, vec2 b) {
 }
 // Resplandor de un tubo (sustituye al bloom de A): un núcleo fino y un halo ancho.
 float resplandor(float d) {
-  return exp(-d * d / 0.000012) * 1.0 + exp(-d * d / 0.0005) * 0.07;
+  return exp(-d * d / 0.000012) * 0.7 + exp(-d * d / 0.0005) * 0.05;
 }
 `;
 

@@ -59,6 +59,10 @@ export function CajaCarton({
     <group>
       <Caja p={[0, alto / 2, 0]} t={t} m={mat.kraft} />
       <Caja p={[0, alto + 0.0006, 0]} t={[0.07, 0.001, fondo + 0.002]} m={mat.cinta} />
+      {/* Solapas: junta central de la tapa y cinta que baja por la cara frontal, con el borde de la solapa marcado */}
+      <Caja p={[0, alto + 0.0003, 0]} t={[ancho + 0.002, 0.0006, 0.003]} m={mat.caucho} />
+      <Caja p={[0, alto * 0.78, fondo / 2 + 0.0006]} t={[0.07, alto * 0.44, 0.0012]} m={mat.cinta} />
+      <Caja p={[0, alto * 0.56, fondo / 2 + 0.0004]} t={[ancho + 0.002, 0.0015, 0.0008]} m={mat.caucho} />
       <Etiqueta
         p={[-ancho * 0.18, alto * 0.46, fondo / 2 + 0.001]}
         t={[ancho * 0.36, alto * 0.38]}

@@ -76,10 +76,10 @@ export const LUZ = {
   /** Foco rasante sobre el ladrillo: un tercio del tubo, para ver la textura sin perder la penumbra. */
   paredLavado: 28,
   // Los tubos no deben ser lo más brillante del encuadre (critico-diseno, 24-11-2026): el foco cae en el banco y la vitrina.
-  tuboEmisivo: 2.1,
+  tuboEmisivo: 1.4,
   // El flexo es la mancha más brillante de la sala: el banco es el protagonista (critico-diseno).
   // El flexo es la mancha más brillante de la sala: el banco manda (critico-diseno, 23-11-2026).
-  flexo: 110,
+  flexo: 72,
   bombilla: 8,
   vitrina: 2.4,
   led: 1.8,
@@ -191,7 +191,7 @@ function Armero({ mat }: { mat: Materiales }) {
         );
       })}
       <mesh position={[0, MUEBLE.baldaMedia - 0.03, MUEBLE.frente + 0.001]}>
-        <planeGeometry args={[util, 0.05]} />
+        <planeGeometry args={[util, 0.066]} />
         <meshStandardMaterial map={tira} roughness={0.7} />
       </mesh>
       {/* Regla de papel en milímetros en el lateral izquierdo (1:1) y un número de ranura en el fondo de cada hueco */}
@@ -256,17 +256,21 @@ function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | nu
       <Caja p={[0, y0 + 0.05, zFondo + 0.02]} t={[2.4, 0.1, 0.5]} m={mat.contrachapado} />
       {VITRINA.xs.map((x, i) => (
         <group key={`pedestal-${x}`} position={[x, y0 + 0.1, zFondo + 0.04]}>
-          <Caja p={[0, 0.07 + i * 0.03, 0]} t={[0.5, 0.14 + i * 0.06, 0.3]} m={mat.peana} />
-          {/* Dos soportes de acero en la cara superior de la peana, donde descansa la réplica */}
-          {[-0.28, 0.28].map((dx) => (
-            <Caja
-              key={`soporte-${dx}`}
-              p={[dx * 0.7, 0.14 + i * 0.06 + 0.012, 0]}
-              t={[0.06, 0.024, 0.1]}
-              m={mat.acero}
-            />
+          {/* Peana con moldura: zócalo ancho, fuste más estrecho y plato superior de acero, no una caja lisa */}
+          <Caja p={[0, 0.02, 0]} t={[0.54, 0.04, 0.34]} m={mat.peana} />
+          <Caja p={[0, 0.07 + i * 0.03, 0]} t={[0.44, 0.06 + i * 0.06, 0.26]} m={mat.peana} />
+          <Caja p={[0, 0.14 + i * 0.06 - 0.01, 0]} t={[0.5, 0.02, 0.3]} m={mat.acero} />
+          {/* Dos cunas de goma con base de acero en el plato, donde descansa la réplica */}
+          {[-0.2, 0.2].map((dx) => (
+            <group key={`cuna-${dx}`} position={[dx, 0.14 + i * 0.06, 0]}>
+              <Caja p={[0, 0.006, 0]} t={[0.09, 0.012, 0.12]} m={mat.aceroClaro} />
+              <Caja p={[0, 0.024, 0]} t={[0.07, 0.024, 0.1]} m={mat.caucho} />
+              {[-0.025, 0.025].map((dz) => (
+                <Cilindro key={`tornillo-${dz}`} p={[0.0, 0.013, dz * 2]} rad={0.004} h={0.004} m={mat.acero} seg={8} />
+              ))}
+            </group>
           ))}
-          <Caja p={[0, 0.06 + i * 0.03, 0.155]} t={[0.18, 0.05, 0.01]} m={mat.laton} />
+          <Caja p={[0, 0.06 + i * 0.03, 0.131]} t={[0.18, 0.04, 0.006]} m={mat.laton} />
         </group>
       ))}
       {VITRINA.xs.map((x, i) => (
@@ -399,7 +403,7 @@ function Biblioteca({ mat }: { mat: Materiales }) {
         );
       })}
       <Caja p={[0, yBalda, zFondo + 0.02]} t={[1.2, 0.03, 0.4]} m={mat.contrachapado} />
-      {[-0.4, -0.13, 0.14, 0.41].map((x, i) => (
+      {[-0.2, 0.2].map((x, i) => (
         <group key={`archivo-${x}`} position={[x, yBalda + 0.015, zFondo + 0.02]}>
           <CajaCarton mat={mat} t={[0.25, 0.12, 0.3]} codigo={`AR-${i + 1}`} linea2="archivo" />
         </group>
@@ -464,10 +468,6 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
         </group>
       ))}
       <Caja p={[0, 0.2, 0]} t={[ancho - 0.2, 0.04, fondo - 0.1]} m={mat.acero} />
-      {/* Balda baja: una caja de cartón de recambios */}
-      <group position={[0.5, 0.22, 0]}>
-        <CajaCarton mat={mat} t={[0.5, 0.24, 0.36]} codigo="HT-05" linea2="recambios" />
-      </group>
       {/* Faldón delantero, donde va el rótulo del banco */}
       <Caja p={[0, alto - 0.12, fondo / 2 + 0.01]} t={[ancho, 0.14, 0.02]} m={mat.acero} />
       <mesh position={[-0.15, yTapete, 0]} rotation={[-Math.PI / 2, 0, 0]} material={mat.tapete}>
@@ -540,36 +540,6 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
           shadow-mapSize={[1024, 1024]}
           shadow-bias={-0.0004}
         />
-      </group>
-    </group>
-  );
-}
-
-/**
- * Atrezo de suelo, bajo y a los lados para no tapar las zonas: a ras de los zócalos (por debajo de unos 45 cm no
- * se ve nada del mueble desde la cámara del póster). Solo lo que llega al nivel de detalle de las réplicas
- * (Javi, 24-11-2026): maletines con cierres y asa, y cartones con cinta y etiqueta. Sin réplicas ni armas.
- */
-function Ambientacion({ mat }: { mat: Materiales }) {
-  // Cerca de los zócalos para que el atrezo quede por encima de la fila de tarjetas de la interfaz.
-  const zSuelo = MUEBLE.frente + 0.65;
-  return (
-    <group>
-      {/* Izquierda: dos maletines rígidos apilados (los de la pared del almacén, con cierres, asa y etiqueta) */}
-      <group position={[-3.15, 0, zSuelo]} rotation={[0, 0.1, 0]} scale={0.75}>
-        <group position={[0, 0.075, 0]}>
-          <Maletin mat={mat} codigo="A-9" linea2="1 180 × 440" ancho={1.0} />
-        </group>
-        <group position={[0, 0.225, 0]}>
-          <Maletin mat={mat} codigo="A-10" linea2="1 180 × 440" ancho={1.0} />
-        </group>
-      </group>
-      {/* Derecha: dos cartones de pedido apilados, con etiqueta */}
-      <group position={[3.2, 0, zSuelo + 0.05]} rotation={[0, -0.12, 0]}>
-        <CajaCarton mat={mat} t={[0.46, 0.2, 0.34]} codigo="BB-04" linea2="caja 10 uds" />
-        <group position={[0.02, 0.2, 0]} rotation={[0, 0.2, 0]}>
-          <CajaCarton mat={mat} t={[0.38, 0.16, 0.3]} codigo="GF-05" linea2="gafas" />
-        </group>
       </group>
     </group>
   );
@@ -964,7 +934,6 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       ))}
 
       <Banco mat={mat} flexo={flexo} />
-      <Ambientacion mat={mat} />
       {ZONAS.filter((z) => z.id === 'banco').map((z) => (
         <group key="banco-rotulo">
           <PlacaRotulo material={rotulos[z.id] as MeshStandardMaterial} posicion={z.anclaRotulo} tamano={[0.9, 0.14]} />
