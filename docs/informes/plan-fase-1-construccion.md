@@ -98,10 +98,15 @@ Cada rebanada se entrega en PR pequeño y pasa por:
 ### Tercera pasada del póster (24-11-2026, tras la revisión de critico-diseno: 6/10)
 - **Causa del fallo de `verify` del #67**: real, no una cancelación. El test «Más luz tiene su propio póster» pedía `poster-2560.webp`
   (el script ya lo emitía, pero los binarios y el manifiesto eran de la versión anterior). Se rehornea y se regenera el manifiesto.
-- **Atrezo nuevo**, solo bajo y en los márgenes para no tapar zonas: maletines apilados y caja de herramientas en el suelo,
-  cajón de botes de bolas y cartones, perchero con chaleco, casco y gafas y caballete de dianas junto a la pared, y en cada
-  ranura del armero el contorno de plano (discontinuo, con cota) de la caja máxima de la réplica: «aquí irá una réplica» sin
-  siluetas de relleno.
+- **Regla de Javi (24-11-2026): el atrezo solo si tiene el detalle que tendrán las réplicas.** Revisado cada objeto a 100 %,
+  se **retiran** cascos, soportes, chalecos, gafas, botes y bombonas, caja de herramientas, batería, calibre, linterna, cinta
+  métrica, perchero y caballete (formas simples: se veían de juguete junto a las réplicas) y se borra su código. Quedan los que
+  pasan: maletines rígidos con cierres, asa y etiqueta; cartones con cinta y etiqueta; carpetas con lomo etiquetado; planos
+  enmarcados con cotas reales; hoja de plano sobre el tablero; panel perforado con herramientas colgadas; dianas y etiquetas
+  de kraft en el corcho; y el flexo, rehecho **articulado** (brazos dobles, articulaciones con tornillos, muelle, pantalla con
+  borde, portalámparas y cable). Las zonas libres se quedan limpias.
+- **Armero**: en cada ranura, el contorno de plano (discontinuo, con cota) de la caja máxima de la réplica («aquí irá una
+  réplica», sin siluetas de relleno) y separadores bajos de acero oscuro.
 - **Legibilidad**: cotas de los rótulos a ~0,25 del alto de la lámina (antes ~5 px a 1440 px), corcho a 1024 px de textura, papel y
   plástico blanco con albedo máximo ≈ 0,5 lineal (se quemaban), suelo más oscuro y más rugoso, focos de la vitrina más suaves
   y sombras con borde blando (radio de luz de 0,12 m).
