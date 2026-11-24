@@ -74,7 +74,7 @@ class ReceptorAK(Familia):
         cuerpo = cuerpo + loft_x(
             -58,
             0,
-            [(-58, yt + 1.5, yb + 3, hw + 0.6), (-20, yt + 2, yb + 3.5, hw + 1.0), (0, yt + 1.0, yb + 4.5, hw + 0.2)],
+            [(-58, yt + 0.6, yb + 3, hw + 0.6), (-20, yt + 0.8, yb + 3.5, hw + 1.0), (0, yt + 0.6, yb + 4.5, hw + 0.2)],
             radio=9.0,
         )
         # Espiga trasera para la culata.

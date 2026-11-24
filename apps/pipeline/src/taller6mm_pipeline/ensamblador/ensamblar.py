@@ -40,6 +40,7 @@ from taller6mm_pipeline.ensamblador.reglas import (
 from taller6mm_pipeline.familias.rail_picatinny import centros_ranuras_mm
 
 ESQUEMA_MANIFIESTO = "m4-builds/v1"
+ESQUEMAS_MANIFIESTO = (ESQUEMA_MANIFIESTO, "ak-builds/v1")  # mismo formato; cambia la plataforma
 ESQUEMA_INFORME = "m4-ensamblaje/v1"
 HUECO_FISICO_MM = 1.0  # holgura entre piezas montadas a partir de la cual se avisa
 PRECISION_MM = 1.0
@@ -283,6 +284,10 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
             origen_padre = (mp @ np.array([0, 0, 0, 1.0]))[:3]
             desliz += float(np.dot(origen_padre - origen_hijo, tang))
         mh = geometria.trasladar(*(tang * desliz)) @ mh
+        if m.get("desplazar_mm") is not None:
+            # Ajuste fino en los ejes del conjunto (x, y, z en mm) para los montajes coaxiales, cuya tangente no
+            # siempre es el eje de avance (en el AK la de los sockets de guardamanos es vertical).
+            mh = geometria.trasladar(*(float(v) for v in m["desplazar_mm"])) @ mh
         insertar = float(m.get("insertar_mm", 0.0))
         if insertar:
             # La pieza entra en un hueco del padre (cargador en el pozo): se hunde a lo largo de la normal del socket.

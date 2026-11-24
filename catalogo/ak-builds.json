@@ -1,0 +1,397 @@
+{
+  "esquema": "ak-builds/v1",
+  "generado": "2026-11-24",
+  "nota": "Builds del AK para el ensamblador (mismo formato que m4-builds.json). Piezas de los generadores ak_*.py con parámetros de barrido (es_demo). Todo es T0 y publicable_3d=false.",
+  "builds": [
+    {
+      "id": "akm",
+      "nombre": "AKM",
+      "descripcion": "Fusil tipo AKM: receptor estampado con tapa de dos nervaduras, guardamanos y cubremano de madera, pistolete de baquelita, culata fija de madera, cargador de acero curvo, cañón con mira de capucha y freno oblicuo.",
+      "piezas": [
+        {
+          "id": "receptor",
+          "rol": "receptor",
+          "familia": "ak.receptor",
+          "params": {
+            "longitud": 380.0,
+            "alto": 46.0,
+            "ancho": 36.0
+          }
+        },
+        {
+          "id": "canon",
+          "rol": "canon",
+          "familia": "ak.canon",
+          "params": {
+            "longitud": 370.0,
+            "diametro": 16.0,
+            "longitud_rosca": 14.0,
+            "mira": "capucha"
+          }
+        },
+        {
+          "id": "boca",
+          "rol": "bocacha",
+          "familia": "ak.boca",
+          "params": {
+            "tipo": "oblicuo",
+            "longitud": 40.0,
+            "diametro": 21.0
+          }
+        },
+        {
+          "id": "tapa",
+          "rol": "tapa",
+          "familia": "ak.tapa",
+          "params": {
+            "longitud": 290.0,
+            "alto": 19.0,
+            "ancho": 36.0,
+            "nervaduras": 2,
+            "rail": false
+          }
+        },
+        {
+          "id": "guardamanos",
+          "rol": "guardamanos",
+          "familia": "ak.guardamanos_inferior",
+          "params": {
+            "ancho": 40.0,
+            "alto": 30.0,
+            "longitud": 190.0,
+            "estilo": "madera_surcos"
+          }
+        },
+        {
+          "id": "cubremano",
+          "rol": "cubremano",
+          "familia": "ak.cubremano",
+          "params": {
+            "longitud": 180.0,
+            "ancho": 36.0,
+            "alto": 26.0,
+            "ventilacion": "nervios"
+          }
+        },
+        {
+          "id": "pistolete",
+          "rol": "pistolete",
+          "familia": "ak.pistolete",
+          "params": {
+            "altura": 100.0,
+            "profundidad": 36.0,
+            "ancho": 32.0,
+            "inclinacion": 22.0,
+            "estilo": "bakelita"
+          }
+        },
+        {
+          "id": "cargador",
+          "rol": "cargador",
+          "familia": "ak.cargador",
+          "params": {
+            "altura": 250.0,
+            "profundidad": 40.0,
+            "ancho": 26.0,
+            "radio_curva": 420.0,
+            "material": "acero"
+          }
+        },
+        {
+          "id": "culata",
+          "rol": "culata",
+          "familia": "ak.culata_fija",
+          "params": {
+            "longitud": 320.0,
+            "alto_culata": 115.0,
+            "ancho": 34.0,
+            "material": "madera"
+          }
+        },
+        {
+          "id": "mira-trasera",
+          "rol": "mira",
+          "familia": "ak.mira_trasera",
+          "params": {
+            "longitud": 64.0,
+            "ancho": 24.0,
+            "alto": 26.0
+          }
+        }
+      ],
+      "montajes": [
+        {
+          "hijo": "canon",
+          "padre": "receptor",
+          "socket_hijo": "receiver",
+          "socket_padre": "barrel",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "boca",
+          "padre": "canon",
+          "socket_hijo": "muzzle_mount",
+          "socket_padre": "muzzle",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "tapa",
+          "padre": "receptor",
+          "socket_hijo": "base",
+          "socket_padre": "dust_cover",
+          "modo": "opuestos",
+          "deslizar_mm": -145.0,
+          "insertar_mm": -0.8,
+          "nota": "La tapa llega hasta el frente y apoya sobre la cuna delantera (2 mm más alta que el cuerpo)."
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor",
+          "socket_hijo": "receiver",
+          "socket_padre": "handguard",
+          "modo": "coaxial",
+          "eje": "x",
+          "desplazar_mm": [30.4, 0.0, 0.0],
+          "nota": "El guardamanos comparte el eje del cañón (y = 0) y arranca en la cara delantera del receptor."
+        },
+        {
+          "hijo": "cubremano",
+          "padre": "guardamanos",
+          "socket_hijo": "lower",
+          "socket_padre": "upper",
+          "modo": "coaxial",
+          "eje": "x",
+          "deslizar_mm": 100.0,
+          "desplazar_mm": [0.0, 1.75, 0.0],
+          "ventana_hueco_mm": 90.0,
+          "nota": "El cubremano comparte el eje del cañón y arranca detrás de la base de la mira trasera."
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor",
+          "socket_hijo": "grip",
+          "socket_padre": "grip",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor",
+          "socket_hijo": "mag_well",
+          "socket_padre": "mag_well",
+          "modo": "opuestos",
+          "insertar_mm": 20.0,
+          "desplazar_mm": [-2.2, 0.0, 0.0]
+        },
+        {
+          "hijo": "culata",
+          "padre": "receptor",
+          "socket_hijo": "receiver",
+          "socket_padre": "stock",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "mira-trasera",
+          "padre": "canon",
+          "socket_hijo": "base",
+          "socket_padre": "rear_sight",
+          "modo": "opuestos"
+        }
+      ]
+    },
+    {
+      "id": "ak74",
+      "nombre": "AK-74",
+      "descripcion": "Fusil tipo AK-74: receptor estampado con tapa de cuatro nervaduras, guardamanos y cubremano de polímero ventilado, pistolete y culata de polímero, cargador de polímero, cañón con orejas de mira y freno de dos cámaras.",
+      "piezas": [
+        {
+          "id": "receptor",
+          "rol": "receptor",
+          "familia": "ak.receptor",
+          "params": {
+            "longitud": 380.0,
+            "alto": 46.0,
+            "ancho": 36.0
+          }
+        },
+        {
+          "id": "canon",
+          "rol": "canon",
+          "familia": "ak.canon",
+          "params": {
+            "longitud": 370.0,
+            "diametro": 16.0,
+            "longitud_rosca": 14.0,
+            "mira": "orejas"
+          }
+        },
+        {
+          "id": "boca",
+          "rol": "bocacha",
+          "familia": "ak.boca",
+          "params": {
+            "tipo": "dos_camaras",
+            "longitud": 58.0,
+            "diametro": 23.0
+          }
+        },
+        {
+          "id": "tapa",
+          "rol": "tapa",
+          "familia": "ak.tapa",
+          "params": {
+            "longitud": 290.0,
+            "alto": 19.0,
+            "ancho": 36.0,
+            "nervaduras": 4,
+            "rail": false
+          }
+        },
+        {
+          "id": "guardamanos",
+          "rol": "guardamanos",
+          "familia": "ak.guardamanos_inferior",
+          "params": {
+            "ancho": 40.0,
+            "alto": 30.0,
+            "longitud": 190.0,
+            "estilo": "polimero_estriado"
+          }
+        },
+        {
+          "id": "cubremano",
+          "rol": "cubremano",
+          "familia": "ak.cubremano",
+          "params": {
+            "longitud": 180.0,
+            "ancho": 36.0,
+            "alto": 26.0,
+            "ventilacion": "ranuras"
+          }
+        },
+        {
+          "id": "pistolete",
+          "rol": "pistolete",
+          "familia": "ak.pistolete",
+          "params": {
+            "altura": 100.0,
+            "profundidad": 36.0,
+            "ancho": 32.0,
+            "inclinacion": 22.0,
+            "estilo": "polimero"
+          }
+        },
+        {
+          "id": "cargador",
+          "rol": "cargador",
+          "familia": "ak.cargador",
+          "params": {
+            "altura": 250.0,
+            "profundidad": 40.0,
+            "ancho": 26.0,
+            "radio_curva": 420.0,
+            "material": "polimero"
+          }
+        },
+        {
+          "id": "culata",
+          "rol": "culata",
+          "familia": "ak.culata_fija",
+          "params": {
+            "longitud": 320.0,
+            "alto_culata": 115.0,
+            "ancho": 34.0,
+            "material": "polimero"
+          }
+        },
+        {
+          "id": "mira-trasera",
+          "rol": "mira",
+          "familia": "ak.mira_trasera",
+          "params": {
+            "longitud": 64.0,
+            "ancho": 24.0,
+            "alto": 26.0
+          }
+        }
+      ],
+      "montajes": [
+        {
+          "hijo": "canon",
+          "padre": "receptor",
+          "socket_hijo": "receiver",
+          "socket_padre": "barrel",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "boca",
+          "padre": "canon",
+          "socket_hijo": "muzzle_mount",
+          "socket_padre": "muzzle",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "tapa",
+          "padre": "receptor",
+          "socket_hijo": "base",
+          "socket_padre": "dust_cover",
+          "modo": "opuestos",
+          "deslizar_mm": -145.0,
+          "insertar_mm": -0.8,
+          "nota": "La tapa llega hasta el frente y apoya sobre la cuna delantera (2 mm más alta que el cuerpo)."
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor",
+          "socket_hijo": "receiver",
+          "socket_padre": "handguard",
+          "modo": "coaxial",
+          "eje": "x",
+          "desplazar_mm": [30.4, 0.0, 0.0],
+          "nota": "El guardamanos comparte el eje del cañón (y = 0) y arranca en la cara delantera del receptor."
+        },
+        {
+          "hijo": "cubremano",
+          "padre": "guardamanos",
+          "socket_hijo": "lower",
+          "socket_padre": "upper",
+          "modo": "coaxial",
+          "eje": "x",
+          "deslizar_mm": 100.0,
+          "desplazar_mm": [0.0, 1.9, 0.0],
+          "ventana_hueco_mm": 90.0,
+          "nota": "El cubremano comparte el eje del cañón y arranca detrás de la base de la mira trasera."
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor",
+          "socket_hijo": "grip",
+          "socket_padre": "grip",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor",
+          "socket_hijo": "mag_well",
+          "socket_padre": "mag_well",
+          "modo": "opuestos",
+          "insertar_mm": 20.0,
+          "desplazar_mm": [-2.2, 0.0, 0.0]
+        },
+        {
+          "hijo": "culata",
+          "padre": "receptor",
+          "socket_hijo": "receiver",
+          "socket_padre": "stock",
+          "modo": "opuestos"
+        },
+        {
+          "hijo": "mira-trasera",
+          "padre": "canon",
+          "socket_hijo": "base",
+          "socket_padre": "rear_sight",
+          "modo": "opuestos"
+        }
+      ]
+    }
+  ]
+}

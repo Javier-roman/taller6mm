@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from taller6mm_pipeline.ensamblador.ensamblar import ESQUEMA_MANIFIESTO, ManifiestoInvalidoError, ensamblar
+from taller6mm_pipeline.ensamblador.ensamblar import ESQUEMAS_MANIFIESTO, ManifiestoInvalidoError, ensamblar
 
 RAIZ = Path(__file__).resolve().parents[5]
 APP = Path(__file__).resolve().parents[3]
@@ -19,8 +19,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--build", action="append", help="id del build (se puede repetir); por defecto, todos")
     args = ap.parse_args(argv)
     doc = json.loads(args.manifiesto.read_text(encoding="utf-8"))
-    if doc.get("esquema") != ESQUEMA_MANIFIESTO:
-        raise ManifiestoInvalidoError(f"esquema esperado {ESQUEMA_MANIFIESTO}, hay {doc.get('esquema')!r}")
+    if doc.get("esquema") not in ESQUEMAS_MANIFIESTO:
+        raise ManifiestoInvalidoError(f"esquema esperado {ESQUEMAS_MANIFIESTO}, hay {doc.get('esquema')!r}")
     args.salida.mkdir(parents=True, exist_ok=True)
     kit = APP / "salida"
     for build in doc["builds"]:

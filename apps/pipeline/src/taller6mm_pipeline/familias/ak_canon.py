@@ -80,8 +80,8 @@ class CanonAK(Familia):
         x_mira = largo - lr - 24.0
         perfil = [
             (0, 0),
-            (0, r + 2.0),
-            (2.0, r + 2.0),
+            (0, r + 1.2),  # el collar trasero (Ø18,4) cabe en el canal del guardamanos (Ø18,6)
+            (2.0, r + 1.2),
             (2.0, r),
             (x_mira, r),
             (x_mira, r - 0.8),

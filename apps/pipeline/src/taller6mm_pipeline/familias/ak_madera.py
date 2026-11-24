@@ -166,7 +166,8 @@ class CubremanoAK(Familia):
         cuerpo = loft_x(0, largo, nudos, radio=11.0)
         r_canal = 10.2
         cuerpo = cuerpo - cilindro_x(r_canal, -1, largo + 1, y=Y_TUBO_GAS)
-        cuerpo = cuerpo - caja_redonda(-1, largo + 1, 0, Y_TUBO_GAS, -r_canal, r_canal, 0.0)  # abierto por abajo
+        # Abierto por abajo, algo más ancho que el canal del tubo para dejar pasar el collar del bloque de gas (Ø23).
+        cuerpo = cuerpo - caja_redonda(-1, largo + 1, -1.0, Y_TUBO_GAS, -r_canal - 1.6, r_canal + 1.6, 0.0)
         vaciados = 2
         # Dos surcos longitudinales a cada lado, para que ninguna variante sea un tubo liso.
         for lado in (1, -1):
