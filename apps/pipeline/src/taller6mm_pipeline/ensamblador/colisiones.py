@@ -117,9 +117,15 @@ def dentro_de(puntos: Puntos, malla: Malla3D) -> NDArray[np.bool_]:
 
 
 def distancia_min(a: Puntos, b: Puntos) -> float:
-    """Distancia mínima entre dos nubes de puntos (por trozos)."""
+    """Distancia mínima entre dos nubes de puntos (árbol k-d de scipy, que ya trae build123d; si no, por trozos)."""
     if len(a) == 0 or len(b) == 0:
         return float("inf")
+    try:
+        from scipy.spatial import cKDTree  # noqa: PLC0415
+    except ImportError:  # pragma: no cover - scipy llega con build123d
+        cKDTree = None  # noqa: N806
+    if cKDTree is not None:
+        return float(cKDTree(b).query(a, k=1)[0].min())
     mejor = float("inf")
     trozo = max(1, int(2_000_000 // len(b)))
     for i in range(0, len(a), trozo):
@@ -185,6 +191,6 @@ def solape(a: Malla3D, b: Malla3D) -> Solape | None:
 def holgura(a: Malla3D, b: Malla3D, centro: Puntos, radio: float = 30.0) -> float:
     """Distancia mínima entre las superficies de A y B en una ventana de `radio` mm alrededor de `centro`."""
     c = np.asarray(centro, dtype=np.float64)
-    pa, _ = muestrear(a, 6000, 21, (c, radio))
-    pb, _ = muestrear(b, 6000, 23, (c, radio))
+    pa, _ = muestrear(a, 40000, 21, (c, radio))  # denso: una cara plana grande da pocos puntos con 6000
+    pb, _ = muestrear(b, 40000, 23, (c, radio))
     return distancia_min(pa, pb)

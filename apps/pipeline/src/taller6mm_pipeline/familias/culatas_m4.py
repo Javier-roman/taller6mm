@@ -259,6 +259,16 @@ class _TelescopicaBase(Familia):
             notas.append(NOTA_TUBO)
         else:
             notas.append("Sin tubo: se compone con `amortiguador.tubo`.")
+            if p["diametro_tubo"] is not None:
+                # La culata es una funda: con el tubo suelto, el cuerpo lleva el alojamiento (cilindro + quilla) para
+                # que el tubo del ensamblaje entre sin atravesar el material (antes se montaba con 15 mm de solape).
+                r_a = d_tubo / 2 + 1.2  # el anillo trasero del tubo llega a +1 mm sobre el cuerpo
+                prof = largo - 12.0
+                x_a = x_frente - prof / 2 + 0.5
+                aloj = cilindro_en("x", r_a, prof + 1.0, (x_a, 0, 0))
+                aloj = aloj + Pos(x_a, -(r_a + 4.0) / 2, 0) * Box(prof + 1.0, r_a + 4.0, 8.4)
+                cuerpo = cuerpo - aloj
+                notas.append("Alojamiento interior del tubo (cilindro y quilla) con holgura para el anillo del tubo.")
         notas.append(f"Posición {pos} de 6 ({paso:g} mm por posición, estimado).")
         return Geometria(cuerpo, sockets, (), tuple(notas), nominales_de(cuerpo), vaciados=9)
 

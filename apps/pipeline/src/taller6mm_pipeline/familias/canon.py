@@ -248,5 +248,5 @@ class BloqueGas(Familia):
             cuerpo = cuerpo + Pos(largo * 0.75, 0, z * (ro - 0.3)) * Cylinder(
                 2.2, 1.6, align=(Align.CENTER, Align.CENTER, Align.CENTER)
             )
-        cuerpo = cuerpo - _cil_x(rc, -1, largo + 1)
+        cuerpo = cuerpo - _cil_x(rc + 0.1, -1, largo + 1)  # 0,1 mm de holgura: el collar abraza sin solapar el cañón
         return Geometria(cuerpo, tuple(sockets), (), tuple(notas), nominales_de(cuerpo), vaciados=1)

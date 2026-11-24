@@ -228,6 +228,8 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
             "socket_padre": m["socket_padre"],
             "modo": m.get("modo", "opuestos"),
         }
+        if "ventana_hueco_mm" in m:  # piezas cuyo contacto real queda lejos del socket (funda sobre un tubo)
+            entrada["ventana_hueco_mm"] = float(m["ventana_hueco_mm"])
         if hid not in piezas or pid not in piezas or pid not in mundo:
             entrada["estado"] = "sin_colocar"
             entrada["motivo"] = "falta una de las piezas o el padre no está colocado"
@@ -281,6 +283,10 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
             origen_padre = (mp @ np.array([0, 0, 0, 1.0]))[:3]
             desliz += float(np.dot(origen_padre - origen_hijo, tang))
         mh = geometria.trasladar(*(tang * desliz)) @ mh
+        insertar = float(m.get("insertar_mm", 0.0))
+        if insertar:
+            # La pieza entra en un hueco del padre (cargador en el pozo): se hunde a lo largo de la normal del socket.
+            mh = geometria.trasladar(*(-marco_p[:3, 2] * insertar)) @ mh
         mundo[hid] = mh
         if hijo.tiene_malla and padre.tiene_malla and pos_riel is not None:
             tramo = _tramo_riel(padre, sp)
@@ -294,6 +300,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
             {
                 "estado": veredicto.estado,
                 "deslizar_mm": round(desliz, 4),
+                "insertar_mm": insertar,
                 "transformacion_hijo": _transformacion(mh),
                 "veredicto": veredicto.a_dict(),
                 "nota": m.get("nota", ""),
@@ -400,7 +407,7 @@ def ensamblar(build: Mapping[str, Any], cache: Path | None = None, kit: Path | N
             continue
         sp = piezas[b].socket(m_out["socket_padre"])
         centro = np.asarray(m_out["_centro"])
-        h = colisiones.holgura(mallas_mundo[a], mallas_mundo[b], centro)
+        h = colisiones.holgura(mallas_mundo[a], mallas_mundo[b], centro, float(m_out.get("ventana_hueco_mm", 30.0)))
         m_out["holgura_mm"] = None if h == float("inf") else round(h, 2)
         if h > HUECO_FISICO_MM:
             huecos_fisicos.append(

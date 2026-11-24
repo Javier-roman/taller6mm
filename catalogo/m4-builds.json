@@ -1,12 +1,12 @@
 {
   "esquema": "m4-builds/v1",
   "generado": "2026-11-15",
-  "nota": "Builds de ejemplo del M4/M16 para el ensamblador (apps/pipeline/src/taller6mm_pipeline/ensamblador). Las piezas salen de los generadores con parámetros de barrido (es_demo) y las que no tienen malla ni modelo (culata, cargador, red dot) entran como marcador visual sin cotas. Todo es T0 y publicable_3d=false.",
+  "nota": "Builds de ejemplo del M4/M16 para el ensamblador. Las piezas salen de los generadores con parámetros de barrido (es_demo). El m4a1-carabina y el m4-cqb-ris están completos (culata, cargador y óptica con malla real); el m16a2-asa conserva marcadores. Todo es T0 y publicable_3d=false.",
   "builds": [
     {
       "id": "m4a1-carabina",
       "nombre": "M4A1 carabina",
-      "descripcion": "Carabina de 6,7 in: receptor plano con raíl, cañón de 300 mm, guardamanos de dos mitades, apagallamas A2, tubo de culata mil-spec y mira BUIS trasera.",
+      "descripcion": "Carabina de 6,7 in: receptor plano con raíl y asa de armado, cañón de 300 mm, guardamanos de dos mitades, apagallamas A2, tubo y culata de 6 posiciones, cargador corto, mira delantera A2, BUIS trasera y red dot.",
       "piezas": [
         {
           "id": "receptor-superior",
@@ -16,7 +16,7 @@
             "longitud": 250.0,
             "ancho": 34.0,
             "alto": 40.0,
-            "asa_armado": false,
+            "asa_armado": true,
             "variante": "a3_plano"
           }
         },
@@ -122,38 +122,27 @@
         {
           "id": "culata",
           "rol": "culata",
-          "familia": "culata.telescopica",
+          "familia": "culata.telescopica_6pos",
           "params": {
-            "especificacion": "milspec",
-            "longitud": null,
-            "altura": null,
-            "ancho": null,
-            "pared": null,
-            "diametro_tubo": null
-          },
-          "marcador": {
-            "forma": "caja",
-            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
-            "centro_mm": [0, 0, -25],
-            "dim_mm": [44, 36, 150]
+            "diametro_tubo": 29.16,
+            "ancho": 46.0,
+            "longitud_cuerpo": 170.0,
+            "alto_cantonera": 93.0,
+            "paso_posicion": 12.0,
+            "posicion": 3,
+            "incluir_tubo": false
           }
         },
         {
           "id": "cargador",
           "rol": "cargador",
-          "familia": "cargador.m4",
+          "familia": "cargador.m4_forma",
           "params": {
-            "capacidad": 120,
+            "capacidad": 30,
             "sistema": "aeg",
-            "largo": null,
-            "ancho": null,
-            "altura": null
-          },
-          "marcador": {
-            "forma": "caja",
-            "centro_mm": [0, 0, -3],
-            "dim_mm": [40, 22, 106],
-            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta"
+            "largo": 42.4,
+            "ancho": 22.6,
+            "altura": 100.0
           }
         },
         {
@@ -167,6 +156,17 @@
             "ancho": 20.0,
             "posicion": "erguida",
             "lado": "trasera"
+          }
+        },
+        {
+          "id": "optica",
+          "rol": "optica",
+          "familia": "optica.red_dot_tubular",
+          "params": {
+            "longitud": 62.0,
+            "diametro": 22.0,
+            "altura_eje": 31.0,
+            "campana": 6.0
           }
         }
       ],
@@ -234,18 +234,21 @@
         {
           "hijo": "culata",
           "padre": "tubo",
-          "socket_hijo": null,
-          "socket_padre": "stock",
-          "modo": "opuestos",
-          "nota": "Sin malla ni sockets: marcador visual."
+          "socket_hijo": "tubo",
+          "socket_padre": "receiver",
+          "modo": "coaxial",
+          "nota": "La culata es una funda que desliza sobre el tubo: coincide con el frente del tubo (coaxial).",
+          "eje": "x",
+          "ventana_hueco_mm": 90.0
         },
         {
           "hijo": "cargador",
           "padre": "receptor-inferior",
-          "socket_hijo": null,
+          "socket_hijo": "pozo",
           "socket_padre": "magwell",
           "modo": "opuestos",
-          "nota": "Sin malla ni sockets: marcador visual."
+          "insertar_mm": 15.0,
+          "nota": "El cargador entra 15 mm en el pozo (hueco pasante de 44 x 24 mm del receptor inferior)."
         },
         {
           "hijo": "buis-trasera",
@@ -254,13 +257,21 @@
           "socket_padre": "rail.top",
           "modo": "opuestos",
           "posicion_riel_mm": 15.0
+        },
+        {
+          "hijo": "optica",
+          "padre": "receptor-superior",
+          "socket_hijo": "rail",
+          "socket_padre": "rail.top",
+          "modo": "opuestos",
+          "ranura_riel": 9
         }
       ]
     },
     {
       "id": "m4-cqb-ris",
       "nombre": "M4 CQB con RIS",
-      "descripcion": "CQB: receptor corto sin tapa, cañón de 240 mm, guardamanos RIS cuadrado con raíles en las cuatro caras, bocacha, empuñadura vertical, BUIS y red dot sobre elevador.",
+      "descripcion": "CQB: receptor corto con asa de armado, cañón de 240 mm, guardamanos RIS cuadrado con raíles en las cuatro caras, bocacha, empuñadura vertical, BUIS delantera y trasera, holográfica compacta y culata de polímero.",
       "piezas": [
         {
           "id": "receptor-superior",
@@ -270,7 +281,7 @@
             "longitud": 200.0,
             "ancho": 34.0,
             "alto": 40.0,
-            "asa_armado": false,
+            "asa_armado": true,
             "variante": "a3_plano",
             "tapa": "sin",
             "forward_assist": false
@@ -379,38 +390,28 @@
         {
           "id": "culata",
           "rol": "culata",
-          "familia": "culata.telescopica",
+          "familia": "culata.telescopica_polimero",
           "params": {
-            "especificacion": "milspec",
-            "longitud": null,
-            "altura": null,
-            "ancho": null,
-            "pared": null,
-            "diametro_tubo": null
-          },
-          "marcador": {
-            "forma": "caja",
-            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
-            "centro_mm": [0, 0, -25],
-            "dim_mm": [44, 36, 150]
+            "diametro_tubo": 29.16,
+            "ancho": 46.0,
+            "longitud_cuerpo": 170.0,
+            "alto_cantonera": 93.0,
+            "paso_posicion": 12.0,
+            "posicion": 4,
+            "estilo": "moe",
+            "incluir_tubo": false
           }
         },
         {
           "id": "cargador",
           "rol": "cargador",
-          "familia": "cargador.m4",
+          "familia": "cargador.m4_forma",
           "params": {
             "capacidad": 120,
             "sistema": "aeg",
-            "largo": null,
-            "ancho": null,
-            "altura": null
-          },
-          "marcador": {
-            "forma": "caja",
-            "centro_mm": [0, 0, -3],
-            "dim_mm": [40, 22, 106],
-            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta"
+            "largo": 42.4,
+            "ancho": 22.6,
+            "altura": 135.0
           }
         },
         {
@@ -451,27 +452,14 @@
           }
         },
         {
-          "id": "elevador",
-          "rol": "montura",
-          "familia": "montura.riser",
-          "params": {
-            "huella": "t1",
-            "longitud": 50.0,
-            "altura": 22.0,
-            "ancho": 32.0,
-            "separacion_tornillos": null,
-            "qd": true
-          }
-        },
-        {
-          "id": "red-dot",
+          "id": "optica",
           "rol": "optica",
-          "marcador": {
-            "forma": "caja",
-            "centro_mm": [0, 0, 20],
-            "dim_mm": [60, 35, 40],
-            "aviso": "marcador visual orientativo: no es una cota ni un modelo; sirve para ver dónde va la pieza que falta",
-            "requiere": ["huella-t1-micro"]
+          "familia": "optica.holografica_abierta",
+          "params": {
+            "longitud": 72.0,
+            "altura": 46.0,
+            "ancho": 36.0,
+            "pared": 4.5
           }
         }
       ],
@@ -541,18 +529,21 @@
         {
           "hijo": "culata",
           "padre": "tubo",
-          "socket_hijo": null,
-          "socket_padre": "stock",
-          "modo": "opuestos",
-          "nota": "Sin malla ni sockets: marcador visual."
+          "socket_hijo": "tubo",
+          "socket_padre": "receiver",
+          "modo": "coaxial",
+          "nota": "La culata es una funda que desliza sobre el tubo: coincide con el frente del tubo (coaxial).",
+          "eje": "x",
+          "ventana_hueco_mm": 90.0
         },
         {
           "hijo": "cargador",
           "padre": "receptor-inferior",
-          "socket_hijo": null,
+          "socket_hijo": "pozo",
           "socket_padre": "magwell",
           "modo": "opuestos",
-          "nota": "Sin malla ni sockets: marcador visual."
+          "insertar_mm": 15.0,
+          "nota": "El cargador entra 15 mm en el pozo (hueco pasante de 44 x 24 mm del receptor inferior)."
         },
         {
           "hijo": "buis-trasera",
@@ -579,20 +570,12 @@
           "posicion_riel_mm": 70.0
         },
         {
-          "hijo": "elevador",
+          "hijo": "optica",
           "padre": "receptor-superior",
           "socket_hijo": "rail",
           "socket_padre": "rail.top",
           "modo": "opuestos",
-          "ranura_riel": 7
-        },
-        {
-          "hijo": "red-dot",
-          "padre": "elevador",
-          "socket_hijo": null,
-          "socket_padre": "optic",
-          "modo": "opuestos",
-          "nota": "Sin modelo: marcador visual."
+          "ranura_riel": 10
         }
       ]
     },
@@ -816,7 +799,8 @@
           "socket_hijo": null,
           "socket_padre": "stock",
           "modo": "opuestos",
-          "nota": "Sin malla ni sockets: marcador visual."
+          "nota": "Sin malla ni sockets: marcador visual.",
+          "ventana_hueco_mm": 90.0
         },
         {
           "hijo": "cargador",

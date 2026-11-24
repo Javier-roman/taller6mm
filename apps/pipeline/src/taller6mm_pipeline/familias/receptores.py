@@ -234,11 +234,19 @@ class ReceptorSuperior(Familia):
 
         # Empuñadura de armado visible por detrás.
         if p["asa_armado"]:
-            ya = y1 - 9.0
-            asa_a = _caja(-24, 8, ya - 5, ya + 5, -8, 8) + _caja(-24, -6, ya - 7, ya + 3, -22, 22)
-            cuerpo = cuerpo + fillet(asa_a.edges().filter_by(Axis.Y), radius=2.0)
+            # El asa va por ENCIMA de la torre del tubo del inferior (llega a 15 mm sobre el eje) y por delante de la
+            # tuerca del tubo (x >= -20): antes se hundía en la torre y por eso los builds la desactivaban. El
+            # vástago (x -10..8) se solapa con el raíl, y el travesaño en T (z ±22) con el vástago.
+            ya = max(y1 - 9.0, 21.0)
+            vastago = _caja(-10, 8, ya - 3.5, ya + 3.5, -7, 7)
+            travesano = _caja(-20, -6, ya - 3.5, ya + 4.5, -22, 22)
+            cuerpo = (
+                cuerpo
+                + fillet(vastago.edges().filter_by(Axis.Y), radius=2.0)
+                + fillet(travesano.edges().filter_by(Axis.Y), radius=3.0)
+            )
             sockets.append(
-                Socket("charging_handle", (-24.0, ya, 0.0), INTERFAZ_ASA_ARMADO, (-1.0, 0.0, 0.0), (0.0, 1.0, 0.0), {})
+                Socket("charging_handle", (-20.0, ya, 0.0), INTERFAZ_ASA_ARMADO, (-1.0, 0.0, 0.0), (0.0, 1.0, 0.0), {})
             )
 
         # Nariz de la tuerca del cañón, con el alojamiento del cañón.

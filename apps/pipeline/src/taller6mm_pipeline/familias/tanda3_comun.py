@@ -76,11 +76,17 @@ def mordazas(x0: float, x1: float, profundidad: float = 8.0, grueso: float = 3.5
     """
     largo = x1 - x0
     piezas = []
+    # El raíl es una cola de milano: ancho máximo (SEMI_RAIL) a `bisel` bajo el plano superior y vuelve al ancho del
+    # plano a `2 * bisel`. La cara interior de la mordaza lo sigue con 0,4 mm de holgura (el sondeo del ensamblador es de 0,5 mm; antes se hundía 0,9 mm en
+    # el raíl y el ensamblador lo marcaba como colisión).
+    semi_plano = e.PICATINNY_ANCHO_PLANO.valor_mm / 2
+    bisel = SEMI_RAIL - semi_plano
     for lado in (1, -1):
         pts = [
-            (0.0, lado * (SEMI_RAIL + 0.1)),
-            (-0.78 * profundidad, lado * (SEMI_RAIL - 1.6)),
-            (-profundidad, lado * (SEMI_RAIL - 1.3)),
+            (0.0, lado * (SEMI_RAIL + 0.4)),
+            (-bisel, lado * (SEMI_RAIL + 0.4)),
+            (-2 * bisel, lado * (semi_plano + 0.4)),
+            (-profundidad, lado * (semi_plano + 0.4)),
             (-profundidad, lado * (SEMI_RAIL + grueso)),
             (0.0, lado * (SEMI_RAIL + grueso)),
         ]
@@ -113,8 +119,13 @@ def base_sobre_rail(x0: float, x1: float, altura: float, ancho: float, *, bulon:
     # Ajusta: la placa nace en y = 0 y sube; el raíl queda debajo.
     cuerpo = placa + mordazas(x0, x1)
     taco = Pos(cx, -e.PICATINNY_PROFUNDIDAD_RANURA.valor_mm / 2, 0) * Cylinder(1.0, 1.0)
+    # Taco de retroceso: entra en una ranura Picatinny (5,23 mm de ancho): 0,2 mm de holgura por lado, no más ancho
+    # que la ranura (antes medía 6,4 mm y se hundía 0,6 mm en cada diente del raíl).
+    semi_taco = e.PICATINNY_ANCHO_RANURA.valor_mm / 2 - 0.2
     cuerpo = cuerpo + Pos(cx, -1.7, 0) * extrude(
-        Plane.XY * Polygon((-3.2, -1.3), (3.2, -1.3), (3.2, 1.3), (-3.2, 1.3), align=None), 8.0 / 2, both=True
+        Plane.XY * Polygon((-semi_taco, -1.3), (semi_taco, -1.3), (semi_taco, 1.3), (-semi_taco, 1.3), align=None),
+        8.0 / 2,
+        both=True,
     )
     _ = taco
     if bulon:

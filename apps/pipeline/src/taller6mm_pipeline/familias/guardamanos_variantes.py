@@ -30,6 +30,17 @@ _CARAS_RIS = {
 }
 
 
+RADIO_PASO_CANON_MM = 12.3  # el cañón del barrido llega a Ø24 mm (tuerca incluida); el paso deja 0,3 mm de holgura
+GROSOR_TAPA_MM = 3.0
+
+
+def _tapa_trasera(radio_interior: float):  # noqa: ANN202
+    """Anillo trasero (delta ring / tuerca de cañón simplificada): cierra el hueco entre la nariz del receptor
+    superior (Ø28) y la pared del guardamanos, con el paso del cañón. Antes la pieza quedaba a 1-6,5 mm del
+    receptor sin ningún elemento que los uniera. Se solapa 0,5 mm con la pared para soldar el sólido."""
+    return extrude(Plane.YZ * (Circle(radio_interior + 0.5) - Circle(RADIO_PASO_CANON_MM)), GROSOR_TAPA_MM)
+
+
 def _mlok_que_caben(longitud_mm: float) -> int:
     n = int((longitud_mm - 2 * MARGEN_EXTREMO_MM + e.MLOK_SEPARACION.valor_mm) // e.MLOK_PASO_MM)
     return max(1, min(10, n))
@@ -99,6 +110,7 @@ class GuardamanosVariantes(Familia):
         cuerpo = extrude(Plane.YZ * (Circle(radio) - Circle(radio - pared)), largo)
         anillo = 4.0  # aro del delta ring y tapa delantera, estimados
         cuerpo += extrude(Plane.YZ * (Circle(radio + 3.0) - Circle(radio - pared)), anillo)
+        cuerpo += _tapa_trasera(radio - pared)
         if tipo == "mid":
             cuerpo += Pos(largo - anillo, 0, 0) * extrude(
                 Plane.YZ * (Circle(radio + 1.5) - Circle(radio - pared)), anillo
@@ -117,6 +129,7 @@ class GuardamanosVariantes(Familia):
     def _ris(largo: float, lado: float, pared: float) -> Geometria:
         medio = lado / 2
         cuerpo = extrude(Plane.YZ * (Rectangle(lado, lado) - Circle(medio - pared)), largo)
+        cuerpo += _tapa_trasera(medio - pared)
         n_rail = ranuras_rail_que_caben(largo)
         y_base = medio - pared / 2
         y_alto = medio + e.PICATINNY_ALTURA.valor_mm

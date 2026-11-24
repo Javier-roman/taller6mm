@@ -17,17 +17,27 @@ import numpy as np
 from numpy.typing import NDArray
 
 from taller6mm_pipeline.familias import FAMILIAS
+from taller6mm_pipeline.familias.ak_piezas import FAMILIAS_AK
 from taller6mm_pipeline.familias.base import Familia, Pieza, Valor
 from taller6mm_pipeline.familias.glb import leer_glb
 from taller6mm_pipeline.familias.oleada1 import FAMILIAS_OLEADA1
 from taller6mm_pipeline.familias.oleada1_cuerpos import FAMILIAS_CUERPOS
+from taller6mm_pipeline.familias.tanda3 import FAMILIAS_TANDA3
+from taller6mm_pipeline.familias.tanda3_culatas import FAMILIAS_CULATAS_BOCAS
 
 M_A_MM = 1000.0
 
 
 def registro_familias() -> dict[str, Familia]:
-    """Todas las familias conocidas (sin tocar ninguna): base, oleada 1 y cuerpos del M4."""
-    return {**FAMILIAS, **FAMILIAS_OLEADA1, **FAMILIAS_CUERPOS}
+    """Todas las familias conocidas (sin tocar ninguna): base, oleada 1, cuerpos, tanda 3, culatas y bocas, y AK."""
+    return {
+        **FAMILIAS,
+        **FAMILIAS_OLEADA1,
+        **FAMILIAS_CUERPOS,
+        **FAMILIAS_TANDA3,
+        **FAMILIAS_CULATAS_BOCAS,
+        **FAMILIAS_AK,
+    }
 
 
 @dataclass(frozen=True, slots=True)
