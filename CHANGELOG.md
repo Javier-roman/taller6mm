@@ -6,7 +6,7 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 ## [Sin publicar]
 
 ### Fase 1 · S1 de La Armería: vistas horneadas en R2 (2026-11-22)
-- Binding R2 `VISTAS` de solo lectura (`taller6mm-assets-preview` en preview) y ruta
+- Binding R2 `VISTAS` sobre un bucket dedicado `taller6mm-vistas-preview` en preview (un binding de R2 puede leer, escribir y borrar: por eso no se enlaza el bucket de assets) y ruta
   `/assets/armeria/<hash>/<archivo>.webp` en el Worker, con `Cache-Control` inmutable y ETag (`src/lib/vistas.ts`).
   Sin bucket público (decisión de Javi, 22-11-2026). Si el objeto no está, sigue la cadena normal.
 - `scripts/validar-preview.mjs` acepta `r2_buckets` solo si son exactamente los de `main`, con tests.

@@ -29,7 +29,7 @@ Decisiones de Javi (05-11-2026): híbrido (póster de base, B en móvil y A en e
 Javi aprobó construir la Fase 1 reescribiendo el prototipo en `apps/web` (la rama `spike/armeria-f1` sigue sin fusionarse)
 y las dependencias de cliente de más de 30 KB (three.js, R3F y drei, cargadas con `import()` solo en el nivel A).
 Los pases horneados y el póster se sirven desde **R2 con `Cache-Control` inmutable mediante un binding del Worker de la
-web** (`VISTAS`, solo lectura, sin bucket público), en rutas con el hash del contenido (`/assets/armeria/<hash>/…`).
+web** (`VISTAS`, sobre un bucket dedicado `taller6mm-vistas*` sin acceso público; solo se sirven los archivos del manifiesto), en rutas con el hash del contenido (`/assets/armeria/<hash>/…`).
 En local se sirven desde `public/assets/armeria/` (`pnpm --filter @taller6mm/web vistas:local`). Alcance: **solo escritorio**
 por ahora; el móvil se aparca y B pasa a ser el respaldo de A en escritorio.
 

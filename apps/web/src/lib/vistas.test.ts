@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { CACHE_INMUTABLE, type CubetaVistas, claveVista, hashConjunto, rutaVista, servirVista } from './vistas';
+import {
+  CACHE_INMUTABLE,
+  type CubetaVistas,
+  clavesDelManifiesto,
+  claveVista,
+  hashConjunto,
+  rutaVista,
+  servirVista,
+} from './vistas';
 
 const HASH = 'a1b2c3d4e5f6';
 const url = (ruta: string) => `https://web.test${ruta}`;
@@ -102,5 +110,32 @@ describe('servirVista', () => {
     expect(r?.status).toBe(200);
     expect(r?.headers.get('content-length')).toBe('4');
     expect(await r?.text()).toBe('');
+  });
+});
+
+describe('lista de claves permitidas', () => {
+  const manifiesto = { hash: '0123456789ab', archivos: { 'poster-1920.webp': {}, 'albedo.webp': {} } };
+  const permitidas = clavesDelManifiesto(manifiesto);
+
+  it('se construye con armeria/<hash>/<archivo>', () => {
+    expect([...permitidas].sort()).toEqual([
+      'armeria/0123456789ab/albedo.webp',
+      'armeria/0123456789ab/poster-1920.webp',
+    ]);
+  });
+
+  it('no consulta R2 por rutas válidas pero ajenas al manifiesto', async () => {
+    let llamadas = 0;
+    const cubeta: CubetaVistas = {
+      get: async () => {
+        llamadas += 1;
+        return null;
+      },
+    };
+    const ajena = new Request('https://x.test/assets/armeria/ffffffffffff/poster-1920.webp');
+    const otroArchivo = new Request('https://x.test/assets/armeria/0123456789ab/secreto.webp');
+    expect(await servirVista(ajena, cubeta, permitidas)).toBeNull();
+    expect(await servirVista(otroArchivo, cubeta, permitidas)).toBeNull();
+    expect(llamadas).toBe(0);
   });
 });
