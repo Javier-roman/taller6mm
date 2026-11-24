@@ -102,8 +102,8 @@
           "rol": "culata",
           "familia": "ak.culata_fija",
           "params": {
-            "longitud": 320.0,
-            "alto_culata": 115.0,
+            "longitud": 285.0,
+            "alto_culata": 100.0,
             "ancho": 34.0,
             "material": "madera"
           }
@@ -297,8 +297,8 @@
           "rol": "culata",
           "familia": "ak.culata_fija",
           "params": {
-            "longitud": 320.0,
-            "alto_culata": 115.0,
+            "longitud": 285.0,
+            "alto_culata": 100.0,
             "ancho": 34.0,
             "material": "polimero"
           }

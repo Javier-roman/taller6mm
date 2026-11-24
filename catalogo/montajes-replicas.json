@@ -1,0 +1,927 @@
+{
+  "esquema": "montajes-replicas/v1",
+  "nivel": "T0",
+  "publicable_3d": false,
+  "es_demo": true,
+  "aviso": "Todo es T0 y no publicable en 3D: piezas de barrido (es_demo) sin vistas licenciadas. El montaje comprueba encaje por interfaces, solapes y huecos; no certifica fidelidad (principios 1 y 2).",
+  "iluminacion": "mate_suave",
+  "montajes": [
+    {
+      "id": "m4a1-carabina",
+      "nombre": "M4A1 carabina",
+      "tipo": "m4",
+      "resumen": {
+        "piezas": 13,
+        "montajes": 12,
+        "compatibles": 12,
+        "incompatibles": 0,
+        "sin_datos": 0,
+        "sin_colocar": 0,
+        "colisiones_entre_montados": 0,
+        "colisiones_otras": 0,
+        "huecos_entre_piezas": 0,
+        "huecos_de_datos": 0
+      },
+      "veredictos": [
+        {
+          "hijo": "receptor-inferior",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «union-superior-inferior-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "canon",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tuerca-guardamanos-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tuerca-guardamanos-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "bloque-gas",
+          "padre": "canon",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-bloque-gas-ar»; collar frente a cañón: 18 mm frente a 18 mm (tolerancia 0.2 mm).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "apagallamas",
+          "padre": "canon",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «rosca-m14x1-ccw».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "tubo",
+          "padre": "receptor-inferior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tubo-culata-mil-spec».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "bloqueo-tubo",
+          "padre": "tubo",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tubo-culata-mil-spec»; tuerca frente a rosca: 30.16 mm frente a 30.16 mm (tolerancia 0.2 mm).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor-inferior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-pistolete-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "culata",
+          "padre": "tubo",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tubo-culata-mil-spec».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor-inferior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «pozo-stanag-m4».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "buis-trasera",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «picatinny-mil-std-1913»; la montura ocupa de -122.5 a -97.5 mm y el raíl medido va de -125.0 a 125.0 mm.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "optica",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «picatinny-mil-std-1913»; la montura ocupa de -57.9 a 4.1 mm y el raíl medido va de -125.0 a 125.0 mm.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        }
+      ],
+      "colisiones": [],
+      "huecos_entre_piezas": [],
+      "huecos_de_datos": [],
+      "piezas_sin_malla": [],
+      "caja_mm": [[-234.0, -175.0, -26.0], [617.0, 74.3, 26.0]],
+      "materiales": {
+        "pieza.receptor-superior": {
+          "pieza": "receptor-superior",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.receptor-inferior": {
+          "pieza": "receptor-inferior",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.canon": {
+          "pieza": "canon",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.bloque-gas": {
+          "pieza": "bloque-gas",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.guardamanos": {
+          "pieza": "guardamanos",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.apagallamas": {
+          "pieza": "apagallamas",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.tubo": {
+          "pieza": "tubo",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.bloqueo-tubo": {
+          "pieza": "bloqueo-tubo",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.pistolete": {
+          "pieza": "pistolete",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.culata": {
+          "pieza": "culata",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.cargador": {
+          "pieza": "cargador",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.buis-trasera": {
+          "pieza": "buis-trasera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.optica": {
+          "pieza": "optica",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        }
+      }
+    },
+    {
+      "id": "m4-cqb-ris",
+      "nombre": "M4 CQB con RIS",
+      "tipo": "m4",
+      "resumen": {
+        "piezas": 15,
+        "montajes": 14,
+        "compatibles": 14,
+        "incompatibles": 0,
+        "sin_datos": 0,
+        "sin_colocar": 0,
+        "colisiones_entre_montados": 0,
+        "colisiones_otras": 0,
+        "huecos_entre_piezas": 0,
+        "huecos_de_datos": 0
+      },
+      "veredictos": [
+        {
+          "hijo": "receptor-inferior",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «union-superior-inferior-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "canon",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tuerca-guardamanos-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "guardamanos",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tuerca-guardamanos-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "bloque-gas",
+          "padre": "canon",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-bloque-gas-ar»; collar frente a cañón: 18 mm frente a 18 mm (tolerancia 0.2 mm).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "apagallamas",
+          "padre": "canon",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «rosca-m14x1-ccw».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "tubo",
+          "padre": "receptor-inferior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tubo-culata-mil-spec».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "bloqueo-tubo",
+          "padre": "tubo",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tubo-culata-mil-spec»; tuerca frente a rosca: 30.16 mm frente a 30.16 mm (tolerancia 0.2 mm).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "pistolete",
+          "padre": "receptor-inferior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-pistolete-ar».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "culata",
+          "padre": "tubo",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «tubo-culata-mil-spec».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cargador",
+          "padre": "receptor-inferior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «pozo-stanag-m4».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "buis-trasera",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «picatinny-mil-std-1913»; la montura ocupa de -87.5 a -62.5 mm y el raíl medido va de -100.0 a 100.0 mm.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "buis-delantera",
+          "padre": "guardamanos",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «picatinny-mil-std-1913»; la montura ocupa de 107.5 a 132.5 mm y el raíl medido va de 0.0 a 170.2 mm.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "empunadura-vertical",
+          "padre": "guardamanos",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «picatinny-mil-std-1913»; la montura ocupa de 50.1 a 89.9 mm y el raíl medido va de 0.0 a 170.2 mm.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "optica",
+          "padre": "receptor-superior",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «picatinny-mil-std-1913»; la montura ocupa de -28.5 a 43.5 mm y el raíl medido va de -100.0 a 100.0 mm.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        }
+      ],
+      "colisiones": [],
+      "huecos_entre_piezas": [],
+      "huecos_de_datos": [],
+      "piezas_sin_malla": [],
+      "caja_mm": [[-246.0, -210.0, -27.3], [501.2, 73.2, 27.3]],
+      "materiales": {
+        "pieza.receptor-superior": {
+          "pieza": "receptor-superior",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.receptor-inferior": {
+          "pieza": "receptor-inferior",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.canon": {
+          "pieza": "canon",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.bloque-gas": {
+          "pieza": "bloque-gas",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.guardamanos": {
+          "pieza": "guardamanos",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.apagallamas": {
+          "pieza": "apagallamas",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.tubo": {
+          "pieza": "tubo",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.bloqueo-tubo": {
+          "pieza": "bloqueo-tubo",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.pistolete": {
+          "pieza": "pistolete",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.culata": {
+          "pieza": "culata",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.cargador": {
+          "pieza": "cargador",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.buis-trasera": {
+          "pieza": "buis-trasera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.buis-delantera": {
+          "pieza": "buis-delantera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.empunadura-vertical": {
+          "pieza": "empunadura-vertical",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.optica": {
+          "pieza": "optica",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        }
+      }
+    },
+    {
+      "id": "akm",
+      "nombre": "AKM",
+      "tipo": "ak",
+      "resumen": {
+        "piezas": 10,
+        "montajes": 9,
+        "compatibles": 9,
+        "incompatibles": 0,
+        "sin_datos": 0,
+        "sin_colocar": 0,
+        "colisiones_entre_montados": 0,
+        "colisiones_otras": 0,
+        "huecos_entre_piezas": 0,
+        "huecos_de_datos": 0
+      },
+      "veredictos": [
+        {
+          "hijo": "canon-akm",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-canon-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "boca",
+          "padre": "canon-akm",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «rosca-m14x1-ccw»; boca de Ø21 mm frente a la rosca de Ø14 mm del cañón.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "tapa",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-tapa-ak»; ancho de la tapa frente al del receptor: 36 mm frente a 36 mm (tolerancia 0.2 mm).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "guardamanos-madera",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-guardamanos-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cubremano-madera",
+          "padre": "guardamanos-madera",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-cubremano-ak»; cubremano de 180 x 36 mm sobre un guardamanos de 190 x 40 mm (largo x ancho).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "pistolete-bakelita",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-pistolete-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cargador-acero",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «pozo-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "culata-madera",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-culata-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "mira-trasera",
+          "padre": "canon-akm",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-mira-trasera-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        }
+      ],
+      "colisiones": [],
+      "huecos_entre_piezas": [],
+      "huecos_de_datos": [],
+      "piezas_sin_malla": [],
+      "caja_mm": [[-719.2, -252.8, -21.0], [410.0, 54.3, 21.0]],
+      "materiales": {
+        "pieza.receptor": {
+          "pieza": "receptor",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.canon-akm": {
+          "pieza": "canon-akm",
+          "material": "acero_pavonado",
+          "regla_explicita": true
+        },
+        "pieza.boca": {
+          "pieza": "boca",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.tapa": {
+          "pieza": "tapa",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.guardamanos-madera": {
+          "pieza": "guardamanos-madera",
+          "material": "madera_veta",
+          "regla_explicita": true
+        },
+        "pieza.cubremano-madera": {
+          "pieza": "cubremano-madera",
+          "material": "madera_veta",
+          "regla_explicita": true
+        },
+        "pieza.pistolete-bakelita": {
+          "pieza": "pistolete-bakelita",
+          "material": "madera_veta",
+          "regla_explicita": true
+        },
+        "pieza.cargador-acero": {
+          "pieza": "cargador-acero",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.culata-madera": {
+          "pieza": "culata-madera",
+          "material": "madera_veta",
+          "regla_explicita": true
+        },
+        "pieza.mira-trasera": {
+          "pieza": "mira-trasera",
+          "material": "parkerizado",
+          "regla_explicita": true
+        }
+      }
+    },
+    {
+      "id": "ak74",
+      "nombre": "AK-74",
+      "tipo": "ak",
+      "resumen": {
+        "piezas": 10,
+        "montajes": 9,
+        "compatibles": 9,
+        "incompatibles": 0,
+        "sin_datos": 0,
+        "sin_colocar": 0,
+        "colisiones_entre_montados": 0,
+        "colisiones_otras": 0,
+        "huecos_entre_piezas": 0,
+        "huecos_de_datos": 0
+      },
+      "veredictos": [
+        {
+          "hijo": "canon-ak74",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-canon-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "boca",
+          "padre": "canon-ak74",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «rosca-m14x1-ccw»; boca de Ø23 mm frente a la rosca de Ø14 mm del cañón.",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "tapa",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-tapa-ak»; ancho de la tapa frente al del receptor: 36 mm frente a 36 mm (tolerancia 0.2 mm).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "guardamanos-polimero",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-guardamanos-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cubremano-polimero",
+          "padre": "guardamanos-polimero",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-cubremano-ak»; cubremano de 180 x 36 mm sobre un guardamanos de 190 x 40 mm (largo x ancho).",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "pistolete-polimero",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-pistolete-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cargador-polimero",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «pozo-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "culata-polimero",
+          "padre": "receptor",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-culata-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        },
+        {
+          "hijo": "mira-trasera",
+          "padre": "canon-ak74",
+          "estado": "compatible",
+          "motivo": "Encaja: ambos sockets son «montaje-mira-trasera-ak».",
+          "fuente": "regla del ensamblador sobre ids de catalogo/interfaces.json y parámetros de los generadores (cotas de barrido o estimadas, no de un SKU)",
+          "confianza": "media"
+        }
+      ],
+      "colisiones": [],
+      "huecos_entre_piezas": [],
+      "huecos_de_datos": [],
+      "piezas_sin_malla": [],
+      "caja_mm": [[-719.2, -252.8, -21.0], [428.0, 54.3, 21.0]],
+      "materiales": {
+        "pieza.receptor": {
+          "pieza": "receptor",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.canon-ak74": {
+          "pieza": "canon-ak74",
+          "material": "acero_pavonado",
+          "regla_explicita": true
+        },
+        "pieza.boca": {
+          "pieza": "boca",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.tapa": {
+          "pieza": "tapa",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.guardamanos-polimero": {
+          "pieza": "guardamanos-polimero",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.cubremano-polimero": {
+          "pieza": "cubremano-polimero",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.pistolete-polimero": {
+          "pieza": "pistolete-polimero",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.cargador-polimero": {
+          "pieza": "cargador-polimero",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.culata-polimero": {
+          "pieza": "culata-polimero",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.mira-trasera": {
+          "pieza": "mira-trasera",
+          "material": "parkerizado",
+          "regla_explicita": true
+        }
+      }
+    },
+    {
+      "id": "hicapa-5-1",
+      "nombre": "Hi-Capa 5.1",
+      "tipo": "pistola",
+      "resumen": {
+        "piezas": 8,
+        "montajes": 7,
+        "compatibles": 7,
+        "incompatibles": 0,
+        "colisiones_entre_montados": 1,
+        "colisiones_otras": 0,
+        "huecos_entre_piezas": 0,
+        "huecos_de_datos": 0
+      },
+      "veredictos": [
+        {
+          "hijo": "corredera",
+          "padre": "armazon",
+          "estado": "compatible",
+          "motivo": "corredera requiere «riel-corredera-pistola» y armazon la ofrece en su socket corredera",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cargador",
+          "padre": "armazon",
+          "estado": "compatible",
+          "motivo": "cargador requiere «pozo-hi-capa» y armazon la ofrece en su socket cargador",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "mira_trasera",
+          "padre": "corredera",
+          "estado": "compatible",
+          "motivo": "mira_trasera requiere «cola-milano-mira-pistola» y corredera la ofrece en su socket mira_trasera",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "mira_delantera",
+          "padre": "corredera",
+          "estado": "compatible",
+          "motivo": "mira_delantera requiere «cola-milano-mira-pistola» y corredera la ofrece en su socket mira_delantera",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "canon",
+          "padre": "corredera",
+          "estado": "compatible",
+          "motivo": "canon requiere «alojamiento-canon-pistola» y corredera la ofrece en su socket canon",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cacha_izq",
+          "padre": "armazon",
+          "estado": "compatible",
+          "motivo": "cacha_izq requiere «montaje-empunadura-lateral-1911» y armazon la ofrece en su socket cacha_izq",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cacha_der",
+          "padre": "armazon",
+          "estado": "compatible",
+          "motivo": "cacha_der requiere «montaje-empunadura-lateral-1911» y armazon la ofrece en su socket cacha_der",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        }
+      ],
+      "colisiones": [
+        {
+          "a": "armazon",
+          "b": "corredera",
+          "entre_montados": true,
+          "profundidad_max_mm": 1.0
+        }
+      ],
+      "huecos_entre_piezas": [],
+      "huecos_de_datos": [],
+      "piezas_sin_malla": [],
+      "caja_mm": [[-25.649, -139.33, -18.5], [221.0, 26.5, 18.5]],
+      "materiales": {
+        "pieza.armazon": {
+          "pieza": "hicapa-armazon",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.corredera": {
+          "pieza": "hicapa-corredera",
+          "material": "acero_pavonado",
+          "regla_explicita": true
+        },
+        "pieza.canon": {
+          "pieza": "hicapa-canon",
+          "material": "acero_pavonado",
+          "regla_explicita": true
+        },
+        "pieza.cacha_izq": {
+          "pieza": "hicapa-cacha_izq",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.cacha_der": {
+          "pieza": "hicapa-cacha_der",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.mira_trasera": {
+          "pieza": "hicapa-mira_trasera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.mira_delantera": {
+          "pieza": "hicapa-mira_delantera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.cargador": {
+          "pieza": "hicapa-cargador",
+          "material": "parkerizado",
+          "regla_explicita": true
+        }
+      }
+    },
+    {
+      "id": "glock-17-gbb",
+      "nombre": "Glock 17 GBB",
+      "tipo": "pistola",
+      "resumen": {
+        "piezas": 6,
+        "montajes": 5,
+        "compatibles": 5,
+        "incompatibles": 0,
+        "colisiones_entre_montados": 0,
+        "colisiones_otras": 0,
+        "huecos_entre_piezas": 0,
+        "huecos_de_datos": 0
+      },
+      "veredictos": [
+        {
+          "hijo": "corredera",
+          "padre": "armazon",
+          "estado": "compatible",
+          "motivo": "corredera requiere «riel-corredera-pistola» y armazon la ofrece en su socket corredera",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "cargador",
+          "padre": "armazon",
+          "estado": "compatible",
+          "motivo": "cargador requiere «pozo-glock-gbb» y armazon la ofrece en su socket cargador",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "mira_trasera",
+          "padre": "corredera",
+          "estado": "compatible",
+          "motivo": "mira_trasera requiere «cola-milano-mira-pistola» y corredera la ofrece en su socket mira_trasera",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "mira_delantera",
+          "padre": "corredera",
+          "estado": "compatible",
+          "motivo": "mira_delantera requiere «cola-milano-mira-pistola» y corredera la ofrece en su socket mira_delantera",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        },
+        {
+          "hijo": "canon",
+          "padre": "corredera",
+          "estado": "compatible",
+          "motivo": "canon requiere «alojamiento-canon-pistola» y corredera la ofrece en su socket canon",
+          "fuente": "interfaces `requiere`/`ofrece` de los generadores de pistola (familias/pistola_*.py), cotas de barrido",
+          "confianza": "media"
+        }
+      ],
+      "colisiones": [],
+      "huecos_entre_piezas": [],
+      "huecos_de_datos": [],
+      "piezas_sin_malla": [],
+      "caja_mm": [[-30.245, -131.327, -15.0], [200.0, 29.5, 15.0]],
+      "materiales": {
+        "pieza.armazon": {
+          "pieza": "glock-armazon",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        },
+        "pieza.corredera": {
+          "pieza": "glock-corredera",
+          "material": "parkerizado",
+          "regla_explicita": true
+        },
+        "pieza.canon": {
+          "pieza": "glock-canon",
+          "material": "acero_pavonado",
+          "regla_explicita": true
+        },
+        "pieza.mira_trasera": {
+          "pieza": "glock-mira_trasera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.mira_delantera": {
+          "pieza": "glock-mira_delantera",
+          "material": "anodizado_negro",
+          "regla_explicita": true
+        },
+        "pieza.cargador": {
+          "pieza": "glock-cargador",
+          "material": "polimero_grano",
+          "regla_explicita": true
+        }
+      }
+    }
+  ]
+}

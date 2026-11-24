@@ -171,6 +171,8 @@ def asentar(colocadas: list[PiezaColocada]) -> list[PiezaColocada]:
             break
         for r in grupo:
             por_id[r] = _mover(por_id[r], (0.0, PASO_ASIENTO_MM, 0.0))
+    for r in grupo:  # un paso más de margen: el muestreo rápido puede dejar pasar un solape de 1 mm
+        por_id[r] = _mover(por_id[r], (0.0, PASO_ASIENTO_MM, 0.0))
     for r, padre in (("canon", "armazon"), ("mira_trasera", "corredera"), ("mira_delantera", "corredera")):
         if r not in por_id:
             continue
