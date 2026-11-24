@@ -89,6 +89,9 @@ export function crearMateriales() {
     ledIzquierda: m({ name: 'emisivo:tubo-izquierda', color: '#e9eef7', emissive: '#dfe9ff', emissiveIntensity: 1.2 }),
     ledDerecha: m({ name: 'emisivo:tubo-derecha', color: '#e9eef7', emissive: '#dfe9ff', emissiveIntensity: 1.2 }),
     // Atrezo de airsoft (sin réplicas ni armas).
+    // Separadores del armero en acero oscuro mate (no en verde liso, que parecía un archivador) y peanas de la vitrina en pizarra.
+    separador: m({ color: '#22272a', roughness: 0.4, metalness: 0.7 }),
+    peana: m({ color: '#4d535a', roughness: 0.5 }),
     plasticoBlanco: m({ color: '#a9a69c', roughness: 0.55 }),
     tapaNaranja: m({ color: '#c4562f', roughness: 0.5 }),
     caucho: m({ color: '#0f1113', roughness: 0.85 }),

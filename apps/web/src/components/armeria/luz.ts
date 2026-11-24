@@ -30,11 +30,12 @@ export const VARIANTES_LUZ: Readonly<Record<Luz, VarianteLuz>> = {
   },
   'mas-luz': {
     nombre: 'Más luz',
-    reposo: 0.7,
+    reposo: 0.8,
     foco: 1.05,
     resto: 0.55,
     calidas: 1,
-    ambiente: 1.3,
+    // «Más luz» tiene que notarse (critico-diseno, 24-11-2026): el relleno de armero, suelo y fondos casi se duplica.
+    ambiente: 2.4,
     colorTubo: '#dfe9ff',
   },
 };

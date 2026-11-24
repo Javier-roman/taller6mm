@@ -89,7 +89,8 @@ export const LUZ = {
   tubo: 85,
   /** Foco rasante sobre el ladrillo: un tercio del tubo, para ver la textura sin perder la penumbra. */
   paredLavado: 28,
-  tuboEmisivo: 3.4,
+  // Los tubos no deben ser lo más brillante del encuadre (critico-diseno, 24-11-2026): el foco cae en el banco y la vitrina.
+  tuboEmisivo: 2.1,
   // El flexo es la mancha más brillante de la sala: el banco es el protagonista (critico-diseno).
   // El flexo es la mancha más brillante de la sala: el banco manda (critico-diseno, 23-11-2026).
   flexo: 110,
@@ -172,9 +173,9 @@ function Armero({ mat }: { mat: Materiales }) {
       {Array.from({ length: huecos + 1 }, (_, i) => (
         <Caja
           key={`sep-${i}`}
-          p={[-util / 2 + i * paso, MUEBLE.baldaMedia + 0.2, zFondo]}
-          t={[0.012, 0.38, MUEBLE.fondo - 0.08]}
-          m={mat.chapa}
+          p={[-util / 2 + i * paso, MUEBLE.baldaMedia + 0.13, zFondo]}
+          t={[0.012, 0.24, MUEBLE.fondo - 0.08]}
+          m={mat.separador}
         />
       ))}
       {Array.from({ length: huecos }, (_, i) => {
@@ -289,7 +290,7 @@ function Vitrina({ mat, luz }: { mat: Materiales; luz: RefObject<PointLight | nu
       <Caja p={[0, y0 + 0.05, zFondo + 0.02]} t={[2.4, 0.1, 0.5]} m={mat.contrachapado} />
       {VITRINA.xs.map((x, i) => (
         <group key={`pedestal-${x}`} position={[x, y0 + 0.1, zFondo + 0.04]}>
-          <Caja p={[0, 0.07 + i * 0.03, 0]} t={[0.5, 0.14 + i * 0.06, 0.3]} m={mat.polimeroNegro} />
+          <Caja p={[0, 0.07 + i * 0.03, 0]} t={[0.5, 0.14 + i * 0.06, 0.3]} m={mat.peana} />
           {/* Dos soportes de acero en la cara superior de la peana, donde descansa la réplica */}
           {[-0.28, 0.28].map((dx) => (
             <Caja
@@ -579,7 +580,8 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
  * márgenes junto a la pared, donde antes no había nada. Sin réplicas ni armas.
  */
 function Ambientacion({ mat }: { mat: Materiales }) {
-  const zSuelo = MUEBLE.frente + 1.1;
+  // Cerca de los zócalos para que el atrezo quede por encima de la fila de tarjetas de la interfaz.
+  const zSuelo = MUEBLE.frente + 0.65;
   const zPared = MUEBLE.frente - MUEBLE.fondo - 0.2;
   return (
     <group>
@@ -886,14 +888,14 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
         <planeGeometry args={[24, 5.2]} />
       </mesh>
       {/* Pared: señal de protección ocular obligatoria y el alzado del compactus, a escala, con sus cotas */}
-      <mesh position={[-4.87, 1.75, MUEBLE.frente - MUEBLE.fondo - 0.036]}>
-        <planeGeometry args={[0.42, 0.42]} />
+      <mesh position={[-4.38, 1.75, MUEBLE.frente - MUEBLE.fondo - 0.036]}>
+        <planeGeometry args={[0.28, 0.28]} />
         <meshStandardMaterial map={senalOjos} roughness={0.6} />
       </mesh>
-      <group position={[4.87, 1.75, MUEBLE.frente - MUEBLE.fondo - 0.02]}>
+      <group position={[4.38, 1.75, MUEBLE.frente - MUEBLE.fondo - 0.02]}>
         <PlanoEnmarcado
           mat={mat}
-          ancho={0.46}
+          ancho={0.26}
           mm={[MUEBLE.ancho * 1000, MUEBLE.alto * 1000]}
           titulo="Alzado compactus"
         />

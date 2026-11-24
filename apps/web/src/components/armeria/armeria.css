@@ -196,7 +196,7 @@
 /* Activo sin relleno latón: el único botón latón es la acción principal, «Monta tu réplica» (critico-diseno). */
 .armeria__ajuste[aria-pressed="true"] {
   color: var(--laton-claro);
-  background: var(--grafito);
+  background: color-mix(in srgb, var(--laton) 22%, var(--grafito));
   border-color: var(--laton);
 }
 
