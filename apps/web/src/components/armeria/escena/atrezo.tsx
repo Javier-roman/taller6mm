@@ -4,7 +4,7 @@
 // va con medidas reales en metros. Cada pieza tiene su origen en la base (y = 0), centrada en x y z.
 import { colors } from '@taller6mm/ui/tokens';
 import { useMemo } from 'react';
-import { MeshStandardMaterial, SphereGeometry } from 'three';
+import { MeshStandardMaterial } from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { Caja, Cilindro, type V3 } from './geom.tsx';
 import type { Materiales } from './materiales.ts';
@@ -39,97 +39,6 @@ export function Etiqueta({
     <mesh position={[...p]} material={material}>
       <planeGeometry args={[...t]} />
     </mesh>
-  );
-}
-
-/** Gafas de protección colgadas de un gancho por su goma: montura, lente tintada y goma en bucle. */
-export function Gafas({ mat, giro = 0 }: { mat: Materiales; giro?: number }) {
-  return (
-    <group rotation={[0, giro, 0]} scale={1.5}>
-      {/* Gancho y bucle de la goma */}
-      <Cilindro p={[0, 0.17, 0]} rad={0.005} h={0.03} m={mat.aceroClaro} r={[Math.PI / 2, 0, 0]} />
-      <mesh position={[0, 0.095, 0]} scale={[1, 1.55, 1]} material={mat.polimeroOd}>
-        <torusGeometry args={[0.052, 0.005, 6, 28]} />
-      </mesh>
-      {/* Montura y lente */}
-      <mesh position={[0, 0.025, 0]} material={mat.polimeroFde}>
-        <boxGeometry args={[0.17, 0.062, 0.034]} />
-      </mesh>
-      <mesh position={[0, 0.025, 0.014]} material={mat.lente}>
-        <boxGeometry args={[0.15, 0.045, 0.012]} />
-      </mesh>
-      <Caja p={[0, 0.058, 0.006]} t={[0.172, 0.01, 0.04]} m={mat.caucho} />
-    </group>
-  );
-}
-
-/** Casco ligero con carril frontal y laterales (tipo «fast»), sin picar nada real: cáscara, borde y carriles. */
-export function Casco({ mat, tela = 'tela' }: { mat: Materiales; tela?: 'tela' | 'telaFde' | 'telaNegra' }) {
-  const cascara = useMemo(() => new SphereGeometry(0.13, 28, 14, 0, Math.PI * 2, 0, Math.PI / 2), []);
-  const material = mat[tela];
-  return (
-    <group>
-      <mesh geometry={cascara} scale={[1, 0.78, 1.18]} position={[0, 0.002, 0]} material={material} />
-      {/* Borde inferior: cinta de goma */}
-      <mesh position={[0, 0.003, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1.18, 1]} material={mat.caucho}>
-        <torusGeometry args={[0.131, 0.0055, 8, 40]} />
-      </mesh>
-      {/* Carril frontal y carriles laterales */}
-      <Caja p={[0, 0.068, 0.145]} t={[0.05, 0.026, 0.014]} m={mat.acero} r={[0.52, 0, 0]} />
-      {[-1, 1].map((lado) => (
-        <Caja key={`riel-${lado}`} p={[lado * 0.128, 0.05, 0.02]} t={[0.012, 0.034, 0.09]} m={mat.acero} />
-      ))}
-      {/* Cinta de ajuste trasera */}
-      <Caja p={[0, 0.018, -0.15]} t={[0.1, 0.018, 0.018]} m={mat.caucho} />
-    </group>
-  );
-}
-
-/** Chaleco portaplacas colgado: faldón, hombreras, fajín y tres bolsillos al frente. */
-export function Chaleco({ mat, tela = 'tela' }: { mat: Materiales; tela?: 'tela' | 'telaFde' | 'telaNegra' }) {
-  const material = mat[tela];
-  const cuerpo = useMemo(() => new RoundedBoxGeometry(0.4, 0.46, 0.05, 3, 0.02), []);
-  const bolsillo = useMemo(() => new RoundedBoxGeometry(0.095, 0.13, 0.04, 2, 0.012), []);
-  return (
-    <group>
-      <mesh geometry={cuerpo} position={[0, -0.23, 0]} material={material} />
-      {[-1, 1].map((lado) => (
-        <Caja
-          key={`hombrera-${lado}`}
-          p={[lado * 0.125, 0.025, 0]}
-          t={[0.07, 0.1, 0.03]}
-          m={material}
-          r={[0, 0, lado * 0.08]}
-        />
-      ))}
-      <Caja p={[0, -0.36, 0.03]} t={[0.44, 0.07, 0.03]} m={mat.caucho} />
-      {[-0.115, 0, 0.115].map((x) => (
-        <mesh key={`bolsillo-${x}`} geometry={bolsillo} position={[x, -0.27, 0.042]} material={material} />
-      ))}
-      {[-0.115, 0, 0.115].map((x) => (
-        <Caja key={`solapa-${x}`} p={[x, -0.215, 0.064]} t={[0.09, 0.025, 0.006]} m={mat.caucho} />
-      ))}
-      <Cilindro p={[0, 0.085, 0]} rad={0.006} h={0.03} m={mat.aceroClaro} r={[Math.PI / 2, 0, 0]} />
-    </group>
-  );
-}
-
-/** Bote de bolas: cuerpo blanco, tapón naranja y etiqueta de papel con medida. */
-export function Bote({
-  mat,
-  codigo = '6 mm',
-  linea2 = '0,20 g',
-}: {
-  mat: Materiales;
-  codigo?: string;
-  linea2?: string;
-}) {
-  return (
-    <group>
-      <Cilindro p={[0, 0.1, 0]} rad={0.055} h={0.2} m={mat.plasticoBlanco} seg={28} />
-      <Cilindro p={[0, 0.215, 0]} rad={0.058} h={0.03} m={mat.tapaNaranja} seg={28} />
-      <Etiqueta p={[0, 0.1, 0.0557]} t={[0.062, 0.08]} codigo={codigo} linea2={linea2} />
-    </group>
   );
 }
 
@@ -248,60 +157,6 @@ export function LlavesAllen({ mat }: { mat: Materiales }) {
   );
 }
 
-/** Cinta métrica: carcasa con cinta asomando. */
-export function CintaMetrica({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Cilindro p={[0, -0.04, 0]} rad={0.04} h={0.05} m={mat.laton} r={[Math.PI / 2, 0, 0]} seg={28} />
-      <Caja p={[0.045, -0.075, 0]} t={[0.03, 0.012, 0.045]} m={mat.polimeroNegro} />
-    </group>
-  );
-}
-
-/** Linterna de mano tumbada o colgada: cuerpo, cabeza y anillo. */
-export function Linterna({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Cilindro p={[0, 0, 0]} rad={0.0185} h={0.15} m={mat.polimeroNegro} seg={18} />
-      <Cilindro p={[0, 0.0925, 0]} rad={0.027} h={0.04} m={mat.acero} seg={18} />
-      <Cilindro p={[0, 0.1135, 0]} rad={0.022} h={0.004} m={mat.vidrio} seg={18} />
-      <Cilindro p={[0, -0.02, 0]} rad={0.0195} h={0.008} m={mat.aceroClaro} seg={18} />
-      <Cilindro p={[0, 0.03, 0]} rad={0.0195} h={0.008} m={mat.aceroClaro} seg={18} />
-    </group>
-  );
-}
-
-/** Calibre digital (pie de rey): regla, nonio y mordazas, tumbado. */
-export function Calibre({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Caja p={[0, 0.003, 0]} t={[0.2, 0.006, 0.018]} m={mat.aceroClaro} />
-      <Caja p={[0.07, 0.009, 0.004]} t={[0.05, 0.016, 0.026]} m={mat.polimeroNegro} />
-      <Caja p={[-0.098, 0.012, 0]} t={[0.004, 0.026, 0.018]} m={mat.aceroClaro} />
-      <Caja p={[0.047, 0.012, 0]} t={[0.004, 0.024, 0.018]} m={mat.aceroClaro} />
-    </group>
-  );
-}
-
-/** Caja de herramientas abierta: cuerpo, asa, bandeja con piezas sueltas (tornillos y bolsitas). */
-export function CajaHerramientas({ mat }: { mat: Materiales }) {
-  const cuerpo = useMemo(() => new RoundedBoxGeometry(0.42, 0.16, 0.2, 3, 0.012), []);
-  return (
-    <group>
-      <mesh geometry={cuerpo} position={[0, 0.08, 0]} material={mat.acero} />
-      <Caja p={[0, 0.162, 0]} t={[0.4, 0.004, 0.18]} m={mat.caucho} />
-      {[-0.13, -0.045, 0.04, 0.125].map((x, i) => (
-        <Caja key={`hueco-${x}`} p={[x, 0.166, i % 2 ? 0.03 : -0.02]} t={[0.07, 0.01, 0.08]} m={mat.polimeroNegro} />
-      ))}
-      <Caja p={[0, 0.19, 0.0]} t={[0.2, 0.012, 0.012]} m={mat.destornilladorNaranja} r={[0, 0.0, 0]} />
-      {[-0.19, 0.19].map((x) => (
-        <Caja key={`soporte-asa-${x}`} p={[x, 0.17, 0]} t={[0.012, 0.04, 0.02]} m={mat.aceroClaro} />
-      ))}
-      <Caja p={[0, 0.1, 0.1005]} t={[0.05, 0.03, 0.004]} m={mat.aceroClaro} />
-    </group>
-  );
-}
-
 /** Maletín rígido apilable con asa, dos cierres y etiqueta. */
 export function Maletin({
   mat,
@@ -378,37 +233,6 @@ export function Regla({ mm }: { mm: number }) {
   );
 }
 
-/** Batería LiPo: funda azul con etiqueta y el cable con conector. */
-export function Bateria({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Caja p={[0, 0.0105, 0]} t={[0.13, 0.021, 0.04]} m={mat.bateria} />
-      <Etiqueta p={[0, 0.0222, 0]} t={[0.06, 0.026]} codigo="11,1 V" linea2="LiPo 1300" />
-      <Caja p={[0.075, 0.009, 0]} t={[0.03, 0.01, 0.016]} m={mat.polimeroNegro} />
-      <Cilindro
-        p={[0.095, 0.009, 0.012]}
-        rad={0.003}
-        h={0.05}
-        m={mat.destornilladorNaranja}
-        r={[0, 0, Math.PI / 2]}
-        seg={8}
-      />
-    </group>
-  );
-}
-
-/** Bombona de green gas: cuerpo verde con tapa metálica y etiqueta. */
-export function Bombona({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Cilindro p={[0, 0.09, 0]} rad={0.032} h={0.18} m={mat.bombona} seg={24} />
-      <Cilindro p={[0, 0.19, 0]} rad={0.014} h={0.02} m={mat.aceroClaro} seg={16} />
-      <Cilindro p={[0, 0.205, 0]} rad={0.008} h={0.012} m={mat.aceroClaro} seg={12} />
-      <Etiqueta p={[0, 0.09, 0.0322]} t={[0.05, 0.07]} codigo="GAS" linea2="green" />
-    </group>
-  );
-}
-
 /** Hoja de plano sobre el tablero: papel con alzado y cotas, tumbada. */
 export function HojaPlano({
   ancho = 0.32,
@@ -427,78 +251,5 @@ export function HojaPlano({
     <mesh rotation={[-Math.PI / 2, 0, 0]} material={material}>
       <planeGeometry args={[ancho, ancho * 0.75]} />
     </mesh>
-  );
-}
-
-/** Soporte de casco: pie, columna y cabeza redondeada donde descansa. */
-export function SoporteCasco({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Cilindro p={[0, 0.008, 0]} rad={0.07} h={0.016} m={mat.acero} seg={24} />
-      <Cilindro p={[0, 0.07, 0]} rad={0.012} h={0.12} m={mat.acero} seg={12} />
-      <mesh position={[0, 0.138, 0]} material={mat.acero} scale={[1, 0.6, 1.2]}>
-        <sphereGeometry args={[0.07, 20, 12]} />
-      </mesh>
-    </group>
-  );
-}
-
-/** Caja abierta de listones con botes de bolas de pie: el pedido típico de un taller, a ras de suelo. */
-export function CajonBotes({ mat, n = [3, 2] }: { mat: Materiales; n?: readonly [number, number] }) {
-  const [filas, columnas] = n;
-  const ancho = filas * 0.125 + 0.03;
-  const fondo = columnas * 0.125 + 0.03;
-  return (
-    <group>
-      <Caja p={[0, 0.01, 0]} t={[ancho, 0.02, fondo]} m={mat.contrachapado} />
-      <Caja p={[0, 0.08, fondo / 2]} t={[ancho, 0.14, 0.015]} m={mat.contrachapado} />
-      <Caja p={[0, 0.08, -fondo / 2]} t={[ancho, 0.14, 0.015]} m={mat.contrachapado} />
-      <Caja p={[-ancho / 2, 0.08, 0]} t={[0.015, 0.14, fondo]} m={mat.contrachapado} />
-      <Caja p={[ancho / 2, 0.08, 0]} t={[0.015, 0.14, fondo]} m={mat.contrachapado} />
-      {Array.from({ length: filas * columnas }, (_, i) => {
-        const x = ((i % filas) - (filas - 1) / 2) * 0.125;
-        const z = (Math.floor(i / filas) - (columnas - 1) / 2) * 0.125;
-        return (
-          <group key={`bote-${i}`} position={[x, 0.02, z]}>
-            <Bote mat={mat} codigo={i % 2 ? '6 mm' : '8 mm'} linea2={i % 2 ? '0,25 g' : '0,20 g'} />
-          </group>
-        );
-      })}
-    </group>
-  );
-}
-
-/** Perchero de pie con chaleco, casco y gafas colgados: la percha del jugador, junto a la pared. */
-export function Perchero({ mat }: { mat: Materiales }) {
-  return (
-    <group>
-      <Cilindro p={[0, 0.012, 0]} rad={0.2} h={0.024} m={mat.acero} seg={32} />
-      <Cilindro p={[0, 0.85, 0]} rad={0.014} h={1.7} m={mat.aceroClaro} seg={12} />
-      <Caja p={[0, 1.52, 0]} t={[0.5, 0.016, 0.016]} m={mat.aceroClaro} />
-      <Cilindro p={[0, 1.78, 0]} rad={0.022} h={0.04} m={mat.acero} seg={14} />
-      <group position={[0, 1.8, 0]} scale={1.3}>
-        <Casco mat={mat} tela="telaNegra" />
-      </group>
-      <group position={[-0.09, 1.51, 0.02]}>
-        <Chaleco mat={mat} tela="tela" />
-      </group>
-      <group position={[0.2, 1.48, 0]} rotation={[0, 0.5, 0]}>
-        <Gafas mat={mat} />
-      </group>
-    </group>
-  );
-}
-
-/** Caballete de dianas: pie de acero, tablero de cartón y hoja de diana con impactos. */
-export function Caballete({ mat, semilla }: { mat: Materiales; semilla: number }) {
-  return (
-    <group>
-      <Caja p={[0, 0.012, 0]} t={[0.5, 0.024, 0.34]} m={mat.acero} />
-      <Caja p={[0, 0.7, -0.02]} t={[0.045, 1.4, 0.045]} m={mat.aceroClaro} />
-      <Caja p={[0, 1.2, 0]} t={[0.52, 0.72, 0.022]} m={mat.kraft} />
-      <group position={[0, 1.2, 0.0125]}>
-        <Diana semilla={semilla} ancho={0.36} />
-      </group>
-    </group>
   );
 }

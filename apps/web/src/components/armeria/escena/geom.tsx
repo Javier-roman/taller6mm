@@ -1,6 +1,6 @@
 // Piezas geométricas comunes de la sala: caja biselada, cilindro, sombras y alias de vectores. Sin lógica de La Armería.
 import { type RefObject, useLayoutEffect, useMemo } from 'react';
-import type { BufferGeometry, Group, Material, Mesh } from 'three';
+import { type BufferGeometry, type Group, type Material, type Mesh, Quaternion, Vector3 } from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
 export type V3 = readonly [number, number, number];
@@ -47,6 +47,25 @@ export function Cilindro({
   return (
     <mesh position={[...p]} rotation={[...r]} material={m}>
       <cylinderGeometry args={[rad, rad, h, seg]} />
+    </mesh>
+  );
+}
+
+/** Barra cilíndrica entre dos puntos `a` y `b` (m): brazos de lámpara, hilos, cables. */
+export function Barra({ a, b, rad, m, seg = 12 }: { a: V3; b: V3; rad: number; m: Material; seg?: number }) {
+  const { posicion, largo, cuaternion } = useMemo(() => {
+    const desde = new Vector3(...a);
+    const dir = new Vector3(...b).sub(desde);
+    const largo = dir.length();
+    return {
+      posicion: desde.clone().addScaledVector(dir, 0.5).toArray() as [number, number, number],
+      largo,
+      cuaternion: new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), dir.normalize()),
+    };
+  }, [a, b]);
+  return (
+    <mesh position={posicion} quaternion={cuaternion} material={m}>
+      <cylinderGeometry args={[rad, rad, largo, seg]} />
     </mesh>
   );
 }
