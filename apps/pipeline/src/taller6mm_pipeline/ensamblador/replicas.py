@@ -36,7 +36,7 @@ from PIL import Image, ImageDraw
 from taller6mm_pipeline.calidad import hoja
 from taller6mm_pipeline.ensamblador import colisiones
 from taller6mm_pipeline.ensamblador.ensamblar import HUECO_FISICO_MM, ensamblar
-from taller6mm_pipeline.familias.pistola_montaje import colocar, montar
+from taller6mm_pipeline.familias.pistola_montaje import colocar, escribir
 from taller6mm_pipeline.familias.pistolas_piezas import BUILDS as BUILDS_PISTOLA
 from taller6mm_pipeline.materiales import asignador, exportar_glb, iluminacion
 from taller6mm_pipeline.materiales.cc0 import RAIZ
@@ -157,8 +157,8 @@ PARES_PISTOLA = (
 
 def preparar_pistola(m: Montaje) -> Preparado:
     build = next(b for b in BUILDS_PISTOLA if b["id"] == m.id)
-    glb, inf = montar(build, prefijo_nodo="pieza.")
-    piezas_gen, colocadas, comprobaciones = colocar(build)
+    piezas_gen, colocadas, comprobaciones = colocar(build)  # el asiento es lo lento: una sola vez
+    glb, inf = escribir(build, colocadas, comprobaciones, "pieza.")
     mallas = {
         c.id: colisiones.Malla3D(c.vertices(), c.pieza.malla.triangulos)  # type: ignore[union-attr]
         for c in colocadas

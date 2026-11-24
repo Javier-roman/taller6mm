@@ -121,7 +121,7 @@ def distancia_min(a: Puntos, b: Puntos) -> float:
     if len(a) == 0 or len(b) == 0:
         return float("inf")
     try:
-        from scipy.spatial import cKDTree  # noqa: PLC0415
+        from scipy.spatial import cKDTree
     except ImportError:  # pragma: no cover - scipy llega con build123d
         cKDTree = None  # noqa: N806
     if cKDTree is not None:

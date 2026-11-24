@@ -34,7 +34,7 @@ RADIO_PASO_CANON_MM = 12.3  # el cañón del barrido llega a Ø24 mm (tuerca inc
 GROSOR_TAPA_MM = 3.0
 
 
-def _tapa_trasera(radio_interior: float):  # noqa: ANN202
+def _tapa_trasera(radio_interior: float):
     """Anillo trasero (delta ring / tuerca de cañón simplificada): cierra el hueco entre la nariz del receptor
     superior (Ø28) y la pared del guardamanos, con el paso del cañón. Antes la pieza quedaba a 1-6,5 mm del
     receptor sin ningún elemento que los uniera. Se solapa 0,5 mm con la pared para soldar el sólido."""

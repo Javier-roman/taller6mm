@@ -28,7 +28,14 @@ from pathlib import Path
 import bpy
 from mathutils import Vector
 
-VISTAS = {"lateral": (0.0, -1.0, 0.0), "tres_cuartos": (0.62, -1.0, 0.36), "izq": (0.85, -1.0, 0.62), "der": (0.85, 1.0, 0.62), "lado": (0.0, -1.0, 0.03), "arriba": (0.3, -0.2, 1.6)}
+VISTAS = {
+    "lateral": (0.0, -1.0, 0.0),
+    "tres_cuartos": (0.62, -1.0, 0.36),
+    "izq": (0.85, -1.0, 0.62),
+    "der": (0.85, 1.0, 0.62),
+    "lado": (0.0, -1.0, 0.03),
+    "arriba": (0.3, -0.2, 1.6),
+}
 SEMILLA_CYCLES = 20261117
 FSTOP = 5.6
 PROF_DIV = []

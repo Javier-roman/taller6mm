@@ -31,7 +31,7 @@ MATERIALES: dict[str, dict[str, Any]] = {
         "metalico": 1.0,
         "rugosidad": {"media": 0.65, "variacion": 0.08, "escala": 55.0, "grano": 0.05},
         "grano": {"escala": 1800.0, "relieve": 0.05},
-        "rayas": {"cantidad": 0.5, "escala": 260.0, "alargado": 14.0, "aclarado": 0.9, "rugosidad": -0.2},
+        "rayas": {"cantidad": 0.22, "escala": 260.0, "alargado": 14.0, "aclarado": 0.5, "rugosidad": -0.2},
         "desgaste": {**_DESGASTE_METAL},
         "suciedad": {**_SUCIEDAD},
         "variacion_pieza": {"color": 0.18, "rugosidad": 0.04},
