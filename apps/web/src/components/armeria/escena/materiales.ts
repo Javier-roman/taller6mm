@@ -26,7 +26,7 @@ export function crearMateriales() {
   const pantalla = texturaPantalla();
   return {
     ladrillo: m({ map: ladrillo.mapa, normalMap: ladrillo.normal, roughness: 0.92 }),
-    hormigon: m({ map: hormigon.mapa, normalMap: hormigon.normal, roughness: 0.42, metalness: 0.08 }),
+    hormigon: m({ map: hormigon.mapa, normalMap: hormigon.normal, roughness: 0.5, metalness: 0.08 }),
     chapa: m({ color: verde, roughness: 0.32, metalness: 0.55 }),
     // Fondo de los huecos: más oscuro que el atrezo para que este se separe de él (critico-diseno: valores).
     chapaOscura: m({ color: verde.clone().multiplyScalar(0.28), roughness: 0.7, metalness: 0.3 }),
@@ -89,7 +89,7 @@ export function crearMateriales() {
     ledIzquierda: m({ name: 'emisivo:tubo-izquierda', color: '#e9eef7', emissive: '#dfe9ff', emissiveIntensity: 1.2 }),
     ledDerecha: m({ name: 'emisivo:tubo-derecha', color: '#e9eef7', emissive: '#dfe9ff', emissiveIntensity: 1.2 }),
     // Atrezo de airsoft (sin réplicas ni armas).
-    plasticoBlanco: m({ color: '#d9d6cc', roughness: 0.45 }),
+    plasticoBlanco: m({ color: '#a9a69c', roughness: 0.55 }),
     tapaNaranja: m({ color: '#c4562f', roughness: 0.5 }),
     caucho: m({ color: '#0f1113', roughness: 0.85 }),
     lente: new MeshPhysicalMaterial({

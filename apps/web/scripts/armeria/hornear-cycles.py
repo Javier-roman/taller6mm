@@ -111,7 +111,7 @@ def main():
     luces = [ob for ob in escena.objects if ob.type == "LIGHT"]
     for luz in luces:
         luz.data.energy *= 4 * math.pi
-        luz.data.shadow_soft_size = 0.05
+        luz.data.shadow_soft_size = 0.12
 
     # Los rótulos son placas finas pegadas al mueble: no proyectan sombra, o dejarían un rectángulo oscuro
     # desenfocado en el fondo de cada módulo (critico-diseno, 23-11-2026).

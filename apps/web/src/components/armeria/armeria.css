@@ -153,6 +153,9 @@
 /* Sin réplicas todavía: el aviso se retira cuando el frente de fidelidad entregue modelos a escala. */
 .armeria__provisional {
   display: block;
+  /* Legible a 1440 px (critico-diseno, 24-11-2026): un escalón por encima del resto de la nota. */
+  font-size: var(--texto-s);
+  font-weight: var(--peso-semi);
   color: var(--cota);
   white-space: nowrap;
 }

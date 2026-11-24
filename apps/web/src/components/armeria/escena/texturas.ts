@@ -131,7 +131,7 @@ export function texturaHormigon(repetir: readonly [number, number]): TexturaConR
   const W = 512;
   const color = lienzo(W, W);
   const alt = lienzo(W, W);
-  color.ctx.fillStyle = '#4b4d50';
+  color.ctx.fillStyle = '#3a3c3f';
   color.ctx.fillRect(0, 0, W, W);
   alt.ctx.fillStyle = 'rgb(128 128 128)';
   alt.ctx.fillRect(0, 0, W, W);
@@ -193,15 +193,52 @@ export function texturaContrachapado() {
 
 export function texturaCorcho() {
   const rnd = azar(41);
-  const { canvas, ctx } = lienzo(256, 256);
-  ctx.fillStyle = '#7d5d3c';
-  ctx.fillRect(0, 0, 256, 256);
-  for (let k = 0; k < 2200; k++) {
+  // 1024 px y granos de 2–7 px: a 1440 px el corcho se lee como corcho y no como una pasta naranja lisa.
+  const { canvas, ctx } = lienzo(1024, 1024);
+  ctx.fillStyle = '#7a5a3a';
+  ctx.fillRect(0, 0, 1024, 1024);
+  for (let k = 0; k < 14000; k++) {
     const g = rnd();
-    ctx.fillStyle = g > 0.5 ? 'rgb(150 116 78 / 0.5)' : 'rgb(70 50 32 / 0.55)';
-    ctx.fillRect(rnd() * 256, rnd() * 256, 1 + rnd() * 3, 1 + rnd() * 3);
+    ctx.fillStyle = g > 0.55 ? 'rgb(160 124 84 / 0.65)' : g > 0.2 ? 'rgb(62 44 28 / 0.7)' : 'rgb(104 78 50 / 0.6)';
+    ctx.fillRect(rnd() * 1024, rnd() * 1024, 2 + rnd() * 5, 2 + rnd() * 5);
   }
   return textura(canvas, [2, 2]);
+}
+
+/**
+ * Hueco de una ranura del armero, dibujado como en un plano: contorno discontinuo de la caja máxima de la réplica
+ * y marcas de nivel arriba y abajo. Es el «aquí irá una réplica» de la sala sin siluetas de relleno (Javi,
+ * 22-11-2026): lo grabado se apaga cuando el socket recibe su imagen real, que se pinta encima.
+ */
+export function texturaHuecoArmero() {
+  const [W, H] = [128, 640];
+  const { canvas, ctx } = lienzo(W, H);
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = colors['trazo-fuerte'];
+  ctx.globalAlpha = 0.55;
+  ctx.lineWidth = 3;
+  ctx.setLineDash([16, 12]);
+  ctx.strokeRect(10, 10, W - 20, H - 20);
+  ctx.setLineDash([]);
+  ctx.strokeStyle = colors.cota;
+  ctx.lineWidth = 4;
+  for (const y of [10, H - 10]) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.moveTo(W / 2, 40);
+  ctx.lineTo(W / 2, H - 40);
+  ctx.stroke();
+  for (const y of [40, H - 40]) {
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 14, y);
+    ctx.lineTo(W / 2 + 14, y);
+    ctx.stroke();
+  }
+  return textura(canvas);
 }
 
 /**
@@ -314,21 +351,22 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
     marcaRegistro(ctx, m * 1.7, m * 1.7, 1, 1, alto * 0.14);
     marcaRegistro(ctx, ancho - m * 1.7, alto - m * 1.7, -1, -1, alto * 0.14);
     const escala = opciones.escala ?? 1;
-    const tam = Math.round(alto * (opciones.cota ? 0.44 : 0.52) * escala);
+    const tam = Math.round(alto * (opciones.cota ? 0.4 : 0.52) * escala);
     ctx.fillStyle = colors.hueso;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = `700 ${tam}px ${FONT_FAMILIES.rotulo}`;
     ctx.letterSpacing = `${Math.round(tam * 0.05)}px`;
-    ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.cota ? alto * 0.42 : alto / 2, ancho - m * 6);
+    ctx.fillText(texto.toUpperCase(), ancho / 2, opciones.cota ? alto * 0.38 : alto / 2, ancho - m * 6);
     ctx.letterSpacing = '0px';
     if (opciones.cota) {
-      const y = alto * 0.8;
+      // La cota se lee a 1440 px: ~0,25 del alto de la lámina, en peso 600 y con el trazo más grueso.
+      const y = alto * 0.79;
       const x0 = m * 3.4;
       const x1 = ancho - m * 3.4;
       ctx.strokeStyle = colors.cota;
-      ctx.lineWidth = Math.max(2.5, alto * 0.016);
-      ctx.font = `500 ${Math.round(alto * 0.17)}px ${FONT_FAMILIES.datos}`;
+      ctx.lineWidth = Math.max(3.5, alto * 0.026);
+      ctx.font = `600 ${Math.round(alto * 0.25)}px ${FONT_FAMILIES.datos}`;
       const medida = ctx.measureText(opciones.cota).width;
       const mitad = medida / 2 + alto * 0.07;
       for (const [a, b] of [
@@ -342,8 +380,8 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
       }
       for (const x of [x0, x1]) {
         ctx.beginPath();
-        ctx.moveTo(x, y - alto * 0.07);
-        ctx.lineTo(x, y + alto * 0.07);
+        ctx.moveTo(x, y - alto * 0.09);
+        ctx.lineTo(x, y + alto * 0.09);
         ctx.stroke();
       }
       ctx.fillStyle = colors.cota;

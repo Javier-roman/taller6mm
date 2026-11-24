@@ -12,7 +12,9 @@ import { texturaDiana, texturaEtiqueta, texturaPlano, texturaRegla } from './tex
 
 /** Material con un mapa de etiqueta o de papel; se crea una vez por etiqueta. */
 function usarMapa(mapa: ConstructorParameters<typeof MeshStandardMaterial>[0]) {
-  return new MeshStandardMaterial(mapa);
+  // El papel blanco puro se quemaba bajo los focos (critico-diseno, 24-11-2026): el albedo máximo del papel es ~0,5
+  // lineal, como un folio real en una sala en penumbra, y la tinta conserva su contraste.
+  return new MeshStandardMaterial({ color: '#c9c6bd', ...mapa });
 }
 
 /** Etiqueta de papel pegada en una cara frontal (mira a +z). */
@@ -437,6 +439,66 @@ export function SoporteCasco({ mat }: { mat: Materiales }) {
       <mesh position={[0, 0.138, 0]} material={mat.acero} scale={[1, 0.6, 1.2]}>
         <sphereGeometry args={[0.07, 20, 12]} />
       </mesh>
+    </group>
+  );
+}
+
+/** Caja abierta de listones con botes de bolas de pie: el pedido típico de un taller, a ras de suelo. */
+export function CajonBotes({ mat, n = [3, 2] }: { mat: Materiales; n?: readonly [number, number] }) {
+  const [filas, columnas] = n;
+  const ancho = filas * 0.125 + 0.03;
+  const fondo = columnas * 0.125 + 0.03;
+  return (
+    <group>
+      <Caja p={[0, 0.01, 0]} t={[ancho, 0.02, fondo]} m={mat.contrachapado} />
+      <Caja p={[0, 0.08, fondo / 2]} t={[ancho, 0.14, 0.015]} m={mat.contrachapado} />
+      <Caja p={[0, 0.08, -fondo / 2]} t={[ancho, 0.14, 0.015]} m={mat.contrachapado} />
+      <Caja p={[-ancho / 2, 0.08, 0]} t={[0.015, 0.14, fondo]} m={mat.contrachapado} />
+      <Caja p={[ancho / 2, 0.08, 0]} t={[0.015, 0.14, fondo]} m={mat.contrachapado} />
+      {Array.from({ length: filas * columnas }, (_, i) => {
+        const x = ((i % filas) - (filas - 1) / 2) * 0.125;
+        const z = (Math.floor(i / filas) - (columnas - 1) / 2) * 0.125;
+        return (
+          <group key={`bote-${i}`} position={[x, 0.02, z]}>
+            <Bote mat={mat} codigo={i % 2 ? '6 mm' : '8 mm'} linea2={i % 2 ? '0,25 g' : '0,20 g'} />
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+/** Perchero de pie con chaleco, casco y gafas colgados: la percha del jugador, junto a la pared. */
+export function Perchero({ mat }: { mat: Materiales }) {
+  return (
+    <group>
+      <Cilindro p={[0, 0.012, 0]} rad={0.2} h={0.024} m={mat.acero} seg={32} />
+      <Cilindro p={[0, 0.85, 0]} rad={0.014} h={1.7} m={mat.aceroClaro} seg={12} />
+      <Caja p={[0, 1.52, 0]} t={[0.5, 0.016, 0.016]} m={mat.aceroClaro} />
+      <Cilindro p={[0, 1.78, 0]} rad={0.022} h={0.04} m={mat.acero} seg={14} />
+      <group position={[0, 1.8, 0]} scale={1.3}>
+        <Casco mat={mat} tela="telaNegra" />
+      </group>
+      <group position={[-0.09, 1.51, 0.02]}>
+        <Chaleco mat={mat} tela="tela" />
+      </group>
+      <group position={[0.2, 1.48, 0]} rotation={[0, 0.5, 0]}>
+        <Gafas mat={mat} />
+      </group>
+    </group>
+  );
+}
+
+/** Caballete de dianas: pie de acero, tablero de cartón y hoja de diana con impactos. */
+export function Caballete({ mat, semilla }: { mat: Materiales; semilla: number }) {
+  return (
+    <group>
+      <Caja p={[0, 0.012, 0]} t={[0.5, 0.024, 0.34]} m={mat.acero} />
+      <Caja p={[0, 0.7, -0.02]} t={[0.045, 1.4, 0.045]} m={mat.aceroClaro} />
+      <Caja p={[0, 1.2, 0]} t={[0.52, 0.72, 0.022]} m={mat.kraft} />
+      <group position={[0, 1.2, 0.0125]}>
+        <Diana semilla={semilla} ancho={0.36} />
+      </group>
     </group>
   );
 }

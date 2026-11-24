@@ -29,8 +29,10 @@ import {
   Bateria,
   Bombona,
   Bote,
+  Caballete,
   CajaCarton,
   CajaHerramientas,
+  CajonBotes,
   Calibre,
   Carpeta,
   Casco,
@@ -44,6 +46,7 @@ import {
   Linterna,
   LlavesAllen,
   Maletin,
+  Perchero,
   PlanoEnmarcado,
   Regla,
   SoporteCasco,
@@ -52,7 +55,7 @@ import {
 import { ajustarReflejo, crearReflejoFalso } from './efectos.ts';
 import { Caja, Cilindro, useSombras, type V3 } from './geom.tsx';
 import { CALIDO, crearMateriales, type Materiales } from './materiales.ts';
-import { texturaRotulo, texturaSenalOjos, texturaTiraNumerada } from './texturas.ts';
+import { texturaHuecoArmero, texturaRotulo, texturaSenalOjos, texturaTiraNumerada } from './texturas.ts';
 
 export interface ControlSala {
   luz: Iluminacion;
@@ -91,7 +94,7 @@ export const LUZ = {
   // El flexo es la mancha más brillante de la sala: el banco manda (critico-diseno, 23-11-2026).
   flexo: 110,
   bombilla: 8,
-  vitrina: 3.4,
+  vitrina: 2.4,
   led: 1.8,
   ambiente: 0.06,
   hemisferio: 0.1,
@@ -160,6 +163,10 @@ function Armero({ mat }: { mat: Materiales }) {
   const paso = util / huecos;
   const tira = useMemo(() => texturaTiraNumerada(1, huecos), [huecos]);
   const yBarra = 2.64;
+  const huecoMat = useMemo(
+    () => new MeshStandardMaterial({ map: texturaHuecoArmero(), transparent: true, roughness: 0.9 }),
+    [],
+  );
   return (
     <group>
       {Array.from({ length: huecos + 1 }, (_, i) => (
@@ -187,6 +194,12 @@ function Armero({ mat }: { mat: Materiales }) {
               t={[0.07, 0.04, 0.012]}
               m={mat.acero}
             />
+            <mesh
+              position={[x, MUEBLE.baldaMedia + 0.03 + ARMERO.alto / 2, zFondo - MUEBLE.fondo / 2 + 0.024]}
+              material={huecoMat}
+            >
+              <planeGeometry args={[paso * 0.9, ARMERO.alto]} />
+            </mesh>
             <Socket id={`armero-${String(i + 1).padStart(2, '0')}`} estanteria="izquierda" />
           </group>
         );
@@ -555,6 +568,49 @@ function Banco({ mat, flexo }: { mat: Materiales; flexo: RefObject<SpotLight | n
           shadow-mapSize={[1024, 1024]}
           shadow-bias={-0.0004}
         />
+      </group>
+    </group>
+  );
+}
+
+/**
+ * Atrezo de suelo y de los márgenes de la pared, bajo y a los lados para no tapar las zonas: a ras de los zócalos
+ * (por debajo de unos 45 cm no se ve nada del mueble desde la cámara del póster) y, más altos, solo en los
+ * márgenes junto a la pared, donde antes no había nada. Sin réplicas ni armas.
+ */
+function Ambientacion({ mat }: { mat: Materiales }) {
+  const zSuelo = MUEBLE.frente + 1.1;
+  const zPared = MUEBLE.frente - MUEBLE.fondo - 0.2;
+  return (
+    <group>
+      {/* Izquierda: dos maletines apilados con una caja de bolas encima y la caja de herramientas al lado */}
+      <group position={[-3.15, 0, zSuelo]} rotation={[0, 0.1, 0]} scale={0.75}>
+        <group position={[0, 0.075, 0]}>
+          <Maletin mat={mat} codigo="A-9" linea2="1 180 × 440" ancho={1.0} />
+        </group>
+        <group position={[0, 0.225, 0]}>
+          <Maletin mat={mat} codigo="A-10" linea2="1 180 × 440" ancho={1.0} />
+        </group>
+      </group>
+      <group position={[-2.1, 0, zSuelo + 0.15]} rotation={[0, -0.25, 0]} scale={1.3}>
+        <CajaHerramientas mat={mat} />
+      </group>
+      {/* Derecha: cajón de botes de bolas, cartones apilados y un casco sobre su soporte */}
+      <group position={[2.35, 0, zSuelo]} rotation={[0, 0.15, 0]}>
+        <CajonBotes mat={mat} />
+      </group>
+      <group position={[3.2, 0, zSuelo + 0.05]} rotation={[0, -0.12, 0]}>
+        <CajaCarton mat={mat} t={[0.46, 0.2, 0.34]} codigo="BB-04" linea2="caja 10 uds" />
+        <group position={[0.02, 0.2, 0]} rotation={[0, 0.2, 0]}>
+          <CajaCarton mat={mat} t={[0.38, 0.16, 0.3]} codigo="GF-05" linea2="gafas" />
+        </group>
+      </group>
+      {/* Márgenes de la pared: perchero con chaleco, casco y gafas, y caballete con una diana */}
+      <group position={[-4.5, 0, zPared]}>
+        <Perchero mat={mat} />
+      </group>
+      <group position={[4.5, 0, zPared]} rotation={[0, -0.12, 0]}>
+        <Caballete mat={mat} semilla={23} />
       </group>
     </group>
   );
@@ -955,6 +1011,7 @@ export function Sala({ control, onApuntar, onElegir }: SalaProps) {
       ))}
 
       <Banco mat={mat} flexo={flexo} />
+      <Ambientacion mat={mat} />
       {ZONAS.filter((z) => z.id === 'banco').map((z) => (
         <group key="banco-rotulo">
           <PlacaRotulo material={rotulos[z.id] as MeshStandardMaterial} posicion={z.anclaRotulo} tamano={[0.9, 0.14]} />
