@@ -94,3 +94,14 @@ Cada rebanada se entrega en PR pequeño y pasa por:
   de la zona; retroiluminados (la emisión es un mapa aparte, solo luce lo grabado). Fuentes y colores de `packages/ui`.
 - **Horneado sin ruido**: Cycles con 384 muestras, muestreo adaptativo, denoiser con guías de albedo y normal, recorte de luz indirecta,
   rótulos sin sombra proyectada y sin brillo especular (eran la causa de los rectángulos desenfocados y de las placas pálidas).
+
+### Tercera pasada del póster (24-11-2026, tras la revisión de critico-diseno: 6/10)
+- **Causa del fallo de `verify` del #67**: real, no una cancelación. El test «Más luz tiene su propio póster» pedía `poster-2560.webp`
+  (el script ya lo emitía, pero los binarios y el manifiesto eran de la versión anterior). Se rehornea y se regenera el manifiesto.
+- **Atrezo nuevo**, solo bajo y en los márgenes para no tapar zonas: maletines apilados y caja de herramientas en el suelo,
+  cajón de botes de bolas y cartones, perchero con chaleco, casco y gafas y caballete de dianas junto a la pared, y en cada
+  ranura del armero el contorno de plano (discontinuo, con cota) de la caja máxima de la réplica: «aquí irá una réplica» sin
+  siluetas de relleno.
+- **Legibilidad**: cotas de los rótulos a ~0,25 del alto de la lámina (antes ~5 px a 1440 px), corcho a 1024 px de textura, papel y
+  plástico blanco con albedo máximo ≈ 0,5 lineal (se quemaban), suelo más oscuro y más rugoso, focos de la vitrina más suaves
+  y sombras con borde blando (radio de luz de 0,12 m).

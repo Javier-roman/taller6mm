@@ -1,57 +1,65 @@
 {
-  "hash": "2614bcfb74de",
+  "hash": "76cca67dafc6",
   "archivos": {
     "albedo.webp": {
-      "sha256": "ec745d2311e8eb99b0670220c20d550ae5d015c969c0f8cbd688a4334500c044",
-      "bytes": 325896
+      "sha256": "85f748c1d0d9da6ba8bf76c1e0b01fd3e1b060a7667ce0229bb4b692e1b14422",
+      "bytes": 329084
     },
     "base.webp": {
-      "sha256": "59d85a8fd722c8c716d5954688d5c31f210b06518fd7c23c599a982a20a222fe",
-      "bytes": 49644
+      "sha256": "9b256375f11634421871da255c23de135abf1bb2c37d2749e35f566232274bb6",
+      "bytes": 14106
     },
     "calidas.webp": {
-      "sha256": "a43ce926abc0c7f4dbf2a7b21fc9d136bab236e0d01e80103ea4737a901595c8",
-      "bytes": 36756
+      "sha256": "9c22c88d3bb27342424b38648b03a2261931cc30717fd4afa87412858c20f14f",
+      "bytes": 32066
     },
     "normal.webp": {
-      "sha256": "809179d2b63486bfb25eb46ba1c1460881ab71a54be7287c6c4f1864694ece36",
-      "bytes": 337024
+      "sha256": "c227ad17461c5ef26f219f40c3c7326d7d95a7b7333fc9fd1d38a996110c8ff2",
+      "bytes": 353266
     },
     "poster-1920.webp": {
-      "sha256": "35ecb9104dd63b9d793568ea1edf95baedbfd5a9b058d0562e85878a803264dd",
-      "bytes": 75080
+      "sha256": "c864e4881f462788d26e11d48ba2faab3bcac0c89755717dbdd9f44e87a0ffdd",
+      "bytes": 194456
+    },
+    "poster-2560.webp": {
+      "sha256": "488d92460bec71b2b246daca7e269138c89eb13fa594a30671e5f555f3a5f23a",
+      "bytes": 284744
     },
     "poster-960.webp": {
-      "sha256": "1219bcf247828319fc9c91f1aa71c3c8082a86ce136f30d58c4bab21ecbc156c",
-      "bytes": 32972
+      "sha256": "9ab97c5738e120685b0ecdad01fcb2ea1e6f297e6391700818c02ca356ddb154",
+      "bytes": 73876
     },
     "poster-mas-luz-1920.webp": {
-      "sha256": "c499b19606600b607efe303ac450d77b7d537ce4d0c24a61001afa0bedbcd1a4",
-      "bytes": 86192
+      "sha256": "51a59d0872dbabd4fa92ad416ce7643693ce92e7da14eb4daec7c5b0471cdf2a",
+      "bytes": 236636
+    },
+    "poster-mas-luz-2560.webp": {
+      "sha256": "ca728523a1a56f0408bc481c6d4163438f0f356e2149d5fb60a684d5a90ed2d5",
+      "bytes": 335258
     },
     "poster-mas-luz-960.webp": {
-      "sha256": "f211413c3c3907bf2add0e864c730bcc87b7c71bd62edad53ec0036bd233d4ab",
-      "bytes": 38470
+      "sha256": "60bcf669658337e4413ba0b7786815ca5d63e97fafb5d6eb13a07a88126444b5",
+      "bytes": 84658
     },
     "profundidad.webp": {
-      "sha256": "b225fbebe2df207634379547da35d4a948f5713f95a2c6d88a3780f26edff833",
-      "bytes": 20752
+      "sha256": "bbd25f59101ad3fd3e2a25a69c80bde2ed14585a8be04ecc136b1cfeeda8ee49",
+      "bytes": 23174
     },
     "rotulos.webp": {
-      "sha256": "6f642cdb48656fbc21051645cfa04e4bc3d321b5e946a6b7e714d6cce04121c7",
-      "bytes": 26816
+      "sha256": "20b7862f0f51debe3de24267282bcf171e17fbf168b0c1f267efc8735453609d",
+      "bytes": 25752
     },
     "tubo-centro.webp": {
-      "sha256": "08f46182f6cd07bd60275493612c8b074b93cb3720190008248d2e1266379409",
-      "bytes": 56794
+      "sha256": "49d0df2aac5612d65e61c6efea641d12739eec83a8f599f32b4c51e8f6285790",
+      "bytes": 56830
     },
     "tubo-derecha.webp": {
-      "sha256": "490139a421084b40c5f2542c45045fcbb52318915707b16a63e61e2932c3ccdf",
-      "bytes": 71976
+      "sha256": "28479f7335fe514983af542183f43f76f5390201121224719e6a2fb4738406d8",
+      "bytes": 74884
     },
     "tubo-izquierda.webp": {
-      "sha256": "8f7d19840242eaafc19b72198c7dc3ad4bf995374cd61e1ffc2ae4e3ba595c0d",
-      "bytes": 62802
+      "sha256": "51eb440fae6517cea28764feea83f6c17c5073dc064494c5a3f365a753526240",
+      "bytes": 70786
     }
   }
 }
