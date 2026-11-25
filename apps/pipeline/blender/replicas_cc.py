@@ -225,6 +225,36 @@ def srgb_a_lineal(c):
     return [((x + 0.055) / 1.055) ** 2.4 if x > 0.04045 else x / 12.92 for x in c]
 
 
+def anadir_cuadriculado(mat, cfg):
+    """Cuadriculado de empuñadura (pirámides a 45°) como relieve extra: dos bandas triangulares cruzadas."""
+    nodos, enlaces = mat.node_tree.nodes, mat.node_tree.links
+    tc = nodos.new("ShaderNodeTexCoord")
+    alturas = []
+    for ang in (45.0, -45.0):
+        mp = nodos.new("ShaderNodeMapping")
+        mp.inputs["Rotation"].default_value = (0.0, math.radians(ang), 0.0)
+        enlaces.new(tc.outputs["Object"], mp.inputs["Vector"])
+        w = nodos.new("ShaderNodeTexWave")
+        w.wave_type, w.bands_direction, w.wave_profile = "BANDS", "X", "TRI"
+        w.inputs["Scale"].default_value = cfg["escala"]
+        w.inputs["Distortion"].default_value = 0.0
+        enlaces.new(mp.outputs["Vector"], w.inputs["Vector"])
+        alturas.append(w.outputs["Fac"])
+    suma = nodos.new("ShaderNodeMath")
+    suma.operation = "ADD"
+    enlaces.new(alturas[0], suma.inputs[0])
+    enlaces.new(alturas[1], suma.inputs[1])
+    principled = next(n for n in nodos if n.bl_idname == "ShaderNodeBsdfPrincipled")
+    previo = principled.inputs["Normal"].links[0].from_socket if principled.inputs["Normal"].links else None
+    bump = nodos.new("ShaderNodeBump")
+    bump.inputs["Strength"].default_value = cfg["fuerza"]
+    bump.inputs["Distance"].default_value = 0.0004
+    enlaces.new(suma.outputs["Value"], bump.inputs["Height"])
+    if previo is not None:
+        enlaces.new(previo, bump.inputs["Normal"])
+    enlaces.new(bump.outputs["Normal"], principled.inputs["Normal"])
+
+
 def construir_materiales(trabajo, modo_mat="pbr"):
     mats = {}
     for clave, m in trabajo["materiales"].items():
@@ -244,6 +274,8 @@ def construir_materiales(trabajo, modo_mat="pbr"):
                     for k, v in m.get("principled", {}).items():
                         if k in n.inputs:
                             n.inputs[k].default_value = v
+            if m.get("cuadriculado"):
+                anadir_cuadriculado(mat, m["cuadriculado"])
         mats[clave] = mat
     return mats
 

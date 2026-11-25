@@ -24,13 +24,13 @@ Las réplicas paramétricas montadas se rechazaron («parecen juguete malo del c
 1. **Licencia en vivo antes de descargar**: ficha de OpenGameArt (`License(s): CC0`) y API pública de Sketchfab (`license.slug`). Descarga a ritmo bajo con el User-Agent identificado (`taller6mm_pipeline.importador.red`). Los hashes de OpenGameArt coinciden con `catalogo/modelos-cc.json`; el del M4A1, con `catalogo/importador-manifiesto.json`.
 2. **Limpieza** (`replicas_cc.py`, modo `listar`): se descartan texturas, materiales y UV del archivo, se separan las partes sueltas y se borran por reglas los internos y la munición (Glock: bloques y barra del disparador; M4A1: balas). Solo queda la forma exterior.
 3. **Zonas de material** por nombre de malla o por caja normalizada (u atrás-boca, v abajo-arriba, w lado): metal, polímero y, en el AK, madera.
-4. **Materiales** de la biblioteca propia (`materiales/biblioteca.py`, bases CC0 de `catalogo/materiales-cc0.json`) con las correcciones de `critico-diseno` del 24-11-2026: metal negro neutro sin rayas, desgaste solo en aristas y de color gris (no blanco), polímeros oscuros con rugosidad 0,5-0,6 y madera `#5A2E1C`-`#4E2817` con barniz 0,4.
-5. **Luz de tres puntos** (`catalogo/replicas-ilustrativas.json`, clave `luz`): principal de área a 45° de azimut y 35° de elevación respecto a la cámara, relleno a un cuarto, dos tiras de contorno detrás y arriba, panel de reflejo junto a la cámara, mundo 0,025-0,055, AgX «Medium High Contrast», **fondo transparente**.
+4. **Materiales** de la biblioteca propia (`materiales/biblioteca.py`, bases CC0 de `catalogo/materiales-cc0.json`) con las correcciones de `critico-diseno` del 24-11-2026: metal negro neutro sin rayas, desgaste solo en aristas y de color gris (no blanco), polímeros oscuros (`#101010`-`#161616`, rugosidad 0,6-0,65), madera del AK `#50291A` con veta fina y barniz 0,3, fosfatado en el cañón del M4A1, y cachas de nogal cuadriculadas (relieve procedural en rombos de 1,5 mm) en la 1911, aplicadas por caras exteriores del armazón.
+5. **Luz de tres puntos** (`catalogo/replicas-ilustrativas.json`, clave `luz`): principal de área a 45° de azimut y 35° de elevación respecto a la cámara, relleno a un cuarto, dos tiras de contorno detrás y arriba (2x la principal, no 1,5x: su superficie es pequeña), una tercera tira baja y trasera para que las empuñaduras no se pierdan sobre el fondo, panel de reflejo junto a la cámara, mundo 0,025-0,055, AgX «Medium High Contrast», **fondo transparente**.
 6. **Render** a 1800 x 1200, 160 muestras, OIDN, lente 90-100 mm: `lateral` (cámara a -Y: boca a la derecha), `lateral-izq` (cámara a +Y: boca a la izquierda) y `tres-cuartos` (37° de azimut, 17° de elevación, encuadre por silueta al 80 %).
 
 ## Sobre «lado izquierdo, boca a la derecha»
 
-Con la boca a la derecha del cuadro se ve el **lado derecho** del arma (ventana de expulsión del M4A1 y de la 1911, selector del AK). El lado **izquierdo** real queda con la boca a la izquierda. Para no mostrar un arma especular falsa, se entregan las dos vistas (`lateral` y `lateral-izq`); el tres cuartos enseña el lado derecho.
+Con la boca a la derecha del cuadro se ve el **lado derecho** del arma (ventana de expulsión del M4A1 y de la 1911, selector del AK). El lado **izquierdo** real queda con la boca a la izquierda. Para no mostrar un arma especular falsa, se entregan las dos vistas (`lateral` y `lateral-izq`); el tres cuartos de las pistolas enseña el lado derecho en la 1911 y el izquierdo en la Glock (es el que lleva las estrías de la corredera).
 
 ## Reglas que se cumplen
 
@@ -47,3 +47,11 @@ python -I -c "import sys; sys.path.insert(0, 'apps/pipeline/src'); from taller6m
 ```
 
 Modos: `listar <id>` (partes y coordenadas), `debug <id>` (zonas en colores), `render <id|todos> [res=1200x800] [muestras=48] [sufijo=-t1] [vistas=lateral,tres-cuartos]`, `sonda <id>` (desgaste en aristas) y `hoja` (hoja de contacto). Los binarios van en `assets-src/raw/modelos-cc/` y los renders en `assets-src/vistas/replicas-cc/`; las dos están ignoradas por git.
+
+## Revisión de `critico-diseno` (25-11-2026) y estado
+
+Notas honestas antes de la segunda pasada de materiales y luz: M4A1 6, AK 5, 1911 4,5, Glock 3,5. Arreglos aplicados después: tres cuartos de la Glock por el lado izquierdo, armazón y empuñadura de la Glock más oscuros con punteado, madera del AK con veta fina y color uniforme, M4A1 con tres acabados (anodizado, polímero y fosfatado), cachas de nogal cuadriculadas en la 1911, tiras de contorno mayores y tercera tira baja. El crítico avisa de un techo de 6-7 con geometría gratuita: la pieza protagonista de cada balda saldrá del frente de fidelidad, no de aquí. La Glock queda **no recomendada como pieza principal** (formas blandas, guardamonte con el disparador fundido, hoyuelo en la empuñadura del modelo original, sin ventana de expulsión).
+
+## Escala entre clases
+
+Cada clase tiene su propio px/mm (fusiles 1,64; pistolas 6,43), anotado en `salidas.px_por_mm_lateral` del registro. Si un pistola y un fusil comparten balda, la web debe componerlos con esos factores: las dos escalas «convención» (AK 880 mm, Glock 200 mm) no están verificadas.

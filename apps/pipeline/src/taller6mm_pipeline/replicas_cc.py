@@ -96,6 +96,9 @@ def trabajo(m: dict[str, Any], reg: dict[str, Any], modo: str, opciones: dict[st
     res = opciones.get("res") or clase["res"]
     vistas = []
     for v in clase["vistas"]:
+        v = dict(v)
+        if v["id"] == "tres-cuartos" and "tres_cuartos_az" in r:
+            v["az"] = r["tres_cuartos_az"]
         if opciones.get("vistas") and v["id"] not in opciones["vistas"]:
             continue
         vistas.append(v)
@@ -110,7 +113,12 @@ def trabajo(m: dict[str, Any], reg: dict[str, Any], modo: str, opciones: dict[st
         "zonas": r["zonas"],
         "zona_defecto": r["zona_defecto"],
         "materiales": {
-            k: {"spec": spec_material(v), "principled": v.get("principled", {}), "semilla": v.get("semilla", 7)}
+            k: {
+                "spec": spec_material(v),
+                "principled": v.get("principled", {}),
+                "semilla": v.get("semilla", 7),
+                "cuadriculado": v.get("cuadriculado"),
+            }
             for k, v in r["materiales"].items()
         },
         "colores_debug": COLORES_DEBUG,
@@ -170,7 +178,12 @@ def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
             base = Image.new("RGBA", im.size, (*fondo, 255))
             base.alpha_composite(im)
             hoja.paste(base.convert("RGB").resize(celda, Image.LANCZOS), (c * celda[0], r * celda[1]))
-        d.text((12, r * celda[1] + 8), f"{m['id']}  |  {m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar", fill=(200, 200, 205), font=letra)
+        d.text(
+            (12, r * celda[1] + 8),
+            f"{m['id']}  |  {m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar",
+            fill=(200, 200, 205),
+            font=letra,
+        )
     salida = VISTAS_DIR / f"hoja-replicas-cc{sufijo}.png"
     hoja.save(salida)
     print("HOJA", salida, hoja.size)

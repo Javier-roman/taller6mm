@@ -50,7 +50,7 @@
         },
         {
           "id": "tres-cuartos",
-          "az": 37,
+          "az": 30,
           "el": 17,
           "lente": 100,
           "encuadre": 0.8
@@ -128,7 +128,7 @@
             "base": "anodizado_negro",
             "color": "#1A1A1C",
             "metalico": 0.55,
-            "rugosidad": 0.34,
+            "rugosidad": 0.45,
             "variacion_rugosidad": 0.05,
             "grano_relieve": 0.04,
             "rayas": 0.0,
@@ -146,10 +146,10 @@
           },
           "polimero": {
             "base": "polimero_grano",
-            "color": "#131313",
+            "color": "#161616",
             "rugosidad": 0.6,
             "variacion_rugosidad": 0.06,
-            "grano_relieve": 0.12,
+            "grano_relieve": 0.3,
             "desgaste": {
               "color": "#3a3a3a",
               "cantidad": 0.25,
@@ -161,7 +161,8 @@
               "oscurece": 0.2
             }
           }
-        }
+        },
+        "tres_cuartos_az": 143
       },
       "titulo": "Pistola de polímero (silueta tipo Glock de 1.ª generación)",
       "clase": "pistola",
@@ -264,18 +265,18 @@
               "metalico": 1.0
             },
             "suciedad": {
-              "cantidad": 0.35,
+              "cantidad": 0.18,
               "oscurece": 0.2
             }
           },
           "madera": {
             "base": "madera_veta",
-            "color": "#4E2817",
-            "color2": "#33190d",
+            "color": "#50291A",
+            "color2": "#43220F",
             "rugosidad": 0.5,
             "principled": {
-              "Coat Weight": 0.4,
-              "Coat Roughness": 0.55
+              "Coat Weight": 0.3,
+              "Coat Roughness": 0.3
             },
             "desgaste": {
               "color": "#7a4a30",
@@ -288,8 +289,8 @@
               "oscurece": 0.2
             },
             "veta": {
-              "escala": 340,
-              "distorsion": 1.1
+              "escala": 1400,
+              "distorsion": 1.5
             }
           }
         }
@@ -398,14 +399,23 @@
               }
             },
             "mat": "polimero"
+          },
+          {
+            "parte": {
+              "nombre": "Body_Body1",
+              "centro": {
+                "u": [0.77, 1.0]
+              }
+            },
+            "mat": "parkerizado"
           }
         ],
         "materiales": {
           "metal": {
             "base": "anodizado_negro",
-            "color": "#1C1C1E",
-            "metalico": 0.4,
-            "rugosidad": 0.42,
+            "color": "#1B1C1E",
+            "metalico": 0.6,
+            "rugosidad": 0.38,
             "variacion_rugosidad": 0.05,
             "grano_relieve": 0.04,
             "rayas": 0.0,
@@ -423,8 +433,8 @@
           },
           "polimero": {
             "base": "polimero_grano",
-            "color": "#1A1A1A",
-            "rugosidad": 0.55,
+            "color": "#101010",
+            "rugosidad": 0.65,
             "variacion_rugosidad": 0.06,
             "grano_relieve": 0.14,
             "desgaste": {
@@ -436,6 +446,24 @@
             "suciedad": {
               "cantidad": 0.35,
               "oscurece": 0.2
+            }
+          },
+          "parkerizado": {
+            "base": "parkerizado",
+            "color": "#202221",
+            "metalico": 0.7,
+            "rugosidad": 0.5,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.25,
+              "radio_mm": 0.6,
+              "rugosidad": 0.4,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.2,
+              "oscurece": 0.15
             }
           }
         }
@@ -522,17 +550,33 @@
         "zonas": [
           {
             "parte": {
-              "nombres": ["Object_12"]
+              "nombres": ["Object_14"]
             },
-            "mat": "polimero"
+            "cara": {
+              "u": [0.08, 0.42],
+              "v": [0.04, 0.66],
+              "w": [0.0, 0.12]
+            },
+            "mat": "madera"
+          },
+          {
+            "parte": {
+              "nombres": ["Object_14"]
+            },
+            "cara": {
+              "u": [0.08, 0.42],
+              "v": [0.04, 0.66],
+              "w": [0.88, 1.0]
+            },
+            "mat": "madera"
           }
         ],
         "materiales": {
           "metal": {
             "base": "anodizado_negro",
-            "color": "#1A1A1C",
+            "color": "#141518",
             "metalico": 0.6,
-            "rugosidad": 0.32,
+            "rugosidad": 0.35,
             "variacion_rugosidad": 0.05,
             "grano_relieve": 0.04,
             "rayas": 0.0,
@@ -563,6 +607,34 @@
             "suciedad": {
               "cantidad": 0.35,
               "oscurece": 0.2
+            }
+          },
+          "madera": {
+            "base": "madera_veta",
+            "color": "#3B2215",
+            "color2": "#2B190E",
+            "rugosidad": 0.45,
+            "veta": {
+              "escala": 1000,
+              "distorsion": 1.0
+            },
+            "principled": {
+              "Coat Weight": 0.2,
+              "Coat Roughness": 0.4
+            },
+            "cuadriculado": {
+              "escala": 650,
+              "fuerza": 0.35
+            },
+            "desgaste": {
+              "color": "#5a3a24",
+              "cantidad": 0.2,
+              "radio_mm": 0.8,
+              "rugosidad": 0.5
+            },
+            "suciedad": {
+              "cantidad": 0.2,
+              "oscurece": 0.15
             }
           }
         }
@@ -640,7 +712,7 @@
       "el": 10,
       "dist": 1.8,
       "tam_d": 1.6,
-      "relativa": 0.25,
+      "relativa": 0.33,
       "color": [0.9, 0.94, 1.0]
     },
     "contornos": [
@@ -648,19 +720,28 @@
         "az": 150,
         "el": 55,
         "dist": 1.5,
-        "largo_d": 1.5,
-        "ancho_d": 0.3,
-        "relativa": 3,
+        "largo_d": 2.0,
+        "ancho_d": 0.25,
+        "relativa": 2.0,
         "color": [1.0, 0.97, 0.93]
       },
       {
         "az": 210,
         "el": 50,
         "dist": 1.5,
-        "largo_d": 1.5,
-        "ancho_d": 0.3,
-        "relativa": 3,
+        "largo_d": 2.0,
+        "ancho_d": 0.25,
+        "relativa": 2.0,
         "color": [0.93, 0.96, 1.0]
+      },
+      {
+        "az": 195,
+        "el": 0,
+        "dist": 1.4,
+        "largo_d": 1.2,
+        "ancho_d": 0.3,
+        "relativa": 1.5,
+        "color": [1.0, 0.98, 0.95]
       }
     ],
     "reflejo": {
