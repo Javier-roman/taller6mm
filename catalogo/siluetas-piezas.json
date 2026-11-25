@@ -44,10 +44,10 @@
           "glb": "akm-lateral-izq.cargador.glb",
           "material": "metal",
           "ancho_z_mm": 37.0,
-          "triangulos": 2910,
+          "triangulos": 4370,
           "aristas_abiertas": 0,
-          "volumen_mm3": 419589.1,
-          "sha256": "daea3bebd6a2f0d4"
+          "volumen_mm3": 417936.7,
+          "sha256": "47e67dc5a112d4dd"
         },
         "guardamonte": {
           "glb": "akm-lateral-izq.guardamonte.glb",
@@ -127,7 +127,7 @@
         "fuente": "longitud nominal de la plataforma AKM (880 mm, dato público de la plataforma, no ficha del SKU)",
         "confianza": "baja"
       },
-      "segundos": 18.4
+      "segundos": 7.7
     },
     {
       "id": "ak105-lateral-izq",
@@ -199,10 +199,10 @@
           "glb": "ak105-lateral-izq.cargador.glb",
           "material": "polimero",
           "ancho_z_mm": 36.0,
-          "triangulos": 2296,
+          "triangulos": 3200,
           "aristas_abiertas": 0,
-          "volumen_mm3": 445023.3,
-          "sha256": "d4305ecd8acdbd3c"
+          "volumen_mm3": 444349.0,
+          "sha256": "3f29fa2c0cd0cef9"
         },
         "guardamonte": {
           "glb": "ak105-lateral-izq.guardamonte.glb",
@@ -228,7 +228,7 @@
         "fuente": "longitud nominal de la plataforma AK-105 con culata extendida (943 mm, dato público de la plataforma, no ficha del SKU); el montaje de la foto puede diferir hasta un 8 %; el receptor medido sale a 276 mm frente a 258 mm en el AKM (misma pieza): coherente",
         "confianza": "baja"
       },
-      "segundos": 7.5
+      "segundos": 5.5
     },
     {
       "id": "mk18-mod1-lateral-izq",
@@ -309,10 +309,10 @@
           "glb": "mk18-mod1-lateral-izq.cargador.glb",
           "material": "receptor",
           "ancho_z_mm": 28.0,
-          "triangulos": 1954,
+          "triangulos": 2398,
           "aristas_abiertas": 0,
-          "volumen_mm3": 193094.5,
-          "sha256": "7f7c014c503309b3"
+          "volumen_mm3": 192700.4,
+          "sha256": "628b00e0a034ddeb"
         }
       },
       "iou_silueta_lateral": 0.9627,
@@ -329,7 +329,7 @@
         "fuente": "largo total del Mk18 Mod.1 GBB, ficha oficial de Tokyo Marui con la culata recogida (docs/catalogo/cotas-publicas.md, ficha 479)",
         "confianza": "alta"
       },
-      "segundos": 12.5
+      "segundos": 5.3
     },
     {
       "id": "hicapa-nighthawk-lateral-izq",
@@ -338,10 +338,10 @@
           "glb": "hicapa-nighthawk-lateral-izq.corredera.glb",
           "material": "corredera",
           "ancho_z_mm": 25.0,
-          "triangulos": 1274,
+          "triangulos": 1506,
           "aristas_abiertas": 0,
-          "volumen_mm3": 104944.4,
-          "sha256": "773727565f883efd"
+          "volumen_mm3": 104527.9,
+          "sha256": "45d2ae54da41d03a"
         },
         "alza_delantera": {
           "glb": "hicapa-nighthawk-lateral-izq.alza_delantera.glb",
@@ -430,7 +430,7 @@
         "fuente": "longitud total de la Hi-Capa 5.1 (docs/catalogo/cotas-publicas.md, ficha Tokyo Marui); se asume la misma para esta réplica: no hay ficha propia del SKU",
         "confianza": "media-baja"
       },
-      "segundos": 16.9
+      "segundos": 6.0
     },
     {
       "id": "glock-19x-lateral-izq",
@@ -439,10 +439,10 @@
           "glb": "glock-19x-lateral-izq.corredera.glb",
           "material": "corredera",
           "ancho_z_mm": 25.4,
-          "triangulos": 1106,
+          "triangulos": 1814,
           "aristas_abiertas": 0,
-          "volumen_mm3": 100689.3,
-          "sha256": "0be317ded132a21d"
+          "volumen_mm3": 100413.1,
+          "sha256": "4e5c13f367b1b692"
         },
         "alza_delantera": {
           "glb": "glock-19x-lateral-izq.alza_delantera.glb",
@@ -540,7 +540,7 @@
         "fuente": "longitud total publicada de la Glock 19X real (7,95 in); la réplica GBB la copia 1:1 según su ficha comercial (no verificada contra la ficha del SKU)",
         "confianza": "media"
       },
-      "segundos": 39.8
+      "segundos": 13.9
     }
   ]
 }

@@ -55,6 +55,10 @@ class Parte:
 
 def prisma_xy(pts: Sequence[Punto], z0: float, z1: float) -> Any:
     """Polígono del plano XY extruido de z0 a z1 (cortes: ranuras, ventanas)."""
+    pts = list(pts)
+    area = sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(pts, [*pts[1:], pts[0]], strict=True))
+    if area < 0:  # sentido horario: la cara miraría a -Z y la extrusión iría al revés
+        pts = pts[::-1]
     cara = Face(Wire([Line(a, b) for a, b in zip(pts, [*pts[1:], pts[0]], strict=True)]))
     return Pos(0, 0, z0) * extrude(cara, amount=z1 - z0)
 

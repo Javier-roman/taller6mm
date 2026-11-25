@@ -8,6 +8,7 @@ diferencia de longitud entre variantes se ve de verdad. Solo imágenes propias r
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -68,7 +69,11 @@ def componer(plataforma: dict, reps: dict, salida: Path) -> Path | None:
     return ruta_sal
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    global VISTAS
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--vistas", type=Path, default=VISTAS)
+    VISTAS = ap.parse_args(argv).vistas
     doc = json.loads(CATALOGO.read_text(encoding="utf-8"))
     reps = cargar_siluetas()
     for pl in doc["plataformas"]:

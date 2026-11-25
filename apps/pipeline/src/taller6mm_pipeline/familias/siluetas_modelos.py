@@ -224,15 +224,15 @@ def modelo_hicapa(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict
     d = rep["detalles_mm"]
     cor = partes["corredera"]
     cortes = [
-        ranura((r[0], r[1]), (r[2], r[3]), 1.4, 12.5 - 1.0, 13.5)
+        ranura((r[0], r[1]), (r[2], r[3]), 2.0, 12.5 - 1.6, 13.5)
         for r in d["ranuras_traseras"] + d["ranuras_frontales"]
     ]
     cortes += [
-        ranura((r[0], r[1]), (r[2], r[3]), 1.4, -13.5, -12.5 + 1.0)
+        ranura((r[0], r[1]), (r[2], r[3]), 2.0, -13.5, -12.5 + 1.6)
         for r in d["ranuras_traseras"] + d["ranuras_frontales"]
     ]
     x0, y0, x1, y1 = d["ventana"][0]
-    cortes.append(prisma_xy([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 12.5 - 1.2, 13.5))
+    cortes.append(prisma_xy([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 12.5 - 1.8, 13.5))
     cc = _caja(rep, "corredera")
     y_eje = cc["y_ini_mm"] + cc["alto_mm"] * 0.57
     cortes.append(cilindro_en("x", 5.6, 26.0, (cc["x_fin_mm"] - 12.0, y_eje, 0.0)))
@@ -290,10 +290,10 @@ def modelo_glock(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[
     cor = partes["corredera"]
     cortes = []
     for r in d["ranuras_traseras"]:
-        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.3, 12.7 - 0.9, 13.7))
-        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.3, -13.7, -12.7 + 0.9))
+        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.9, 12.7 - 1.5, 13.7))
+        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.9, -13.7, -12.7 + 1.5))
     x0, y0, x1, y1 = d["ventana"][0]
-    cortes.append(prisma_xy([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 12.7 - 1.4, 13.7))
+    cortes.append(prisma_xy([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 12.7 - 1.8, 13.7))
     cc = _caja(rep, "corredera")
     y_eje = cc["y_ini_mm"] + cc["alto_mm"] * 0.55
     cortes.append(cilindro_en("x", 5.4, 24.0, (cc["x_fin_mm"] - 11.0, y_eje, 0.0)))
