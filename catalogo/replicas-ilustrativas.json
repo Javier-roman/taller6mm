@@ -499,8 +499,9 @@
         "caja_mm_render": [777.0, 59.4, 226.7],
         "hash_geometria_limpia": "287c76c99186b869ea2e8b4999be44c29a32f293fd7bd15c899a990d0406b4b8",
         "caras_por_zona": {
-          "metal": 17073,
-          "polimero": 3922
+          "metal": 13465,
+          "polimero": 3922,
+          "parkerizado": 3608
         },
         "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
         "glb_limpio": "assets-src/raw/modelos-cc/limpios/m4a1-mrm0lten.glb (ignorada por git)"
@@ -670,8 +671,9 @@
         "caja_mm_render": [222.0, 29.2, 140.3],
         "hash_geometria_limpia": "22e47d5038cbcaba907c509d9f545e9e07aefc2895e0c1385bc3f4adc9e5eadb",
         "caras_por_zona": {
-          "metal": 14204,
-          "polimero": 856
+          "metal": 14655,
+          "polimero": 0,
+          "madera": 405
         },
         "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
         "glb_limpio": "assets-src/raw/modelos-cc/limpios/pistola-1911-solid3ddd.glb (ignorada por git)"
@@ -685,8 +687,8 @@
         "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
       },
       "desgaste_aristas": {
-        "superficie_con_mezcla_mayor_10pct": 3.2,
-        "superficie_con_mezcla_mayor_25pct": 0.2,
+        "superficie_con_mezcla_mayor_10pct": 2.89,
+        "superficie_con_mezcla_mayor_25pct": 0.16,
         "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
         "color_desgaste": "gris neutro, nunca blanco"
       }
