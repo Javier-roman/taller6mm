@@ -27,6 +27,7 @@ ENTRADA = RAIZ / "assets-src" / "raw" / "_entrada"
 SALIDA = RAIZ / "catalogo" / "siluetas-referencia.json"
 FUENTE_MEDIDA = "medido en foto de referencia interna (aportada por Javi), por script determinista"
 EPS_MM = 0.30  # tolerancia de Douglas-Peucker
+EPS_MIN_PX = 1.3  # por debajo de ~1 px solo se mide el ruido de la captura
 
 
 @dataclass(frozen=True)
@@ -37,6 +38,7 @@ class Region:
     poly: list[tuple[int, int]]
     oscuro: bool = False
     quita_a: tuple[str, ...] = ()
+    eps_px: float = 0.0  # tolerancia mayor para piezas de contorno ruidoso (madera veteada)
     criterio: str = ""  # "madera" | "no_madera": separa por color (sin guardar color de ningún píxel)
 
 
@@ -190,6 +192,7 @@ def inclinacion_empunadura(m: np.ndarray, filas: tuple[int, int], x_max: int) ->
 def medir(r: Replica, entrada: Path = ENTRADA) -> dict:
     ruta = entrada / r.carpeta / r.archivo
     img = s.cargar(ruta)
+    espejado = r.espejo
     if r.espejo:
         img = img[:, ::-1].copy()
         r = _espejar(r, img.shape[1])
@@ -206,7 +209,7 @@ def medir(r: Replica, entrada: Path = ENTRADA) -> dict:
             rm &= luma < 95
         if reg.criterio:
             rr, gg, bb = (img[..., k].astype(np.int32) for k in range(3))
-            madera = (rr - bb > 45) & (rr > 110) & (rr > gg)
+            madera = s.cierre((rr - bb > 45) & (rr > 110) & (rr > gg), 4)
             rm &= madera if reg.criterio == "madera" else ~madera
         masks[nombre] = rm
     for nombre, reg in r.regiones.items():
@@ -222,8 +225,12 @@ def medir(r: Replica, entrada: Path = ENTRADA) -> dict:
     origen = (float(xs_ref.min()), float(alto - ys_ref.max() - 1))  # borde trasero y borde inferior (y arriba)
     for nombre, pm in masks.items():
         ext, huecos = s.contornos(pm)
-        ext_s = s.simplificar(s.suavizar(ext), EPS_MM / mm)
-        hue_s = [s.simplificar(s.suavizar(h), EPS_MM / mm) for h in huecos if abs(s.area_con_signo(h)) > 400]
+        ext_s = s.simplificar(s.suavizar(ext, 5), max(EPS_MM / mm, EPS_MIN_PX, r.regiones[nombre].eps_px))
+        hue_s = [
+            s.simplificar(s.suavizar(h, 5), max(EPS_MM / mm, EPS_MIN_PX))
+            for h in huecos
+            if abs(s.area_con_signo(h)) > 400
+        ]
         partes[nombre] = {
             "contorno_mm": _redondea(s.a_mm(ext_s, mm, origen)),
             "huecos_mm": [_redondea(s.a_mm(h, mm, origen)) for h in hue_s],
@@ -264,6 +271,7 @@ def medir(r: Replica, entrada: Path = ENTRADA) -> dict:
         "foto": f"{r.carpeta}/{r.archivo}",
         "foto_sha256": hashlib.sha256(ruta.read_bytes()).hexdigest(),
         "foto_px": [img.shape[1], img.shape[0]],
+        "espejo": espejado,
         "vista": "lateral izquierdo, boca a la derecha; casi ortogonal (captura de tienda)",
         "calibre": {
             "mm_por_px": round(mm, 6),

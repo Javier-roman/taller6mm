@@ -31,11 +31,11 @@ AKM = Replica(
         "base_alza": R([(55, 190), (100, 190), (100, 282), (55, 282)]),
         "canon": R([(100, 246), (300, 246), (300, 285), (100, 285)]),
         "tubo_gases": R([(165, 212), (297, 212), (297, 247), (165, 247)]),
-        "guardamanos_sup": R([(293, 205), (432, 205), (432, 247), (293, 247)], criterio="madera"),
-        "guardamanos_inf": R([(297, 247), (490, 247), (490, 310), (297, 310)], criterio="madera"),
+        "guardamanos_sup": R([(293, 205), (432, 205), (432, 247), (293, 247)], criterio="madera", eps_px=2.5),
+        "guardamanos_inf": R([(297, 247), (490, 247), (490, 310), (297, 310)], criterio="madera", eps_px=2.5),
         "mira_trasera": R([(430, 196), (520, 196), (520, 238), (430, 238)], quita_a=("receptor",)),
         "receptor": R([(425, 216), (790, 216), (790, 304), (425, 304)], criterio="no_madera"),
-        "culata": R([(783, 255), (1062, 255), (1062, 372), (783, 372)], criterio="madera"),
+        "culata": R([(783, 255), (1062, 255), (1062, 372), (783, 372)], criterio="madera", eps_px=4.0),
         "empunadura": R([(693, 306), (790, 306), (790, 440), (693, 440)], criterio="no_madera"),
         "cargador": R([(445, 303), (612, 303), (612, 512), (445, 512)]),
         "guardamonte": R([(612, 296), (702, 296), (702, 354), (612, 354)]),
@@ -58,9 +58,9 @@ AK105 = Replica(
     archivo="Captura de pantalla 2026-11-25 111100.png",
     nombre="AK-105 con guardamanos M-LOK, boca larga y culata ajustable (lado derecho volcado, boca a la derecha)",
     longitud_mm=943.0,
-    longitud_fuente="longitud nominal de la plataforma AK-105 con culata extendida (943 mm, dato público de la plataforma, "
-    "no ficha del SKU); el montaje de la foto (boca larga, culata ajustable) puede diferir hasta un 8 %; el receptor "
-    "medido sale a 276 mm frente a 258 mm en el AKM (misma pieza): coherente",
+    longitud_fuente="longitud nominal de la plataforma AK-105 con culata extendida (943 mm, dato público de la "
+    "plataforma, no ficha del SKU); el montaje de la foto puede diferir hasta un 8 %; el receptor medido sale a "
+    "276 mm frente a 258 mm en el AKM (misma pieza): coherente",
     longitud_confianza="baja",
     umbral=45.0,
     espejo=True,

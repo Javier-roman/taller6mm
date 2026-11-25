@@ -46,6 +46,13 @@ Familias por tipo de pieza: M4 (`oleada1*.py`, `receptores.py`, `canon.py`, `amo
 ### Tornillería y detalle fino
 Cabeza hexagonal con `_hexagono_x` + hueco hexagonal restado; ranuras de partición como cortes finos (≈0,2-0,4 mm) con solape; texto neutro con `grabar`. Sin logos.
 
+### Pieza desde una foto de referencia (silueta real)
+Detalle y método en `familia-siluetas.md`. En corto: `fotos/silueta.py` saca el contorno de una foto con fondo claro, se parte
+en regiones y se guarda como números en `catalogo/siluetas-referencia.json`; `siluetas_motor.construir` extruye cada parte
+(`Spec`: ancho estimado en Z y radio) con redondeo por prisma, o la revoluciona si es redonda; los detalles (serrados,
+nervaduras, hoyuelos, ranuras) se restan con `siluetas_modelos`. **No uses `filetear` sobre estos contornos** (se cuelga) ni el
+eje PCA en piezas en L (`eje="x"`).
+
 ### Sockets
 Cada pieza declara `socket.*` con posición y orientación en mm; el ensamblador los casa por interfaz (rosca, diámetro, raíl). Si no encaja, es un **hueco anotado**, no una cota inventada.
 

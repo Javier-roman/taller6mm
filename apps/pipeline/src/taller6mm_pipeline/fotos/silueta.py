@@ -282,5 +282,21 @@ def mediana_color(img: np.ndarray, m: np.ndarray) -> tuple[int, int, int]:
     return int(np.rint(v[0])), int(np.rint(v[1])), int(np.rint(v[2]))
 
 
+def _desplazar_max(m: np.ndarray, k: int, op) -> np.ndarray:
+    """Dilatación (op=np.logical_or) o erosión (np.logical_and) con un cuadrado de lado 2k+1."""
+    p = np.pad(m, k, constant_values=op is np.logical_and)
+    sal = m.copy() if op is np.logical_or else np.ones_like(m)
+    h, w = m.shape
+    for dy in range(-k, k + 1):
+        for dx in range(-k, k + 1):
+            sal = op(sal, p[k + dy : k + dy + h, k + dx : k + dx + w])
+    return sal
+
+
+def cierre(m: np.ndarray, k: int) -> np.ndarray:
+    """Cierre morfológico (dilatar y erosionar k px): une los huecos de color que parten una pieza."""
+    return _desplazar_max(_desplazar_max(m, k, np.logical_or), k, np.logical_and)
+
+
 def longitud(pts: Sequence[Punto]) -> float:
     return sum(math.dist(a, b) for a, b in zip(pts, [*pts[1:], pts[0]], strict=True))

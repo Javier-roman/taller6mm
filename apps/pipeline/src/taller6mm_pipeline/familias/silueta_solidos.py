@@ -8,16 +8,18 @@ filetes de verdad.
 
 from __future__ import annotations
 
+import itertools
 import math
 from collections.abc import Sequence
 from typing import Any
 
-from build123d import Face, Line, Plane, Pos, Spline, Wire, extrude
+import numpy as np
+from build123d import Face, Line, Plane, Pos, RectangleRounded, Spline, Wire, extrude
 
-from taller6mm_pipeline.familias.formas import filetear
 from taller6mm_pipeline.fotos import silueta as sil
 
 Punto = tuple[float, float]
+PASO_SPLINE_MM = 4.0
 
 
 def _giro(a: Punto, b: Punto, c: Punto) -> float:
@@ -43,7 +45,14 @@ def aristas_desde_poligono(pts: Sequence[Punto], esquina_deg: float = 32.0) -> l
         if len(tramo) == 2:
             aristas.append(Line(*tramo))
         else:
-            aristas.append(Spline(*tramo))
+            # Un spline por pocos puntos lejanos se desborda y se come esquinas: se añaden puntos intermedios.
+            denso: list[Punto] = [tramo[0]]
+            for a, b in itertools.pairwise(tramo):
+                paso = max(1, math.ceil(math.dist(a, b) / PASO_SPLINE_MM))
+                denso += [
+                    (a[0] + (b[0] - a[0]) * k / paso, a[1] + (b[1] - a[1]) * k / paso) for k in range(1, paso + 1)
+                ]
+            aristas.append(Spline(*denso))
     return aristas
 
 
@@ -54,6 +63,40 @@ def cara_con_huecos(ext: Sequence[Punto], huecos: Sequence[Sequence[Punto]] = ()
     return cara
 
 
+def _eje_principal(ext: Sequence[Punto], eje: str = "pca") -> tuple[tuple[float, float], tuple[float, float]]:
+    """Eje mayor (PCA) del contorno y su perpendicular, ambos unitarios (o X / Y si `eje` lo fija)."""
+    if eje == "x":
+        return (1.0, 0.0), (0.0, 1.0)
+    if eje == "y":
+        return (0.0, 1.0), (-1.0, 0.0)
+    a = np.asarray(ext)
+    c = a - a.mean(axis=0)
+    _, vec = np.linalg.eigh(c.T @ c)
+    u = vec[:, 1]
+    if u[0] < 0:
+        u = -u
+    return (float(u[0]), float(u[1])), (float(-u[1]), float(u[0]))
+
+
+def prisma_redondeado(
+    ext: Sequence[Punto], ancho_mm: float, radio: float, z_centro: float = 0.0, eje: str = "pca"
+) -> Any:
+    """Prisma a lo largo del eje mayor del contorno con sección (perpendicular x Z) de rectángulo redondeado: al
+    intersecarlo con el contorno extruido redondea las aristas largas (arriba y abajo del receptor, culata, cargador)
+    sin filetes de OCCT, que se cuelgan con contornos medidos."""
+    (ux, uy), (vx, vy) = _eje_principal(ext, eje)
+    a = np.asarray(ext)
+    pu, pv = a @ np.array([ux, uy]), a @ np.array([vx, vy])
+    largo = float(pu.max() - pu.min()) + 4.0
+    alto_v = float(pv.max() - pv.min())
+    cu, cv = float((pu.max() + pu.min()) / 2), float((pv.max() + pv.min()) / 2)
+    r = max(0.1, min(radio, alto_v / 2 - 0.05, ancho_mm / 2 - 0.05))
+    origen = (ux * (cu - largo / 2) + vx * cv, uy * (cu - largo / 2) + vy * cv, z_centro)
+    plano = Plane(origin=origen, x_dir=(vx, vy, 0), z_dir=(ux, uy, 0))
+    seccion = RectangleRounded(alto_v, ancho_mm, r)
+    return extrude(plano * seccion, amount=largo)
+
+
 def extruir_contorno(
     ext: Sequence[Punto],
     huecos: Sequence[Sequence[Punto]],
@@ -62,18 +105,29 @@ def extruir_contorno(
     radio: float = 0.0,
     esquina_deg: float = 32.0,
     z_centro: float = 0.0,
+    eje: str = "pca",
 ) -> Any:
-    """Sólido del contorno (plano XY) extruido `ancho_mm` en Z, centrado en `z_centro`, con filete `radio` en las
-    aristas de las dos caras grandes (los cantos de la silueta). Si OCCT no puede, prueba radios menores."""
+    """Sólido del contorno (plano XY) extruido `ancho_mm` en Z, centrado en `z_centro`. Con `radio` > 0 se
+    intersecta con un prisma de sección redondeada alineado con el eje mayor de la pieza."""
     cara = cara_con_huecos(ext, huecos, esquina_deg)
-    cuerpo = extrude(cara, amount=ancho_mm / 2, both=True)
-    cuerpo = Pos(0, 0, z_centro) * cuerpo
+    cuerpo = Pos(0, 0, z_centro) * extrude(cara, amount=ancho_mm / 2, both=True)
     if radio > 0:
-        cantos = [e for e in cuerpo.edges() if abs(e.center().Z - z_centro) > ancho_mm / 2 - 1e-6]
-        for r in (radio, radio * 0.7, radio * 0.5, radio * 0.3):
-            f = filetear(cuerpo, r, cantos)
-            if f is not cuerpo:
-                return f
+        try:
+            redondo = cuerpo & prisma_redondeado(ext, ancho_mm, radio, z_centro, eje)
+        except Exception:
+            return cuerpo
+        # Comprobación: el resultado debe caber en el cuerpo (OCCT a veces devuelve la herramienta).
+        bb, br = cuerpo.bounding_box(), redondo.bounding_box()
+        cabe = (
+            br.min.X >= bb.min.X - 0.05
+            and br.max.X <= bb.max.X + 0.05
+            and br.min.Y >= bb.min.Y - 0.05
+            and br.max.Y <= bb.max.Y + 0.05
+            and br.min.Z >= bb.min.Z - 0.05
+            and br.max.Z <= bb.max.Z + 0.05
+        )
+        if cabe and redondo.is_valid and 0.5 * cuerpo.volume < redondo.volume <= cuerpo.volume * 1.001:
+            return redondo
     return cuerpo
 
 
