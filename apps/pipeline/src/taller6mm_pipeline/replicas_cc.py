@@ -147,6 +147,32 @@ def ejecutar(t: dict[str, Any], nombre: str) -> str:
     return salida
 
 
+def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
+    """Una fila por modelo y una columna por vista, sobre el fondo de La Armería (#1A1B1E) con rótulo de ilustrativa."""
+    from PIL import Image, ImageDraw
+
+    fondo = (26, 27, 30)
+    vistas = ["lateral", "lateral-izq", "tres-cuartos"]
+    celda = (900, 600)
+    filas = [m for m in reg["modelos"] if (VISTAS_DIR / m["id"] / f"lateral{sufijo}.png").exists()]
+    hoja = Image.new("RGB", (celda[0] * len(vistas), celda[1] * len(filas)), fondo)
+    d = ImageDraw.Draw(hoja)
+    for r, m in enumerate(filas):
+        for c, v in enumerate(vistas):
+            ruta = VISTAS_DIR / m["id"] / f"{v}{sufijo}.png"
+            if not ruta.exists():
+                continue
+            im = Image.open(ruta).convert("RGBA")
+            base = Image.new("RGBA", im.size, (*fondo, 255))
+            base.alpha_composite(im)
+            hoja.paste(base.convert("RGB").resize(celda, Image.LANCZOS), (c * celda[0], r * celda[1]))
+        d.text((12, r * celda[1] + 8), f"{m['id']}  |  {m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar", fill=(200, 200, 205))
+    salida = VISTAS_DIR / f"hoja-replicas-cc{sufijo}.png"
+    hoja.save(salida)
+    print("HOJA", salida, hoja.size)
+    return salida
+
+
 def main() -> None:
     args = sys.argv[sys.argv.index("--") + 1 :]
     modo, quien, resto = args[0], args[1], args[2:]
@@ -162,6 +188,9 @@ def main() -> None:
         else:
             opciones[k] = v
     reg = cargar()
+    if modo == "hoja":
+        hoja_de_contacto(reg, opciones.get("sufijo", ""))
+        return
     ids = [m["id"] for m in reg["modelos"]] if quien == "todos" else [quien]
     for m in reg["modelos"]:
         if m["id"] not in ids:

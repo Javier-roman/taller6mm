@@ -412,6 +412,32 @@ def configurar_render(plan, res, muestras, transparente=True):
     e.view_settings.exposure = plan["exposicion_ev"]
 
 
+def encuadrar_vertices(cam, centro, direccion, obs, objetivo, iteraciones=12):
+    """Ajusta distancia y centrado para que la silueta real (vértices, no la caja) ocupe `objetivo` del lado mayor."""
+    from bpy_extras.object_utils import world_to_camera_view
+
+    sc = bpy.context.scene
+    puntos = [o.matrix_world @ v.co for o in obs for i, v in enumerate(o.data.vertices) if i % 3 == 0]
+    ancho_rel = sc.render.resolution_y / sc.render.resolution_x
+    for _ in range(iteraciones):
+        bpy.context.view_layer.update()
+        ps = [world_to_camera_view(sc, cam, p) for p in puntos]
+        x0, x1 = min(p.x for p in ps), max(p.x for p in ps)
+        y0, y1 = min(p.y for p in ps), max(p.y for p in ps)
+        fw, fh = x1 - x0, (y1 - y0) * ancho_rel
+        ext = max(fw, fh)
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        dist = (cam.location - centro).length
+        vw = cam.data.sensor_width / cam.data.lens * dist
+        q = cam.rotation_euler.to_quaternion()
+        derecha, arriba = q @ Vector((1, 0, 0)), q @ Vector((0, 1, 0))
+        cam.location += derecha * (cx - 0.5) * vw + arriba * (cy - 0.5) * vw * ancho_rel
+        if abs(ext - objetivo) < 0.005 and abs(cx - 0.5) < 0.005 and abs(cy - 0.5) < 0.01:
+            break
+        cam.location = centro + (cam.location - centro) * (ext / objetivo)
+    cam.data.clip_end = max(cam.data.clip_end, (cam.location - centro).length * 4)
+
+
 def camara(centro: Vector, az: float, el: float, dist: float, lente: float):
     cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
     cam.data.lens = lente
@@ -530,10 +556,7 @@ def main():
             cam.location = pos_polar(centro, vista["az"], vista["el"], diag * 2.5)
             cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
             dirv = (cam.location - centro).normalized()
-            AY["encuadrar"](cam, centro, dirv, lo, hi, vista.get("encuadre", 0.8))
-        if vista.get("desplazar_mm"):
-            # recentra el cuadro sobre la caja (la caja puede no estar centrada respecto al origen)
-            pass
+            encuadrar_vertices(cam, centro, dirv, obs, vista.get("encuadre", 0.8))
         renderizar(str(Path(trabajo["salida"]) / f"{vista['id']}{trabajo.get('sufijo', '')}.png"))
         print("HECHO", vista["id"], flush=True)
 

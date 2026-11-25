@@ -146,8 +146,8 @@
           },
           "polimero": {
             "base": "polimero_grano",
-            "color": "#202020",
-            "rugosidad": 0.55,
+            "color": "#131313",
+            "rugosidad": 0.6,
             "variacion_rugosidad": 0.06,
             "grano_relieve": 0.12,
             "desgaste": {
@@ -244,8 +244,8 @@
           },
           "madera": {
             "base": "madera_veta",
-            "color": "#5A2E1C",
-            "color2": "#43220f",
+            "color": "#4E2817",
+            "color2": "#33190d",
             "rugosidad": 0.45,
             "principled": {
               "Coat Weight": 0.4,
@@ -262,8 +262,8 @@
               "oscurece": 0.2
             },
             "veta": {
-              "escala": 220,
-              "distorsion": 2.2
+              "escala": 340,
+              "distorsion": 1.1
             }
           }
         }
@@ -371,7 +371,7 @@
           },
           "polimero": {
             "base": "polimero_grano",
-            "color": "#1E1E1E",
+            "color": "#1A1A1A",
             "rugosidad": 0.55,
             "variacion_rugosidad": 0.06,
             "grano_relieve": 0.14,

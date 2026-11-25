@@ -2,6 +2,14 @@
 
 Memoria compartida entre agentes: **qué falló, por qué y qué hacer**. Léelo antes de empezar. Al cerrar una tanda, añade una entrada nueva arriba (fecha, qué pasó, qué hacer). Sin relleno: una lección, un párrafo.
 
+## Modelos de licencia abierta como imagen de portada (25-11-2026)
+- **La puerta de calidad mide forma, no parecido.** Las réplicas paramétricas pasaban todos los umbrales y a Javi le parecían juguetes. *Qué hacer:* para la imagen de las baldas y la 2D, partir de un modelo completo CC0/CC BY con forma real y retexturizarlo (`docs/catalogo/replicas-ilustrativas.md`); mirar siempre un render a 100 % antes de dar nada por bueno.
+- **Pistola 1911: elige por el detalle, no por el recuento de triángulos.** De seis 1911 CC BY, la de 15 mil triángulos con tornillos de cachas y ventana de expulsión superó a la de 40 mil (638 partes sueltas desordenadas) y a la de 8 mil (corredera con un pliegue en la boca). *Qué hacer:* miniatura en Workbench de todos los candidatos en una hoja, antes de limpiar ninguno.
+- **Las partes sueltas ya vienen con nombre.** `separate(type='LOOSE')` conserva el nombre de la malla de origen: en el AK-47 bastan cuatro nombres (culata, pistolete y dos guardamanos) para separar la madera; en el M4A1, «Stock», «Magazine» y una caja normalizada para el pistolete. No hace falta cortar geometría.
+- **Metal negro que sale gris o que desaparece.** Con `metálico = 1` y mundo oscuro el metal negro no refleja nada y queda como un recorte; con polímero a su lado, el polímero sale 3 veces más claro. *Qué hacer:* metálico 0,4-0,6 y rugosidad 0,3-0,4 en el metal, polímero con albedo 0,006-0,01 lineal y exposición de -1,6 EV con AgX; ajustar mirando una hoja con los cuatro modelos juntos.
+- **Encuadrar con la caja de la pieza deja el arma al 55 %.** Las esquinas de la caja se proyectan más lejos que la silueta. *Qué hacer:* ajustar distancia y centrado con los vértices (`encuadrar_vertices` en `replicas_cc.py`) y, para px/mm común por clase, fijar el ancho del cuadro en mm en vez de encuadrar cada pieza.
+- **Cycles en CPU a 1800 x 1200 y 160 muestras tarda unos 3 minutos por vista.** Itera a 1200 x 800 y 48 muestras (≈20 s) y deja el render final en segundo plano.
+
 ## Modelado y mallas
 - **Aristas abiertas por contactos tangentes (nov-2026).** Un solape casi nulo entre dos sólidos (placa que sobresale un 2 %, letras que se tocan por una esquina, ranura tangente al taladro) deja la malla abierta, y puede pasar en Linux y no en Windows (coma flotante). *Qué hacer:* solape claro (varios mm; en grabado, ≥0,04 mm de solape entre celdas) y cortes que **entren** en el sólido. No relajes el test.
 - **`filetear` falla en silencio.** Si OCCT no puede, devuelve el sólido sin tocar. *Qué hacer:* comprueba que el filete se ha aplicado (volumen o aristas) cuando el detalle importa.
