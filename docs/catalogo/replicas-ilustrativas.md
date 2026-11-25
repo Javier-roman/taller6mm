@@ -10,12 +10,12 @@ Las réplicas paramétricas montadas se rechazaron («parecen juguete malo del c
 
 | Id | Modelo base | Autor y licencia | Triángulos limpios | Escala de render |
 |---|---|---|---|---|
-| `glock-locarem` | High Poly Glock-18 (No-Textures), OpenGameArt | locarem, CC0 | 23.452 | 200 mm, **convención** sin cita |
+| `glock-locarem` | High Poly Glock-18 (No-Textures), OpenGameArt | locarem, CC0 | 27.676 | 200 mm, **convención** sin cita |
 | `ak47-lamoot` | High-poly AK-47, OpenGameArt | Lamoot, CC0 | 30.730 | 880 mm, **convención** sin cita |
 | `m4a1-mrm0lten` | M4A1 Carbine, Sketchfab (copia Objaverse) | MrM0lten, CC BY 4.0 | 20.995 | 777 mm, **citada** (TM M4A1 MWS) |
 | `pistola-1911-solid3ddd` | Colt Pistol M1911A1 Game Asset, Sketchfab (copia Objaverse) | solid3DDD, CC BY 4.0 | 15.060 | 222 mm, **citada** (TM Hi-Capa 5.1) |
 
-- **No hay Hi-Capa.** Se buscó (Sketchfab, API pública) y no hay ninguna de licencia abierta con forma aprovechable (la única, «HI-CAPA STAND», es un soporte). Se usa una **1911**, la plataforma de la que deriva. Se probaron antes otras cinco 1911 CC BY; la elegida fue la única con detalle real (tornillos de cachas, palanca de seguridad, ventana de expulsión, guardamonte sin facetas visibles).
+- **No hay Hi-Capa.** Se buscó (Sketchfab, API pública) y no hay ninguna de licencia abierta con forma aprovechable (la única, «HI-CAPA STAND», es un soporte). Se usa una **1911**, la plataforma de la que deriva. Se compararon en Workbench trece candidatos y se renderizaron dos 1911 más (Foxx Assets, descartada por una corrugación en la boca de la corredera, y 8sianDude, con 638 partes sueltas desordenadas); la elegida es la única con detalle real (tornillos de cachas, palanca de seguridad, ventana de expulsión). Su silueta tiene algo de facetado en el martillo y el guardamonte.
 - Las cotas citadas salen de `docs/catalogo/cotas-publicas.md`, pero el modelo **no es esa réplica**: la longitud del modelo queda `null` (sin verificar) y con bandera. Las dos escalas «convención» existen solo para que los px/mm sean comunes dentro de cada clase (fusiles: 1,64 px/mm; pistolas: 6,43 px/mm).
 - Atribución CC BY archivada en el registro (`fuente.atribucion`). CC0 no la exige; se archiva igualmente.
 

@@ -185,7 +185,33 @@
         "logos_o_marcajes_en_geometria": false,
         "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
       },
-      "notas": "Variante G18 (selectora) en la ficha; Glock es marca: solo se usa la forma. Internos (barra del disparador, bloques) borrados; se conservan corredera, armazón, gatillo con guardamonte y base del cargador."
+      "notas": "Variante G18 (selectora) en la ficha; Glock es marca: solo se usa la forma. Internos (barra del disparador, bloques) borrados; se conservan corredera, armazón, gatillo con guardamonte y base del cargador.",
+      "limpieza": {
+        "triangulos": 27676,
+        "partes": 18,
+        "caja_mm_render": [200.0, 20.9, 119.7],
+        "hash_geometria_limpia": "4f7a1c9aa52c5928f782a50aeb7c09c05424b1e5ccf55bdd66034b9a5773530a",
+        "caras_por_zona": {
+          "metal": 4033,
+          "polimero": 9784
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/glock-locarem.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/glock-locarem/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 6.43,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 0.63,
+        "superficie_con_mezcla_mayor_25pct": 0.01,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      }
     },
     {
       "id": "ak47-lamoot",
@@ -246,10 +272,10 @@
             "base": "madera_veta",
             "color": "#4E2817",
             "color2": "#33190d",
-            "rugosidad": 0.45,
+            "rugosidad": 0.5,
             "principled": {
               "Coat Weight": 0.4,
-              "Coat Roughness": 0.28
+              "Coat Roughness": 0.55
             },
             "desgaste": {
               "color": "#7a4a30",
@@ -290,7 +316,33 @@
         "logos_o_marcajes_en_geometria": false,
         "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
       },
-      "notas": "AK-47 real de 2010; cascarón hueco sin mecanismo. 92 partes sueltas; madera (culata, pistolete y guardamanos) separada del metal por nombre de malla."
+      "notas": "AK-47 real de 2010; cascarón hueco sin mecanismo. 92 partes sueltas; madera (culata, pistolete y guardamanos) separada del metal por nombre de malla.",
+      "limpieza": {
+        "triangulos": 30730,
+        "partes": 92,
+        "caja_mm_render": [880.0, 70.7, 260.5],
+        "hash_geometria_limpia": "b736f7776cbac312b2468dfcea3a0ddde517750a1baf49554ec8b85f811205e1",
+        "caras_por_zona": {
+          "metal": 14176,
+          "madera": 1518
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/ak47-lamoot.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/ak47-lamoot/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 1.64,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 3.06,
+        "superficie_con_mezcla_mayor_25pct": 0.02,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      }
     },
     {
       "id": "m4a1-mrm0lten",
@@ -412,7 +464,33 @@
         "logos_o_marcajes_en_geometria": false,
         "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
       },
-      "notas": "Carabina con culata telescópica recogida, guardamanos RIS cuádruple y asa de transporte A2. Se borra la munición suelta del modelo. El archivo trae 2.326 partes sueltas."
+      "notas": "Carabina con culata telescópica recogida, guardamanos RIS cuádruple y asa de transporte A2. Se borra la munición suelta del modelo. El archivo trae 2.326 partes sueltas.",
+      "limpieza": {
+        "triangulos": 20995,
+        "partes": 2292,
+        "caja_mm_render": [777.0, 59.4, 226.7],
+        "hash_geometria_limpia": "287c76c99186b869ea2e8b4999be44c29a32f293fd7bd15c899a990d0406b4b8",
+        "caras_por_zona": {
+          "metal": 17073,
+          "polimero": 3922
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/m4a1-mrm0lten.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/m4a1-mrm0lten/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 1.64,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 0.09,
+        "superficie_con_mezcla_mayor_25pct": 0.0,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      }
     },
     {
       "id": "pistola-1911-solid3ddd",
@@ -513,7 +591,33 @@
         "logos_o_marcajes_en_geometria": false,
         "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
       },
-      "notas": "No se encontró ninguna Hi-Capa de licencia abierta con forma aprovechable; la 1911 es la plataforma de la que deriva. Cargador y cañón del modelo van dentro del armazón."
+      "notas": "No se encontró ninguna Hi-Capa de licencia abierta con forma aprovechable; la 1911 es la plataforma de la que deriva. Cargador y cañón del modelo van dentro del armazón.",
+      "limpieza": {
+        "triangulos": 15060,
+        "partes": 6,
+        "caja_mm_render": [222.0, 29.2, 140.3],
+        "hash_geometria_limpia": "22e47d5038cbcaba907c509d9f545e9e07aefc2895e0c1385bc3f4adc9e5eadb",
+        "caras_por_zona": {
+          "metal": 14204,
+          "polimero": 856
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/pistola-1911-solid3ddd.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/pistola-1911-solid3ddd/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 6.43,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 3.2,
+        "superficie_con_mezcla_mayor_25pct": 0.2,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      }
     }
   ],
   "luz": {

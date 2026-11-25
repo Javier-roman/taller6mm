@@ -149,7 +149,7 @@ def ejecutar(t: dict[str, Any], nombre: str) -> str:
 
 def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
     """Una fila por modelo y una columna por vista, sobre el fondo de La Armería (#1A1B1E) con rótulo de ilustrativa."""
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageFont
 
     fondo = (26, 27, 30)
     vistas = ["lateral", "lateral-izq", "tres-cuartos"]
@@ -157,6 +157,10 @@ def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
     filas = [m for m in reg["modelos"] if (VISTAS_DIR / m["id"] / f"lateral{sufijo}.png").exists()]
     hoja = Image.new("RGB", (celda[0] * len(vistas), celda[1] * len(filas)), fondo)
     d = ImageDraw.Draw(hoja)
+    try:
+        letra = ImageFont.truetype("arial.ttf", 22)
+    except OSError:
+        letra = ImageFont.load_default()
     for r, m in enumerate(filas):
         for c, v in enumerate(vistas):
             ruta = VISTAS_DIR / m["id"] / f"{v}{sufijo}.png"
@@ -166,7 +170,7 @@ def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
             base = Image.new("RGBA", im.size, (*fondo, 255))
             base.alpha_composite(im)
             hoja.paste(base.convert("RGB").resize(celda, Image.LANCZOS), (c * celda[0], r * celda[1]))
-        d.text((12, r * celda[1] + 8), f"{m['id']}  |  {m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar", fill=(200, 200, 205))
+        d.text((12, r * celda[1] + 8), f"{m['id']}  |  {m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar", fill=(200, 200, 205), font=letra)
     salida = VISTAS_DIR / f"hoja-replicas-cc{sufijo}.png"
     hoja.save(salida)
     print("HOJA", salida, hoja.size)
