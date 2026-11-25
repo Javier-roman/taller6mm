@@ -21,8 +21,8 @@ import numpy as np
 from PIL import ExifTags, Image, ImageOps
 
 EXTENSIONES = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".tif", ".tiff"}
-LADO_MINIMO_PX = 1500  # por debajo, medir en mm pierde demasiada precisión
-NITIDEZ_MINIMA = 60.0  # varianza del laplaciano en gris, a 1000 px de lado largo: por debajo, foto movida o borrosa
+LADO_MINIMO_PX = 1000  # por debajo, medir en mm pierde demasiada precisión (ajustado el 25-11-2026 a la calidad disponible)
+NITIDEZ_MINIMA = 35.0  # varianza del laplaciano en gris, a 1000 px de lado largo: por debajo, foto movida o borrosa
 CARPETA_POR_DEFECTO = Path(__file__).resolve().parents[5] / "assets-src" / "raw" / "_entrada"
 
 
