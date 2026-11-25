@@ -1,0 +1,572 @@
+{
+  "esquema": 1,
+  "titulo": "Réplicas ilustrativas a partir de modelos 3D de licencia abierta",
+  "nota": "Pivote del 25-11-2026: las réplicas paramétricas montadas se rechazaron («parecen juguete»). Para La Armería y la 2D se usan modelos completos CC0/CC BY con forma real, retexturizados con los materiales y la luz propios. Son ILUSTRATIVOS: nivel T0, medidas sin verificar, no son la réplica exacta de ninguna marca. publicable=false hasta que un humano revise la procedencia (docs/05 §5). Los binarios viven en assets-src/raw/modelos-cc/ y los renders en assets-src/vistas/replicas-cc/ (ambas ignoradas por git).",
+  "clases": {
+    "fusil": {
+      "res": [1800, 1200],
+      "muestras": 160,
+      "vistas": [
+        {
+          "id": "lateral",
+          "az": 0,
+          "el": 4,
+          "lente": 90,
+          "ancho_cuadro_mm": 1100
+        },
+        {
+          "id": "lateral-izq",
+          "az": 180,
+          "el": 4,
+          "lente": 90,
+          "ancho_cuadro_mm": 1100
+        },
+        {
+          "id": "tres-cuartos",
+          "az": 37,
+          "el": 17,
+          "lente": 90,
+          "encuadre": 0.8
+        }
+      ]
+    },
+    "pistola": {
+      "res": [1800, 1200],
+      "muestras": 160,
+      "vistas": [
+        {
+          "id": "lateral",
+          "az": 0,
+          "el": 4,
+          "lente": 100,
+          "ancho_cuadro_mm": 280
+        },
+        {
+          "id": "lateral-izq",
+          "az": 180,
+          "el": 4,
+          "lente": 100,
+          "ancho_cuadro_mm": 280
+        },
+        {
+          "id": "tres-cuartos",
+          "az": 37,
+          "el": 17,
+          "lente": 100,
+          "encuadre": 0.8
+        }
+      ]
+    }
+  },
+  "modelos": [
+    {
+      "id": "glock-locarem",
+      "fuente": {
+        "modelo": "High Poly Glock-18 (No-Textures)",
+        "plataforma": "OpenGameArt",
+        "autor": "locarem",
+        "url_ficha": "https://opengameart.org/content/high-poly-glock-18-no-textures",
+        "url_descarga": "https://opengameart.org/sites/default/files/Glock_HighPoly.obj",
+        "licencia": "CC0 1.0",
+        "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "Ficha pública leída en vivo antes de descargar: «License(s): CC0»",
+        "sha256": "5437aa4cbacfb9838c2ff06cabb13ccf68779ce8af4652a1672923772f35d089",
+        "bytes": 2074202,
+        "archivo": "assets-src/raw/modelos-cc/Glock_HighPoly.obj",
+        "atribucion": "«High Poly Glock-18 (No-Textures)» de locarem, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), vía https://opengameart.org/content/high-poly-glock-18-no-textures. No exigida por CC0; se archiva igualmente."
+      },
+      "render": {
+        "clase": "pistola",
+        "orientacion": {
+          "boca": "-X",
+          "arriba": "+Y"
+        },
+        "largo_mm_render": 200,
+        "borrar": [
+          {
+            "parte": {
+              "nombres": ["Cube.010_Cube.020", "Cube.010_Cube.021", "Cube.010_Cube.004"]
+            }
+          },
+          {
+            "parte": {
+              "nombres": ["Cube.010_Cube.016"]
+            },
+            "cara": {
+              "v": [0.05, 1]
+            }
+          }
+        ],
+        "zona_defecto": "polimero",
+        "zonas": [
+          {
+            "parte": {
+              "nombres": [
+                "Cube.010_Cube.015",
+                "Cube.010_Cube.003",
+                "Cube.010_Cube.001",
+                "Cube.010_Cube.002",
+                "Cube.010_Cube.005",
+                "Cube.010_Cube.006",
+                "Cube.010_Cube.007",
+                "Cube.010_Cube.008",
+                "Cube.010_Cube.009",
+                "Cube.010_Cube.010",
+                "Cube.010_Cube.011",
+                "Cube.010_Cube.012",
+                "Cube.010_Cube.013",
+                "Cube.010_Cube.014",
+                "Cube.010_Cube.019"
+              ]
+            },
+            "mat": "metal"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "anodizado_negro",
+            "color": "#1A1A1C",
+            "metalico": 0.55,
+            "rugosidad": 0.34,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.04,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.6,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          },
+          "polimero": {
+            "base": "polimero_grano",
+            "color": "#202020",
+            "rugosidad": 0.55,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.12,
+            "desgaste": {
+              "color": "#3a3a3a",
+              "cantidad": 0.25,
+              "radio_mm": 0.8,
+              "rugosidad": 0.55
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          }
+        }
+      },
+      "titulo": "Pistola de polímero (silueta tipo Glock de 1.ª generación)",
+      "clase": "pistola",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "convencion",
+        "largo_mm_render": 200,
+        "longitud_mm_verificada": null,
+        "bandera": "sin cota de pistola de polímero en el catálogo: 200 mm es una convención de render para fijar px/mm común a las pistolas, no un dato verificado"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "Variante G18 (selectora) en la ficha; Glock es marca: solo se usa la forma. Internos (barra del disparador, bloques) borrados; se conservan corredera, armazón, gatillo con guardamonte y base del cargador."
+    },
+    {
+      "id": "ak47-lamoot",
+      "fuente": {
+        "modelo": "High-poly AK-47",
+        "plataforma": "OpenGameArt",
+        "autor": "Lamoot",
+        "url_ficha": "https://opengameart.org/content/high-poly-ak-47",
+        "url_descarga": "https://opengameart.org/sites/default/files/highpoly_ak47.obj",
+        "licencia": "CC0 1.0",
+        "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "Ficha pública leída en vivo antes de descargar: «License(s): CC0»",
+        "sha256": "f6ec87cbdf8394a1c09ff42a3377b26da6149ea07024690a91307352506ef376",
+        "bytes": 842609,
+        "archivo": "assets-src/raw/modelos-cc/highpoly_ak47.obj",
+        "atribucion": "«High-poly AK-47» de Lamoot, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), vía https://opengameart.org/content/high-poly-ak-47. No exigida por CC0; se archiva igualmente."
+      },
+      "render": {
+        "clase": "fusil",
+        "orientacion": {
+          "boca": "+Y",
+          "arriba": "+Z"
+        },
+        "largo_mm_render": 880,
+        "borrar": [],
+        "zona_defecto": "metal",
+        "zonas": [
+          {
+            "parte": {
+              "nombres": ["Circle.007", "Circle.075", "Circle.051", "Circle.050"]
+            },
+            "mat": "madera"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "acero_pavonado",
+            "color": "#1A1B1E",
+            "metalico": 0.55,
+            "rugosidad": 0.35,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.03,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.8,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          },
+          "madera": {
+            "base": "madera_veta",
+            "color": "#5A2E1C",
+            "color2": "#43220f",
+            "rugosidad": 0.45,
+            "principled": {
+              "Coat Weight": 0.4,
+              "Coat Roughness": 0.28
+            },
+            "desgaste": {
+              "color": "#7a4a30",
+              "cantidad": 0.3,
+              "radio_mm": 1.0,
+              "rugosidad": 0.5
+            },
+            "suciedad": {
+              "cantidad": 0.3,
+              "oscurece": 0.2
+            },
+            "veta": {
+              "escala": 220,
+              "distorsion": 2.2
+            }
+          }
+        }
+      },
+      "titulo": "Fusil de asalto con madera (silueta tipo AK-47)",
+      "clase": "fusil",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "convencion",
+        "largo_mm_render": 880,
+        "longitud_mm_verificada": null,
+        "bandera": "sin cota de réplica AK en el catálogo: 880 mm es una convención de render para fijar px/mm común a los fusiles, no un dato verificado"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "AK-47 real de 2010; cascarón hueco sin mecanismo. 92 partes sueltas; madera (culata, pistolete y guardamanos) separada del metal por nombre de malla."
+    },
+    {
+      "id": "m4a1-mrm0lten",
+      "fuente": {
+        "modelo": "M4A1 Carbine",
+        "plataforma": "Sketchfab (copia en el dataset Objaverse 1.0 de Hugging Face)",
+        "autor": "MrM0lten",
+        "url_ficha": "https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9",
+        "url_descarga": "https://huggingface.co/datasets/allenai/objaverse",
+        "licencia": "CC BY 4.0",
+        "url_licencia": "https://creativecommons.org/licenses/by/4.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "API pública de Sketchfab (campo license.slug), consultada en vivo antes de descargar",
+        "sha256": "a7a390e26b4c2e93c8f83cb6bf77b5993510ae6d4b1818fc372ffbab92723f5e",
+        "bytes": 11237012,
+        "archivo": "assets-src/raw/modelos-cc/9bb8f18ad94d4b468e447a2d43bd08b9.glb",
+        "atribucion": "\"M4A1 Carbine\" de MrM0lten, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9"
+      },
+      "render": {
+        "clase": "fusil",
+        "orientacion": {
+          "boca": "+X",
+          "arriba": "+Z"
+        },
+        "largo_mm_render": 777,
+        "borrar": [
+          {
+            "parte": {
+              "nombre": "Bullet"
+            }
+          }
+        ],
+        "zona_defecto": "metal",
+        "zonas": [
+          {
+            "parte": {
+              "nombre": "Stock"
+            },
+            "mat": "polimero"
+          },
+          {
+            "parte": {
+              "nombre": "Magazine"
+            },
+            "mat": "polimero"
+          },
+          {
+            "parte": {
+              "nombre": "Body_Body1",
+              "centro": {
+                "u": [0.27, 0.4],
+                "v": [0.1, 0.52]
+              }
+            },
+            "mat": "polimero"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "anodizado_negro",
+            "color": "#1C1C1E",
+            "metalico": 0.4,
+            "rugosidad": 0.42,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.04,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.7,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          },
+          "polimero": {
+            "base": "polimero_grano",
+            "color": "#1E1E1E",
+            "rugosidad": 0.55,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.14,
+            "desgaste": {
+              "color": "#3a3a3a",
+              "cantidad": 0.25,
+              "radio_mm": 0.8,
+              "rugosidad": 0.55
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          }
+        }
+      },
+      "titulo": "Carabina tipo M4A1 con guardamanos RIS",
+      "clase": "fusil",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "citada",
+        "largo_mm_render": 777,
+        "fuente_cota": "docs/catalogo/cotas-publicas.md y catalogo/cotas-airsoft.json: Tokyo Marui M4A1 MWS, largo total 777 mm (ficha oficial 409)",
+        "confianza": "alta para la réplica de la ficha; el modelo no es esa réplica, así que la medida del modelo queda sin verificar",
+        "longitud_mm_verificada": null,
+        "bandera": "largo ajustado a la cota citada de otra réplica de la misma clase; sin cota para este modelo"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "Carabina con culata telescópica recogida, guardamanos RIS cuádruple y asa de transporte A2. Se borra la munición suelta del modelo. El archivo trae 2.326 partes sueltas."
+    },
+    {
+      "id": "pistola-1911-solid3ddd",
+      "fuente": {
+        "modelo": "Colt Pistol M1911A1 Game Asset",
+        "plataforma": "Sketchfab (copia en el dataset Objaverse 1.0 de Hugging Face)",
+        "autor": "solid3DDD",
+        "url_ficha": "https://sketchfab.com/3d-models/colt-pistol-m1911a1-game-asset-b2af7029a4694344a1290dee3cb7e6da",
+        "url_descarga": "https://huggingface.co/datasets/allenai/objaverse",
+        "licencia": "CC BY 4.0",
+        "url_licencia": "https://creativecommons.org/licenses/by/4.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "API pública de Sketchfab (campo license.slug), consultada en vivo antes de descargar",
+        "sha256": "01e00f53f242025f58d20a1ca221e410688e7ef96ae755f896e1f83df33b92df",
+        "bytes": 5136224,
+        "archivo": "assets-src/raw/modelos-cc/b2af7029a4694344a1290dee3cb7e6da.glb",
+        "atribucion": "\"Colt Pistol M1911A1 Game Asset\" de solid3DDD, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/colt-pistol-m1911a1-game-asset-b2af7029a4694344a1290dee3cb7e6da"
+      },
+      "render": {
+        "clase": "pistola",
+        "orientacion": {
+          "boca": "-Y",
+          "arriba": "+Z"
+        },
+        "largo_mm_render": 222,
+        "separar_sueltas": false,
+        "borrar": [],
+        "zona_defecto": "metal",
+        "zonas": [
+          {
+            "parte": {
+              "nombres": ["Object_12"]
+            },
+            "mat": "polimero"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "anodizado_negro",
+            "color": "#1A1A1C",
+            "metalico": 0.6,
+            "rugosidad": 0.32,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.04,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.6,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          },
+          "polimero": {
+            "base": "polimero_grano",
+            "color": "#1E1E1E",
+            "rugosidad": 0.55,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.2,
+            "desgaste": {
+              "color": "#3a3a3a",
+              "cantidad": 0.25,
+              "radio_mm": 0.8,
+              "rugosidad": 0.55
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          }
+        }
+      },
+      "titulo": "Pistola tipo 1911 de acero (no es una Hi-Capa)",
+      "clase": "pistola",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "citada",
+        "largo_mm_render": 222,
+        "fuente_cota": "docs/catalogo/cotas-publicas.md: Tokyo Marui Hi-Capa 5.1 Government, largo total 222 mm (ficha oficial blowback/55)",
+        "confianza": "alta (extracto) para la Hi-Capa; el modelo es una 1911, no una Hi-Capa",
+        "longitud_mm_verificada": null,
+        "bandera": "largo ajustado a la cota citada de la Hi-Capa 5.1 solo para comparar con ella; sin cota de este modelo"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "No se encontró ninguna Hi-Capa de licencia abierta con forma aprovechable; la 1911 es la plataforma de la que deriva. Cargador y cañón del modelo van dentro del armazón."
+    }
+  ],
+  "luz": {
+    "tono": "AgX",
+    "look": "AgX - Medium High Contrast",
+    "exposicion_ev": -1.6,
+    "mundo": {
+      "gris_abajo": 0.025,
+      "gris_arriba": 0.055
+    },
+    "clave": {
+      "az": -45,
+      "el": 35,
+      "dist": 1.6,
+      "tam_d": 1.2,
+      "energia_d2": 120
+    },
+    "relleno": {
+      "az": 50,
+      "el": 10,
+      "dist": 1.8,
+      "tam_d": 1.6,
+      "relativa": 0.25,
+      "color": [0.9, 0.94, 1.0]
+    },
+    "contornos": [
+      {
+        "az": 150,
+        "el": 55,
+        "dist": 1.5,
+        "largo_d": 1.5,
+        "ancho_d": 0.3,
+        "relativa": 3,
+        "color": [1.0, 0.97, 0.93]
+      },
+      {
+        "az": 210,
+        "el": 50,
+        "dist": 1.5,
+        "largo_d": 1.5,
+        "ancho_d": 0.3,
+        "relativa": 3,
+        "color": [0.93, 0.96, 1.0]
+      }
+    ],
+    "reflejo": {
+      "az": -22,
+      "el": 8,
+      "dist": 1.5,
+      "largo_d": 1.8,
+      "ancho_d": 0.9,
+      "relativa": 0.6,
+      "color": [1.0, 1.0, 1.0]
+    }
+  }
+}
