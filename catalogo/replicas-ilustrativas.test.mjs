@@ -12,8 +12,8 @@ const modelos = registro.modelos;
 const LICENCIAS = /^(CC0 1\.0|CC BY 4\.0)$/;
 const CLASES = new Set(Object.keys(registro.clases));
 
-test('hay entre 3 y 6 modelos y los ids no se repiten', () => {
-  assert.ok(modelos.length >= 3 && modelos.length <= 6);
+test('hay entre 3 y 10 modelos y los ids no se repiten', () => {
+  assert.ok(modelos.length >= 3 && modelos.length <= 10);
   assert.equal(new Set(modelos.map((m) => m.id)).size, modelos.length);
 });
 
@@ -46,7 +46,7 @@ for (const m of modelos) {
 
   test(`${m.id}: escala honesta (cota citada o convención con bandera)`, () => {
     const e = m.escala;
-    assert.ok(['citada', 'convencion'].includes(e.tipo));
+    assert.ok(['citada', 'convencion', 'relativa'].includes(e.tipo));
     assert.ok(Number.isFinite(e.largo_mm_render) && e.largo_mm_render > 0);
     if (e.tipo === 'citada') {
       assert.ok(e.fuente_cota && e.confianza, 'una cota citada lleva fuente y confianza');

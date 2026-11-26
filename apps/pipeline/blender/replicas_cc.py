@@ -274,6 +274,10 @@ def construir_materiales(trabajo, modo_mat="pbr"):
                     for k, v in m.get("principled", {}).items():
                         if k in n.inputs:
                             n.inputs[k].default_value = v
+            if m.get("veta_direccion"):
+                for n in mat.node_tree.nodes:
+                    if n.bl_idname == "ShaderNodeTexWave" and n.wave_type == "RINGS":
+                        n.rings_direction = m["veta_direccion"]
             if m.get("cuadriculado"):
                 anadir_cuadriculado(mat, m["cuadriculado"])
         mats[clave] = mat
@@ -500,6 +504,287 @@ def preparar(trabajo):
     return obs, lo, hi
 
 
+def deformar_array(co, lo, ajuste: dict):
+    """Aplica a un array (n, 3) en metros la deformación por zonas (ver `deformar_por_zonas`)."""
+    import numpy as np
+
+    xm, xr = np.array(ajuste["x_modelo_mm"], float), np.array(ajuste["x_ref_mm"], float)
+    anclas = np.array([r[:3] for r in ajuste["z_anclas"]], float)
+    x = (co[:, 0] - lo.x) * 1000.0
+    z = (co[:, 2] - lo.z) * 1000.0
+    xn = np.interp(x, xm, xr)
+    pie, cabeza = x < xm[0], x > xm[-1]
+    xn[pie] = xr[0] + (x[pie] - xm[0]) * (xr[1] - xr[0]) / (xm[1] - xm[0])
+    xn[cabeza] = xr[-1] + (x[cabeza] - xm[-1]) * (xr[-1] - xr[-2]) / (xm[-1] - xm[-2])
+    a = np.interp(xn, anclas[:, 0], anclas[:, 1])
+    b = np.interp(xn, anclas[:, 0], anclas[:, 2])
+    out = co.copy()
+    out[:, 0] = lo.x + xn / 1000.0
+    out[:, 2] = lo.z + (a * z + b) / 1000.0
+    return out
+
+
+def transformar_grupo(co, g: dict, pivote):
+    """Traslación (dx, dz mm), giro (grados, eje Y) y escala (sx, sz) de un grupo rígido alrededor de su pivote."""
+    out = co.copy()
+    px, pz = pivote
+    x, z = (out[:, 0] - px) * g.get("sx", 1.0), (out[:, 2] - pz) * g.get("sz", 1.0)
+    t = math.radians(g.get("rot", 0.0))
+    c, sn = math.cos(t), math.sin(t)
+    out[:, 0] = px + c * x - sn * z + g.get("dx", 0.0) / 1000.0
+    out[:, 2] = pz + sn * x + c * z + g.get("dz", 0.0) / 1000.0
+    return out
+
+
+def miembros_y_pivotes(obs, ajuste: dict):
+    """Grupo rígido de cada parte (por reglas de nombre o caja normalizada) y pivote (centro superior) de cada grupo."""
+    n0 = Norm(*caja_de(obs))
+    miembros = {}
+    for g in ajuste.get("grupos", []):
+        for o in obs:
+            if parte_coincide(g["parte"], datos_parte(o, n0), o.name):
+                miembros.setdefault(o.name, g)
+    pivotes = {}
+    for g in ajuste.get("grupos", []):
+        sel = [o for o in obs if miembros.get(o.name) is g]
+        if sel:
+            glo, ghi = caja_de(sel)
+            pivotes[g["id"]] = ((glo.x + ghi.x) / 2, ghi.z)
+    return miembros, pivotes
+
+
+def forma_deformada(co, lo, ajuste: dict, g, pivote):
+    import numpy as np
+
+    co = deformar_array(co, lo, ajuste)
+    if g is not None:
+        piv = deformar_array(np.array([[pivote[0], 0.0, pivote[1]]]), lo, ajuste)[0]
+        co = transformar_grupo(co, g, (piv[0], piv[2]))
+    return co
+
+
+def deformar_por_zonas(obs, ajuste: dict) -> None:
+    """Deformación por zonas a lo largo del eje de la boca (x) y en altura (z), continua y sin desgarros.
+
+    `x_modelo_mm` -> `x_ref_mm`: tramos lineales que alargan o acortan zonas (culata, guardamanos, cañón) sin tocar el
+    detalle de las zonas con pendiente 1. `z_anclas` = [[x_ref_mm, escala, desplazamiento_mm], ...]: transformación
+    afín de la altura interpolada entre anclas. Coordenadas relativas a la esquina mínima de la caja, en mm.
+    Después, `grupos` (cargador, pistolete...) se mueven como sólidos rígidos con giro y escala propios.
+    """
+    import numpy as np
+
+    lo, _ = caja_de(obs)
+    miembros, pivotes = miembros_y_pivotes(obs, ajuste)
+    for o in obs:
+        n = len(o.data.vertices)
+        co = np.empty(n * 3)
+        o.data.vertices.foreach_get("co", co)
+        g = miembros.get(o.name)
+        co = forma_deformada(co.reshape(n, 3), lo, ajuste, g, pivotes.get(g["id"]) if g else None)
+        o.data.vertices.foreach_set("co", co.ravel())
+        o.data.update()
+
+
+def ajustar_silueta(obs, trabajo) -> dict:
+    """Busca por descenso de coordenadas los parámetros de zona y de grupo que maximizan el IoU con la referencia.
+
+    El IoU se mide sobre una máscara ortográfica (Workbench, 1 px/mm) alineada por la esquina superior izquierda.
+    La penalización mantiene cerca de 1 las escalas y pendientes (para no deformar detalle fino).
+    """
+    import numpy as np
+
+    ref = np.load(trabajo["ref_npy"])
+    aj = json.loads(json.dumps(trabajo["ajuste"]))
+    lo0, _ = caja_de(obs)
+    miembros, pivotes = miembros_y_pivotes(obs, aj)
+    base = {}
+    for o in obs:
+        n = len(o.data.vertices)
+        co = np.empty(n * 3)
+        o.data.vertices.foreach_get("co", co)
+        base[o.name] = co.reshape(n, 3)
+
+    sc = bpy.context.scene
+    sc.render.engine = "BLENDER_WORKBENCH"
+    sc.display.shading.light = "FLAT"
+    sc.display.shading.color_type = "SINGLE"
+    sc.display.shading.single_color = (1.0, 1.0, 1.0)
+    sc.render.film_transparent = True
+    sc.view_settings.view_transform = "Standard"
+    sc.render.image_settings.color_mode = "RGBA"
+    ancho, alto = ref.shape[1], ref.shape[0]
+    sc.render.resolution_x, sc.render.resolution_y = ancho, alto
+    cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
+    cam.data.type = "ORTHO"
+    cam.data.ortho_scale = ancho / 1000.0
+    cam.data.clip_end = 10.0
+    cam.rotation_euler = (math.pi / 2, 0.0, 0.0)
+    sc.collection.objects.link(cam)
+    sc.camera = cam
+    tmp = str(Path(trabajo["salida"]) / "_opt.png")
+    ry, rx = np.nonzero(ref)
+    r_min, c_min = ry.min(), rx.min()
+
+    def aplicar():
+        for o in obs:
+            g = miembros.get(o.name)
+            co = forma_deformada(base[o.name], lo0, aj, g, pivotes.get(g["id"]) if g else None)
+            o.data.vertices.foreach_set("co", co.ravel())
+            o.data.update()
+
+    def mascara():
+        lo, hi = caja_de(obs)
+        cam.location = ((lo.x + hi.x) / 2, -2.0, (lo.z + hi.z) / 2)
+        bpy.context.view_layer.update()
+        renderizar(tmp)
+        img = bpy.data.images.load(tmp, check_existing=False)
+        px = np.empty(ancho * alto * 4, np.float32)
+        img.pixels.foreach_get(px)
+        bpy.data.images.remove(img)
+        return px.reshape(alto, ancho, 4)[::-1, :, 3] > 0.5
+
+    def iou():
+        m = mascara()
+        yy, xx = np.nonzero(m)
+        if len(yy) == 0:
+            return 0.0
+        r0, c0 = yy.min(), xx.min()
+        h = min(alto - r0, alto - r_min)
+        w = min(ancho - c0, ancho - c_min)
+        a = m[r0 : r0 + h, c0 : c0 + w]
+        b = ref[r_min : r_min + h, c_min : c_min + w]
+        return float((a & b).sum()) / float((a | b).sum())
+
+    pars = []
+    for i in range(1, len(aj["x_ref_mm"]) - 1):
+        pars.append(([aj["x_ref_mm"]], i, 8.0, aj["x_ref_mm"][i] - 120, aj["x_ref_mm"][i] + 120))
+    # las filas con el mismo 4.º elemento (id de atadura) comparten escala y desplazamiento: zona plana, sin curvar
+    atadas = {}
+    for fila in aj["z_anclas"]:
+        atadas.setdefault(fila[3] if len(fila) > 3 else id(fila), []).append(fila)
+    for filas in atadas.values():
+        pars.append((filas, 1, 0.04, 0.6, 1.7))
+        pars.append((filas, 2, 6.0, -120, 120))
+    for g in aj.get("grupos", []):
+        for k, paso, mn, mx in (
+            ("dx", 6.0, -120, 120),
+            ("dz", 6.0, -120, 120),
+            ("rot", 2.0, -25, 25),
+            ("sz", 0.04, 0.5, 2.0),
+            ("sx", 0.04, 0.5, 2.0),
+        ):
+            if k in g.get("libres", ["dx", "dz", "rot", "sz", "sx"]):
+                g.setdefault(k, 1.0 if k in ("sz", "sx") else 0.0)
+                pars.append(([g], k, paso, mn, mx))
+    lam = trabajo.get("penalizacion", 0.03)
+    xm = aj["x_modelo_mm"]
+    pesos = trabajo.get("peso_tramo", [1.0] * len(xm))
+
+    def pen():
+        p = 0.0
+        for i in range(len(xm) - 1):
+            pend = (aj["x_ref_mm"][i + 1] - aj["x_ref_mm"][i]) / (xm[i + 1] - xm[i])
+            p += pesos[i] * (pend - 1.0) ** 2
+        for fila in aj["z_anclas"]:
+            p += (fila[1] - 1.0) ** 2
+        for g in aj.get("grupos", []):
+            p += 0.3 * ((g.get("sz", 1.0) - 1.0) ** 2 + (g.get("sx", 1.0) - 1.0) ** 2)
+        return lam * p
+
+    def objetivo():
+        aplicar()
+        return iou() - pen()
+
+    mejor = objetivo()
+    inicial = mejor
+    pasos = [p[2] for p in pars]
+    evals = 0
+    for ronda in range(trabajo.get("rondas", 7)):
+        mejoro = False
+        for k, (conts, clave, _paso, mn, mx) in enumerate(pars):
+            for signo in (1, -1):
+                antes = conts[0][clave]
+                nuevo = min(mx, max(mn, antes + signo * pasos[k]))
+                if nuevo == antes:
+                    continue
+                for cont in conts:
+                    cont[clave] = nuevo
+                v = objetivo()
+                evals += 1
+                if v > mejor + 1e-5:
+                    mejor, mejoro = v, True
+                    break
+                for cont in conts:
+                    cont[clave] = antes
+        if not mejoro:
+            pasos = [x / 2 for x in pasos]
+        print(f"RONDA {ronda} objetivo={mejor:.4f} evals={evals}", flush=True)
+    aplicar()
+    final = iou()
+    print(f"AJUSTE iou_inicial={inicial:.4f} iou_final={final:.4f}", flush=True)
+    return {"ajuste": aj, "iou_final_1pxmm": round(final, 4), "iou_inicial": round(inicial, 4), "evaluaciones": evals}
+
+
+def render_silueta(obs, trabajo) -> None:
+    """Máscara de silueta lateral (ortográfica, alfa) a un px/mm fijo, para medir el IoU contra el contorno de foto."""
+    sc = bpy.context.scene
+    sc.render.engine = "BLENDER_WORKBENCH"
+    sc.display.shading.light = "FLAT"
+    sc.display.shading.color_type = "SINGLE"
+    sc.display.shading.single_color = (1.0, 1.0, 1.0)
+    sc.render.film_transparent = True
+    sc.view_settings.view_transform = "Standard"
+    sc.render.image_settings.color_mode = "RGBA"
+    sc.render.resolution_x, sc.render.resolution_y = trabajo["silueta_res"]
+    ancho_mm = trabajo["silueta_ancho_mm"]
+    cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
+    cam.data.type = "ORTHO"
+    cam.data.ortho_scale = ancho_mm / 1000.0
+    lo, hi = caja_de(obs)
+    c = (lo + hi) / 2
+    cam.location = (c.x, -2.0, c.z)
+    cam.rotation_euler = (math.pi / 2, 0.0, 0.0)
+    cam.data.clip_end = 10.0
+    sc.collection.objects.link(cam)
+    sc.camera = cam
+    renderizar(str(Path(trabajo["salida"]) / f"silueta{trabajo.get('sufijo', '')}.png"))
+    print("HECHO silueta", flush=True)
+
+
+def crear_extrusiones(lo, specs):
+    """Piezas planas extruidas desde un contorno (culata y tubo del AK-105) con bisel: se añaden tras deformar el cuerpo.
+
+    `puntos_mm` son [x, z] relativos a la esquina mínima de la silueta de referencia; `lo` es la esquina mínima del
+    cuerpo antes de deformar, que es el origen de la deformación (ver `deformar_array`).
+    """
+    salida = []
+    for e in specs:
+        bm = bmesh.new()
+        mitad = e["ancho_mm"] / 2000.0
+        vs = [bm.verts.new((lo.x + x / 1000.0, -mitad, lo.z + z / 1000.0)) for x, z in e["puntos_mm"]]
+        cara = bm.faces.new(vs)
+        res = bmesh.ops.extrude_face_region(bm, geom=[cara])
+        mover = [v for v in res["geom"] if isinstance(v, bmesh.types.BMVert)]
+        bmesh.ops.translate(bm, vec=(0.0, 2 * mitad, 0.0), verts=mover)
+        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+        malla = bpy.data.meshes.new("ext_" + e["id"])
+        bm.to_mesh(malla)
+        bm.free()
+        obj = bpy.data.objects.new("ext_" + e["id"], malla)
+        bpy.context.scene.collection.objects.link(obj)
+        mod = obj.modifiers.new("bisel", "BEVEL")
+        mod.width = e.get("bisel_mm", 2.0) / 1000.0
+        mod.segments = 3
+        mod.limit_method = "ANGLE"
+        mod.angle_limit = math.radians(35)
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.modifier_apply(modifier="bisel")
+        salida.append(obj)
+    return salida
+
+
 def main():
     a = argumentos()
     trabajo = json.loads(Path(a["trabajo"]).read_text(encoding="utf-8"))
@@ -516,6 +801,12 @@ def main():
                 d["caras"],
                 "c=({:.2f},{:.2f},{:.2f})".format(d["u"], d["v"], d["w"]),
                 "u={:.2f}-{:.2f} v={:.2f}-{:.2f}".format(d["u0"], d["u1"], d["v0"], d["v1"]),
+                "mm x={:.0f}-{:.0f} z={:.0f}-{:.0f}".format(
+                    d["u0"] * trabajo["largo_mm"],
+                    d["u1"] * trabajo["largo_mm"],
+                    d["v0"] * n1.dim.z / n1.dim.x * trabajo["largo_mm"],
+                    d["v1"] * n1.dim.z / n1.dim.x * trabajo["largo_mm"],
+                ),
             )
         return
     # escala a mm reales (o convención de render) y centrado
@@ -526,11 +817,31 @@ def main():
             v.co = (v.co - centro_antes) * esc
         o.data.update()
     lo, hi = caja_de(obs)
+    lo_pre = lo
+    extras = crear_extrusiones(lo_pre, trabajo.get("extrusiones", []))
+    if modo == "ajustar":
+        res = ajustar_silueta(obs, trabajo)
+        Path(trabajo["salida"]).mkdir(parents=True, exist_ok=True)
+        (Path(trabajo["salida"]) / "ajuste-optimo.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
+        return
+    if trabajo.get("ajuste"):
+        deformar_por_zonas(obs, trabajo["ajuste"])
+        obs = obs + extras
+        lo, hi = caja_de(obs)
+        centro_nuevo = (lo + hi) / 2
+        for o in obs:
+            o.data.transform(Matrix.Translation(-centro_nuevo))
+            o.data.update()
+        lo, hi = caja_de(obs)
     n2 = Norm(lo, hi)  # misma normalización (invariante a la escala y al desplazamiento)
     mats = construir_materiales(trabajo, "pbr" if modo != "sonda_borde" else "borde")
     cuenta = asignar_zonas(obs, trabajo["zonas"], trabajo["zona_defecto"], n2, mats)
     print("CARAS_POR_ZONA", json.dumps(cuenta))
     suavizar(obs, trabajo.get("suavizado_grados", 35))
+    if modo == "silueta":
+        Path(trabajo["salida"]).mkdir(parents=True, exist_ok=True)
+        render_silueta(obs, trabajo)
+        return
     if trabajo.get("exportar_limpio"):
         bpy.ops.object.select_all(action="DESELECT")
         for o in obs:

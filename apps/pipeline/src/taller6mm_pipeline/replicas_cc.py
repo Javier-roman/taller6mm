@@ -89,6 +89,22 @@ def plan_luz(clase: dict[str, Any]) -> dict[str, Any]:
     return clase["luz"]
 
 
+def luz_de_modelo(luz: dict[str, Any], r: dict[str, Any]) -> dict[str, Any]:
+    """Plan de luz común con los ajustes propios de una pieza (`luz_ajuste`: relleno_ev, contornos, exposicion_ev)."""
+    aj = r.get("luz_ajuste")
+    if not aj:
+        return luz
+    out = copy.deepcopy(luz)
+    if "relleno_ev" in aj:
+        out["relleno"]["relativa"] *= 2.0 ** aj["relleno_ev"]
+    if "contornos_x" in aj:
+        for c in out["contornos"]:
+            c["relativa"] *= aj["contornos_x"]
+    if "exposicion_ev" in aj:
+        out["exposicion_ev"] += aj["exposicion_ev"]
+    return out
+
+
 def trabajo(m: dict[str, Any], reg: dict[str, Any], modo: str, opciones: dict[str, Any]) -> dict[str, Any]:
     r = m["render"]
     clase = reg["clases"][r["clase"]]
@@ -109,7 +125,7 @@ def trabajo(m: dict[str, Any], reg: dict[str, Any], modo: str, opciones: dict[st
         "separar_sueltas": r.get("separar_sueltas", True),
         "borrar": r.get("borrar", []),
         "min_caras": r.get("min_caras", 0),
-        "largo_mm": r["largo_mm_render"],
+        "largo_mm": opciones.get("largo") or r["largo_mm_render"],
         "zonas": r["zonas"],
         "zona_defecto": r["zona_defecto"],
         "materiales": {
@@ -118,6 +134,7 @@ def trabajo(m: dict[str, Any], reg: dict[str, Any], modo: str, opciones: dict[st
                 "principled": v.get("principled", {}),
                 "semilla": v.get("semilla", 7),
                 "cuadriculado": v.get("cuadriculado"),
+                "veta_direccion": v.get("veta_direccion"),
             }
             for k, v in r["materiales"].items()
         },
@@ -125,11 +142,34 @@ def trabajo(m: dict[str, Any], reg: dict[str, Any], modo: str, opciones: dict[st
         "vistas": vistas,
         "res": res,
         "muestras": opciones.get("muestras") or clase["muestras"],
-        "luz": reg["luz"],
+        "luz": luz_de_modelo(reg["luz"], r),
         "salida": str(salida),
         "suavizado_grados": r.get("suavizado_grados", 35),
         "sufijo": opciones.get("sufijo", ""),
     }
+    if r.get("ajuste"):
+        t["ajuste"] = r["ajuste"]
+    if r.get("extrusiones"):
+        t["extrusiones"] = extrusiones_de_referencia(m["referencia_silueta"], r["extrusiones"])
+    if modo == "ajustar":
+        import numpy as np
+
+        t["modo"] = "ajustar"
+        ref_id = opciones["ref"]
+        mascara, _, _ = raster_referencia(ref_id, 1.0, 1400.0, 900.0)
+        npy = TMP / f"ref-{ref_id}.npy"
+        TMP.mkdir(parents=True, exist_ok=True)
+        np.save(npy, mascara)
+        t["ref_npy"] = str(npy)
+        t["rondas"] = opciones.get("rondas", 7)
+        t["peso_tramo"] = r["ajuste"].get("peso_tramo", [1.0] * len(r["ajuste"]["x_modelo_mm"]))
+        t["penalizacion"] = r["ajuste"].get("penalizacion", 0.03)
+        t["largo_mm"] = opciones.get("largo") or r["ajuste"]["largo_mm"]
+    if modo == "silueta":
+        t["modo"] = "silueta"
+        t["silueta_res"] = [1800, 1200]
+        t["silueta_ancho_mm"] = 1200.0
+        t["sufijo"] = opciones.get("sufijo", "")
     if modo == "sonda":
         t["modo"] = "sonda_borde"
         t["muestras"] = 8
@@ -153,6 +193,78 @@ def ejecutar(t: dict[str, Any], nombre: str) -> str:
         print(salida[-4000:])
         raise SystemExit(f"Blender falló en {nombre}")
     return salida
+
+
+PAPEL = (0xD7, 0xD4, 0xCC)  # fondo papel #D7D4CC de la dirección de arte
+VISTAS_RENDER = ("lateral", "lateral-izq", "tres-cuartos")
+
+
+def variante_papel(png: Path, salida: Path, objetivo: float = 0.8) -> None:
+    """Variante sobre fondo papel: recorta la silueta, la escala al `objetivo` del cuadro y le da una sombra suave."""
+    from PIL import Image, ImageChops, ImageFilter
+
+    im = Image.open(png).convert("RGBA")
+    caja = im.getchannel("A").point(lambda v: 255 if v > 8 else 0).getbbox()
+    pieza = im.crop(caja)
+    ancho, alto = im.size
+    s = min(objetivo * ancho / pieza.width, objetivo * alto / pieza.height)
+    pieza = pieza.resize((round(pieza.width * s), round(pieza.height * s)), Image.LANCZOS)
+    lienzo = Image.new("RGBA", (ancho, alto), (*PAPEL, 255))
+    x, y = (ancho - pieza.width) // 2, (alto - pieza.height) // 2
+    sombra = Image.new("RGBA", (ancho, alto), (0, 0, 0, 0))
+    mascara = Image.new("L", (ancho, alto), 0)
+    mascara.paste(pieza.getchannel("A"), (x + round(0.012 * ancho), y + round(0.035 * alto)))
+    mascara = mascara.filter(ImageFilter.GaussianBlur(round(0.012 * ancho))).point(lambda v: round(v * 0.32))
+    sombra.putalpha(ImageChops.multiply(mascara, Image.new("L", (ancho, alto), 255)))
+    lienzo.alpha_composite(sombra)
+    lienzo.alpha_composite(pieza, (x, y))
+    lienzo.convert("RGB").save(salida)
+
+
+def hacer_papel(reg: dict[str, Any]) -> None:
+    for m in reg["modelos"]:
+        for v in VISTAS_RENDER:
+            origen = VISTAS_DIR / m["id"] / f"{v}.png"
+            if origen.exists():
+                variante_papel(origen, VISTAS_DIR / m["id"] / f"{v}-papel.png")
+    print("PAPEL listo")
+
+
+def comparar_con_foto(reg: dict[str, Any]) -> None:
+    """Hoja interna (no se publica): foto de referencia (volteada si hace falta) junto a la vista lateral sobre papel."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    sil = {r["id"]: r for r in json.loads(SILUETAS.read_text(encoding="utf-8"))["replicas"]}
+    entrada = RAIZ / "assets-src" / "raw" / "_entrada"
+    if not entrada.exists():  # worktree: las fotos están en el repo principal
+        entrada = Path(*RAIZ.parts[: RAIZ.parts.index(".claude")]) / "assets-src" / "raw" / "_entrada"
+    carpeta = VISTAS_DIR / "_comparacion"
+    carpeta.mkdir(parents=True, exist_ok=True)
+    try:
+        letra = ImageFont.truetype("arial.ttf", 22)
+    except OSError:
+        letra = ImageFont.load_default()
+    for m in reg["modelos"]:
+        ref = sil.get(m.get("referencia_silueta") or "")
+        render = VISTAS_DIR / m["id"] / "lateral-papel.png"
+        if ref is None or not render.exists():
+            continue
+        foto = Image.open(entrada / ref["foto"]).convert("RGB")
+        if ref["espejo"]:
+            foto = foto.transpose(Image.FLIP_LEFT_RIGHT)
+        mio = Image.open(render).convert("RGB")
+        alto = 700
+        foto = foto.resize((round(foto.width * alto / foto.height), alto))
+        mio = mio.resize((round(mio.width * alto / mio.height), alto))
+        hoja = Image.new("RGB", (foto.width + mio.width, alto + 40), (30, 30, 32))
+        hoja.paste(foto, (0, 40))
+        hoja.paste(mio, (foto.width, 40))
+        d = ImageDraw.Draw(hoja)
+        iou = (m.get("iou_silueta") or {}).get("iou_ajustado")
+        d.text((8, 8), "FOTO DE REFERENCIA (solo uso interno, no se publica)", fill=(235, 235, 235), font=letra)
+        d.text((foto.width + 8, 8), f"{m['id']}  IoU de silueta: {iou}", fill=(235, 235, 235), font=letra)
+        hoja.save(carpeta / f"{m['id']}.png")
+        print("COMPARACION", carpeta / f"{m['id']}.png")
 
 
 def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
@@ -190,6 +302,80 @@ def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
     return salida
 
 
+SILUETAS = RAIZ / "catalogo" / "siluetas-referencia.json"
+
+
+def extrusiones_de_referencia(ref_id: str, specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Contornos de partes de la referencia, en mm relativos a la esquina mínima de la silueta entera."""
+    doc = json.loads(SILUETAS.read_text(encoding="utf-8"))
+    r = next(x for x in doc["replicas"] if x["id"] == ref_id)
+    x0 = min(p[0] for v in r["partes"].values() for p in v["contorno_mm"])
+    y0 = min(p[1] for v in r["partes"].values() for p in v["contorno_mm"])
+    salida = []
+    for e in specs:
+        puntos = [[round(p[0] - x0, 2), round(p[1] - y0, 2)] for p in r["partes"][e["ref_parte"]]["contorno_mm"]]
+        salida.append({**e, "puntos_mm": puntos})
+    return salida
+
+
+def raster_referencia(ref_id: str, px_por_mm: float, ancho_mm: float, alto_mm: float):
+    """Contorno de referencia (unión de partes menos huecos) rasterizado; devuelve (máscara, x_min_mm, y_max_mm)."""
+    import numpy as np
+    from PIL import Image, ImageDraw
+
+    doc = json.loads(SILUETAS.read_text(encoding="utf-8"))
+    r = next(x for x in doc["replicas"] if x["id"] == ref_id)
+    xs = [p[0] for v in r["partes"].values() for p in v["contorno_mm"]]
+    ys = [p[1] for v in r["partes"].values() for p in v["contorno_mm"]]
+    x0, y1 = min(xs), max(ys)
+    w, h = round(ancho_mm * px_por_mm), round(alto_mm * px_por_mm)
+    total = np.zeros((h, w), bool)
+
+    def px(p):
+        return ((p[0] - x0) * px_por_mm + 2, (y1 - p[1]) * px_por_mm + 2)
+
+    for v in r["partes"].values():
+        capa = Image.new("L", (w, h), 0)
+        d = ImageDraw.Draw(capa)
+        d.polygon([px(p) for p in v["contorno_mm"]], fill=255)
+        for hueco in v.get("huecos_mm") or []:
+            d.polygon([px(p) for p in hueco], fill=0)
+        total |= np.asarray(capa) > 127
+    return total, x0, y1
+
+
+def iou_silueta(ref_id: str, png: Path, px_por_mm: float = 1.5, ancho_mm: float = 1200.0, alto_mm: float = 800.0):
+    """IoU entre la máscara lateral del modelo (alfa del PNG) y el contorno de referencia, alineados por la esquina
+    mínima de sus cajas y con una búsqueda de ±8 mm de traslación. Devuelve (IoU alineado por caja, IoU mejor, desplazamiento)."""
+    import numpy as np
+    from PIL import Image
+
+    ref, _, _ = raster_referencia(ref_id, px_por_mm, ancho_mm, alto_mm)
+    modelo = np.asarray(Image.open(png).convert("RGBA"))[..., 3] > 127
+    ys, xs = np.nonzero(modelo)
+    mod = np.zeros_like(ref)
+    # alinea la esquina izquierda-arriba (x mínimo, y máximo) del modelo con la de la referencia (2 px de margen)
+    ry, rx = np.nonzero(ref)
+    dy, dx = ry.min() - ys.min(), rx.min() - xs.min()
+    ys2, xs2 = ys + dy, xs + dx
+    ok = (ys2 >= 0) & (ys2 < ref.shape[0]) & (xs2 >= 0) & (xs2 < ref.shape[1])
+    mod[ys2[ok], xs2[ok]] = True
+
+    def iou(a, b):
+        return float((a & b).sum()) / float((a | b).sum())
+
+    base = iou(mod, ref)
+    mejor, desp = base, (0, 0)
+    paso = max(1, round(px_por_mm * 2))
+    rango = round(8 * px_por_mm)
+    for oy in range(-rango, rango + 1, paso):
+        for ox in range(-rango, rango + 1, paso):
+            v = iou(np.roll(np.roll(mod, oy, 0), ox, 1), ref)
+            if v > mejor:
+                mejor, desp = v, (round(ox / px_por_mm, 1), round(oy / px_por_mm, 1))
+    return round(base, 4), round(mejor, 4), desp
+
+
 def main() -> None:
     args = sys.argv[sys.argv.index("--") + 1 :]
     modo, quien, resto = args[0], args[1], args[2:]
@@ -198,13 +384,26 @@ def main() -> None:
         k, _, v = a.partition("=")
         if k == "res":
             opciones[k] = [int(x) for x in v.split("x")]
-        elif k in ("muestras", "max"):
+        elif k in ("muestras", "max", "rondas"):
             opciones[k] = int(v)
+        elif k == "largo":
+            opciones[k] = float(v)
         elif k == "vistas":
             opciones[k] = v.split(",")
         else:
             opciones[k] = v
     reg = cargar()
+    if modo == "iou":
+        ref = opciones["ref"]
+        png = VISTAS_DIR / quien / f"silueta{opciones.get('sufijo', '')}.png"
+        print("IOU", quien, ref, iou_silueta(ref, png))
+        return
+    if modo == "papel":
+        hacer_papel(reg)
+        return
+    if modo == "comparar":
+        comparar_con_foto(reg)
+        return
     if modo == "hoja":
         hoja_de_contacto(reg, opciones.get("sufijo", ""))
         return
