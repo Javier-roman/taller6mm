@@ -14,6 +14,7 @@
       "!**/.astro",
       "!**/dist",
       "!apps/pipeline/.venv",
+      "!docs/informes/propuestas-sistema",
       "!pnpm-lock.yaml",
       "!packages/ui/src/styles/tokens.css",
       "!packages/ui/src/styles/theme.css"

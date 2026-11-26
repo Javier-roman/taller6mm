@@ -19,10 +19,8 @@
     "css": "node scripts/write-css.ts"
   },
   "dependencies": {
-    "@fontsource-variable/archivo": "catalog:",
-    "@fontsource/big-shoulders-stencil": "catalog:",
-    "@fontsource/cinzel": "catalog:",
-    "@fontsource/jetbrains-mono": "catalog:",
+    "@fontsource/ibm-plex-mono": "catalog:",
+    "@fontsource/ibm-plex-sans-condensed": "catalog:",
     "react": "catalog:"
   },
   "devDependencies": {
