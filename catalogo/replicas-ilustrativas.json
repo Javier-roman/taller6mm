@@ -226,6 +226,11 @@
         "iou_ajustado": 0.6963,
         "iou_ajustado_mejor_traslacion": 0.732,
         "nota": "sin ajuste por zonas: es otro modelo de pistola (la foto es una Glock 19X; la otra, una Hi-Capa con visor). máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
+      },
+      "uso_recomendado": {
+        "recomendada_para_balda": true,
+        "vistas": ["lateral-izq", "tres-cuartos"],
+        "nota": "solo las caras limpias: el lado derecho no tiene estrías y la empuñadura lleva un hoyuelo del modelo original; pieza de relleno, no protagonista"
       }
     },
     {
@@ -333,7 +338,7 @@
               "Coat Roughness": 0.4
             },
             "cuadriculado": {
-              "escala": 150,
+              "escala": 105,
               "fuerza": 0.3
             },
             "desgaste": {
@@ -411,6 +416,11 @@
         "iou_ajustado": 0.623,
         "iou_ajustado_mejor_traslacion": 0.8293,
         "nota": "sin ajuste por zonas: es otro modelo de pistola (la foto es una Glock 19X; la otra, una Hi-Capa con visor). máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
+      },
+      "uso_recomendado": {
+        "recomendada_para_balda": true,
+        "vistas": ["lateral-izq", "tres-cuartos"],
+        "nota": "el lado derecho desborda la madera de las cachas al armazón; usar el lado izquierdo (el retén del cargador sale con madera)"
       }
     },
     {
@@ -477,7 +487,7 @@
           "madera": {
             "base": "madera_veta",
             "color": "#5A2E1C",
-            "color2": "#3D1F11",
+            "color2": "#4B2717",
             "rugosidad": 0.58,
             "principled": {
               "Coat Weight": 0.2,
@@ -501,7 +511,7 @@
           },
           "empunadura": {
             "base": "polimero_grano",
-            "color": "#2E2823",
+            "color": "#2B1B13",
             "rugosidad": 0.55,
             "variacion_rugosidad": 0.06,
             "grano_relieve": 0.2,
@@ -626,6 +636,11 @@
         "iou_ajustado": 0.8563,
         "iou_ajustado_mejor_traslacion": 0.8604,
         "nota": "máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
+      },
+      "uso_recomendado": {
+        "recomendada_para_balda": true,
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "nota": "guardamanos inferior algo corto frente a la foto"
       }
     },
     {
@@ -846,6 +861,11 @@
         "iou_ajustado": 0.8199,
         "iou_ajustado_mejor_traslacion": 0.8299,
         "nota": "máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica. la culata y el tubo salen del contorno de la foto: su IoU es 1 por construcción; el valor es del conjunto"
+      },
+      "uso_recomendado": {
+        "recomendada_para_balda": false,
+        "vistas": [],
+        "nota": "no recomendada: la culata es una pieza plana extruida, guardamanos y cargador son los de un AK clásico"
       }
     },
     {
@@ -994,7 +1014,7 @@
           },
           "fde_culata": {
             "base": "polimero_grano",
-            "color": "#6E5E4C",
+            "color": "#54473A",
             "rugosidad": 0.62,
             "variacion_rugosidad": 0.06,
             "grano_relieve": 0.14,
@@ -1011,9 +1031,9 @@
           },
           "fde_guardamanos": {
             "base": "anodizado_negro",
-            "color": "#4A423B",
-            "metalico": 0.5,
-            "rugosidad": 0.5,
+            "color": "#54473A",
+            "metalico": 0.3,
+            "rugosidad": 0.55,
             "rayas": 0.0,
             "desgaste": {
               "color": "#7a6e60",
@@ -1137,6 +1157,11 @@
         "iou_ajustado": 0.7391,
         "iou_ajustado_mejor_traslacion": 0.7391,
         "nota": "máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
+      },
+      "uso_recomendado": {
+        "recomendada_para_balda": true,
+        "vistas": ["lateral-izq", "tres-cuartos"],
+        "nota": "usar como carabina corta genérica de raíles, no como Mk18: guardamanos más fino que el RIS de la foto y alza A2"
       }
     }
   ],

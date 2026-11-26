@@ -65,6 +65,18 @@ python -I -c "import sys; sys.path.insert(0, 'apps/pipeline/src'); from taller6m
 
 Modos: `listar`, `debug`, `render [res=1200x800] [muestras=48] [sufijo=-t1] [vistas=...]`, `sonda`, `silueta [largo=mm]`, `iou ref=<id de silueta>`, `ajustar ref=<id de silueta> [rondas=7]`, `papel`, `comparar` y `hoja`. Los binarios van en `assets-src/raw/modelos-cc/` y los renders en `assets-src/vistas/replicas-cc/`; las dos están ignoradas por git.
 
-## Revisión de `critico-diseno`
+## Revisión de `critico-diseno` y notas honestas
 
-Primera tanda (25-11-2026): M4A1 6,5 · 1911 6 · AK 5,5 · Glock 5, tras aplicar sus arreglos de la primera pasada (eran 6, 4,5, 5 y 3,5). Techo de 6-7 con geometría gratuita: la pieza protagonista de cada balda saldrá del frente de fidelidad, no de aquí. La Glock queda **no recomendada como pieza principal** (formas blandas, guardamonte con el disparador fundido, hoyuelo de la empuñadura en el modelo original). Segunda tanda: ver el PR.
+| Modelo | 25-11 (1.ª pasada) | 25-11 (2.ª) | 26-11 | ¿A una balda? |
+|---|---|---|---|---|
+| AKM (`akm-lamoot`) | 3,5 (como AK) | 5,5 | **6,5** | Sí, a distancia de balda |
+| 1911 (`pistola-1911-solid3ddd`) | 4,5 | 6 | **6,5** | Sí, solo con el lado izquierdo |
+| Glock (`glock-locarem`) | 3,5 | 5 | **6** | Solo de relleno, lado izquierdo o tres cuartos |
+| Mk18 (`mk18-mrm0lten`) | 6 (como M4A1) | 6,5 | **5** | Solo como carabina corta genérica, no como Mk18 |
+| AK-105 (`ak105-lamoot`) | (nuevo) | (nuevo) | **4,5** | No: se descarta de la primera balda |
+
+Techo de 6-7 con geometría gratuita: la pieza protagonista de cada balda saldrá del frente de fidelidad, no de aquí.
+
+Lo que más se aleja de la foto: AKM, guardamanos inferior algo corto y culata más gruesa; AK-105, culata plana extruida, cargador curvo de 7,62 y tapa redondeada en lugar de raíl; Mk18, guardamanos más fino que el RIS de la foto, alza A2 y culata M4 de seis posiciones. Defectos conocidos no resueltos: hoyuelo en la empuñadura de la Glock (geometría del modelo), madera de la 1911 que desborda al armazón en el lado derecho y retén del cargador con madera, rim light flojo sobre fondo oscuro (el fondo papel ya funciona mejor).
+
+`uso_recomendado` en el registro recoge, por modelo, si va a una balda y con qué vistas.
