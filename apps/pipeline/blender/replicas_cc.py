@@ -141,7 +141,13 @@ def en_rango(valor: float, rango) -> bool:
 def coincide(caja_n: dict | None, u: float, v: float, w: float) -> bool:
     if not caja_n:
         return True
-    return en_rango(u, caja_n.get("u")) and en_rango(v, caja_n.get("v")) and en_rango(w, caja_n.get("w"))
+    if not (en_rango(u, caja_n.get("u")) and en_rango(v, caja_n.get("v")) and en_rango(w, caja_n.get("w"))):
+        return False
+    # `rectas`: [[u0, v0, u1, v1], ...]; cada una deja pasar solo lo que cae a la izquierda de la recta dirigida
+    for u0, v0, u1, v1 in caja_n.get("rectas", []):
+        if (u1 - u0) * (v - v0) - (v1 - v0) * (u - u0) < 0:
+            return False
+    return True
 
 
 def datos_parte(o: bpy.types.Object, norm: Norm) -> dict:
@@ -687,6 +693,9 @@ def ajustar_silueta(obs, trabajo) -> dict:
             p += pesos[i] * (pend - 1.0) ** 2
         for fila in aj["z_anclas"]:
             p += (fila[1] - 1.0) ** 2
+        # una inclinación entre anclas vecinas doblaría el cañón o el guardamanos: se penaliza fuerte
+        for f1, f2 in zip(aj["z_anclas"], aj["z_anclas"][1:], strict=False):
+            p += 50.0 * ((f2[2] - f1[2]) / max(f2[0] - f1[0], 1.0)) ** 2
         for g in aj.get("grupos", []):
             p += 0.3 * ((g.get("sz", 1.0) - 1.0) ** 2 + (g.get("sx", 1.0) - 1.0) ** 2)
         return lam * p
@@ -751,6 +760,35 @@ def render_silueta(obs, trabajo) -> None:
     print("HECHO silueta", flush=True)
 
 
+def _revolucion(lo, e):
+    """Pieza de revolución (freno de boca) a partir de la mitad superior de un contorno de foto."""
+    pts = e["puntos_mm"]
+    zc = (min(p[1] for p in pts) + max(p[1] for p in pts)) / 2.0
+    semi = sorted(((x, z - zc) for x, z in pts if z >= zc - 0.01), key=lambda t: t[0])
+    perfil = [(semi[0][0], 0.0), *semi, (semi[-1][0], 0.0)]
+    bm = bmesh.new()
+    vs = [bm.verts.new((lo.x + x / 1000.0, 0.0, lo.z + (zc + r) / 1000.0)) for x, r in perfil]
+    for a, b in zip(vs, vs[1:], strict=False):
+        bm.edges.new((a, b))
+    bmesh.ops.spin(
+        bm,
+        geom=list(bm.verts) + list(bm.edges),
+        cent=(lo.x, 0.0, lo.z + zc / 1000.0),
+        axis=(1.0, 0.0, 0.0),
+        angle=2 * math.pi,
+        steps=40,
+        use_duplicate=False,
+    )
+    bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=1e-6)
+    bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+    malla = bpy.data.meshes.new("ext_" + e["id"])
+    bm.to_mesh(malla)
+    bm.free()
+    obj = bpy.data.objects.new("ext_" + e["id"], malla)
+    bpy.context.scene.collection.objects.link(obj)
+    return obj
+
+
 def crear_extrusiones(lo, specs):
     """Piezas planas extruidas desde un contorno (culata y tubo del AK-105) con bisel: se añaden tras deformar el cuerpo.
 
@@ -759,6 +797,9 @@ def crear_extrusiones(lo, specs):
     """
     salida = []
     for e in specs:
+        if e.get("tipo") == "revolucion":
+            salida.append(_revolucion(lo, e))
+            continue
         bm = bmesh.new()
         mitad = e["ancho_mm"] / 2000.0
         vs = [bm.verts.new((lo.x + x / 1000.0, -mitad, lo.z + z / 1000.0)) for x, z in e["puntos_mm"]]
@@ -772,15 +813,16 @@ def crear_extrusiones(lo, specs):
         bm.free()
         obj = bpy.data.objects.new("ext_" + e["id"], malla)
         bpy.context.scene.collection.objects.link(obj)
-        mod = obj.modifiers.new("bisel", "BEVEL")
-        mod.width = e.get("bisel_mm", 2.0) / 1000.0
-        mod.segments = 3
-        mod.limit_method = "ANGLE"
-        mod.angle_limit = math.radians(35)
-        bpy.ops.object.select_all(action="DESELECT")
-        obj.select_set(True)
-        bpy.context.view_layer.objects.active = obj
-        bpy.ops.object.modifier_apply(modifier="bisel")
+        if e.get("bisel_mm", 2.0) > 0:
+            mod = obj.modifiers.new("bisel", "BEVEL")
+            mod.width = e["bisel_mm"] / 1000.0
+            mod.segments = 2
+            mod.limit_method = "ANGLE"
+            mod.angle_limit = math.radians(50)
+            bpy.ops.object.select_all(action="DESELECT")
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.object.modifier_apply(modifier="bisel")
         salida.append(obj)
     return salida
 

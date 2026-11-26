@@ -1,7 +1,7 @@
 {
   "esquema": 1,
   "titulo": "Réplicas ilustrativas a partir de modelos 3D de licencia abierta",
-  "nota": "Pivote del 25-11-2026: las réplicas paramétricas montadas se rechazaron («parecen juguete»). Para La Armería y la 2D se usan modelos completos CC0/CC BY con forma real, retexturizados con los materiales y la luz propios. Son ILUSTRATIVOS: nivel T0, medidas sin verificar, no son la réplica exacta de ninguna marca. publicable=false hasta que un humano revise la procedencia (docs/05 §5). Los binarios viven en assets-src/raw/modelos-cc/ y los renders en assets-src/vistas/replicas-cc/ (ambas ignoradas por git).",
+  "nota": "Pivote del 25-11-2026: las réplicas paramétricas montadas se rechazaron («parecen juguete»). Para La Armería y la 2D se usan modelos completos CC0/CC BY con forma real, retexturizados con los materiales y la luz propios. Son ILUSTRATIVOS: nivel T0, medidas sin verificar, no son la réplica exacta de ninguna marca. publicable=false hasta que un humano revise la procedencia (docs/05 §5). Los binarios viven en assets-src/raw/modelos-cc/ y los renders en assets-src/vistas/replicas-cc/ (ambas ignoradas por git). Segunda tanda (26-11-2026): los fusiles son los modelos de Lamoot (AK-47) y MrM0lten (M4A1) deformados por zonas para ajustar su silueta lateral a la de fotos de referencia internas (catalogo/siluetas-referencia.json): AKM, AK-105 y Mk18. ADR-0011: la escala es relativa, con bandera; las proporciones salen de la silueta.",
   "clases": {
     "fusil": {
       "res": [1800, 1200],
@@ -126,9 +126,9 @@
         "materiales": {
           "metal": {
             "base": "anodizado_negro",
-            "color": "#1A1A1C",
+            "color": "#1C1C1E",
             "metalico": 0.55,
-            "rugosidad": 0.45,
+            "rugosidad": 0.33,
             "variacion_rugosidad": 0.05,
             "grano_relieve": 0.04,
             "rayas": 0.0,
@@ -146,8 +146,8 @@
           },
           "polimero": {
             "base": "polimero_grano",
-            "color": "#161616",
-            "rugosidad": 0.6,
+            "color": "#0F0F0F",
+            "rugosidad": 0.7,
             "variacion_rugosidad": 0.06,
             "grano_relieve": 0.3,
             "desgaste": {
@@ -162,7 +162,11 @@
             }
           }
         },
-        "tres_cuartos_az": 143
+        "tres_cuartos_az": 143,
+        "luz_ajuste": {
+          "relleno_ev": 0.6,
+          "contornos_x": 0.7
+        }
       },
       "titulo": "Pistola de polímero (silueta tipo Glock de 1.ª generación)",
       "clase": "pistola",
@@ -205,320 +209,23 @@
         "resolucion": [1800, 1200],
         "formato": "PNG RGBA, fondo transparente",
         "px_por_mm_lateral": 6.43,
-        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %",
+        "vistas_papel": ["lateral-papel", "lateral-izq-papel", "tres-cuartos-papel"],
+        "fondo_papel": "#D7D4CC, sombra suave, arma al 80 % del cuadro",
+        "comparacion_con_foto": "assets-src/vistas/replicas-cc/_comparacion/ (solo uso interno)"
       },
       "desgaste_aristas": {
         "superficie_con_mezcla_mayor_10pct": 0.63,
         "superficie_con_mezcla_mayor_25pct": 0.01,
         "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
         "color_desgaste": "gris neutro, nunca blanco"
-      }
-    },
-    {
-      "id": "ak47-lamoot",
-      "fuente": {
-        "modelo": "High-poly AK-47",
-        "plataforma": "OpenGameArt",
-        "autor": "Lamoot",
-        "url_ficha": "https://opengameart.org/content/high-poly-ak-47",
-        "url_descarga": "https://opengameart.org/sites/default/files/highpoly_ak47.obj",
-        "licencia": "CC0 1.0",
-        "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
-        "fecha_verificacion": "2026-11-25",
-        "verificacion": "Ficha pública leída en vivo antes de descargar: «License(s): CC0»",
-        "sha256": "f6ec87cbdf8394a1c09ff42a3377b26da6149ea07024690a91307352506ef376",
-        "bytes": 842609,
-        "archivo": "assets-src/raw/modelos-cc/highpoly_ak47.obj",
-        "atribucion": "«High-poly AK-47» de Lamoot, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), vía https://opengameart.org/content/high-poly-ak-47. No exigida por CC0; se archiva igualmente."
       },
-      "render": {
-        "clase": "fusil",
-        "orientacion": {
-          "boca": "+Y",
-          "arriba": "+Z"
-        },
-        "largo_mm_render": 880,
-        "borrar": [],
-        "zona_defecto": "metal",
-        "zonas": [
-          {
-            "parte": {
-              "nombres": ["Circle.007", "Circle.075", "Circle.051", "Circle.050"]
-            },
-            "mat": "madera"
-          }
-        ],
-        "materiales": {
-          "metal": {
-            "base": "acero_pavonado",
-            "color": "#1A1B1E",
-            "metalico": 0.55,
-            "rugosidad": 0.35,
-            "variacion_rugosidad": 0.05,
-            "grano_relieve": 0.03,
-            "rayas": 0.0,
-            "desgaste": {
-              "color": "#4a4b4e",
-              "cantidad": 0.3,
-              "radio_mm": 0.8,
-              "rugosidad": 0.35,
-              "metalico": 1.0
-            },
-            "suciedad": {
-              "cantidad": 0.18,
-              "oscurece": 0.2
-            }
-          },
-          "madera": {
-            "base": "madera_veta",
-            "color": "#50291A",
-            "color2": "#43220F",
-            "rugosidad": 0.5,
-            "principled": {
-              "Coat Weight": 0.3,
-              "Coat Roughness": 0.3
-            },
-            "desgaste": {
-              "color": "#7a4a30",
-              "cantidad": 0.3,
-              "radio_mm": 1.0,
-              "rugosidad": 0.5
-            },
-            "suciedad": {
-              "cantidad": 0.3,
-              "oscurece": 0.2
-            },
-            "veta": {
-              "escala": 1400,
-              "distorsion": 1.5
-            }
-          }
-        }
-      },
-      "titulo": "Fusil de asalto con madera (silueta tipo AK-47)",
-      "clase": "fusil",
-      "nivel": "T0",
-      "ilustrativa": true,
-      "publicable": false,
-      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
-      "medidas_verificadas": false,
-      "es_replica_exacta": false,
-      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
-      "escala": {
-        "tipo": "convencion",
-        "largo_mm_render": 880,
-        "longitud_mm_verificada": null,
-        "bandera": "sin cota de réplica AK en el catálogo: 880 mm es una convención de render para fijar px/mm común a los fusiles, no un dato verificado"
-      },
-      "marcajes": {
-        "texturas_originales_descartadas": true,
-        "materiales_originales_descartados": true,
-        "uv_descartadas": true,
-        "logos_o_marcajes_en_geometria": false,
-        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
-      },
-      "notas": "AK-47 real de 2010; cascarón hueco sin mecanismo. 92 partes sueltas; madera (culata, pistolete y guardamanos) separada del metal por nombre de malla.",
-      "limpieza": {
-        "triangulos": 30730,
-        "partes": 92,
-        "caja_mm_render": [880.0, 70.7, 260.5],
-        "hash_geometria_limpia": "b736f7776cbac312b2468dfcea3a0ddde517750a1baf49554ec8b85f811205e1",
-        "caras_por_zona": {
-          "metal": 14176,
-          "madera": 1518
-        },
-        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
-        "glb_limpio": "assets-src/raw/modelos-cc/limpios/ak47-lamoot.glb (ignorada por git)"
-      },
-      "salidas": {
-        "carpeta": "assets-src/vistas/replicas-cc/ak47-lamoot/ (ignorada por git)",
-        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
-        "resolucion": [1800, 1200],
-        "formato": "PNG RGBA, fondo transparente",
-        "px_por_mm_lateral": 1.64,
-        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
-      },
-      "desgaste_aristas": {
-        "superficie_con_mezcla_mayor_10pct": 3.06,
-        "superficie_con_mezcla_mayor_25pct": 0.02,
-        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
-        "color_desgaste": "gris neutro, nunca blanco"
-      }
-    },
-    {
-      "id": "m4a1-mrm0lten",
-      "fuente": {
-        "modelo": "M4A1 Carbine",
-        "plataforma": "Sketchfab (copia en el dataset Objaverse 1.0 de Hugging Face)",
-        "autor": "MrM0lten",
-        "url_ficha": "https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9",
-        "url_descarga": "https://huggingface.co/datasets/allenai/objaverse",
-        "licencia": "CC BY 4.0",
-        "url_licencia": "https://creativecommons.org/licenses/by/4.0/",
-        "fecha_verificacion": "2026-11-25",
-        "verificacion": "API pública de Sketchfab (campo license.slug), consultada en vivo antes de descargar",
-        "sha256": "a7a390e26b4c2e93c8f83cb6bf77b5993510ae6d4b1818fc372ffbab92723f5e",
-        "bytes": 11237012,
-        "archivo": "assets-src/raw/modelos-cc/9bb8f18ad94d4b468e447a2d43bd08b9.glb",
-        "atribucion": "\"M4A1 Carbine\" de MrM0lten, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9"
-      },
-      "render": {
-        "clase": "fusil",
-        "orientacion": {
-          "boca": "+X",
-          "arriba": "+Z"
-        },
-        "largo_mm_render": 777,
-        "borrar": [
-          {
-            "parte": {
-              "nombre": "Bullet"
-            }
-          }
-        ],
-        "zona_defecto": "metal",
-        "zonas": [
-          {
-            "parte": {
-              "nombre": "Stock"
-            },
-            "mat": "polimero"
-          },
-          {
-            "parte": {
-              "nombre": "Magazine"
-            },
-            "mat": "polimero"
-          },
-          {
-            "parte": {
-              "nombre": "Body_Body1",
-              "centro": {
-                "u": [0.27, 0.4],
-                "v": [0.1, 0.52]
-              }
-            },
-            "mat": "polimero"
-          },
-          {
-            "parte": {
-              "nombre": "Body_Body1",
-              "centro": {
-                "u": [0.77, 1.0]
-              }
-            },
-            "mat": "parkerizado"
-          }
-        ],
-        "materiales": {
-          "metal": {
-            "base": "anodizado_negro",
-            "color": "#1B1C1E",
-            "metalico": 0.6,
-            "rugosidad": 0.38,
-            "variacion_rugosidad": 0.05,
-            "grano_relieve": 0.04,
-            "rayas": 0.0,
-            "desgaste": {
-              "color": "#4a4b4e",
-              "cantidad": 0.3,
-              "radio_mm": 0.7,
-              "rugosidad": 0.35,
-              "metalico": 1.0
-            },
-            "suciedad": {
-              "cantidad": 0.35,
-              "oscurece": 0.2
-            }
-          },
-          "polimero": {
-            "base": "polimero_grano",
-            "color": "#101010",
-            "rugosidad": 0.65,
-            "variacion_rugosidad": 0.06,
-            "grano_relieve": 0.14,
-            "desgaste": {
-              "color": "#3a3a3a",
-              "cantidad": 0.25,
-              "radio_mm": 0.8,
-              "rugosidad": 0.55
-            },
-            "suciedad": {
-              "cantidad": 0.35,
-              "oscurece": 0.2
-            }
-          },
-          "parkerizado": {
-            "base": "parkerizado",
-            "color": "#202221",
-            "metalico": 0.7,
-            "rugosidad": 0.5,
-            "rayas": 0.0,
-            "desgaste": {
-              "color": "#4a4b4e",
-              "cantidad": 0.25,
-              "radio_mm": 0.6,
-              "rugosidad": 0.4,
-              "metalico": 1.0
-            },
-            "suciedad": {
-              "cantidad": 0.2,
-              "oscurece": 0.15
-            }
-          }
-        }
-      },
-      "titulo": "Carabina tipo M4A1 con guardamanos RIS",
-      "clase": "fusil",
-      "nivel": "T0",
-      "ilustrativa": true,
-      "publicable": false,
-      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
-      "medidas_verificadas": false,
-      "es_replica_exacta": false,
-      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
-      "escala": {
-        "tipo": "citada",
-        "largo_mm_render": 777,
-        "fuente_cota": "docs/catalogo/cotas-publicas.md y catalogo/cotas-airsoft.json: Tokyo Marui M4A1 MWS, largo total 777 mm (ficha oficial 409)",
-        "confianza": "alta para la réplica de la ficha; el modelo no es esa réplica, así que la medida del modelo queda sin verificar",
-        "longitud_mm_verificada": null,
-        "bandera": "largo ajustado a la cota citada de otra réplica de la misma clase; sin cota para este modelo"
-      },
-      "marcajes": {
-        "texturas_originales_descartadas": true,
-        "materiales_originales_descartados": true,
-        "uv_descartadas": true,
-        "logos_o_marcajes_en_geometria": false,
-        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
-      },
-      "notas": "Carabina con culata telescópica recogida, guardamanos RIS cuádruple y asa de transporte A2. Se borra la munición suelta del modelo. El archivo trae 2.326 partes sueltas.",
-      "limpieza": {
-        "triangulos": 20995,
-        "partes": 2292,
-        "caja_mm_render": [777.0, 59.4, 226.7],
-        "hash_geometria_limpia": "287c76c99186b869ea2e8b4999be44c29a32f293fd7bd15c899a990d0406b4b8",
-        "caras_por_zona": {
-          "metal": 13465,
-          "polimero": 3922,
-          "parkerizado": 3608
-        },
-        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
-        "glb_limpio": "assets-src/raw/modelos-cc/limpios/m4a1-mrm0lten.glb (ignorada por git)"
-      },
-      "salidas": {
-        "carpeta": "assets-src/vistas/replicas-cc/m4a1-mrm0lten/ (ignorada por git)",
-        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
-        "resolucion": [1800, 1200],
-        "formato": "PNG RGBA, fondo transparente",
-        "px_por_mm_lateral": 1.64,
-        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
-      },
-      "desgaste_aristas": {
-        "superficie_con_mezcla_mayor_10pct": 0.09,
-        "superficie_con_mezcla_mayor_25pct": 0.0,
-        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
-        "color_desgaste": "gris neutro, nunca blanco"
+      "referencia_silueta": "glock-19x-lateral-izq",
+      "iou_silueta": {
+        "referencia": "glock-19x-lateral-izq",
+        "iou_ajustado": 0.6963,
+        "iou_ajustado_mejor_traslacion": 0.732,
+        "nota": "sin ajuste por zonas: es otro modelo de pistola (la foto es una Glock 19X; la otra, una Hi-Capa con visor). máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
       }
     },
     {
@@ -554,9 +261,11 @@
               "nombres": ["Object_14"]
             },
             "cara": {
-              "u": [0.08, 0.42],
-              "v": [0.04, 0.66],
-              "w": [0.0, 0.12]
+              "u": [0.08, 0.36],
+              "v": [0.04, 0.7],
+              "w": [0.0, 0.12],
+              "recta": [0.215, 0.02, 0.322, 0.72],
+              "rectas": [[0.175, 0.012, 0.295, 0.722], [0.228, 0.748, 0.035, 0.03]]
             },
             "mat": "madera"
           },
@@ -612,20 +321,20 @@
           },
           "madera": {
             "base": "madera_veta",
-            "color": "#3B2215",
-            "color2": "#2B190E",
-            "rugosidad": 0.45,
+            "color": "#4A2A16",
+            "color2": "#341C0E",
+            "rugosidad": 0.5,
             "veta": {
-              "escala": 1000,
-              "distorsion": 1.0
+              "escala": 900,
+              "distorsion": 1.2
             },
             "principled": {
               "Coat Weight": 0.2,
               "Coat Roughness": 0.4
             },
             "cuadriculado": {
-              "escala": 650,
-              "fuerza": 0.35
+              "escala": 150,
+              "fuerza": 0.3
             },
             "desgaste": {
               "color": "#5a3a24",
@@ -636,7 +345,8 @@
             "suciedad": {
               "cantidad": 0.2,
               "oscurece": 0.15
-            }
+            },
+            "veta_direccion": "Z"
           }
         }
       },
@@ -671,9 +381,9 @@
         "caja_mm_render": [222.0, 29.2, 140.3],
         "hash_geometria_limpia": "22e47d5038cbcaba907c509d9f545e9e07aefc2895e0c1385bc3f4adc9e5eadb",
         "caras_por_zona": {
-          "metal": 14655,
+          "metal": 14833,
           "polimero": 0,
-          "madera": 405
+          "madera": 227
         },
         "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
         "glb_limpio": "assets-src/raw/modelos-cc/limpios/pistola-1911-solid3ddd.glb (ignorada por git)"
@@ -684,13 +394,749 @@
         "resolucion": [1800, 1200],
         "formato": "PNG RGBA, fondo transparente",
         "px_por_mm_lateral": 6.43,
-        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %"
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %",
+        "vistas_papel": ["lateral-papel", "lateral-izq-papel", "tres-cuartos-papel"],
+        "fondo_papel": "#D7D4CC, sombra suave, arma al 80 % del cuadro",
+        "comparacion_con_foto": "assets-src/vistas/replicas-cc/_comparacion/ (solo uso interno)"
       },
       "desgaste_aristas": {
         "superficie_con_mezcla_mayor_10pct": 2.89,
         "superficie_con_mezcla_mayor_25pct": 0.16,
         "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
         "color_desgaste": "gris neutro, nunca blanco"
+      },
+      "referencia_silueta": "hicapa-nighthawk-lateral-izq",
+      "iou_silueta": {
+        "referencia": "hicapa-nighthawk-lateral-izq",
+        "iou_ajustado": 0.623,
+        "iou_ajustado_mejor_traslacion": 0.8293,
+        "nota": "sin ajuste por zonas: es otro modelo de pistola (la foto es una Glock 19X; la otra, una Hi-Capa con visor). máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
+      }
+    },
+    {
+      "id": "akm-lamoot",
+      "fuente": {
+        "modelo": "High-poly AK-47",
+        "plataforma": "OpenGameArt",
+        "autor": "Lamoot",
+        "url_ficha": "https://opengameart.org/content/high-poly-ak-47",
+        "url_descarga": "https://opengameart.org/sites/default/files/highpoly_ak47.obj",
+        "licencia": "CC0 1.0",
+        "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "Ficha pública leída en vivo antes de descargar: «License(s): CC0»",
+        "sha256": "f6ec87cbdf8394a1c09ff42a3377b26da6149ea07024690a91307352506ef376",
+        "bytes": 842609,
+        "archivo": "assets-src/raw/modelos-cc/highpoly_ak47.obj",
+        "atribucion": "«High-poly AK-47» de Lamoot, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), vía https://opengameart.org/content/high-poly-ak-47. No exigida por CC0; se archiva igualmente."
+      },
+      "render": {
+        "clase": "fusil",
+        "orientacion": {
+          "boca": "+Y",
+          "arriba": "+Z"
+        },
+        "largo_mm_render": 873.26,
+        "borrar": [],
+        "zona_defecto": "metal",
+        "zonas": [
+          {
+            "parte": {
+              "nombres": ["Circle.075"]
+            },
+            "mat": "empunadura"
+          },
+          {
+            "parte": {
+              "nombres": ["Circle.007", "Circle.051", "Circle.050"]
+            },
+            "mat": "madera"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "acero_pavonado",
+            "color": "#1A1B1E",
+            "metalico": 0.55,
+            "rugosidad": 0.35,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.03,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.8,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.18,
+              "oscurece": 0.2
+            }
+          },
+          "madera": {
+            "base": "madera_veta",
+            "color": "#5A2E1C",
+            "color2": "#3D1F11",
+            "rugosidad": 0.58,
+            "principled": {
+              "Coat Weight": 0.2,
+              "Coat Roughness": 0.5,
+              "Specular IOR Level": 0.25
+            },
+            "desgaste": {
+              "color": "#7a4a30",
+              "cantidad": 0.3,
+              "radio_mm": 1.0,
+              "rugosidad": 0.5
+            },
+            "suciedad": {
+              "cantidad": 0.3,
+              "oscurece": 0.2
+            },
+            "veta": {
+              "escala": 1400,
+              "distorsion": 1.5
+            }
+          },
+          "empunadura": {
+            "base": "polimero_grano",
+            "color": "#2E2823",
+            "rugosidad": 0.55,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.2,
+            "desgaste": {
+              "color": "#4a423a",
+              "cantidad": 0.2,
+              "radio_mm": 0.8,
+              "rugosidad": 0.5
+            },
+            "suciedad": {
+              "cantidad": 0.2,
+              "oscurece": 0.15
+            }
+          }
+        },
+        "ajuste": {
+          "largo_mm": 873.26,
+          "x_modelo_mm": [0, 210, 498, 655, 873.26],
+          "x_ref_mm": [0, 215.0, 509.0, 619.0, 873.26],
+          "z_anclas": [
+            [25, 1.0, 12.0],
+            [100, 0.9199999999999999, 27.0],
+            [190, 1, 0],
+            [380, 0.96, 0],
+            [600, 1, 0],
+            [800, 1, 0]
+          ],
+          "grupos": [
+            {
+              "id": "cargador",
+              "parte": {
+                "nombre": "Circle",
+                "centro": {
+                  "u": [0.4, 0.62],
+                  "v": [0.0, 0.56]
+                }
+              },
+              "libres": ["dx", "dz", "rot", "sz"],
+              "dx": -9.0,
+              "dz": -6.0,
+              "rot": -3.0,
+              "sz": 1.02
+            },
+            {
+              "id": "pistolete",
+              "parte": {
+                "nombre": "Circle",
+                "centro": {
+                  "u": [0.22, 0.34],
+                  "v": [0.15, 0.62]
+                }
+              },
+              "libres": ["dx", "dz", "rot"],
+              "dx": 6.0,
+              "dz": 6.0,
+              "rot": 3.0
+            }
+          ]
+        },
+        "luz_ajuste": {
+          "contornos_x": 0.5
+        }
+      },
+      "titulo": "Fusil de asalto con madera, ajustado a la silueta de un AKM de réplica",
+      "clase": "fusil",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "relativa",
+        "largo_mm_render": 873.26,
+        "tomada_de": "proporciones de la silueta de una foto de referencia interna de un AKM de réplica (calibrada a 880 mm nominales de la plataforma)",
+        "longitud_mm_verificada": null,
+        "bandera": "escala relativa (ADR-0011): proporciones tomadas de la silueta de la foto; no es una medida verificada de este modelo"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "El AK-47 de Lamoot deformado por zonas (culata, cajón, guardamanos, cañón) y con cargador y pistolete rígidos reposicionados para ajustar su silueta lateral a la de la foto; sin tocar tornillos ni estrías en el cajón.",
+      "limpieza": {
+        "triangulos": 30730,
+        "partes": 92,
+        "caja_mm_render": [873.3, 70.1, 270.3],
+        "hash_geometria_limpia": "852988b9e407a6ae53fa09e0a89b1e87223bac87e8e5313f88869cdb7c3bbc68",
+        "caras_por_zona": {
+          "metal": 14176,
+          "madera": 1122,
+          "empunadura": 396
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/akm-lamoot.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/akm-lamoot/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 1.64,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %",
+        "vistas_papel": ["lateral-papel", "lateral-izq-papel", "tres-cuartos-papel"],
+        "fondo_papel": "#D7D4CC, sombra suave, arma al 80 % del cuadro",
+        "comparacion_con_foto": "assets-src/vistas/replicas-cc/_comparacion/ (solo uso interno)"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 3.09,
+        "superficie_con_mezcla_mayor_25pct": 0.02,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      },
+      "referencia_silueta": "akm-lateral-izq",
+      "iou_silueta": {
+        "referencia": "akm-lateral-izq",
+        "iou_modelo_base": 0.6847,
+        "iou_ajustado": 0.8563,
+        "iou_ajustado_mejor_traslacion": 0.8604,
+        "nota": "máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
+      }
+    },
+    {
+      "id": "ak105-lamoot",
+      "fuente": {
+        "modelo": "High-poly AK-47",
+        "plataforma": "OpenGameArt",
+        "autor": "Lamoot",
+        "url_ficha": "https://opengameart.org/content/high-poly-ak-47",
+        "url_descarga": "https://opengameart.org/sites/default/files/highpoly_ak47.obj",
+        "licencia": "CC0 1.0",
+        "url_licencia": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "Ficha pública leída en vivo antes de descargar: «License(s): CC0»",
+        "sha256": "f6ec87cbdf8394a1c09ff42a3377b26da6149ea07024690a91307352506ef376",
+        "bytes": 842609,
+        "archivo": "assets-src/raw/modelos-cc/highpoly_ak47.obj",
+        "atribucion": "«High-poly AK-47» de Lamoot, CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/), vía https://opengameart.org/content/high-poly-ak-47. No exigida por CC0; se archiva igualmente."
+      },
+      "render": {
+        "clase": "fusil",
+        "orientacion": {
+          "boca": "+Y",
+          "arriba": "+Z"
+        },
+        "largo_mm_render": 675.3,
+        "borrar": [
+          {
+            "parte": {
+              "centro": {
+                "u": [0, 0.15]
+              }
+            }
+          }
+        ],
+        "zona_defecto": "metal",
+        "zonas": [
+          {
+            "parte": {
+              "nombres": ["ext_boca"]
+            },
+            "mat": "metal"
+          },
+          {
+            "parte": {
+              "nombres": ["Circle.075", "Circle.051", "Circle.050"]
+            },
+            "mat": "polimero"
+          },
+          {
+            "parte": {
+              "nombre": "ext_"
+            },
+            "mat": "polimero"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "acero_pavonado",
+            "color": "#1B1C1E",
+            "metalico": 0.55,
+            "rugosidad": 0.5,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.03,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.8,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.18,
+              "oscurece": 0.2
+            }
+          },
+          "polimero": {
+            "base": "polimero_grano",
+            "color": "#0E0E0E",
+            "rugosidad": 0.68,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.14,
+            "desgaste": {
+              "color": "#3a3a3a",
+              "cantidad": 0.25,
+              "radio_mm": 0.8,
+              "rugosidad": 0.55
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          }
+        },
+        "extrusiones": [
+          {
+            "id": "culata",
+            "ref_parte": "culata",
+            "ancho_mm": 40,
+            "bisel_mm": 1.5,
+            "suavizado": 0
+          },
+          {
+            "id": "tubo_culata",
+            "ref_parte": "tubo_culata",
+            "ancho_mm": 34,
+            "bisel_mm": 1.2,
+            "suavizado": 0,
+            "alargar_der_mm": 22
+          },
+          {
+            "id": "boca",
+            "ref_parte": "boca",
+            "tipo": "revolucion"
+          }
+        ],
+        "ajuste": {
+          "largo_mm": 675.3,
+          "x_modelo_mm": [0, 310, 522, 571, 675.3],
+          "x_ref_mm": [267.7, 538.0, 802.0, 852.0, 943],
+          "z_anclas": [
+            [330, 1.12, 10.5, "r"],
+            [480, 1.12, 10.5, "r"],
+            [620, 1.08, 10.5, "g"],
+            [760, 1.08, 10.5, "g"],
+            [830, 1.08, 10.5, "g"],
+            [900, 1.08, 10.5, "g"]
+          ],
+          "grupos": [
+            {
+              "id": "cargador",
+              "parte": {
+                "nombre": "Circle",
+                "centro": {
+                  "u": [0.25, 0.55],
+                  "v": [0.0, 0.56]
+                }
+              },
+              "libres": ["dx", "dz", "rot", "sz"],
+              "dx": -6.75,
+              "dz": -7.5,
+              "rot": -3.5,
+              "sz": 1.04
+            },
+            {
+              "id": "pistolete",
+              "parte": {
+                "nombres": ["Circle.075"]
+              },
+              "libres": ["dx", "dz", "rot"],
+              "dx": -21.0,
+              "dz": -4.5,
+              "rot": -3.25
+            }
+          ],
+          "peso_tramo": [1, 3, 2, 1],
+          "penalizacion": 0.03
+        }
+      },
+      "titulo": "Fusil de asalto con culata ajustable y guardamanos de polímero, ajustado a la silueta de un AK-105 de réplica",
+      "clase": "fusil",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "relativa",
+        "largo_mm_render": 675.3,
+        "tomada_de": "proporciones de la silueta de una foto de referencia interna de un AK-105 de réplica (calibrada a 943 mm nominales de la plataforma)",
+        "longitud_mm_verificada": null,
+        "bandera": "escala relativa (ADR-0011): proporciones tomadas de la silueta de la foto; no es una medida verificada de este modelo"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "El AK-47 de Lamoot sin la culata maciza de madera: culata ajustable y tubo extruidos desde el contorno de la foto (pieza plana con bisel), guardamanos y pistolete de polímero, cuerpo deformado por zonas.",
+      "limpieza": {
+        "triangulos": 30998,
+        "partes": 92,
+        "caja_mm_render": [943.0, 67.2, 291.5],
+        "hash_geometria_limpia": "c336c669e1b4254b9ddddf3799cbca3eef8582208a586143cb382aba6f5d675e",
+        "caras_por_zona": {
+          "metal": 14344,
+          "polimero": 1490
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/ak105-lamoot.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/ak105-lamoot/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 1.64,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %",
+        "vistas_papel": ["lateral-papel", "lateral-izq-papel", "tres-cuartos-papel"],
+        "fondo_papel": "#D7D4CC, sombra suave, arma al 80 % del cuadro",
+        "comparacion_con_foto": "assets-src/vistas/replicas-cc/_comparacion/ (solo uso interno)"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 2.46,
+        "superficie_con_mezcla_mayor_25pct": 0.01,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      },
+      "referencia_silueta": "ak105-lateral-izq",
+      "iou_silueta": {
+        "referencia": "ak105-lateral-izq",
+        "iou_modelo_base": 0.6986,
+        "iou_ajustado": 0.8199,
+        "iou_ajustado_mejor_traslacion": 0.8299,
+        "nota": "máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica. la culata y el tubo salen del contorno de la foto: su IoU es 1 por construcción; el valor es del conjunto"
+      }
+    },
+    {
+      "id": "mk18-mrm0lten",
+      "fuente": {
+        "modelo": "M4A1 Carbine",
+        "plataforma": "Sketchfab (copia en el dataset Objaverse 1.0 de Hugging Face)",
+        "autor": "MrM0lten",
+        "url_ficha": "https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9",
+        "url_descarga": "https://huggingface.co/datasets/allenai/objaverse",
+        "licencia": "CC BY 4.0",
+        "url_licencia": "https://creativecommons.org/licenses/by/4.0/",
+        "fecha_verificacion": "2026-11-25",
+        "verificacion": "API pública de Sketchfab (campo license.slug), consultada en vivo antes de descargar",
+        "sha256": "a7a390e26b4c2e93c8f83cb6bf77b5993510ae6d4b1818fc372ffbab92723f5e",
+        "bytes": 11237012,
+        "archivo": "assets-src/raw/modelos-cc/9bb8f18ad94d4b468e447a2d43bd08b9.glb",
+        "atribucion": "\"M4A1 Carbine\" de MrM0lten, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), vía https://sketchfab.com/3d-models/m4a1-carbine-9bb8f18ad94d4b468e447a2d43bd08b9"
+      },
+      "render": {
+        "clase": "fusil",
+        "orientacion": {
+          "boca": "+X",
+          "arriba": "+Z"
+        },
+        "largo_mm_render": 715.0,
+        "borrar": [
+          {
+            "parte": {
+              "nombre": "Bullet"
+            }
+          },
+          {
+            "parte": {
+              "nombre": "Scope"
+            }
+          },
+          {
+            "parte": {
+              "centro": {
+                "u": [0.3, 0.6],
+                "v": [0.88, 1.0]
+              }
+            }
+          }
+        ],
+        "zona_defecto": "metal",
+        "zonas": [
+          {
+            "parte": {
+              "nombre": "Stock"
+            },
+            "mat": "fde_culata"
+          },
+          {
+            "parte": {
+              "nombre": "Magazine"
+            },
+            "mat": "polimero"
+          },
+          {
+            "parte": {
+              "nombre": "Body_Body1",
+              "centro": {
+                "u": [0.88, 1.0]
+              }
+            },
+            "mat": "parkerizado"
+          },
+          {
+            "parte": {
+              "nombre": "Body_Body1",
+              "centro": {
+                "u": [0.55, 0.88],
+                "v": [0.45, 1.0]
+              }
+            },
+            "mat": "fde_guardamanos"
+          },
+          {
+            "parte": {
+              "nombre": "Body_Body1",
+              "centro": {
+                "u": [0.27, 0.4],
+                "v": [0.1, 0.52]
+              }
+            },
+            "mat": "polimero"
+          }
+        ],
+        "materiales": {
+          "metal": {
+            "base": "anodizado_negro",
+            "color": "#1B1C1E",
+            "metalico": 0.55,
+            "rugosidad": 0.5,
+            "variacion_rugosidad": 0.05,
+            "grano_relieve": 0.04,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.3,
+              "radio_mm": 0.7,
+              "rugosidad": 0.35,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          },
+          "polimero": {
+            "base": "polimero_grano",
+            "color": "#0E0E0E",
+            "rugosidad": 0.68,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.14,
+            "desgaste": {
+              "color": "#3a3a3a",
+              "cantidad": 0.25,
+              "radio_mm": 0.8,
+              "rugosidad": 0.55
+            },
+            "suciedad": {
+              "cantidad": 0.35,
+              "oscurece": 0.2
+            }
+          },
+          "parkerizado": {
+            "base": "parkerizado",
+            "color": "#202221",
+            "metalico": 0.7,
+            "rugosidad": 0.5,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#4a4b4e",
+              "cantidad": 0.25,
+              "radio_mm": 0.6,
+              "rugosidad": 0.4,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.2,
+              "oscurece": 0.15
+            }
+          },
+          "fde_culata": {
+            "base": "polimero_grano",
+            "color": "#6E5E4C",
+            "rugosidad": 0.62,
+            "variacion_rugosidad": 0.06,
+            "grano_relieve": 0.14,
+            "desgaste": {
+              "color": "#8a7a66",
+              "cantidad": 0.2,
+              "radio_mm": 0.8,
+              "rugosidad": 0.55
+            },
+            "suciedad": {
+              "cantidad": 0.2,
+              "oscurece": 0.15
+            }
+          },
+          "fde_guardamanos": {
+            "base": "anodizado_negro",
+            "color": "#4A423B",
+            "metalico": 0.5,
+            "rugosidad": 0.5,
+            "rayas": 0.0,
+            "desgaste": {
+              "color": "#7a6e60",
+              "cantidad": 0.25,
+              "radio_mm": 0.6,
+              "rugosidad": 0.4,
+              "metalico": 1.0
+            },
+            "suciedad": {
+              "cantidad": 0.2,
+              "oscurece": 0.15
+            }
+          }
+        },
+        "ajuste": {
+          "largo_mm": 715.0,
+          "x_modelo_mm": [0, 222, 415, 551, 715],
+          "x_ref_mm": [0, 197.0, 433.0, 654.0, 715],
+          "z_anclas": [
+            [40, 1.06, -6.0, "c"],
+            [150, 1.06, -6.0, "c"],
+            [230, 1.08, -6.0, "r"],
+            [360, 1.08, -6.0, "r"],
+            [430, 1.04, -6.0, "g"],
+            [520, 1.04, -6.0, "g"],
+            [610, 1.04, -6.0, "g"],
+            [665, 1.12, -6.0, "b"],
+            [705, 1.12, -6.0, "b"]
+          ],
+          "grupos": [
+            {
+              "id": "cargador",
+              "parte": {
+                "nombre": "Magazine"
+              },
+              "libres": ["dx", "dz", "rot", "sz"],
+              "dx": -12.0,
+              "dz": -12.0,
+              "rot": 2.0,
+              "sz": 1.12
+            },
+            {
+              "id": "pistolete",
+              "parte": {
+                "nombre": "Body_Body1",
+                "centro": {
+                  "u": [0.27, 0.4],
+                  "v": [0.1, 0.52]
+                }
+              },
+              "libres": ["dx", "dz", "rot"],
+              "dx": -3.0,
+              "dz": -12.0,
+              "rot": -4.0
+            }
+          ],
+          "peso_tramo": [1, 3, 1, 1],
+          "penalizacion": 0.03
+        }
+      },
+      "titulo": "Carabina corta con guardamanos de raíles, ajustada a la silueta de un Mk18 de réplica",
+      "clase": "fusil",
+      "nivel": "T0",
+      "ilustrativa": true,
+      "publicable": false,
+      "motivo_no_publicable": "Pendiente de revisión humana de procedencia (docs/05 §5): una etiqueta CC no prueba que el subidor tuviera los derechos.",
+      "medidas_verificadas": false,
+      "es_replica_exacta": false,
+      "aviso": "Imagen ilustrativa: forma genérica de un modelo 3D de licencia abierta, sin medidas verificadas. No es la réplica exacta de ninguna marca ni modelo comercial.",
+      "escala": {
+        "tipo": "relativa",
+        "largo_mm_render": 715.0,
+        "tomada_de": "proporciones de la silueta de una foto de referencia interna de un Mk18 Mod.1 de réplica (largo total 715 mm de la ficha oficial de Tokyo Marui)",
+        "longitud_mm_verificada": null,
+        "bandera": "escala relativa (ADR-0011): proporciones tomadas de la silueta de la foto; no es una medida verificada de este modelo"
+      },
+      "marcajes": {
+        "texturas_originales_descartadas": true,
+        "materiales_originales_descartados": true,
+        "uv_descartadas": true,
+        "logos_o_marcajes_en_geometria": false,
+        "comprobacion": "renders a 100 % de zoom sin texto ni logos legibles; falta revisión humana"
+      },
+      "notas": "El M4A1 de MrM0lten sin el asa de transporte, con el guardamanos de raíles alargado, culata y cargador reajustados a la silueta de la foto; culata y guardamanos con acabado arena como en la foto.",
+      "limpieza": {
+        "triangulos": 19013,
+        "partes": 1601,
+        "caja_mm_render": [715.0, 54.7, 259.8],
+        "hash_geometria_limpia": "bf0d0e84202d37e594d277d4fd5ac160c35402ce8b3b94686b6def5cb851ed8f",
+        "caras_por_zona": {
+          "metal": 4424,
+          "polimero": 1254,
+          "parkerizado": 4122,
+          "fde_culata": 2714,
+          "fde_guardamanos": 6499
+        },
+        "borrado": "internos y munición por reglas de nombre y de caja (ver render.borrar)",
+        "glb_limpio": "assets-src/raw/modelos-cc/limpios/mk18-mrm0lten.glb (ignorada por git)"
+      },
+      "salidas": {
+        "carpeta": "assets-src/vistas/replicas-cc/mk18-mrm0lten/ (ignorada por git)",
+        "vistas": ["lateral", "lateral-izq", "tres-cuartos"],
+        "resolucion": [1800, 1200],
+        "formato": "PNG RGBA, fondo transparente",
+        "px_por_mm_lateral": 1.64,
+        "px_por_mm_nota": "en el plano del sujeto; común dentro de cada clase; tres-cuartos encuadrado por silueta al 80 %",
+        "vistas_papel": ["lateral-papel", "lateral-izq-papel", "tres-cuartos-papel"],
+        "fondo_papel": "#D7D4CC, sombra suave, arma al 80 % del cuadro",
+        "comparacion_con_foto": "assets-src/vistas/replicas-cc/_comparacion/ (solo uso interno)"
+      },
+      "desgaste_aristas": {
+        "superficie_con_mezcla_mayor_10pct": 0.06,
+        "superficie_con_mezcla_mayor_25pct": 0.0,
+        "unidad": "% de píxeles de la silueta (sonda de bordes, vista lateral)",
+        "color_desgaste": "gris neutro, nunca blanco"
+      },
+      "referencia_silueta": "mk18-mod1-lateral-izq",
+      "iou_silueta": {
+        "referencia": "mk18-mod1-lateral-izq",
+        "iou_modelo_base": 0.4918,
+        "iou_ajustado": 0.7391,
+        "iou_ajustado_mejor_traslacion": 0.7391,
+        "nota": "máscara lateral ortográfica a 1,5 px/mm alineada por la esquina superior izquierda; foto de referencia interna, no se publica"
       }
     }
   ],

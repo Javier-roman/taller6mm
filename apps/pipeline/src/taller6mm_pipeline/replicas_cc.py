@@ -267,36 +267,41 @@ def comparar_con_foto(reg: dict[str, Any]) -> None:
         print("COMPARACION", carpeta / f"{m['id']}.png")
 
 
-def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "") -> Path:
-    """Una fila por modelo y una columna por vista, sobre el fondo de La Armería (#1A1B1E) con rótulo de ilustrativa."""
+def pie_de_escala(m: dict[str, Any]) -> str:
+    e = m.get("escala") or {}
+    return e.get("tomada_de") or e.get("fuente_cota") or e.get("bandera") or "sin dato"
+
+
+def hoja_de_contacto(reg: dict[str, Any], sufijo: str = "", papel: bool = False) -> Path:
+    """Una fila por modelo y una columna por vista; rótulo con ILUSTRATIVA T0 y «escala tomada de»."""
     from PIL import Image, ImageDraw, ImageFont
 
-    fondo = (26, 27, 30)
+    fondo = PAPEL if papel else (26, 27, 30)
+    tinta = (40, 38, 34) if papel else (205, 205, 210)
     vistas = ["lateral", "lateral-izq", "tres-cuartos"]
     celda = (900, 600)
+    cab = 62
     filas = [m for m in reg["modelos"] if (VISTAS_DIR / m["id"] / f"lateral{sufijo}.png").exists()]
-    hoja = Image.new("RGB", (celda[0] * len(vistas), celda[1] * len(filas)), fondo)
+    hoja = Image.new("RGB", (celda[0] * len(vistas), (celda[1] + cab) * len(filas)), fondo)
     d = ImageDraw.Draw(hoja)
     try:
         letra = ImageFont.truetype("arial.ttf", 22)
+        letra_p = ImageFont.truetype("arial.ttf", 18)
     except OSError:
-        letra = ImageFont.load_default()
+        letra = letra_p = ImageFont.load_default()
     for r, m in enumerate(filas):
+        y0 = r * (celda[1] + cab)
+        d.text((12, y0 + 6), f"{m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar", fill=tinta, font=letra)
+        d.text((12, y0 + 34), f"Escala tomada de: {pie_de_escala(m)}"[:190], fill=tinta, font=letra_p)
         for c, v in enumerate(vistas):
-            ruta = VISTAS_DIR / m["id"] / f"{v}{sufijo}.png"
+            ruta = VISTAS_DIR / m["id"] / f"{v}{'-papel' if papel else ''}{sufijo}.png"
             if not ruta.exists():
                 continue
             im = Image.open(ruta).convert("RGBA")
             base = Image.new("RGBA", im.size, (*fondo, 255))
             base.alpha_composite(im)
-            hoja.paste(base.convert("RGB").resize(celda, Image.LANCZOS), (c * celda[0], r * celda[1]))
-        d.text(
-            (12, r * celda[1] + 8),
-            f"{m['id']}  |  {m['titulo']}  |  ILUSTRATIVA T0, medidas sin verificar",
-            fill=(200, 200, 205),
-            font=letra,
-        )
-    salida = VISTAS_DIR / f"hoja-replicas-cc{sufijo}.png"
+            hoja.paste(base.convert("RGB").resize(celda, Image.LANCZOS), (c * celda[0], y0 + cab))
+    salida = VISTAS_DIR / f"hoja-replicas-cc{'-papel' if papel else ''}{sufijo}.png"
     hoja.save(salida)
     print("HOJA", salida, hoja.size)
     return salida
@@ -313,7 +318,20 @@ def extrusiones_de_referencia(ref_id: str, specs: list[dict[str, Any]]) -> list[
     y0 = min(p[1] for v in r["partes"].values() for p in v["contorno_mm"])
     salida = []
     for e in specs:
-        puntos = [[round(p[0] - x0, 2), round(p[1] - y0, 2)] for p in r["partes"][e["ref_parte"]]["contorno_mm"]]
+        crudo = [[p[0] - x0, p[1] - y0] for p in r["partes"][e["ref_parte"]]["contorno_mm"]]
+        for _ in range(e.get("suavizado", 0)):  # corte de esquinas de Chaikin: redondea el contorno de foto
+            sig = []
+            for i, a in enumerate(crudo):
+                b = crudo[(i + 1) % len(crudo)]
+                sig.append([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]])
+                sig.append([0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]])
+            crudo = sig
+        if e.get("alargar_der_mm"):  # prolonga el borde derecho para que la pieza entre en el cajón
+            xmax = max(p[0] for p in crudo)
+            for p in crudo:
+                if p[0] >= xmax - 1.0:
+                    p[0] += e["alargar_der_mm"]
+        puntos = [[round(p[0], 2), round(p[1], 2)] for p in crudo]
         salida.append({**e, "puntos_mm": puntos})
     return salida
 
@@ -406,6 +424,7 @@ def main() -> None:
         return
     if modo == "hoja":
         hoja_de_contacto(reg, opciones.get("sufijo", ""))
+        hoja_de_contacto(reg, opciones.get("sufijo", ""), papel=True)
         return
     ids = [m["id"] for m in reg["modelos"]] if quien == "todos" else [quien]
     for m in reg["modelos"]:
