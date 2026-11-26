@@ -9,7 +9,7 @@ Hoy, para montar una réplica a tu gusto tienes que:
 No existe un sitio que junte **ver**, **saber** y **comprar mejor** para el airsoft.
 
 ## 2. La propuesta: un taller virtual de airsoft
-1. **Ver**: en El Banco eliges tu réplica exacta y la montas pieza a pieza con representación fiel 1:1, en 2D y 3D.
+1. **Ver**: en El Banco eliges tu réplica exacta y la montas pieza a pieza con representación visual fiel y honesta (proporciones reales, medidas solo con fuente, ADR-0011), en 2D y 3D.
 2. **Saber**: la compatibilidad está explicada. Qué encaja, qué necesita adaptador, qué requiere modificación, qué no encaja y por qué.
 3. **Comprar mejor**: cada pieza muestra sus ofertas reales en tiendas de España y del extranjero, con precio, stock y fecha de comprobación. También el coste puesto en casa y la combinación de tiendas más barata.
 4. **Compartir**: la comunidad publica sus builds, se inspira, valora y opina.

@@ -16,7 +16,7 @@ La especificación está en `docs/` y **no se importa aquí** para no gastar con
 | Dirección de arte, La Armería (inicio), sistema de diseño | `docs/02-experiencia-y-diseno.md` |
 | El Banco (configurador) y motor de compatibilidad | `docs/03-el-banco-configurador.md` |
 | Mercado: fuentes, rastreo, emparejado, precios, alertas | `docs/04-mercado-e-ingesta.md` |
-| Assets 2D/3D y fidelidad 1:1 | `docs/05-assets-y-fidelidad.md` |
+| Assets 2D/3D y fidelidad visual | `docs/05-assets-y-fidelidad.md` |
 | Comunidad, rankings, moderación | `docs/06-comunidad.md` |
 | Arquitectura, datos, APIs, costes | `docs/07-arquitectura.md` |
 | Calidad, seguridad, operación | `docs/08-calidad-seguridad-operacion.md` |
@@ -28,7 +28,7 @@ La especificación está en `docs/` y **no se importa aquí** para no gastar con
 | Modelos de IA, Gemini y medición de uso | `docs/ia/modelos.md` |
 
 ## Principios no negociables
-1. **Fidelidad 1:1.** Réplicas y accesorios con proporciones y medidas reales en mm. Si un asset no alcanza un nivel, se muestra con su nivel real (T0–T3, docs/05); nunca se disfraza.
+1. **Fidelidad visual honesta** (ADR-0011). Réplicas y accesorios con proporciones reales sacadas de referencia; las medidas en mm solo se muestran con fuente. El nivel de cada asset (ilustrativa, aproximada o verificada; T0–T3, docs/05) es siempre visible y nunca se disfraza. Las interfaces estándar (raíles, roscas, M-LOK, cargadores) son exactas.
 2. **Datos honestos.** Precio y stock siempre con la fecha de la última comprobación. Lo desconocido es `null` + bandera, nunca un valor inventado. Datos de ejemplo solo en seeds marcados `is_demo`, jamás en producción. Nada de estadísticas de videojuego (daño, precisión).
 3. **Compatibilidad explicable.** Cada veredicto lleva motivo, fuente y confianza.
 4. **Ingesta respetuosa y legal.** robots.txt (incluidas las líneas `Content-Signal`), ritmo bajo, User-Agent identificado, opt-out inmediato, sin login, sin evadir bloqueos ni CAPTCHAs. Primero feeds y APIs oficiales.
