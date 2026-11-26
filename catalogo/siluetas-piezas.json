@@ -1,0 +1,546 @@
+{
+  "esquema": "siluetas-piezas/v1",
+  "replicas": [
+    {
+      "id": "akm-lateral-izq",
+      "partes": {
+        "receptor": {
+          "glb": "akm-lateral-izq.receptor.glb",
+          "material": "metal",
+          "ancho_z_mm": 37.0,
+          "triangulos": 3104,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 646277.0,
+          "sha256": "943a6c5fc3d7112d"
+        },
+        "mira_trasera": {
+          "glb": "akm-lateral-izq.mira_trasera.glb",
+          "material": "metal",
+          "ancho_z_mm": 26.0,
+          "triangulos": 596,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 52327.1,
+          "sha256": "afa5de78046d300f"
+        },
+        "culata": {
+          "glb": "akm-lateral-izq.culata.glb",
+          "material": "madera",
+          "ancho_z_mm": 46.0,
+          "triangulos": 1626,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 648445.6,
+          "sha256": "f9a678e3be01a8b5"
+        },
+        "empunadura": {
+          "glb": "akm-lateral-izq.empunadura.glb",
+          "material": "polimero",
+          "ancho_z_mm": 34.0,
+          "triangulos": 1098,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 174124.9,
+          "sha256": "447be53ddb318e66"
+        },
+        "cargador": {
+          "glb": "akm-lateral-izq.cargador.glb",
+          "material": "metal",
+          "ancho_z_mm": 37.0,
+          "triangulos": 4370,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 417936.7,
+          "sha256": "47e67dc5a112d4dd"
+        },
+        "guardamonte": {
+          "glb": "akm-lateral-izq.guardamonte.glb",
+          "material": "metal",
+          "ancho_z_mm": 3.5,
+          "triangulos": 988,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 6364.2,
+          "sha256": "1ef5d7266a88be46"
+        },
+        "guardamanos_sup": {
+          "glb": "akm-lateral-izq.guardamanos_sup.glb",
+          "material": "madera",
+          "ancho_z_mm": 36.0,
+          "triangulos": 690,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 105683.1,
+          "sha256": "fb5f8bcc7d6a91db"
+        },
+        "guardamanos_inf": {
+          "glb": "akm-lateral-izq.guardamanos_inf.glb",
+          "material": "madera",
+          "ancho_z_mm": 44.0,
+          "triangulos": 1070,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 225926.9,
+          "sha256": "222ac0b5e70f10eb"
+        },
+        "tubo_gases": {
+          "glb": "akm-lateral-izq.tubo_gases.glb",
+          "material": "metal",
+          "ancho_z_mm": null,
+          "triangulos": 5072,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 31212.8,
+          "sha256": "272e5f4e41c57e17"
+        },
+        "canon": {
+          "glb": "akm-lateral-izq.canon.glb",
+          "material": "metal",
+          "ancho_z_mm": null,
+          "triangulos": 7484,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 91178.4,
+          "sha256": "c0618dde60e9413e"
+        },
+        "freno": {
+          "glb": "akm-lateral-izq.freno.glb",
+          "material": "metal",
+          "ancho_z_mm": null,
+          "triangulos": 1544,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 5859.1,
+          "sha256": "40c98164e1e70775"
+        },
+        "base_alza": {
+          "glb": "akm-lateral-izq.base_alza.glb",
+          "material": "metal",
+          "ancho_z_mm": 9.0,
+          "triangulos": 688,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 14884.5,
+          "sha256": "494111e4507315b8"
+        }
+      },
+      "iou_silueta_lateral": 0.9444,
+      "iou_objetivo": 0.9,
+      "iou_nota": "modelo vs máscara de la foto de referencia (misma escala y origen). El contorno se extruye de la propia foto, así que mide la fidelidad del proceso, no una verificación independiente.",
+      "es_demo": false,
+      "nivel": "T0",
+      "publicable_3d": false,
+      "confianza": "media (contorno); baja (anchos en Z y relieves)",
+      "procedencia": "aportadas por Javi (capturas de producto de tienda; referencia interna, no se publican)",
+      "calibre": {
+        "mm_por_px": 0.842912,
+        "longitud_mm": 880.0,
+        "fuente": "longitud nominal de la plataforma AKM (880 mm, dato público de la plataforma, no ficha del SKU)",
+        "confianza": "baja"
+      },
+      "segundos": 7.7
+    },
+    {
+      "id": "ak105-lateral-izq",
+      "partes": {
+        "receptor": {
+          "glb": "ak105-lateral-izq.receptor.glb",
+          "material": "metal",
+          "ancho_z_mm": 38.0,
+          "triangulos": 1166,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 810002.3,
+          "sha256": "fa54e06b93b5f4f1"
+        },
+        "guardamanos": {
+          "glb": "ak105-lateral-izq.guardamanos.glb",
+          "material": "polimero",
+          "ancho_z_mm": 42.0,
+          "triangulos": 1648,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 865599.1,
+          "sha256": "aea736eedfdc36e3"
+        },
+        "boca": {
+          "glb": "ak105-lateral-izq.boca.glb",
+          "material": "metal",
+          "ancho_z_mm": null,
+          "triangulos": 4784,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 123758.6,
+          "sha256": "d91d12770788144c"
+        },
+        "alza_delantera": {
+          "glb": "ak105-lateral-izq.alza_delantera.glb",
+          "material": "metal",
+          "ancho_z_mm": 8.0,
+          "triangulos": 380,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 7262.7,
+          "sha256": "079ecaeb696f6ad6"
+        },
+        "tubo_culata": {
+          "glb": "ak105-lateral-izq.tubo_culata.glb",
+          "material": "metal",
+          "ancho_z_mm": null,
+          "triangulos": 3848,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 74930.2,
+          "sha256": "07bfb7bce9045f1c"
+        },
+        "culata": {
+          "glb": "ak105-lateral-izq.culata.glb",
+          "material": "polimero",
+          "ancho_z_mm": 52.0,
+          "triangulos": 1736,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 961919.0,
+          "sha256": "cdcb7dc0eef51aac"
+        },
+        "empunadura": {
+          "glb": "ak105-lateral-izq.empunadura.glb",
+          "material": "polimero",
+          "ancho_z_mm": 34.0,
+          "triangulos": 1482,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 219705.3,
+          "sha256": "16cf7a57443b2048"
+        },
+        "cargador": {
+          "glb": "ak105-lateral-izq.cargador.glb",
+          "material": "polimero",
+          "ancho_z_mm": 36.0,
+          "triangulos": 3200,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 444349.0,
+          "sha256": "3f29fa2c0cd0cef9"
+        },
+        "guardamonte": {
+          "glb": "ak105-lateral-izq.guardamonte.glb",
+          "material": "metal",
+          "ancho_z_mm": 3.5,
+          "triangulos": 780,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 4628.2,
+          "sha256": "eed53c55eccf794d"
+        }
+      },
+      "iou_silueta_lateral": 0.9679,
+      "iou_objetivo": 0.9,
+      "iou_nota": "modelo vs máscara de la foto de referencia (misma escala y origen). El contorno se extruye de la propia foto, así que mide la fidelidad del proceso, no una verificación independiente.",
+      "es_demo": false,
+      "nivel": "T0",
+      "publicable_3d": false,
+      "confianza": "media (contorno); baja (anchos en Z y relieves)",
+      "procedencia": "aportadas por Javi (capturas de producto de tienda; referencia interna, no se publican)",
+      "calibre": {
+        "mm_por_px": 0.907603,
+        "longitud_mm": 943.0,
+        "fuente": "longitud nominal de la plataforma AK-105 con culata extendida (943 mm, dato público de la plataforma, no ficha del SKU); el montaje de la foto puede diferir hasta un 8 %; el receptor medido sale a 276 mm frente a 258 mm en el AKM (misma pieza): coherente",
+        "confianza": "baja"
+      },
+      "segundos": 5.5
+    },
+    {
+      "id": "mk18-mod1-lateral-izq",
+      "partes": {
+        "receptor_sup": {
+          "glb": "mk18-mod1-lateral-izq.receptor_sup.glb",
+          "material": "receptor",
+          "ancho_z_mm": 40.0,
+          "triangulos": 980,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 356515.2,
+          "sha256": "cd5f2e19db1dab98"
+        },
+        "receptor_inf": {
+          "glb": "mk18-mod1-lateral-izq.receptor_inf.glb",
+          "material": "receptor",
+          "ancho_z_mm": 38.0,
+          "triangulos": 1088,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 317550.6,
+          "sha256": "abcb1d55bb8f2dd5"
+        },
+        "guardamanos": {
+          "glb": "mk18-mod1-lateral-izq.guardamanos.glb",
+          "material": "arena",
+          "ancho_z_mm": 52.0,
+          "triangulos": 16406,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 713710.6,
+          "sha256": "7a5cf6e56a4c40d2"
+        },
+        "alza_delantera": {
+          "glb": "mk18-mod1-lateral-izq.alza_delantera.glb",
+          "material": "receptor",
+          "ancho_z_mm": 4.0,
+          "triangulos": 242,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 2365.1,
+          "sha256": "d882e72afc14e77f"
+        },
+        "alza_trasera": {
+          "glb": "mk18-mod1-lateral-izq.alza_trasera.glb",
+          "material": "receptor",
+          "ancho_z_mm": 8.0,
+          "triangulos": 498,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 5060.6,
+          "sha256": "1d64dad3e06cdc74"
+        },
+        "boca": {
+          "glb": "mk18-mod1-lateral-izq.boca.glb",
+          "material": "receptor",
+          "ancho_z_mm": null,
+          "triangulos": 3164,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 30480.9,
+          "sha256": "cb5374dd23820733"
+        },
+        "culata": {
+          "glb": "mk18-mod1-lateral-izq.culata.glb",
+          "material": "arena",
+          "ancho_z_mm": 48.0,
+          "triangulos": 1906,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 786434.4,
+          "sha256": "2e9f4842a536fb0a"
+        },
+        "empunadura": {
+          "glb": "mk18-mod1-lateral-izq.empunadura.glb",
+          "material": "receptor",
+          "ancho_z_mm": 32.0,
+          "triangulos": 1542,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 161811.7,
+          "sha256": "985997a2d425f5bd"
+        },
+        "cargador": {
+          "glb": "mk18-mod1-lateral-izq.cargador.glb",
+          "material": "receptor",
+          "ancho_z_mm": 28.0,
+          "triangulos": 2398,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 192700.4,
+          "sha256": "628b00e0a034ddeb"
+        }
+      },
+      "iou_silueta_lateral": 0.9627,
+      "iou_objetivo": 0.9,
+      "iou_nota": "modelo vs máscara de la foto de referencia (misma escala y origen). El contorno se extruye de la propia foto, así que mide la fidelidad del proceso, no una verificación independiente.",
+      "es_demo": false,
+      "nivel": "T0",
+      "publicable_3d": false,
+      "confianza": "media (contorno); baja (anchos en Z y relieves)",
+      "procedencia": "aportadas por Javi (capturas de producto de tienda; referencia interna, no se publican)",
+      "calibre": {
+        "mm_por_px": 0.750262,
+        "longitud_mm": 715.0,
+        "fuente": "largo total del Mk18 Mod.1 GBB, ficha oficial de Tokyo Marui con la culata recogida (docs/catalogo/cotas-publicas.md, ficha 479)",
+        "confianza": "alta"
+      },
+      "segundos": 5.3
+    },
+    {
+      "id": "hicapa-nighthawk-lateral-izq",
+      "partes": {
+        "corredera": {
+          "glb": "hicapa-nighthawk-lateral-izq.corredera.glb",
+          "material": "corredera",
+          "ancho_z_mm": 25.0,
+          "triangulos": 1506,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 104527.9,
+          "sha256": "45d2ae54da41d03a"
+        },
+        "alza_delantera": {
+          "glb": "hicapa-nighthawk-lateral-izq.alza_delantera.glb",
+          "material": "corredera",
+          "ancho_z_mm": 3.6,
+          "triangulos": 396,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 433.1,
+          "sha256": "831966a3e778a4a5"
+        },
+        "alza_trasera": {
+          "glb": "hicapa-nighthawk-lateral-izq.alza_trasera.glb",
+          "material": "corredera",
+          "ancho_z_mm": 10.0,
+          "triangulos": 278,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 1387.5,
+          "sha256": "31ab8118958008bd"
+        },
+        "cubierta_optica": {
+          "glb": "hicapa-nighthawk-lateral-izq.cubierta_optica.glb",
+          "material": "corredera",
+          "ancho_z_mm": 17.0,
+          "triangulos": 376,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 3136.0,
+          "sha256": "49d25cadd78999b7"
+        },
+        "armazon": {
+          "glb": "hicapa-nighthawk-lateral-izq.armazon.glb",
+          "material": "armazon",
+          "ancho_z_mm": 23.0,
+          "triangulos": 2844,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 203182.6,
+          "sha256": "f204ecd687299494"
+        },
+        "cachas": {
+          "glb": "hicapa-nighthawk-lateral-izq.cachas.glb",
+          "material": "polimero",
+          "ancho_z_mm": 34.0,
+          "triangulos": 54498,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 182030.3,
+          "sha256": "a59a20fd89c49d64"
+        },
+        "guardamonte": {
+          "glb": "hicapa-nighthawk-lateral-izq.guardamonte.glb",
+          "material": "armazon",
+          "ancho_z_mm": 9.0,
+          "triangulos": 1572,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 2677.7,
+          "sha256": "30927c858f3cf0ac"
+        },
+        "base_cargador": {
+          "glb": "hicapa-nighthawk-lateral-izq.base_cargador.glb",
+          "material": "polimero",
+          "ancho_z_mm": 30.0,
+          "triangulos": 632,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 20540.2,
+          "sha256": "97fc6363e1be17fb"
+        },
+        "canon": {
+          "glb": "hicapa-nighthawk-lateral-izq.canon.glb",
+          "material": "metal_canon",
+          "ancho_z_mm": null,
+          "triangulos": 288,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 1200.2,
+          "sha256": "b699b49ef196e1db"
+        }
+      },
+      "iou_silueta_lateral": 0.9892,
+      "iou_objetivo": 0.9,
+      "iou_nota": "modelo vs máscara de la foto de referencia (misma escala y origen). El contorno se extruye de la propia foto, así que mide la fidelidad del proceso, no una verificación independiente.",
+      "es_demo": false,
+      "nivel": "T0",
+      "publicable_3d": false,
+      "confianza": "media (contorno); baja (anchos en Z y relieves)",
+      "procedencia": "aportadas por Javi (capturas de producto de tienda; referencia interna, no se publican)",
+      "calibre": {
+        "mm_por_px": 0.189906,
+        "longitud_mm": 222.0,
+        "fuente": "longitud total de la Hi-Capa 5.1 (docs/catalogo/cotas-publicas.md, ficha Tokyo Marui); se asume la misma para esta réplica: no hay ficha propia del SKU",
+        "confianza": "media-baja"
+      },
+      "segundos": 6.0
+    },
+    {
+      "id": "glock-19x-lateral-izq",
+      "partes": {
+        "corredera": {
+          "glb": "glock-19x-lateral-izq.corredera.glb",
+          "material": "corredera",
+          "ancho_z_mm": 25.4,
+          "triangulos": 1814,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 100413.1,
+          "sha256": "4e5c13f367b1b692"
+        },
+        "alza_delantera": {
+          "glb": "glock-19x-lateral-izq.alza_delantera.glb",
+          "material": "negro",
+          "ancho_z_mm": 3.2,
+          "triangulos": 218,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 180.0,
+          "sha256": "4b2f4d710fffcbc4"
+        },
+        "alza_trasera": {
+          "glb": "glock-19x-lateral-izq.alza_trasera.glb",
+          "material": "negro",
+          "ancho_z_mm": 10.0,
+          "triangulos": 222,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 492.5,
+          "sha256": "1236f607fac846fc"
+        },
+        "armazon": {
+          "glb": "glock-19x-lateral-izq.armazon.glb",
+          "material": "armazon",
+          "ancho_z_mm": 27.0,
+          "triangulos": 215650,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 203504.0,
+          "sha256": "ee8e27691739621c"
+        },
+        "riel_frontal": {
+          "glb": "glock-19x-lateral-izq.riel_frontal.glb",
+          "material": "armazon",
+          "ancho_z_mm": 21.0,
+          "triangulos": 606,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 16222.0,
+          "sha256": "d80678650f5e33c7"
+        },
+        "guardamonte": {
+          "glb": "glock-19x-lateral-izq.guardamonte.glb",
+          "material": "armazon",
+          "ancho_z_mm": 11.0,
+          "triangulos": 1580,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 10128.4,
+          "sha256": "f90b9213e21da254"
+        },
+        "gatillo": {
+          "glb": "glock-19x-lateral-izq.gatillo.glb",
+          "material": "negro",
+          "ancho_z_mm": 7.0,
+          "triangulos": 752,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 1074.2,
+          "sha256": "85c123f01f297f09"
+        },
+        "retenida_cargador": {
+          "glb": "glock-19x-lateral-izq.retenida_cargador.glb",
+          "material": "negro",
+          "ancho_z_mm": 5.0,
+          "triangulos": 402,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 652.1,
+          "sha256": "77f83de83fc22543"
+        },
+        "base_cargador": {
+          "glb": "glock-19x-lateral-izq.base_cargador.glb",
+          "material": "armazon",
+          "ancho_z_mm": 26.0,
+          "triangulos": 666,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 11418.1,
+          "sha256": "8cf2ad89b9058a78"
+        },
+        "canon": {
+          "glb": "glock-19x-lateral-izq.canon.glb",
+          "material": "negro",
+          "ancho_z_mm": null,
+          "triangulos": 288,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 1200.2,
+          "sha256": "dbd333cdab59ac4c"
+        }
+      },
+      "iou_silueta_lateral": 0.9861,
+      "iou_objetivo": 0.9,
+      "iou_nota": "modelo vs máscara de la foto de referencia (misma escala y origen). El contorno se extruye de la propia foto, así que mide la fidelidad del proceso, no una verificación independiente.",
+      "es_demo": false,
+      "nivel": "T0",
+      "publicable_3d": false,
+      "confianza": "media (contorno); baja (anchos en Z y relieves)",
+      "procedencia": "aportadas por Javi (capturas de producto de tienda; referencia interna, no se publican)",
+      "calibre": {
+        "mm_por_px": 0.232451,
+        "longitud_mm": 202.0,
+        "fuente": "longitud total publicada de la Glock 19X real (7,95 in); la réplica GBB la copia 1:1 según su ficha comercial (no verificada contra la ficha del SKU)",
+        "confianza": "media"
+      },
+      "segundos": 13.9
+    }
+  ]
+}

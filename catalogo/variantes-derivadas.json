@@ -1,0 +1,232 @@
+{
+  "esquema": "variantes-derivadas/v1",
+  "nota": "Variantes DERIVADAS de una base con silueta medida (docs/catalogo/familia-siluetas.md). Cambiar longitud de cañón/corredera/guardamanos o color es válido; un receptor o sistema distinto exige su propia silueta. Nada es medida de una réplica concreta; todo T0, confianza baja-media, no publicable.",
+  "plataformas": [
+    {
+      "plataforma": "ak",
+      "base": "akm-lateral-izq",
+      "zona_fija": "contorno medido del receptor/armazón (y a veces la corredera)",
+      "parametros_variables": {
+        "longitud_total_mm": {
+          "rango": [700, 1000],
+          "nota": "tramo delantero: cañón, tubo de gases y guardamanos"
+        },
+        "culata": ["fija de madera (base)", "otra silueta medida (p. ej. la del AK-105)"],
+        "color": ["madera + negro (base)", "todo negro"]
+      },
+      "variantes": [
+        {
+          "id": "akm-carabina-corta",
+          "nombre": "AKM derivado de carabina corta",
+          "derivada_de": "akm-lateral-izq",
+          "longitud_total_mm": 735.0,
+          "factor_tramo_delantero": 0.5718,
+          "fuente_longitud": "dato público de la plataforma (carabina corta de la familia AK, culata extendida): sin ficha del SKU; escala relativa con bandera",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "akm-guardamanos-largo",
+          "nombre": "AKM derivado con cañón y guardamanos largos",
+          "derivada_de": "akm-lateral-izq",
+          "longitud_total_mm": 980.0,
+          "factor_tramo_delantero": 1.3305,
+          "fuente_longitud": "escala relativa (variación de barrido +100 mm); sin ficha ni dato público del modelo",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "akm-negro",
+          "nombre": "AKM derivado en acabado todo negro",
+          "derivada_de": "akm-lateral-izq",
+          "longitud_total_mm": 880.0,
+          "factor_tramo_delantero": null,
+          "fuente_longitud": "mismo largo que la base; el negro se toma del cargador medido en la misma foto",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        }
+      ]
+    },
+    {
+      "plataforma": "ar-m4",
+      "base": "mk18-mod1-lateral-izq",
+      "zona_fija": "contorno medido del receptor/armazón (y a veces la corredera)",
+      "parametros_variables": {
+        "longitud_total_mm": {
+          "rango": [705, 803],
+          "nota": "cañón y guardamanos (CQB-R, Mk18, carabina, SOPMOD)"
+        },
+        "culata": ["telescópica de la base", "otra silueta medida (SA-F14: aún sin lateral puro)"],
+        "color": ["negro + arena (base)", "todo negro", "todo arena"]
+      },
+      "variantes": [
+        {
+          "id": "mk18-cqb-r",
+          "nombre": "Mk18 derivado a la longitud de la CQB-R",
+          "derivada_de": "mk18-mod1-lateral-izq",
+          "longitud_total_mm": 705.0,
+          "factor_tramo_delantero": 0.8966,
+          "fuente_longitud": "ficha oficial Tokyo Marui CQB-R AEG next-gen (docs/catalogo/cotas-publicas.md)",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "mk18-carabina",
+          "nombre": "Mk18 derivado a la longitud de la M4A1 Carbine",
+          "derivada_de": "mk18-mod1-lateral-izq",
+          "longitud_total_mm": 777.0,
+          "factor_tramo_delantero": 1.6413,
+          "fuente_longitud": "ficha oficial Tokyo Marui M4A1 MWS / Carbine GBB (docs/catalogo/cotas-publicas.md)",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "mk18-negro",
+          "nombre": "Mk18 derivado en acabado todo negro",
+          "derivada_de": "mk18-mod1-lateral-izq",
+          "longitud_total_mm": 715.0,
+          "factor_tramo_delantero": null,
+          "fuente_longitud": "mismo largo que la base; el negro sale del receptor medido en la misma foto",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        }
+      ]
+    },
+    {
+      "plataforma": "hi-capa",
+      "base": "hicapa-nighthawk-lateral-izq",
+      "zona_fija": "contorno medido del receptor/armazón (y a veces la corredera)",
+      "parametros_variables": {
+        "longitud_total_mm": {
+          "rango": [195, 230],
+          "nota": "longitud de corredera y cañón (4,3 / 5,1)"
+        },
+        "color": ["negro (base)", "arena"]
+      },
+      "variantes": [
+        {
+          "id": "hicapa-chisato",
+          "nombre": "Hi-Capa derivada a la longitud de la Chisato",
+          "derivada_de": "hicapa-nighthawk-lateral-izq",
+          "longitud_total_mm": 210.0,
+          "factor_tramo_delantero": 0.8219,
+          "fuente_longitud": "ficha oficial Tokyo Marui Chisato (docs/catalogo/cotas-publicas.md)",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "hicapa-dor",
+          "nombre": "Hi-Capa derivada a la longitud de la D.O.R",
+          "derivada_de": "hicapa-nighthawk-lateral-izq",
+          "longitud_total_mm": 220.0,
+          "factor_tramo_delantero": 0.9703,
+          "fuente_longitud": "ficha oficial Tokyo Marui Hi-Capa D.O.R (docs/catalogo/cotas-publicas.md)",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "hicapa-metal-claro",
+          "nombre": "Hi-Capa derivada con corredera en gris claro",
+          "derivada_de": "hicapa-nighthawk-lateral-izq",
+          "longitud_total_mm": 222.0,
+          "factor_tramo_delantero": null,
+          "fuente_longitud": "mismo largo que la base; acabado de corredera aclarado (variante de color, no medida)",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        }
+      ]
+    },
+    {
+      "plataforma": "glock-17",
+      "base": "glock-19x-lateral-izq",
+      "zona_fija": "contorno medido del receptor/armazón (y a veces la corredera)",
+      "parametros_variables": {
+        "longitud_total_mm": {
+          "rango": [170, 210],
+          "nota": "longitud de corredera y cañón (compacta / estándar)"
+        },
+        "color": ["arena (base)", "negro"]
+      },
+      "variantes": [
+        {
+          "id": "glock-compacta",
+          "nombre": "Glock derivada a la longitud de una compacta",
+          "derivada_de": "glock-19x-lateral-izq",
+          "longitud_total_mm": 188.0,
+          "factor_tramo_delantero": 0.7928,
+          "fuente_longitud": "dato público de la plataforma (compacta); sin ficha del SKU, escala relativa con bandera",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "glock-estandar",
+          "nombre": "Glock derivada a la longitud de una estándar",
+          "derivada_de": "glock-19x-lateral-izq",
+          "longitud_total_mm": 204.0,
+          "factor_tramo_delantero": 1.032,
+          "fuente_longitud": "dato público de la plataforma (estándar); sin ficha del SKU, escala relativa con bandera",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        },
+        {
+          "id": "glock-negra",
+          "nombre": "Glock derivada en acabado negro",
+          "derivada_de": "glock-19x-lateral-izq",
+          "longitud_total_mm": 202.0,
+          "factor_tramo_delantero": null,
+          "fuente_longitud": "mismo largo que la base; el negro sale del mando negro medido en la misma foto",
+          "nivel": "T0",
+          "confianza": "baja-media",
+          "es_demo": true,
+          "publicable_3d": false,
+          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta.",
+          "aristas_abiertas": 0
+        }
+      ]
+    }
+  ]
+}
