@@ -29,9 +29,17 @@ proporciones, colores medianos y polígonos de partición. No se reproducen logo
    luz de `catalogo/iluminacion-presets.json` (`mate_suave`: clave, relleno, tiras de contorno, sombrero), materiales con el
    albedo medido. Salida en `assets-src/vistas/replicas-silueta/` (ignorada).
 
+## Secciones transversales (no son prismas de grosor constante)
+Cada `Spec` puede llevar `planta` (ancho en Z según la posición a lo largo de X o de Y): culatas que se estrechan hacia el
+cuello, empuñaduras que se afinan hacia abajo, guardamanos que adelgazan. Además: guardamanos RIS con **cuatro raíles**
+(`rail_picatinny.solido_rail`) y raíl superior en el AK-105, apagallamas con seis ranuras, brocal del pozo del cargador,
+cachas de la Hi-Capa integradas en el armazón con relieve de escamas. Los anchos son estimaciones (confianza baja).
+
 ## Colores (medidos)
-La mediana de un rectángulo del objeto da el color con la luz de la foto. El albedo aplicado: los negros se neutralizan
-(0,62 × medio, limitado a 30-52, guía de aspecto §2.1) y los demás se atenúan un 20 %. Se guardan ambos valores. La
+La mediana de un rectángulo del objeto da el color con la luz de la foto y se guarda como `rgb_medido`. El albedo aplicado
+(`rgb`, con su nota) depende del modo: polímero negro neutro común #1E1F21; metal pintado #242527 con especular; madera del AKM
+barniz #5A2E1C con veta procedural y capa de barniz; Glock 19X en coyote (se conserva el valor medido y el tono se lleva a
+33 grados porque el medido es un balance de blancos cálido); el resto, color medido × 0,8. Se guardan ambos valores. La
 rugosidad sale de la guía de aspecto (metal pintado 0,4-0,45, polímero 0,5-0,55, madera barnizada 0,5).
 
 ## Calibre y límites
@@ -39,7 +47,7 @@ rugosidad sale de la guía de aspecto (metal pintado 0,4-0,45, polímero 0,5-0,5
 |---|---|---|
 | Mk18 Mod.1 | 715 mm, ficha oficial Tokyo Marui (culata recogida) | alta |
 | Hi-Capa (visor reflex) | 222 mm de la Hi-Capa 5.1 (ficha TM); no hay ficha del SKU | media-baja |
-| Glock 19X | 202 mm publicado de la pistola real; réplica 1:1 sin ficha verificada | media |
+| Glock 19X | 189 mm (7,44 in), tabla técnica oficial de GLOCK (eu.glock.com, consultada el 26-11-2026); la altura con cargador sale a 139 mm, igual que la cifra oficial (comprobación cruzada) | alta |
 | AKM | 880 mm nominal de la plataforma; sin ficha del SKU | baja |
 | AK-105 | 943 mm nominal de la plataforma (culata extendida); el montaje de la foto puede diferir un 8 % | baja |
 

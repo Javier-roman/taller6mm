@@ -12,19 +12,25 @@ import argparse
 import json
 from pathlib import Path
 
+import numpy as np
 from PIL import Image, ImageDraw
 
 from taller6mm_pipeline.familias.siluetas_base import RAIZ, cargar_siluetas
 
 VISTAS = RAIZ / "assets-src" / "vistas" / "replicas-silueta"
 CATALOGO = RAIZ / "catalogo" / "variantes-derivadas.json"
-FONDO = (46, 52, 58, 255)
-TEXTO = (222, 226, 228, 255)
+FONDO = (215, 212, 204, 255)  # papel #D7D4CC (ADR-0010)
+TEXTO = (27, 34, 38, 255)  # tinta #1B2226
 
 
 def _recorta(im: Image.Image) -> Image.Image:
-    caja = im.getchannel("A").getbbox()
-    return im.crop(caja) if caja else im
+    """Recorta al objeto: lo que se aparta del color del papel."""
+    a = np.asarray(im.convert("RGB")).astype(int)
+    dif = np.abs(a - np.array(FONDO[:3])).sum(axis=2) > 24
+    ys, xs = np.nonzero(dif)
+    if not len(xs):
+        return im
+    return im.crop((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
 
 
 def _nombre_png(id_: str, base: bool) -> Path:
@@ -62,8 +68,10 @@ def componer(plataforma: dict, reps: dict, salida: Path) -> Path | None:
     y = 20
     for im, et, mm in zip(redim, etiquetas, largos, strict=True):
         dr.text((40, y), f"{et} · {mm:.0f} mm", fill=TEXTO)
-        lienzo.alpha_composite(im, (40, y + 22))
+        lienzo.alpha_composite(im.convert("RGBA"), (40, y + 22))
         y += im.height + 56
+    for im in redim:  # guías verticales en la boca de cada variante: se ve cuánto cambia el largo
+        dr.line((40 + im.width, 10, 40 + im.width, alto - 10), fill=(120, 110, 95, 255), width=1)
     ruta_sal = salida / f"comparativa-{plataforma['plataforma']}.png"
     lienzo.convert("RGB").save(ruta_sal)
     return ruta_sal

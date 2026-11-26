@@ -4,7 +4,7 @@
         --lista lista.json
 
 `lista.json`: [{"escena": ".../escena.json", "png": "x.png", "vista": "lateral|tres_cuartos|tres_cuartos_der",
-"encuadre": 0.86, "preset": "mate_suave", "muestras": 48, "res": [1600, 900]}].
+"encuadre": 0.8, "preset": "mate_suave", "muestras": 48, "res": [1600, 900]}].
 La escena (`escena.json`, escrita por `siluetas_motor.exportar`) lista las partes (GLB propios, mm en datos y metros en
 la escena) y su material: albedo medido en la foto de referencia interna (solo el número), metálico y rugosidad de la
 guía de aspecto. La luz sale de `catalogo/iluminacion-presets.json` (clave, relleno, tiras de contorno, sombrero).
@@ -41,6 +41,7 @@ def lineal(c: float) -> float:
 
 
 def material(nombre: str, spec: dict) -> bpy.types.Material:
+    """Material por tipo: metal (rugosidad media y especular), polímero (grano fino), madera (veta procedural y barniz)."""
     m = bpy.data.materials.new(nombre)
     m.use_nodes = True
     nodos, enlaces = m.node_tree.nodes, m.node_tree.links
@@ -48,21 +49,45 @@ def material(nombre: str, spec: dict) -> bpy.types.Material:
     salida = nodos.new("ShaderNodeOutputMaterial")
     bsdf = nodos.new("ShaderNodeBsdfPrincipled")
     r, g, b = (lineal(v) for v in spec["rgb"])
+    tipo = spec.get("tipo", "polimero")
     bsdf.inputs["Base Color"].default_value = (r, g, b, 1.0)
     bsdf.inputs["Metallic"].default_value = float(spec["metalico"])
-    # Rugosidad no constante (guía de aspecto §2.4): ruido fino alrededor de la media.
+    rug = float(spec["rugosidad"])
+    bsdf.inputs["Roughness"].default_value = rug
     ruido = nodos.new("ShaderNodeTexNoise")
     ruido.inputs["Scale"].default_value = 700.0
     ruido.inputs["Detail"].default_value = 5.0
     rampa = nodos.new("ShaderNodeMapRange")
-    rug = float(spec["rugosidad"])
     rampa.inputs["To Min"].default_value = max(rug - 0.07, 0.02)
     rampa.inputs["To Max"].default_value = min(rug + 0.07, 1.0)
+    enlaces.new(ruido.outputs["Fac"], rampa.inputs["Value"])
+    enlaces.new(rampa.outputs["Result"], bsdf.inputs["Roughness"])
+    if tipo == "metal":
+        bsdf.inputs["Specular IOR Level"].default_value = 0.8
+    elif tipo == "madera":
+        # Veta propia (no sale de ninguna foto): bandas largas a lo largo de X deformadas por ruido.
+        coord = nodos.new("ShaderNodeTexCoord")
+        mapa = nodos.new("ShaderNodeMapping")
+        mapa.inputs["Scale"].default_value = (60.0, 900.0, 900.0)
+        onda = nodos.new("ShaderNodeTexWave")
+        onda.wave_type = "BANDS"
+        onda.bands_direction = "Y"
+        onda.inputs["Scale"].default_value = 1.0
+        onda.inputs["Distortion"].default_value = 5.0
+        onda.inputs["Detail"].default_value = 2.0
+        mezcla = nodos.new("ShaderNodeMix")
+        mezcla.data_type = "RGBA"
+        mezcla.inputs["B"].default_value = (r * 0.55, g * 0.5, b * 0.5, 1.0)
+        mezcla.inputs["A"].default_value = (r, g, b, 1.0)
+        enlaces.new(coord.outputs["Object"], mapa.inputs["Vector"])
+        enlaces.new(mapa.outputs["Vector"], onda.inputs["Vector"])
+        enlaces.new(onda.outputs["Fac"], mezcla.inputs["Factor"])
+        enlaces.new(mezcla.outputs["Result"], bsdf.inputs["Base Color"])
+        bsdf.inputs["Coat Weight"].default_value = 0.6
+        bsdf.inputs["Coat Roughness"].default_value = 0.12
     bump = nodos.new("ShaderNodeBump")
     bump.inputs["Strength"].default_value = 0.08
     bump.inputs["Distance"].default_value = 0.0004
-    enlaces.new(ruido.outputs["Fac"], rampa.inputs["Value"])
-    enlaces.new(rampa.outputs["Result"], bsdf.inputs["Roughness"])
     enlaces.new(ruido.outputs["Fac"], bump.inputs["Height"])
     enlaces.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
     enlaces.new(bsdf.outputs["BSDF"], salida.inputs["Surface"])
@@ -115,7 +140,8 @@ def renderizar(item: dict) -> None:
     esc.cycles.device = "CPU"
     esc.cycles.samples = int(item.get("muestras", 48))
     esc.cycles.use_denoising = True
-    esc.render.film_transparent = True
+    papel = item.get("fondo", "papel") == "papel"
+    esc.render.film_transparent = not papel
     esc.render.resolution_x, esc.render.resolution_y = item.get("res", [1600, 900])
     esc.render.image_settings.file_format = "PNG"
     esc.render.image_settings.color_mode = "RGBA"
@@ -125,6 +151,17 @@ def renderizar(item: dict) -> None:
     mundo.use_nodes = True
     mundo.node_tree.nodes["Background"].inputs["Color"].default_value = (*preset["mundo"]["arriba"], 1.0)
     mundo.node_tree.nodes["Background"].inputs["Strength"].default_value = float(preset["mundo"]["intensidad"])
+    if papel:  # la cámara ve el papel #D7D4CC; la luz ambiente sigue siendo la del preset
+        nw = mundo.node_tree.nodes
+        enl = mundo.node_tree.links
+        fondo_p = nw.new("ShaderNodeBackground")
+        fondo_p.inputs["Color"].default_value = (lineal(215), lineal(212), lineal(204), 1.0)
+        trayecto = nw.new("ShaderNodeLightPath")
+        mezcla = nw.new("ShaderNodeMixShader")
+        enl.new(trayecto.outputs["Is Camera Ray"], mezcla.inputs["Fac"])
+        enl.new(nw["Background"].outputs["Background"], mezcla.inputs[1])
+        enl.new(fondo_p.outputs["Background"], mezcla.inputs[2])
+        enl.new(mezcla.outputs["Shader"], nw["World Output"].inputs["Surface"])
     esc.world = mundo
     vista = item.get("vista", "lateral")
     v = Vector(VISTAS[vista]).normalized()
@@ -132,7 +169,7 @@ def renderizar(item: dict) -> None:
     cam.data.clip_start, cam.data.clip_end = d * 0.01, d * 60
     if vista == "lateral":
         cam.data.type = "ORTHO"
-        enc = float(item.get("encuadre", 0.88))
+        enc = float(item.get("encuadre", 0.8))
         cam.data.ortho_scale = max(dim.x / enc, dim.z / enc * esc.render.resolution_x / esc.render.resolution_y)
     else:
         cam.data.lens = 70
@@ -144,7 +181,7 @@ def renderizar(item: dict) -> None:
         from bpy_extras.object_utils import world_to_camera_view
 
         esq = [Vector((x, y, z)) for x in (lo.x, hi.x) for y in (lo.y, hi.y) for z in (lo.z, hi.z)]
-        objetivo = float(item.get("encuadre", 0.86))
+        objetivo = float(item.get("encuadre", 0.8))
         for _ in range(10):
             bpy.context.view_layer.update()
             pts = [world_to_camera_view(esc, cam, e) for e in esq]

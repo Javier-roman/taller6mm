@@ -13,9 +13,10 @@ from collections.abc import Callable, Sequence
 from typing import Any
 
 import numpy as np
-from build123d import Compound
+from build123d import Box, Compound, Pos, Rot
 
 from taller6mm_pipeline.familias.formas import cilindro_en
+from taller6mm_pipeline.familias.rail_picatinny import solido_rail
 from taller6mm_pipeline.familias.siluetas_base import (
     Parte,
     cano_hueco,
@@ -99,61 +100,167 @@ def _caja(rep: dict[str, Any], n: str) -> dict[str, float]:
     return rep["proporciones"]["cajas_partes_mm"][n]
 
 
+# --- ayudantes de sección transversal ------------------------------------------------------------------------------
+
+
+def _caja_contorno(ext: Sequence[Punto]) -> tuple[float, float, float, float]:
+    xs, ys = [p[0] for p in ext], [p[1] for p in ext]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def rieles_cuatro_caras(x0: float, largo: float, y_arriba: float, y_abajo: float, ancho_z: float) -> Any:
+    """Cuatro raíles Picatinny (arriba, abajo y costados) de un guardamanos RIS, con `solido_rail` del repo."""
+    n = max(3, int((largo - 4.0) // 10.16))
+    rail = solido_rail(n)
+    ym = (y_arriba + y_abajo) / 2
+    piezas = [
+        Pos(x0, y_arriba, 0) * rail,
+        Pos(x0, y_abajo, 0) * (Rot(180, 0, 0) * rail),
+        Pos(x0, ym, ancho_z / 2) * (Rot(90, 0, 0) * rail),
+        Pos(x0, ym, -ancho_z / 2) * (Rot(-90, 0, 0) * rail),
+    ]
+    return Compound(piezas)
+
+
+def ranuras_apagallamas(x_fin: float, y_eje: float, largo: float, radio: float, n_pares: int = 3) -> list[Any]:
+    """Ranuras longitudinales del apagallamas: `n_pares` cortes a través del eje, `2 * n_pares` ranuras."""
+    cortes = []
+    for k in range(n_pares):
+        caja = Box(largo, 2.2, radio * 3.0)
+        cortes.append(Pos(x_fin - largo / 2 + 0.5, y_eje, 0) * (Rot(180 * k / n_pares, 0, 0) * caja))
+    return cortes
+
+
+def brocal_cargador(ext_cargador: Sequence[Punto], ancho_z: float) -> Any:
+    """Brocal del pozo del cargador: marco rectangular redondeado que abraza la boca del cargador."""
+    x0, _, x1, y1 = _caja_contorno(ext_cargador)
+    xs = _cortes_horizontales(ext_cargador, y1 - 3.0)
+    xa, xb = (xs[0], xs[-1]) if len(xs) >= 2 else (x0, x1)
+    marco = Pos((xa + xb) / 2, y1 - 6.0, 0) * Box(xb - xa + 7.0, 13.0, ancho_z + 7.0)
+    hueco = Pos((xa + xb) / 2, y1 - 6.0, 0) * Box(xb - xa + 0.6, 14.0, ancho_z + 0.6)
+    return marco - hueco
+
+
 # --- AKM ----------------------------------------------------------------------------------------------------------
 
 SPECS_AKM = (
-    Spec("receptor", "metal", 37.0, 11.0, eje="x", nota="tapa y cuerpo con el contorno medido; ancho estimado"),
+    Spec(
+        "receptor",
+        "metal",
+        37.0,
+        11.0,
+        eje="x",
+        nota="tapa y cuerpo con el contorno medido; ancho estimado",
+    ),
     Spec("mira_trasera", "metal", 26.0, 1.5),
-    Spec("culata", "madera", 46.0, 7.0, nota="caída y cantonera del contorno medido"),
-    Spec("empunadura", "polimero", 34.0, 10.0),
+    Spec(
+        "culata",
+        "madera",
+        50.0,
+        7.0,
+        planta=((0.0, 50.0), (0.3, 46.0), (0.72, 30.0), (1.0, 33.0)),
+        nota="caída y cantonera del contorno medido; estrechamiento hacia el cuello estimado",
+    ),
+    Spec(
+        "empunadura",
+        "marron",
+        34.0,
+        10.0,
+        planta=((0.0, 34.0), (1.0, 26.0)),
+        planta_eje="y",
+    ),
     Spec("cargador", "metal", 37.0, 3.0, nota="curva del contorno medido"),
     Spec("guardamonte", "metal", 3.5, 0.8),
-    Spec("guardamanos_sup", "madera", 36.0, 6.0),
-    Spec("guardamanos_inf", "madera", 44.0, 7.0),
+    Spec("guardamanos_sup", "madera", 36.0, 6.0, planta=((0.0, 36.0), (1.0, 31.0))),
+    Spec(
+        "guardamanos_inf",
+        "madera",
+        44.0,
+        7.0,
+        planta=((0.0, 44.0), (0.8, 40.0), (1.0, 33.0)),
+    ),
     Spec("tubo_gases", "metal", None),
     Spec("canon", "metal", None),
     Spec("freno", "metal", None),
     Spec("base_alza", "metal", 9.0, 1.0),
 )
 
+MAT_AKM = {
+    "metal": ("metal_negro", 0.6, 0.4, "metal", "negro_metal"),
+    "madera": ("madera", 0.0, 0.35, "madera", "madera"),
+    "marron": ("empunadura", 0.0, 0.5, "polimero", "marron_oscuro"),
+}
 
-def modelo_akm(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
+
+def modelo_akm(
+    rep: dict[str, Any],
+) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
     partes = construir(rep, SPECS_AKM)
     ext_c, _ = contorno_de(rep, "cargador")
     partes["cargador"].solido = _cortar(
-        partes["cargador"].solido, nervaduras_cargador(ext_c, (0.2, 0.35, 0.5, 0.65, 0.8), 3.2, 1.6, 18.5)
+        partes["cargador"].solido,
+        nervaduras_cargador(ext_c, (0.2, 0.35, 0.5, 0.65, 0.8), 3.2, 1.6, 18.5),
     )
-    for x, y, r in ((505, 265, 2.0), (550, 267, 2.0), (588, 288, 2.0), (733, 285, 2.0), (500, 290, 1.8)):
+    for x, y, r in (
+        (505, 265, 2.0),
+        (550, 267, 2.0),
+        (588, 288, 2.0),
+        (733, 285, 2.0),
+        (500, 290, 1.8),
+    ):
         cx, cy = _px(rep, x, y)
         for c in tornillo(cx, cy, r, 18.5, 0.7):
             partes["receptor"].solido = partes["receptor"].solido + c
     partes["receptor"].notas.append("remaches laterales medidos en la foto; sin marcajes")
-    pal = _pal(
-        rep,
-        {"metal": ("metal_negro", 0.6, 0.45), "madera": ("madera", 0.0, 0.5), "polimero": ("empunadura", 0.0, 0.5)},
-    )
-    return partes, pal
+    return partes, _pal(rep, MAT_AKM)
 
 
 # --- AK-105 -------------------------------------------------------------------------------------------------------
 
 SPECS_AK105 = (
     Spec("receptor", "metal", 38.0, 12.0, eje="x"),
-    Spec("guardamanos", "polimero", 42.0, 6.0, nota="guardamanos M-LOK: ranuras medidas en la foto"),
+    Spec(
+        "guardamanos",
+        "polimero",
+        42.0,
+        6.0,
+        nota="guardamanos M-LOK: ranuras medidas en la foto",
+    ),
     Spec("boca", "metal", None),
     Spec("alza_delantera", "metal", 8.0, 0.8),
     Spec("tubo_culata", "metal", None),
-    Spec("culata", "polimero", 52.0, 8.0),
-    Spec("empunadura", "polimero", 34.0, 10.0),
+    Spec(
+        "culata",
+        "polimero",
+        52.0,
+        8.0,
+        planta=((0.0, 52.0), (0.35, 46.0), (1.0, 36.0)),
+        nota="culata esquelética: los huecos son los de la silueta medida",
+    ),
+    Spec(
+        "empunadura",
+        "polimero",
+        34.0,
+        10.0,
+        planta=((0.0, 36.0), (1.0, 28.0)),
+        planta_eje="y",
+    ),
     Spec("cargador", "polimero", 36.0, 3.0, nota="curva del contorno medido"),
     Spec("guardamonte", "metal", 3.5, 0.8),
 )
 
+MAT_AK105 = {
+    "metal": ("metal_negro", 0.6, 0.38, "metal", "negro_metal"),
+    "polimero": ("polimero", 0.0, 0.55, "polimero", "negro_polimero"),
+}
 
-def modelo_ak105(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
+
+def modelo_ak105(
+    rep: dict[str, Any],
+) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
     partes = construir(rep, SPECS_AK105)
     c = _caja(rep, "guardamanos")
-    filas = (c["y_ini_mm"] + (c["alto_mm"]) * 0.62, c["y_ini_mm"] + c["alto_mm"] * 0.30)
+    filas = (c["y_ini_mm"] + c["alto_mm"] * 0.62, c["y_ini_mm"] + c["alto_mm"] * 0.30)
     rects = []
     for k, yc in enumerate(filas):
         x = c["x_ini_mm"] + 22.0 + (14.0 if k else 0.0)
@@ -161,12 +268,20 @@ def modelo_ak105(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[
             rects.append((x, yc - 3.2, x + 34.0, yc + 3.2))
             x += 52.0
     partes["guardamanos"].solido = _cortar(partes["guardamanos"].solido, ranuras_laterales(rects, 21.0, 6.0))
+    n = max(3, int((c["largo_mm"] - 30.0) // 10.16))
+    partes["riel_superior"] = Parte(
+        "riel_superior",
+        Pos(c["x_ini_mm"] + 15.0, c["y_fin_mm"] - 0.5, 0) * solido_rail(n),
+        "metal",
+        21.0,
+        ["raíl superior Picatinny sobre el guardamanos (estándar)"],
+    )
     ext_c, _ = contorno_de(rep, "cargador")
     partes["cargador"].solido = _cortar(
-        partes["cargador"].solido, nervaduras_cargador(ext_c, (0.25, 0.5, 0.75), 3.0, 1.4, 18.0, 9.0)
+        partes["cargador"].solido,
+        nervaduras_cargador(ext_c, (0.25, 0.5, 0.75), 3.0, 1.4, 18.0, 9.0),
     )
-    pal = _pal(rep, {"metal": ("metal_negro", 0.6, 0.4), "polimero": ("polimero", 0.0, 0.55)})
-    return partes, pal
+    return partes, _pal(rep, MAT_AK105)
 
 
 # --- Mk18 Mod.1 ---------------------------------------------------------------------------------------------------
@@ -174,35 +289,76 @@ def modelo_ak105(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[
 SPECS_MK18 = (
     Spec("receptor_sup", "receptor", 40.0, 12.0, eje="x"),
     Spec("receptor_inf", "receptor", 38.0, 6.0, eje="x"),
-    Spec("guardamanos", "arena", 52.0, 14.0),
+    Spec(
+        "guardamanos",
+        "arena",
+        40.0,
+        17.0,
+        nota="núcleo del guardamanos RIS; los cuatro raíles se añaden aparte",
+    ),
     Spec("alza_delantera", "receptor", 4.0, 0.6),
     Spec("alza_trasera", "receptor", 8.0, 0.8),
     Spec("boca", "receptor", None),
-    Spec("culata", "arena", 48.0, 12.0),
-    Spec("empunadura", "receptor", 32.0, 10.0),
+    Spec(
+        "culata",
+        "arena",
+        52.0,
+        12.0,
+        planta=((0.0, 52.0), (0.45, 47.0), (1.0, 36.0)),
+        nota="perfil de la culata telescópica medido; estrechamiento estimado",
+    ),
+    Spec(
+        "empunadura",
+        "receptor",
+        32.0,
+        10.0,
+        planta=((0.0, 34.0), (1.0, 28.0)),
+        planta_eje="y",
+    ),
     Spec("cargador", "receptor", 28.0, 3.0),
 )
 
+MAT_MK18 = {
+    "receptor": ("receptor", 0.6, 0.4, "metal", "negro_metal"),
+    "arena": ("culata", 0.0, 0.5, "polimero", "medido"),
+}
 
-def modelo_mk18(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
+
+def modelo_mk18(
+    rep: dict[str, Any],
+) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
     partes = construir(rep, SPECS_MK18)
     c = _caja(rep, "guardamanos")
-    centros = []
-    for k, yc in enumerate((c["y_ini_mm"] + c["alto_mm"] * 0.68, c["y_ini_mm"] + c["alto_mm"] * 0.36)):
-        x = c["x_ini_mm"] + 12.0 + (4.5 if k else 0.0)
-        while x < c["x_fin_mm"] - 22.0:
-            centros.append((x, yc))
-            x += 9.0
-    partes["guardamanos"].solido = _cortar(partes["guardamanos"].solido, agujeros_z(centros, 2.6, 26.0, 9.0))
+    rieles = rieles_cuatro_caras(
+        c["x_ini_mm"] + 3.0,
+        c["largo_mm"] - 6.0,
+        c["y_fin_mm"] - 8.0,
+        c["y_ini_mm"] + 8.0,
+        40.0,
+    )
+    partes["guardamanos"].solido = partes["guardamanos"].solido + rieles
+    partes["guardamanos"].notas.append("raíles Picatinny en las cuatro caras (solido_rail del repo)")
+    cb = _caja(rep, "boca")
+    ext_b, _ = contorno_de(rep, "boca")
+    _, yb0, _, yb1 = _caja_contorno(ext_b)
+    partes["boca"].solido = _cortar(
+        partes["boca"].solido,
+        ranuras_apagallamas(cb["x_fin_mm"], (yb0 + yb1) / 2, 22.0, (yb1 - yb0) / 2),
+    )
+    partes["boca"].notas.append("apagallamas con seis ranuras longitudinales")
     ext_c, _ = contorno_de(rep, "cargador")
     partes["cargador"].solido = _cortar(
-        partes["cargador"].solido, nervaduras_cargador(ext_c, (0.3, 0.5, 0.7), 3.0, 1.4, 14.0, 9.0)
+        partes["cargador"].solido,
+        nervaduras_cargador(ext_c, (0.3, 0.5, 0.7), 3.0, 1.4, 14.0, 9.0),
     )
-    pal = _pal(
-        rep,
-        {"receptor": ("receptor", 0.6, 0.42), "arena": ("culata", 0.0, 0.5)},
+    partes["brocal"] = Parte(
+        "brocal",
+        brocal_cargador(ext_c, 28.0),
+        "receptor",
+        35.0,
+        ["brocal del pozo del cargador"],
     )
-    return partes, pal
+    return partes, _pal(rep, MAT_MK18)
 
 
 # --- Hi-Capa ------------------------------------------------------------------------------------------------------
@@ -212,14 +368,36 @@ SPECS_HICAPA = (
     Spec("alza_delantera", "corredera", 3.6, 0.5),
     Spec("alza_trasera", "corredera", 10.0, 0.6),
     Spec("cubierta_optica", "corredera", 17.0, 0.6),
-    Spec("armazon", "armazon", 23.0, 2.2, eje="x"),
-    Spec("cachas", "polimero", 34.0, 9.0, nota="cachas con hoyuelos de agarre: relieve estimado"),
-    Spec("guardamonte", "armazon", 9.0, 2.2, eje="x", nota="arco del guardamonte: ancho estimado"),
+    Spec("armazon", "polimero", 23.0, 2.2, eje="x"),
+    Spec(
+        "cachas",
+        "polimero",
+        34.0,
+        9.0,
+        planta=((0.0, 31.0), (0.5, 34.0), (1.0, 33.0)),
+        planta_eje="y",
+    ),
+    Spec(
+        "guardamonte",
+        "armazon",
+        9.0,
+        2.2,
+        eje="x",
+        nota="arco del guardamonte: ancho estimado",
+    ),
     Spec("base_cargador", "polimero", 30.0, 2.5),
 )
 
+MAT_HICAPA = {
+    "corredera": ("corredera", 0.7, 0.38, "metal", "negro_metal"),
+    "armazon": ("armazon_guardamonte", 0.7, 0.4, "metal", "negro_metal"),
+    "polimero": ("empunadura", 0.0, 0.5, "polimero", "negro_polimero"),
+}
 
-def modelo_hicapa(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
+
+def modelo_hicapa(
+    rep: dict[str, Any],
+) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
     partes = construir(rep, SPECS_HICAPA)
     d = rep["detalles_mm"]
     cor = partes["corredera"]
@@ -246,23 +424,22 @@ def modelo_hicapa(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict
         ["cañón visible en la boca"],
     )
     ext_ca, _ = contorno_de(rep, "cachas")
-    centros = rejilla_hex([tuple(p) for p in d["textura_hoyuelos"]], ext_ca, 4.7, 9.0)
-    partes["cachas"].solido = hoyuelos(partes["cachas"].solido, centros, 17.0, 2.15, 0.5)
+    centros = rejilla_hex([tuple(p) for p in d["textura_hoyuelos"]], ext_ca, 5.0, 9.0)
+    partes["cachas"].solido = hoyuelos(partes["cachas"].solido, centros, 17.0, 2.4, 0.5)
+    partes["cachas"].notas.append("relieve de escamas (hoyuelos hexagonales): estimado")
     for (x, y, r), zc, alto in zip(d["tornillos"], (17.0, 11.5, 4.5, 17.0), (0.6, 0.5, 0.5, 1.2), strict=True):
         for c in tornillo(x, y, r, zc, alto):
             nombre = "cachas" if zc == 17.0 else ("guardamonte" if zc == 4.5 else "armazon")
             partes[nombre].solido = partes[nombre].solido + c
-    pal = _pal(
-        rep,
-        {
-            "corredera": ("corredera", 0.7, 0.4),
-            "armazon": ("armazon_guardamonte", 0.7, 0.42),
-            "polimero": ("empunadura", 0.0, 0.5),
-        },
-    )
+    # Cachas integradas en el armazón: una sola pieza de polímero (sin panel flotante).
+    partes["armazon"].solido = partes["armazon"].solido + partes["cachas"].solido
+    partes["armazon"].notas.append("cachas integradas en el armazón (una sola pieza)")
+    partes["armazon"].ancho_mm = 34.0
+    del partes["cachas"]
+    pal = _pal(rep, MAT_HICAPA)
     pal["metal_canon"] = {
         **pal["corredera"],
-        "rgb": [28, 28, 29],
+        "rgb": [24, 24, 26],
         "rugosidad": 0.3,
         "nota": "acero del cañón: acabado propio",
     }
@@ -272,28 +449,43 @@ def modelo_hicapa(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict
 # --- Glock 19X ----------------------------------------------------------------------------------------------------
 
 SPECS_GLOCK = (
-    Spec("corredera", "corredera", 25.4, 2.2, eje="x"),
+    Spec(
+        "corredera",
+        "corredera",
+        25.5,
+        2.2,
+        eje="x",
+        nota="ancho de corredera 25,5 mm: tabla oficial de GLOCK",
+    ),
     Spec("alza_delantera", "negro", 3.2, 0.4),
     Spec("alza_trasera", "negro", 10.0, 0.5),
-    Spec("armazon", "armazon", 27.0, 6.0, eje="x"),
+    Spec("armazon", "armazon", 28.0, 6.0, eje="x"),
     Spec("riel_frontal", "armazon", 21.0, 1.6, eje="x"),
     Spec("guardamonte", "armazon", 11.0, 2.5, eje="x"),
     Spec("gatillo", "negro", 7.0, 1.0),
-    Spec("retenida_cargador", "negro", 5.0, 0.8, z=15.0),
+    Spec("retenida_cargador", "negro", 2.6, 0.6, z=14.9),
     Spec("base_cargador", "armazon", 26.0, 2.5),
 )
 
+MAT_GLOCK = {
+    "corredera": ("corredera", 0.0, 0.5, "polimero", "coyote"),
+    "armazon": ("armazon", 0.0, 0.55, "polimero", "coyote"),
+    "negro": ("mando_negro", 0.0, 0.45, "polimero", "negro_polimero"),
+}
 
-def modelo_glock(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
+
+def modelo_glock(
+    rep: dict[str, Any],
+) -> tuple[dict[str, Parte], dict[str, dict[str, Any]]]:
     partes = construir(rep, SPECS_GLOCK)
     d = rep["detalles_mm"]
     cor = partes["corredera"]
     cortes = []
     for r in d["ranuras_traseras"]:
-        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.9, 12.7 - 1.5, 13.7))
-        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.9, -13.7, -12.7 + 1.5))
+        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.9, 12.75 - 1.5, 13.8))
+        cortes.append(ranura((r[0], r[1]), (r[2], r[3]), 1.9, -13.8, -12.75 + 1.5))
     x0, y0, x1, y1 = d["ventana"][0]
-    cortes.append(prisma_xy([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 12.7 - 1.8, 13.7))
+    cortes.append(prisma_xy([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 12.75 - 1.8, 13.8))
     cc = _caja(rep, "corredera")
     y_eje = cc["y_ini_mm"] + cc["alto_mm"] * 0.55
     cortes.append(cilindro_en("x", 5.4, 24.0, (cc["x_fin_mm"] - 11.0, y_eje, 0.0)))
@@ -307,15 +499,11 @@ def modelo_glock(rep: dict[str, Any]) -> tuple[dict[str, Parte], dict[str, dict[
     )
     ext_a, _ = contorno_de(rep, "armazon")
     centros = rejilla_hex([tuple(p) for p in d["textura_hoyuelos"]], ext_a, 2.5, 5.0)
-    partes["armazon"].solido = hoyuelos(partes["armazon"].solido, centros, 13.5, 0.8, 0.35)
+    partes["armazon"].solido = hoyuelos(partes["armazon"].solido, centros, 14.0, 0.8, 0.35)
     for x, y, r in d["tornillos"]:
-        for c in tornillo(x, y, r, 13.5, 0.5):
+        for c in tornillo(x, y, r, 14.0, 0.5):
             partes["armazon"].solido = partes["armazon"].solido + c
-    pal = _pal(
-        rep,
-        {"corredera": ("corredera", 0.2, 0.42), "armazon": ("armazon", 0.0, 0.55), "negro": ("mando_negro", 0.0, 0.45)},
-    )
-    return partes, pal
+    return partes, _pal(rep, MAT_GLOCK)
 
 
 MODELOS: dict[str, Modelo] = {

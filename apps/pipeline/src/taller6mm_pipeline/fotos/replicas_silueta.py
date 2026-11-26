@@ -27,7 +27,7 @@ ENTRADA = RAIZ / "assets-src" / "raw" / "_entrada"
 SALIDA = RAIZ / "catalogo" / "siluetas-referencia.json"
 FUENTE_MEDIDA = "medido en foto de referencia interna (aportada por Javi), por script determinista"
 EPS_MM = 0.30  # tolerancia de Douglas-Peucker
-EPS_MIN_PX = 1.3  # por debajo de ~1 px solo se mide el ruido de la captura
+EPS_MIN_PX = 2.0  # por debajo de ~1 px solo se mide el ruido de la captura
 
 
 @dataclass(frozen=True)
@@ -114,10 +114,11 @@ GLOCK = Replica(
     carpeta="Glock 19X GBB UmarexVFC - Tan",
     archivo="Captura de pantalla 2026-11-25 105940.png",
     nombre="Glock 19X de armazón de polímero (lado izquierdo, boca a la derecha)",
-    longitud_mm=202.0,
-    longitud_fuente="longitud total publicada de la Glock 19X real (7,95 in); la réplica GBB la copia 1:1 según su "
-    "ficha comercial (no verificada contra la ficha del SKU)",
-    longitud_confianza="media",
+    longitud_mm=189.0,
+    longitud_fuente="longitud total publicada de la Glock 19X: 189 mm (7,44 in), tabla técnica oficial de GLOCK "
+    "(eu.glock.com/en/Products/Pistols/G19X-gns, consultada el 26-11-2026); la altura con cargador sale a 139 mm "
+    "con este calibre, igual que la cifra oficial (139 mm): comprobación cruzada",
+    longitud_confianza="alta",
     umbral=45.0,
     regiones={
         "alza_delantera": Region([(860, 55), (945, 55), (945, 93), (860, 93)]),
@@ -225,9 +226,9 @@ def medir(r: Replica, entrada: Path = ENTRADA) -> dict:
     origen = (float(xs_ref.min()), float(alto - ys_ref.max() - 1))  # borde trasero y borde inferior (y arriba)
     for nombre, pm in masks.items():
         ext, huecos = s.contornos(pm)
-        ext_s = s.simplificar(s.suavizar(ext, 5), max(EPS_MM / mm, EPS_MIN_PX, r.regiones[nombre].eps_px))
+        ext_s = s.simplificar(s.suavizar(ext, 9), max(EPS_MM / mm, EPS_MIN_PX, r.regiones[nombre].eps_px))
         hue_s = [
-            s.simplificar(s.suavizar(h, 5), max(EPS_MM / mm, EPS_MIN_PX))
+            s.simplificar(s.suavizar(h, 9), max(EPS_MM / mm, EPS_MIN_PX))
             for h in huecos
             if abs(s.area_con_signo(h)) > 400
         ]

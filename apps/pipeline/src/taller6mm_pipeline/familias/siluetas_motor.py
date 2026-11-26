@@ -7,6 +7,7 @@ silueta en cada x. Después, cada modelo (`siluetas_modelos`) añade sus detalle
 
 from __future__ import annotations
 
+import colorsys
 import hashlib
 import json
 import math
@@ -37,6 +38,8 @@ class Spec:
     z: float = 0.0
     esquina: float = 32.0
     huecos: bool = True
+    planta: tuple[tuple[float, float], ...] | None = None  # (posición 0-1, ancho en Z): estrechamiento estimado
+    planta_eje: str = "x"
     eje: str = "pca"  # eje del prisma de redondeo: "pca" (alargadas), "x" o "y" (piezas en L)
     nota: str = ""
 
@@ -99,7 +102,15 @@ def construir(rep: dict[str, Any], specs: Sequence[Spec]) -> dict[str, Parte]:
                 (0.0, 0.0, False),  # polígono de rectas: siempre se puede teselar
             ):
                 cand = extruir_contorno(
-                    ext, hue if con_huecos else [], sp.ancho, radio=radio, esquina_deg=esq, z_centro=sp.z, eje=sp.eje
+                    ext,
+                    hue if con_huecos else [],
+                    sp.ancho,
+                    radio=radio,
+                    esquina_deg=esq,
+                    z_centro=sp.z,
+                    eje=sp.eje,
+                    planta=sp.planta,
+                    planta_eje=sp.planta_eje,
                 )
                 if _se_tesela(cand):
                     solido = cand
@@ -128,17 +139,39 @@ def albedo_aplicado(rgb: Sequence[int]) -> tuple[list[int], str]:
     ], "color medido x 0,8 (la foto lleva la luz de estudio de la tienda)"
 
 
-def paleta(rep: dict[str, Any], mapa: dict[str, tuple[str, float, float]]) -> dict[str, dict[str, Any]]:
-    """`mapa`: material -> (clave de `colores_srgb`, metálico, rugosidad). Devuelve albedo aplicado y medido."""
+def albedo_modo(modo: str, medido: Sequence[int]) -> tuple[list[int], str]:
+    """Albedo aplicado según el modo del material (siempre se guarda también el color medido)."""
+    r, g, b = medido
+    if modo == "negro_polimero":
+        return [30, 31, 33], "negro neutro común del polímero #1E1F21 (el medido lleva la luz de la foto)"
+    if modo == "negro_metal":
+        return [36, 37, 39], "negro neutro de metal pintado #242527 (el medido lleva la luz de la foto)"
+    if modo == "madera":
+        return [90, 46, 28], "barniz de madera #5A2E1C; el medido está sobreexpuesto por la luz de la tienda"
+    if modo == "marron_oscuro":
+        return [round(r * 0.7), round(g * 0.7), round(b * 0.7)], "color medido x 0,7 (plástico marrón oscuro)"
+    if modo == "coyote":
+        h, _sat, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+        rgb = colorsys.hsv_to_rgb(33 / 360, 0.5, v * 0.8)
+        return [round(c * 255) for c in rgb], (
+            f"coyote: del color medido solo se conserva el valor ({v:.2f}); el tono medido ({h * 360:.0f} grados) "
+            "es un balance de blancos cálido de la foto y se lleva a 33 grados, saturación 0,50"
+        )
+    return albedo_aplicado(medido)
+
+
+def paleta(rep: dict[str, Any], mapa: dict[str, tuple]) -> dict[str, dict[str, Any]]:
+    """`mapa`: material -> (clave de color, metálico, rugosidad, tipo, modo): albedo aplicado y medido."""
     out: dict[str, dict[str, Any]] = {}
-    for mat, (clave, metal, rug) in mapa.items():
+    for mat, (clave, metal, rug, tipo, modo) in mapa.items():
         medido = rep["colores_srgb"][clave]
-        ap, nota = albedo_aplicado(medido)
+        ap, nota = albedo_modo(modo, medido)
         out[mat] = {
             "rgb_medido": medido,
             "rgb": ap,
             "metalico": metal,
             "rugosidad": rug,
+            "tipo": tipo,
             "fuente": rep["colores_fuente"],
             "nota": nota,
         }

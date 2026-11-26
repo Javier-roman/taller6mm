@@ -88,9 +88,9 @@ def svg_plano(rep: dict) -> tuple[str, dict]:
     cal = rep["calibre"]
     pie_txt = (
         f"T0 · medido en foto de referencia interna · confianza {cal['confianza']} · "
-        f"calibre {cal['longitud_mm']:.0f} mm"
+        f"escala tomada de: {cal['longitud_mm']:.0f} mm"
     )
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.1f} {h:.1f}" role="img" \
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.1f} {h:.1f}" role="img" xml:lang="es" \
 aria-labelledby="t d" data-replica="{escape(rep["id"])}" data-nivel="T0" data-largo-mm="{ancho:.1f}" \
 data-alto-mm="{alto:.1f}">
 <title id="t">Plano T0 de {escape(rep["nombre"])}</title>

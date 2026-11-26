@@ -45,7 +45,12 @@ def _recaja(rep: dict[str, Any]) -> None:
 
 
 def estirar(
-    rep: dict[str, Any], longitud_total_mm: float, ancla: float, estirar_partes: list[str], mover_partes: list[str]
+    rep: dict[str, Any],
+    longitud_total_mm: float,
+    ancla: float,
+    estirar_partes: list[str],
+    mover_partes: list[str],
+    ref: str,
 ) -> float:
     """Estira el tramo delantero (x > ancla) hasta que el largo total sea `longitud_total_mm`. Devuelve el factor."""
     x0, x1 = _x_extremos(rep)
@@ -55,20 +60,43 @@ def estirar(
     def mapa(x: float) -> float:
         return x if x <= ancla else ancla + (x - ancla) * f
 
+    x_ref = max(p[0] for p in rep["partes"][ref]["contorno_mm"])
+    desplaza = mapa(x_ref) - x_ref  # el extremo delantero de la pieza de referencia arrastra a las piezas de boca
     for n in estirar_partes:
         v = rep["partes"][n]
         v["contorno_mm"] = [[round(mapa(x), 2), y] for x, y in v["contorno_mm"]]
         v["huecos_mm"] = [[[round(mapa(x), 2), y] for x, y in h] for h in v["huecos_mm"]]
     for n in mover_partes:
         v = rep["partes"][n]
-        dx = mapa(min(p[0] for p in v["contorno_mm"])) - min(p[0] for p in v["contorno_mm"])
-        v["contorno_mm"] = [[round(x + dx, 2), y] for x, y in v["contorno_mm"]]
+        v["contorno_mm"] = [[round(x + desplaza, 2), y] for x, y in v["contorno_mm"]]
     for k, lista in rep.get("detalles_mm", {}).items():
         if k.startswith("textura_") or k == "tornillos":
             continue
         rep["detalles_mm"][k] = [[round(mapa(v), 2) if i % 2 == 0 else v for i, v in enumerate(fila)] for fila in lista]
     _recaja(rep)
     return f
+
+
+def acortar_empunadura(
+    rep: dict[str, Any], factor: float, escalar: list[str], mover: list[str], ancla_y: float
+) -> None:
+    """Acorta la empuñadura: los puntos por debajo de `ancla_y` se comprimen `factor` y la base del cargador sube."""
+
+    def mapa(y: float) -> float:
+        return y if y >= ancla_y else ancla_y + (y - ancla_y) * factor
+
+    y_base = max(p[1] for p in rep["partes"][mover[0]]["contorno_mm"])
+    dy = mapa(y_base) - y_base
+    for n in escalar:
+        v = rep["partes"][n]
+        v["contorno_mm"] = [[x, round(mapa(y), 2)] for x, y in v["contorno_mm"]]
+        v["huecos_mm"] = [[[x, round(mapa(y), 2)] for x, y in h] for h in v["huecos_mm"]]
+    for n in mover:
+        v = rep["partes"][n]
+        v["contorno_mm"] = [[x, round(y + dy, 2)] for x, y in v["contorno_mm"]]
+    for k in [k for k in rep.get("detalles_mm", {}) if k.startswith("textura_")]:
+        rep["detalles_mm"][k] = [[x, round(mapa(y), 2)] for x, y in rep["detalles_mm"][k]]
+    _recaja(rep)
 
 
 def recolorear(rep: dict[str, Any], cambios: dict[str, str]) -> None:
@@ -80,6 +108,7 @@ def recolorear(rep: dict[str, Any], cambios: dict[str, str]) -> None:
 DEFINICIONES: list[dict[str, Any]] = [
     {
         "plataforma": "ak",
+        "ref": "canon",
         "base": "akm-lateral-izq",
         "ancla": 330.0,
         "estirar": ["guardamanos_sup", "guardamanos_inf", "tubo_gases", "canon"],
@@ -116,6 +145,7 @@ DEFINICIONES: list[dict[str, Any]] = [
     },
     {
         "plataforma": "ar-m4",
+        "ref": "guardamanos",
         "base": "mk18-mod1-lateral-izq",
         "ancla": 430.0,
         "estirar": ["guardamanos"],
@@ -151,6 +181,7 @@ DEFINICIONES: list[dict[str, Any]] = [
     },
     {
         "plataforma": "hi-capa",
+        "ref": "corredera",
         "base": "hicapa-nighthawk-lateral-izq",
         "ancla": 125.0,
         "estirar": ["corredera", "armazon", "cubierta_optica_no"],
@@ -186,6 +217,7 @@ DEFINICIONES: list[dict[str, Any]] = [
     },
     {
         "plataforma": "glock-17",
+        "ref": "corredera",
         "base": "glock-19x-lateral-izq",
         "ancla": 120.0,
         "estirar": ["corredera", "armazon", "riel_frontal"],
@@ -201,6 +233,7 @@ DEFINICIONES: list[dict[str, Any]] = [
                 "longitud_mm": 188.0,
                 "fuente": "dato público de la plataforma (compacta); sin ficha del SKU, escala relativa con bandera",
                 "color": None,
+                "empunadura": 0.8,
             },
             {
                 "id": "glock-estandar",
@@ -228,7 +261,10 @@ def derivar(rep: dict[str, Any], d: dict[str, Any], v: dict[str, Any]) -> dict[s
     factor = None
     if v["longitud_mm"]:
         partes = [n for n in d["estirar"] if n in r["partes"]]
-        factor = estirar(r, v["longitud_mm"], d["ancla"], partes, d["mover"])
+        factor = estirar(r, v["longitud_mm"], d["ancla"], partes, d["mover"], d["ref"])
+    if v.get("empunadura"):
+        g = r["proporciones"]["cajas_partes_mm"]["guardamonte"]
+        acortar_empunadura(r, v["empunadura"], ["armazon"], ["base_cargador"], g["y_ini_mm"])
     if v["color"]:
         recolorear(r, v["color"])
         k = v.get("aclarar")
@@ -265,6 +301,7 @@ def generar(salida: Path, solo: list[str] | None = None) -> list[dict[str, Any]]
                     "derivada_de": d["base"],
                     "longitud_total_mm": v["longitud_mm"] or base["calibre"]["longitud_mm"],
                     "factor_tramo_delantero": r["factor_tramo_delantero"],
+                    "factor_empunadura": v.get("empunadura"),
                     "fuente_longitud": v["fuente"],
                     "nivel": "T0",
                     "confianza": "baja-media",
