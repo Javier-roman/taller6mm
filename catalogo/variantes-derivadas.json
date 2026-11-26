@@ -27,7 +27,7 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta.",
+          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
           "aristas_abiertas": 0
         },
         {
@@ -42,7 +42,7 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta.",
+          "aviso": "DERIVADA de akm-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
           "aristas_abiertas": 0
         },
         {
@@ -87,7 +87,7 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta.",
+          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
           "aristas_abiertas": 0
         },
         {
@@ -102,7 +102,7 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta.",
+          "aviso": "DERIVADA de mk18-mod1-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
           "aristas_abiertas": 0
         },
         {
@@ -146,8 +146,8 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta.",
-          "aristas_abiertas": 7
+          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
+          "aristas_abiertas": 0
         },
         {
           "id": "hicapa-dor",
@@ -161,8 +161,8 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta.",
-          "aristas_abiertas": 7
+          "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
+          "aristas_abiertas": 0
         },
         {
           "id": "hicapa-metal-claro",
@@ -177,7 +177,7 @@
           "es_demo": true,
           "publicable_3d": false,
           "aviso": "DERIVADA de hicapa-nighthawk-lateral-izq: no es la medida de una réplica concreta.",
-          "aristas_abiertas": 7
+          "aristas_abiertas": 0
         }
       ]
     },
@@ -187,7 +187,7 @@
       "zona_fija": "contorno medido del receptor/armazón (y a veces la corredera)",
       "parametros_variables": {
         "longitud_total_mm": {
-          "rango": [170, 210],
+          "rango": [150, 210],
           "nota": "longitud de corredera y cañón (compacta / estándar)"
         },
         "color": ["arena (base)", "negro"]
@@ -195,18 +195,18 @@
       "variantes": [
         {
           "id": "glock-compacta",
-          "nombre": "Glock derivada a la longitud de una compacta",
+          "nombre": "Glock derivada subcompacta con empuñadura corta",
           "derivada_de": "glock-19x-lateral-izq",
-          "longitud_total_mm": 188.0,
-          "factor_tramo_delantero": 0.9858,
+          "longitud_total_mm": 160.0,
+          "factor_tramo_delantero": 0.4754,
           "factor_empunadura": 0.8,
-          "fuente_longitud": "dato público de la plataforma (compacta); sin ficha del SKU, escala relativa con bandera",
+          "fuente_longitud": "dato público de la plataforma (subcompacta, 160 mm); sin ficha del SKU; escala relativa",
           "nivel": "T0",
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta.",
-          "aristas_abiertas": 6
+          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
+          "aristas_abiertas": 0
         },
         {
           "id": "glock-estandar",
@@ -220,8 +220,8 @@
           "confianza": "baja-media",
           "es_demo": true,
           "publicable_3d": false,
-          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta.",
-          "aristas_abiertas": 6
+          "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta. Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados.",
+          "aristas_abiertas": 0
         },
         {
           "id": "glock-negra",
@@ -236,7 +236,7 @@
           "es_demo": true,
           "publicable_3d": false,
           "aviso": "DERIVADA de glock-19x-lateral-izq: no es la medida de una réplica concreta.",
-          "aristas_abiertas": 6
+          "aristas_abiertas": 0
         }
       ]
     }

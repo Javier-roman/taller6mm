@@ -251,7 +251,7 @@ SPECS_AK105 = (
 
 MAT_AK105 = {
     "metal": ("metal_negro", 0.6, 0.38, "metal", "negro_metal"),
-    "polimero": ("polimero", 0.0, 0.55, "polimero", "negro_polimero"),
+    "polimero": ("polimero", 0.0, 0.66, "polimero", "negro_polimero"),
 }
 
 
@@ -391,7 +391,7 @@ SPECS_HICAPA = (
 MAT_HICAPA = {
     "corredera": ("corredera", 0.7, 0.38, "metal", "negro_metal"),
     "armazon": ("armazon_guardamonte", 0.7, 0.4, "metal", "negro_metal"),
-    "polimero": ("empunadura", 0.0, 0.5, "polimero", "negro_polimero"),
+    "polimero": ("empunadura", 0.0, 0.66, "polimero", "negro_polimero"),
 }
 
 
@@ -468,8 +468,8 @@ SPECS_GLOCK = (
 )
 
 MAT_GLOCK = {
-    "corredera": ("corredera", 0.0, 0.5, "polimero", "coyote"),
-    "armazon": ("armazon", 0.0, 0.55, "polimero", "coyote"),
+    "corredera": ("corredera", 0.0, 0.62, "polimero", "coyote"),
+    "armazon": ("armazon", 0.0, 0.68, "polimero", "coyote"),
     "negro": ("mando_negro", 0.0, 0.45, "polimero", "negro_polimero"),
 }
 

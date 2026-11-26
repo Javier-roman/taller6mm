@@ -210,8 +210,8 @@ DEFINICIONES: list[dict[str, Any]] = [
                 "nombre": "Hi-Capa derivada con corredera en gris claro",
                 "longitud_mm": None,
                 "fuente": "mismo largo que la base; acabado de corredera aclarado (variante de color, no medida)",
-                "color": {"corredera": "corredera", "armazon_guardamonte": "corredera"},
-                "aclarar": 1.6,
+                "color": None,
+                "rgb": {"corredera": [150, 150, 152], "armazon_guardamonte": [150, 150, 152]},
             },
         ],
     },
@@ -223,15 +223,15 @@ DEFINICIONES: list[dict[str, Any]] = [
         "estirar": ["corredera", "armazon", "riel_frontal"],
         "mover": ["alza_delantera"],
         "parametros": {
-            "longitud_total_mm": {"rango": [170, 210], "nota": "longitud de corredera y cañón (compacta / estándar)"},
+            "longitud_total_mm": {"rango": [150, 210], "nota": "longitud de corredera y cañón (compacta / estándar)"},
             "color": ["arena (base)", "negro"],
         },
         "variantes": [
             {
                 "id": "glock-compacta",
-                "nombre": "Glock derivada a la longitud de una compacta",
-                "longitud_mm": 188.0,
-                "fuente": "dato público de la plataforma (compacta); sin ficha del SKU, escala relativa con bandera",
+                "nombre": "Glock derivada subcompacta con empuñadura corta",
+                "longitud_mm": 160.0,
+                "fuente": "dato público de la plataforma (subcompacta, 160 mm); sin ficha del SKU; escala relativa",
                 "color": None,
                 "empunadura": 0.8,
             },
@@ -267,10 +267,10 @@ def derivar(rep: dict[str, Any], d: dict[str, Any], v: dict[str, Any]) -> dict[s
         acortar_empunadura(r, v["empunadura"], ["armazon"], ["base_cargador"], g["y_ini_mm"])
     if v["color"]:
         recolorear(r, v["color"])
-        k = v.get("aclarar")
-        if k:
-            for c in v["color"]:
-                r["colores_srgb"][c] = [min(255, round(x * k)) for x in r["colores_srgb"][c]]
+        r["modo_color"] = "medido"
+    for clave, rgb in (v.get("rgb") or {}).items():
+        r["colores_srgb"][clave] = list(rgb)
+        r["modo_color"] = "medido"
     r["derivada_de"] = rep["id"]
     r["factor_tramo_delantero"] = None if factor is None else round(factor, 4)
     return r
@@ -307,7 +307,12 @@ def generar(salida: Path, solo: list[str] | None = None) -> list[dict[str, Any]]
                     "confianza": "baja-media",
                     "es_demo": True,
                     "publicable_3d": False,
-                    "aviso": f"DERIVADA de {d['base']}: no es la medida de una réplica concreta.",
+                    "aviso": f"DERIVADA de {d['base']}: no es la medida de una réplica concreta."
+                    + (
+                        " Conserva el guardamanos, la culata y el receptor de la base, solo estirados o acortados."
+                        if v["longitud_mm"]
+                        else ""
+                    ),
                     "aristas_abiertas": sum(p["aristas_abiertas"] for p in res["partes"].values()),
                 }
             )

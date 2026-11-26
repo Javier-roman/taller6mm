@@ -41,7 +41,7 @@ def lineal(c: float) -> float:
 
 
 def material(nombre: str, spec: dict) -> bpy.types.Material:
-    """Material por tipo: metal (rugosidad media y especular), polímero (grano fino), madera (veta procedural y barniz)."""
+    """Material por tipo: metal (especular), polímero (grano fino) o madera (veta procedural y barniz)."""
     m = bpy.data.materials.new(nombre)
     m.use_nodes = True
     nodos, enlaces = m.node_tree.nodes, m.node_tree.links
@@ -128,8 +128,23 @@ def renderizar(item: dict) -> None:
                 o.data.materials.append(mats[p["material"]])
                 bpy.context.view_layer.objects.active = o
                 o.select_set(True)
-                bpy.ops.object.shade_smooth_by_angle(angle=0.52)
+                bisel = o.modifiers.new("bisel", "BEVEL")
+                bisel.width = 0.0005  # 0,5 mm: cada arista atrapa la luz
+                bisel.segments = 2
+                bisel.limit_method = "ANGLE"
+                bisel.angle_limit = 0.6
+                bpy.ops.object.modifier_apply(modifier="bisel")
+                bpy.ops.object.shade_smooth_by_angle(angle=0.6)
                 mallas.append(o)
+    lo0, _hi0 = caja(mallas)
+    suelo = bpy.data.objects.new("suelo", bpy.data.meshes.new("suelo"))
+    suelo.data.from_pydata(
+        [(-3, -3, lo0.z - 0.0005), (3, -3, lo0.z - 0.0005), (3, 3, lo0.z - 0.0005), (-3, 3, lo0.z - 0.0005)],
+        [],
+        [(0, 1, 2, 3)],
+    )
+    suelo.is_shadow_catcher = True  # sombra de contacto sobre el papel
+    bpy.context.scene.collection.objects.link(suelo)
     cfg = json.loads((RAIZ / "catalogo" / "iluminacion-presets.json").read_text(encoding="utf-8"))
     preset = cfg["presets"][item.get("preset", cfg["defecto"])]
     lo, hi = caja(mallas)
@@ -140,7 +155,7 @@ def renderizar(item: dict) -> None:
     esc.cycles.device = "CPU"
     esc.cycles.samples = int(item.get("muestras", 48))
     esc.cycles.use_denoising = True
-    papel = item.get("fondo", "papel") == "papel"
+    papel = item.get("fondo", "transparente") == "papel"
     esc.render.film_transparent = not papel
     esc.render.resolution_x, esc.render.resolution_y = item.get("res", [1600, 900])
     esc.render.image_settings.file_format = "PNG"

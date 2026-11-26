@@ -12,6 +12,13 @@ Memoria compartida entre agentes: **qué falló, por qué y qué hacer**. Léelo
 - **Cámara ortográfica de Blender.** El alto de la pieza es el eje Z de Blender (el glTF pasa de Y arriba a Z arriba): encuadrar con `dim.z`, no con `dim.y`.
 - **JSON generados y Biome.** El hook de pre-commit formatea JSON con tabulaciones: ejecuta `pnpm exec biome format --write` sobre el archivo generado antes de hacer commit.
 
+- **Un contorno lateral no da el grosor.** Con el contorno solo se obtiene un prisma de grosor constante («losa» en tres cuartos). *Qué hacer:* `Spec.planta` (estrechamiento en Z a lo largo de X o Y) más raíles, nervaduras y relieves; todo ancho en Z es estimación y se declara.
+- **Spline por pocos puntos lejanos se come esquinas.** Un tramo de contorno con vértices separados 20 mm puede perder un triángulo entero al hacerse `Spline`. *Qué hacer:* intercalar puntos cada 4 mm antes del spline (`PASO_SPLINE_MM`); el IoU del Hi-Capa pasó de 0,88 a 0,99.
+- **`a & b` de OCCT puede devolver la herramienta.** Comprobar siempre que el resultado cabe en la caja del cuerpo y que su volumen no crece (`_interseca_seguro`).
+- **Fondo de papel en Cycles con AgX sale gris.** El tono de la vista comprime el #D7D4CC. *Qué hacer:* renderizar transparente y componer sobre el papel exacto después (`siluetas_comparativas.sobre_papel`).
+- **Longitud de una réplica: cruza con otra cota.** La Glock 19X medía 202 mm por error de memoria; la tabla oficial dice 189 mm y la altura calculada con ese calibre (139 mm) coincide con la oficial: es la prueba de que el calibre es bueno.
+- **Colores de foto.** La mediana lleva el balance de blancos y la luz de la tienda: coyote salía salmón. Se guarda el medido y se aplica un albedo corregido con su nota (negro #1E1F21, madera #5A2E1C, coyote a 33 grados).
+
 ## Modelado y mallas
 - **Aristas abiertas por contactos tangentes (nov-2026).** Un solape casi nulo entre dos sólidos (placa que sobresale un 2 %, letras que se tocan por una esquina, ranura tangente al taladro) deja la malla abierta, y puede pasar en Linux y no en Windows (coma flotante). *Qué hacer:* solape claro (varios mm; en grabado, ≥0,04 mm de solape entre celdas) y cortes que **entren** en el sólido. No relajes el test.
 - **`filetear` falla en silencio.** Si OCCT no puede, devuelve el sólido sin tocar. *Qué hacer:* comprueba que el filete se ha aplicado (volumen o aristas) cuando el detalle importa.

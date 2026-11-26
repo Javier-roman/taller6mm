@@ -81,7 +81,8 @@ def solido_revolucion(contorno: Sequence[Punto]) -> Any:
 
 def _se_tesela(solido: Any) -> bool:
     try:
-        return len(teselar(solido, 0.05, 0.35).triangulos) > 0
+        m = teselar(solido, 0.05, 0.35)
+        return len(m.triangulos) > 0 and m.aristas_abiertas() == 0
     except Exception:
         return False
 
@@ -165,7 +166,8 @@ def paleta(rep: dict[str, Any], mapa: dict[str, tuple]) -> dict[str, dict[str, A
     out: dict[str, dict[str, Any]] = {}
     for mat, (clave, metal, rug, tipo, modo) in mapa.items():
         medido = rep["colores_srgb"][clave]
-        ap, nota = albedo_modo(modo, medido)
+        # Variante de color derivada: manda el color puesto en la variante, no el acabado fijo de la base.
+        ap, nota = albedo_modo("medido" if rep.get("modo_color") == "medido" else modo, medido)
         out[mat] = {
             "rgb_medido": medido,
             "rgb": ap,

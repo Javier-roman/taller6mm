@@ -127,7 +127,7 @@
         "fuente": "longitud nominal de la plataforma AKM (880 mm, dato público de la plataforma, no ficha del SKU)",
         "confianza": "baja"
       },
-      "segundos": 11.9
+      "segundos": 6.4
     },
     {
       "id": "ak105-lateral-izq",
@@ -237,7 +237,7 @@
         "fuente": "longitud nominal de la plataforma AK-105 con culata extendida (943 mm, dato público de la plataforma, no ficha del SKU); el montaje de la foto puede diferir hasta un 8 %; el receptor medido sale a 276 mm frente a 258 mm en el AKM (misma pieza): coherente",
         "confianza": "baja"
       },
-      "segundos": 8.9
+      "segundos": 4.8
     },
     {
       "id": "mk18-mod1-lateral-izq",
@@ -347,7 +347,7 @@
         "fuente": "largo total del Mk18 Mod.1 GBB, ficha oficial de Tokyo Marui con la culata recogida (docs/catalogo/cotas-publicas.md, ficha 479)",
         "confianza": "alta"
       },
-      "segundos": 9.5
+      "segundos": 4.8
     },
     {
       "id": "hicapa-nighthawk-lateral-izq",
@@ -365,10 +365,10 @@
           "glb": "hicapa-nighthawk-lateral-izq.alza_delantera.glb",
           "material": "corredera",
           "ancho_z_mm": 3.6,
-          "triangulos": 311,
-          "aristas_abiertas": 7,
-          "volumen_mm3": 424.2,
-          "sha256": "9c5f910b6f25e1fe"
+          "triangulos": 142,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 424.4,
+          "sha256": "598dec456a4eb7ea"
         },
         "alza_trasera": {
           "glb": "hicapa-nighthawk-lateral-izq.alza_trasera.glb",
@@ -425,7 +425,7 @@
           "sha256": "d2460d25c1114909"
         }
       },
-      "iou_silueta_lateral": 0.9886,
+      "iou_silueta_lateral": 0.9885,
       "iou_objetivo": 0.9,
       "iou_nota": "modelo vs máscara de la foto de referencia (misma escala y origen). El contorno se extruye de la propia foto, así que mide la fidelidad del proceso, no una verificación independiente.",
       "es_demo": false,
@@ -439,7 +439,7 @@
         "fuente": "longitud total de la Hi-Capa 5.1 (docs/catalogo/cotas-publicas.md, ficha Tokyo Marui); se asume la misma para esta réplica: no hay ficha propia del SKU",
         "confianza": "media-baja"
       },
-      "segundos": 10.5
+      "segundos": 5.4
     },
     {
       "id": "glock-19x-lateral-izq",
@@ -466,10 +466,10 @@
           "glb": "glock-19x-lateral-izq.alza_trasera.glb",
           "material": "negro",
           "ancho_z_mm": 10.0,
-          "triangulos": 246,
-          "aristas_abiertas": 6,
-          "volumen_mm3": 403.6,
-          "sha256": "d265bf358be76d5d"
+          "triangulos": 24,
+          "aristas_abiertas": 0,
+          "volumen_mm3": 406.0,
+          "sha256": "bfb60a567b750d1d"
         },
         "armazon": {
           "glb": "glock-19x-lateral-izq.armazon.glb",
@@ -549,7 +549,7 @@
         "fuente": "longitud total publicada de la Glock 19X: 189 mm (7,44 in), tabla técnica oficial de GLOCK (eu.glock.com/en/Products/Pistols/G19X-gns, consultada el 26-11-2026); la altura con cargador sale a 139 mm con este calibre, igual que la cifra oficial (139 mm): comprobación cruzada",
         "confianza": "alta"
       },
-      "segundos": 14.5
+      "segundos": 9.3
     }
   ]
 }

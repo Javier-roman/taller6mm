@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 from taller6mm_pipeline.familias.siluetas_base import RAIZ, cargar_siluetas
 
@@ -23,10 +23,22 @@ FONDO = (215, 212, 204, 255)  # papel #D7D4CC (ADR-0010)
 TEXTO = (27, 34, 38, 255)  # tinta #1B2226
 
 
+def _fuente() -> ImageFont.ImageFont:
+    """Fuente con ñ, í, á…: la de PIL por defecto no los dibuja bien."""
+    for ruta in ("C:/Windows/Fonts/consola.ttf", "C:/Windows/Fonts/arial.ttf", "DejaVuSansMono.ttf"):
+        try:
+            return ImageFont.truetype(ruta, 20)
+        except OSError:
+            continue
+    return ImageFont.load_default()
+
+
 def _recorta(im: Image.Image) -> Image.Image:
     """Recorta al objeto: lo que se aparta del color del papel."""
-    a = np.asarray(im.convert("RGB")).astype(int)
-    dif = np.abs(a - np.array(FONDO[:3])).sum(axis=2) > 24
+    if "A" in im.getbands() and im.getchannel("A").getextrema()[0] < 255:
+        dif = np.asarray(im.getchannel("A")) > 8
+    else:
+        dif = np.abs(np.asarray(im.convert("RGB")).astype(int) - np.array(FONDO[:3])).sum(axis=2) > 24
     ys, xs = np.nonzero(dif)
     if not len(xs):
         return im
@@ -48,7 +60,7 @@ def componer(plataforma: dict, reps: dict, salida: Path) -> Path | None:
             return None
         imgs.append(_recorta(Image.open(ruta).convert("RGBA")))
         if i == base_id:
-            etiquetas.append(f"BASE medida: {reps[base_id]['nombre']}")
+            etiquetas.append(f"BASE medida: {reps[base_id]['nombre'].split(' (')[0]}")
             largos.append(reps[base_id]["calibre"]["longitud_mm"])
         else:
             v = next(x for x in plataforma["variantes"] if x["id"] == i)
@@ -67,7 +79,7 @@ def componer(plataforma: dict, reps: dict, salida: Path) -> Path | None:
     dr = ImageDraw.Draw(lienzo)
     y = 20
     for im, et, mm in zip(redim, etiquetas, largos, strict=True):
-        dr.text((40, y), f"{et} · {mm:.0f} mm", fill=TEXTO)
+        dr.text((40, y), f"{et} · {mm:.0f} mm", fill=TEXTO, font=_fuente())
         lienzo.alpha_composite(im.convert("RGBA"), (40, y + 22))
         y += im.height + 56
     for im in redim:  # guías verticales en la boca de cada variante: se ve cuánto cambia el largo
@@ -77,6 +89,21 @@ def componer(plataforma: dict, reps: dict, salida: Path) -> Path | None:
     return ruta_sal
 
 
+def sobre_papel(carpeta: Path) -> list[Path]:
+    """Compone cada render transparente sobre el papel #D7D4CC exacto (`<nombre>-papel.png`)."""
+    sal = []
+    for f in sorted(carpeta.glob("*.png")):
+        if f.stem.endswith("-papel") or f.stem.startswith("comparativa"):
+            continue
+        im = Image.open(f).convert("RGBA")
+        fondo = Image.new("RGBA", im.size, FONDO)
+        fondo.alpha_composite(im)
+        destino = f.with_name(f.stem + "-papel.png")
+        fondo.convert("RGB").save(destino)
+        sal.append(destino)
+    return sal
+
+
 def main(argv: list[str] | None = None) -> int:
     global VISTAS
     ap = argparse.ArgumentParser(description=__doc__)
@@ -84,6 +111,7 @@ def main(argv: list[str] | None = None) -> int:
     VISTAS = ap.parse_args(argv).vistas
     doc = json.loads(CATALOGO.read_text(encoding="utf-8"))
     reps = cargar_siluetas()
+    print(len(sobre_papel(VISTAS)), "renders sobre papel")
     for pl in doc["plataformas"]:
         r = componer(pl, reps, VISTAS)
         print(pl["plataforma"], r)
