@@ -2,6 +2,23 @@
 
 Memoria compartida entre agentes: **qué falló, por qué y qué hacer**. Léelo antes de empezar. Al cerrar una tanda, añade una entrada nueva arriba (fecha, qué pasó, qué hacer). Sin relleno: una lección, un párrafo.
 
+## Siluetas desde fotos de referencia (nov-2026)
+- **Los filetes de OCCT se cuelgan con contornos medidos.** Un contorno de foto simplificado (100-300 segmentos) hace que `fillet` falle o no termine nunca, aunque la extrusión sea válida. *Qué hacer:* no filetear; intersecar la extrusión con un prisma de sección redondeada (`silueta_solidos.prisma_redondeado`), que es rápido y siempre cierra. Une los tramos entre esquinas duras en un solo `Spline` para tener pocas caras.
+- **El eje del prisma de redondeo importa.** Con el eje mayor (PCA) en una pieza en L (armazón de pistola, guardamonte) el prisma gira y corta un triángulo del sólido. *Qué hacer:* `eje="x"` en piezas en L y PCA solo en piezas alargadas (receptor, culata, cargador, empuñadura).
+- **Una captura de tienda con fondo blanco basta para un contorno, no para un 3/4.** Las vistas en perspectiva no dan silueta ortogonal: se usan solo para proporciones cualitativas. *Qué hacer:* pedir lateral puro (o dos a 90°) y dejar la réplica sin construir si no llega.
+- **Partir la máscara con regiones y color.** Cada pieza sale de `máscara ∩ polígono de región` (px de la foto), con `quita_a` para piezas separadas y un criterio de color para madera/oscuro; el cierre morfológico de 4 px evita contornos con ruido de veta. Con ruido de captura, la tolerancia de Douglas-Peucker no baja de 1,3 px (sale solo el ruido del JPEG).
+- **El IoU contra la foto es circular.** El contorno se extruye de la propia foto: el IoU mide la fidelidad del proceso (≥ 0,90), no una verificación independiente. Decláralo siempre junto a la cifra.
+- **La escala por longitud total incluye accesorios.** La caja de la silueta entera cambia si el montaje tiene boca larga o culata extensible; calibrar entre fotos distintas con «la misma pieza» solo vale si se define igual en las dos (el receptor del AKM incluía el cuello delantero y el del AK-105 no). *Qué hacer:* calibre por longitud publicada y bandera; comprobar la coherencia con otra cota.
+- **Cámara ortográfica de Blender.** El alto de la pieza es el eje Z de Blender (el glTF pasa de Y arriba a Z arriba): encuadrar con `dim.z`, no con `dim.y`.
+- **JSON generados y Biome.** El hook de pre-commit formatea JSON con tabulaciones: ejecuta `pnpm exec biome format --write` sobre el archivo generado antes de hacer commit.
+
+- **Un contorno lateral no da el grosor.** Con el contorno solo se obtiene un prisma de grosor constante («losa» en tres cuartos). *Qué hacer:* `Spec.planta` (estrechamiento en Z a lo largo de X o Y) más raíles, nervaduras y relieves; todo ancho en Z es estimación y se declara.
+- **Spline por pocos puntos lejanos se come esquinas.** Un tramo de contorno con vértices separados 20 mm puede perder un triángulo entero al hacerse `Spline`. *Qué hacer:* intercalar puntos cada 4 mm antes del spline (`PASO_SPLINE_MM`); el IoU del Hi-Capa pasó de 0,88 a 0,99.
+- **`a & b` de OCCT puede devolver la herramienta.** Comprobar siempre que el resultado cabe en la caja del cuerpo y que su volumen no crece (`_interseca_seguro`).
+- **Fondo de papel en Cycles con AgX sale gris.** El tono de la vista comprime el #D7D4CC. *Qué hacer:* renderizar transparente y componer sobre el papel exacto después (`siluetas_comparativas.sobre_papel`).
+- **Longitud de una réplica: cruza con otra cota.** La Glock 19X medía 202 mm por error de memoria; la tabla oficial dice 189 mm y la altura calculada con ese calibre (139 mm) coincide con la oficial: es la prueba de que el calibre es bueno.
+- **Colores de foto.** La mediana lleva el balance de blancos y la luz de la tienda: coyote salía salmón. Se guarda el medido y se aplica un albedo corregido con su nota (negro #1E1F21, madera #5A2E1C, coyote a 33 grados).
+
 ## Modelado y mallas
 - **Aristas abiertas por contactos tangentes (nov-2026).** Un solape casi nulo entre dos sólidos (placa que sobresale un 2 %, letras que se tocan por una esquina, ranura tangente al taladro) deja la malla abierta, y puede pasar en Linux y no en Windows (coma flotante). *Qué hacer:* solape claro (varios mm; en grabado, ≥0,04 mm de solape entre celdas) y cortes que **entren** en el sólido. No relajes el test.
 - **`filetear` falla en silencio.** Si OCCT no puede, devuelve el sólido sin tocar. *Qué hacer:* comprueba que el filete se ha aplicado (volumen o aristas) cuando el detalle importa.
