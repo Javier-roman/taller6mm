@@ -6,6 +6,7 @@
 //   node scripts/db.mjs reset     → borra el estado local de D1, migra y siembra
 import { existsSync, readdirSync, rmSync } from 'node:fs';
 import path from 'node:path';
+import { generateSeeds } from './db-seed.mjs';
 import { bin, node, root } from './run.mjs';
 
 const BASES = [
@@ -30,6 +31,7 @@ export function migrate() {
 }
 
 export function seed() {
+  generateSeeds();
   let applied = 0;
   for (const [base, binding] of BASES) {
     const dir = path.join(root, 'packages', 'db', 'seeds', base);

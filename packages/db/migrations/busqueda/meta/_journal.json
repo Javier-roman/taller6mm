@@ -8,6 +8,13 @@
       "when": 1793465018013,
       "tag": "0000_meta",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1795766529712,
+      "tag": "0001_catalogo_fts",
+      "breakpoints": true
     }
   ]
 }
