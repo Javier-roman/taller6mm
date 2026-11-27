@@ -3,22 +3,16 @@
 // mejora progresiva por encima. Teclado: un solo tabulador para toda la navegación (roving tabindex), con
 // ← → ↑ ↓ Inicio y Fin entre zonas, Intro para entrar y Esc para cerrar la hoja.
 import { BRAND } from '@taller6mm/ui/brand';
-import { Boton, Placa } from '@taller6mm/ui/componentes';
+import { Boton } from '@taller6mm/ui/componentes';
 import { type KeyboardEvent, type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { Demo } from './Demo.tsx';
 import { type EstadoArmeria, zonaActiva } from './estado.ts';
+import { Hoja } from './Hoja.tsx';
 import { VARIANTES_LUZ } from './luz.ts';
 import { TEXTO_ALTERNATIVO } from './Poster.tsx';
 import type { Acciones } from './useArmeria.ts';
 import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONAS, zonaPorId, zonasDe } from './zonas.ts';
 import './armeria.css';
-
-function Demo({ plural = false }: { plural?: boolean }) {
-  return (
-    <span className="armeria__demo">
-      Demo<span className="t6-sr">{plural ? ' (datos de ejemplo)' : ' (dato de ejemplo)'}</span>
-    </span>
-  );
-}
 
 /** Bombilla: «Más luz». */
 function IconoLuz() {
@@ -41,7 +35,10 @@ export interface InterfazProps {
 export function InterfazArmeria({ estado, acciones, children, escenaActiva = false }: InterfazProps) {
   const enlaces = useRef<Record<string, HTMLAnchorElement | null>>({});
   const panel = useRef<HTMLDivElement>(null);
+  // A dónde vuelve el foco al cerrar la hoja: quien la abrió (una zona de la barra o «Monta tu réplica»); si la abrió
+  // el puntero sobre el póster (sus zonas no se enfocan), la zona de la barra.
   const volverA = useRef<string | null>(null);
+  const abridor = useRef<HTMLElement | null>(null);
   const [foco, setFoco] = useState<string>(ZONAS[0]?.id ?? 'replicas');
   const abierta = zonaPorId(estado.abierta);
   const activa = zonaActiva(estado);
@@ -49,6 +46,9 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
   const abrir = useCallback(
     (id: string) => {
       volverA.current = id;
+      const activo = document.activeElement;
+      abridor.current =
+        activo instanceof HTMLElement && activo.closest('.armeria__nav, .armeria__cabecera') ? activo : null;
       acciones.abrir(id);
     },
     [acciones],
@@ -56,7 +56,11 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
   const cerrar = useCallback(() => {
     acciones.cerrar();
     const id = volverA.current;
-    if (id) requestAnimationFrame(() => enlaces.current[id]?.focus());
+    const origen = abridor.current;
+    requestAnimationFrame(() => {
+      if (origen?.isConnected) origen.focus();
+      else if (id) enlaces.current[id]?.focus();
+    });
   }, [acciones]);
 
   // Esc cierra la hoja de la zona (docs/02 §3.2).
@@ -179,33 +183,7 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
         </nav>
       </div>
 
-      {abierta ? (
-        <div
-          className="armeria__panel"
-          data-lado={abierta.estanteria === 'derecha' ? 'izquierda' : 'derecha'}
-          role="dialog"
-          aria-modal="false"
-          aria-label={abierta.nombre}
-          tabIndex={-1}
-          ref={panel}
-        >
-          <Placa titulo={abierta.nombre} nivelTitulo={2} codigo={abierta.ruta} as="div">
-            <p className="armeria__panel-texto">{abierta.descripcion}</p>
-            <p className="armeria__panel-dato">
-              {abierta.dato} <Demo />
-            </p>
-            <p className="armeria__panel-nota">Esta sección aún no está abierta.</p>
-            <div className="armeria__panel-acciones">
-              <Boton variante="laton" aria-disabled="true" title="Esta sección aún no está abierta">
-                Próximamente
-              </Boton>
-              <Boton variante="fantasma" onClick={cerrar}>
-                Volver a la sala
-              </Boton>
-            </div>
-          </Placa>
-        </div>
-      ) : null}
+      {abierta ? <Hoja zona={abierta} onCerrar={cerrar} panelRef={panel} /> : null}
     </div>
   );
 }

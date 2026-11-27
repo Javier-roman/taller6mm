@@ -4,6 +4,7 @@
  * estrechas la interfaz solo se adapta para no romperse (la versión móvil queda aparcada).
  */
 @import "./zonas-poster.css";
+@import "./hoja.css";
 
 .armeria {
   position: relative;
@@ -60,10 +61,22 @@
   inset: 0;
 }
 
-/* Sin borde en reposo: la zona activa se marca en su tarjeta de la navegación (critico-diseno). */
+/*
+ * Sin borde en reposo. La zona activa (puntero, foco o hoja abierta) se recorta como en un plano: el resto de la
+ * sala baja de luz (sombra que sale de la zona, recortada por el póster) y la zona lleva un trazo de cota.
+ */
 .armeria-poster__zona {
   position: absolute;
   border-radius: var(--radio-m);
+  transition:
+    box-shadow var(--duracion-componente) var(--curva-mecanica),
+    outline-color var(--duracion-componente) var(--curva-mecanica);
+}
+
+.armeria-poster__zona[data-activa="true"] {
+  outline: var(--trazo-fino) dashed var(--cota);
+  outline-offset: calc(var(--espacio-1) * -1);
+  box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--negro-pavonado) 48%, transparent);
 }
 
 /* Huecos de réplica: sin pintar y sin puntero hasta que lleven una imagen real. */
@@ -196,7 +209,7 @@
 /* Activo sin relleno latón: el único botón latón es la acción principal, «Monta tu réplica» (critico-diseno). */
 .armeria__ajuste[aria-pressed="true"] {
   color: var(--laton-claro);
-  background: var(--grafito);
+  background: color-mix(in srgb, var(--laton) 22%, var(--grafito));
   border-color: var(--laton);
 }
 
@@ -336,68 +349,6 @@
   vertical-align: 0.1em;
 }
 
-/* ── Panel de la zona abierta ──────────────────────────────────────────────────── */
-.armeria__panel {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  right: var(--espacio-6);
-  width: min(26rem, calc(100% - 2 * var(--espacio-6)));
-  translate: 0 -50%;
-  animation: armeria-entra var(--duracion-panel) var(--curva-mecanica);
-}
-
-.armeria__panel[data-lado="izquierda"] {
-  right: auto;
-  left: var(--espacio-6);
-}
-
-.armeria__panel:focus {
-  outline: none;
-}
-
-.armeria__panel-texto {
-  margin: 0 0 var(--espacio-3);
-  max-width: var(--ancho-lectura);
-  line-height: var(--interlineado-cuerpo);
-}
-
-.armeria__panel-dato {
-  margin: 0 0 var(--espacio-3);
-  font-family: var(--fuente-datos);
-  font-size: var(--texto-s);
-}
-
-.armeria__panel-nota {
-  margin: 0 0 var(--espacio-4);
-  font-size: var(--texto-s);
-  color: var(--niebla);
-}
-
-.armeria__panel-acciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espacio-2);
-}
-
-@keyframes armeria-entra {
-  from {
-    opacity: 0;
-    translate: var(--espacio-4) -50%;
-  }
-}
-
-.armeria__panel[data-lado="izquierda"] {
-  animation-name: armeria-entra-izquierda;
-}
-
-@keyframes armeria-entra-izquierda {
-  from {
-    opacity: 0;
-    translate: calc(var(--espacio-4) * -1) -50%;
-  }
-}
-
 /*
  * ── Pantallas estrechas (portátil pequeño y menos): fila desplazable ───────────────────────────────
  * Ocho tarjetas de 160 px no caben: en vez de encogerlas, la fila se desplaza en horizontal y la tarjeta que
@@ -428,22 +379,12 @@
   .armeria__lema {
     display: none;
   }
-
-  .armeria__panel {
-    top: auto;
-    right: var(--espacio-4);
-    bottom: var(--espacio-4);
-    left: var(--espacio-4);
-    width: auto;
-    max-height: 45svh;
-    overflow-y: auto;
-    translate: none;
-    animation: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .armeria__panel {
+  .armeria__hoja,
+  .armeria-poster__zona {
     animation: none;
+    transition: none;
   }
 }

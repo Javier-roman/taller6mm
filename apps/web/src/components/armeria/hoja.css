@@ -1,0 +1,569 @@
+/*
+ * Hoja de contenido de un módulo de La Armería (dirección A «plano de cotas», ADR-0010). Solo tokens de
+ * @taller6mm/ui; la lámina, las marcas de registro y los componentes vienen de packages/ui. Aquí solo se coloca
+ * la hoja sobre la sala y se ordena su contenido. Prioridad: LEGIBILIDAD (Javi, 27-11-2026): hoja grande, texto de
+ * 16 px o más en el cuerpo, nada por debajo de 14 px, aire entre secciones y desplazamiento por secciones completas.
+ * Escritorio primero: en pantallas estrechas pasa a hoja inferior.
+ */
+.armeria__hoja {
+  /* Dentro de la hoja nada baja de 14 px: los componentes que usan «xs» (12 px) suben un escalón. */
+  --texto-xs: var(--texto-s);
+
+  position: absolute;
+  z-index: 3;
+  /* Casi toda la ventana: entre la cabecera (arriba) y la barra de zonas (abajo). Altura fija: no salta de un módulo a otro. */
+  top: var(--espacio-24);
+  right: var(--espacio-6);
+  bottom: calc(var(--espacio-24) + var(--espacio-12));
+  width: min(43rem, calc(100% - 2 * var(--espacio-6)));
+  display: flex;
+  font-size: var(--texto-m);
+  line-height: var(--interlineado-cuerpo);
+  animation: armeria-entra var(--duracion-panel) var(--curva-mecanica);
+}
+
+.armeria__hoja[data-lado="izquierda"] {
+  right: auto;
+  left: var(--espacio-6);
+  animation-name: armeria-entra-izquierda;
+}
+
+/* El foco llega a la hoja al abrirla: con teclado se ve, con ratón no hace falta (el anillo es de :focus-visible). */
+.armeria__hoja:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* La placa llena la hoja; su cabecera (título) queda fija y solo se desplaza `.armeria__hoja-cuerpo`. */
+.armeria__hoja .t6-placa {
+  flex: 1;
+  min-block-size: 0;
+  min-inline-size: 0;
+  block-size: auto;
+  gap: var(--espacio-4);
+  padding-block-end: 0;
+}
+
+.armeria__hoja .t6-placa__cabecera {
+  /* Hueco a la derecha para el botón de cerrar. */
+  padding-inline-end: calc(var(--objetivo-tactil) + var(--espacio-4));
+  padding-block-end: var(--espacio-4);
+}
+
+.armeria__hoja .t6-placa__titulo {
+  font-size: var(--texto-xl);
+  line-height: var(--interlineado-titular);
+}
+
+.armeria__hoja .t6-placa__codigo {
+  font-size: var(--texto-s);
+}
+
+.armeria__hoja .t6-placa__cuerpo {
+  flex: 1;
+  min-block-size: 0;
+  min-inline-size: 0;
+  color: var(--hueso);
+}
+
+/* Botón de cerrar, fijo en la esquina de la cabecera. */
+.armeria__cerrar {
+  position: absolute;
+  top: var(--espacio-4);
+  right: var(--espacio-4);
+  display: grid;
+  place-items: center;
+  inline-size: var(--objetivo-tactil);
+  block-size: var(--objetivo-tactil);
+  padding: 0;
+  border: var(--trazo-fino) solid var(--acero);
+  border-radius: var(--radio-m);
+  background: var(--grafito);
+  color: var(--hueso);
+  cursor: pointer;
+  transition:
+    border-color var(--duracion-micro) var(--curva-mecanica),
+    color var(--duracion-micro) var(--curva-mecanica);
+}
+
+.armeria__cerrar:hover {
+  border-color: var(--laton);
+  color: var(--laton-claro);
+}
+
+.armeria__cerrar svg {
+  inline-size: var(--espacio-4);
+  block-size: var(--espacio-4);
+}
+
+/*
+ * Cuerpo desplazable: llega hasta el borde de la placa (la barra de desplazamiento queda en el borde, bien visible)
+ * y se desplaza por secciones completas (`scroll-snap` por cercanía): nada queda cortado a media ficha.
+ */
+.armeria__hoja-cuerpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--espacio-8);
+  min-block-size: 0;
+  margin-inline: calc(var(--espacio-6) * -1);
+  padding: var(--espacio-2) var(--espacio-6) var(--espacio-8);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y proximity;
+  scroll-padding-block-start: var(--espacio-2);
+  scrollbar-width: auto;
+  scrollbar-color: var(--laton) var(--negro-pavonado);
+  scrollbar-gutter: stable;
+}
+
+/* Ningún bloque se encoge para caber (la tabla, con su propio desplazamiento, se aplastaba): la hoja se desplaza. */
+.armeria__hoja-cuerpo > * {
+  flex: none;
+}
+
+/* Cada bloque se alinea al principio al soltar el desplazamiento. */
+.armeria__hoja-cuerpo > *,
+.armeria__fichas > li,
+.armeria__build,
+.armeria__bajada {
+  scroll-snap-align: start;
+}
+
+.armeria__hoja-descripcion {
+  margin: 0;
+  max-width: var(--ancho-lectura);
+  font-size: var(--texto-m);
+  line-height: var(--interlineado-cuerpo);
+}
+
+/* Cajetín del resumen: el dato, la marca de ejemplo y la fecha en que se comprobó, entre dos trazos. */
+.armeria__hoja-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--espacio-2) var(--espacio-4);
+  margin: 0;
+  padding: var(--espacio-3) 0;
+  border-block: var(--trazo-fino) solid var(--trazo-fuerte);
+}
+
+.armeria__hoja-resumen .armeria__demo {
+  margin: 0;
+  align-self: center;
+}
+
+.armeria__hoja-dato {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-l);
+  font-weight: var(--peso-medio);
+  line-height: var(--interlineado-compacto);
+  color: var(--hueso);
+}
+
+.armeria__fecha {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-s);
+  color: var(--niebla);
+}
+
+.armeria__hoja-resumen .armeria__fecha {
+  flex-basis: 100%;
+}
+
+/* Subtítulo con línea de cota: «RANURAS DEL ARMERO ────────». */
+.armeria__hoja-seccion {
+  display: grid;
+  gap: var(--espacio-4);
+}
+
+.armeria__hoja-subtitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-s);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--interletra-versalitas);
+  text-transform: uppercase;
+  color: var(--cota);
+}
+
+.armeria__hoja-subtitulo::after {
+  content: "";
+  flex: 1;
+  border-block-start: var(--trazo-fino) solid var(--trazo-fuerte);
+}
+
+.armeria__lista-simple,
+.armeria__chips,
+.armeria__builds,
+.armeria__bajadas,
+.armeria__fichas,
+.armeria__ranuras {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Filas simples: nombre, dato y etiqueta, separadas por un trazo fino. */
+.armeria__fila {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3) 0;
+  border-block-end: var(--trazo-fino) solid color-mix(in srgb, var(--trazo-fuerte) 55%, transparent);
+}
+
+.armeria__fila:last-child {
+  border-block-end: 0;
+}
+
+.armeria__fila--apilada {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-1);
+}
+
+.armeria__bloque {
+  display: block;
+}
+
+.armeria__fila-nombre {
+  flex: 1;
+  font-size: var(--texto-m);
+  font-weight: var(--peso-medio);
+}
+
+.armeria__fila-meta {
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-s);
+  color: var(--niebla);
+}
+
+.armeria__lista-simple--doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--espacio-8);
+}
+
+.armeria__lista-simple--doble .armeria__fila:nth-last-child(2) {
+  border-block-end: 0;
+}
+
+/* La tabla de tiendas cabe en la hoja sin partir fechas ni nombres. */
+.armeria__hoja .t6-tabla {
+  font-size: var(--texto-m);
+}
+
+.armeria__hoja .t6-tabla table {
+  font-size: var(--texto-s);
+}
+
+.armeria__hoja .t6-tabla :is(th, td) {
+  padding: var(--espacio-3) var(--espacio-2);
+}
+
+.armeria__hoja .t6-tabla :is(th[scope="row"], td:nth-child(3)) {
+  white-space: nowrap;
+}
+
+/* El título de la tabla repite el resumen de la hoja: queda solo para el lector de pantalla. */
+.armeria__hoja .t6-tabla caption {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Ranuras del armero: huecos libres con su número, a plantilla. */
+.armeria__ranuras {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--espacio-2);
+}
+
+.armeria__ranura {
+  display: grid;
+  place-items: center;
+  min-height: var(--objetivo-tactil);
+  border: var(--trazo-fino) dashed var(--trazo-fuerte);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-s);
+  color: var(--niebla);
+}
+
+.armeria__ranura[data-libre="false"] {
+  border-style: solid;
+  border-color: var(--laton);
+  color: var(--laton-claro);
+}
+
+.armeria__chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espacio-3);
+}
+
+/* Plano más bajo (2:1) para que nombre y precio entren en la primera vista; las cotas se siguen leyendo. */
+.armeria__fichas .t6-ficha__imagen {
+  aspect-ratio: 2 / 1;
+}
+
+.armeria__fichas .t6-ficha__imagen :is(.t6-plano, img) {
+  position: absolute;
+  inset: 0;
+}
+
+/* Fichas de pieza: dos por fila. */
+.armeria__fichas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espacio-4);
+}
+
+/* Builds y bajadas: una fila por entrada, con su número o su etiqueta de precio. */
+.armeria__builds,
+.armeria__bajadas {
+  display: grid;
+}
+
+.armeria__build,
+.armeria__bajada {
+  display: grid;
+  gap: var(--espacio-3);
+  padding: var(--espacio-4) 0;
+  border-block-end: var(--trazo-fino) solid color-mix(in srgb, var(--trazo-fuerte) 55%, transparent);
+}
+
+.armeria__build:first-child,
+.armeria__bajada:first-child {
+  padding-block-start: 0;
+}
+
+.armeria__build:last-child,
+.armeria__bajada:last-child {
+  padding-block-end: 0;
+  border-block-end: 0;
+}
+
+.armeria__build {
+  grid-template-columns: var(--espacio-12) 1fr;
+  align-items: start;
+}
+
+.armeria__build-puesto {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-3xl);
+  font-weight: var(--peso-medio);
+  line-height: var(--interlineado-compacto);
+  color: var(--laton);
+}
+
+.armeria__build-cuerpo {
+  display: grid;
+  gap: var(--espacio-3);
+  justify-items: start;
+}
+
+.armeria__build-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3) var(--espacio-6);
+}
+
+.armeria__build-nombre {
+  margin: 0;
+  font-size: var(--texto-l);
+  font-weight: var(--peso-semi);
+  line-height: var(--interlineado-compacto);
+}
+
+.armeria__bajada-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.armeria__bajada del {
+  color: var(--niebla);
+}
+
+.armeria__bajada-antes {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+/* Taquilla: tres cifras a plantilla. */
+.armeria__cifras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--espacio-4);
+  margin: 0;
+}
+
+.armeria__cifras > div {
+  display: grid;
+  gap: var(--espacio-2);
+  padding: var(--espacio-4);
+  border: var(--trazo-fino) solid var(--trazo-fuerte);
+  border-radius: var(--radio-s);
+}
+
+.armeria__cifras dt {
+  font-size: var(--texto-m);
+  color: var(--niebla);
+}
+
+.armeria__cifras dd {
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-3xl);
+  line-height: var(--interlineado-compacto);
+}
+
+/* Acciones al final del contenido, con la línea de cota de las secciones. */
+.armeria__hoja-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3) var(--espacio-4);
+  padding-block-start: var(--espacio-6);
+  border-block-start: var(--trazo-fino) solid var(--trazo-fuerte);
+}
+
+.armeria__hoja-nota {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--texto-m);
+  color: var(--niebla);
+}
+
+/* «Volver a la sala» en neutro: la acción principal es la sección (aún deshabilitada) y no debe competir con ella. */
+.armeria__hoja-acciones .t6-boton--fantasma {
+  color: var(--hueso);
+}
+
+/* Fechas de comprobación y nº de tiendas: son la promesa del producto, a 14 px como mínimo. */
+.armeria__hoja :is(.t6-precio__fecha, .t6-ficha__tiendas) {
+  font-size: var(--texto-s);
+}
+
+/*
+ * Aviso discreto de que hay más contenido debajo: un degradado corto que aparece solo si la hoja se puede desplazar
+ * y se apaga al llegar al final. Solo donde el navegador sabe ligar la animación al desplazamiento; si no, no hay
+ * degradado (la barra de desplazamiento sigue siendo visible).
+ */
+.armeria__hoja-cuerpo::after {
+  content: "";
+  position: sticky;
+  /* Chrome mide el «pegado» desde el contenido, no desde el borde: se compensa el relleno inferior. */
+  bottom: calc(var(--espacio-8) * -1);
+  display: block;
+  flex: none;
+  block-size: var(--espacio-12);
+  /* Anula el hueco (`gap`) que el degradado, como último elemento, añadiría al final. */
+  margin-block-start: calc((var(--espacio-12) + var(--espacio-8)) * -1);
+  background: linear-gradient(to bottom, transparent, var(--carbon) 80%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .armeria__hoja-cuerpo::after {
+    animation: armeria-mas-abajo linear both;
+    animation-timeline: scroll(nearest block);
+  }
+}
+
+@keyframes armeria-mas-abajo {
+  0%,
+  92% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes armeria-entra {
+  from {
+    opacity: 0;
+    translate: var(--espacio-4) 0;
+  }
+}
+
+@keyframes armeria-entra-izquierda {
+  from {
+    opacity: 0;
+    translate: calc(var(--espacio-4) * -1) 0;
+  }
+}
+
+/* Pantallas estrechas: hoja inferior. Solo evita que se rompa; el móvil está aparcado. */
+@media (max-width: 72rem) {
+  .armeria__hoja {
+    top: auto;
+    right: var(--espacio-4);
+    bottom: var(--espacio-4);
+    left: var(--espacio-4);
+    width: auto;
+    height: 78svh;
+    animation: none;
+  }
+
+  .armeria__hoja[data-lado="izquierda"] {
+    right: var(--espacio-4);
+    left: var(--espacio-4);
+  }
+
+  .armeria__ranuras,
+  .armeria__fichas,
+  .armeria__chips,
+  .armeria__cifras {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .armeria__lista-simple--doble {
+    grid-template-columns: 1fr;
+  }
+
+  .armeria__lista-simple--doble .armeria__fila:nth-last-child(2) {
+    border-block-end: var(--trazo-fino) solid color-mix(in srgb, var(--trazo-fuerte) 55%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .armeria__hoja,
+  .armeria__hoja[data-lado] {
+    animation: none;
+  }
+}
+
+/* Texto corrido de avisos y veredictos a 16 px y a medida de lectura; los 14 px quedan para metadatos. */
+.armeria__hoja :is(.t6-aviso__texto, .t6-compat__motivo) {
+  max-width: var(--ancho-lectura);
+  font-size: var(--texto-m);
+  line-height: var(--interlineado-cuerpo);
+}
+
+.armeria__hoja .t6-tabla tbody th[scope="row"] {
+  font-size: var(--texto-m);
+}
+
+.armeria__hoja .armeria__bajada del {
+  text-decoration-thickness: 1px;
+}
+
+.armeria__cifras dd {
+  font-size: var(--texto-2xl);
+}

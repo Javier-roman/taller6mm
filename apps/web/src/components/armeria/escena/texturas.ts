@@ -215,7 +215,8 @@ export function texturaHuecoArmero() {
   const { canvas, ctx } = lienzo(W, H);
   ctx.clearRect(0, 0, W, H);
   ctx.strokeStyle = colors['trazo-fuerte'];
-  ctx.globalAlpha = 0.55;
+  // Tenue (20–30 %): reserva el hueco sin competir con los rótulos; a plena fuerza parecía una estantería con fallo de luz.
+  ctx.globalAlpha = 0.28;
   ctx.lineWidth = 3;
   ctx.setLineDash([16, 12]);
   ctx.strokeRect(10, 10, W - 20, H - 20);
@@ -291,21 +292,24 @@ export function texturaTapete() {
 
 /** Tira de ranuras numeradas del armero, como las etiquetas de ref-08 pero en papel de plano. */
 export function texturaTiraNumerada(desde: number, cuantos: number) {
-  const { canvas, ctx } = lienzo(1536, 96);
+  // Misma proporción que la placa de la sala (2,5 m × 0,066 m): antes el lienzo era 16:1 y la placa 50:1, y las
+  // cifras salían aplastadas y de 6 px a 1440 px (critico-diseno, 24-11-2026).
+  const [W, H] = [3072, 81];
+  const { canvas, ctx } = lienzo(W, H);
   ctx.fillStyle = colors.papel;
-  ctx.fillRect(0, 0, 1536, 96);
+  ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = colors['tinta-papel'];
-  ctx.font = `600 46px ${FONT_FAMILIES.datos}`;
+  ctx.font = `700 56px ${FONT_FAMILIES.datos}`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  const paso = 1536 / cuantos;
+  const paso = W / cuantos;
   for (let i = 0; i < cuantos; i++) {
-    ctx.fillText(String(desde + i).padStart(2, '0'), paso * (i + 0.5), 52);
-    ctx.fillRect(paso * i, 0, 3, 96);
+    ctx.fillText(String(desde + i).padStart(2, '0'), paso * (i + 0.5), 46);
+    ctx.fillRect(paso * i, 0, 4, H);
     // Marcas de cota en el borde superior de cada ranura.
-    for (let t = 1; t < 5; t++) ctx.fillRect(paso * i + (paso * t) / 5, 0, 2, t === 2 ? 16 : 9);
+    for (let t = 1; t < 5; t++) ctx.fillRect(paso * i + (paso * t) / 5, 0, 3, t === 2 ? 14 : 8);
   }
-  grano(ctx, 1536, 96, 12, azar(61));
+  grano(ctx, W, H, 12, azar(61));
   return textura(canvas);
 }
 
@@ -366,7 +370,7 @@ export function texturaRotulo(texto: string, opciones: OpcionesRotulo = {}) {
       const x1 = ancho - m * 3.4;
       ctx.strokeStyle = colors.cota;
       ctx.lineWidth = Math.max(3.5, alto * 0.026);
-      ctx.font = `600 ${Math.round(alto * 0.25)}px ${FONT_FAMILIES.datos}`;
+      ctx.font = `700 ${Math.round(alto * 0.3)}px ${FONT_FAMILIES.datos}`;
       const medida = ctx.measureText(opciones.cota).width;
       const mitad = medida / 2 + alto * 0.07;
       for (const [a, b] of [
