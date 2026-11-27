@@ -1,8 +1,7 @@
 // Insignia de fidelidad T0–T3 (docs/05 §2): acompaña siempre al render para que se sepa qué se está
 // viendo. El nivel va en texto, icono y forma, nunca solo en color. Sin nivel → «Sin verificar»
 // (principio 2: lo desconocido se dice, no se disimula).
-import type { ReactNode } from 'react';
-import { IconoDesconocido, IconoFoto, IconoModelo, IconoPlano, IconoVerificado } from './iconos.tsx';
+import { IconoDesconocido } from './iconos.tsx';
 import { cx } from './util.ts';
 
 export const NIVELES_FIDELIDAD = {
@@ -13,13 +12,6 @@ export const NIVELES_FIDELIDAD = {
 } as const;
 
 export type NivelFidelidad = keyof typeof NIVELES_FIDELIDAD;
-
-const ICONOS: Record<NivelFidelidad, () => ReactNode> = {
-  T0: IconoPlano,
-  T1: IconoFoto,
-  T2: IconoModelo,
-  T3: IconoVerificado,
-};
 
 export interface InsigniaFidelidadProps {
   nivel: NivelFidelidad | null;
@@ -38,11 +30,11 @@ export function InsigniaFidelidad({ nivel, compacta = false, className }: Insign
       </span>
     );
   }
-  const Icono = ICONOS[nivel];
   const { nombre } = NIVELES_FIDELIDAD[nivel];
   return (
     <span className={cx('t6-insignia', `t6-insignia--${nivel.toLowerCase()}`, className)} data-nivel={nivel}>
-      <Icono />
+      {/* El cuadrito se llena con el nivel: T0 vacío, T1 un tercio, T2 dos tercios, T3 lleno. */}
+      <i className="t6-insignia__nivel" aria-hidden="true" />
       <span className="t6-sr">Fidelidad: </span>
       <span className="t6-insignia__codigo">{nivel}</span>
       {compacta ? <span className="t6-sr"> · {nombre}</span> : <span className="t6-insignia__nombre">{nombre}</span>}

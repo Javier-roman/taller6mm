@@ -1,0 +1,12 @@
+---
+// Una celda de demostración: rótulo del estado y el componente en ese estado.
+interface Props {
+  nombre: string;
+}
+const { nombre } = Astro.props;
+---
+
+<div class="flex flex-col gap-2">
+  <span class="text-xs text-niebla">{nombre}</span>
+  <slot />
+</div>
