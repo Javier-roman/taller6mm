@@ -3,8 +3,9 @@
 import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 4321;
-const { CI, CLAUDE_CODE_REMOTE, PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH } = process.env;
+// E2E_PORT permite varias copias del repo (worktrees) sin que una reutilice el servidor de otra.
+const { CI, CLAUDE_CODE_REMOTE, E2E_PORT, PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH } = process.env;
+const PORT = Number(E2E_PORT ?? 4321);
 // En la nube de Claude Code hay un Chromium preinstalado (otra revisión que la de @playwright/test).
 const cloudChromium =
   CLAUDE_CODE_REMOTE === 'true' && existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined;

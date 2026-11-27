@@ -5,6 +5,19 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 
 ## [Sin publicar]
 
+### Fase 1 · S1.1 de La Armería: esqueleto y póster (2026-11-22)
+- `/` es ahora La Armería, prerenderizada: póster WebP como `<img>` en el HTML inicial (con `fetchpriority`, tamaño y
+  texto alternativo), ocho zonas clicables encima, navegación HTML con roving tabindex (← → ↑ ↓ Inicio Fin), hoja de
+  zona con Esc, «Más luz» siempre visible (se recuerda en `localStorage`, con alternativa si falta) y marcas de
+  datos de demostración y siluetas provisionales. Isla React `client:idle`. Solo escritorio: el móvil queda aparcado.
+- Lógica pura con tests (encuadre, CSS de zonas generado, preferencias, manifiesto) y e2e a 1440 px con axe.
+- **Sin siluetas de réplicas** (Javi, 22-11-2026): la sala 3D (`escena/Sala.tsx`) se reescribe sin ellas, con ranuras,
+  ganchos de sujeción, peanas con soportes y tapete vacíos, y los huecos pasan a ser **sockets** (`sockets.ts`, `replicaId: null`)
+  con su rectángulo sobre el póster (CSS generado) y un marcador `socket.<id>` en la escena. Póster y pases re-horneados.
+- Horno de vistas: sala 3D → glTF → Blender/Cycles (`scripts/armeria/hornear-cycles.mjs`), pases de datos con three.js
+  (`hornear-datos.mjs`) y póster compuesto con el compositor del nivel B (`poster.mjs`, penumbra y «Más luz»).
+- Dependencias de cliente aprobadas por Javi: `three` y `@react-three/fiber` (solo en el nivel A, con `import()`); `vite` solo para el horno.
+
 ### Fase 1 · S1 de La Armería: vistas horneadas en R2 (2026-11-22)
 - Binding R2 `VISTAS` sobre un bucket dedicado `taller6mm-vistas-preview` en preview (un binding de R2 puede leer, escribir y borrar: por eso no se enlaza el bucket de assets) y ruta
   `/assets/armeria/<hash>/<archivo>.webp` en el Worker, con `Cache-Control` inmutable y ETag (`src/lib/vistas.ts`).

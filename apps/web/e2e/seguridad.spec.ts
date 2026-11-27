@@ -13,8 +13,9 @@ const COMMON = {
 } as const;
 
 test.describe('cabeceras de seguridad', () => {
+  // `/` (La Armería) está prerenderizada y la CSP con hashes de Astro solo viaja en las páginas SSR: se prueba con /estado.
   test('página SSR: comunes + CSP de Astro con frame-ancestors', async ({ request }) => {
-    const res = await request.get('/');
+    const res = await request.get('/estado');
     expect(res.status()).toBe(200);
     const headers = res.headers();
     for (const [name, pattern] of Object.entries(COMMON)) expect(headers[name], name).toMatch(pattern);
@@ -63,7 +64,8 @@ test.describe('todas las respuestas del Worker llevan las cabeceras (src/worker.
 test.describe('CSRF (checkOrigin de Astro)', () => {
   for (const contentType of ['application/x-www-form-urlencoded', 'text/plain', 'multipart/form-data; boundary=x']) {
     test(`rechaza un envío desde otro origen (${contentType.split(';')[0]}), con cabeceras`, async ({ request }) => {
-      const res = await request.post('/', {
+      // CSRF: checkOrigin solo corre en rutas SSR (la portada, prerenderizada, no recibe POST).
+      const res = await request.post('/estado', {
         headers: { origin: 'https://atacante.example', 'content-type': contentType },
         data: contentType.startsWith('multipart') ? '--x--\r\n' : 'a=1',
       });
