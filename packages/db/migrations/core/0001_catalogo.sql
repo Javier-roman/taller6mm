@@ -11,8 +11,8 @@ CREATE TABLE `assets` (
 	`sha256` text,
 	`publishable` integer DEFAULT false NOT NULL,
 	`is_demo` integer NOT NULL,
-	FOREIGN KEY (`part_id`) REFERENCES `parts`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`replica_id`) REFERENCES `replicas`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`part_id`) REFERENCES `parts`(`id`),
+	FOREIGN KEY (`replica_id`) REFERENCES `replicas`(`id`),
 	CONSTRAINT "assets_view_ck" CHECK("assets"."view" IN ('2d','3d')),
 	CONSTRAINT "assets_level_ck" CHECK("assets"."level" IN ('T0','T1','T2','T3')),
 	CONSTRAINT "assets_license_ck" CHECK("assets"."license_status" IN ('own','ceded','cc0','cc-by','third-party-reference')),
@@ -34,7 +34,7 @@ CREATE TABLE `categories` (
 	`name` text NOT NULL,
 	`parent_id` text,
 	`is_demo` integer NOT NULL,
-	FOREIGN KEY (`parent_id`) REFERENCES `categories`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`parent_id`) REFERENCES `categories`(`id`)
 );
 --> statement-breakpoint
 CREATE INDEX `categories_parent_idx` ON `categories` (`parent_id`);--> statement-breakpoint
@@ -94,7 +94,7 @@ CREATE TABLE `part_families` (
 	`confidence` text,
 	`notes` text,
 	`is_demo` integer NOT NULL,
-	FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`),
 	CONSTRAINT "part_families_level_ck" CHECK("part_families"."expected_level" IN ('T0','T1','T2','T3')),
 	CONSTRAINT "part_families_status_ck" CHECK("part_families"."status" IN ('verified','pending')),
 	CONSTRAINT "part_families_confidence_ck" CHECK("part_families"."confidence" IS NULL OR "part_families"."confidence" IN ('high','medium','low')),
@@ -107,8 +107,8 @@ CREATE TABLE `part_family_interfaces` (
 	`interface_id` text NOT NULL,
 	`role` text NOT NULL,
 	PRIMARY KEY(`part_family_id`, `interface_id`, `role`),
-	FOREIGN KEY (`part_family_id`) REFERENCES `part_families`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`interface_id`) REFERENCES `interfaces`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`part_family_id`) REFERENCES `part_families`(`id`),
+	FOREIGN KEY (`interface_id`) REFERENCES `interfaces`(`id`),
 	CONSTRAINT "part_family_interfaces_role_ck" CHECK("part_family_interfaces"."role" IN ('offers','requires','unspecified'))
 );
 --> statement-breakpoint
@@ -117,8 +117,8 @@ CREATE TABLE `part_family_platform_families` (
 	`part_family_id` text NOT NULL,
 	`platform_family_id` text NOT NULL,
 	PRIMARY KEY(`part_family_id`, `platform_family_id`),
-	FOREIGN KEY (`part_family_id`) REFERENCES `part_families`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`platform_family_id`) REFERENCES `platform_families`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`part_family_id`) REFERENCES `part_families`(`id`),
+	FOREIGN KEY (`platform_family_id`) REFERENCES `platform_families`(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `part_interfaces` (
@@ -126,8 +126,8 @@ CREATE TABLE `part_interfaces` (
 	`interface_id` text NOT NULL,
 	`role` text NOT NULL,
 	PRIMARY KEY(`part_id`, `interface_id`, `role`),
-	FOREIGN KEY (`part_id`) REFERENCES `parts`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`interface_id`) REFERENCES `interfaces`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`part_id`) REFERENCES `parts`(`id`),
+	FOREIGN KEY (`interface_id`) REFERENCES `interfaces`(`id`),
 	CONSTRAINT "part_interfaces_role_ck" CHECK("part_interfaces"."role" IN ('offers','requires'))
 );
 --> statement-breakpoint
@@ -143,8 +143,8 @@ CREATE TABLE `parts` (
 	`parameters` text,
 	`notes` text,
 	`is_demo` integer NOT NULL,
-	FOREIGN KEY (`part_family_id`) REFERENCES `part_families`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`part_family_id`) REFERENCES `part_families`(`id`),
+	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`),
 	CONSTRAINT "parts_kind_ck" CHECK("parts"."kind" IN ('part','accessory','consumable')),
 	CONSTRAINT "parts_level_ck" CHECK("parts"."level" IN ('T0','T1','T2','T3'))
 );
@@ -154,8 +154,8 @@ CREATE TABLE `platform_brands` (
 	`platform_id` text NOT NULL,
 	`brand_id` text NOT NULL,
 	PRIMARY KEY(`platform_id`, `brand_id`),
-	FOREIGN KEY (`platform_id`) REFERENCES `platforms`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`platform_id`) REFERENCES `platforms`(`id`),
+	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `platform_families` (
@@ -168,8 +168,8 @@ CREATE TABLE `platform_interfaces` (
 	`platform_id` text NOT NULL,
 	`interface_id` text NOT NULL,
 	PRIMARY KEY(`platform_id`, `interface_id`),
-	FOREIGN KEY (`platform_id`) REFERENCES `platforms`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`interface_id`) REFERENCES `interfaces`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`platform_id`) REFERENCES `platforms`(`id`),
+	FOREIGN KEY (`interface_id`) REFERENCES `interfaces`(`id`)
 );
 --> statement-breakpoint
 CREATE INDEX `platform_interfaces_iface_idx` ON `platform_interfaces` (`interface_id`);--> statement-breakpoint
@@ -186,8 +186,8 @@ CREATE TABLE `platforms` (
 	`confidence` text,
 	`notes` text,
 	`is_demo` integer NOT NULL,
-	FOREIGN KEY (`family_id`) REFERENCES `platform_families`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`magazine_well_interface_id`) REFERENCES `interfaces`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`family_id`) REFERENCES `platform_families`(`id`),
+	FOREIGN KEY (`magazine_well_interface_id`) REFERENCES `interfaces`(`id`),
 	CONSTRAINT "platforms_status_ck" CHECK("platforms"."status" IN ('verified','pending')),
 	CONSTRAINT "platforms_confidence_ck" CHECK("platforms"."confidence" IS NULL OR "platforms"."confidence" IN ('high','medium','low')),
 	CONSTRAINT "platforms_verified_has_source_ck" CHECK("platforms"."status" <> 'verified' OR ("platforms"."source_url" IS NOT NULL AND "platforms"."source_checked_on" IS NOT NULL AND "platforms"."confidence" IS NOT NULL))
@@ -205,8 +205,8 @@ CREATE TABLE `replicas` (
 	`source_checked_on` text,
 	`notes` text,
 	`is_demo` integer NOT NULL,
-	FOREIGN KEY (`platform_id`) REFERENCES `platforms`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`platform_id`) REFERENCES `platforms`(`id`),
+	FOREIGN KEY (`brand_id`) REFERENCES `brands`(`id`),
 	CONSTRAINT "replicas_level_ck" CHECK("replicas"."level" IN ('T0','T1','T2','T3'))
 );
 --> statement-breakpoint
