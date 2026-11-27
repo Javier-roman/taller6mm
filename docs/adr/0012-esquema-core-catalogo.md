@@ -1,6 +1,6 @@
 # ADR-0012 — Esquema del catálogo en `core`: ids estables, cotas con CHECK y semillas is_demo
 
-- **Estado**: Propuesta (pendiente del OK de Javi al fusionar el PR de la rebanada C2)
+- **Estado**: Aceptada (27-11-2026). Javi eligió la opción A: identificadores legibles y estables (slugs) en lugar de ULID, y cotas de interfaces con 0,01 mm.
 - **Fecha**: 2026-11-27
 - **Decisores**: Javi (+ Claude Code)
 
