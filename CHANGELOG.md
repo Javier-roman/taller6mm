@@ -5,6 +5,15 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 
 ## [Sin publicar]
 
+### Fase 1 · S1 de La Armería: vistas horneadas en R2 (2026-11-22)
+- Binding R2 `VISTAS` sobre un bucket dedicado `taller6mm-vistas-preview` en preview (un binding de R2 puede leer, escribir y borrar: por eso no se enlaza el bucket de assets) y ruta
+  `/assets/armeria/<hash>/<archivo>.webp` en el Worker, con `Cache-Control` inmutable y ETag (`src/lib/vistas.ts`).
+  Sin bucket público (decisión de Javi, 22-11-2026). Si el objeto no está, sigue la cadena normal.
+- `scripts/validar-preview.mjs` acepta `r2_buckets` solo si son exactamente los de `main`, con tests.
+- `apps/web/scripts/armeria/vistas.mjs`: manifiesto con hashes, copia local y comandos de subida a R2 (solo
+  los imprime). Los binarios viven en `assets-src/vistas/armeria/` (fuera de git).
+- El estado de las tres bases D1 pasa de `/` a `/estado`; el humo del despliegue de las Previews lo usa.
+
 ### Herramientas de IA (2026-11-05)
 - Reparto de modelos de Claude Code: sesión `opusplan` con esfuerzo medio, asesor en Opus, subagentes y skills
   con su modelo y esfuerzo, y el nuevo subagente `documentador` (`docs/ia/modelos.md`).

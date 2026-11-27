@@ -133,12 +133,12 @@ jobs:
             exit 1
           fi
           echo "url=$url" >> "$GITHUB_OUTPUT"
-      - name: Humo (tres bases en orden, /sistema y noindex en las dos rutas)
+      - name: Humo (tres bases en /estado, /sistema y noindex en las dos rutas)
         env:
           URL: ${{ steps.preview.outputs.url }}
         run: |
-          curl --fail --silent --show-error --retry 5 --retry-delay 3 --retry-all-errors -D cabeceras.txt -o inicio.html "$URL/"
-          test "$(grep -o 'data-state="ok"' inicio.html | wc -l)" -ge 3
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 --retry-all-errors -D cabeceras.txt -o estado.html "$URL/estado"
+          test "$(grep -o 'data-state="ok"' estado.html | wc -l)" -ge 3
           grep -qi '^x-robots-tag: noindex' cabeceras.txt
           curl --fail --silent --show-error -D cabeceras-sistema.txt -o /dev/null "$URL/sistema"
           grep -qi '^x-robots-tag: noindex' cabeceras-sistema.txt
