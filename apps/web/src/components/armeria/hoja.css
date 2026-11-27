@@ -6,13 +6,17 @@
 .armeria__hoja {
   position: absolute;
   z-index: 3;
-  top: 50%;
+  /* Anclada bajo la cabecera: al cambiar de módulo no salta; crece hacia abajo hasta la barra de zonas. */
+  top: calc(var(--espacio-24) + var(--espacio-4));
   right: var(--espacio-6);
-  width: min(38rem, calc(100% - 2 * var(--espacio-6)));
+  width: min(36rem, calc(100% - 2 * var(--espacio-6)));
   /* Entre la cabecera (arriba) y la barra de zonas (abajo): la hoja nunca las tapa y se desplaza por dentro. */
-  max-height: calc(100svh - var(--espacio-24) * 2 - var(--espacio-16) - var(--espacio-4));
+  max-height: calc(
+    100svh -
+    (var(--espacio-24) + var(--espacio-4)) -
+    (var(--espacio-24) + var(--espacio-8) + var(--espacio-2))
+  );
   display: flex;
-  translate: 0 -50%;
   animation: armeria-entra var(--duracion-panel) var(--curva-mecanica);
 }
 
@@ -209,8 +213,8 @@
 }
 
 .armeria__chips {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--espacio-2);
   margin: 0;
   padding: 0;
@@ -320,9 +324,9 @@
   bottom: 0;
   display: block;
   flex: none;
-  block-size: var(--espacio-8);
-  margin-block-start: calc(var(--espacio-8) * -1);
-  background: linear-gradient(to bottom, transparent, var(--carbon));
+  block-size: var(--espacio-12);
+  margin-block-start: calc(var(--espacio-12) * -1);
+  background: linear-gradient(to bottom, transparent, var(--carbon) 85%);
   opacity: 0;
   pointer-events: none;
 }
@@ -392,14 +396,14 @@
 @keyframes armeria-entra {
   from {
     opacity: 0;
-    translate: var(--espacio-4) -50%;
+    translate: var(--espacio-4) 0;
   }
 }
 
 @keyframes armeria-entra-izquierda {
   from {
     opacity: 0;
-    translate: calc(var(--espacio-4) * -1) -50%;
+    translate: calc(var(--espacio-4) * -1) 0;
   }
 }
 
@@ -411,14 +415,25 @@
     bottom: var(--espacio-4);
     left: var(--espacio-4);
     width: auto;
-    max-height: 55svh;
-    translate: none;
+    max-height: 78svh;
     animation: none;
   }
 
   .armeria__hoja[data-lado="izquierda"] {
     right: var(--espacio-4);
     left: var(--espacio-4);
+  }
+
+  .armeria__ranuras {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .armeria__lista-simple--doble {
+    grid-template-columns: 1fr;
+  }
+
+  .armeria__lista-simple--doble .armeria__fila:nth-last-child(2) {
+    border-block-end: var(--trazo-fino) solid color-mix(in srgb, var(--trazo-fuerte) 55%, transparent);
   }
 }
 
@@ -427,4 +442,24 @@
   .armeria__hoja[data-lado] {
     animation: none;
   }
+}
+
+/* Fechas de comprobación y nº de tiendas, un escalón por encima de los rótulos: son la promesa del producto. */
+.armeria__hoja :is(.t6-precio__fecha, .t6-ficha__tiendas) {
+  font-size: var(--texto-s);
+}
+
+/* «Volver a la sala» en neutro: la acción principal es la sección (aún deshabilitada) y no debe competir con ella. */
+.armeria__hoja-acciones .t6-boton--fantasma {
+  color: var(--hueso);
+}
+
+/* El título de la tabla repite el resumen de la hoja: queda solo para el lector de pantalla. */
+.armeria__hoja .t6-tabla caption {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

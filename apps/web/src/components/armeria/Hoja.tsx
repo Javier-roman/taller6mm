@@ -66,12 +66,13 @@ function Fecha({ iso, prefijo = 'Comprobado' }: { iso: string | null; prefijo?: 
   );
 }
 
-function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
+function Seccion({ titulo, demo = false, children }: { titulo: string; demo?: boolean; children: ReactNode }) {
   const id = useId();
   return (
     <section className="armeria__hoja-seccion" aria-labelledby={id}>
       <h3 id={id} className="armeria__hoja-subtitulo">
         {titulo}
+        {demo ? <Demo plural /> : null}
       </h3>
       {children}
     </section>
@@ -103,7 +104,7 @@ function CuerpoArmero() {
           ))}
         </ol>
       </Seccion>
-      <Seccion titulo="Familias previstas, sin ficha todavía">
+      <Seccion demo titulo="Familias previstas, sin ficha">
         <ul className="armeria__chips">
           {FAMILIAS_PREVISTAS.map((f) => (
             <li key={f.id}>
@@ -121,7 +122,7 @@ function CuerpoArmero() {
 
 function CuerpoAccesorios() {
   return (
-    <Seccion titulo={`Muestra: ${ACCESORIOS_MUESTRA.length} de ${ACCESORIOS_TOTAL}`}>
+    <Seccion demo titulo={`Muestra: ${ACCESORIOS_MUESTRA.length} de ${ACCESORIOS_TOTAL}`}>
       <ul className="armeria__fichas">
         {ACCESORIOS_MUESTRA.map((a) => (
           <li key={a.id}>
@@ -143,7 +144,7 @@ function CuerpoAccesorios() {
 
 function CuerpoComunidad() {
   return (
-    <Seccion titulo="Builds más valoradas">
+    <Seccion demo titulo="Builds más valoradas">
       <ol className="armeria__builds">
         {BUILDS_TOP.map((b, i) => (
           <li key={b.id} className="armeria__build">
@@ -180,7 +181,7 @@ function CuerpoBanco() {
   const { veredicto, motivo, fuente, confianza } = COMPATIBILIDAD_EJEMPLO;
   return (
     <>
-      <Seccion titulo="Ranuras de una réplica larga: «Continúa tu build» aparecerá aquí">
+      <Seccion titulo="Ranuras de una réplica larga">
         <ul className="armeria__lista-simple armeria__lista-simple--doble">
           {RANURAS_BANCO.map((r) => (
             <li key={r.id} className="armeria__fila">
@@ -192,7 +193,7 @@ function CuerpoBanco() {
           ))}
         </ul>
       </Seccion>
-      <Seccion titulo="Qué encaja y por qué">
+      <Seccion demo titulo="Qué encaja y por qué">
         <InsigniaCompatibilidad veredicto={veredicto} motivo={motivo} fuente={fuente} confianza={confianza} />
       </Seccion>
     </>
@@ -201,7 +202,7 @@ function CuerpoBanco() {
 
 function CuerpoMercado() {
   return (
-    <Seccion titulo="Bajadas de precio">
+    <Seccion demo titulo="Bajadas de precio">
       <ul className="armeria__bajadas">
         {BAJADAS.map((b) => (
           <li key={b.id} className="armeria__bajada">
@@ -259,7 +260,7 @@ function CuerpoTiendas() {
 
 function CuerpoGuias() {
   return (
-    <Seccion titulo={`Muestra: ${GUIAS_MUESTRA.length} de ${GUIAS_TOTAL}`}>
+    <Seccion demo titulo={`Muestra: ${GUIAS_MUESTRA.length} de ${GUIAS_TOTAL}`}>
       <ul className="armeria__lista-simple">
         {GUIAS_MUESTRA.map((g) => (
           <li key={g.id} className="armeria__fila armeria__fila--apilada">
@@ -341,8 +342,8 @@ export function Hoja({ zona, onCerrar, panelRef }: HojaProps) {
         {resumen ? (
           <p className="armeria__hoja-resumen">
             <strong className="armeria__hoja-dato">{resumen.texto}</strong>
-            <Demo />
-            <Fecha iso={resumen.comprobado} />
+            {resumen.is_demo ? <Demo /> : null}
+            {resumen.comprobado === undefined ? null : <Fecha iso={resumen.comprobado} />}
           </p>
         ) : null}
         {/* Lo único que se desplaza: cabecera, resumen y acciones se quedan siempre a la vista. */}

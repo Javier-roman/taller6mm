@@ -14,6 +14,7 @@ import {
   porcentajeBajada,
   RANURAS_BANCO,
   RESUMENES,
+  type ResumenDemo,
   TAQUILLA_SIN_SESION,
   TIENDAS,
 } from './contenido-demo.ts';
@@ -33,18 +34,23 @@ describe('contenido de ejemplo', () => {
       ...BAJADAS,
       ...TIENDAS,
       ...GUIAS_MUESTRA,
-      ...Object.values(RESUMENES),
       TAQUILLA_SIN_SESION,
     ];
     for (const e of elementos) expect(e.is_demo).toBe(true);
   });
 
-  it('hay un resumen fechado para cada una de las ocho zonas', () => {
+  it('hay un resumen para cada una de las ocho zonas: los de ejemplo con fecha, los estados reales sin ella', () => {
     expect(Object.keys(RESUMENES).sort()).toEqual(ZONAS.map((z) => z.id).sort());
-    for (const r of Object.values(RESUMENES)) {
+    for (const r of Object.values(RESUMENES) as readonly ResumenDemo[]) {
       expect(r.texto.length).toBeGreaterThan(0);
-      expect(r.comprobado === null || esFechaIso(r.comprobado)).toBe(true);
+      if (r.is_demo)
+        expect(r.comprobado === null || (r.comprobado !== undefined && esFechaIso(r.comprobado))).toBe(true);
+      // Un estado real (0 réplicas, sin sesión, sin build) no es de ejemplo ni lleva fecha inventada.
+      else expect(r.comprobado).toBeUndefined();
     }
+    expect(RESUMENES.replicas.is_demo).toBe(false);
+    expect(RESUMENES.banco.is_demo).toBe(false);
+    expect(RESUMENES.taquilla.is_demo).toBe(false);
   });
 
   it('los precios son céntimos enteros con fecha ISO UTC (o null explícito, nunca 0)', () => {
@@ -79,7 +85,7 @@ describe('contenido de ejemplo', () => {
     const ranuras = socketsDe('replicas');
     expect(ranuras).toHaveLength(ARMERO.huecos);
     expect(ranuras.every((s) => s.replicaId === null)).toBe(true);
-    expect(RESUMENES.replicas?.texto.startsWith('0 réplicas publicadas')).toBe(true);
+    expect(RESUMENES.replicas.texto.startsWith('0 réplicas publicadas')).toBe(true);
   });
 
   it('la taquilla sin sesión no muestra cifras inventadas', () => {

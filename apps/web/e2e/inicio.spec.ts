@@ -154,8 +154,15 @@ test.describe('La Armería · hojas de los ocho módulos (S2)', () => {
       // Resumen con dato, marca de ejemplo y fecha de comprobación legible por máquina.
       const cajetin = hoja.locator('.armeria__hoja-resumen');
       await expect(cajetin).toContainText(resumen);
-      await expect(cajetin).toContainText('Demo');
-      await expect(cajetin.locator('time[datetime]')).toHaveCount(1);
+      // Los estados reales (0 réplicas, sin build, sin sesión) no son de ejemplo ni llevan una fecha inventada.
+      const esEstadoReal = ['replicas', 'banco', 'taquilla'].includes(id);
+      if (esEstadoReal) {
+        await expect(cajetin).not.toContainText('Demo');
+        await expect(cajetin.locator('time')).toHaveCount(0);
+      } else {
+        await expect(cajetin).toContainText('Demo');
+        await expect(cajetin.locator('time[datetime]')).toHaveCount(1);
+      }
       // Acción a la sección futura: deshabilitada (aria-disabled, enfocable) y explicada, nunca un enlace roto.
       const accion = hoja.locator('button.t6-boton--laton');
       await expect(accion).toHaveAttribute('aria-disabled', 'true');
@@ -186,6 +193,8 @@ test.describe('La Armería · hojas de los ocho módulos (S2)', () => {
       const precios = await hoja.locator('.t6-precio').count();
       expect(precios, id).toBeGreaterThan(0);
       for (let i = 0; i < precios; i++) await expect(hoja.locator('.t6-precio').nth(i)).toContainText(/Comprobado/);
+      // En pantallas estrechas la hoja tapa la barra de zonas: se cierra antes de abrir la siguiente.
+      await page.keyboard.press('Escape');
     }
   });
 

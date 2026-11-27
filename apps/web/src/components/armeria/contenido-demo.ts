@@ -16,9 +16,15 @@ export interface MarcaDemo {
 }
 
 /** Línea de resumen de cada hoja: un dato y la fecha en que se comprobó (`null` = nunca se comprobó). */
-export interface ResumenDemo extends MarcaDemo {
+export interface ResumenDemo {
   readonly texto: string;
-  readonly comprobado: string | null;
+  /**
+   * Cuándo se comprobó; `null` = nunca se comprobó. `undefined` = el dato es un estado (sin sesión, sin build) y no
+   * caduca ni se comprueba: no lleva fecha, para no inventarla.
+   */
+  readonly comprobado?: string | null;
+  /** `true` = dato de ejemplo (lleva la marca «Demo»); `false` = hecho real de este momento (0 réplicas, sin sesión). */
+  readonly is_demo: boolean;
 }
 
 // ── Armero ───────────────────────────────────────────────────────────────────────────────────────
@@ -293,18 +299,18 @@ export const TAQUILLA_SIN_SESION = {
 
 // ── Resúmenes de cada hoja (dato fechado) ────────────────────────────────────────────────────────
 export const RESUMENES = {
-  replicas: { texto: '0 réplicas publicadas · 12 ranuras libres', comprobado: COMPROBADO_DEMO, is_demo: true },
+  replicas: { texto: '0 réplicas publicadas · 12 ranuras libres', is_demo: false },
   accesorios: {
     texto: `${ACCESORIOS_TOTAL} accesorios · ${TIENDAS_TOTAL} tiendas`,
     comprobado: COMPROBADO_DEMO,
     is_demo: true,
   },
   comunidad: { texto: `Top de la semana: ${BUILDS_TOP.length} builds`, comprobado: COMPROBADO_DEMO, is_demo: true },
-  banco: { texto: 'Sin build en curso', comprobado: COMPROBADO_DEMO, is_demo: true },
+  banco: { texto: 'Sin build en curso', is_demo: false },
   mercado: { texto: `${BAJADAS.length} bajadas de precio`, comprobado: COMPROBADO_DEMO, is_demo: true },
   tiendas: { texto: `${TIENDAS.length} tiendas seguidas`, comprobado: COMPROBADO_DEMO, is_demo: true },
   guias: { texto: `${GUIAS_TOTAL} guías`, comprobado: COMPROBADO_DEMO, is_demo: true },
-  taquilla: { texto: 'Sin sesión iniciada', comprobado: COMPROBADO_DEMO, is_demo: true },
+  taquilla: { texto: 'Sin sesión iniciada', is_demo: false },
 } as const satisfies Readonly<Record<string, ResumenDemo>>;
 
 /** Resumen de una zona por id (`undefined` si no existe). */
