@@ -61,6 +61,8 @@ Detalle de las tablas del catálogo:
 | `dimensions` | Cotas con fuente, confianza y evidencia |
 | `assets` | Nivel, vista, ficheros en R2 por LOD, anclajes, licencia, procedencia, validación, estado |
 
+Implementación del catálogo (rebanada C2): `packages/db/src/core.ts`, migración `0001_catalogo`, ADR-0012 y `docs/catalogo/plan-esquema-core.md`. Diferencias con la tabla de arriba: `categories` es un árbol de un nivel de momento; `slots`, `mounts`, `adapters`, `compat_overrides` y `variants` esperan al motor de compatibilidad; `products` se divide en `replicas` y `parts`, y las ranuras/anclajes de una pieza se expresan por ahora con `part_interfaces`.
+
 ### 3.2 Base `mercado`
 `shops`, `sources`, `crawl_runs`, `listings` (dato bruto por URL), `offers` (vista actual de cada listado emparejado), `price_events`, `match_queue`, `radar_items`, `fx_rates`, `optouts`.
 
@@ -136,6 +138,7 @@ Por orden, solo cuando haga falta:
 | 0005 | Autenticación | Pendiente |
 | 0006 | Modelos de IA del pipeline | Pendiente |
 | 0007 | Emparejado | Pendiente |
+| 0012 | Esquema del catálogo en `core` (ids estables, cotas con CHECK, semillas is_demo) | Propuesta |
 
 ## Criterios de aceptación
 - [ ] El diagrama y las tablas reflejan lo implementado al cierre de cada fase.

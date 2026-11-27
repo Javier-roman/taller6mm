@@ -5,6 +5,11 @@ versiones publicadas: todo va en «Sin publicar», agrupado por fase.
 
 ## [Sin publicar]
 
+### Fase 2 · Esquema de datos del catálogo (C2, 2026-11-27)
+- Esquema Drizzle de `core` (marcas, plataformas, réplicas, piezas, interfaces, cotas con fuente, activos) con CHECK que impone cotas con fuente o `NULL` + `pending`, y activos de terceros nunca publicables (ADR-0012).
+- Índice FTS5 `search_catalog` en `busqueda`.
+- Semillas `is_demo` desde `catalogo/*.json` con validación Zod (`pnpm db:seed:local`) y contratos de cota, activo y nivel en `@taller6mm/domain`.
+
 ### Herramientas de IA (2026-11-05)
 - Reparto de modelos de Claude Code: sesión `opusplan` con esfuerzo medio, asesor en Opus, subagentes y skills
   con su modelo y esfuerzo, y el nuevo subagente `documentador` (`docs/ia/modelos.md`).
