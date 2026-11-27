@@ -3,7 +3,8 @@
 import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 4321;
+// E2E_PORT permite varias copias del repo (worktrees) sin que una reutilice el servidor de otra.
+const PORT = Number(process.env.E2E_PORT ?? 4321);
 const { CI, CLAUDE_CODE_REMOTE, PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH } = process.env;
 // En la nube de Claude Code hay un Chromium preinstalado (otra revisión que la de @playwright/test).
 const cloudChromium =
