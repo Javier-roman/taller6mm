@@ -35,7 +35,10 @@ export interface InterfazProps {
 export function InterfazArmeria({ estado, acciones, children, escenaActiva = false }: InterfazProps) {
   const enlaces = useRef<Record<string, HTMLAnchorElement | null>>({});
   const panel = useRef<HTMLDivElement>(null);
+  // A dónde vuelve el foco al cerrar la hoja: quien la abrió (una zona de la barra o «Monta tu réplica»); si la abrió
+  // el puntero sobre el póster (sus zonas no se enfocan), la zona de la barra.
   const volverA = useRef<string | null>(null);
+  const abridor = useRef<HTMLElement | null>(null);
   const [foco, setFoco] = useState<string>(ZONAS[0]?.id ?? 'replicas');
   const abierta = zonaPorId(estado.abierta);
   const activa = zonaActiva(estado);
@@ -43,6 +46,9 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
   const abrir = useCallback(
     (id: string) => {
       volverA.current = id;
+      const activo = document.activeElement;
+      abridor.current =
+        activo instanceof HTMLElement && activo.closest('.armeria__nav, .armeria__cabecera') ? activo : null;
       acciones.abrir(id);
     },
     [acciones],
@@ -50,7 +56,11 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
   const cerrar = useCallback(() => {
     acciones.cerrar();
     const id = volverA.current;
-    if (id) requestAnimationFrame(() => enlaces.current[id]?.focus());
+    const origen = abridor.current;
+    requestAnimationFrame(() => {
+      if (origen?.isConnected) origen.focus();
+      else if (id) enlaces.current[id]?.focus();
+    });
   }, [acciones]);
 
   // Esc cierra la hoja de la zona (docs/02 §3.2).

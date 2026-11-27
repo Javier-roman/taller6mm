@@ -127,3 +127,104 @@ test.describe('La Armería · póster y navegación', () => {
     await expect(page.locator('h1')).toHaveCount(1);
   });
 });
+
+const HOJAS = [
+  ['replicas', 'Armero de réplicas', /0 réplicas publicadas/],
+  ['accesorios', 'Almacén de accesorios', /186 accesorios · 8 tiendas/],
+  ['comunidad', 'Vitrina de la comunidad', /Top de la semana: 3 builds/],
+  ['banco', 'Banco de trabajo', /Sin build en curso/],
+  ['mercado', 'Tablón de mercado', /3 bajadas de precio/],
+  ['tiendas', 'Mostrador de tiendas', /8 tiendas seguidas/],
+  ['guias', 'Biblioteca de manuales', /12 guías/],
+  ['taquilla', 'Taquilla personal', /Sin sesión iniciada/],
+] as const;
+
+test.describe('La Armería · hojas de los ocho módulos (S2)', () => {
+  for (const [id, nombre, resumen] of HOJAS) {
+    test(`${id}: título, resumen fechado y de ejemplo, acción a su sección y teclado`, async ({ page }) => {
+      await irAlInicio(page);
+      const nav = page.getByRole('navigation', { name: 'Zonas de La Armería' });
+      const enlace = nav.locator(`a[href="/${id}"]`);
+      await enlace.focus();
+      await page.keyboard.press('Enter');
+      const hoja = page.getByRole('dialog', { name: nombre });
+      await expect(hoja).toBeVisible();
+      await expect(hoja).toBeFocused();
+      await expect(hoja.getByRole('heading', { level: 2, name: nombre })).toBeVisible();
+      // Resumen con dato, marca de ejemplo y fecha de comprobación legible por máquina.
+      const cajetin = hoja.locator('.armeria__hoja-resumen');
+      await expect(cajetin).toContainText(resumen);
+      await expect(cajetin).toContainText('Demo');
+      await expect(cajetin.locator('time[datetime]')).toHaveCount(1);
+      // Acción a la sección futura: deshabilitada (aria-disabled, enfocable) y explicada, nunca un enlace roto.
+      const accion = hoja.locator('button.t6-boton--laton');
+      await expect(accion).toHaveAttribute('aria-disabled', 'true');
+      await expect(accion).toHaveAccessibleDescription(new RegExp(String.raw`\(/${id}\) llega en la Fase \d`));
+      await expect(hoja.locator(`a[href="/${id}"]`)).toHaveCount(0);
+      // Esc vuelve a la sala y devuelve el foco a la zona.
+      await page.keyboard.press('Escape');
+      await expect(hoja).toHaveCount(0);
+      await expect(enlace).toBeFocused();
+    });
+  }
+
+  test('el armero muestra el estado vacío honesto y los doce sockets libres', async ({ page }) => {
+    await irAlInicio(page);
+    await page.getByRole('navigation', { name: 'Zonas de La Armería' }).locator('a[href="/replicas"]').click();
+    const hoja = page.getByRole('dialog', { name: 'Armero de réplicas' });
+    await expect(hoja.getByText('Aún no hay réplicas publicadas')).toBeVisible();
+    await expect(hoja.locator('.armeria__ranura[data-libre="true"]')).toHaveCount(12);
+    await expect(hoja.locator('.armeria__ranura[data-libre="false"]')).toHaveCount(0);
+  });
+
+  test('cada precio de las hojas lleva su fecha de comprobación', async ({ page }) => {
+    await irAlInicio(page);
+    const nav = page.getByRole('navigation', { name: 'Zonas de La Armería' });
+    for (const id of ['accesorios', 'comunidad', 'mercado']) {
+      await nav.locator(`a[href="/${id}"]`).click();
+      const hoja = page.locator('.armeria__hoja');
+      const precios = await hoja.locator('.t6-precio').count();
+      expect(precios, id).toBeGreaterThan(0);
+      for (let i = 0; i < precios; i++) await expect(hoja.locator('.t6-precio').nth(i)).toContainText(/Comprobado/);
+    }
+  });
+
+  test('«Monta tu réplica» abre el banco y Esc devuelve el foco al botón', async ({ page }) => {
+    await irAlInicio(page);
+    const boton = page.getByRole('button', { name: 'Monta tu réplica' });
+    await boton.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog', { name: 'Banco de trabajo' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(boton).toBeFocused();
+  });
+
+  test('«Volver a la sala» cierra la hoja', async ({ page }) => {
+    await irAlInicio(page);
+    await page.getByRole('navigation', { name: 'Zonas de La Armería' }).locator('a[href="/tiendas"]').click();
+    await page.getByRole('button', { name: 'Volver a la sala' }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+
+  test('con movimiento reducido las hojas se abren sin animación', async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await irAlInicio(page);
+    await page.getByRole('navigation', { name: 'Zonas de La Armería' }).locator('a[href="/mercado"]').click();
+    const nombre = await page.locator('.armeria__hoja').evaluate((el) => getComputedStyle(el).animationName);
+    expect(nombre).toBe('none');
+    await context.close();
+  });
+
+  for (const [id, nombre] of HOJAS) {
+    test(`${id}: sin infracciones de accesibilidad con la hoja abierta (WCAG 2.2 AA)`, async ({ page }) => {
+      await irAlInicio(page);
+      await page.getByRole('navigation', { name: 'Zonas de La Armería' }).locator(`a[href="/${id}"]`).click();
+      await expect(page.getByRole('dialog', { name: nombre })).toBeVisible();
+      const resultados = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      expect(resultados.violations).toEqual([]);
+    });
+  }
+});
