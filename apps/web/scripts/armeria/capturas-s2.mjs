@@ -28,7 +28,8 @@ const zoom = Number(opcion('zoom') ?? 1);
 const recorte = opcion('recorte')?.split(',').map(Number);
 
 mkdirSync(salida, { recursive: true });
-const browser = await chromium.launch();
+// Sin --hide-scrollbars: la barra de desplazamiento de las hojas debe verse en las capturas, como en un navegador real.
+const browser = await chromium.launch({ ignoreDefaultArgs: ['--hide-scrollbars'] });
 const context = await browser.newContext({
   viewport: { width: ancho, height: alto },
   deviceScaleFactor: zoom,

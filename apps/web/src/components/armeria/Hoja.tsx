@@ -12,6 +12,7 @@ import {
   FichaPieza,
   formatearComprobado,
   formatearDato,
+  IconoCruz,
   InsigniaCompatibilidad,
   Placa,
   Tabla,
@@ -338,43 +339,47 @@ export function Hoja({ zona, onCerrar, panelRef }: HojaProps) {
       ref={panelRef}
     >
       <Placa titulo={zona.nombre} nivelTitulo={2} codigo={zona.ruta} as="div">
-        <p className="armeria__hoja-descripcion">{zona.descripcion}</p>
-        {resumen ? (
-          <p className="armeria__hoja-resumen">
-            <strong className="armeria__hoja-dato">{resumen.texto}</strong>
-            {resumen.is_demo ? <Demo /> : null}
-            {resumen.comprobado === undefined ? null : <Fecha iso={resumen.comprobado} />}
-          </p>
-        ) : null}
-        {/* Lo único que se desplaza: cabecera, resumen y acciones se quedan siempre a la vista. */}
+        {/* Lo único que se desplaza es este cuerpo: el título y el botón de cerrar se quedan fijos arriba. */}
         <section
           className="armeria__hoja-cuerpo"
           // biome-ignore lint/a11y/noNoninteractiveTabindex: región desplazable con nombre; sin foco no se lee con teclado.
           tabIndex={0}
           aria-label={`Contenido de ${zona.nombre}`}
         >
-          {Cuerpo ? <Cuerpo /> : null}
-        </section>
-        <div className="armeria__hoja-acciones">
-          {disponible ? (
-            <BotonEnlace variante="laton" href={zona.ruta}>
-              {accion}
-            </BotonEnlace>
-          ) : (
-            <Boton variante="laton" aria-disabled="true" aria-describedby={notaId}>
-              {accion}
-            </Boton>
-          )}
-          <Boton variante="fantasma" onClick={onCerrar}>
-            Volver a la sala
-          </Boton>
-          {disponible ? null : (
-            <p id={notaId} className="armeria__hoja-nota">
-              Esta sección ({zona.ruta}) llega en la Fase {zona.fase}.
+          <p className="armeria__hoja-descripcion">{zona.descripcion}</p>
+          {resumen ? (
+            <p className="armeria__hoja-resumen">
+              <strong className="armeria__hoja-dato">{resumen.texto}</strong>
+              {resumen.is_demo ? <Demo /> : null}
+              {resumen.comprobado === undefined ? null : <Fecha iso={resumen.comprobado} />}
             </p>
-          )}
-        </div>
+          ) : null}
+          {Cuerpo ? <Cuerpo /> : null}
+          <div className="armeria__hoja-acciones">
+            {disponible ? (
+              <BotonEnlace variante="laton" href={zona.ruta}>
+                {accion}
+              </BotonEnlace>
+            ) : (
+              <Boton variante="laton" aria-disabled="true" aria-describedby={notaId}>
+                {accion}
+              </Boton>
+            )}
+            <Boton variante="fantasma" onClick={onCerrar}>
+              Volver a la sala
+            </Boton>
+            {disponible ? null : (
+              <p id={notaId} className="armeria__hoja-nota">
+                Esta sección ({zona.ruta}) llega en la Fase {zona.fase}.
+              </p>
+            )}
+          </div>
+        </section>
       </Placa>
+      <button type="button" className="armeria__cerrar" onClick={onCerrar}>
+        <IconoCruz />
+        <span className="t6-sr">Cerrar {zona.nombre}</span>
+      </button>
     </div>
   );
 }
