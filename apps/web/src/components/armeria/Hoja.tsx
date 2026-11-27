@@ -30,7 +30,7 @@ import {
   GUIAS_TOTAL,
   porcentajeBajada,
   RANURAS_BANCO,
-  RESUMENES,
+  resumenDe,
   TAQUILLA_SIN_SESION,
   TIENDAS,
 } from './contenido-demo.ts';
@@ -103,13 +103,14 @@ function CuerpoArmero() {
           ))}
         </ol>
       </Seccion>
-      <Seccion titulo="Familias previstas">
-        <ul className="armeria__lista-simple">
+      <Seccion titulo="Familias previstas, sin ficha todavía">
+        <ul className="armeria__chips">
           {FAMILIAS_PREVISTAS.map((f) => (
-            <li key={f.id} className="armeria__fila">
-              <span className="armeria__fila-nombre">{f.nombre}</span>
-              <span className="armeria__fila-meta">{f.tipo}</span>
-              <Chip tono="desconocido">Sin ficha</Chip>
+            <li key={f.id}>
+              <Chip tono="desconocido">
+                {f.nombre} <span className="t6-sr">({f.tipo}, sin ficha)</span>
+                <span aria-hidden="true">· {f.tipo}</span>
+              </Chip>
             </li>
           ))}
         </ul>
@@ -157,8 +158,16 @@ function CuerpoComunidad() {
               <p className="armeria__fila-meta">
                 Base {b.base} · {b.piezas} piezas · {b.autor}
               </p>
-              <Valoracion nota={b.nota} opiniones={b.opiniones} />
-              <EtiquetaPrecio compacta centimos={b.centimos} comprobado={b.comprobado} stock="desconocido" />
+              <div className="armeria__build-pie">
+                <Valoracion nota={b.nota} opiniones={b.opiniones} />
+                <EtiquetaPrecio
+                  compacta
+                  centimos={b.centimos}
+                  tienda=""
+                  comprobado={b.comprobado}
+                  stock="desconocido"
+                />
+              </div>
             </div>
           </li>
         ))}
@@ -171,11 +180,8 @@ function CuerpoBanco() {
   const { veredicto, motivo, fuente, confianza } = COMPATIBILIDAD_EJEMPLO;
   return (
     <>
-      <Aviso tipo="info" titulo="Todavía no tienes ninguna build en curso">
-        Aquí verás «Continúa tu build» en cuanto montes una réplica. Cada pieza se comprueba contra la ranura que ocupa.
-      </Aviso>
-      <Seccion titulo="Ranuras de una réplica larga">
-        <ul className="armeria__lista-simple">
+      <Seccion titulo="Ranuras de una réplica larga: «Continúa tu build» aparecerá aquí">
+        <ul className="armeria__lista-simple armeria__lista-simple--doble">
           {RANURAS_BANCO.map((r) => (
             <li key={r.id} className="armeria__fila">
               <span className="armeria__fila-nombre">{r.nombre}</span>
@@ -201,14 +207,14 @@ function CuerpoMercado() {
           <li key={b.id} className="armeria__bajada">
             <div className="armeria__bajada-cabecera">
               <h4 className="armeria__build-nombre">{b.pieza}</h4>
-              <Chip tono="ok" sinIcono>
-                <span aria-hidden="true">↓ {porcentajeBajada(b)} %</span>
-                <span className="t6-sr">Bajada del {porcentajeBajada(b)} %</span>
-              </Chip>
+              <p className="armeria__fila-meta armeria__bajada-antes">
+                Antes <del>{formatearDato(b.antes, 'eur')}</del>
+                <Chip tono="ok" sinIcono>
+                  <span aria-hidden="true">↓ {porcentajeBajada(b)} %</span>
+                  <span className="t6-sr">Bajada del {porcentajeBajada(b)} %</span>
+                </Chip>
+              </p>
             </div>
-            <p className="armeria__fila-meta">
-              Antes <del>{formatearDato(b.antes, 'eur')}</del>
-            </p>
             <EtiquetaPrecio centimos={b.ahora} tienda={b.tienda} comprobado={b.comprobado} stock={b.stock} />
           </li>
         ))}
@@ -316,7 +322,7 @@ export interface HojaProps {
 export function Hoja({ zona, onCerrar, panelRef }: HojaProps) {
   const notaId = useId();
   const Cuerpo = CUERPOS[zona.id];
-  const resumen = RESUMENES[zona.id];
+  const resumen = resumenDe(zona.id);
   const disponible = zona.fase <= FASE_ACTUAL;
   const accion = ACCION[zona.id] ?? 'Abrir';
   return (
@@ -339,7 +345,15 @@ export function Hoja({ zona, onCerrar, panelRef }: HojaProps) {
             <Fecha iso={resumen.comprobado} />
           </p>
         ) : null}
-        {Cuerpo ? <Cuerpo /> : null}
+        {/* Lo único que se desplaza: cabecera, resumen y acciones se quedan siempre a la vista. */}
+        <section
+          className="armeria__hoja-cuerpo"
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: región desplazable con nombre; sin foco no se lee con teclado.
+          tabIndex={0}
+          aria-label={`Contenido de ${zona.nombre}`}
+        >
+          {Cuerpo ? <Cuerpo /> : null}
+        </section>
         <div className="armeria__hoja-acciones">
           {disponible ? (
             <BotonEnlace variante="laton" href={zona.ruta}>

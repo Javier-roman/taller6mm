@@ -33,7 +33,7 @@ Cada rebanada se entrega en PR pequeño y pasa por:
 | Rebanada | Contenido | Notas |
 |---|---|---|
 | **S1** · Escena base | Promover el código del spike a `apps/web`. Selector de nivel con caída automática (sin WebGL, FPS bajos o `webglcontextlost` → nivel anterior). Póster como `<img>` en el HTML inicial, con la isla 3D hidratada en `client:idle`. Movimiento reducido. «Más luz». Colores fijos de `Sala.tsx` pasados a tokens de `packages/ui`. | Validar la CSP aquí. WASM y KTX2 solo en `/`. Revisión de `revisor-seguridad`. Preferencias («Más luz», intro vista) en `localStorage`, con alternativa si no está disponible. |
-| **S2** · Módulos | Ocho módulos clicables con datos de demo y su hoja de contenido. | Árbol DOM accesible y teclado desde el principio, no al final. |
+| **S2** · Módulos | Ocho módulos clicables con datos de demo y su hoja de contenido. | Árbol DOM accesible y teclado desde el principio, no al final. Hecho el 27-11-2026 (rama `feat/armeria-s2-modulos`, ver «S2» más abajo). |
 | **S3** · Interacción | Intro de primera visita. Linterna con una abstracción común para puntero y táctil. Apertura del compactus. | Siempre con alternativa ligera. |
 | **S4** · Calidad visual | axe (WCAG 2.2 AA). Regresión visual con capturas en CI. Lightmaps de A con Blender. | Regresión: render por software determinista, tolerancia y animaciones paradas en un fotograma fijo. Los lightmaps son **aplazables** si no mejoran la imagen. |
 | **S5** · Sistema | Componentes base completos en `/sistema`. | — |
@@ -119,3 +119,25 @@ Cada rebanada se entrega en PR pequeño y pasa por:
 - **Legibilidad**: cotas de los rótulos a ~0,25 del alto de la lámina (antes ~5 px a 1440 px), corcho a 1024 px de textura, papel y
   plástico blanco con albedo máximo ≈ 0,5 lineal (se quemaban), suelo más oscuro y más rugoso, focos de la vitrina más suaves
   y sombras con borde blando (radio de luz de 0,12 m).
+
+### S2 · Los ocho módulos con su hoja de contenido (27-11-2026)
+- **Qué hay**: cada zona abre una hoja (`Hoja.tsx`, `hoja.css`) con título, un **resumen con dato fechado** («Comprobado el 26 nov 2026,
+  19:40»), un cuerpo propio y una **acción a su sección futura** (`/replicas`, `/banco`…). Mientras la fase de esa sección no llega
+  (`FASE_ACTUAL` en `Hoja.tsx`), la acción es un botón con `aria-disabled` (sigue enfocable) que dice «llega en la Fase N»; cuando
+  llegue, el mismo código pinta un enlace. La zona abierta, apuntada o enfocada se recorta en el póster (resto de la sala más
+  oscuro, trazo de cota discontinuo).
+- **Datos de ejemplo**: `contenido-demo.ts`, todo `is_demo: true`, precios en céntimos con fecha ISO UTC, una tienda sin fecha
+  (`null` + «Sin fecha de comprobación»), tiendas «de ejemplo» (ningún precio es de una tienda real). Un test (`contenido-demo.test.ts`)
+  comprueba marca, fechas, céntimos enteros y que los rótulos de `zonas.ts` coinciden con las hojas.
+- **Armero honesto**: «0 réplicas publicadas», estado vacío con aviso «provisional», las 12 ranuras de `sockets.ts` como huecos libres
+  (si un socket recibe `replicaId`, la hoja lo cuenta y lo marca) y las cuatro familias previstas como «sin ficha».
+- **Componentes reutilizados de `/sistema`**: Placa, FichaPieza (plano T0 e Insignia de fidelidad), EtiquetaPrecio, Tabla, Chip,
+  Aviso, Valoración, InsigniaCompatibilidad, Boton. Solo se añade CSS de disposición, con tokens.
+- **Teclado y accesibilidad**: la hoja es un `dialog` no modal; Intro abre, Esc cierra y el foco vuelve a quien la abrió (la zona de
+  la barra o «Monta tu réplica»); Tab recorre la región desplazable y sus acciones. axe WCAG 2.2 AA sin infracciones con cada una de
+  las ocho hojas abiertas (e2e). Con `prefers-reduced-motion` la hoja entra sin animación y el recorte del póster no hace fundido.
+- **CI de la S1 (#67)**: el fallo de `verify (windows)` fue real y ya estaba resuelto (`poster-2560.webp`); el que seguía rojo era
+  `e2e`: la portada prerenderizada ya no lleva la CSP de Astro ni pasa por `checkOrigin` (las pruebas de seguridad pasan a `/estado`) y los
+  WebP del póster no están en git, así que en el CI daban 404 (el e2e los tolera solo si falta la copia local). `E2E_PORT` evita que dos
+  copias del repo compartan servidor de pruebas.
+- **Pendiente** (otra rebanada o la oficina): re-horneado final del póster con la GPU del servidor; nivel B/A; móvil.

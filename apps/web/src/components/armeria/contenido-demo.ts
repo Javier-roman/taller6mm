@@ -292,7 +292,7 @@ export const TAQUILLA_SIN_SESION = {
 } as const;
 
 // ── Resúmenes de cada hoja (dato fechado) ────────────────────────────────────────────────────────
-export const RESUMENES: Readonly<Record<string, ResumenDemo>> = {
+export const RESUMENES = {
   replicas: { texto: '0 réplicas publicadas · 12 ranuras libres', comprobado: COMPROBADO_DEMO, is_demo: true },
   accesorios: {
     texto: `${ACCESORIOS_TOTAL} accesorios · ${TIENDAS_TOTAL} tiendas`,
@@ -305,4 +305,8 @@ export const RESUMENES: Readonly<Record<string, ResumenDemo>> = {
   tiendas: { texto: `${TIENDAS.length} tiendas seguidas`, comprobado: COMPROBADO_DEMO, is_demo: true },
   guias: { texto: `${GUIAS_TOTAL} guías`, comprobado: COMPROBADO_DEMO, is_demo: true },
   taquilla: { texto: 'Sin sesión iniciada', comprobado: COMPROBADO_DEMO, is_demo: true },
-};
+} as const satisfies Readonly<Record<string, ResumenDemo>>;
+
+/** Resumen de una zona por id (`undefined` si no existe). */
+export const resumenDe = (id: string): ResumenDemo | undefined =>
+  (RESUMENES as Readonly<Record<string, ResumenDemo>>)[id];
