@@ -4,8 +4,11 @@
 // y los 404 con página de error prerenderizada (revisión de seguridad de S4, hallazgo B1).
 // Los estáticos no pasan por aquí: llevan las mismas cabeceras por `public/_headers`.
 import { handle } from '@astrojs/cloudflare/handler';
+import manifiestoVistas from './components/armeria/vistas.json';
 import { applySecurityHeaders } from './lib/security-headers';
-import { servirVista } from './lib/vistas';
+import { clavesDelManifiesto, servirVista } from './lib/vistas';
+
+const VISTAS_PERMITIDAS = clavesDelManifiesto(manifiestoVistas);
 
 const internalError = () =>
   new Response('Error interno. Inténtalo de nuevo en unos minutos.', {
@@ -18,7 +21,7 @@ export default {
     let response: Response;
     try {
       // Pases horneados de La Armería: desde R2 con caché inmutable; si no están, sigue la cadena normal.
-      response = (await servirVista(request, env.VISTAS)) ?? (await handle(request, env, ctx));
+      response = (await servirVista(request, env.VISTAS, VISTAS_PERMITIDAS)) ?? (await handle(request, env, ctx));
     } catch (error) {
       // Sin detalles en la respuesta ni datos personales en el log (docs/08 §6.3).
       console.error('web: excepción no controlada', error instanceof Error ? error.name : typeof error);

@@ -48,14 +48,23 @@ Cada rebanada se entrega en PR pequeño y pasa por:
 | 4 | LCP y CLS por activos pesados | Los pases horneados (unos 1,2 MB con todas las variantes) irán a R2 con `Cache-Control` inmutable, o a `public/`. **Decisión pendiente.** |
 | 5 | Pérdida de contexto WebGL o FPS bajos | Medición inicial y caída automática al nivel anterior (S1). |
 
-## 4. Decisiones que necesitan a Javi
+## 4. Decisiones de Javi (22-11-2026)
 
-1. Aprobar las dependencias de cliente de la sección 3, riesgo 3.
-2. Dónde viven los pases horneados: en el repo o en R2. **Pendiente.**
-3. Si el código del spike se promueve tal cual o se reescribe limpio. **Pendiente.**
-4. Si los lightmaps de A son prioritarios (S4). **Pendiente.**
+| # | Decisión | Elegida |
+|---|---|---|
+| 1 | Alcance de S1 | **Póster + B (2.5D) + A (3D)**. Con ello Javi aprueba las dependencias de cliente de más de 30 KB gz (three, React Three Fiber, drei, postprocessing, GSAP), que se cargan con `import()` solo en el nivel A. |
+| 2 | Dónde viven los pases horneados | **R2 con caché inmutable**, servidos por el Worker de la web mediante un binding de R2 (sin bucket público). La subida de objetos al bucket de preview es una operación remota: la ejecuta Javi con `wrangler`, con las órdenes que le dé Claude. |
+| 3 | Código del prototipo | **Reescribir limpio copiando lo bueno** de `spike/armeria-f1`: TypeScript estricto, colores desde tokens de `packages/ui`, tests y accesibilidad desde el principio. |
+| 4 | Lightmaps de A | Siguen aplazados (S4), si no mejoran la imagen. |
 
-## 5. Fuera de alcance por ahora
+**Tamaño del prototipo a rehacer** (rama `spike/armeria-f1`): 124 archivos y unas 7.250 líneas, entre componentes, texturas, módulos, scripts de horneado y capturas. S1 se divide en sub-pasos pequeños (esqueleto y póster, nivel B, nivel A, selector con caída automática, «Más luz» y movimiento reducido, CSP), cada uno con capturas a 390 y 1440 px antes de seguir.
+
+## 5. Decisiones que siguen abiertas
+
+- Medición en móvil real (pendiente de un dispositivo).
+- Tras la reescritura, el OK visual de Javi a cada hito (CLAUDE.md).
+
+## 6. Fuera de alcance por ahora
 
 - Pulido del móvil: encuadre del Banco y tubo del armero en el nivel B móvil. Medición en móvil real.
 - Telemetría del selector de nivel. Si se hace, será anónima y conforme al RGPD.

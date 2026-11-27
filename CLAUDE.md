@@ -16,7 +16,7 @@ La especificación está en `docs/` y **no se importa aquí** para no gastar con
 | Dirección de arte, La Armería (inicio), sistema de diseño | `docs/02-experiencia-y-diseno.md` |
 | El Banco (configurador) y motor de compatibilidad | `docs/03-el-banco-configurador.md` |
 | Mercado: fuentes, rastreo, emparejado, precios, alertas | `docs/04-mercado-e-ingesta.md` |
-| Assets 2D/3D y fidelidad 1:1 | `docs/05-assets-y-fidelidad.md` |
+| Assets 2D/3D y fidelidad visual | `docs/05-assets-y-fidelidad.md` |
 | Comunidad, rankings, moderación | `docs/06-comunidad.md` |
 | Arquitectura, datos, APIs, costes | `docs/07-arquitectura.md` |
 | Calidad, seguridad, operación | `docs/08-calidad-seguridad-operacion.md` |
@@ -28,7 +28,7 @@ La especificación está en `docs/` y **no se importa aquí** para no gastar con
 | Modelos de IA, Gemini y medición de uso | `docs/ia/modelos.md` |
 
 ## Principios no negociables
-1. **Fidelidad 1:1.** Réplicas y accesorios con proporciones y medidas reales en mm. Si un asset no alcanza un nivel, se muestra con su nivel real (T0–T3, docs/05); nunca se disfraza.
+1. **Fidelidad visual honesta** (ADR-0011). Réplicas y accesorios con proporciones reales sacadas de referencia; las medidas en mm solo se muestran con fuente. El nivel de cada asset (ilustrativa, aproximada o verificada; T0–T3, docs/05) es siempre visible y nunca se disfraza. Las interfaces estándar (raíles, roscas, M-LOK, cargadores) son exactas.
 2. **Datos honestos.** Precio y stock siempre con la fecha de la última comprobación. Lo desconocido es `null` + bandera, nunca un valor inventado. Datos de ejemplo solo en seeds marcados `is_demo`, jamás en producción. Nada de estadísticas de videojuego (daño, precisión).
 3. **Compatibilidad explicable.** Cada veredicto lleva motivo, fuente y confianza.
 4. **Ingesta respetuosa y legal.** robots.txt (incluidas las líneas `Content-Signal`), ritmo bajo, User-Agent identificado, opt-out inmediato, sin login, sin evadir bloqueos ni CAPTCHAs. Primero feeds y APIs oficiales.
@@ -104,6 +104,7 @@ docs              Especificación, ADRs, informes de fase, runbooks, referencias
 - Subagentes: `critico-diseno`, `revisor-seguridad`, `ingeniero-ingesta`, `revisor-fidelidad`, `auditor-rendimiento` (pásalos al cerrar cada rebanada de su área), `documentador` (docs, CHANGELOG, README), `mejorador-escalador` (agente único y siempre activo: cierra los fallos de la puerta de calidad y eleva las piezas por la escalera N1-N5 con iluminación, docs/05 §12 y §13), `generador-familias` (crea familias nuevas de piezas paramétricas, en Sonnet) y `delegado-gemini`. Para búsquedas amplias en el código, `Explore`. **Nombres claros:** lanza siempre los agentes con su tipo propio y, si no existe, con una descripción «Rol: zona» (nunca `general-purpose` a secas), para que Javi sepa quién es quién.
 - **Mira lo que construyes**: usa el MCP de Playwright (capturas a 390 px y 1440 px) antes de dar algo por bueno.
 - **El diseño es lo más importante para Javi.** En cada hito visual, para y enséñale capturas en escritorio y móvil, pasadas antes por `critico-diseno`. No continúes ni fusiones sin su OK explícito. Antes de construir La Armería (Fase 1), presenta varias propuestas con capturas basadas en `docs/referencias/` y espera a que elija.
+- **Servidor de oficina (`ssh taller6mm-gpu`, GPU L4).** Solo la sesión principal, y **solo con permiso explícito de Javi para cada uso**; los subagentes no lo usan. Siempre dentro de `~/taller6mm/`, sin tocar nada de los demás usuarios ni sus procesos (ni la GPU en uso), sin `sudo` ni instalaciones globales y sin romper nada. Detalle en la memoria `servidor-gpu-oficina`.
 - **Los agentes guardan su progreso.** Los cortes por el límite de cuota son frecuentes: todo agente (y la sesión principal con los worktrees de los agentes cortados) hace commit WIP cada pocos pasos en su rama, con los hooks de pre-commit activos y sin saltarlos. Nunca se deja trabajo solo en el disco sin commit.
 - Explica a Javi cada decisión importante en 2-3 líneas: qué, por qué y qué alternativa descartaste. Sin jerga innecesaria.
 - Nunca manejes credenciales de Javi: si hace falta iniciar sesión (wrangler, gh), dale el comando y lo ejecuta él.
