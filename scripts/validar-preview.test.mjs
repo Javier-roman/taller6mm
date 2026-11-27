@@ -36,8 +36,14 @@ describe('validar-preview', () => {
     'un service binding (a jobs)': (c) => {
       c.services = [{ binding: 'JOBS', service: 'taller6mm-jobs' }];
     },
-    'un bucket R2': (c) => {
-      c.r2_buckets = [{ binding: 'X', bucket_name: 'taller6mm-uploads' }];
+    'un bucket R2 de más': (c) => {
+      c.r2_buckets = [...c.r2_buckets, { binding: 'X', bucket_name: 'taller6mm-uploads' }];
+    },
+    'el binding VISTAS apuntando a otro bucket': (c) => {
+      c.r2_buckets = [{ binding: 'VISTAS', bucket_name: 'taller6mm-uploads-preview' }];
+    },
+    'sin el bucket de vistas': (c) => {
+      c.r2_buckets = [];
     },
     rutas: (c) => {
       c.routes = [{ pattern: 'taller6mm.es/*', zone_name: 'taller6mm.es' }];
@@ -48,8 +54,11 @@ describe('validar-preview', () => {
     'variables cambiadas': (c) => {
       c.vars = { ENVIRONMENT: 'production' };
     },
-    'previews con un bucket': (c) => {
-      c.previews = { ...c.previews, r2_buckets: [{ binding: 'X', bucket_name: 'y' }] };
+    'previews con un bucket de más': (c) => {
+      c.previews = { ...c.previews, r2_buckets: [...c.previews.r2_buckets, { binding: 'X', bucket_name: 'y' }] };
+    },
+    'previews con el bucket de producción': (c) => {
+      c.previews = { ...c.previews, r2_buckets: [{ binding: 'VISTAS', bucket_name: 'taller6mm-assets' }] };
     },
     'previews con otra base': (c) => {
       c.previews = { ...c.previews, d1_databases: c.d1_databases.slice(1) };

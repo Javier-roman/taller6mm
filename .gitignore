@@ -38,6 +38,10 @@ assets-src/**/*.blend1
 assets-src/raw/
 # Biblioteca de materiales CC0 descargada (en git solo catalogo/materiales-cc0.json con hashes)
 assets-src/materiales-cc0/
+# Vistas horneadas de La Armería (póster y pases de luz): viven en R2; en git solo apps/web/src/components/armeria/vistas.json
+assets-src/vistas/**/*.webp
+# Copia local para desarrollo y e2e (apps/web/scripts/armeria/vistas.mjs local)
+apps/web/public/assets/armeria/
 
 # Capturas de referencia de terceros: uso interno, no publicar
 docs/referencias/*.png

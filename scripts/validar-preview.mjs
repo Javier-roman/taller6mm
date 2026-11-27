@@ -54,6 +54,9 @@ export function vacio(valor) {
 const bases = (lista) =>
   (lista ?? []).map(({ binding, database_name, database_id }) => ({ binding, database_name, database_id }));
 
+/** Solo lo que identifica cada bucket (nombre y binding): la Preview lee los mismos que main, nunca otros. */
+const buckets = (lista) => (lista ?? []).map(({ binding, bucket_name }) => ({ binding, bucket_name }));
+
 /** Configuración de una Preview de PR, solo con datos de `main`. Replica la que genera la build de Astro. */
 export function configuracionPreview(referencia) {
   const p = referencia.env?.preview;
@@ -74,10 +77,12 @@ export function configuracionPreview(referencia) {
     observability: p.observability ?? { enabled: true },
     vars: p.vars ?? {},
     d1_databases: bases(p.d1_databases),
+    r2_buckets: buckets(p.r2_buckets),
     previews: {
       vars: p.previews?.vars ?? {},
       observability: p.previews?.observability ?? { enabled: true },
       d1_databases: bases(p.previews?.d1_databases),
+      r2_buckets: buckets(p.previews?.r2_buckets),
     },
   };
 }
@@ -101,6 +106,7 @@ const PERMITIDAS = new Set([
   'assets',
   'vars',
   'd1_databases',
+  'r2_buckets',
   'previews',
   'workers_dev',
   'preview_urls',
@@ -120,6 +126,7 @@ const canonico = (valor) =>
       : v,
   );
 const ordenadas = (lista) => bases(lista).sort((a, b) => String(a.binding).localeCompare(String(b.binding)));
+const ordenadosBuckets = (lista) => buckets(lista).sort((a, b) => String(a.binding).localeCompare(String(b.binding)));
 const distinto = (a, b) => canonico(a) !== canonico(b);
 
 export function validar(build, referencia) {
@@ -130,13 +137,18 @@ export function validar(build, referencia) {
   if (distinto(build.vars ?? {}, esperado.vars)) errores.push('vars distintas de las de main');
   if (distinto(ordenadas(build.d1_databases), ordenadas(esperado.d1_databases)))
     errores.push('d1_databases distintas de las de main');
+  // Los buckets R2 de la build son exactamente los de main (VISTAS, de solo lectura): ni uno más, ni otro.
+  if (distinto(ordenadosBuckets(build.r2_buckets), ordenadosBuckets(esperado.r2_buckets)))
+    errores.push('r2_buckets distintos de los de main');
   const previews = build.previews ?? {};
   const sobra = Object.keys(previews).filter(
-    (k) => !['vars', 'd1_databases', 'observability'].includes(k) && !vacio(previews[k]),
+    (k) => !['vars', 'd1_databases', 'r2_buckets', 'observability'].includes(k) && !vacio(previews[k]),
   );
   if (sobra.length) errores.push(`previews trae bindings no permitidos: ${sobra.join(', ')}`);
   if (distinto(ordenadas(previews.d1_databases), ordenadas(esperado.previews.d1_databases)))
     errores.push('previews.d1_databases distintas de las de main');
+  if (distinto(ordenadosBuckets(previews.r2_buckets), ordenadosBuckets(esperado.previews.r2_buckets)))
+    errores.push('previews.r2_buckets distintos de los de main');
   if (distinto(previews.vars ?? {}, esperado.previews.vars)) errores.push('previews.vars distintas de las de main');
   // Lo que decide qué código se sube y cómo, igual que en la configuración con la que se desplegará.
   for (const clave of [

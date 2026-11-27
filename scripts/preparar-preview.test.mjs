@@ -104,6 +104,7 @@ describe('preparar-preview', () => {
       'observability',
       'preview_urls',
       'previews',
+      'r2_buckets',
       'rules',
       'send_metrics',
       'upload_source_maps',

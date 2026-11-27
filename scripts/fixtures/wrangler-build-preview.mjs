@@ -27,7 +27,7 @@ export function buildPreview(referencia) {
     durable_objects: { bindings: [] },
     kv_namespaces: [],
     queues: { producers: [], consumers: [] },
-    r2_buckets: [],
+    r2_buckets: p.r2_buckets ?? [],
     d1_databases: p.d1_databases,
     services: [],
     logfwdr: { bindings: [] },

@@ -25,6 +25,14 @@ Decisiones de Javi (05-11-2026): híbrido (póster de base, B en móvil y A en e
 5. **Mismos datos vivos y mismas rutas** en los tres niveles; todo valor de diseño sale de los tokens de `packages/ui`.
 6. **Seguridad**: la CSP actual vale para estos prototipos (sin WASM ni workers `blob:`). Si el 3D final usa texturas KTX2 y geometría Meshopt, se amplía la CSP **solo en `/`** (WASM y workers `blob:`), con revisión de `revisor-seguridad`.
 
+## Actualización (22-11-2026): construcción limpia y vistas en R2
+Javi aprobó construir la Fase 1 reescribiendo el prototipo en `apps/web` (la rama `spike/armeria-f1` sigue sin fusionarse)
+y las dependencias de cliente de más de 30 KB (three.js, R3F y drei, cargadas con `import()` solo en el nivel A).
+Los pases horneados y el póster se sirven desde **R2 con `Cache-Control` inmutable mediante un binding del Worker de la
+web** (`VISTAS`, sobre un bucket dedicado `taller6mm-vistas*` sin acceso público; solo se sirven los archivos del manifiesto), en rutas con el hash del contenido (`/assets/armeria/<hash>/…`).
+En local se sirven desde `public/assets/armeria/` (`pnpm --filter @taller6mm/web vistas:local`). Alcance: **solo escritorio**
+por ahora; el móvil se aparca y B pasa a ser el respaldo de A en escritorio.
+
 ## Alternativas consideradas
 | Opción | Pros | Contras | Por qué no |
 |---|---|---|---|
