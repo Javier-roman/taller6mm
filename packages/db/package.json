@@ -15,7 +15,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "drizzle-orm": "catalog:"
+    "@taller6mm/domain": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "catalog:",

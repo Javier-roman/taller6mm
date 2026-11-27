@@ -11,11 +11,13 @@ const migrationsOf = (base: Base) => env[`${BINDINGS[base]}_MIGRATIONS`];
 describe.each(BASES)('base %s', (base) => {
   const db = env[BINDINGS[base]];
 
-  test('0000_meta se aplica desde cero y es idempotente', async () => {
+  test('las migraciones se aplican desde cero, en orden y de forma idempotente', async () => {
     await applyD1Migrations(db, migrationsOf(base));
     await applyD1Migrations(db, migrationsOf(base)); // la segunda vez no reaplica nada
     const applied = await db.prepare('SELECT name FROM d1_migrations ORDER BY id').all<{ name: string }>();
-    expect(applied.results.map((r) => r.name)).toEqual(['0000_meta.sql']);
+    const names = applied.results.map((r) => r.name);
+    expect(names[0]).toBe('0000_meta.sql'); // la primera nunca cambia
+    expect(names).toEqual(migrationsOf(base).map((m) => m.name));
   });
 
   test('la tabla meta identifica la base correcta (detecta bindings cruzados)', async () => {

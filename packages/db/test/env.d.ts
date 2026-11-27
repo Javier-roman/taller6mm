@@ -4,5 +4,7 @@ declare namespace Cloudflare {
     CORE_MIGRATIONS: import('cloudflare:test').D1Migration[];
     MERCADO_MIGRATIONS: import('cloudflare:test').D1Migration[];
     BUSQUEDA_MIGRATIONS: import('cloudflare:test').D1Migration[];
+    CORE_SEED: string[];
+    BUSQUEDA_SEED: string[];
   }
 }

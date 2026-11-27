@@ -74,3 +74,6 @@ assets-src/calidad/
 
 # Vistas de la escalera de calidad (apps/pipeline): renders de revision interna, nunca se publican
 assets-src/vistas/
+
+# Semillas SQL generadas por scripts/db-seed.mjs desde catalogo/
+packages/db/seeds/
