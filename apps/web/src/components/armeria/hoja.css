@@ -155,9 +155,9 @@
 .armeria__hoja-dato {
   font-family: var(--fuente-datos);
   font-size: var(--texto-l);
-  font-weight: var(--peso-semi);
+  font-weight: var(--peso-medio);
   line-height: var(--interlineado-compacto);
-  color: var(--laton-claro);
+  color: var(--hueso);
 }
 
 .armeria__fecha {
@@ -309,7 +309,17 @@
   gap: var(--espacio-3);
 }
 
-/* Fichas de pieza: dos por fila, con su plano T0 en la proporción de /sistema (las cotas se leen). */
+/* Plano más bajo (2:1) para que nombre y precio entren en la primera vista; las cotas se siguen leyendo. */
+.armeria__fichas .t6-ficha__imagen {
+  aspect-ratio: 2 / 1;
+}
+
+.armeria__fichas .t6-ficha__imagen :is(.t6-plano, img) {
+  position: absolute;
+  inset: 0;
+}
+
+/* Fichas de pieza: dos por fila. */
 .armeria__fichas {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -455,13 +465,14 @@
 .armeria__hoja-cuerpo::after {
   content: "";
   position: sticky;
-  bottom: 0;
+  /* Chrome mide el «pegado» desde el contenido, no desde el borde: se compensa el relleno inferior. */
+  bottom: calc(var(--espacio-8) * -1);
   display: block;
   flex: none;
-  block-size: var(--espacio-8);
+  block-size: var(--espacio-12);
   /* Anula el hueco (`gap`) que el degradado, como último elemento, añadiría al final. */
-  margin-block-start: calc((var(--espacio-8) + var(--espacio-8)) * -1);
-  background: linear-gradient(to bottom, transparent, var(--carbon));
+  margin-block-start: calc((var(--espacio-12) + var(--espacio-8)) * -1);
+  background: linear-gradient(to bottom, transparent, var(--carbon) 80%);
   opacity: 0;
   pointer-events: none;
 }
@@ -469,7 +480,7 @@
 @supports (animation-timeline: scroll()) {
   .armeria__hoja-cuerpo::after {
     animation: armeria-mas-abajo linear both;
-    animation-timeline: scroll(self block);
+    animation-timeline: scroll(nearest block);
   }
 }
 
@@ -536,4 +547,23 @@
   .armeria__hoja[data-lado] {
     animation: none;
   }
+}
+
+/* Texto corrido de avisos y veredictos a 16 px y a medida de lectura; los 14 px quedan para metadatos. */
+.armeria__hoja :is(.t6-aviso__texto, .t6-compat__motivo) {
+  max-width: var(--ancho-lectura);
+  font-size: var(--texto-m);
+  line-height: var(--interlineado-cuerpo);
+}
+
+.armeria__hoja .t6-tabla tbody th[scope="row"] {
+  font-size: var(--texto-m);
+}
+
+.armeria__hoja .armeria__bajada del {
+  text-decoration-thickness: 1px;
+}
+
+.armeria__cifras dd {
+  font-size: var(--texto-2xl);
 }
