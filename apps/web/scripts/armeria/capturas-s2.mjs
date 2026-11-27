@@ -58,5 +58,5 @@ await page.screenshot({
   fullPage: bandera('completa'),
   ...(recorte ? { clip: { x: recorte[0], y: recorte[1], width: recorte[2], height: recorte[3] } } : {}),
 });
-console.log(archivo, errores.length ? `ERRORES: ${errores.join(' | ')}` : 'sin errores de consola');
+console.log('%s %s', archivo, errores.length ? `ERRORES: ${errores.join(' | ')}` : 'sin errores de consola');
 await browser.close();
