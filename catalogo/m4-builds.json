@@ -191,7 +191,7 @@
           "hijo": "guardamanos",
           "padre": "receptor-superior",
           "socket_hijo": "union-receptor",
-          "socket_padre": "handguard",
+          "socket_padre": "handguard_front",
           "modo": "opuestos"
         },
         {
@@ -496,7 +496,7 @@
           "hijo": "guardamanos",
           "padre": "receptor-superior",
           "socket_hijo": "union-receptor",
-          "socket_padre": "handguard",
+          "socket_padre": "handguard_front",
           "modo": "opuestos"
         },
         {
@@ -770,7 +770,7 @@
           "hijo": "guardamanos",
           "padre": "receptor-superior",
           "socket_hijo": "union-receptor",
-          "socket_padre": "handguard",
+          "socket_padre": "handguard_front",
           "modo": "opuestos"
         },
         {

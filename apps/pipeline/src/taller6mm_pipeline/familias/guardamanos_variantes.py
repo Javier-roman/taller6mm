@@ -11,11 +11,12 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import replace
 
-from build123d import Circle, Plane, Pos, Rectangle, Rot, extrude
+from build123d import Axis, Circle, Cylinder, Plane, Pos, Rectangle, RectangleRounded, Rot, extrude
 
 from taller6mm_pipeline.familias import estandares as e
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, ParametroInvalidoError, Socket, Valor
 from taller6mm_pipeline.familias.comun_oleada1 import mm
+from taller6mm_pipeline.familias.formas import con_rosca_interna_x, filetear
 from taller6mm_pipeline.familias.guardamanos_mlok import MARGEN_EXTREMO_MM, GuardamanosMlok, ranuras_rail_que_caben
 from taller6mm_pipeline.familias.rail_picatinny import NOTA_PERFIL, longitud_rail_mm, solido_rail
 
@@ -30,6 +31,12 @@ _CARAS_RIS = {
 }
 
 
+PASO_ROSCA_TUERCA_MM = 1.5  # RIS; el M-LOK usa 1,0 en un tramo corto
+PASO_ROSCA_MLOK_MM = 1.0  #  # estimado: el paso de la tuerca de cañón depende del SKU (confianza baja)
+LARGO_ROSCA_TUERCA_MM = 20.0
+INICIO_ROSCA_TUERCA_MM = 8.0
+
+
 def _mlok_que_caben(longitud_mm: float) -> int:
     n = int((longitud_mm - 2 * MARGEN_EXTREMO_MM + e.MLOK_SEPARACION.valor_mm) // e.MLOK_PASO_MM)
     return max(1, min(10, n))
@@ -37,7 +44,7 @@ def _mlok_que_caben(longitud_mm: float) -> int:
 
 class GuardamanosVariantes(Familia):
     id = "guardamanos.variantes"
-    version = 1
+    version = 2
     nombre = "Guardamanos AR por tipo"
     requiere = (INTERFAZ_UNION,)
     ofrece = (e.INTERFAZ_PICATINNY, e.INTERFAZ_MLOK)
@@ -85,8 +92,22 @@ class GuardamanosVariantes(Familia):
             }
             g = GuardamanosMlok()
             geo = g.construir(g.validar(base))
+            geo = replace(
+                geo, solido=con_rosca_interna_x(geo.solido, d / 2 - pared, 12.0, PASO_ROSCA_MLOK_MM, 0.5, 1.0)
+            )
         elif tipo == "ris":
             geo = self._ris(largo, d, pared)
+            geo = replace(
+                geo,
+                solido=con_rosca_interna_x(
+                    geo.solido,
+                    d / 2 - pared,
+                    LARGO_ROSCA_TUERCA_MM,
+                    PASO_ROSCA_TUERCA_MM,
+                    INICIO_ROSCA_TUERCA_MM,
+                    1.0,
+                ),
+            )
         else:
             geo = self._dos_mitades(tipo, largo, d, pared)
 
@@ -98,29 +119,46 @@ class GuardamanosVariantes(Familia):
         radio = d / 2
         cuerpo = extrude(Plane.YZ * (Circle(radio) - Circle(radio - pared)), largo)
         anillo = 4.0  # aro del delta ring y tapa delantera, estimados
-        cuerpo += extrude(Plane.YZ * (Circle(radio + 3.0) - Circle(radio - pared)), anillo)
+        # Aros con los cantos redondeados (filete de 0,8 mm) en vez de cilindros vivos.
+        aro = filetear(extrude(Plane.YZ * (Circle(radio + 3.0) - Circle(radio - pared)), anillo), 0.8)
+        cuerpo += aro
         if tipo == "mid":
-            cuerpo += Pos(largo - anillo, 0, 0) * extrude(
-                Plane.YZ * (Circle(radio + 1.5) - Circle(radio - pared)), anillo
+            cuerpo += Pos(largo - anillo, 0, 0) * filetear(
+                extrude(Plane.YZ * (Circle(radio + 1.5) - Circle(radio - pared)), anillo), 0.8
             )
+        # Estrías de agarre: 12 canales longitudinales redondeados (Ø 3 mm) en la cara exterior, entre los aros,
+        # sin tocar las juntas laterales.
+        x0, x1 = anillo + 6.0, largo - anillo - 6.0
+        canal = Pos((x0 + x1) / 2, 0, 0) * Cylinder(1.5, x1 - x0).rotate(Axis.Y, 90)
+        for k in range(12):
+            ang = 15.0 + k * 30.0  # 15°, 45°… : ningún canal cae sobre las juntas (90° y 270°)
+            cuerpo -= Rot(ang, 0, 0) * Pos(0, radio + 0.4, 0) * canal
+        # Ranuras de ventilación pasantes (óvalos de 14 x 4 mm) en cuatro columnas a 45°, repartidas a lo largo.
+        n_vent = max(1, int((largo - 2 * anillo - 16.0) // 22.0))
+        ranura = extrude(RectangleRounded(14.0, 4.0, 1.9), radio + 1.0)
+        x_ini = (largo - (n_vent - 1) * 22.0) / 2
+        for col in (45.0, 135.0, 225.0, 315.0):
+            for j in range(n_vent):
+                cuerpo -= Rot(col, 0, 0) * Pos(x_ini + j * 22.0, 0, 0) * ranura
         # Juntas de las dos mitades: dos ranuras finas laterales a todo lo largo.
         junta = extrude(Plane.YZ * Rectangle(0.8, 1.0), largo - 2 * anillo)
         cuerpo -= [Pos(anillo, 0, s * radio) * junta for s in (1, -1)]
         notas = (
             "El escudo térmico interior y la unión al receptor no se modelan; el aro es una simplificación.",
             "Las juntas laterales (0,8 x 1 mm) y los aros de 4 mm son estimaciones de silueta, sin cota de SKU.",
+            "Estrías de agarre (12 canales de Ø 3 mm) y ranuras de ventilación (14 x 4 mm): detalle estimado.",
         )
         alto = 2 * (radio + 3.0)
-        return Geometria(cuerpo, (), (), notas, (largo, alto, alto), vaciados=3)
+        return Geometria(cuerpo, (), (), notas, (largo, alto, alto), vaciados=3 + 4 * n_vent)
 
     @staticmethod
     def _ris(largo: float, lado: float, pared: float) -> Geometria:
         medio = lado / 2
-        cuerpo = extrude(Plane.YZ * (Rectangle(lado, lado) - Circle(medio - pared)), largo)
+        cuerpo = extrude(Plane.YZ * (RectangleRounded(lado, lado, 3.5) - Circle(medio - pared)), largo)
         n_rail = ranuras_rail_que_caben(largo)
         y_base = medio - pared / 2
         y_alto = medio + e.PICATINNY_ALTURA.valor_mm
-        rail = solido_rail(n_rail, y_alto - y_base, largo)
+        rail = solido_rail(n_rail, y_alto - y_base, largo, radio_perfil=0.5)
         sockets = []
         for cara, (giro, normal) in _CARAS_RIS.items():
             cuerpo += Rot(giro, 0, 0) * Pos(0, y_base, 0) * rail

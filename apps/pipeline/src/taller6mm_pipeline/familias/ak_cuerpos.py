@@ -30,7 +30,7 @@ from taller6mm_pipeline.familias.ak_formas import (
 from taller6mm_pipeline.familias.base import Familia, Geometria, Parametro, Socket, Valor
 from taller6mm_pipeline.familias.comun_oleada1 import mm, prisma
 from taller6mm_pipeline.familias.detalle import nominales_de
-from taller6mm_pipeline.familias.formas import filetear, interpolar, loftear, superelipse
+from taller6mm_pipeline.familias.formas import filetear, interpolar, loftear, rosca_helicoidal, superelipse
 from taller6mm_pipeline.familias.rail_picatinny import NOTA_PERFIL, longitud_rail_mm, solido_rail
 
 INT_CANON = "montaje-canon-ak"  # propuesta (aún no está en interfaces.json)
@@ -165,17 +165,29 @@ class TapaAK(Familia):
         largo, alto, ancho = float(p["longitud"]), float(p["alto"]), float(p["ancho"])
         w = ancho / 2
         # Alzado de la cúpula: baja hacia los dos extremos (fracciones de la longitud, de atrás adelante).
-        perfil = ((0.0, 0.78, 0.96), (0.12, 0.90, 0.99), (0.4, 1.0, 1.0), (0.75, 0.97, 1.0), (1.0, 0.86, 0.99))
+        # Atrás más estrecha y baja que delante, como la chapa estampada real (estimado).
+        perfil = ((0.0, 0.66, 0.78), (0.12, 0.88, 0.90), (0.4, 1.0, 1.0), (0.75, 0.97, 0.98), (1.0, 0.80, 0.92))
         nudos = [(-largo * (1 - f), alto * k, -alto * k, w * kw) for f, k, kw in perfil]
         cupula = loft_x(-largo, 0, nudos, radio=alto * 0.95)
+        # Chapa estampada: cáscara hueca de 1,4 mm, abierta por abajo (el interior es un vaciado del mismo alzado).
+        pared = 1.4
+        nudos_in = [
+            (-largo + 2.0 + (x + largo) * (largo - 4.0) / largo, ya - pared, yb, max(sw - pared, 1.0))
+            for x, ya, yb, sw in nudos
+        ]
+        hueco = loft_x(-largo + 2.0, -2.0, nudos_in, radio=alto * 0.95)
+        cupula = cupula - hueco
         cuerpo = cupula - Pos(-largo / 2, -alto - 5, 0) * Box(largo + 40, 2 * alto + 10, ancho + 20)
         # Casquillo trasero de la varilla del muelle, con su orificio.
-        cuerpo = cuerpo + cilindro_x(5.8, -largo - 5, -largo + 12, alto * 0.5)
+        # El casquillo lleva rosca (hilo helicoidal de paso 1 mm, estimado) y el extremo con filete.
+        casquillo = cilindro_x(5.2, -largo - 5, -largo + 12, alto * 0.5)
+        hilo = Pos(-largo - 3.5, alto * 0.5, 0) * Rot(0, 90, 0) * rosca_helicoidal(5.8, 0.6, 1.0, 14.0)
+        cuerpo = cuerpo + filetear(casquillo, 0.6) + hilo
         cuerpo = cuerpo - cilindro_x(2.0, -largo - 6, -largo + 1, alto * 0.5)
         vaciados = 1
         n_nerv = int(p["nervaduras"])
         for lado in (1, -1):
-            z0, z1 = (w - 1.2, w + 2) if lado > 0 else (-w - 2, -w + 1.2)
+            z0, z1 = (w - 0.55, w + 2) if lado > 0 else (-w - 2, -w + 0.55)
             cuerpo = cuerpo - caja_redonda(-largo * 0.9, -largo * 0.12, alto * 0.4, alto * 0.4 + 3.2, z0, z1, 1.3)
             vaciados += 1
             for i in range(n_nerv):

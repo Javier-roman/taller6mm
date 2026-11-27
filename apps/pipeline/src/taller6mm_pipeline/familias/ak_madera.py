@@ -33,7 +33,7 @@ from taller6mm_pipeline.familias.base import (
 )
 from taller6mm_pipeline.familias.comun_oleada1 import mm, prisma
 from taller6mm_pipeline.familias.detalle import nominales_de
-from taller6mm_pipeline.familias.formas import filetear
+from taller6mm_pipeline.familias.formas import filetear, suavizar
 
 INT_GUARDAMANOS = "montaje-guardamanos-ak"
 INT_CUBREMANO = "montaje-cubremano-ak"
@@ -198,6 +198,7 @@ class CubremanoAK(Familia):
                 x = largo * 0.15 + i * 8.0
                 cuerpo = cuerpo - caja_redonda(x, x + 2.2, y_sup - 1.3, y_sup + 1, -hw - 1, hw + 1, 0.8, ejes="y")
                 vaciados += 1
+        cuerpo = suavizar(cuerpo, (0.5, 0.35, 0.25, 0.15))  # cantos de surcos, ranuras y nervios redondeados
         sockets = (
             Socket(
                 "lower",
