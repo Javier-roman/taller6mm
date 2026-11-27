@@ -3,22 +3,16 @@
 // mejora progresiva por encima. Teclado: un solo tabulador para toda la navegación (roving tabindex), con
 // ← → ↑ ↓ Inicio y Fin entre zonas, Intro para entrar y Esc para cerrar la hoja.
 import { BRAND } from '@taller6mm/ui/brand';
-import { Boton, Placa } from '@taller6mm/ui/componentes';
+import { Boton } from '@taller6mm/ui/componentes';
 import { type KeyboardEvent, type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { Demo } from './Demo.tsx';
 import { type EstadoArmeria, zonaActiva } from './estado.ts';
+import { Hoja } from './Hoja.tsx';
 import { VARIANTES_LUZ } from './luz.ts';
 import { TEXTO_ALTERNATIVO } from './Poster.tsx';
 import type { Acciones } from './useArmeria.ts';
 import { ESTANTERIAS, ORDEN_ESTANTERIAS, ZONAS, zonaPorId, zonasDe } from './zonas.ts';
 import './armeria.css';
-
-function Demo({ plural = false }: { plural?: boolean }) {
-  return (
-    <span className="armeria__demo">
-      Demo<span className="t6-sr">{plural ? ' (datos de ejemplo)' : ' (dato de ejemplo)'}</span>
-    </span>
-  );
-}
 
 /** Bombilla: «Más luz». */
 function IconoLuz() {
@@ -179,33 +173,7 @@ export function InterfazArmeria({ estado, acciones, children, escenaActiva = fal
         </nav>
       </div>
 
-      {abierta ? (
-        <div
-          className="armeria__panel"
-          data-lado={abierta.estanteria === 'derecha' ? 'izquierda' : 'derecha'}
-          role="dialog"
-          aria-modal="false"
-          aria-label={abierta.nombre}
-          tabIndex={-1}
-          ref={panel}
-        >
-          <Placa titulo={abierta.nombre} nivelTitulo={2} codigo={abierta.ruta} as="div">
-            <p className="armeria__panel-texto">{abierta.descripcion}</p>
-            <p className="armeria__panel-dato">
-              {abierta.dato} <Demo />
-            </p>
-            <p className="armeria__panel-nota">Esta sección aún no está abierta.</p>
-            <div className="armeria__panel-acciones">
-              <Boton variante="laton" aria-disabled="true" title="Esta sección aún no está abierta">
-                Próximamente
-              </Boton>
-              <Boton variante="fantasma" onClick={cerrar}>
-                Volver a la sala
-              </Boton>
-            </div>
-          </Placa>
-        </div>
-      ) : null}
+      {abierta ? <Hoja zona={abierta} onCerrar={cerrar} panelRef={panel} /> : null}
     </div>
   );
 }

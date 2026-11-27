@@ -1,0 +1,336 @@
+/*
+ * Hoja de contenido de un módulo de La Armería (dirección A «plano de cotas», ADR-0010). Solo tokens de
+ * @taller6mm/ui; la lámina, las marcas de registro y los componentes vienen de packages/ui. Aquí solo se coloca
+ * la hoja sobre la sala y se ordena su contenido. Escritorio primero: en pantallas estrechas pasa a hoja inferior.
+ */
+.armeria__hoja {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: var(--espacio-6);
+  width: min(38rem, calc(100% - 2 * var(--espacio-6)));
+  /* Entre la cabecera (arriba) y la barra de zonas (abajo): la hoja nunca las tapa y se desplaza por dentro. */
+  max-height: calc(100svh - var(--espacio-24) * 2 - var(--espacio-16) - var(--espacio-4));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--trazo-fuerte) transparent;
+  translate: 0 -50%;
+  animation: armeria-entra var(--duracion-panel) var(--curva-mecanica);
+}
+
+.armeria__hoja[data-lado="izquierda"] {
+  right: auto;
+  left: var(--espacio-6);
+  animation-name: armeria-entra-izquierda;
+}
+
+/* El foco llega a la hoja al abrirla: con teclado se ve, con ratón no hace falta (el anillo es de :focus-visible). */
+.armeria__hoja:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.armeria__hoja .t6-placa {
+  block-size: auto;
+  gap: var(--espacio-4);
+}
+
+.armeria__hoja-descripcion {
+  margin: 0;
+  max-width: var(--ancho-lectura);
+  line-height: var(--interlineado-cuerpo);
+}
+
+/* Cajetín del resumen: el dato, la marca de ejemplo y la fecha en que se comprobó, entre dos trazos. */
+.armeria__hoja-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--espacio-1) var(--espacio-3);
+  margin: 0;
+  padding: var(--espacio-2) 0;
+  border-block: var(--trazo-fino) solid var(--trazo-fuerte);
+}
+
+.armeria__hoja-resumen .armeria__demo {
+  margin: 0;
+  align-self: center;
+}
+
+.armeria__hoja-dato {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-m);
+  font-weight: var(--peso-semi);
+  color: var(--laton-claro);
+}
+
+.armeria__fecha {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  color: var(--niebla);
+}
+
+.armeria__hoja-resumen .armeria__fecha {
+  margin-inline-start: auto;
+}
+
+/* Subtítulo con línea de cota: «RANURAS DEL ARMERO ────────». */
+.armeria__hoja-seccion {
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.armeria__hoja-subtitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--interletra-versalitas);
+  text-transform: uppercase;
+  color: var(--cota);
+}
+
+.armeria__hoja-subtitulo::after {
+  content: "";
+  flex: 1;
+  border-block-start: var(--trazo-fino) solid var(--trazo-fuerte);
+}
+
+/* Filas simples: nombre, dato y etiqueta, separadas por un trazo fino. */
+.armeria__lista-simple,
+.armeria__builds,
+.armeria__bajadas,
+.armeria__fichas,
+.armeria__ranuras {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.armeria__fila {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding: var(--espacio-1) 0;
+  border-block-end: var(--trazo-fino) solid color-mix(in srgb, var(--trazo-fuerte) 55%, transparent);
+}
+
+.armeria__fila:last-child {
+  border-block-end: 0;
+}
+
+.armeria__fila--apilada {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-1);
+}
+
+.armeria__bloque {
+  display: block;
+}
+
+/* La tabla de tiendas cabe en la hoja sin partir fechas ni nombres: menos aire lateral y fechas en una línea. */
+.armeria__hoja .t6-tabla :is(th, td) {
+  padding: var(--espacio-2);
+}
+
+.armeria__hoja .t6-tabla :is(th[scope="row"], td:nth-child(3)) {
+  white-space: nowrap;
+}
+
+.armeria__fila-nombre {
+  flex: 1;
+  font-weight: var(--peso-medio);
+}
+
+.armeria__fila-meta {
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  color: var(--niebla);
+}
+
+/* Ranuras del armero: huecos libres con su número, a plantilla. */
+.armeria__ranuras {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--espacio-1);
+}
+
+.armeria__ranura {
+  display: grid;
+  place-items: center;
+  min-height: var(--espacio-12);
+  border: var(--trazo-fino) dashed var(--trazo-fuerte);
+  border-radius: var(--radio-s);
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-xs);
+  color: var(--niebla);
+}
+
+.armeria__ranura[data-libre="false"] {
+  border-style: solid;
+  border-color: var(--laton);
+  color: var(--laton-claro);
+}
+
+.armeria__fichas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espacio-3);
+}
+
+/* Builds y bajadas: una fila por entrada, con su número o su etiqueta de precio. */
+.armeria__builds,
+.armeria__bajadas {
+  display: grid;
+}
+
+.armeria__build,
+.armeria__bajada {
+  display: grid;
+  gap: var(--espacio-2);
+  padding: var(--espacio-3) 0;
+  border-block-end: var(--trazo-fino) solid color-mix(in srgb, var(--trazo-fuerte) 55%, transparent);
+}
+
+.armeria__build:first-child,
+.armeria__bajada:first-child {
+  padding-block-start: 0;
+}
+
+.armeria__build:last-child,
+.armeria__bajada:last-child {
+  padding-block-end: 0;
+  border-block-end: 0;
+}
+
+.armeria__build {
+  grid-template-columns: var(--espacio-8) 1fr;
+  align-items: start;
+}
+
+.armeria__build-puesto {
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-3xl);
+  font-weight: var(--peso-medio);
+  line-height: var(--interlineado-compacto);
+  color: var(--laton);
+}
+
+.armeria__build-cuerpo {
+  display: grid;
+  gap: var(--espacio-2);
+  justify-items: start;
+}
+
+.armeria__build-nombre {
+  margin: 0;
+  font-size: var(--texto-m);
+  font-weight: var(--peso-semi);
+  line-height: var(--interlineado-compacto);
+}
+
+.armeria__bajada-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.armeria__bajada del {
+  color: var(--niebla);
+}
+
+/* Taquilla: tres cifras a plantilla. */
+.armeria__cifras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--espacio-3);
+  margin: 0;
+}
+
+.armeria__cifras > div {
+  display: grid;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
+  border: var(--trazo-fino) solid var(--trazo-fuerte);
+  border-radius: var(--radio-s);
+}
+
+.armeria__cifras dt {
+  font-size: var(--texto-s);
+  color: var(--niebla);
+}
+
+.armeria__cifras dd {
+  margin: 0;
+  font-family: var(--fuente-datos);
+  font-size: var(--texto-3xl);
+  line-height: var(--interlineado-compacto);
+}
+
+/* Las acciones se quedan a la vista al desplazar la hoja: el enlace a la sección no puede quedar fuera de pantalla. */
+.armeria__hoja-acciones {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2) var(--espacio-3);
+  margin: 0 calc(var(--espacio-6) * -1) calc(var(--espacio-6) * -1);
+  padding: var(--espacio-3) var(--espacio-6);
+  border-block-start: var(--trazo-fino) solid var(--trazo-fuerte);
+  background-color: var(--carbon);
+}
+
+.armeria__hoja-nota {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--texto-s);
+  color: var(--niebla);
+}
+
+@keyframes armeria-entra {
+  from {
+    opacity: 0;
+    translate: var(--espacio-4) -50%;
+  }
+}
+
+@keyframes armeria-entra-izquierda {
+  from {
+    opacity: 0;
+    translate: calc(var(--espacio-4) * -1) -50%;
+  }
+}
+
+/* Pantallas estrechas: hoja inferior. Solo evita que se rompa; el móvil está aparcado. */
+@media (max-width: 72rem) {
+  .armeria__hoja {
+    top: auto;
+    right: var(--espacio-4);
+    bottom: var(--espacio-4);
+    left: var(--espacio-4);
+    width: auto;
+    max-height: 55svh;
+    translate: none;
+    animation: none;
+  }
+
+  .armeria__hoja[data-lado="izquierda"] {
+    right: var(--espacio-4);
+    left: var(--espacio-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .armeria__hoja,
+  .armeria__hoja[data-lado] {
+    animation: none;
+  }
+}

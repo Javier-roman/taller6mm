@@ -16,12 +16,14 @@ export interface PosterProps {
   luz?: Luz;
   /** Una escena (B o A) ya pinta por encima: el póster se oculta. */
   oculto?: boolean;
+  /** Zona destacada (puntero, foco o hoja abierta): el póster atenúa el resto de la sala. */
+  activa?: string | null;
 }
 
-export function Poster({ acciones, luz = 'penumbra', oculto = false }: PosterProps) {
+export function Poster({ acciones, luz = 'penumbra', oculto = false, activa = null }: PosterProps) {
   const poster = posterDe(luz);
   return (
-    <div className="armeria-poster" data-oculto={oculto}>
+    <div className="armeria-poster" data-oculto={oculto} data-hay-activa={activa !== null}>
       <div className="armeria-poster__lienzo">
         <img
           className="armeria-poster__imagen"
@@ -43,6 +45,7 @@ export function Poster({ acciones, luz = 'penumbra', oculto = false }: PosterPro
               href={zona.ruta}
               className="armeria-poster__zona"
               data-zona={zona.id}
+              data-activa={zona.id === activa}
               tabIndex={-1}
               onPointerEnter={() => acciones.apuntar(zona.id)}
               onPointerLeave={() => acciones.apuntar(null)}
