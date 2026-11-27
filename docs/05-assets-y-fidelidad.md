@@ -1,4 +1,6 @@
-# 05 · Assets 2D/3D y fidelidad 1:1
+# 05 · Assets 2D/3D y fidelidad visual
+
+> **Actualización 26-11-2026 (ADR-0011):** ya no se persigue la medida exacta en mm de cada réplica. Se busca fidelidad visual honesta: proporciones reales de referencia, medidas solo con fuente y nivel siempre visible. Las interfaces estándar siguen siendo exactas. Donde este documento diga «1:1» o «medidas reales en mm», léase con esa regla.
 
 > Requisito de Javi: "para mí es muy importante la similitud de las réplicas con las originales; tiene que ser similar o, si puede ser, igual".
 
