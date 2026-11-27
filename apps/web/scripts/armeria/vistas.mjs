@@ -8,7 +8,7 @@
 //   node scripts/armeria/vistas.mjs local             copia el conjunto a public/assets/armeria/<hash>/ (desarrollo, e2e)
 //   node scripts/armeria/vistas.mjs r2 [--bucket b]   IMPRIME los comandos de subida a R2; no ejecuta nada remoto
 //
-// La subida la ejecuta una persona con su sesión de wrangler (preview: taller6mm-assets-preview). Este script
+// La subida la ejecuta una persona con su sesión de wrangler (preview: taller6mm-vistas-preview). Este script
 // nunca llama a la red ni toca credenciales.
 import { createHash } from 'node:crypto';
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -22,14 +22,14 @@ const raiz = path.resolve(webDir, '..', '..');
 const origen = path.join(raiz, 'assets-src', 'vistas', 'armeria');
 const manifiesto = path.join(webDir, 'src', 'components', 'armeria', 'vistas.json');
 const publico = path.join(webDir, 'public', 'assets', 'armeria');
-const BUCKET_PREVIEW = 'taller6mm-assets-preview';
+const BUCKET_PREVIEW = 'taller6mm-vistas-preview';
 
 const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex');
 
 function leerOrigen() {
   let nombres;
   try {
-    nombres = readdirSync(origen).filter((n) => n.endsWith('.webp'));
+    nombres = readdirSync(origen).filter((n) => /^[a-z0-9][a-z0-9-]*\.webp$/.test(n));
   } catch {
     throw new Error(`No existe ${origen}: faltan los binarios de las vistas (assets-src/vistas/armeria/*.webp).`);
   }
@@ -87,7 +87,7 @@ async function comando(cmd, args) {
     for (const a of reales) {
       const rel = path.relative(webDir, path.join(origen, a.nombre)).split(path.sep).join('/');
       console.log(
-        `pnpm exec wrangler r2 object put ${bucket}/armeria/${m.hash}/${a.nombre} --file ${rel} --content-type image/webp --cache-control "${CACHE_INMUTABLE}" --remote`,
+        `pnpm exec wrangler r2 object put ${bucket}/armeria/${m.hash}/${a.nombre} --file "${rel}" --content-type image/webp --cache-control "${CACHE_INMUTABLE}" --remote`,
       );
     }
     console.log(

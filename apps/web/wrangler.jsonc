@@ -45,7 +45,7 @@
     }
   ],
   // Local: miniflare lo simula vacío; sin objeto, el Worker deja pasar al estático de public/assets/armeria/.
-  "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets-local" }],
+  "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-vistas-local" }],
   "env": {
     "preview": {
       "name": "taller6mm-web-preview",
@@ -74,7 +74,7 @@
           "migrations_dir": "../../packages/db/migrations/busqueda"
         }
       ],
-      "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets-preview" }],
+      "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-vistas-preview" }],
       // Cada Preview de PR comparte estos recursos de preview (con datos de demo, nunca de producción).
       // Las Previews no heredan nada del Worker: sin este bloque se crearían sin bases ni buckets.
       "previews": {
@@ -100,7 +100,7 @@
             "migrations_dir": "../../packages/db/migrations/busqueda"
           }
         ],
-        "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets-preview" }]
+        "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-vistas-preview" }]
       }
     },
     "production": {
@@ -131,7 +131,7 @@
           "migrations_dir": "../../packages/db/migrations/busqueda"
         }
       ],
-      "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-assets" }]
+      "r2_buckets": [{ "binding": "VISTAS", "bucket_name": "taller6mm-vistas" }]
     }
   }
 }

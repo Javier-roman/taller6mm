@@ -1,6 +1,8 @@
 // Vistas horneadas de La Armería (póster y pases de luz del nivel B, ADR-0002) servidas desde R2.
-// Javi decidió el 22-11-2026: sin bucket público. El Worker de la web lee el binding `VISTAS` (solo lectura)
-// y responde en /assets/armeria/<hash>/<archivo>.webp con Cache-Control inmutable: la ruta lleva el hash del
+// Javi decidió el 22-11-2026: sin bucket público. El Worker de la web usa el binding `VISTAS`, que apunta a un
+// bucket DEDICADO (`taller6mm-vistas*`, solo con WebP publicables): un binding de R2 permite leer, escribir y
+// borrar todo el bucket, así que nunca se enlaza el bucket genérico de assets (revisión de seguridad del PR #65).
+// La ruta solo sirve lo que figura en el manifiesto (`vistas.json`). Responde en /assets/armeria/<hash>/<archivo>.webp con Cache-Control inmutable: la ruta lleva el hash del
 // contenido, así que un conjunto nuevo es una ruta nueva y nada se invalida. En local (y en cualquier
 // entorno donde el objeto no esté en el bucket) `servirVista` devuelve null y el estático de
 // public/assets/armeria/ (scripts/armeria/vistas.mjs local) o el 404 de Astro hacen el resto.
@@ -20,6 +22,14 @@ const RUTA_VISTA = /^\/assets\/armeria\/([0-9a-f]{12})\/([a-z0-9][a-z0-9-]*\.web
 export function claveVista(pathname: string): string | null {
   const m = RUTA_VISTA.exec(pathname);
   return m ? `armeria/${m[1]}/${m[2]}` : null;
+}
+
+/** Claves de R2 que el manifiesto del conjunto autoriza servir (`armeria/<hash>/<archivo>`). */
+export function clavesDelManifiesto(manifiesto: {
+  readonly hash: string;
+  readonly archivos: Readonly<Record<string, unknown>>;
+}): ReadonlySet<string> {
+  return new Set(Object.keys(manifiesto.archivos).map((nombre) => `armeria/${manifiesto.hash}/${nombre}`));
 }
 
 /** Ruta pública de una vista del conjunto con ese hash. */
@@ -65,10 +75,15 @@ function coincide(ifNoneMatch: string | null, etag: string): boolean {
  * Responde a una vista horneada o devuelve null para que siga la cadena normal (estáticos y Astro).
  * Solo GET y HEAD; la cubeta es opcional porque no todos los entornos la tienen enlazada.
  */
-export async function servirVista(request: Request, cubeta: CubetaVistas | undefined): Promise<Response | null> {
+export async function servirVista(
+  request: Request,
+  cubeta: CubetaVistas | undefined,
+  permitidas?: ReadonlySet<string>,
+): Promise<Response | null> {
   if (!cubeta || (request.method !== 'GET' && request.method !== 'HEAD')) return null;
   const clave = claveVista(new URL(request.url).pathname);
-  if (!clave) return null;
+  // Con lista de claves permitidas (el Worker siempre la pasa) no se consulta R2 por rutas desconocidas.
+  if (!clave || (permitidas && !permitidas.has(clave))) return null;
   const objeto = await cubeta.get(clave);
   if (!objeto) return null;
   const cabeceras = { ...ENCABEZADOS_BASE, etag: objeto.httpEtag };
